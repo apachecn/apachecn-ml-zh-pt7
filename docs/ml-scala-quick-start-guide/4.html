@@ -1,0 +1,707 @@
+<html><head/><body>
+
+
+    
+        <title>Scala for Tree-Based Ensemble Techniques</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">基于树的集成技术的Scala</h1>
+                
+            
+            
+                
+<p class="mce-root">在前一章中，我们使用线性模型解决了分类和回归问题。我们还使用了逻辑回归、支持向量机和朴素贝叶斯。然而，在这两种情况下，我们都没有体验到良好的准确性，因为我们的模型显示出较低的可信度。<br/></p>
+<p class="mce-root">另一方面，基于树的分类器和树集成分类器非常有用、健壮，并且广泛用于分类和回归任务。本章将简要介绍使用基于树和集成技术开发这些分类器和回归器，例如用于分类和回归的<strong>决策树</strong> ( <strong> DTs </strong>)、<strong>随机森林</strong> ( <strong> RF </strong>)和<strong>梯度增强树</strong> ( <strong> GBT </strong>)。更具体地说，我们将重新审视并解决我们之前讨论过的回归(来自<a href="f649db9f-aea9-4509-b9b8-e0b7d5fb726a.xhtml" target="_blank">第二章</a>，<em> Scala用于回归分析</em>)和分类(来自<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第三章</a>，<em> Scala用于学习分类</em>)问题。</p>
+<p class="mce-root">本章将涵盖以下主题:</p>
+<ul>
+<li>决策树和树集合</li>
+<li>监督学习的决策树</li>
+<li>用于监督学习的梯度提升树</li>
+<li>监督学习的随机森林</li>
+<li>下一步是什么？</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Technical requirements</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">技术要求</h1>
+                
+            
+            
+                
+<p>确保在您的机器上安装并配置了Scala 2.11.x和Java 1.8.x。</p>
+<p>这几章的代码文件可以在GitHub上找到:</p>
+<p><a href="https://github.com/PacktPublishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/Chapter04" target="_blank">https://github . com/packt publishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/chapter 04</a></p>
+<p>看看下面的播放列表，看看本章的动作视频代码:<br/><a href="http://bit.ly/2WhQf2i" target="_blank">http://bit.ly/2WhQf2i</a></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Decision trees and tree ensembles</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">决策树和树集合</h1>
+                
+            
+            
+                
+<p>DTs通常属于监督学习技术，用于识别和解决与分类和回归相关的问题。顾名思义，DTs有不同的分支——每个分支根据统计概率表示一个可能的决策、现象或反应。就特征而言，DTs分为两种主要类型:训练集和测试集，这有助于对预测的标签或类进行良好的更新。</p>
+<p>二进制和多类分类问题都可以通过DT算法来处理，这也是它被用于跨问题的原因之一。例如，对于我们在<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第3章</a>、<em> Scala中介绍的准入示例，用于学习分类</em>，DTs从准入数据中学习，以一组<kbd>if...else</kbd>决策规则来近似正弦曲线，如下图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-694 image-border" src="img/b07f5aa1-744a-4782-8fc6-4ac4bdab1cc4.png" style="width:85.25em;height:44.25em;"/></p>
+<p>基于高校录取数据利用DTs生成决策规则</p>
+<p>一般来说，树越大，决策规则越复杂，模型越适合。DTs的另一个令人兴奋的功能是它们可以用来解决分类和回归问题。现在让我们来看看DTs的优缺点。两种广泛使用的基于树的集成技术是RF和GBT。这两种技术的主要区别在于训练树的方式和顺序:</p>
+<ul>
+<li>RFs独立地训练每棵树，但是基于数据的随机样本。这些随机样本有助于使模型比单个DT更稳健，因此不太可能对训练数据造成过载。</li>
+<li>GBTs一次训练一棵树。由先前训练的树产生的错误将被每个新训练的树纠正。随着更多树的加入，模型变得更有表现力。</li>
+</ul>
+<p>RFs采用一个观察子集和一个变量子集来构建，这是一个DTs集合。这些树实际上是在同一个训练集的不同部分上训练的，但是个体树长得非常深，倾向于从高度不可预测的模式中学习。</p>
+<p>有时非常深的树是DT模型中过度拟合问题的原因。此外，这些偏差会使分类器表现不佳，即使所表示的要素质量相对于数据集而言是好的。</p>
+<p class="mce-root"/>
+<p>当构建DTs时，RFs将它们集成在一起，以获得更准确和稳定的预测。RFs有助于将多个DTs平均在一起，其目标是通过计算事例对之间的接近度来减少方差以确保一致性。这也是RF的一个直接后果。通过独立陪审员小组的最大投票，我们得到了比最佳陪审团更好的最终预测。下图显示了如何将来自两个森林的决策集成在一起以获得最终预测:<br/></p>
+<div><img class="alignnone size-full wp-image-567 image-border" src="img/debf3299-9124-459b-92b1-c5682ebce220.png" style="width:36.92em;height:23.83em;"/></div>
+<p>基于树的集成及其组装技术</p>
+<p>最后，RF和GBT都产生DT的加权集合，随后预测来自每个集合模型的个体树的组合结果。使用这些方法(作为分类器或回归器)时，参数设置如下:</p>
+<ul>
+<li>如果树的数量为1，则不应用引导。如果树的数量大于1，则应用自举，支持的值为<kbd>auto</kbd>、<kbd>all</kbd>、<kbd>sqrt</kbd>、<kbd>log2</kbd>和三分之一。</li>
+<li>支持的数值为[0.0-1.0]和[1-n]。如果<kbd>numTrees</kbd>是<kbd>1</kbd>，<kbd>featureSubsetStrategy</kbd>被设置为<kbd>all</kbd>。如果<kbd>numTrees &gt; 1</kbd>(用于射频)，<kbd>featureSubsetStrategy</kbd>设置为<kbd>sqrt</kbd>分类。如果选择<kbd>featureSubsetStrategy</kbd>作为<kbd>auto</kbd>，算法会自动推断出最佳特征子集策略。</li>
+<li>杂质标准仅用于信息增益计算，基尼系数和方差分别作为分类和回归的支持值。</li>
+<li><kbd>maxDepth</kbd>是树的最大深度(例如，深度0表示1个叶节点，深度1表示1个内部节点和2个叶节点，以此类推)。</li>
+<li><kbd>maxBins</kbd>表示用于分割要素的最大箱数，建议值为100以获得更好的结果。</li>
+</ul>
+<p>既然我们已经处理了回归分析和分类问题，让我们看看如何更舒适地使用DT、RF和GBT来解决这些问题。先从DT开始吧。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Decision trees for supervised learning</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">监督学习的决策树</h1>
+                
+            
+            
+                
+<p>在这一节中，我们将看到如何使用DTs来解决回归和分类问题。在前两章<a href="f649db9f-aea9-4509-b9b8-e0b7d5fb726a.xhtml" target="_blank">第二章</a>、<em>回归分析的Scala</em>和<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第三章</a>、<em>学习分类的Scala</em>中，我们解决了客户流失和保险赔付问题。那分别是分类和回归问题。在这两种方法中，我们都使用了其他经典模型。然而，我们将看到如何用基于树和集成的技术来解决它们。我们将使用Scala中Apache Spark ML包中的DT实现。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Decision trees for classification</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">分类决策树</h1>
+                
+            
+            
+                
+<p>首先我们知道<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank"/> <a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank"/> <a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank"/> <a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第三章</a><em>Scala对于学习分类</em>的客户流失预测问题，我们也知道数据。我们也知道DTs的工作原理。因此，我们可以使用基于Spark的DTs实现直接进入编码部分。首先，我们通过实例化<kbd>DecisionTreeClassifier</kbd>接口来创建一个<kbd>DecisionTreeClassifier</kbd>评估器。此外，我们需要指定标签和特征向量列:</p>
+<pre class="mce-root">val dTree = new DecisionTreeClassifier()<br/>        .setLabelCol("label")// Setting label column<br/>        .setFeaturesCol("features") // Setting feature vector column<br/>        .setSeed(1234567L)// for reproducibility</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>如前几章所述，我们有三个变压器(<kbd>ipindexer</kbd>、<kbd>labelindexer</kbd>和<kbd>assembler</kbd>)和一个估计器(<kbd>dTree</kbd>)。我们现在可以将它们链接在一个管道中，这样每个管道都可以充当一个阶段:</p>
+<pre class="mce-root">val pipeline = new Pipeline()<br/>          .setStages(Array(PipelineConstruction.ipindexer,<br/>                            PipelineConstruction.labelindexer,<br/>                                PipelineConstruction.assembler,dTree))</pre>
+<p>由于我们想要执行超参数调整和交叉验证，我们将不得不创建一个<kbd>paramGrid</kbd>变量，该变量将在K倍交叉验证期间用于超参数空间的网格搜索:</p>
+<pre class="mce-root">var paramGrid = new ParamGridBuilder()<br/>  .addGrid(dTree.impurity, "gini" :: "entropy" :: Nil)<br/>  .addGrid(dTree.maxBins, 2 :: 5 :: 10 :: 15 :: 20 :: 25 :: 30 :: Nil)<br/>  .addGrid(dTree.maxDepth, 5 :: 10 :: 15 :: 20 :: 25 :: 30 :: 30 :: Nil)<br/>  .build()</pre>
+<p>更具体地说，这将搜索DT的<kbd>impurity</kbd>、<kbd>maxBins</kbd>和<kbd>maxDepth</kbd>以获得最佳模型。最大箱数用于分离连续要素以及选择如何在每个结点上分割要素。结合起来，该算法通过DT的<kbd>maxDepth</kbd>和<kbd>maxBins</kbd>参数搜索最佳模型。</p>
+<p>在前面的代码段中，我们创建了一个渐进的<kbd>paramGrid</kbd>变量，其中我们将组合指定为一个字符串或整数值列表。这意味着我们正在用不同的超参数组合创建网格空间。这将帮助我们提供由最佳超参数组成的最佳模型。然而，为此，我们需要有一个<kbd>BinaryClassificationEvaluator</kbd>评估员来评估每个模型，并在交叉验证过程中挑选最佳模型:</p>
+<pre class="mce-root">val evaluator = new BinaryClassificationEvaluator()<br/>                  .setLabelCol("label")<br/>                  .setRawPredictionCol("prediction")</pre>
+<p>我们使用<kbd>CrossValidator</kbd>进行10重交叉验证，以选择最佳模型:</p>
+<pre class="mce-root">println("Preparing for 10-fold cross-validation")<br/>val numFolds = 10<br/><br/>val crossval = new CrossValidator()<br/>     .setEstimator(pipeline)<br/>     .setEvaluator(evaluator)<br/>     .setEstimatorParamMaps(paramGrid)<br/>     .setNumFolds(numFolds)</pre>
+<p class="mce-root"/>
+<p>现在，让我们调用<kbd>fit</kbd>方法，以便包括所有特征预处理和DT分类器在内的完整预定义管道被多次执行——每次使用不同的超参数向量:</p>
+<pre><strong>val</strong> cvModel = crossval.fit(Preprocessing.trainDF)</pre>
+<p>现在是时候评估DT模型在测试数据集上的预测能力了:</p>
+<pre><strong>val</strong> predictions = cvModel.transform(Preprocessing.testSet)<br/>prediction.show(10)</pre>
+<p>这将引导我们进入下面的数据框，显示预测标签与实际标签的对比。此外，它还显示了原始概率:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-568 image-border" src="img/d2d26de4-9bd0-4238-a36d-ddf1cba4948d.png" style="width:24.50em;height:18.42em;"/></p>
+<p>然而，基于前面的预测数据框架，很难猜测分类的准确性。但是在第二步中，使用<kbd>BinaryClassificationEvaluator</kbd>进行评估，如下所示:</p>
+<pre><strong>val</strong> accuracy = evaluator.evaluate(predictions)<br/>println("Classification accuracy: " + accuracy)</pre>
+<p>这将提供具有精度值的输出:</p>
+<pre><strong>Accuracy: 0.8441663599558337</strong></pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>因此，从我们的二元分类模型中，我们获得了大约84%的分类准确度。与SVM和LR一样，我们将基于以下RDD观察精确召回曲线下的区域和<strong>接收器操作特性</strong> ( <strong> ROC </strong>)曲线下的区域，其中包含测试集的原始分数:</p>
+<pre class="mce-root">val predictionAndLabels = predictions<br/>      .select("prediction", "label")<br/>      .rdd.map(x =&gt; (x(0).asInstanceOf[Double], x(1)<br/>        .asInstanceOf[Double]))</pre>
+<p>前面的RDD可用于计算前面提到的两个性能指标:</p>
+<pre><strong>val</strong> metrics = <strong>new</strong> BinaryClassificationMetrics(predictionAndLabels)<br/>println("Area under the precision-recall curve: " + metrics.areaUnderPR)<br/>println("Area under the receiver operating characteristic (ROC) curve: " + metrics.areaUnderROC)</pre>
+<p>在这种情况下，评估返回84%的准确度，但只有67%的精确度，这比SVM和LR的结果好得多:</p>
+<pre><strong>Area under the precision-recall curve: 0.6665988000794282</strong><br/><strong>Area under the receiver operating characteristic (ROC) curve: 0.8441663599558337</strong></pre>
+<p>然后，我们计算更多的指标，例如，假阳性和真阳性，假阴性和真阴性，因为这些预测对于评估模型的性能也很有用:</p>
+<pre><strong>val</strong> TC = predDF.count() //Total count<br/><br/><strong>val</strong> tp = tVSpDF.filter($"prediction" === 0.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True positive rate<br/><strong>val</strong> tn = tVSpDF.filter($"prediction" === 1.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True negative rate<br/><strong>val</strong> fp = tVSpDF.filter($"prediction" === 1.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False positive rate<br/><strong>val</strong> fn = tVSpDF.filter($"prediction" === 0.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False negative rate</pre>
+<p class="mce-root">另外，我们计算马修斯相关系数:<q> <br/> </q></p>
+<pre><strong>val</strong> MCC = (tp * tn - fp * fn) / math.sqrt((tp + fp) * (tp + fn) * (fp + tn) * (tn + fn)) </pre>
+<p>让我们观察一下模型的可信度有多高:</p>
+<pre>println("True positive rate: " + tp *100 + "%")<br/>println("False positive rate: " + fp * 100 + "%")<br/>println("True negative rate: " + tn * 100 + "%")<br/>println("False negative rate: " + fn * 100 + "%")<br/>println("Matthews correlation coefficient: " + MCC)</pre>
+<p>太棒了。我们只达到了70%的准确率，这可能就是为什么我们的树数量很少的原因，但是是什么因素呢？</p>
+<pre><strong>True positive rate: 70.76461769115441%</strong><br/><strong>False positive rate: 14.992503748125937%</strong><br/><strong>True negative rate: 12.293853073463268%</strong><br/><strong>False negative rate: 1.9490254872563717%</strong><br/><strong>Matthews correlation coefficient: 0.5400720075807806</strong></pre>
+<p>现在，让我们看看在交叉验证后，我们在哪个级别获得了最佳模型:</p>
+<pre><strong>val</strong> bestModel = cvModel.bestModel<br/>println("The Best Model and Parameters:\n--------------------")<br/>println(bestModel.asInstanceOf[org.apache.spark.ml.PipelineModel].stages(3))</pre>
+<p class="mce-root">根据以下输出，我们用<kbd>53 nodes</kbd>在<kbd>depth 5</kbd>获得了最佳树模型:</p>
+<pre class="mce-root"><strong>The Best Model and Parameters:</strong><br/><strong>DecisionTreeClassificationModel of depth 5 with 53 nodes</strong></pre>
+<p>让我们通过展示树来提取在树构建期间采取的那些步骤(即决策)。该树帮助我们找到数据集中最有价值的特征:</p>
+<pre class="mce-root">bestModel.asInstanceOf[org.apache.spark.ml.PipelineModel]<br/>      .stages(3)<br/>      .extractParamMap<br/>val treeModel = bestModel.asInstanceOf[org.apache.spark.ml.PipelineModel]<br/>      .stages(3)<br/>      .asInstanceOf[DecisionTreeClassificationModel]<br/>println("Learned classification tree model:\n" + treeModel.toDebugString)</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>在下面的输出中，<kbd>toDebugString()</kbd>方法打印了树的决策节点，并在最后一片叶子上确定了预测结果:</p>
+<pre><strong>Learned classification tree model:</strong><br/><strong>If (feature 3 &lt;= 245.2)</strong><br/><strong>    If (feature 11 &lt;= 3.0)</strong><br/><strong>     If (feature 1 in {1.0})</strong><br/><strong>      If (feature 10 &lt;= 2.0)</strong><br/><strong>       Predict: 1.0</strong><br/><strong>      Else (feature 10 &gt; 2.0)</strong><br/><strong>       If (feature 9 &lt;= 12.9)</strong><br/><strong>        Predict: 0.0</strong><br/><strong>       Else (feature 9 &gt; 12.9)</strong><br/><strong>        Predict: 1.0</strong><br/><strong>     …</strong><br/><strong> Else (feature 7 &gt; 198.0)</strong><br/><strong>      If (feature 2 &lt;= 28.0)</strong><br/><strong>       Predict: 1.0</strong><br/><strong>      Else (feature 2 &gt; 28.0)</strong><br/><strong>       If (feature 0 &lt;= 60.0)</strong><br/><strong>        Predict: 0.0</strong><br/><strong>       Else (feature 0 &gt; 60.0)</strong><br/><strong>        Predict: 1.0</strong></pre>
+<p>我们还可以看到某些特征(在我们的例子中是<kbd>3</kbd>和<kbd>11</kbd>)被用于决策——也就是说，这是客户可能流失的两个最重要的原因。但是那两个特征是什么呢？让我们看看他们:</p>
+<pre>println("Feature 11:" + Preprocessing.trainDF.filter(PipelineConstruction.featureCols(11)))<br/>println("Feature 3:" + Preprocessing.trainDF.filter(PipelineConstruction.featureCols(3)))</pre>
+<p>根据以下输出，特征3和11是最重要的预测因素:</p>
+<pre><strong>Feature 11: [total_international_num_calls: double]</strong><br/><strong>Feature 3:  [total_day_mins: double]</strong></pre>
+<p>客户服务呼叫和全天分钟数由DTs选择，因为它们提供了一种自动机制来确定最重要的功能。</p>
+<p class="mce-root"/>
+<p class="mce-root"/>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Decision trees for regression</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">回归决策树</h1>
+                
+            
+            
+                
+<p>在<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml">第3章</a>、<em> Scala学习分类</em>中，我们学习了如何预测关于交通缓慢的问题。我们应用<strong>线性回归</strong> ( <strong> LR </strong>)和广义线性回归来解决这个问题。此外，我们非常了解这些数据。</p>
+<p>如前所述，对于回归问题，DT还可以提供非常强大的响应和性能。类似于<kbd>DecisionTreeClassifier</kbd>，可以用<kbd>DecisionTreeRegressor()</kbd>方法实例化<kbd>DecisionTreeRegressor</kbd>估算器。此外，我们需要显式指定标签和特性列:</p>
+<pre>// Estimator algorithm<br/>val model = new DecisionTreeRegressor().setFeaturesCol("features").setLabelCol("label")</pre>
+<p>在实例化前面的估计器时，我们可以设置最大箱数、树数、最大深度和杂质。</p>
+<p>然而，由于我们将执行k-fold交叉验证，我们可以在创建<kbd>paramGrid</kbd>时设置这些参数:</p>
+<pre>// Search through decision tree's parameter for the best model<br/>var paramGrid = new ParamGridBuilder()<br/>      .addGrid(rfModel.impurity, "variance" :: Nil)// variance for regression<br/>      .addGrid(rfModel.maxBins, 25 :: 30 :: 35 :: Nil)<br/>      .addGrid(rfModel.maxDepth, 5 :: 10 :: 15 :: Nil)<br/>      .addGrid(rfModel.numTrees, 3 :: 5 :: 10 :: 15 :: Nil)<br/>      .build()</pre>
+<p class="mce-root">为了获得更好、更稳定的性能，让我们将k倍交叉验证和网格搜索作为模型调整的一部分。如你所料，我将进行10次交叉验证。根据您的设置和数据集随意调整折叠次数:</p>
+<pre class="mce-root">println("Preparing K-fold Cross Validation and Grid Search: Model tuning")<br/>val numFolds = 10  // 10-fold cross-validation <br/>val cv = new CrossValidator()<br/>      .setEstimator(rfModel)<br/>      .setEvaluator(new RegressionEvaluator)<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<p>太棒了。我们创造了交叉验证估计量。现在是时候用交叉验证来训练DT回归模型了:</p>
+<pre>println("Training model with decision tree algorithm")<br/>val cvModel = cv.fit(trainingData)</pre>
+<p>现在我们有了合适的模型，我们可以进行预测了。因此，让我们开始评估训练集和验证集上的模型，并计算RMSE、MSE、MAE、R平方等:</p>
+<pre>println("Evaluating the model on the test set and calculating the regression metrics")<br/>val trainPredictionsAndLabels = cvModel.transform(testData).select("label", "prediction")<br/>                                            .map { case Row(label: Double, prediction: Double) <br/>                                            =&gt; (label, prediction) }.rdd<br/><br/>val testRegressionMetrics = new RegressionMetrics(trainPredictionsAndLabels)</pre>
+<p>一旦我们有了最佳拟合和交叉验证的模型，我们可以期待一个良好的预测精度。让我们在训练和验证集上观察结果:</p>
+<pre><strong>val</strong> results = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetrics.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetrics.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetrics.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetrics.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetrics.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(results)</pre>
+<p class="mce-root">以下输出显示了测试集的MSE、RMSE、R平方、MAE和解释方差:</p>
+<pre class="mce-root"><strong>=====================================================================</strong><br/><strong> TrainingData count: 80</strong><br/><strong> TestData count: 55</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 7.871519100933004</strong><br/><strong> TestData RMSE = 2.8056227652578323</strong><br/><strong> TestData R-squared = 0.5363607928629964</strong><br/><strong> TestData MAE = 2.284866391184572</strong><br/><strong> TestData explained variance = 20.213067468774792</strong><br/><strong> =====================================================================</strong></pre>
+<p>太好了！我们已经成功地在训练集和测试集上计算了原始预测，我们可以看到与LR回归模型相比的改进。让我们寻找有助于提高精确度的模型:</p>
+<pre><strong>val </strong>bestModel = cvModel.bestModel.asInstanceOf[DecisionTreeRegressionModel]</pre>
+<p>此外，我们可以通过观察林中的dt来了解决策是如何做出的:</p>
+<pre>println("Decision tree from best cross-validated model: " + bestModel.toDebugString)</pre>
+<p>以下是输出:</p>
+<pre><strong>Decision tree from best cross-validated model at depth 5 with 39 nodes</strong><br/><strong>   If (feature 0 &lt;= 19.0)</strong><br/><strong>    If (feature 0 &lt;= 3.0)</strong><br/><strong>     If (feature 0 &lt;= 1.0)</strong><br/><strong>      If (feature 3 &lt;= 0.0)</strong><br/><strong>       If (feature 4 &lt;= 0.0)</strong><br/><strong>        Predict: 4.1</strong><br/><strong>       Else (feature 4 &gt; 0.0)</strong><br/><strong>        Predict: 3.4000000000000004</strong><br/><strong>      ....</strong><br/><strong>        Predict: 15.30909090909091</strong><br/><strong>       Else (feature 0 &gt; 25.0)</strong><br/><strong>        Predict: 12.800000000000002</strong><br/><strong>     Else (feature 11 &gt; 1.0)</strong><br/><strong>      Predict: 22.100000000000023</strong><br/><strong>    Else (feature 9 &gt; 1.0)</strong><br/><strong>     Predict: 23.399999999999977</strong></pre>
+<p>使用DTs，可以测量特征的重要性，以便在稍后阶段我们可以决定使用哪些特征以及从数据帧中删除哪些特征。让我们从之前刚刚创建的最佳模型中找出特征重要性，所有特征按升序排列如下:</p>
+<pre>val featureImportances = bestModel.featureImportances.toArray<br/><br/>val FI_to_List_sorted = featureImportances.toList.sorted.toArray<br/>println("Feature importance generated by the best model: ")<br/>for(x &lt;- FI_to_List_sorted) println(x)<br/><br/></pre>
+<p class="mce-root"/>
+<p>以下是模型生成的特征重要性:</p>
+<pre><strong>Feature importance generated by the best model:</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 7.109215735617604E-5</strong><br/><strong> 2.1327647206851872E-4</strong><br/><strong> 0.001134987328520092</strong><br/><strong> 0.00418143999334111</strong><br/><strong> 0.025448271970345014</strong><br/><strong> 0.03446268498009088</strong><br/><strong> 0.057588305610674816</strong><br/><strong> 0.07952108027588178</strong><br/><strong> 0.7973788612117217</strong><br/></pre>
+<p>最后一个结果对于理解特征的重要性很重要。正如你所看到的，RF把一些特性排到了更重要的位置。例如，最后几个特征是最重要的，而其中八个不太重要。我们可以删除那些不重要的列，并再次训练DT模型，以观察在测试集上MAE是否有任何更大的减少和R平方的增加。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Gradient boosted trees for supervised learning</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用于监督学习的梯度提升树</h1>
+                
+            
+            
+                
+<p>在这一节中，我们将看到如何使用GBT来解决回归和分类问题。在前两章<a href="f649db9f-aea9-4509-b9b8-e0b7d5fb726a.xhtml" target="_blank">第二章</a>、<em> Scala进行回归分析</em>和<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第三章</a>、<em> Scala进行学习分类</em>中，我们解决了客户流失和保险赔付严重度问题，分别是分类和回归问题。在这两种方法中，我们都使用了其他经典模型。然而，我们将看到如何用基于树和集成的技术来解决它们。我们将使用Scala中Spark ML包的GBT实现。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Gradient boosted trees for classification</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用于分类的梯度增强树</h1>
+                
+            
+            
+                
+<p>我们从<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml">第三章</a>、<em>Scala for Learning class ification</em>中知道客户流失预测问题，对数据了如指掌。我们已经知道RF的工作原理，所以让我们开始使用基于Spark的RF实现:</p>
+<ol>
+<li>通过调用<kbd>GBTClassifier()</kbd>接口实例化一个<kbd>GBTClassifier</kbd>估算器:</li>
+</ol>
+<pre style="padding-left: 60px" class="mce-root">val gbt = new GBTClassifier()<br/>      .setLabelCol("label")<br/>      .setFeaturesCol("features")<br/>      .setSeed(1234567L)</pre>
+<ol start="2">
+<li>我们准备了三个变压器和一个估算器。链在单个管道中，即它们中的每一个都充当一个阶段:</li>
+</ol>
+<pre style="padding-left: 60px" class="mce-root">// Chain indexers and tree in a Pipeline.<br/>val pipeline = new Pipeline()<br/>      .setStages(Array(ScalaClassification.PipelineConstruction.ipindexer,<br/>        ScalaClassification.PipelineConstruction.labelindexer,<br/>        ScalaClassification.PipelineConstruction.assembler,<br/>        gbt))</pre>
+<ol start="3">
+<li>定义<kbd>paramGrid</kbd>变量，在超参数空间进行网格搜索:</li>
+</ol>
+<pre style="padding-left: 60px" class="mce-root">// Search through decision tree's maxDepth parameter for best model<br/>val paramGrid = new ParamGridBuilder()<br/>      .addGrid(gbt.maxDepth, 3 :: 5 :: 10 :: Nil) // :: 15 :: 20 :: 25 :: 30 :: Nil)<br/>      .addGrid(gbt.impurity, "gini" :: "entropy" :: Nil)<br/>      .addGrid(gbt.maxBins, 5 :: 10 :: 20 :: Nil) //10 :: 15 :: 25 :: 35 :: 45 :: Nil)<br/>      .build()</pre>
+<ol start="4">
+<li>定义一个<kbd>BinaryClassificationEvaluator</kbd>评估器来评估模型:</li>
+</ol>
+<pre style="padding-left: 60px" class="mce-root">val evaluator = new BinaryClassificationEvaluator()<br/>                  .setLabelCol("label")<br/>                  .setRawPredictionCol("prediction")</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<ol start="5">
+<li>我们使用<kbd>CrossValidator</kbd>对最佳模型选择进行10重交叉验证:</li>
+</ol>
+<pre style="padding-left: 60px" class="mce-root">// Set up 10-fold cross validation<br/>val numFolds = 10<br/>val crossval = new CrossValidator()<br/>      .setEstimator(pipeline)<br/>      .setEvaluator(evaluator)<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<ol start="6">
+<li>现在让我们调用<kbd>fit</kbd>方法，这样完整的预定义管道，包括所有的特征预处理和DT分类器，被执行多次——每次使用不同的超参数向量:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>val</strong> cvModel = crossval.fit(Preprocessing.trainDF)</pre>
+<p>现在是时候评估DT模型在测试数据集上的预测能力了:</p>
+<ol>
+<li>用模型管道转换测试集，这将按照我们在前面的特性工程步骤中描述的相同机制更新特性:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>val</strong> predictions = cvModel.transform(Preprocessing.testSet)<br/>prediction.show(10)</pre>
+<p style="padding-left: 60px">这将引导我们进入下面的数据框，显示预测标签与实际标签的对比。此外，它还显示了原始概率:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-569 image-border" src="img/5764c41b-e8ca-46e1-8139-1361a875ed98.png" style="width:25.58em;height:17.75em;"/></p>
+<p class="mce-root"/>
+<p style="padding-left: 60px">但是，看到前面的预测数据帧后，真的很难猜测分类精度。</p>
+<ol start="2">
+<li>但是在第二步中，使用如下的<kbd>BinaryClassificationEvaluator</kbd>进行评估:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>val</strong> accuracy = evaluator.evaluate(predictions)<br/>println("Classification accuracy: " + accuracy)</pre>
+<p style="padding-left: 60px">这将为我们提供分类准确性:</p>
+<pre style="padding-left: 60px"><strong>Accuracy: 0.869460802355539</strong></pre>
+<p>因此，我们从我们的二元分类模型中获得了大约87%的分类准确度。就像SVM和LR一样，我们将基于以下RDD来观察精确回忆曲线下的面积和ROC曲线下的面积，该包含测试集上的原始分数:</p>
+<pre class="mce-root"><strong>val</strong> predictionAndLabels = predictions<br/>      .select("prediction", "label")<br/>      .rdd.map(x =&gt; (x(0).asInstanceOf[Double], x(1)<br/>      .asInstanceOf[Double]))</pre>
+<p>前面的RDD可用于计算前面提到的性能指标:</p>
+<pre><strong>val</strong> metrics = <strong>new</strong> BinaryClassificationMetrics(predictionAndLabels)<br/>println("Area under the precision-recall curve: " + metrics.areaUnderPR)<br/>println("Area under the receiver operating characteristic (ROC) curve: " + metrics.areaUnderROC)</pre>
+<p class="mce-root">这将共享准确性和预测方面的价值:</p>
+<pre><strong>Area under the precision-recall curve: 0.7270259009251356</strong><br/><strong>Area under the receiver operating characteristic (ROC) curve: 0.869460802355539</strong></pre>
+<p>在这种情况下，评估返回87%的准确度，但只有73%的精确度，这比SVM和LR好得多。然后我们再计算一些真假度量。正面和负面预测也有助于评估模型的性能:</p>
+<pre><strong>val</strong> TC = predDF.count() //Total count<br/><br/><strong>val</strong> tp = tVSpDF.filter($"prediction" === 0.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True positive rate<br/><strong>val</strong> tn = tVSpDF.filter($"prediction" === 1.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True negative rate<br/><strong>val</strong> fp = tVSpDF.filter($"prediction" === 1.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False positive rate<br/><strong>val</strong> fn = tVSpDF.filter($"prediction" === 0.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False negative rate</pre>
+<p class="mce-root">另外，我们计算马修斯相关系数:<q> <br/> </q></p>
+<pre><strong>val</strong> MCC = (tp * tn - fp * fn) / math.sqrt((tp + fp) * (tp + fn) * (fp + tn) * (tn + fn)) </pre>
+<p>让我们观察一下模型的可信度有多高:</p>
+<pre>println("True positive rate: " + tp *100 + "%")<br/>println("False positive rate: " + fp * 100 + "%")<br/>println("True negative rate: " + tn * 100 + "%")<br/>println("False negative rate: " + fn * 100 + "%")<br/>println("Matthews correlation coefficient: " + MCC)</pre>
+<p class="mce-root">现在让我们来看看真阳性、假阳性、真阴性和假阴性的比率。此外，我们看到了MCC: <br/></p>
+<pre class="mce-root"><strong>True positive rate: 0.7781109445277361</strong><br/><strong>False positive rate: 0.07946026986506746</strong><br/><strong>True negative rate: 0.1184407796101949</strong><br/><strong>False negative rate: 0.0239880059970015</strong><br/><strong>Matthews correlation coefficient: 0.6481780577821629</strong></pre>
+<p>这些比率看起来很有希望，因为我们经历了正的MCC，它显示了大部分正相关，表明一个稳健的分类器。现在，与DTs类似，RFs可以在分类过程中进行调试。要打印树并选择最重要的特性，运行DT中的最后几行代码。注意，我们仍然通过将<kbd>numTrees</kbd>、<kbd>maxBins</kbd>和<kbd>maxDepth</kbd>限制在<kbd>7</kbd>来限定超参数空间。请记住，更大的树最有可能表现得更好。因此，您可以随意摆弄这些代码和添加特性，也可以使用更大的超参数空间，例如，更大的树。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>GBTs for regression</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">回归的GBTs</h1>
+                
+            
+            
+                
+<p>为了减小损失函数的大小，GBTs将训练许多dt。对于每个实例，该算法将使用当前可用的集合来预测每个训练的标签。</p>
+<p>与决策树类似，GBTs可以执行以下操作:</p>
+<ul>
+<li>处理分类和数字特征</li>
+<li>用于二元分类和回归(尚不支持多类分类)</li>
+<li>不需要特征缩放</li>
+<li>从非常高维的数据集中捕获非线性和特征交互</li>
+</ul>
+<p>假设我们有<em> N </em>个数据实例(被<em>x<sub>I</sub>T9】=实例<em> i </em>的特征，<em> y </em>是标签(被<em>y<sub>I</sub>T17】=实例<em> i </em>的标签)，那么<em> f(x <sub> i </sub> ) </em>就是GBT模型对实例<em>I</em>的预测标签</em></em></p>
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/65f6f4b8-e90a-47da-a3c0-030f4ff1d493.png" style="width:25.17em;height:2.17em;"/></p>
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/880a15a7-d9c3-4c57-ac07-1527f8b1fb83.png" style="width:17.92em;height:2.17em;"/></p>
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/a742e469-420d-40f4-aa94-c9bbef6a0223.png" style="width:17.42em;height:2.17em;"/></p>
+<p>第一个等式称为<em>对数</em>损失，它是二项式负<em>对数</em>似然的两倍。第二种称为平方误差，通常被称为<em> L2 </em>损失和基于GBT的回归任务的默认损失。最后，第三种称为绝对误差，通常称为<em> L1 </em>损失，如果数据点有许多异常值且比平方误差稳健，则推荐使用这种方法。</p>
+<p>现在我们知道了GBT回归算法的最小工作原理，我们可以开始了。让我们通过调用<kbd>GBTRegressor()</kbd>接口来实例化一个<kbd>GBTRegressor</kbd>估算器:</p>
+<pre><strong>val</strong> gbtModel = new GBTRegressor().setFeaturesCol("features").setLabelCol("label")</pre>
+<p>当实例化前面的估计器时，我们可以设置最大箱数、树数、最大深度和杂质。然而，由于我们将执行k-fold交叉验证，我们也可以在创建<kbd>paramGrid</kbd>变量时设置这些参数:</p>
+<pre>// Search through GBT's parameter for the best model<br/><strong>var</strong> paramGrid = new ParamGridBuilder()<br/>      .addGrid(gbtModel.impurity, "variance" :: Nil)// variance for regression<br/>      .addGrid(gbtModel.maxBins, 25 :: 30 :: 35 :: Nil)<br/>      .addGrid(gbtModel.maxDepth, 5 :: 10 :: 15 :: Nil)<br/>      .addGrid(gbtModel.numTrees, 3 :: 5 :: 10 :: 15 :: Nil)<br/>      .build()</pre>
+<div><strong>Validation while training</strong>: Gradient boosting can overfit, especially when you train your model with more trees. In order to prevent this issue, it is useful to validate (for example, using cross-validation) while carrying out the training.</div>
+<p class="mce-root">为了获得更好、更稳定的性能，让我们准备k倍交叉验证和网格搜索作为模型调整的一部分。如你所料，我将进行10次交叉验证。根据您的设置和数据集随意调整折叠次数:</p>
+<pre class="mce-root">println("Preparing K-fold Cross Validation and Grid Search: Model tuning")<br/><strong>val</strong> numFolds = 10  // 10-fold cross-validation <br/><strong>val</strong> cv = new CrossValidator()<br/>      .setEstimator(gbtModel)<br/>      .setEvaluator(new RegressionEvaluator)<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<p>太棒了。我们创造了交叉验证估计量。现在是时候用交叉验证来训练<kbd>RandomForestRegression</kbd>模型了:</p>
+<pre>println("Training model with RandomForestRegressor algorithm")<br/><strong>val</strong> cvModel = cv.fit(trainingData)</pre>
+<p>现在我们有了合适的模型，我们可以进行预测了。让我们开始评估训练集和验证集上的模型，并计算RMSE、MSE、MAE和R平方误差:</p>
+<pre>println("Evaluating the model on the test set and calculating the regression metrics")<br/><strong>val</strong> trainPredictionsAndLabels = cvModel.transform(testData).select("label", "prediction")<br/>                                            .map { case Row(label: Double, prediction: Double) <br/>                                            =&gt; (label, prediction) }.rdd<br/><br/><strong>val</strong> testRegressionMetrics = new RegressionMetrics(trainPredictionsAndLabels)</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>一旦我们有了最佳拟合和交叉验证的模型，我们可以期待一个高预测精度。现在，让我们观察训练和验证集的结果:</p>
+<pre><strong>val</strong> results = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetrics.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetrics.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetrics.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetrics.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetrics.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(results)</pre>
+<p class="mce-root">以下输出显示了测试集的MSE、RMSE、R平方、MAE和解释方差:</p>
+<pre class="mce-root"><strong>=====================================================================</strong><br/><strong> TrainingData count: 80</strong><br/><strong> TestData count: 55</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 5.99847335425882</strong><br/><strong> TestData RMSE = 2.4491780977011084</strong><br/><strong> TestData R-squared = 0.4223425609926217</strong><br/><strong> TestData MAE = 2.0564380367107646</strong><br/><strong> TestData explained variance = 20.340666319995183</strong><br/><strong> =====================================================================</strong></pre>
+<p>太好了！我们已经成功计算了训练和测试集的原始预测，我们可以看到与LR、DT和GBT回归模型相比的改进。让我们寻找有助于提高精确度的模型:</p>
+<pre><strong>val </strong>bestModel = cvModel.bestModel.asInstanceOf[GBTRegressionModel]</pre>
+<p>此外，我们可以通过观察林中的DTs来了解决策是如何做出的:</p>
+<pre>println("Decision tree from best cross-validated model: " + bestModel.toDebugString)</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>在下面的输出中，toDebugString()方法打印了树的决策节点和最后叶子的最终预测结果:</p>
+<pre><strong>Decision tree from best cross-validated model with 10 trees</strong><br/><strong>   Tree 0 (weight 1.0):</strong><br/><strong>     If (feature 0 &lt;= 16.0)</strong><br/><strong>      If (feature 2 &lt;= 1.0)</strong><br/><strong>       If (feature 15 &lt;= 0.0)</strong><br/><strong>        If (feature 13 &lt;= 0.0)</strong><br/><strong>         If (feature 16 &lt;= 0.0)</strong><br/><strong>          If (feature 0 &lt;= 3.0)</strong><br/><strong>           If (feature 3 &lt;= 0.0)</strong><br/><strong>            Predict: 6.128571428571427</strong><br/><strong>           Else (feature 3 &gt; 0.0)</strong><br/><strong>            Predict: 3.3999999999999986</strong><br/><strong> ....</strong><br/><strong> Tree 9 (weight 1.0):</strong><br/><strong>     If (feature 0 &lt;= 22.0)</strong><br/><strong>      If (feature 2 &lt;= 1.0)</strong><br/><strong>       If (feature 1 &lt;= 1.0)</strong><br/><strong>        If (feature 0 &lt;= 1.0)</strong><br/><strong>         Predict: 3.4</strong><br/><strong> ...</strong></pre>
+<p>使用随机森林，可以测量要素的重要性，以便在稍后阶段，我们可以决定使用哪些要素以及从数据帧中删除哪些要素。让我们从之前刚刚创建的最佳模型中找出特征重要性，所有特征按升序排列如下:</p>
+<pre><strong>val</strong> featureImportances = bestModel.featureImportances.toArray<br/><br/><strong>val</strong> FI_to_List_sorted = featureImportances.toList.sorted.toArray<br/>println("Feature importance generated by the best model: ")<br/>for(x &lt;- FI_to_List_sorted) println(x)<br/><br/></pre>
+<p>以下是模型生成的特征重要性:</p>
+<pre><strong>Feature importance generated by the best model:</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 5.767724652714395E-4</strong><br/><strong> 0.001616872851121874</strong><br/><strong> 0.006381209526062637</strong><br/><strong> 0.008867810069950395</strong><br/><strong> 0.009420668763121653</strong><br/><strong> 0.01802097742361489</strong><br/><strong> 0.026755738338777407</strong><br/><strong> 0.02761531441902482</strong><br/><strong> 0.031208534172407782</strong><br/><strong> 0.033620224027091</strong><br/><strong> 0.03801721834820778</strong><br/><strong> 0.05263475066123412</strong><br/><strong> 0.05562565266841311</strong><br/><strong> 0.13221209076999635</strong><br/><strong> 0.5574261654957049</strong></pre>
+<p>最后一个结果对于理解特征的重要性很重要。如你所见，RF对一些看起来更重要的特性进行了排名。例如，后两个特征最重要，前两个不太重要。我们可以删除一些不重要的列，并训练RF模型来观察测试集上的R平方和MAE值是否有任何减少。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Random forest for supervised learning</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">监督学习的随机森林</h1>
+                
+            
+            
+                
+<p>在这一节中，我们将看到如何使用RF来解决回归和分类问题。我们将使用Scala中Spark ML包的DT实现。虽然GBT和RF都是树的集合，但是训练过程是不同的。例如，RF使用bagging技术来执行这个例子，而GBT使用boosting。然而，这两种组合之间有一些实际的权衡，这可能会造成选择什么的两难境地。然而，在大多数情况下，RF会是赢家。以下是一些理由:</p>
+<ul>
+<li>gbt一次训练一棵树，但是RF可以并行训练多棵树。所以射频的训练时间更短。然而，在某些特殊情况下，使用GBTs训练和使用较少数量的树会更快更方便。</li>
+<li>RFs不太容易过度拟合。换句话说，RFs减少了更多树的方差，但是gbt减少了更多树的偏差。</li>
+<li>RFs更容易调优，因为性能随着树的数量单调增加，但是gbt随着树数量的增加性能会变差。</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Random forest for classification</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用于分类的随机森林</h1>
+                
+            
+            
+                
+<p>我们从<a href="51712107-c5bc-4d7d-a84a-3039aafc8c0a.xhtml" target="_blank">第三章</a>、<em>Scala for Learning class ification</em>中熟悉客户流失预测问题，也对数据了如指掌。我们也知道射频的工作原理。因此，我们可以直接使用RFs的基于Spark的实现进行编码。</p>
+<p>我们首先通过调用<kbd>RandomForestClassifier()</kbd>接口来实例化<kbd>RandomForestClassifier</kbd>估计器:</p>
+<pre class="mce-root"><strong>val</strong> rf = new RandomForestClassifier()<br/>                    .setLabelCol("label")<br/>                    .setFeaturesCol("features")<br/>                    .setSeed(1234567L)  // for reproducibility</pre>
+<p>现在，我们已经准备好了三个变压器和一个估算器，下一个任务是连接一个流水线，也就是说，它们中的每一个都充当一个阶段:</p>
+<pre class="mce-root"><strong>val</strong> pipeline = new Pipeline()<br/>      .setStages(Array(PipelineConstruction.ipindexer,<br/>                   PipelineConstruction.labelindexer,<br/>                         PipelineConstruction.assembler,rf))</pre>
+<p>让我们定义<kbd>paramGrid</kbd>在超参数空间上执行网格搜索:</p>
+<pre class="mce-root"><strong>val</strong> paramGrid = new ParamGridBuilder()<br/>       .addGrid(rf.maxDepth, 3 :: 5 :: 15 :: 20 :: 50 :: Nil)<br/>       .addGrid(rf.featureSubsetStrategy, "auto" :: "all" :: Nil)<br/>       .addGrid(rf.impurity, "gini" :: "entropy" :: Nil)<br/>       .addGrid(rf.maxBins, 2 :: 5 :: 10 :: Nil)<br/>       .addGrid(rf.numTrees, 10 :: 50 :: 100 :: Nil)<br/>       .build()</pre>
+<p>让我们定义一个<kbd>BinaryClassificationEvaluator</kbd>评估器来评估模型:</p>
+<pre class="mce-root"><strong>val</strong> evaluator = new BinaryClassificationEvaluator()<br/>                  .setLabelCol("label")<br/>                  .setRawPredictionCol("prediction")</pre>
+<p>我们使用<kbd>CrossValidator</kbd>进行10重交叉验证以选择最佳模型:</p>
+<pre class="mce-root"><strong>val</strong> crossval = new CrossValidator()<br/>      .setEstimator(pipeline)<br/>      .setEvaluator(evaluator)<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<p>现在让我们调用<kbd>fit</kbd>方法，这样完整的预定义管道，包括所有的特征预处理和DT分类器，被执行多次——每次使用不同的超参数向量:</p>
+<pre><strong>val</strong> cvModel = crossval.fit(Preprocessing.trainDF)</pre>
+<p>现在是时候评估DT模型在测试数据集上的预测能力了。</p>
+<p class="mce-root"/>
+<p class="mceNonEditable">作为第一步，我们需要用模型管道来转换测试集，这将根据我们在特性工程步骤中描述的相同机制来映射特性:</p>
+<pre><strong>val</strong> predictions = cvModel.transform(Preprocessing.testSet)<br/>prediction.show(10)</pre>
+<p>这将引导我们进入下面的数据框，显示预测标签与实际标签的对比。此外，它还显示了原始概率:</p>
+<p class="CDPAlignCenter CDPAlign"><img src="img/779f9ae9-174a-49f5-a1af-6bc666d4286d.png" style="width:26.58em;height:20.17em;"/></p>
+<p>然而，基于前面的预测数据框架，很难猜测分类的准确性。</p>
+<p>但是在第二步中，使用<kbd>BinaryClassificationEvaluator</kbd>进行评估，如下所示:</p>
+<pre><strong>val</strong> accuracy = evaluator.evaluate(predictions)<br/>println("Classification accuracy: " + accuracy)</pre>
+<p>以下是输出:</p>
+<pre><strong>Accuracy: 0.8800055207949945</strong></pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>因此，我们从我们的二元分类模型中获得了大约87%的分类准确度。现在，类似于SVM和LR，我们将基于以下RDD观察精确回忆曲线下的面积和ROC曲线下的面积，其包含测试集上的原始分数:</p>
+<pre class="mce-root"><strong>val</strong> predictionAndLabels = predictions<br/>      .select("prediction", "label")<br/>      .rdd.map(x =&gt; (x(0).asInstanceOf[Double], x(1)<br/>        .asInstanceOf[Double]))</pre>
+<p>前面的RDD可用于计算前面提到的性能指标:</p>
+<pre><strong>val</strong> metrics = <strong>new</strong> BinaryClassificationMetrics(predictionAndLabels)<br/>println("Area under the precision-recall curve: " + metrics.areaUnderPR)<br/>println("Area under the receiver operating characteristic (ROC) curve: " + metrics.areaUnderROC)</pre>
+<p>在这种情况下，评估返回88%的准确度，但只有73%的精确度，这比SVM和LR好得多:</p>
+<pre><strong>Area under the precision-recall curve: 0.7321042166486744</strong><br/><strong>Area under the receiver operating characteristic (ROC) curve: 0.8800055207949945</strong></pre>
+<p>然后，我们计算一些更多的度量，例如，假的和真的正面和负面预测，这将有助于评估模型的性能:</p>
+<pre><strong>val</strong> TC = predDF.count() //Total count<br/><br/><strong>val</strong> tp = tVSpDF.filter($"prediction" === 0.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True positive rate<br/><strong>val</strong> tn = tVSpDF.filter($"prediction" === 1.0).filter($"label" === $"prediction")<br/>                    .count() / TC.toDouble // True negative rate<br/><strong>val</strong> fp = tVSpDF.filter($"prediction" === 1.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False positive rate<br/><strong>val</strong> fn = tVSpDF.filter($"prediction" === 0.0).filter(not($"label" === $"prediction"))<br/>                    .count() / TC.toDouble // False negative rate</pre>
+<p class="mce-root">另外，我们计算马修斯相关系数:<q> <br/> </q></p>
+<pre><strong>val</strong> MCC = (tp * tn - fp * fn) / math.sqrt((tp + fp) * (tp + fn) * (fp + tn) * (tn + fn))</pre>
+<p class="mce-root"/>
+<p class="mceNonEditable"/>
+<p>让我们观察一下模型的可信度有多高:</p>
+<pre>println("True positive rate: " + tp *100 + "%")<br/>println("False positive rate: " + fp * 100 + "%")<br/>println("True negative rate: " + tn * 100 + "%")<br/>println("False negative rate: " + fn * 100 + "%")<br/>println("Matthews correlation coefficient: " + MCC)</pre>
+<p>现在让我们来看看真阳性、假阳性、真阴性和假阴性的比率。此外，我们还看到了MCC:</p>
+<pre><strong>True positive rate: 0.7691154422788605</strong><br/><strong>False positive rate: 0.08845577211394302</strong><br/><strong>True negative rate: 0.12293853073463268</strong><br/><strong>False negative rate: 0.019490254872563718</strong><br/><strong>Matthews correlation coefficient: 0.6505449208932913</strong></pre>
+<p>就像DT和GBT一样，RF不仅表现出稳健的性能，而且性能略有改善。像DT和GBT一样，可以调试RF来获得在分类期间构建的DT。对于要打印的树和选择的最重要的特性，尝试DT中的最后几行代码，就完成了。</p>
+<p>你能猜出训练了多少不同的模型吗？我们有10倍的交叉验证和介于2和7之间的5维超参数空间基数。现在来简单算一下:<em>10 * 7 * 5 * 2 * 3 * 6 = 12600</em>款！</p>
+<p>现在我们已经看到了如何在分类设置中使用RF，让我们来看另一个回归分析的例子。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Random forest for regression</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">回归随机森林</h1>
+                
+            
+            
+                
+<p>因为RF对于大规模数据集来说足够快且可伸缩，所以基于Spark的RF实现可以帮助您实现巨大的可伸缩性。幸运的是，我们已经知道了射频的工作原理。</p>
+<p>如果以RF计算邻近度，存储需求也会呈指数增长。</p>
+<p class="mce-root">我们可以直接使用基于Spark的RF实现来进行编码。我们首先通过调用<kbd>RandomForestClassifier()</kbd>接口来实例化<kbd>RandomForestClassifier</kbd>估计器:</p>
+<p class="mce-root">现在，让我们通过指定一些超参数来创建网格空间，例如最大箱数、树的最大深度、树的数量和杂质类型:</p>
+<p>为了获得更好、更稳定的性能，让我们准备k倍交叉验证和网格搜索作为模型调整的一部分。如你所料，我将进行10次交叉验证。根据您的设置和数据集随意调整折叠次数:</p>
+<pre><strong>val</strong> rfModel = new RandomForestRegressor()<br/>        .setFeaturesCol("features")<br/>        .setLabelCol("label")</pre>
+<p>太棒了。我们创造了交叉验证估计量。现在是时候用交叉验证来训练随机森林回归模型了:</p>
+<pre>// Search through decision tree's maxDepth parameter for best model<br/><strong>var</strong> paramGrid = new ParamGridBuilder()<br/>      .addGrid(rfModel.impurity, "variance" :: Nil)// variance for regression<br/>      .addGrid(rfModel.maxBins, 25 :: 30 :: 35 :: Nil)<br/>      .addGrid(rfModel.maxDepth, 5 :: 10 :: 15 :: Nil)<br/>      .addGrid(rfModel.numTrees, 3 :: 5 :: 10 :: 15 :: Nil)<br/>      .build()</pre>
+<p class="mce-root">现在我们有了合适的模型，我们可以进行预测了。让我们开始评估训练集和验证集上的模型，并计算RMSE、MSE、MAE和R的平方:</p>
+<pre class="mce-root">println("Preparing K-fold Cross Validation and Grid Search: Model tuning")<br/><strong>val</strong> numFolds = 10  // 10-fold cross-validation <br/><strong>val</strong> cv = new CrossValidator()<br/>      .setEstimator(rfModel)<br/>      .setEvaluator(new RegressionEvaluator)<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<p>一旦我们有了最佳拟合和交叉验证的模型，我们可以期待一个良好的预测精度。现在让我们观察训练集和验证集的结果:</p>
+<pre>println("Training model with RandomForestRegressor algorithm")<br/><strong>val</strong> cvModel = cv.fit(trainingData)</pre>
+<p>以下输出显示了测试集的MSE、RMSE、R平方、MAE和解释方差:</p>
+<pre>println("Evaluating the model on the test set and calculating the regression metrics")<br/><strong>val</strong> trainPredictionsAndLabels = cvModel.transform(testData).select("label", "prediction")<br/>                                            .map { case Row(label: Double, prediction: Double) <br/>                                            =&gt; (label, prediction) }.rdd<br/><br/><strong>val</strong> testRegressionMetrics = new RegressionMetrics(trainPredictionsAndLabels)</pre>
+<p>太好了！我们已经成功计算了训练集和测试集的原始预测，与LR、DT和GBT回归模型相比，我们可以看到改进。让我们寻找有助于提高精确度的模型:</p>
+<pre><strong>val</strong> results = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetrics.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetrics.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetrics.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetrics.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetrics.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(results)</pre>
+<p class="mce-root">此外，通过查看林中的dt，我们可以了解决策是如何做出的:</p>
+<pre class="mce-root"><strong>=====================================================================</strong><br/><strong> TrainingData count: 80</strong><br/><strong> TestData count: 55</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 5.99847335425882</strong><br/><strong> TestData RMSE = 2.4491780977011084</strong><br/><strong> TestData R-squared = 0.4223425609926217</strong><br/><strong> TestData MAE = 2.0564380367107646</strong><br/><strong> TestData explained variance = 20.340666319995183</strong><br/><strong> =====================================================================</strong></pre>
+<p>Great! We have managed to compute the raw prediction on the train and the test sets, and we can see the improvements compared to the LR, DT, and GBT regression models. Let's hunt for the model that helps us to achieve better accuracy:</p>
+<pre><strong>val </strong>bestModel = cvModel.bestModel.asInstanceOf[RandomForestRegressionModel]</pre>
+<p>在下面的输出中，<kbd>toDebugString()</kbd>方法打印了树的决策节点和最后的预测结果:</p>
+<pre>println("Decision tree from best cross-validated model: " + bestModel.toDebugString)</pre>
+<p class="mce-root">使用RF，可以测量特征的重要性，以便在稍后阶段，我们可以决定使用哪些特征，以及从数据帧中删除哪些特征。让我们先找出我们刚刚创建的最佳模型中的特性重要性，然后按如下升序排列所有特性:</p>
+<p>以下是模型生成的特征重要性:</p>
+<pre><strong>Decision tree from best cross-validated model with 10 trees</strong><br/><strong>   Tree 0 (weight 1.0):</strong><br/><strong>     If (feature 0 &lt;= 16.0)</strong><br/><strong>      If (feature 2 &lt;= 1.0)</strong><br/><strong>       If (feature 15 &lt;= 0.0)</strong><br/><strong>        If (feature 13 &lt;= 0.0)</strong><br/><strong>         If (feature 16 &lt;= 0.0)</strong><br/><strong>          If (feature 0 &lt;= 3.0)</strong><br/><strong>           If (feature 3 &lt;= 0.0)</strong><br/><strong>            Predict: 6.128571428571427</strong><br/><strong>           Else (feature 3 &gt; 0.0)</strong><br/><strong>            Predict: 3.3999999999999986</strong><br/><strong> ....</strong><br/><strong> Tree 9 (weight 1.0):</strong><br/><strong>     If (feature 0 &lt;= 22.0)</strong><br/><strong>      If (feature 2 &lt;= 1.0)</strong><br/><strong>       If (feature 1 &lt;= 1.0)</strong><br/><strong>        If (feature 0 &lt;= 1.0)</strong><br/><strong>         Predict: 3.4</strong><br/><strong> ...</strong></pre>
+<p>最后一个结果对于理解特征的重要性很重要。如所见，一些特征比其他特征具有更高的权重。甚至其中一些没有权重。权重越高，特征的重要性越高。比如后两个特性最重要，前两个不太重要。我们可以删除一些不重要的列，并训练RF模型来观察测试集上的R平方和MAE值是否有任何减少。</p>
+<pre><strong>val</strong> featureImportances = bestModel.featureImportances.toArray<br/><br/><strong>val</strong> FI_to_List_sorted = featureImportances.toList.sorted.toArray<br/>println("Feature importance generated by the best model: ")<br/>for(x &lt;- FI_to_List_sorted) println(x)<br/><br/></pre>
+<p>下一步是什么？</p>
+<pre><strong>Feature importance generated by the best model:</strong><br/><strong> 0.0</strong><br/><strong> 0.0</strong><br/><strong> 5.767724652714395E-4</strong><br/><strong> 0.001616872851121874</strong><br/><strong> 0.006381209526062637</strong><br/><strong> 0.008867810069950395</strong><br/><strong> 0.009420668763121653</strong><br/><strong> 0.01802097742361489</strong><br/><strong> 0.026755738338777407</strong><br/><strong> 0.02761531441902482</strong><br/><strong> 0.031208534172407782</strong><br/><strong> 0.033620224027091</strong><br/><strong> 0.03801721834820778</strong><br/><strong> 0.05263475066123412</strong><br/><strong> 0.05562565266841311</strong><br/><strong> 0.13221209076999635</strong><br/><strong> 0.5574261654957049</strong></pre>
+<p>到目前为止，我们主要介绍了用于回归和分类的经典算法和基于树的算法。我们看到，与经典算法相比，集成技术表现出最好的性能。然而，还有其他算法，如one-vs-rest算法，它使用其他分类器来解决分类问题，如逻辑回归。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>What's next?</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">除此之外，基于神经网络的方法，如<strong>多层感知器</strong> ( <strong> MLP </strong>)、<strong>卷积神经网络</strong> ( <strong> CNN </strong>)和<strong>递归神经网络</strong> ( <strong> RNN </strong>)，也可以用来解决监督学习问题。然而，正如所料，这些算法需要大量的训练样本和大型计算基础设施。到目前为止，我们在示例中使用的数据集只有几个样本。此外，这些并不是高维度的。这并不意味着我们不能用它们来解决这两个问题；我们可以，但是由于缺少训练样本，这会导致巨大的过度拟合。</h1>
+                
+            
+            
+                
+<p>我们如何解决这个问题？嗯，我们可以搜索其他数据集，也可以随机生成训练数据。我们将讨论并展示我们如何训练基于神经网络的深度学习模型来解决其他问题。</p>
+<p>Apart from this, neural-network-based approaches, such as <strong>multilayer perceptron</strong> (<strong>MLP</strong>), <strong>convolutional neural network</strong> (<strong>CNN</strong>), and <strong>recurrent neural network</strong> (<strong>RNN</strong>), can also be used to solve supervised learning problems. However, as expected, these algorithms require a large number of training samples and a large computing infrastructure. The datasets we used so far throughout the examples had a few samples. Moreover, those were not so high dimensional. This doesn't mean that we cannot use them to solve these two problems; we can, but this results in huge overfitting due to a lack of training samples.</p>
+<p>How do we fix this issue? Well, we can either search for other datasets or generate training data randomly. We'll discuss and show how we can train neural-network-based deep learning models to solve other problems.</p>
+<p class="mce-root">摘要</p>
+<p class="mce-root">在本章中，我们简要介绍了强大的基于树的算法，如DTs、GBT和RF，用于解决分类和回归任务。我们看到了如何使用基于树和集成技术开发这些分类器和回归器。通过两个真实世界的分类和回归问题，我们看到了树集成技术如何优于基于DT的分类器或回归器。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">我们讨论了结构化和标签化数据的分类和回归的监督学习。然而，随着云计算、物联网和社交媒体的兴起，非结构化数据正在前所未有地增长，给出了超过80%的数据，其中大部分是未标记的。</h1>
+                
+            
+            
+                
+<p>无监督学习技术，如聚类分析和降维，是数据驱动的研究和行业设置中自动从非结构化数据集中发现隐藏结构的关键应用。聚类算法有很多，比如k-means，二分法k-means。然而，这些算法不能很好地处理高维输入数据集，并且经常遭受<em>维数灾难</em>。使用<strong>主成分分析</strong> ( <strong> PCA </strong>)等算法降低维度，并输入潜在数据，对于聚类数十亿个数据点非常有用。</p>
+<p>在下一章中，我们将使用一种基因组数据，根据他们的优势祖先，也称为地理种族，对一个群体进行聚类。我们还将学习如何评估聚类分析结果，以及如何使用降维技术来避免维数灾难。</p>
+<p>Unsupervised learning techniques, such as clustering analysis and dimensionality reduction, are key applications in data-driven research and industry settings to find hidden structures from unstructured datasets automatically. There are many clustering algorithms, such as k-means and bisecting k-means. However, these algorithms cannot perform well with high-dimensional input datasets and often suffer from the <em>curse of dimensionality</em>. Reducing the dimensionality using algorithms such as <strong>principal component analysis</strong> (<strong>PCA</strong>) and feeding the latent data is useful for clustering billions of data points.</p>
+<p>In the next chapter, we will use one kind of genomic data to cluster a population according to their predominant ancestry, also called geographic ethnicity. We will also learn how to evaluate the clustering analysis result and about the dimensionality reduction technique to avoid the curse of dimensionality.</p>
+
+
+            
+
+            
+        
+    
+
+
+</body></html>

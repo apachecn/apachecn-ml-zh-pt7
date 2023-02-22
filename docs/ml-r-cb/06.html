@@ -1,0 +1,656 @@
+<html><head/><body>
+<html>
+  <head>
+    <title>Chapter 6. Classification (II) – Neural Network and SVM</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06" class="calibre1"/>第六章。分类(二)——神经网络和SVM</h1></div></div></div><p class="calibre7">在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem">用支持向量机对数据进行分类</li><li class="listitem">选择支持向量机的代价</li><li class="listitem">可视化SVM拟合</li><li class="listitem">基于由支持向量机训练的模型预测标签</li><li class="listitem">调整支持向量机</li><li class="listitem">用神经网络训练神经网络</li><li class="listitem">可视化由神经网络训练的神经网络</li><li class="listitem">基于神经网络训练的模型预测标签</li><li class="listitem">用神经网络训练神经网络</li><li class="listitem">基于由nnet训练的模型预测标签</li></ul></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Chapter 6. Classification (II) – Neural Network and SVM</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h1 class="title" id="calibre_pb_1"><a id="ch06lvl1sec66" class="calibre1"/>简介</h1></div></div></div><p class="calibre7">大多数研究表明，<strong class="calibre2">支持向量机</strong> ( <strong class="calibre2"> SVM </strong>)和<strong class="calibre2">神经网络</strong> ( <strong class="calibre2"> NN </strong>)是<a id="id521" class="calibre1"/>强大的分类工具，可以应用于几个不同的领域。与上一章提到的基于树或基于概率的方法不同，<a id="id522" class="calibre1"/>支持向量机和神经网络如何从输入转换到输出的过程不太清楚，可能很难解释。因此，支持向量机和神经网络都被称为黑盒方法。</p><p class="calibre7">神经网络的发展受到人类大脑活动的启发。因此，这种类型的网络是一种模拟人类思维模式的计算模型。与此相反，支持向量机首先将输入数据映射到由核函数定义的高维特征空间中，并找到以最大间隔分隔训练数据的最佳超平面。简而言之，我们可以把支持向量机看作是高维空间中的线性算法。</p><p class="calibre7">这两种<a id="id523" class="calibre1"/>方法在解决<a id="id524" class="calibre1"/>分类问题时各有利弊。例如，支持向量机解决方案是全局最优的，而神经网络可能遭受多个局部最优。因此，选择哪一个取决于数据集源的特征。在本章中，我们将说明以下内容:</p><div><ul class="itemizedlist"><li class="listitem">如何训练支持向量机</li><li class="listitem">观察成本的选择如何影响SVM分类器</li><li class="listitem">可视化SVM拟合</li><li class="listitem">基于由SVM训练的模型来预测测试数据集的标签</li><li class="listitem">调谐SVM</li></ul></div><p class="calibre7">在神经网络部分，我们将涵盖:</p><div><ul class="itemizedlist"><li class="listitem">如何训练神经网络</li><li class="listitem">如何可视化神经网络模型</li><li class="listitem">基于由<code class="email">neuralnet</code>训练的模型预测测试数据集的标签</li><li class="listitem">最后，我们将展示如何用<code class="email">nnet</code>训练神经网络，以及如何用它来预测测试数据集的标签</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec67" class="calibre1"/>用支持向量机对数据进行分类</h1></div></div></div><p class="calibre7">最广为人知的两个<a id="id525" class="calibre1"/>支持向量机<a id="id526" class="calibre1"/>是<code class="email">libsvm</code>和<code class="email">SVMLite</code>。对于R用户，可以在<code class="email">e1071</code>包中找到<code class="email">libsvm</code>的实现<a id="id527" class="calibre1"/>，在<code class="email">klaR</code>包中找到<code class="email">SVMLite</code>。所以可以用这两个包实现的函数来训练支持向量机。在这个菜谱中，我们将重点使用<code class="email">e1071</code>包中的<code class="email">svm</code>函数(<code class="email">libsvm</code>实现版本)来训练一个基于电信客户流失数据训练数据集的支持向量机。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">在这个食谱中，我们将继续使用电信客户流失数据集作为输入数据源来训练支持向量机。对于没有准备数据集的人，请参考<a class="calibre1" title="Chapter 5. Classification (I) – Tree, Lazy, and Probabilistic" href="part0060_split_000.html#page">第五章</a>、<em class="calibre8">分类(一)——树、懒、概率</em>了解详情。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec222" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来训练SVM:</p><div><ol class="orderedlist"><li class="listitem" value="1">加载<code class="email">e1071</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(e1071)</strong> </pre> </div></li><li class="listitem" value="2">使用<code class="email">svm</code>函数训练<a id="id528" class="calibre1"/>支持向量机，以<code class="email">trainset</code>为输入数据集，以<code class="email">churn</code>为分类类别:<div> <pre class="programlisting"> <strong class="calibre2">&gt; model  = svm(churn~., data = trainset, kernel="radial", cost=1, gamma = 1/ncol(trainset))</strong> </pre> </div></li><li class="listitem" value="3">最后，您可以通过<code class="email">summary</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(model)</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">svm(formula = churn ~ ., data = trainset, kernel = "radial", cost = 1, gamma = 1/ncol(trainset))</strong>   <strong class="calibre2">Parameters:</strong> <strong class="calibre2">   SVM-Type:  C-classification </strong> <strong class="calibre2"> SVM-Kernel:  radial </strong> <strong class="calibre2">       cost:  1 </strong> <strong class="calibre2">      gamma:  0.05882353 </strong>  <strong class="calibre2">Number of Support Vectors:  691</strong>  <strong class="calibre2"> ( 394 297 )</strong>   <strong class="calibre2">Number of Classes:  2 </strong>  <strong class="calibre2">Levels: </strong> <strong class="calibre2"> yes no</strong> </pre> </div>获得已建模型的整体信息</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec223" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">支持向量机构造一个超平面(或一组超平面),该超平面在高维空间中最大化两个类之间的边缘宽度。其中，<a id="id529" class="calibre1"/>定义超平面的情况是支持向量，如下图所示:</p><div><img src="img/00112.jpeg" alt="How it works..." class="calibre9"/><div><p class="calibre12">图1:支持向量机</p></div></div><p class="calibre10"> </p><p class="calibre7">支持向量机从构造一个最大化边缘宽度的超平面开始。然后，将该定义推广到一个非线性可分问题。最后，它将数据映射到一个高维空间，在这个空间中，数据可以更容易地用一个线性边界分开。</p><p class="calibre7">使用SVM的优势在于它通过面向工程问题的内核建立了一个高度精确的模型。此外，它利用正则项来避免过拟合。它也不会受到局部最优和多重共线性的影响。SVM的主要限制是它在训练和测试时间的速度和规模。因此，为大数据量构建分类模型是不合适的，也不够有效。此外，既然很难解释SVM，核心的决定是如何发生的？正规化是我们需要解决的另一个问题。</p><p class="calibre7">在这个菜谱中，我们继续使用电信<code class="email">churn</code>数据集作为我们的示例数据源。我们开始使用<code class="email">e1071</code>包中提供的<code class="email">libsvm</code>训练一个支持向量机。在训练函数<code class="email">svm</code>中，用户可以指定<code class="email">kernel</code>函数、成本和<code class="email">gamma</code>函数。对于<code class="email">kernel</code>参数，缺省值是radial，用户可以将内核指定为线性、多项式、径向基和sigmoid。至于<code class="email">gamma</code>参数，默认值等于(1/数据维)，它控制分离超平面的形状。增加<code class="email">gamma</code>参数通常会增加支持向量的数量。</p><p class="calibre7">至于代价，默认值设置为1，表示正则项是常数，值越大，余量越小。我们将在下一个菜谱中进一步讨论成本如何影响SVM分类器。一旦构建了支持向量机，就可以使用<code class="email">summary</code>函数来获取信息，比如调用、参数、类的数量和标签的类型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec224" class="calibre1"/>参见</h2></div></div></div><p class="calibre7">另一个流行的<a id="id532" class="calibre1"/>支持向量机工具是<code class="email">SVMLight</code>。不像<code class="email">e1071</code>包提供了<code class="email">libsvm</code>的完整实现，<code class="email">klaR</code>包仅仅提供了一个到<code class="email">SVMLight</code>的接口。要使用<code class="email">SVMLight</code>，可以执行以下步骤:</p><div><ol class="orderedlist"><li class="listitem" value="1">安装<code class="email">klaR</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("klaR")</strong> <strong class="calibre2">&gt; library(klaR)</strong> </pre> </div></li><li class="listitem" value="2">从<a class="calibre1" href="http://svmlight.joachims.org/">http://svmlight.joachims.org/</a>下载<a id="id533" class="calibre1"/>您平台的<code class="email">SVMLight</code>源代码和二进制代码。例如，如果您的客户操作系统是Windows 64位，您应该从<a class="calibre1" href="http://download.joachims.org/svm_light/current/svm_light_windows64.zip">http://download . joachims . org/SVM _ light/current/SVM _ light _ Windows 64 . zip</a>下载该文件。</li><li class="listitem" value="3">然后，您应该解压缩文件，并将可工作的二进制文件放在工作目录中；您可以使用<code class="email">getwd</code>功能查看您的工作目录:<div> <pre class="programlisting"> <strong class="calibre2">&gt; getwd()</strong> </pre> </div></li><li class="listitem" value="4">使用<code class="email">svmlight</code>函数训练支持向量机:<div> <pre class="programlisting"> <strong class="calibre2">&gt; model.light  = svmlight(churn~., data = trainset, kernel="radial", cost=1, gamma = 1/ncol(trainset))</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Choosing the cost of a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec68" class="calibre1"/>选择支持向量机的成本</h1></div></div></div><p class="calibre7">支持向量机创建了一个最佳超平面，该超平面通过<a id="id534" class="calibre1"/>最大余量分离训练数据。然而，有时我们希望在分类时允许一些错误的分类。SVM模型有一个成本函数，控制训练误差和利润。例如，小成本产生大利润(软利润)并允许更多的错误分类。另一方面，大的成本产生了窄的利润(硬利润),并允许更少的错误分类。在这个配方中，我们将说明大成本和小成本如何影响SVM分类器。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Choosing the cost of a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">在这个<a id="id535" class="calibre1"/>菜谱中，我们将使用<code class="email">iris</code>数据集作为我们的示例数据源。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Choosing the cost of a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">如何去做...</h2></div></div></div><p class="calibre7">执行以下步骤，以生成两个具有不同成本的不同分类实例:</p><div><ol class="orderedlist"><li class="listitem" value="1">子集化<code class="email">iris</code>数据集，列名为<code class="email">Sepal.Length</code>、<code class="email">Sepal.Width</code>、<code class="email">Species</code>，种类在<code class="email">setosa</code>和<code class="email">virginica</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; iris.subset = subset(iris, select=c("Sepal.Length", "Sepal.Width", "Species"), Species %in% c("setosa","virginica"))</strong> </pre> </div></li><li class="listitem" value="2">Then, you can generate a scatter plot with <code class="email">Sepal.Length</code> as the x-axis and the <code class="email">Sepal.Width</code> as the y-axis:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(x=iris.subset$Sepal.Length,y=iris.subset$Sepal.Width, col=iris.subset$Species, pch=19)</strong>
+</pre></div><div><img src="img/00113.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图2:萼片的散点图。长度和萼片。虹膜数据集子集的宽度</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="3">接下来，你可以基于<code class="email">iris.subset</code>训练SVM，代价等于1: <div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.model = svm(Species ~ ., data=iris.subset, kernel='linear', cost=1, scale=FALSE)</strong> </pre> </div></li><li class="listitem" value="4">Then, we <a id="id536" class="calibre1"/>can circle the support vector with blue circles:<div><pre class="programlisting">
+<strong class="calibre2">&gt; points(iris.subset[svm.model$index,c(1,2)],col="blue",cex=2)</strong>
+</pre></div><div><img src="img/00114.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图3:用蓝色圆环圈出支持向量</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">Lastly, we can add a separation line on the plot:<div><pre class="programlisting">
+<strong class="calibre2">&gt; w = t(svm.model$coefs) %*% svm.model$SV</strong>
+<strong class="calibre2">&gt; b = -svm.model$rho</strong>
+<strong class="calibre2">&gt; abline(a=-b/w[1,2], b=-w[1,1]/w[1,2], col="red", lty=5)</strong>
+</pre></div><div><img src="img/00115.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图4:向散点图添加分隔线</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="6">In addition<a id="id537" class="calibre1"/> to this, we create another SVM classifier where <code class="email">cost = 10,000</code>:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(x=iris.subset$Sepal.Length,y=iris.subset$Sepal.Width, col=iris.subset$Species, pch=19)</strong>
+<strong class="calibre2">&gt; svm.model = svm(Species ~ ., data=iris.subset, type='C-classification', kernel='linear', cost=10000, scale=FALSE)</strong>
+<strong class="calibre2">&gt; points(iris.subset[svm.model$index,c(1,2)],col="blue",cex=2)</strong>
+<strong class="calibre2">&gt; w = t(svm.model$coefs) %*% svm.model$SV</strong>
+<strong class="calibre2">&gt; b = -svm.model$rho</strong>
+<strong class="calibre2">&gt; abline(a=-b/w[1,2], b=-w[1,1]/w[1,2], col="red", lty=5)</strong>
+</pre></div><div><img src="img/00116.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图5:一个大开销的分类例子</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Choosing the cost of a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">在这个<a id="id538" class="calibre1"/>配方中，我们展示了不同的成本如何影响SVM分类器。首先，我们用包含物种、<code class="email">setosa</code>和<code class="email">virginica</code>的列、<code class="email">Sepal.Length</code>、<code class="email">Sepal.Width</code>和<code class="email">Species</code>创建一个iris子集。然后，为了创建软余量并允许一些错误分类，我们使用小成本的SVM(其中<code class="email">cost = 1</code>)来训练向量机的支持度。接下来，我们用蓝色圆圈圈出支持向量，并添加分隔线。根据<em class="calibre8">图5 </em>，其中一个绿点(<code class="email">virginica</code>)由于选择了小代价而被错误分类(分类到<code class="email">setosa</code>)到分隔线的另一侧。</p><p class="calibre7">除此之外，我们想确定一个大的成本会如何影响SVM分类器。所以我们选择大成本(其中<code class="email">cost = 10,000</code>)。从图5中，我们可以看到创建的边界很窄(硬边界),并且不存在错误分类的情况。因此，这两个例子表明，选择不同的成本可能会影响所创造的利润，也影响错误分类的可能性。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Choosing the cost of a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec228" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">Corinna Cortes和Vladimir N. Vapnik于1995年在以下论文中提出了允许错误分类示例的软边距概念:Cortes，c .和Vapnik，V. (1995)。支持向量网络。机器学习，20(3)，273-297。</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing an SVM fit</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec69" class="calibre1"/>想象SVM合身</h1></div></div></div><p class="calibre7">为了可视化所构建的模型，可以首先使用绘图功能来生成数据输入和SVM拟合的散点图。在该图中，支持向量和类通过<a id="id539" class="calibre1"/>颜色符号突出显示。除此之外，还可以绘制类区域的轮廓填充图，以便于从图中识别错误分类的样本。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing an SVM fit</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch06lvl2sec229" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">在这个菜谱中，我们将使用两个数据集:数据集<code class="email">iris</code>和数据集<code class="email">churn</code>。对于电信<code class="email">churn</code>数据集，人们需要通过用SVM训练支持向量机来完成之前的配方，并且已经保存了SVM拟合模型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing an SVM fit</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec230" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来可视化SVM拟合对象:</p><div><ol class="orderedlist"><li class="listitem" value="1">Use SVM to train the support vector machine based on the iris dataset, and use the <code class="email">plot</code> function to visualize the fitted model:<div><pre class="programlisting">
+<strong class="calibre2">&gt; data(iris)</strong>
+<strong class="calibre2">&gt; model.iris  = svm(Species~., iris)</strong>
+<strong class="calibre2">&gt; plot(model.iris, iris, Petal.Width ~ Petal.Length, slice = list(Sepal.Width = 3, Sepal.Length = 4))</strong>
+</pre></div><div><img src="img/00117.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图6:基于iris数据集的训练SVM拟合的SVM分类图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">Visualize the SVM fit object, <code class="email">model</code>, using the <code class="email">plot</code> function with the dimensions of <code class="email">total_day_minutes</code> and <code class="email">total_intl_charge</code>:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(model, trainset, total_day_minutes ~ total_intl_charge)</strong>
+</pre></div><div><img src="img/00118.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图7:基于流失数据集的训练SVM拟合的SVM分类图</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing an SVM fit</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec231" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个<a id="id540" class="calibre1"/>配方中，我们演示了如何使用<code class="email">plot</code>功能来可视化SVM拟合。在第一个图中，我们使用<code class="email">iris</code>数据集训练一个支持向量机。然后，我们使用<code class="email">plot</code>功能来可视化拟合的SVM。</p><p class="calibre7">在参数列表中，我们在第一个参数中指定拟合的模型，数据集(这应该是用于构建模型的相同数据)作为第二个参数。第三个参数表示用于生成分类图的维度。默认情况下，<code class="email">plot</code>函数只能基于两个维度(x轴和y轴)生成散点图。因此，我们选择变量<code class="email">Petal.Length</code>和<code class="email">Petal.Width</code>作为两个维度来生成散点图。</p><p class="calibre7">从<em class="calibre8">图6 </em>中，我们发现<code class="email">Petal.Length</code>被分配给x轴，<code class="email">Petal.Width</code>被分配给y轴，带有<code class="email">X</code>和<code class="email">O</code>符号的数据点分散在图上。在散点图中，<code class="email">X</code>符号表示支持向量，<code class="email">O</code>符号表示数据点。这两个符号可以通过<code class="email">svSymbol</code>和<code class="email">dataSymbol</code>选项的配置进行更改。支持向量和真实类都被突出显示，并根据它们的标签进行着色(绿色表示viginica，红色表示versicolor，黑色<a id="id541" class="calibre1"/>表示setosa)。最后一个参数<code class="email">slice</code>在有两个以上变量时设置。因此，在本例中，我们通过分配常量<code class="email">3</code>和<code class="email">4</code>来使用额外的变量<code class="email">Sepal.width</code>和<code class="email">Sepal.length</code>。</p><p class="calibre7">接下来，我们采用同样的方法，根据客户流失数据得出SVM拟合。在本例中，我们使用<code class="email">total_day_minutes</code>和<code class="email">total_intl_charge</code>作为绘制散点图的两个维度。根据<em class="calibre8">图7 </em>，红色和黑色的支持向量和数据点紧密地分散在图的中心区域，没有简单的方法将它们分开。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing an SVM fit</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec232" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">还有其他参数，如<code class="email">fill</code>、<code class="email">grid</code>、<code class="email">symbolPalette</code>等，可以通过配置来改变图形的布局。您可以使用<code class="email">help</code>功能查看以下文档以获取更多信息:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?svm.plot</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec70" class="calibre1"/>基于支持向量机训练的模型预测标签</h1></div></div></div><p class="calibre7">在前面的食谱中，我们根据训练数据集训练了一个SVM。训练过程找到<a id="id542" class="calibre1"/>最佳超平面，该超平面使<a id="id543" class="calibre1"/>以最大间距分隔训练数据。然后，我们可以利用SVM拟合来预测新观察的标签(类别)。在这个菜谱中，我们将演示如何使用<code class="email">predict</code>函数根据SVM训练的模型来预测值。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">您需要通过生成拟合的SVM来完成之前的配方，并将拟合的模型保存在模型中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec234" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来预测测试数据集的标签:</p><div><ol class="orderedlist"><li class="listitem" value="1">根据拟合的SVM和测试数据集的属性预测测试数据集的标签:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.pred = predict(model, testset[, !names(testset) %in% c("churn")])</strong> </pre> </div></li><li class="listitem" value="2">然后，您可以使用<code class="email">table</code>函数生成一个带有预测结果和测试数据集标签的分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.table=table(svm.pred, testset$churn)</strong> <strong class="calibre2">&gt; svm.table</strong> <strong class="calibre2">        </strong> <strong class="calibre2">svm.pred yes  no</strong> <strong class="calibre2">     yes  70  12</strong> <strong class="calibre2">     no   71 865</strong> </pre> </div></li><li class="listitem" value="3">接下来，你<a id="id544" class="calibre1"/>可以使用<code class="email">classAgreement</code>来计算系数对比分类协议:<div> <pre class="programlisting"> <strong class="calibre2">&gt; classAgreement(svm.table)</strong> <strong class="calibre2">$diag</strong> <strong class="calibre2">[1] 0.9184676</strong>  <strong class="calibre2">$kappa</strong> <strong class="calibre2">[1] 0.5855903</strong>  <strong class="calibre2">$rand</strong> <strong class="calibre2">[1] 0.850083</strong>  <strong class="calibre2">$crand</strong> <strong class="calibre2">[1] 0.5260472</strong> </pre> </div></li><li class="listitem" value="4">现在，您<a id="id545" class="calibre1"/>可以根据分类表<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(caret)</strong> <strong class="calibre2">&gt; confusionMatrix(svm.table)</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">        </strong> <strong class="calibre2">svm.pred yes  no</strong> <strong class="calibre2">     yes  70  12</strong> <strong class="calibre2">     no   71 865</strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">               Accuracy : 0.9185          </strong> <strong class="calibre2">                 95% CI : (0.8999, 0.9345)</strong> <strong class="calibre2">    No Information Rate : 0.8615          </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : 1.251e-08       </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">                  Kappa : 0.5856          </strong> <strong class="calibre2"> Mcnemar's Test P-Value : 1.936e-10       </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">            Sensitivity : 0.49645         </strong> <strong class="calibre2">            Specificity : 0.98632         </strong> <strong class="calibre2">         Pos Pred Value : 0.85366         </strong> <strong class="calibre2">         Neg Pred Value : 0.92415         </strong> <strong class="calibre2">             Prevalence : 0.13851         </strong> <strong class="calibre2">         Detection Rate : 0.06876         </strong> <strong class="calibre2">   Detection Prevalence : 0.08055         </strong> <strong class="calibre2">      Balanced Accuracy : 0.74139         </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">       'Positive' Class : yes             </strong> </pre> </div>使用<code class="email">confusionMatrix</code>来衡量预测性能</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec235" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个方法中，我们首先使用<code class="email">predict</code>函数来获得测试<a id="id546" class="calibre1"/>数据集的预测标签。接下来，我们使用<code class="email">table</code>函数根据测试<a id="id547" class="calibre1"/>数据集的预测标签生成分类表。到目前为止，评估程序与上一章提到的评估过程非常相似。</p><p class="calibre7">然后我们引入了一个新函数<code class="email">classAgreement</code>，它计算双向列联表的列和行之间的几个一致性系数。这些系数包括diag、kappa、rand和crand。<code class="email">diag</code>系数表示数据点在分类表主对角线上的百分比，<code class="email">kappa</code>指的是<code class="email">diag</code>，其通过变化(随机协议的概率)对协议进行校正，<code class="email">rand</code>表示Rand指数，其测量两个数据簇之间的相似性，<code class="email">crand</code>表示Rand指数，其针对元素的机会分组进行调整。</p><p class="calibre7">最后，我们使用来自<code class="email">caret</code>包的<code class="email">confusionMatrix</code>来测量分类模型的性能。0.9185的准确率说明训练好的支持向量机可以正确的对大部分观测值进行分类。然而，准确性本身并不是分类模型的良好度量。还应该提到敏感性和特异性。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec236" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">除了使用SVM预测新观测值的类别之外，您还可以使用SVM预测连续值。换句话说，可以使用SVM进行回归分析。</p><p class="calibre7">在以下示例中，我们将展示如何基于指定为<code class="email">eps-regression</code>类型的拟合SVM执行简单的回归预测。</p><p class="calibre7">执行以下步骤，使用SVM训练回归模型:</p><div><ol class="orderedlist"><li class="listitem" value="1">基于<code class="email">Quartet</code>数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(car)</strong> <strong class="calibre2">&gt; data(Quartet)</strong> <strong class="calibre2">&gt; model.regression = svm(Quartet$y1~Quartet$x,type="eps-regression")</strong> </pre> </div>训练支持向量机</li><li class="listitem" value="2">使用<code class="email">predict</code>函数获得预测结果:<div> <pre class="programlisting"> <strong class="calibre2">&gt; predict.y = predict(model.regression, Quartet$x) </strong> <strong class="calibre2">&gt; predict.y</strong> <strong class="calibre2">       1        2        3        4        5        6        7        8 </strong> <strong class="calibre2">8.196894 7.152946 8.807471 7.713099 8.533578 8.774046 6.186349 5.763689 </strong> <strong class="calibre2">       9       10       11 </strong> <strong class="calibre2">8.726925 6.621373 5.882946 </strong> </pre> </div></li><li class="listitem" value="3">Plot the predicted points as squares and the training data points as circles on the same plot:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(Quartet$x, Quartet$y1, pch=19)</strong>
+<strong class="calibre2">&gt; points(Quartet$x, predict.y, pch=15, col="red")</strong>
+</pre></div><div><img src="img/00119.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">图8:散点图包含预测数据点和训练数据点</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Tuning a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec71" class="calibre1"/>调优支持向量机</h1></div></div></div><p class="calibre7">除了在支持向量机中使用不同的特性集和<code class="email">kernel</code>函数之外，您可以用来调整其性能的一个技巧是调整参数中配置的gamma和成本<a id="id550" class="calibre1"/>。一种测试不同伽马和成本组合值的性能的可能方法是编写一个<code class="email">for</code>循环，以生成伽马和成本的所有组合作为训练不同支持向量机的输入。幸运的是，SVM提供了一个调优功能<code class="email">tune.svm</code>，这使得调优变得容易多了。在这个菜谱中，我们将演示如何通过使用<code class="email">tune.svm</code>来调整支持向量机。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Tuning a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch06lvl2sec237" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">您需要通过准备一个训练数据集<code class="email">trainset</code>来完成之前的配方。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Tuning a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec238" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来调整支持向量机:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，使用<code class="email">tune.svm</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; tuned = tune.svm(churn~., data = trainset, gamma = 10^(-6:-1), cost = 10^(1:2))</strong> </pre> </div>调整支持向量机</li><li class="listitem" value="2">接下来，您可以使用<code class="email">summary</code>函数获得调优结果:<div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(tuned)</strong>  <strong class="calibre2">Parameter tuning of 'svm':</strong>  <strong class="calibre2">- sampling method: 10-fold cross validation </strong>  <strong class="calibre2">- best parameters:</strong> <strong class="calibre2"> gamma cost</strong> <strong class="calibre2">  0.01  100</strong>  <strong class="calibre2">- best performance: 0.08077885 </strong>  <strong class="calibre2">- Detailed performance results:</strong> <strong class="calibre2">   gamma cost      error dispersion</strong> <strong class="calibre2">1  1e-06   10 0.14774780 0.02399512</strong> <strong class="calibre2">2  1e-05   10 0.14774780 0.02399512</strong> <strong class="calibre2">3  1e-04   10 0.14774780 0.02399512</strong> <strong class="calibre2">4  1e-03   10 0.14774780 0.02399512</strong> <strong class="calibre2">5  1e-02   10 0.09245223 0.02046032</strong> <strong class="calibre2">6  1e-01   10 0.09202306 0.01938475</strong> <strong class="calibre2">7  1e-06  100 0.14774780 0.02399512</strong> <strong class="calibre2">8  1e-05  100 0.14774780 0.02399512</strong> <strong class="calibre2">9  1e-04  100 0.14774780 0.02399512</strong> <strong class="calibre2">10 1e-03  100 0.11794484 0.02368343</strong> <strong class="calibre2">11 1e-02  100 0.08077885 0.01858195</strong> <strong class="calibre2">12 1e-01  100 0.12356135 0.01661508</strong> </pre> </div></li><li class="listitem" value="3"><a id="id551" class="calibre1"/>从调优结果中检索出最佳性能参数后，可以用最佳性能参数重新训练支持向量机:<div> <pre class="programlisting"> <strong class="calibre2">&gt; model.tuned = svm(churn~., data = trainset, gamma = tuned$best.parameters$gamma, cost = tuned$best.parameters$cost)</strong> <strong class="calibre2">&gt; summary(model.tuned)</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">svm(formula = churn ~ ., data = trainset, gamma = 10^-2, cost = 100)</strong>   <strong class="calibre2">Parameters:</strong> <strong class="calibre2">   SVM-Type:  C-classification </strong> <strong class="calibre2"> SVM-Kernel:  radial </strong> <strong class="calibre2">       cost:  100 </strong> <strong class="calibre2">      gamma:  0.01 </strong>  <strong class="calibre2">Number of Support Vectors:  547</strong>  <strong class="calibre2"> ( 304 243 )</strong>   <strong class="calibre2">Number of Classes:  2 </strong>  <strong class="calibre2">Levels: </strong> <strong class="calibre2"> yes no</strong> </pre> </div></li><li class="listitem" value="4">然后，您<a id="id552" class="calibre1"/>可以使用<code class="email">predict</code>函数根据拟合的SVM预测标签:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.tuned.pred = predict(model.tuned, testset[, !names(testset) %in% c("churn")])</strong> </pre> </div></li><li class="listitem" value="5">接下来，根据测试数据集的预测标签和原始标签生成分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.tuned.table=table(svm.tuned.pred, testset$churn)</strong> <strong class="calibre2">&gt; svm.tuned.table</strong> <strong class="calibre2">              </strong> <strong class="calibre2">svm.tuned.pred yes  no</strong> <strong class="calibre2">           yes  95  24</strong> <strong class="calibre2">           no   46 853</strong> </pre> </div></li><li class="listitem" value="6">同样，生成一个类协议来衡量绩效:<div> <pre class="programlisting"> <strong class="calibre2">&gt; classAgreement(svm.tuned.table)</strong> <strong class="calibre2">$diag</strong> <strong class="calibre2">[1] 0.9312377</strong>  <strong class="calibre2">$kappa</strong> <strong class="calibre2">[1] 0.691678</strong>  <strong class="calibre2">$rand</strong> <strong class="calibre2">[1] 0.871806</strong>  <strong class="calibre2">$crand</strong> <strong class="calibre2">[1] 0.6303615</strong> </pre> </div></li><li class="listitem" value="7">最后，你<a id="id553" class="calibre1"/>可以用一个混淆矩阵来衡量再培训模型的表现:<div> <pre class="programlisting"> <strong class="calibre2">&gt; confusionMatrix(svm.tuned.table)</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">              </strong> <strong class="calibre2">svm.tuned.pred yes  no</strong> <strong class="calibre2">           yes  95  24</strong> <strong class="calibre2">           no   46 853</strong> <strong class="calibre2">                                         </strong> <strong class="calibre2">               Accuracy : 0.9312         </strong> <strong class="calibre2">                 95% CI : (0.9139, 0.946)</strong> <strong class="calibre2">    No Information Rate : 0.8615         </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : 1.56e-12       </strong> <strong class="calibre2">                                         </strong> <strong class="calibre2">                  Kappa : 0.6917         </strong> <strong class="calibre2"> Mcnemar's Test P-Value : 0.01207        </strong> <strong class="calibre2">                                         </strong> <strong class="calibre2">            Sensitivity : 0.67376        </strong> <strong class="calibre2">            Specificity : 0.97263        </strong> <strong class="calibre2">         Pos Pred Value : 0.79832        </strong> <strong class="calibre2">         Neg Pred Value : 0.94883        </strong> <strong class="calibre2">             Prevalence : 0.13851        </strong> <strong class="calibre2">         Detection Rate : 0.09332        </strong> <strong class="calibre2">   Detection Prevalence : 0.11690        </strong> <strong class="calibre2">      Balanced Accuracy : 0.82320        </strong> <strong class="calibre2">                                         </strong> <strong class="calibre2">       'Positive' Class : yes            </strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Tuning a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec239" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">要调整<a id="id554" class="calibre1"/>支持向量机，您可以使用试错法来找到最佳的gamma和成本参数。换句话说，为了训练不同的支持向量机，必须生成伽马和成本的各种组合。</p><p class="calibre7">在这个例子中，我们生成了从<em class="calibre8"> 10^-6 </em>到<em class="calibre8"> 10^-1 </em>的不同伽马值，以及值为10或100的成本。因此，您可以使用调谐功能<code class="email">svm.tune</code>生成12组参数。然后，该函数进行10次交叉验证，并输出每个组合的误差离差。因此，误差离差最小的组合被视为最佳参数集。从汇总表中，我们发现值为0.01的gamma和值为100的cost是SVM拟合的最佳参数。</p><p class="calibre7">获得最佳参数后，我们可以训练一个新的支持向量机，其gamma等于0.01，成本等于100。此外，我们可以基于预测的标签和测试数据集的标签来获得分类表。我们还可以从分类表中获得混淆矩阵。根据混淆矩阵的输出，您可以确定新训练的模型与原始模型相比的准确性。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Tuning a support vector machine</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec240" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">有关如何使用<code class="email">svm.tune</code>调优SVM的更多信息，您可以使用<code class="email">help</code>功能访问本文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?svm.tune</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec72" class="calibre1"/>用neuralnet训练神经网络</h1></div></div></div><p class="calibre7">神经网络由一组相互连接的节点构成，包括输入、连接的权重、处理元素和输出。神经网络可以应用于<a id="id555" class="calibre1"/>许多领域，如分类、聚类和预测。要在R中训练一个神经网络，可以使用neuralnet，它<a id="id556" class="calibre1"/>是为了在回归分析的上下文中训练多层感知器而构建的，包含许多灵活的函数来训练前向神经网络。在这个菜谱中，我们将介绍如何使用neuralnet来训练一个神经网络。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">在这个菜谱中，我们将使用一个<code class="email">iris</code>数据集作为我们的示例数据集。我们将首先把<code class="email">iris</code>数据集分别分成训练和测试数据集。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec242" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来训练具有neuralnet的神经网络:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先<a id="id557" class="calibre1"/>加载<code class="email">iris</code>数据集<a id="id558" class="calibre1"/>并将数据分成训练和测试数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; data(iris)</strong> <strong class="calibre2">&gt; ind = sample(2, nrow(iris), replace = TRUE, prob=c(0.7, 0.3))</strong> <strong class="calibre2">&gt; trainset = iris[ind == 1,]</strong> <strong class="calibre2">&gt; testset = iris[ind == 2,]</strong> </pre> </div></li><li class="listitem" value="2">然后，安装并加载<code class="email">neuralnet</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("neuralnet")</strong> <strong class="calibre2">&gt; library(neuralnet)</strong> </pre> </div></li><li class="listitem" value="3">基于<code class="email">Species</code>列中的名称匹配值添加列versicolor、setosa和virginica:<div><pre class="programlisting"> <strong class="calibre2">&gt; trainset$setosa = trainset$Species == "setosa"</strong> <strong class="calibre2">&gt; trainset$virginica = trainset$Species == "virginica"</strong> <strong class="calibre2">&gt; trainset$versicolor = trainset$Species == "versicolor"</strong> </pre></div></li><li class="listitem" value="4">接下来，用每层三个隐藏神经元的<code class="email">neuralnet</code>函数训练神经网络。请注意，每次训练的结果可能会有所不同，因此您可能不会得到相同的结果。但是可以在开始的时候使用set.seed，这样在每一个训练过程中都能得到相同的结果<div> <pre class="programlisting"> <strong class="calibre2">&gt; network = neuralnet(versicolor + virginica + setosa~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, trainset, hidden=3)</strong> <strong class="calibre2">&gt; network</strong> <strong class="calibre2">Call: neuralnet(formula = versicolor + virginica + setosa ~ Sepal.Length +     Sepal.Width + Petal.Length + Petal.Width, data = trainset,     hidden = 3)</strong>  <strong class="calibre2">1 repetition was calculated.</strong>  <strong class="calibre2">         Error Reached Threshold Steps</strong> <strong class="calibre2">1 0.8156100175    0.009994274769 11063</strong> </pre> </div></li><li class="listitem" value="5">现在，您可以通过访问已建立的神经网络模型的<code class="email">result.matrix</code>属性来查看<code class="email">summary</code>信息:<div> <pre class="programlisting"> <strong class="calibre2">&gt; network$result.matrix</strong> <strong class="calibre2">                                          1</strong> <strong class="calibre2">error                        0.815610017474</strong> <strong class="calibre2">reached.threshold            0.009994274769</strong> <strong class="calibre2">steps                    11063.000000000000</strong> <strong class="calibre2">Intercept.to.1layhid1        1.686593311644</strong> <strong class="calibre2">Sepal.Length.to.1layhid1     0.947415215237</strong> <strong class="calibre2">Sepal.Width.to.1layhid1     -7.220058260187</strong> <strong class="calibre2">Petal.Length.to.1layhid1     1.790333443486</strong> <strong class="calibre2">Petal.Width.to.1layhid1      9.943109233330</strong> <strong class="calibre2">Intercept.to.1layhid2        1.411026063895</strong> <strong class="calibre2">Sepal.Length.to.1layhid2     0.240309549505</strong> <strong class="calibre2">Sepal.Width.to.1layhid2      0.480654059973</strong> <strong class="calibre2">Petal.Length.to.1layhid2     2.221435192437</strong> <strong class="calibre2">Petal.Width.to.1layhid2      0.154879347818</strong> <strong class="calibre2">Intercept.to.1layhid3       24.399329878242</strong> <strong class="calibre2">Sepal.Length.to.1layhid3     3.313958088512</strong> <strong class="calibre2">Sepal.Width.to.1layhid3      5.845670010464</strong> <strong class="calibre2">Petal.Length.to.1layhid3    -6.337082722485</strong> <strong class="calibre2">Petal.Width.to.1layhid3    -17.990352566695</strong> <strong class="calibre2">Intercept.to.versicolor     -1.959842102421</strong> <strong class="calibre2">1layhid.1.to.versicolor      1.010292389835</strong> <strong class="calibre2">1layhid.2.to.versicolor      0.936519720978</strong> <strong class="calibre2">1layhid.3.to.versicolor      1.023305801833</strong> <strong class="calibre2">Intercept.to.virginica      -0.908909982893</strong> <strong class="calibre2">1layhid.1.to.virginica      -0.009904635231</strong> <strong class="calibre2">1layhid.2.to.virginica       1.931747950462</strong> <strong class="calibre2">1layhid.3.to.virginica      -1.021438938226</strong> <strong class="calibre2">Intercept.to.setosa          1.500533827729</strong> <strong class="calibre2">1layhid.1.to.setosa         -1.001683936613</strong> <strong class="calibre2">1layhid.2.to.setosa         -0.498758815934</strong> <strong class="calibre2">1layhid.3.to.setosa         -0.001881935696</strong> </pre> </div></li><li class="listitem" value="6">最后，您可以通过在网络中访问<div> <pre class="programlisting"> <strong class="calibre2">&gt; head(network$generalized.weights[[1]])</strong> </pre> </div>来查看<a id="id560" class="calibre1"/>广义重量</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec243" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">神经网络是由人工神经元(或节点)组成的网络。网络中有三种类型的神经元:输入神经元、隐藏神经元和输出神经元。<a id="id561" class="calibre1"/>网络中，神经元相连；神经元之间的连接强度称为权重。如果重量大于零，则处于激励状态。否则，它处于抑制状态。输入神经元接收输入信息；输入值越高，激活程度越大。然后，激活值根据图中的权重和传递函数通过网络传递。然后，隐藏神经元(或输出神经元)对激活值求和，并用传递函数修改求和值。然后，激活值流经隐藏的神经元，并在到达输出节点时停止。因此，可以使用来自输出神经元的输出值来对数据进行分类。</p><div><img src="img/00120.jpeg" alt="How it works..." class="calibre9"/><div><p class="calibre12">图9:人工神经网络</p></div></div><p class="calibre10"> </p><p class="calibre7">神经网络的优势在于:首先，它可以检测因变量和自变量之间的非线性关系。第二，可以使用并行架构有效地训练大型数据集。第三，它是非参数模型，因此可以消除参数估计中的误差。神经网络的主要缺点是它经常收敛到局部最小值而不是全局最小值。此外，当训练过程持续太长时间时，它可能会过度适应。</p><p class="calibre7">在这份食谱中，我们演示了如何训练神经网络。首先，我们将<code class="email">iris</code>数据集分成训练和测试数据集，然后安装<code class="email">neuralnet</code>包并将库加载到R会话中。接下来，我们根据<code class="email">Species</code>列中的名称匹配值分别添加<code class="email">versicolor</code>、<code class="email">setosa</code>和<code class="email">virginica</code>列。然后，我们使用<code class="email">neuralnet</code>函数来训练网络模型。除了在函数中指定标签(名称等于versicolor、virginica和setosa的列)和训练属性之外，我们还在<a id="id564" class="calibre1"/>每层中将隐藏神经元(顶点)的数量配置为三个。</p><p class="calibre7">然后，我们<a id="id565" class="calibre1"/>检查网络中保存的关于训练过程和被训练网络的基本信息。根据输出消息，它显示训练过程需要11，063个步骤，直到误差函数的所有绝对偏导数都低于0.01(在阈值中指定)。<a id="id566" class="calibre1"/>误差是指计算<strong class="calibre2">阿凯克信息准则</strong> ( <strong class="calibre2"> AIC </strong>)的可能性。要查看这方面的详细信息，您可以访问内置神经网络的<code class="email">result.matrix</code>来查看估计的重量。输出显示估计的重量范围从-18到24.40；第一隐层的截距为1.69、1.41和24.40，通向第一隐神经元的两个权重估计为0.95 ( <code class="email">Sepal.Length</code>)、-7.22 ( <code class="email">Sepal.Width</code>)、1.79 ( <code class="email">Petal.Length</code>)和9.94 ( <code class="email">Petal.Width</code>)。我们最后可以确定，训练的神经网络信息包括广义权重，它表示每个协变量的影响。在该配方中，模型生成12个广义权重，它们是对三个响应(<code class="email">setosa</code>、<code class="email">virginica</code>、<code class="email">versicolor</code>)的四个协变量(<code class="email">Sepal.Length</code>、<code class="email">Sepal.Width</code>、<code class="email">Petal.Length</code>、<code class="email">Petal.Width</code>)的组合。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec244" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">有关neuralnet的更详细介绍，可以参考以下论文:Günther，f .和Fritsch，S. (2010)。<em class="calibre8"> neuralnet:训练神经网络</em>。<em class="calibre8">R期刊</em>，2卷1期，第30-38页。</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing a neural network trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec73" class="calibre1"/>可视化由neuralnet训练的神经网络</h1></div></div></div><p class="calibre7"><a id="id567" class="calibre1"/>包<code class="email">neuralnet</code>为<a id="id568" class="calibre1"/>提供了<code class="email">plot</code>函数来可视化已构建的神经网络，以及<code class="email">gwplot</code>函数来可视化广义权重。在下面的食谱中，我们将介绍如何使用这两个功能。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing a neural network trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">你需要通过训练一个神经网络来完成前面的食谱，并且将所有的基本信息保存在网络中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing a neural network trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">如何去做...</h2></div></div></div><p class="calibre7">执行<a id="id569" class="calibre1"/>以下步骤来可视化<a id="id570" class="calibre1"/>神经网络和广义权重:</p><div><ol class="orderedlist"><li class="listitem" value="1">You can visualize the trained neural network with the <code class="email">plot</code> function:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(network)</strong>
+</pre></div><div><img src="img/00121.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图10:训练好的神经网络图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">Furthermore, you can use <code class="email">gwplot</code> to visualize the generalized weights:<div><pre class="programlisting">
+<strong class="calibre2">&gt; par(mfrow=c(2,2))</strong>
+<strong class="calibre2">&gt; gwplot(network,selected.covariate="Petal.Width")</strong>
+<strong class="calibre2">&gt; gwplot(network,selected.covariate="Sepal.Width")</strong>
+<strong class="calibre2">&gt; gwplot(network,selected.covariate="Petal.Length")</strong>
+<strong class="calibre2">&gt; gwplot(network,selected.covariate="Petal.Width")</strong>
+</pre></div><div><img src="img/00122.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图11:广义权重图</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing a neural network trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec247" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个<a id="id571" class="calibre1"/>配方中，我们演示了如何<a id="id572" class="calibre1"/>可视化经过训练的神经网络和每个经过训练的属性的广义权重。根据<em class="calibre8">图10 </em>，该图显示了训练好的神经网络的网络拓扑。此外，该图包括估计重量，截距和训练过程的基本信息。在图的底部，可以找到收敛所需的总误差和步骤数。</p><p class="calibre7"><em class="calibre8">图11 </em>显示了关于<code class="email">network$generalized.weights</code>的广义重量图。图11 中<em class="calibre8">的四个图显示了关于杂色反应的四个协变量:<code class="email">Petal.Width</code>、<code class="email">Sepal.Width</code>、<code class="email">Petal.Length</code>和<code class="email">Petal.Width</code>。如果图上所有的广义权重都接近于零，这意味着协变量几乎没有影响。然而，如果总方差大于1，这意味着协变量具有非线性效应。</em></p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Visualizing a neural network trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec248" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">关于<code class="email">gwplot</code>的更多信息，可以使用<code class="email">help</code>功能访问以下文件:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?gwplot</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec74" class="calibre1"/>基于神经网络训练的模型预测标签</h1></div></div></div><p class="calibre7">类似于<a id="id573" class="calibre1"/>其他分类方法，我们可以基于训练好的神经<a id="id574" class="calibre1"/>网络来预测新观测值的标签。此外，我们可以通过使用混淆矩阵来验证这些网络的性能。在下面的食谱中，我们将介绍如何在神经网络中使用<code class="email">compute</code>函数来获得测试数据集标签的概率矩阵，并使用表和混淆矩阵来测量预测性能。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">您需要通过生成训练数据集<code class="email">trainset</code>和测试数据集<code class="email">testset</code>来完成前面的配方。训练好的神经网络需要保存在网络中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">如何做到这一点...</h2></div></div></div><p class="calibre7">执行以下步骤来测量已训练的神经网络的预测性能:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，基于训练好的神经网络和测试数据集生成预测概率矩阵，<code class="email">testset</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; net.predict = compute(network, testset[-5])$net.result</strong> </pre> </div></li><li class="listitem" value="2">然后，通过寻找概率最大的列获得其他可能的标签:<div> <pre class="programlisting"> <strong class="calibre2">&gt; net.prediction = c("versicolor", "virginica", "setosa")[apply(net.predict, 1, which.max)]</strong> </pre> </div></li><li class="listitem" value="3">根据预测标签和测试数据集的标签生成分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; predict.table = table(testset$Species, net.prediction)</strong> <strong class="calibre2">&gt; predict.table</strong> <strong class="calibre2">            prediction</strong> <strong class="calibre2">             setosa versicolor virginica</strong> <strong class="calibre2">  setosa         20          0         0</strong> <strong class="calibre2">  versicolor      0         19         1</strong> <strong class="calibre2">  virginica       0          2        16</strong> </pre> </div></li><li class="listitem" value="4">接下来，从分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; classAgreement(predict.table)</strong> <strong class="calibre2">$diag</strong> <strong class="calibre2">[1] 0.9444444444</strong>  <strong class="calibre2">$kappa</strong> <strong class="calibre2">[1] 0.9154488518</strong>  <strong class="calibre2">$rand</strong> <strong class="calibre2">[1] 0.9224318658</strong>  <strong class="calibre2">$crand</strong> <strong class="calibre2">[1] 0.8248251737</strong> </pre> </div>中生成<code class="email">classAgreement</code></li><li class="listitem" value="5">最后，用<a id="id575" class="calibre1"/> <code class="email">confusionMatrix</code>到<a id="id576" class="calibre1"/>来衡量预测性能:<div> <pre class="programlisting"> <strong class="calibre2">&gt; confusionMatrix(predict.table)</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">            prediction</strong> <strong class="calibre2">             setosa versicolor virginica</strong> <strong class="calibre2">  setosa         20          0         0</strong> <strong class="calibre2">  versicolor      0         19         1</strong> <strong class="calibre2">  virginica       0          2        16</strong>  <strong class="calibre2">Overall Statistics</strong> <strong class="calibre2">                                                  </strong> <strong class="calibre2">               Accuracy : 0.9482759               </strong> <strong class="calibre2">                 95% CI : (0.8561954, 0.9892035)  </strong> <strong class="calibre2">    No Information Rate : 0.362069                </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : &lt; 0.00000000000000022204</strong> <strong class="calibre2">                                                  </strong> <strong class="calibre2">                  Kappa : 0.922252                </strong> <strong class="calibre2"> Mcnemar's Test P-Value : NA                      </strong>  <strong class="calibre2">Statistics by Class:</strong>  <strong class="calibre2">                     Class: setosa Class: versicolor Class: virginica</strong> <strong class="calibre2">Sensitivity              1.0000000         0.9047619        0.9411765</strong> <strong class="calibre2">Specificity              1.0000000         0.9729730        0.9512195</strong> <strong class="calibre2">Pos Pred Value           1.0000000         0.9500000        0.8888889</strong> <strong class="calibre2">Neg Pred Value           1.0000000         0.9473684        0.9750000</strong> <strong class="calibre2">Prevalence               0.3448276         0.3620690        0.2931034</strong> <strong class="calibre2">Detection Rate           0.3448276         0.3275862        0.2758621</strong> <strong class="calibre2">Detection Prevalence     0.3448276         0.3448276        0.3103448</strong> <strong class="calibre2">Balanced Accuracy        1.0000000         0.9388674        0.9461980</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec251" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个<a id="id577" class="calibre1"/>食谱中，我们展示了<a id="id578" class="calibre1"/>如何基于由neuralnet训练的模型来预测标签。最初，我们使用<code class="email">compute</code>函数根据训练好的神经网络和测试数据集创建一个输出概率矩阵。然后，为了将概率矩阵转换成类别标签，我们使用<code class="email">which.max</code>函数通过选择行中具有最大概率的列来确定类别标签。接下来，我们使用一个表来基于测试数据集的标签和预测标签生成分类矩阵。因为我们已经创建了分类表，所以我们可以使用混淆矩阵来测量所建立的神经网络的预测性能。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by neuralnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec252" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">在这个方法中，我们使用<code class="email">net.result</code>函数，它是神经网络的整体结果，用于预测测试数据集的标签。除了通过访问<code class="email">net.result</code>检查整体结果外，<code class="email">compute</code>函数还生成每层神经元的输出。你可以检查神经元的输出来更好地理解<code class="email">compute</code>是如何工作的:<div> <pre class="programlisting"> <strong class="calibre2">&gt; compute(network, testset[-5])</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec75" class="calibre1"/>用神经网络训练神经网络</h1></div></div></div><p class="calibre7"><code class="email">nnet</code>包是另一个可以处理人工神经网络的包。这个包<a id="id579" class="calibre1"/>提供了用传统的反向传播训练前馈<a id="id581" class="calibre1"/>神经网络的功能<a id="id580" class="calibre1"/>。正如你可以在<code class="email">neuralnet</code>包中找到大部分实现的神经网络功能，在这个食谱中，我们提供了一个如何用<code class="email">nnet</code>训练神经网络的简短概述。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">在这个配方中，我们不使用上一步生成的<code class="email">trainset</code>和<code class="email">trainset</code>；请再次重新加载<code class="email">iris</code>数据集。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec254" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">nnet</code>训练神经网络:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先安装并加载<code class="email">nnet</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("nnet")</strong> <strong class="calibre2">&gt; library(nnet)</strong> </pre> </div></li><li class="listitem" value="2">接下来，将数据集分成训练数据集和测试数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; data(iris)</strong> <strong class="calibre2">&gt; set.seed(2)</strong> <strong class="calibre2">&gt; ind = sample(2, nrow(iris), replace = TRUE, prob=c(0.7, 0.3))</strong> <strong class="calibre2">&gt; trainset = iris[ind == 1,]</strong> <strong class="calibre2">&gt; testset = iris[ind == 2,]</strong> </pre> </div></li><li class="listitem" value="3">然后，用<code class="email">nnet</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; iris.nn = nnet(Species ~ ., data = trainset, size = 2, rang = 0.1, decay = 5e-4, maxit = 200)</strong> <strong class="calibre2"># weights:  19</strong> <strong class="calibre2">initial  value 165.086674 </strong> <strong class="calibre2">iter  10 value 70.447976</strong> <strong class="calibre2">iter  20 value 69.667465</strong> <strong class="calibre2">iter  30 value 69.505739</strong> <strong class="calibre2">iter  40 value 21.588943</strong> <strong class="calibre2">iter  50 value 8.691760</strong> <strong class="calibre2">iter  60 value 8.521214</strong> <strong class="calibre2">iter  70 value 8.138961</strong> <strong class="calibre2">iter  80 value 7.291365</strong> <strong class="calibre2">iter  90 value 7.039209</strong> <strong class="calibre2">iter 100 value 6.570987</strong> <strong class="calibre2">iter 110 value 6.355346</strong> <strong class="calibre2">iter 120 value 6.345511</strong> <strong class="calibre2">iter 130 value 6.340208</strong> <strong class="calibre2">iter 140 value 6.337271</strong> <strong class="calibre2">iter 150 value 6.334285</strong> <strong class="calibre2">iter 160 value 6.333792</strong> <strong class="calibre2">iter 170 value 6.333578</strong> <strong class="calibre2">iter 180 value 6.333498</strong> <strong class="calibre2">final  value 6.333471 </strong> <strong class="calibre2">converged</strong> </pre> </div>训练神经网络</li><li class="listitem" value="4">使用<a id="id582" class="calibre1"/>中的<code class="email">summary</code>到<a id="id583" class="calibre1"/>获取训练好的神经网络的信息:<div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(iris.nn)</strong> <strong class="calibre2">a 4-2-3 network with 19 weights</strong> <strong class="calibre2">options were - softmax modelling  decay=0.0005</strong> <strong class="calibre2"> b-&gt;h1 i1-&gt;h1 i2-&gt;h1 i3-&gt;h1 i4-&gt;h1 </strong> <strong class="calibre2"> -0.38  -0.63  -1.96   3.13   1.53 </strong> <strong class="calibre2"> b-&gt;h2 i1-&gt;h2 i2-&gt;h2 i3-&gt;h2 i4-&gt;h2 </strong> <strong class="calibre2">  8.95   0.52   1.42  -1.98  -3.85 </strong> <strong class="calibre2"> b-&gt;o1 h1-&gt;o1 h2-&gt;o1 </strong> <strong class="calibre2">  3.08 -10.78   4.99 </strong> <strong class="calibre2"> b-&gt;o2 h1-&gt;o2 h2-&gt;o2 </strong> <strong class="calibre2"> -7.41   6.37   7.18 </strong> <strong class="calibre2"> b-&gt;o3 h1-&gt;o3 h2-&gt;o3 </strong> <strong class="calibre2">  4.33   4.42 -12.16 </strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec255" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个食谱中，我们展示了用<code class="email">nnet</code>软件包训练神经网络模型的步骤。我们先用<code class="email">nnet</code>来训练神经网络。通过该功能，我们可以在<code class="email">size</code>参数中设置分类公式、数据来源、隐藏单元数、<code class="email">rang</code>参数中设置初始随机权重、<code class="email">decay</code>参数中设置权重衰减参数、<code class="email">maxit</code>参数中设置最大迭代次数。当我们将<code class="email">maxit</code>设置为200时，训练过程重复运行，直到拟合标准加上衰减项的值收敛。最后，我们使用<code class="email">summary</code>函数来获得关于所构建的<a id="id584" class="calibre1"/>神经网络的信息，这揭示了<a id="id585" class="calibre1"/>该模型是由具有19个权重的4-2-3网络构建的。此外，该模型在打印消息的底部显示了从一个节点到另一个节点的权重转换列表。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Training a neural network with nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec256" class="calibre1"/>参见</h2></div></div></div><p class="calibre7">对<code class="email">nnet</code>的背景理论以及如何制作感兴趣的可以参考以下文章:</p><div><ul class="itemizedlist"><li class="listitem">Ripley，B. D. (1996) <em class="calibre8">模式识别和神经网络</em>。剑桥</li><li class="listitem">维纳布尔斯和里普利博士(2002年)。<em class="calibre8">现代应用统计学第四版</em>。起拱石</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch06lvl1sec76" class="calibre1"/>基于由nnet训练的模型预测标签</h1></div></div></div><p class="calibre7">由于我们<a id="id586" class="calibre1"/>在之前的配方中已经用<code class="email">nnet</code>训练了一个神经<a id="id587" class="calibre1"/>网络，我们现在可以根据训练好的神经网络预测测试数据集的标签。此外，我们可以使用从<code class="email">caret</code>包中改编的<a id="id588" class="calibre1"/>混淆矩阵来评估模型。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">您需要通过从<code class="email">iris</code>数据集生成训练数据集<code class="email">trainset</code>和测试数据集<code class="email">testset</code>来完成前面的配方。训练好的神经网络也需要保存为<code class="email">iris.nn</code>。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch06lvl2sec258" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，根据训练好的神经网络预测标签:</p><div><ol class="orderedlist"><li class="listitem" value="1">基于模型生成测试数据集的预测，<code class="email">iris.nn</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; iris.predict = predict(iris.nn, testset, type="class")</strong> </pre> </div></li><li class="listitem" value="2">根据预测标签和测试数据集标签生成分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; nn.table = table(testset$Species, iris.predict)</strong> <strong class="calibre2">            iris.predict</strong> <strong class="calibre2">             setosa versicolor virginica</strong> <strong class="calibre2">  setosa         17          0         0</strong> <strong class="calibre2">  versicolor      0         14         0</strong> <strong class="calibre2">  virginica       0          1        14</strong> </pre> </div></li><li class="listitem" value="3">最后，根据分类表<div> <pre class="programlisting"> <strong class="calibre2">&gt; confusionMatrix(nn.table)</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">            iris.predict</strong> <strong class="calibre2">             setosa versicolor virginica</strong> <strong class="calibre2">  setosa         17          0         0</strong> <strong class="calibre2">  versicolor      0         14         0</strong> <strong class="calibre2">  virginica       0          1        14</strong>  <strong class="calibre2">Overall Statistics</strong> <strong class="calibre2">                                                  </strong> <strong class="calibre2">               Accuracy : 0.9782609               </strong> <strong class="calibre2">                 95% CI : (0.8847282, 0.9994498)  </strong> <strong class="calibre2">    No Information Rate : 0.3695652               </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : &lt; 0.00000000000000022204</strong> <strong class="calibre2">                                                  </strong> <strong class="calibre2">                  Kappa : 0.9673063               </strong> <strong class="calibre2"> Mcnemar's Test P-Value : NA                      </strong>  <strong class="calibre2">Statistics by Class:</strong>  <strong class="calibre2">                     Class: setosa Class: versicolor</strong> <strong class="calibre2">Sensitivity              1.0000000         0.9333333</strong> <strong class="calibre2">Specificity              1.0000000         1.0000000</strong> <strong class="calibre2">Pos Pred Value           1.0000000         1.0000000</strong> <strong class="calibre2">Neg Pred Value           1.0000000         0.9687500</strong> <strong class="calibre2">Prevalence               0.3695652         0.3260870</strong> <strong class="calibre2">Detection Rate           0.3695652         0.3043478</strong> <strong class="calibre2">Detection Prevalence     0.3695652         0.3043478</strong> <strong class="calibre2">Balanced Accuracy        1.0000000         0.9666667</strong> <strong class="calibre2">                     Class: virginica</strong> <strong class="calibre2">Sensitivity                 1.0000000</strong> <strong class="calibre2">Specificity                 0.9687500</strong> <strong class="calibre2">Pos Pred Value              0.9333333</strong> <strong class="calibre2">Neg Pred Value              1.0000000</strong> <strong class="calibre2">Prevalence                  0.3043478</strong> <strong class="calibre2">Detection Rate              0.3043478</strong> <strong class="calibre2">Detection Prevalence        0.3260870</strong> <strong class="calibre2">Balanced Accuracy           0.9843750</strong> </pre> </div>生成<a id="id589" class="calibre1"/>一个<a id="id590" class="calibre1"/>混淆矩阵</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch06lvl2sec259" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">与其他分类<a id="id592" class="calibre1"/>方法类似<a id="id591" class="calibre1"/>，也可以根据<code class="email">nnet</code>训练的神经网络预测标签。首先，我们使用<code class="email">predict</code>函数根据测试数据集<code class="email">testset</code>生成预测标签。在<code class="email">predict</code>函数中，我们为类指定了<code class="email">type</code>参数，因此输出将是类标签而不是概率矩阵。接下来，我们使用<code class="email">table</code>函数根据预测的标签和测试数据集中写入的标签生成一个分类表。最后，由于我们已经创建了分类表，我们可以使用来自<code class="email">caret</code>包的混淆矩阵来测量训练好的神经网络的预测性能。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting labels based on a model trained by nnet</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch06lvl2sec260" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">对于<code class="email">predict</code>函数，如果没有指定<code class="email">class</code>的<code class="email">type</code>参数，默认情况下会生成一个概率矩阵作为预测结果，这与<code class="email">neuralnet</code>包中的<code class="email">compute</code>函数生成的<code class="email">net.result</code>非常相似:<div> <pre class="programlisting"> <strong class="calibre2">&gt; head(predict(iris.nn, testset))</strong> </pre> </div></li></ul></div></div></div></body></html>
+</body></html>

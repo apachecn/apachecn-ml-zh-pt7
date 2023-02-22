@@ -1,0 +1,77 @@
+<html><head/><body>
+
+
+
+<title>Chapter 11. Deep Learning</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch11"/>第十一章。深度学习</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><p>递归神经网络-预测周期信号</p><div><div><div><div><h1 class="title"><a id="ch11lvl1sec52"/>简介</h1></div></div></div><p>由于预定义的表示和输入特征，大多数机器学习算法工作良好。机器学习算法优化权重以最佳地做出最终预测，而表示学习试图自动学习好的特征或表示。深度学习算法试图通过增加复杂性来学习多个级别的表示。深层架构由多层次的非线性运算组成，比如有很多隐藏层的神经网络。深度学习技术的主要目标是学习特征层次。深度学习技术可以分为三大类；用于无监督或生成学习的深度网络、用于监督学习的深度网络和混合深度网络</p></div></div>
+
+
+
+
+
+<title>Recurrent neural networks - predicting periodic signals</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch11lvl1sec53"/>递归神经网络-预测周期性信号</h1></div></div></div><p>振荡器是产生特定周期性波形的电路，如方波、三角波、锯齿波和正弦波。为了产生输出，振荡器通常使用某种形式的有源器件——灯，灯周围有电阻、电容和电感。振荡器的两个主要类别是张弛振荡器和正弦振荡器。使用张弛振荡器产生三角波、锯齿波和其他非正弦波形，而正弦振荡器由带有外部元件的放大器组成，以产生振荡。正常情况下，纯正弦波中不存在谐波，它们由单一频率组成。</p><div><div><div><div><h2 class="title"><a id="ch11lvl2sec66"/>准备就绪...</h2></div></div></div><p>任务是从有噪声的正弦波预测余弦。5Hz频率的波用于带有一些正态分布噪声的正弦波和平滑的余弦波。创建的数据集是一组10个序列，每个序列由40个观察值组成。</p></div><div><div><div><div><h2 class="title"><a id="ch11lvl2sec67"/>怎么做...</h2></div></div></div><p>作为要执行的第一步，需要加载以下软件包:</p><pre class="programlisting">
+<strong>    &gt; install.packages("rnn")</strong>
+<strong>    &gt; library(rnn)</strong>
+</pre><p>出于再现性的目的，将初始种子设置为随机数:</p><pre class="programlisting">
+<strong>&gt; set.seed(10)</strong>
+</pre><p>初始化所需的频率:</p><pre class="programlisting">
+<strong>&gt; f &lt;- 5</strong>
+</pre><p>创建所需的向量:</p><pre class="programlisting">
+<strong>&gt; w &lt;- 2*pi*f</strong>
+</pre><p>生成序列:<code class="literal">seq()</code>函数生成规则序列。<code class="literal">0.005</code>是起始值，而<code class="literal">2</code>是结束值。<code class="literal">by=0.005</code>决定了增量顺序:</p><pre class="programlisting">
+<strong>&gt; t &lt;- seq(0.005,2,by=0.005)</strong>
+</pre><p>生成<code class="literal">sin</code>和<code class="literal">cos</code>值:</p><pre class="programlisting">
+<strong>    &gt; x &lt;- sin(t*w) + rnorm(200, 0, 0.25)</strong>
+<strong>    &gt; y &lt;- cos(t*w)</strong>
+</pre><p>生成时间序列的样本:<code class="literal">matrix()</code>函数从<code class="literal">x</code>和<code class="literal">y</code>值创建一个矩阵。<code class="literal">nrow = 40</code>表示所需的行数:</p><pre class="programlisting">
+<strong>    &gt; X &lt;- matrix(x, nrow = 40)</strong>
+<strong>    &gt; Y &lt;- matrix(y, nrow = 40)</strong>
+</pre><p>绘制噪音波:。<code class="literal">plot()</code>函数是绘制R对象的通用函数。<code class="literal">as.vector(X)</code>数据帧作为函数值传递。<code class="literal">type='l'</code>象征线条:</p><pre class="programlisting">
+<strong>&gt; plot(as.vector(X), col='blue', type='l', ylab = "x-matrix, y-matrix", main = "Noisy waves")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_001.jpg" alt="How to do it..."/></div><p>
+</p><pre class="programlisting">
+<strong>&gt; lines(as.vector(Y), col = "red")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_002.jpg" alt="How to do it..."/></div><p>
+</p><p>规范<code class="literal">X</code>的价值观。值的范围介于0和1之间:</p><pre class="programlisting">
+<strong>&gt; X &lt;- (X - min(X)) / (max(X) - min(X))</strong>
+</pre><p>打印<code class="literal">X</code>的值:</p><pre class="programlisting">
+<strong>&gt; X</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_003.jpg" alt="How to do it..."/></div><p>
+</p><p>标准化<code class="literal">Y</code>的值。值的范围介于0和1之间:</p><pre class="programlisting">
+<strong>&gt; X &lt;- (X - min(X)) / (max(X) - min(X))</strong>
+</pre><p>打印<code class="literal">X</code>的值:</p><pre class="programlisting">
+<strong>&gt; X</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_004.jpg" alt="How to do it..."/></div><p>
+</p><p>转置<code class="literal">X</code>和<code class="literal">Y</code>的值:</p><pre class="programlisting">
+<strong>    &gt; X &lt;- t(X)</strong>
+<strong>    &gt; Y &lt;- t(Y)</strong>
+</pre><p>创建训练集和测试集:</p><pre class="programlisting">
+<strong>    &gt; train &lt;- 1:8</strong>
+<strong>    &gt; test &lt;- 9:10</strong>
+</pre><p>训练递归神经网络。<code class="literal">Y = Y[train,]</code>表示输出值的数组。<code class="literal">X = X[train,]</code>表示输入值的数组。<code class="literal">learningrate = 0.05</code>表示应用于权重迭代的比率。<code class="literal">hidden_dim = 16</code>是隐藏层的维度。<code class="literal">numepochs = 1500</code>是整个数据集经历训练的次数。</p><p>这个阶段需要时间。所花费的时间取决于学习率、维数以及整个数据集接受训练的次数:</p><pre class="programlisting">
+<strong>&gt; model &lt;- trainr(Y = Y[train,],X = X[train,],learningrate = 0.05,hidden_dim = 16,numepochs = 1500)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_005.jpg" alt="How to do it..."/></div><p>
+</p><p>预测递归神经网络的输出:</p><pre class="programlisting">
+<strong>&gt; Y_predicted &lt;- predictr(model, X)</strong>
+</pre><p>绘制<strong>实际值与</strong>预测值。输出构成了训练集和测试集:</p><pre class="programlisting">
+<strong>&gt; plot(as.vector(t(Y)), col = 'red', type = 'l', main = "Actual values vs Predicted values", ylab = "Y, Y-predicted")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_006.jpg" alt="How to do it..."/></div><p>
+</p><pre class="programlisting">
+<strong>&gt; lines(as.vector(t(Y_predicted)), type = 'l', col = 'blue')</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_007.jpg" alt="How to do it..."/></div><p>
+</p><p>绘制<strong>实际值和</strong>预测值。输出仅构成测试集:</p><pre class="programlisting">
+<strong>&gt; plot(as.vector(t(Y[test,])), col = 'red', type='l', main = "Actual vs predicted: testing set", ylab = "Y,Y-predicted")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_008.jpg" alt="How to do it..."/></div><p>
+</p><pre class="programlisting">
+<strong>&gt; lines(as.vector(t(Y_predicted[test,])), type = 'l', col = 'blue')</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_11_009.jpg" alt="How to do it..."/></div><p>
+</p></div></div>
+</body></html>

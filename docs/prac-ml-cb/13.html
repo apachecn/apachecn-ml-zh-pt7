@@ -1,0 +1,142 @@
+<html><head/><body>
+
+
+
+<title>Chapter 13. Case Study - Pricing Reinsurance Contracts</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch13"/>第十三章。案例研究-再保险合同定价</h1></div></div></div><div><div><div><div><h1 class="title"><a id="ch13lvl1sec56"/>简介</h1></div></div></div><p>顾名思义，再保险是从保险业务发展而来的，其使用范围不仅取决于金额，还取决于直接保险人承保的风险的特点。可以交易的再保险业务量主要取决于在任何给定时间可获得的直接业务量。再保险的理念根植于人类的本能，正是这种本能导致了保险的产生，也就是说，一个人的损失由许多人分担的愿望。</p></div></div>
+
+
+
+
+
+<title>Pricing reinsurance contracts</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch13lvl1sec57"/>再保险合同定价</h1></div></div></div><p>保险人安排再保险的主要目标包括:由于财务限制，通过将通常不会承担的部分风险转移给再保险人，提高处理较大风险的能力；提高接受超过资本允许额度的能力；通过再保险人吸收更大的索赔或巨灾损失，逐年稳定经营业绩；通过加强承销商建立一个在风险大小和质量上均一的账户的努力来增加获利的机会；写作能力和新的风险暴露。再保险的功能可以被认为是提供服务以保护增加的能力、金融稳定、稳定索赔比率、不同类别索赔的累积、分散风险、保护偿付能力差额和稳定利润。再保险有助于吸收因经济变化、社会变化、保险方法变化和科学发展引起的变化而产生的较新的风险暴露。只有两种方式可以安排再保险合同，一种是针对单一保单的一次性临时再保险，另一种是针对特定保单组的自动约定再保险。</p><div><div><div><div><h2 class="title"><a id="ch13lvl2sec70"/>准备就绪...</h2></div></div></div><p>为了执行再保险合同的定价，我们将使用在飓风数据集上收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch13lvl3sec170"/>步骤1 -收集和描述数据</h3></div></div></div><p>将使用XLS格式的数据集<code class="literal">publicdatamay2007.xls</code>。数据集采用标准格式。有207行数据。有七个变量。数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Year</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Base economic damage</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Normalized PL05</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Normalized CL05</code></li></ul></div><p>非数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Hurricane description</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">State</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Category</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch13lvl2sec71"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch13lvl3sec171"/>第2步-探索数据</h3></div></div></div><p>加载以下软件包:</p><pre class="programlisting">
+<strong>    &gt; install.packages("gdata")</strong>
+<strong>    &gt; install.packages("evir")</strong>
+<strong>    &gt; library(gdata)</strong>
+<strong>    &gt; library(evir)</strong>
+</pre><div><div><h3 class="title"><a id="note31"/>注意</h3><p>版本信息:这个页面的代码在R版本3.2.2中测试过</p></div></div><p>让我们研究数据并理解变量之间的关系，如下所示。我们将从导入名为<code class="literal">publicdatamay2007.xls</code>的XLS数据文件开始。我们将把数据保存到<code class="literal">StormDamageData</code>数据框中:</p><pre class="programlisting">
+<strong>&gt; StormDamageData &lt;- read.xls("d:/publicdatamay2007.xls", sheet = 1)</strong>
+</pre><p>打印<code class="literal">StormDamageData</code>帧:<code class="literal">head()</code>函数返回<code class="literal">StormDamageData</code>帧的第一部分。<code class="literal">StormDamageData</code>数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>&gt; head(StormDamageData)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_001.jpg" alt="Step 2 - exploring the data"/></div><p>
+</p><p><code class="literal">tail()</code>函数返回<code class="literal">StormDamageData</code>帧的最后一部分，如下所示。<code class="literal">StormDamageData</code>帧作为输入参数传递。</p><pre class="programlisting">
+<strong>&gt; tail(StormDamageData)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_002.jpg" alt="Step 2 - exploring the data"/></div><p>
+</p><p>探索<code class="literal">StormDamageData</code>数据帧的尺寸:<code class="literal">dim()</code>函数返回<code class="literal">StormDamageData</code>帧的尺寸。<code class="literal">StormDamageData</code>数据帧作为输入参数传递。结果清楚地表明有207行数据和9列:</p><pre class="programlisting">
+<strong>&gt; dim(StormDamageData)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_003.jpg" alt="Step 2 - exploring the data"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch13lvl3sec172"/>第3步----计算个人损失索赔</h3></div></div></div><p>格式化数据:包装函数<code class="literal">ChangeFormat</code>从传递的值中删除逗号(<code class="literal">,</code>)，并将结果作为数值返回:</p><pre class="programlisting">
+<strong>    &gt; ChangeFormat &lt;- function(x){</strong>
+<strong>      x = as.character(x)</strong>
+<strong>      for(i in 1:10){x=sub(",","",as.character(x))}</strong>
+<strong>        return(as.numeric(x)) }</strong>
+</pre><p>将<code class="literal">StormDamageData</code>数据帧存储在数据库中:</p><pre class="programlisting">
+<strong>&gt; base &lt;- StormDamageData[,1:4]</strong>
+</pre><p>调用包装函数<code class="literal">ChangeFormat</code>:数据帧<code class="literal">StormDamageData</code>的<code class="literal">Base.Economic.Damage</code>作为输入传递。函数<code class="literal">Vectorize()</code>创建函数<code class="literal">ChangeFormat()</code>的包装器。结果存储在<code class="literal">base$Base.Economic.Damage</code>数据框中:</p><pre class="programlisting">
+<strong>&gt; base$Base.Economic.Damage &lt;- Vectorize(ChangeFormat)(StormDamageData$Base.Economic.Damage)</strong>
+</pre><p>调用包装函数<code class="literal">ChangeFormat</code>:数据帧<code class="literal">StormDamageData</code>的<code class="literal">Normalized.PL05</code>作为输入传递。然后将结果存储在<code class="literal">base$ Normalized.PL05</code>数据帧中:</p><pre class="programlisting">
+<strong>&gt; base$Normalized.PL05 &lt;- Vectorize(ChangeFormat)(StormDamageData$Normalized.PL05)</strong>
+</pre><p>调用包装函数<code class="literal">ChangeFormat</code>:数据帧<code class="literal">StormDamageData</code>的<code class="literal">Normalized.CL05</code>作为输入被传递。然后将结果存储在<code class="literal">base$ Normalized.CL05</code>数据帧中:</p><pre class="programlisting">
+<strong>&gt; base$Normalized.CL05 &lt;- Vectorize(ChangeFormat)(StormDamageData$Normalized.CL05)</strong>
+</pre><p>打印<code class="literal">base</code>数据帧:<code class="literal">head()</code>函数返回基础数据帧的第一部分。<code class="literal">base</code>数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>&gt; head(base)</strong>
+</pre><p>结果如下:</p><p>绘制207次飓风的标准化成本:<code class="literal">plot()</code>是一个通用函数。<code class="literal">base$Normalized.PL05/1e9</code>代表该地块的<em> x </em>坐标。<code class="literal">type="h"</code>代表直方图的具象风格。<code class="literal">ylim=c(0,155)</code>设置y轴表示的上限，下限为0，上限为155。x轴代表损失指数:</p><div><img src="img/image_13_004.jpg" alt="Step 3 - calculating the individual loss claims"/></div><p>结果如下:</p><p>Plotting the normalized cost of 207 hurricanes: <code class="literal">plot()</code> is a generic function. <code class="literal">base$Normalized.PL05/1e9</code> represents the <em>x</em> coordinates of the plot. <code class="literal">type="h"</code> represents the histogram representational style. <code class="literal">ylim=c(0,155)</code> sets the upper limit of the y axis representation as 0 as the lower limit and 155 as the upper limit. The x axis represents the index of loss:</p><pre class="programlisting">
+<strong>&gt; plot(base$Normalized.PL05/1e9, type="h", ylim=c(0,155), main = "207 Hurricanes, Normalized Costs: 1900 - 2005", xlab = "Index of Loss", ylab = "Normalized Costs", col = "red")</strong>
+</pre><p>The result is as follows:</p><p><a id="ch13lvl3sec173"/>步骤4 -计算飓风的数量</p><div><img src="img/image_13_005.jpg" alt="Step 3 - calculating the individual loss claims"/></div><p>提取每年飓风的年份和频率:基础数据框包含前面文本中显示的详细信息。<code class="literal">table()</code>使用<code class="literal">base$Year</code>建立一个每年飓风计数的应急表。结果存储在<code class="literal">TestBase</code>数据帧中:</p></div><div><div><div><div><h3 class="title">打印<code class="literal">TestBase</code>数据帧的内容:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; TestBase &lt;- table(base$Year)</strong>
+</pre><p>Printing the contents of the <code class="literal">TestBase</code> data frame:</p><pre class="programlisting">
+<strong>&gt; TestBase</strong>
+</pre><p>The result is as follows:</p><p>从<code class="literal">TestBase</code>数据帧中提取年份:<code class="literal">names()</code>函数提取每年的名称。<code class="literal">as.numeric()</code>将每个提取的年份名称转换成数值。结果存储在年数据框中:</p><div><img src="img/image_13_006.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>打印<code class="literal">years</code>数据框的内容:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; years &lt;- as.numeric(names(TestBase))</strong>
+</pre><p>Printing the contents of the <code class="literal">years</code> data frame:</p><pre class="programlisting">
+<strong>&gt; years</strong>
+</pre><p>The result is as follows:</p><p>从<code class="literal">TestBase</code>数据框中提取每年飓风计数的频率:<code class="literal">names()</code>提取每年飓风计数的频率。<code class="literal">as.numeric()</code>将每个提取的飓风次数转换成一个数值。结果存储在频率数据帧中:</p><div><img src="img/image_13_007.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>打印<code class="literal">frequency</code>数据框的内容:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; frequency &lt;- as.numeric(TestBase)</strong>
+</pre><p>Printing the contents of the <code class="literal">frequency</code> data frame:</p><pre class="programlisting">
+<strong>&gt; frequency</strong>
+</pre><p>The result is as follows:</p><p>从<code class="literal">TestBase</code>数据框中提取没有飓风发生的每年的飓风计数频率；结果存储在<code class="literal">years0frequency</code>数据框中；</p><div><img src="img/image_13_008.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>打印<code class="literal">years0frequency</code>数据框的内容:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; years0frequency &lt;- (1900:2005)[which(!(1900:2005)%in%years)]</strong>
+</pre><p>Printing the contents of the <code class="literal">years0frequency</code> data frame:</p><pre class="programlisting">
+<strong>&gt; years0frequency</strong>
+</pre><p>The result is as follows:</p><p>提取每年所有飓风的数量。结果存储在<code class="literal">StormDamageData</code>数据帧中:</p><div><img src="img/image_13_009.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>打印<code class="literal">StormDamageData</code>数据帧。<code class="literal">head()</code>函数返回<code class="literal">StormDamageData</code>数据帧的第一部分。<code class="literal">StormDamageData</code>数据帧作为输入参数传递:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; StormDamageData &lt;- data.frame(years=c(years, years0frequency), frequency=c(frequency, rep(0,length(years0frequency))))</strong>
+</pre><p>绘制1900年到2005年间每年飓风的年份和频率:<code class="literal">plot()</code>是一个通用函数。years代表图的x坐标，frequency代表图的y坐标。<code class="literal">type="h"</code>代表直方图表示风格:</p><pre class="programlisting">
+<strong>&gt; head(StormDamageData) </strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_010.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>
+</p><p>计算1900年至2005年间所有年份的飓风数量的平均值:</p><pre class="programlisting">
+<strong>&gt; plot(years, frequency, type="h", main = "Frequency of Hurricanes: 1900 - 2005", xlab = "Time (Years)", ylab = "Annual Frequency", col = "red")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_011.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p>
+</p><p>平均每年有两次飓风。</p><pre class="programlisting">
+<strong>&gt; mean(StormDamageData$frequency)</strong>
+</pre><p><a id="ch13lvl3sec174"/>第五步——建立预测模型</p><p>让我们找出飓风发生频率可能的线性趋势。<code class="literal">glm()</code>函数用于拟合广义线性模型。<code class="literal">frequency~years</code>定义公式。<code class="literal">data = StormDamageData</code>为公式定义数据集。<code class="literal">family=poisson(link="identity")</code>函数表示泊松分布。</p><div><img src="img/image_13_012.jpg" alt="Step 4 - calculating the number of hurricanes"/></div><p><code class="literal">lm()</code>功能用于拟合线性模型。<code class="literal">frequency~years</code>定义公式。<code class="literal">data = StormDamageData</code>为公式定义数据集。使用以下命令:</p><p>打印<code class="literal">LinearTrend</code>的细节:</p></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>Let's find out the possible linear trend in the hurricane occurrence frequency. The <code class="literal">glm()</code> function is used to fit generalized linear models. <code class="literal">frequency~years</code> defines the formula. <code class="literal">data = StormDamageData</code> defines the dataset for the formula. The <code class="literal">family=poisson(link="identity")</code> function signifies the Poisson distribution.</p><p>The <code class="literal">lm()</code> function is used to fit linear models. <code class="literal">frequency~years</code> defines the formula. <code class="literal">data = StormDamageData</code> defines the dataset for the formula. Use the following commands:</p><pre class="programlisting">
+<strong>&gt; LinearTrend &lt;- glm(frequency~years, data = StormDamageData, family=poisson(link="identity"), start=lm(frequency~years, data = StormDamageData)$coefficients)</strong>
+</pre><p>找出飓风发生频率的可能指数趋势:</p><pre class="programlisting">
+<strong>&gt; LinearTrend</strong>
+</pre><p><code class="literal">glm()</code>函数用于拟合广义线性模型。<code class="literal">frequency~years</code>定义了公式。<code class="literal">data = StormDamageData</code>为公式定义数据集。<code class="literal">family=poisson(link="identity")</code>函数表示泊松分布。我们通过使用以下命令来实现这一点:</p><p>打印<code class="literal">ExpTrend</code>的详细信息:</p><div><img src="img/image_13_013.jpg" alt="Step 5 - building predictive models"/></div><p>结果如下:</p><p>Finding out the possible exponential trend in the hurricane occurrence frequency:</p><p>The <code class="literal">glm()</code> function is used to fit generalized linear models. <code class="literal">frequency~years</code> defines the formula. <code class="literal">data = StormDamageData</code> defines the dataset for the formula. The <code class="literal">family=poisson(link="identity")</code> function signifies the Poisson distribution. We do this by using the following command:</p><pre class="programlisting">
+<strong>&gt; ExpTrend &lt;- glm(frequency~years, data=StormDamageData, family = poisson(link="log"))</strong>
+</pre><p>绘制<code class="literal">1900</code>和<code class="literal">2005</code>之间每年飓风的年份和频率计数:<code class="literal">plot()</code>是一个通用功能。years代表图的x坐标，frequency代表图的y坐标。<code class="literal">type="h"</code>代表直方图的表现风格。<code class="literal">ylim=c(0,6)</code>功能将<em> y </em>轴表示的上限设定为下限<code class="literal">0</code>和上限<code class="literal">6</code>:</p><pre class="programlisting">
+<strong>&gt; ExpTrend</strong>
+</pre><p>结果如下:</p><p>基于指数趋势预测2014年的趋势:<code class="literal">predict()</code>函数用于基于线性模型对象预测值。<code class="literal">ExpTrend</code>表示从<code class="literal">lm</code>继承的类的对象。<code class="literal">newdata = data.frame(years=1890:2030)</code>函数代表在其中寻找预测变量的数据框:</p><div><img src="img/image_13_014.jpg" alt="Step 5 - building predictive models"/></div><p>印刷<code class="literal">cpred1</code>的详细资料:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; plot(years, frequency, type='h', ylim=c(0,6), main = "No. of Major Hurricanes Predicted for 2014", xlim=c(1900,2020))</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_015.jpg" alt="Step 5 - building predictive models"/></div><p>用线段连接<code class="literal">cpred1</code>的点:<code class="literal">lines()</code>是一个通用函数，它将<code class="literal">cpred1</code>数据帧的值作为<em> y </em>轴的坐标，并用线段连接相应的点。<code class="literal">1890:2030</code>代表<em> x </em>轴:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; cpred1 &lt;- predict(ExpTrend, newdata = data.frame(years=1890:2030), type="response")</strong>
+</pre><p>Printing the details of <code class="literal">cpred1</code>:</p><pre class="programlisting">
+<strong>&gt; cpred1</strong>
+</pre><p>The result is as follows:</p><p>基于线性趋势预测2014年的趋势:<code class="literal">predict()</code>函数用于基于线性模型对象预测值。<code class="literal">LinearTrend</code>表示从<code class="literal">lm</code>继承的类的对象。<code class="literal">newdata = data.frame(years=1890:2030)</code>函数代表在其中寻找预测变量的数据框:</p><div><img src="img/image_13_016.jpg" alt="Step 5 - building predictive models"/></div><p>打印<code class="literal">cpred0</code>的详细信息:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; lines(1890:2030,cpred1,col="blue")</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_017.jpg" alt="Step 5 - building predictive models"/></div><p>用线段连接<code class="literal">cpred0</code>的点:<code class="literal">lines()</code>是一个通用函数，它将<code class="literal">cpred0</code>数据框的值作为<em> y- </em>轴的坐标，并用线段连接相应的点。<code class="literal">1890:2030</code>代表<em> x </em>轴:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; cpred0 &lt;- predict(LinearTrend, newdata=data.frame(years=1890:2030), type="response")</strong>
+</pre><p>Printing the details of <code class="literal">cpred0</code>:</p><pre class="programlisting">
+<strong>&gt; cpred0</strong>
+</pre><p>The result is as follows:</p><p>绘制平均值:<code class="literal">abline()</code>作为一个函数，使用<code class="literal">StormDamageData$frequency</code>即<code class="literal">1.95283</code>的平均值绘制直线。<code class="literal">h = mean(StormDamageData$frequency)</code>是水平线的<em> y </em>值；</p><div><img src="img/image_13_018.jpg" alt="Step 5 - building predictive models"/></div><p>结果如下:</p><p>Joining the points of <code class="literal">cpred0</code> with line segments: <code class="literal">lines()</code> is a generic function which takes the value of the <code class="literal">cpred0</code> data frame as coordinates of the <em>y-</em>axis and joins the corresponding points with line segments. <code class="literal">1890:2030</code> represents the <em>x</em>-axis:</p><pre class="programlisting">
+<strong>&gt; lines(1890:2030, cpred0, col="red"))</strong>
+</pre><p>The result is as follows:</p><p>将数据帧值合并为<code class="literal">StormDamageData$frequency</code>、<code class="literal">cpred0</code>和<code class="literal">cpred1</code>的平均值:</p><div><img src="img/image_13_019.jpg" alt="Step 5 - building predictive models"/></div><p>打印预测的详细信息:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; abline(h = mean(StormDamageData$frequency), col="black")</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_020.jpg" alt="Step 5 - building predictive models"/></div><p>在图表上标出2014年的预测点:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; predictions &lt;- cbind(constant = mean(StormDamageData$frequency), linear = cpred0[126], exponential=cpred1[126])</strong>
+</pre><p>Printing the details of the predictions:</p><pre class="programlisting">
+<strong>&gt; predictions</strong>
+</pre><p>The result is as follows:</p><p>重要的是要观察到，通过改变预测模型，保费将会发生变化。对于平面预测，不到两个(主要)飓风，但对于指数趋势，有四个以上(主要)飓风。</p><div><img src="img/image_13_021.jpg" alt="Step 5 - building predictive models"/></div><p><a id="ch13lvl3sec175"/>第六步-计算再保险合同的纯保费</p><p>现在，我们找到了一个合适的模型来计算再保险条约的保费，具有可扣除额和有限的覆盖范围。使用希尔的尾部指数估计器估计尾部指数，如下所示。<code class="literal">hill()</code>是估计重尾数据指数尾部的函数，<code class="literal">base$Normalized.PL05</code>:</p><pre class="programlisting">
+<strong>&gt; points(rep((1890:2030)[126],3), predictions, col=c("black","red","blue"), pch=19)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_022.jpg" alt="Step 5 - building predictive models"/></div><p>
+</p><p>上图显示大飓风的损失是重尾的。</p></div><div><div><div><div><h3 class="title">为帕累托模型设置5亿以上的损失阈值，如下所示:</h3></div></div></div><p>我们用下面的命令返回一个类的对象，<code class="literal">gpd</code>，表示广义帕累托模型的拟合度超过了一个阈值(0.5)。数据集由<code class="literal">base$Normalized.PL05/1e9/20</code>表示:</p><pre class="programlisting">
+<strong>&gt; hill(base$Normalized.PL05)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_13_023.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>
+</p><p>计算阈值0.5以上的<code class="literal">base$Normalized.CL05/1e9/20</code>数据帧的平均值:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; threshold &lt;- .5</strong>
+</pre><p>We return an object of the class, <code class="literal">gpd</code>, representing the fit of a generalized Pareto model to excesses over a threshold (0.5) with the following command. The dataset is represented by <code class="literal">base$Normalized.PL05/1e9/20</code>:</p><pre class="programlisting">
+<strong>   &gt; gpd.PL &lt;- gpd(base$Normalized.PL05/1e9/20, threshold)$par.ests</strong>
+</pre><p>The result is as follows:</p><p>假设损失超过5亿，我们现在可以计算再保险合同的预期价值:</p><div><img src="img/image_13_024.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>
+</p><p>Calculating the mean of the <code class="literal">base$Normalized.CL05/1e9/20</code> data frame above the threshold value of 0.5:</p><pre class="programlisting">
+<strong>&gt; mean(base$Normalized.CL05/1e9/20&gt; .5)</strong>
+</pre><p>如下所示查找预测数据框的平均值:</p><p>结果如下:</p><div><img src="img/image_13_025.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>
+</p><p>Given that the loss exceeds 500 million, we can now compute the expected value of the reinsurance contract:</p><p>计算阈值0.5以上的<code class="literal">base$Normalized.PL05/1e9/20</code>数据帧的平均值:</p><div><img src="img/image_13_026.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; ExpectedValue &lt;- function(yinf,ysup,xi,beta){</strong>
+<strong>    + as.numeric(integrate(function(x) (x-yinf) * dgpd(x,xi,mu=threshold,beta),</strong>
+<strong>    + lower=yinf,upper=ysup)$value +</strong>
+<strong>    + (1-pgpd(ysup,xi,mu=threshold,beta))*(ysup-yinf))</strong>
+<strong>    + }</strong>
+</pre><p>Find the mean value of the predictions data frame as follows:</p><pre class="programlisting">
+<strong>&gt; predictions[1]</strong>
+</pre><p>The result is as follows:</p><p>这表明每一次飓风都有12.5%的几率给保险公司造成超过5亿的损失。</p><div><img src="img/image_13_027.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>计算再保险合同的预期价值:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; mean(base$Normalized.PL05/1e9/20&gt;.5)</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_028.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>这表明再保险公司的预期偿付额约为33098.65万英镑。</p><p>计算再保险合同的保险费:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; ExpectedValue(2,6,gpd.PL[1],gpd.PL[2])*1e3</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_029.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>
+</p><p>This indicates that the expected repayment by the reinsurance company is about 330.9865 million.</p><p>Calculating the premium of the reinsurance contract:</p><pre class="programlisting">
+<strong>&gt; predictions[1] * mean(base$Normalized.PL05/1e9/20&gt; .5) * ExpectedValue(2, 6, gpd.PL[1], gpd.PL[2]) * 1e3</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_13_030.jpg" alt="Step 6 - calculating the pure premium of the reinsurance contract"/></div><p>
+</p></div></div></div>
+</body></html>

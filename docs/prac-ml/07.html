@@ -1,0 +1,298 @@
+<html><head/><body>
+
+
+
+<title>Chapter 7. Association Rules based learning</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07"/>第七章。基于关联规则的学习</h1></div></div></div><p>在前面的章节中，我们已经介绍了决策树、实例和基于核的监督和非监督学习方法。在前几章中，我们还探讨了这些学习算法中最常用的算法。在这一章中，我们将介绍基于关联规则的学习，尤其是Apriori和FP-Growth算法。我们将学习这种技术的基础，并获得使用Apache Mahout、R、Julia、Apache Spark和Python的实践指导。下图描述了本书涵盖的不同学习模型。橙色突出显示的技术将在本章中详细讨论。</p><div><img src="img/B03980_07_01.jpg" alt="Association Rules based learning"/></div><p>本章深入讨论了以下主题:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">理解基于关联规则的学习模型的基础和核心原则</li><li class="listitem" style="list-style-type: disc">关联规则的核心用例，如购物篮问题</li><li class="listitem" style="list-style-type: disc">关键术语，如项目集、提升、支持度、置信度和频繁项目集，以及规则生成技术</li><li class="listitem" style="list-style-type: disc">深入研究基于关联规则的算法，如Apriori和FP-Growth；在大数据集环境下比较Apriori和FP-Growth</li><li class="listitem" style="list-style-type: disc">一些高级关联规则概念(如相关性和顺序规则)的概述和用途</li><li class="listitem" style="list-style-type: disc">Apache Mahout，R，Apache Spark，Julia和Python (scikit-learn)库和模块的示例实现。</li></ul></div><div><div><div><div><h1 class="title"><a id="ch07lvl1sec37"/>基于关联规则学习</h1></div></div></div><p>基于关联规则的机器学习处理寻找可用于分类和预测需求的频繁模式、关联和事务。基于关联规则的学习过程如下:给定一组交易，找出规则并使用这些规则根据交易中其他项目的出现来预测项目的出现，这就是基于关联规则的学习。下图代表了机器学习的范围:</p><div><img src="img/B03980_07_02.jpg" alt="Association rules based learning"/></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec84"/>关联规则——一个定义</h2></div></div></div><p>关联规则<a id="id823" class="indexterm"/>是一种模式的表示，它描述了在给定另一个事件发生的情况下，一个事件发生的概率。通常，关联规则的语法遵循<em> if...然后是</em>将存储库中两组不相关的数据联系起来的语句。简而言之，它有助于找到经常一起使用的对象之间的关系。关联规则的目标是使用大型数据集来预测置信度大于最小置信度的规则，从而找到支持度大于最小支持度的所有项目集。使用关联规则的一个最常见的例子是市场购物篮。为了详细说明购物篮示例，如果客户购买了iPad，他或她可能也会购买iPad保护套。</p><p>关联规则中使用了两个重要的标准，<strong>支持度</strong> <a id="id824" class="indexterm"/>和<a id="id825" class="indexterm"/> <strong>置信度</strong>。每个关联规则应该同时具有最小置信度和最小支持度。这通常是用户定义的。</p><p>现在，让我们看看什么是支持、信心和提升措施。让我们考虑前面解释的同一个例子，<em> If X then Y </em>。其中<em> X </em>正在购买iPad，<em> Y </em>正在购买iPad保护套。</p><p>那么支持度被定义为<em> X </em>和<em> Y </em>在购买或交易总数中被一起购买的频率。</p><div><img src="img/B03980_07_13.jpg" alt="Association rule – a definition"/></div><p>置信度可以定义为<em> X </em>和<em> Y </em>一起购买的频率超过<em> X </em>单独购买的频率。</p><div><img src="img/B03980_07_14.jpg" alt="Association rule – a definition"/></div><p>升力定义为<em> X </em>的支撑超过<em> Y </em>的支撑。</p><div><img src="img/B03980_07_15.jpg" alt="Association rule – a definition"/></div><div><img src="img/B03980_07_03.jpg" alt="Association rule – a definition"/></div><p>在理解这些措施的意义之前，让我们看一下在这种情况下使用的术语作为例子。称为itemset的仓库中的项目集合表示为<em> I = { i <sub> 1 </sub>，i <sub> 2 </sub>，…。i <sub> n </sub> } </em>，所有事务的集合，其中每个事务由项集的子集组成，表示为<em> T = { t <sub> 1 </sub>，t <sub> 2 </sub>，…。t <sub> n </sub> } </em>，其中<em> t </em> <sub> x </sub>是<em> I </em>的子集，具有<a id="id828" class="indexterm"/> <strong>唯一事务标识符</strong> ( <strong> UTI </strong>)。</p><p>现在让我们用一个例子来表示项目、事务和度量。</p><p>考虑五个项目和五个交易，如下所示:</p><p><em> I = {iPad(A)，iPad保护套(B)，iPad防刮保护套(C)，Apple care (D)，iPhone (E)} </em></p><div><img src="img/B03980_07_04.jpg" alt="Association rule – a definition"/></div><p><em> T = {{ iPad，iPad case，iPad scratch guard }，{ iPad，iPad scratch guard，Apple care }，{ iPad case，iPad scratch guard，Apple care }，{ iPad，Apple care，iPhone }，{ iPad case，iPad scratch guard，iPhone }} </em></p><p>下表<a id="id829" class="indexterm"/>显示了每个已识别规则的支持度、置信度和提升值。</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>#</p>
+</th><th style="text-align: left" valign="bottom">
+<p>规则</p>
+</th><th style="text-align: left" valign="bottom">
+<p>支持</p>
+</th><th style="text-align: left" valign="bottom">
+<p>信心</p>
+</th><th style="text-align: left" valign="bottom">
+<p>电梯</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>如果购买了iPad ( <em> A </em>)，也就购买了iPhone ( <em> D </em>)</p>
+</td><td style="text-align: left" valign="top">
+<p>2/5</p>
+</td><td style="text-align: left" valign="top">
+<p>2/3</p>
+</td><td style="text-align: left" valign="top">
+<p>10/9</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>如果购买了iPad scratch guard( <em> C </em>)，则还会购买iPad ( <em> A </em>)</p>
+</td><td style="text-align: left" valign="top">
+<p>2/5</p>
+</td><td style="text-align: left" valign="top">
+<p>2/4</p>
+</td><td style="text-align: left" valign="top">
+<p>5/6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 3 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>如果购买了iPad ( <em> A </em>)，则还会购买iPad防刮擦装置(<em> C </em>)</p>
+</td><td style="text-align: left" valign="top">
+<p>2/5</p>
+</td><td style="text-align: left" valign="top">
+<p>2/3</p>
+</td><td style="text-align: left" valign="top">
+<p>5/6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 4 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>如果购买了iPad保护套(<em> B </em>)和iPad防刮保护套(<em> C </em>)，那么也购买了apple care ( <em> D </em>)</p>
+</td><td style="text-align: left" valign="top">
+<p>1/5</p>
+</td><td style="text-align: left" valign="top">
+<p>1/3</p>
+</td><td style="text-align: left" valign="top">
+<p>5/9</p>
+</td></tr></tbody></table></div><p>从这些项集中，基于支持度和置信度计算，可以确定频繁项集。关联规则挖掘的目标是找到满足以下标准的规则:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">支持≥ minsup(最小支持)阈值</li><li class="listitem" style="list-style-type: disc">置信度≥ minconf(最小置信度)阈值</li></ul></div><p>以下是频繁项集生成和挖掘关联规则所涉及的步骤:</p><div><ol class="orderedlist arabic"><li class="listitem">列出所有可能的关联规则。</li><li class="listitem">计算每个规则的支持度和置信度。</li><li class="listitem">删除不满足minsup和minconf阈值的规则。</li></ol></div><p>这种方法被称为强力方法，并且通常被认为是计算上禁止的。</p><div><div><h3 class="title"><a id="tip05"/>提示</h3><p>源自同一项集的规则通常具有相同的支持度，但置信度不同。最小支持度(minsup)和最小置信度(minconf)是在问题定义陈述期间商定的值。例如，最小支持度和置信度可以分别取75%和85%这样的百分比值。</p></div></div><p>为了避免所有昂贵的计算，我们可以将这个过程简化为两步:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>频繁项集生成</strong>:需要生成所有支持度≥ minsup的项集</li><li class="listitem" style="list-style-type: disc"><strong>规则生成</strong>:从识别出的频繁项目集中，生成可信度最高的规则</li></ul></div><p>当有五个项目时，有32个候选项目集。下图描述了五个项目的项目集组合:<strong> A </strong>、<strong> B </strong>、<strong> C </strong>、<strong> D </strong>和<strong> E </strong>:</p><div><img src="img/B03980_07_05.jpg" alt="Association rule – a definition"/></div><p>给定项目数，可能的<a id="id831" class="indexterm"/>项目集和规则数在此定义:</p><p>给定<em> d </em>唯一项:</p><p><em>可能的项目集总数= 2</em>T21 d</p><p>计算全部可能关联规则的标准公式定义如下:</p><div><img src="img/B03980_07_16.jpg" alt="Association rule – a definition"/></div><p>例如，如果<em> d </em>等于6，那么<em>可能的项目集总数= 2 </em> <sup> d </sup> <em> = 64 </em></p><p>因此，<em>可能的关联规则总数= 602条规则</em></p><p>下图<a id="id832" class="indexterm"/>展示了项目数量与可能关联规则之间的关系。</p><div><img src="img/B03980_07_06.jpg" alt="Association rule – a definition"/></div><p>产生频繁项集和关联规则的有效方法决定了关联规则算法的效率。在下一节中，我们将详细介绍Apriori和FP-Growth算法。</p></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec85"/> Apriori算法</h2></div></div></div><p>在本节中，我们将使用一个示例逐步介绍<a id="id833" class="indexterm"/> Apriori算法。Apriori算法如下所示:</p><div><img src="img/B03980_07_07.jpg" alt="Apriori algorithm"/></div><div><div><h3 class="title"><a id="tip06"/>提示</h3><p>Apriori原则—对于所有频繁项目集，子集也必须是频繁的。</p></div></div><p>考虑这五个项目(来自上一节的示例)</p><p><em> I = {iPad(A)，iPad保护套(B)，iPad防刮保护套(C)，Apple care (D)，iPhone (E)} </em>，以及以下九个<a id="id834" class="indexterm"/>交易。让我们假设最小支持计数是2:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>每日三次</p>
+</th><th style="text-align: left" valign="bottom">
+<p>机器学习环境中的目的或意义</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>，iPad保护套(<em> B </em>，iPhone( <em> E </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad保护套(<em> B </em>)和Apple care( <em> D </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 3 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad保护套(<em> B </em>)和iPad防刮保护套(<em> C </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 4 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>，iPad保护套(<em> B </em>，Apple care( <em> D </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 5 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>)和Apple care( <em> D </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 6 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad保护套(<em> B </em>)和iPad防刮保护套(<em> C </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 7 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>)和Apple care( <em> D </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 8 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>)、iPad保护套(<em> B </em>)、iPad防刮保护套(<em> C </em>)和iPhone ( <em> E </em>)</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 9 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p>iPad( <em> A </em>)、iPad保护套(<em> B </em>)和iPad防刮保护套(<em> C </em>)</p>
+</td></tr></tbody></table></div><p>让我们使用之前的数据集调试<a id="id835" class="indexterm"/>之前的算法:</p><div><ol class="orderedlist arabic"><li class="listitem">Get the number of occurrences for each item from the previous transactions (<em>C</em><sub>1</sub>):<div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>项目集</p>
+</th><th style="text-align: left" valign="bottom">
+<p>支持计数</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><em> {iPad(A)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPad保护套(B)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPad防刮擦板(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em>{苹果关怀(D)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPhone(E)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr></tbody></table></div><p>从<em>C</em>T61】1中确定频繁1项集(<em>L</em>T57】1):</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>项目集</p>
+</th><th style="text-align: left" valign="bottom">
+<p>支持计数</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><em> {iPad(A)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPad保护套(B)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPad防刮擦板(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>6</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em>{苹果关怀(D)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><em> {iPhone(E)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr></tbody></table></div></li><li class="listitem">生成2—项集<a id="id836" class="indexterm"/>候选项(<em>C</em>T3】2)并扫描数据集进行支持计数:<div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom"><p>项集</p> </th> <th style="text-align: left" valign="bottom"> <p>支持计数</p></th></tr></thead><tbody><tr><td style="text-align: left" valign="top"><p><em>{ iPad(A)}</em></p></td> Apple care(D)}<td style="text-align: left" valign="top"><p>1</p></td></tr><tr><td style="text-align: left" valign="top"><p><em><em>【iPad(A)、iPhone(E)}</em></em></p></td><td style="text-align: left" valign="top"><p>2</p></td></tr><td style="text-align: left" valign="top"><p><em>{ iPad保护套(C) iPhone(E)}</em></p></td><td style="text-align: left" valign="top"><p>2</p></td><tr><td style="text-align: left" valign="top"><p><em>【iPad防刮护板(C)，Apple care(D)}</em></p></td><td style="text-align: left" valign="top"><p>0</p></td></tr><tr><td style="text-align: left" valign="top"><p><em>【iPad防刮护板(C)，iPhone(E)}。</em></p></td></tr></tbody></table></div></li><li class="listitem">从<em>C</em><sub>2</sub>:<div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom"><p>项集</p> </th> <th style="text-align: left" valign="bottom"> <p>支持计数</p></th></tr></thead><tr><td style="text-align: left" valign="top"><p><em>{ iPad案例(B) Apple care(D)}</em></p></td><td style="text-align: left" valign="top"><p>2</p></td></tr><tr><td style="text-align: left" valign="top"><p><em>【iPad保护套(B)，iPad防刮保护套(C)}</em></p></td><td style="text-align: left" valign="top"><p>4</p></td></tr><tr><td style="text-align: left" valign="top"><p><em>{ iPad保护套(B)</em></p></td></tr></table></div></li><li class="listitem">生成3—候选项集(<em>C</em>T117】3)。</li><li class="listitem">最后，扫描数据集的支持计数和频繁3-项集标识。</li></ol></div><p>这类似于前面的<a id="id838" class="indexterm"/>步骤，但是我们将演示如何基于先验原则有效地应用剪枝来识别频繁项集。首先，我们确定可能的子集项目集。然后，我们检查是否有任何子集项集不属于频繁项集列表。如果没有找到，我们排除3-项集可能性。</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>C3</p>
+</th><th style="text-align: left" valign="bottom">
+<p>项目集</p>
+</th><th colspan="3" style="text-align: center" valign="bottom">
+<p>可能的子集项目集</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，B，C} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，B} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，C} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，C} </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，B，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，B} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，D} </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 3 </strong> ✕</p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，C，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，C} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {A，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>{C，D}  ✕</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 4 </strong> ✕</p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，C，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，C} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>{C，D}  ✕</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 5 </strong> ✕</p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，C，E} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，C} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>{B，E}  ✕</p>
+</td><td style="text-align: left" valign="top">
+<p>{C，E}  ✕</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 6 </strong> ✕</p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，D，E} </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {B，D} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>✕</p>
+</td><td style="text-align: left" valign="top">
+<p>{D，E}  ✕</p>
+</td></tr></tbody></table></div><p>在上表中，✕项集是使用Apriori技术修剪的，并且使用了步骤4中的数据(<em>l</em>T2】2)。为了便于理解，使用项目代码<em> A </em>、<em> B </em>、<em> C </em>、<em> D </em>和<em> E </em>来表示项目集，而不是实际名称。3-候选项目集可以识别如下:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>C <sub> 3 </sub></p>
+</th><th style="text-align: left" valign="bottom">
+<p>项目集</p>
+</th><th style="text-align: left" valign="bottom">
+<p>支持计数</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {iPad(A)，iPad保护套(B)，iPad防刮保护套(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {iPad(A)，iPad保护套(B)，Apple care(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr></tbody></table></div><p>因此，频繁的3-项集是:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>L <sub> 3 </sub></p>
+</th><th style="text-align: left" valign="bottom">
+<p>项目集</p>
+</th><th style="text-align: left" valign="bottom">
+<p>支持计数</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {iPad(A)，iPad保护套(B)，iPad防刮保护套(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> {iPad(A)，iPad保护套(B)，Apple care(C)} </em></p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td></tr></tbody></table></div><div><ol class="orderedlist arabic"><li class="listitem">生成4—候选项集(<em>C</em>T36】4)。</li><li class="listitem">最后，扫描数据集的支持计数和频繁3-项集标识(<em> L </em> <sub> 4 </sub>)。</li></ol></div><p>正如我们所见，<a id="id839" class="indexterm"/>修剪到此为止，因为没有进一步的<em>C</em>C<sub>3</sub>选项可用。</p><p>Apriori算法效率不高，因为它需要多次数据集扫描。但是，有一些技术可以提高效率。其中一些如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">如果一个事务不包含任何频繁项集，它就没有用，也不需要参与后续的扫描</li><li class="listitem" style="list-style-type: disc">在数据集中频繁出现的任何项集应该至少在数据集的一个分区中频繁出现</li><li class="listitem" style="list-style-type: disc">采样的应用，包括具有较低支持阈值的整个数据集的子集，将产生更高的效率</li></ul></div><div><div><div><div><h3 class="title"><a id="ch07lvl3sec92"/>规则生成策略</h3></div></div></div><p>假设我们有一个<a id="id840" class="indexterm"/>频繁项集<em> {A，B，C，D} </em>，可能的候选规则有:</p><p>ABC→D</p><p>ABD→C</p><p>自动呼叫分配器→B</p><p>BCD→A</p><p>AB→CD</p><p>AC→BD</p><p>公元→公元前</p><p>公元前→公元</p><p>BD→AC</p><p>CD→AB</p><p>A→BCD</p><p>b→自动呼叫分配器</p><p>C→ABD</p><p>D→ABC</p><p>标准的公式是，对于频繁项集的每k个项，可以定义<em> 2k-2 </em>个可能的候选规则。只能保留可信度高的规则。下图描述了标记低置信度规则并删除它们:</p><div><img src="img/B03980_07_08.jpg" alt="Rule generation strategy"/></div><div><div><div><div><h4 class="title"><a id="ch07lvl4sec25"/>定义适当最小化的规则</h4></div></div></div><p>为基于关联规则的挖掘定义minsup阈值时要遵循的一些重要准则如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">minsup太高:这将导致缺少稀有项目的项目集</li><li class="listitem" style="list-style-type: disc">最小值太低:这将导致计算开销，因为需要更多的扫描</li></ul></div></div><div><div><div><div><h4 class="title">先天的——不利的一面</h4></div></div></div><p>现在很清楚，在<a id="id842" class="indexterm"/> Apriori算法中，对于每一个<em> k </em>项集，我们将需要使用<em> (k-1) </em>频繁项集，并且当数据库扫描完成时，使用模式匹配方法。主要的瓶颈是两个巨大的候选集和多次数据库扫描。让我们看一个例子——如果有10个<sup> 4 </sup>频繁1-项集，那么这将导致10个<sup> 7 </sup>候选2-项集。并且对于每<em> n </em>个项目集，需要最长的模式长度<em> n + 1 </em>次扫描。</p><p>这个问题的解决方案是完全避免候选项集的生成，解决这个问题的一种方法是将大型数据集或数据库压缩到一个紧凑的<strong>频繁模式树</strong> ( <strong> FP-tree </strong> ) <a id="id843" class="indexterm"/>中，这样<a id="id844" class="indexterm"/>将避免昂贵的扫描。</p><p>有几种优化先验实现的方法，下面是一些重要的方法:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>方法1 </strong> — <strong>基于Has的项集计数</strong>:每k个项集<a id="id845" class="indexterm"/>桶都有一个阈值设置，如果该项集的项集计数低于该阈值，则不处理该桶。这反过来减少了处理时要考虑的项目集存储桶，从而提高了效率。</li><li class="listitem" style="list-style-type: disc"><strong>方法2 </strong> — <strong>事务消除/计数</strong>:如果一个事务不包含<a id="id846" class="indexterm"/>目标k项集，则该事务不具有附加值或被处理的意义。因此，这种方法是关于识别这些事务并从处理中消除它们。</li><li class="listitem" style="list-style-type: disc"><strong>方法3 </strong> — <strong>分区</strong>:任何在数据集中潜在频繁的项目集也需要在数据集的分区中<a id="id847" class="indexterm"/>频繁；如果没有，项目集可能会被排除在处理之外。</li><li class="listitem" style="list-style-type: disc"><strong>方法4 </strong> — <strong>采样</strong>:这是一种更简单的方法，可以考虑一个样本或更大的<a id="id848" class="indexterm"/>数据宇宙的一个子集，并运行挖掘过程。这将减少k，从而减少频繁的k项集。</li><li class="listitem" style="list-style-type: disc"><strong>方法5 </strong> — <strong>动态项目集计数</strong>:这是最有效的方法之一，涉及<a id="id849" class="indexterm"/>仅当一个新项目集在其所有子集项目集中频繁出现时才包含该项目集。</li></ul></div><p>虽然，有针对Apriori的优化技术；由于固有的昂贵扫描，它造成了低效率，这将需要解决。这就把我们带到了基于关联规则学习的下一个算法，即<a id="id850" class="indexterm"/> <strong> FP-growth </strong>算法。</p></div></div></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec86"/> FP-growth算法</h2></div></div></div><p>FP-growth算法<a id="id851" class="indexterm"/>是挖掘频繁模式以及关联规则挖掘的有效且可扩展的替代方法。它解决了Apriori算法会遇到的大多数性能瓶颈。它允许生成频繁项集，而不必实际生成候选项集。该算法主要有两步:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">从称为FP-tree的数据库构建一个紧凑的数据结构</li><li class="listitem" style="list-style-type: disc">直接从FP-树中提取频繁项集</li></ul></div><p>让我们考虑我们在Apriori算法中使用的同一个例子。总共有五个项目(来自上一节中的示例):</p><p><em>我是{iPad(A)，iPad保护套(B)，iPad防刮保护套(C)，Apple care (D)，iPhone (E)} </em>，下面九笔交易。让我们假设最小支持计数是2:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>每日三次</p>
+</th><th style="text-align: left" valign="bottom">
+<p>事务项目集</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> 1 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)、iPad保护套(B)和iPhone(E) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 2 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad保护套(B)，Apple care(D) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 3 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad保护套(B)，iPad防刮保护套(C) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 4 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)、iPad保护套(B)和Apple care(D) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 5 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)，Apple care(D) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 6 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad保护套(B)，iPad防刮保护套(C) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 7 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)，Apple care(D) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 8 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)、iPad保护套(B)、iPad防刮保护套(C)和iPhone (E) </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> 9 </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> iPad(A)、iPad保护套(B)和iPad防刮保护套(C) </em></p>
+</td></tr></tbody></table></div><p>我们现在来看看如何为这个数据库构建一个FP树:</p><div><ol class="orderedlist arabic"><li class="listitem">Identify/calculate the minimum support count. Since it needs to be 30%, the minimum support count is calculated as follows:<p>最小支持数= 30/100 * 9 = 2.7 ~ 3</p></li><li class="listitem">计算1-项集的出现频率。此外，基于支持计数， 添加<a id="id852" class="indexterm"/>优先级:<div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom"><p>项集</p> </th> <th style="text-align: left" valign="bottom"> <p>支持计数</p> </th> <th style="text-align: left" valign="bottom"> <p>优先级</p></th></tr></thead><tbody><tr><td style="text-align: left" valign="top"><p><em>{ iPad(A)}</em></p></td><td style="text-align: left" valign="top"><p>6</p></td><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top"><p>6</p></td><td style="text-align: left" valign="top"><p>3</p></td></tr><tr><td style="text-align: left" valign="top"><p><em>{ Apple care(D)}</em></p></td><td style="text-align: left" valign="top"><p>2</p></td><td style="text-align: left" valign="top">T85】4</td></tr><td style="text-align: left" valign="top"/></tbody></table></div></li><li class="listitem">按优先级对每个事务项排序:<div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom"><p>TID</p></th><th style="text-align: left" valign="bottom"><p>事务项集</p> </th> <th style="text-align: left" valign="bottom"> <p>根据优先级重新排序的项集</p></th></tr></thead><tbody><tr><td style="text-align: left" valign="top"><p><strong>1</strong></p></td><td style="text-align: left" valign="top"><p>iPad(<em> iPad( <em> A </em>)、iPhone(<em>E</em>)</em></p></td></tr><tr><td style="text-align: left" valign="top"><p><strong>2</strong></p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B </em>、Apple care(<em>D</em>)</p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B iPad防刮保护套(<em>C</em>)</em></p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B </em>)，iPad防刮保护套(<em>C</em>)</p></td></tr><tr><td style="text-align: left" valign="top"><p><strong>4</strong></p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> A </em>)，iPad保护套( 还有Apple care(<em>D</em>)</p></td></tr><tr><td style="text-align: left" valign="top"><p><strong>5</strong></p></td><td style="text-align: left" valign="top"><p>iPad(<em>A</em>)<em>D</em>)</p></td><td style="text-align: left" valign="top"><p>iPad(<em>A</em> iPad防刮保护套(<em>C</em>)</p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B </em>)，iPad防刮保护套(<em>C</em>)</p></td></tr><tr><td style="text-align: left" valign="top"><p><strong>7</strong></p></td><td style="text-align: left" valign="top"><p>iPad(<em> iPad保护套(<em> B </em>)、iPad防刮保护套(<em> C </em>)、iPhone(<em>E</em>)</em></p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B </em>)、iPad( <em> A </em>)、iPad防刮保护套(<em> C </em>)和iPhone(<em>E【T226) 以及iPad防刮保护套(<em>C</em>)</em></p></td><td style="text-align: left" valign="top"><p>iPad保护套(<em> B </em>)、iPad( <em> A </em>)、iPad防刮保护套(<em>C</em>)</p></td></tr></tbody></table></div></li><li class="listitem">为<strong/>=<strong>1</strong>的<a id="id853" class="indexterm"/>事务创建FP-tree，有序项集为iPad case( <em> B </em>)、iPad( <em> A </em>)、iPhone( <em> E </em>)。<div> <img src="img/B03980_07_09.jpg" alt="FP-growth algorithm"/> </div></li><li class="listitem">现在，扫描数据库寻找<strong> TID </strong> = <strong> 2 </strong>，iPad保护套(<em> B </em>)和Apple care( <em> D </em>)。更新后的FP-tree将如下所示:<div> <img src="img/B03980_07_10.jpg" alt="FP-growth algorithm"/> </div></li><li class="listitem">按照L的顺序扫描所有的<a id="id854" class="indexterm"/>事务，并相应地更新FP树。最终的FP树如下所示。请注意，每次在事务中再次遇到一个项目时，节点上的计数值都会递增。<div> <img src="img/B03980_07_11.jpg" alt="FP-growth algorithm"/> </div></li><li class="listitem">为每个事务生成条件FP树，并定义条件模式库。</li><li class="listitem">最后，生成<a id="id855" class="indexterm"/>频繁模式。给定数据集的结果如下所示:<div> <pre class="programlisting">E: {B, E: 2}, {A, E: 2}, {B, A, E: 2} D: {B, D: 2} C: {B, C: 4}, {A, C: 4}, {B, A, C: 2} A: {B, A: 4}</pre> </div></li></ol></div></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec87"/>先验与FP-生长</h2></div></div></div><p>下图<a id="id856" class="indexterm"/>显示了不同minsup阈值的算法之间的关系<a id="id857" class="indexterm"/>:</p><div><img src="img/B03980_07_12.jpg" alt="Apriori versus FP-growth"/><div><p>图片来源:皮尔·卢卡·子兰教授的一篇文章</p></div></div><p>FP-growth算法的优点详述如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">频繁模式挖掘的完整信息被保留，而不会破坏长事务中的模式</li><li class="listitem" style="list-style-type: disc">通过消除不相关的信息来压缩数据，因为预先避免了不频繁的项目集</li><li class="listitem" style="list-style-type: disc">FP-growth算法以分治模式工作，在这种模式下，数据集按照到目前为止发现的频繁项集模式进行分解。这减少了对数据集子集的搜索，而不是对整个数据库的搜索</li><li class="listitem" style="list-style-type: disc">在这种情况下，不会生成<a id="id858" class="indexterm"/>候选项目集<a id="id859" class="indexterm"/>，因此不需要对其进行测试</li></ul></div></div></div></div>
+
+
+
+
+
+<title>Implementing Apriori and FP-growth</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec38"/>实现先验和FP-growth</h1></div></div></div><p>参考本章提供的实现先验分类器的源代码(源代码路径<code class="literal">.../chapter7/...</code>在技术的每个文件夹下)。)</p><div><div><div><div><h2 class="title"><a id="ch07lvl2sec88"/>使用Mahout</h2></div></div></div><p>参考代码<a id="id860" class="indexterm"/>文件夹<code class="literal">.../mahout/chapter7/aprioriexample/</code>中的文件。</p><p>参考<code class="literal">.../mahout/chapter7/fpgrowthexample/</code>文件夹中的<a id="id861" class="indexterm"/>文件代码。</p></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec89"/>使用R</h2></div></div></div><p>参考代码<a id="id862" class="indexterm"/>文件夹<code class="literal">.../r/chapter7/aprioriexample/</code>中的文件。</p><p>参考<code class="literal">.../r/chapter7/fpgrowthexample/</code>文件夹中的<a id="id863" class="indexterm"/>文件代码。</p></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec90"/>使用火花</h2></div></div></div><p>参考代码<a id="id864" class="indexterm"/>文件夹<code class="literal">.../spark/chapter7/aprioriexample/</code>中的文件。</p><p>参考<a id="id865" class="indexterm"/>代码文件文件夹<code class="literal">.../spark/chapter7/fpgrowthexample/</code>。</p></div><div><div><div><div><h2 class="title"><a id="ch07lvl2sec91"/>使用Python (Scikit-learn)</h2></div></div></div><p>参考代码<a id="id866" class="indexterm"/>文件<a id="id867" class="indexterm"/>文件夹<code class="literal">.../python-scikit-learn/ chapter7/aprioriexample/</code>。</p><p>参考代码文件文件夹<code class="literal">.../python-scikit-learn/chapter7/fpgrowthexample/</code>。</p></div><div><div><div><div><h2 class="title">使用朱丽亚</h2></div></div></div><p>参考代码<a id="id868" class="indexterm"/>文件夹<code class="literal">.../julia/chapter7/aprioriexample/</code>中的文件。</p><p>参考代码<a id="id869" class="indexterm"/>文件夹<code class="literal">.../julia/chapter7/fpgrowthexample/</code>中的文件。</p></div></div>
+
+
+
+
+
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec39"/>总结</h1></div></div></div><p>在这一章中，你已经学习了基于关联规则的学习方法以及Apriori和FP-growth算法。通过一个常见的例子，您了解了如何使用Apriori和FP-growth算法进行频繁模式挖掘，并对算法进行了逐步调试。我们还比较和对比了这些算法及其性能。我们有使用Mahout、R、Python、Julia和Spark实现Apriori的例子。在下一章，我们将讨论贝叶斯方法，特别是朴素贝叶斯算法。</p></div>
+</body></html>

@@ -1,0 +1,742 @@
+<html><head/><body>
+
+
+	
+		<title>B16721_05_Final_SK_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-82"><em class="italic"> <a id="_idTextAnchor082"/>第五章</em>:先进样板楼——第一部分</h1>
+			<p>在本章中，我们通过介绍数据科学家在构建企业级模型时考虑的细微问题和选择，开始从基本模型构建过渡到高级模型构建。我们将讨论数据分割选项，比较建模算法，提出超参数优化的两阶段网格搜索策略，引入H2O AutoML自动拟合多种算法以适应数据，并进一步研究特征工程策略以从数据中提取尽可能多的信息。我们将介绍H2O流，这是一个基于菜单的UI，包含在H2O中，对于监控H2O集群的健康状况非常有用，并支持交互式数据和模型调查。</p>
+			<p>在整个过程中，我们将使用<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"> <em class="italic">第3章</em> </a>、<em class="italic">基础工作流程-数据到可部署模型</em>中介绍的Lending Club问题来说明这些高级模型构建概念。在本章结束时，你将能够使用一种或多种H2O的监督学习算法建立一个企业规模的优化预测模型。之后，剩下的就是检查模型并将其部署到生产中。</p>
+			<p>在本章中，我们将讨论以下主要话题:</p>
+			<ul>
+				<li>拆分数据以进行验证或交叉验证和测试</li>
+				<li>算法考虑</li>
+				<li>网格搜索模型优化</li>
+				<li>H2O汽车公司</li>
+				<li>特征工程选项</li>
+				<li>利用H2O流程增强您的IDE工作流程</li>
+				<li>将所有这些放在一起——算法、特征工程、网格搜索和AutoML</li>
+			</ul>
+			<h1 id="_idParaDest-83"><a id="_idTextAnchor083"/>技术要求</h1>
+			<p>我们第一次在本章中介绍代码和数据集。此时，如果您尚未设置您的H2O环境，请参考<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"> <em class="italic">附录</em></a><em class="italic">—【启动H2O集群的替代方法】，</em>进行设置。</p>
+			<h1 id="_idParaDest-84"><a id="_idTextAnchor084"/>拆分数据进行验证或交叉验证和测试</h1>
+			<p>当数据足够大时，将数据分成训练集、验证集和测试集是公认的建模标准<a id="_idIndexMarker228"/>。验证背后的想法<a id="_idIndexMarker229"/>很简单:大多数算法自然会过度适应训练数据。这里，过度拟合意味着一些被建模的东西是特定数据集的实际特性(例如，噪声)，而不是总体的代表。那么，如何纠正这一点呢？嗯，您可以<a id="_idIndexMarker230"/>通过创建一个保持样本(称为验证集)来实现，在建模过程中会对其进行评分，以确定正在建模的是信号还是噪声。这实现了诸如超参数调整、模型正则化、提前停止等功能。</p>
+			<p>测试数据集是在模型构建结束时用于确定真实模型性能的附加维持。拥有维持测试数据对于任何模型构建都是至关重要的。事实上，它是如此重要，以至于你不应该信任或者部署一个没有被测试数据集测量过的模型。</p>
+			<p>训练-验证-测试分割的替代方法是对训练数据使用k倍交叉验证<a id="_idIndexMarker231"/>的训练-测试分割。这是如何工作的:</p>
+			<ol>
+				<li>将训练数据分成k倍，在我们的例子中，k是5。</li>
+				<li>拟合一个模型，其中一个折叠扮演验证数据的角色，其他四个折叠组合成训练数据。</li>
+				<li>重复此操作，以便每个文件夹都被用作一次验证。</li>
+			</ol>
+			<p>这产生了五个模型，每个模型都在不同的数据子集上进行验证。</p>
+			<p>下图很好地说明了这个概念:</p>
+			<div><div><img src="img/Figure_5.1_B16721.jpg" alt="Figure 5.1 – Illustration of 5-fold cross-validation&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图5.1–五重交叉验证图解</p>
+			<p>k倍交叉验证方法<a id="_idIndexMarker232"/>最初是为小数据开发的，以允许模型在训练中看到更多数据。这是以更高的计算费用为代价的。对于许多数据科学家来说，不管数据大小如何，都会使用k倍交叉验证。</p>
+			<p class="callout-heading">模型过拟合和数据分割</p>
+			<p class="callout">模型过拟合<a id="_idIndexMarker233"/>的概念至关重要。根据定义，过度拟合模型不能很好地概括<a id="_idIndexMarker234"/>。如果您使用训练-验证-测试方法，并在同一个验证集上构建许多模型，那么主要的模型很可能在验证数据上过度拟合。这种可能性随着模型数量的增加而增加。根据维持测试集来衡量领先的模型是部署后实际性能的最佳指标。</p>
+			<p class="callout">我们可以通过确保每个模型都建立在自己随机选择的训练-验证分区上来最小化任何过度拟合-验证问题。如果每个模型建立在不同的数据划分上，这在k-fold交叉验证中会自然发生。</p>
+			<p class="callout">一件有趣的事情发生在数据科学竞赛中，这些竞赛有多个参赛项目(数百或数千个)根据盲维持测试数据集进行测试。已经表明，领先的模型通常在测试数据上过度拟合。那么，在这样的情况下，你应该怎么做呢？显而易见的答案是有一个额外的维持集，比如元测试集，可以<a id="_idIndexMarker235"/>用来公平地评估这些模型在部署后将如何推广<a id="_idIndexMarker236"/>。</p>
+			<p>在下一节中，我们将使用Lending Club数据集演示这两种方法。下面的代码开始于<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"> <em class="italic">第三章</em> </a>、<em class="italic">基础工作流-数据到可部署模型</em>的<em class="italic">模型训练</em>部分，具体在<em class="italic">基础工作流</em>的<em class="italic">步骤3 </em>中。</p>
+			<h2 id="_idParaDest-85"><a id="_idTextAnchor085"/>训练、验证和测试集合分割</h2>
+			<p>我们将数据分成三部分:60%用于训练，20%用于验证，20%用于最终的<a id="_idIndexMarker237"/>测试，如下面的<a id="_idIndexMarker239"/>代码块中的<a id="_idIndexMarker238"/>所示:</p>
+			<pre class="source-code">train, valid, test = loans.split_frame(</pre>
+			<pre class="source-code">    seed = 25,</pre>
+			<pre class="source-code">    ratios = [0.6, 0.2],</pre>
+			<pre class="source-code">    destination_frames = ["train", "valid", "test"]</pre>
+			<pre class="source-code">) </pre>
+			<p>前面的代码很简单。可选地，我们为数据分割的再现性设置<code>seed</code>。<code>ratios</code>参数只需要训练和验证比例，通过从一中减去得到测试分割。<code>destination_frames</code>选项允许我们命名产生的数据对象，这不是必需的，但是会使它们在H2O流中的识别更容易。</p>
+			<h2 id="_idParaDest-86"><a id="_idTextAnchor086"/>训练和测试分裂进行k倍交叉验证</h2>
+			<p>我们也可以将数据<a id="_idIndexMarker240"/>分成两部分:80%用于训练<a id="_idIndexMarker241"/>和20%用于测试。这可以使用k倍交叉验证方法来完成，如以下代码所示:</p>
+			<pre class="source-code">train_cv, test_cv = loans.split_frame(</pre>
+			<pre class="source-code">    seed = 25,</pre>
+			<pre class="source-code">    ratios = [0.8],</pre>
+			<pre class="source-code">    destination_frames = ["train_cv", "test_cv"]</pre>
+			<pre class="source-code">) </pre>
+			<p class="callout-heading">如何播种</p>
+			<p class="callout">当前<a id="_idIndexMarker242"/>计算中的随机数根本不是随机的，而是确定性的。<strong class="bold">伪</strong> - <strong class="bold">随机数生成器</strong> ( <strong class="bold"> PRNGs </strong>)是复杂的数学函数，在给定特定种子的情况下返回固定的值序列。如果省略种子，计算机将自动设置种子，通常从系统时钟开始。该种子值通常在日志中报告。在代码中设置种子使得分析可以显式地重现。</p>
+			<p>接下来，我们将<a id="_idIndexMarker243"/>注意力转向选择建模<a id="_idIndexMarker244"/>算法。</p>
+			<h1 id="_idParaDest-87"><a id="_idTextAnchor087"/>算法注意事项</h1>
+			<p>在这一部分，我们将解决<a id="_idIndexMarker245"/>数据科学家应该如何决定应该选择许多机器学习和统计算法中的哪一个来解决特定问题的问题。我们假设事先熟悉统计和机器学习模型，如逻辑回归、决策树、随机森林和梯度推进模型。</p>
+			<p>如<a href="B16721_04_Final_SK_ePub.xhtml#_idTextAnchor064"> <em class="italic">第四章</em> </a>、<em class="italic"> H2O规模化模型构建——能力衔接</em>所述，H2O提供了多种监督和非监督学习算法，可用于构建模型。例如，在二元分类<a id="_idIndexMarker246"/>问题的情况下，数据科学家<a id="_idIndexMarker247"/>可以选择<a id="_idIndexMarker248"/>一个参数GLM <a id="_idIndexMarker249"/>模型(逻辑回归)；半参数<a id="_idIndexMarker250"/>GAM；非参数的<a id="_idIndexMarker251"/>基于树的<a id="_idIndexMarker252"/>方法，例如<strong class="bold">随机森林</strong>、<strong class="bold"> GBM </strong>、<strong class="bold"> XGBoost </strong>或<strong class="bold">规则拟合</strong>；来自机器学习社区的模型，例如<strong class="bold">支持向量机</strong> ( <strong class="bold"> SVMs </strong>)或<strong class="bold">深度学习神经网络</strong>；或者简单的<strong class="bold">朴素贝叶斯分类器</strong>。更复杂的是，这些算法的任何子集<a id="_idIndexMarker253"/>都可以使用<strong class="bold">堆叠集成</strong>组合成一个预测模型(这是一种将多个高度预测模型组合成单个模型的方法；我们将在<em class="italic"> H2O汽车</em>部分讨论这个问题。那么，数据科学家应该做些什么呢？</p>
+			<p class="callout-heading">关于规则拟合的一个注记</p>
+			<p class="callout">RuleFit算法<a id="_idIndexMarker254"/>实际上是一个惩罚线性模型。这里，我们将它与基于树的模型一起列出，因为规则是从大量随机创建的决策树中提取的。通过LASSO进行规则选择和模型正则化。目的是将线性模型和显式规则的可解释性与基于树的方法的灵活性和预测能力结合起来。</p>
+			<p>如果模型选择的唯一标准<a id="_idIndexMarker255"/>是纯粹的预测能力，数据科学家可以简单地尝试一切，并选择在测试数据集上表现最佳的模型。让我们称之为<em class="italic"> Kaggle解决方案</em>，以广受欢迎的Kaggle <a id="_idIndexMarker256"/>数据科学竞赛命名。Kaggle竞赛导致算法和建模方法在多个问题和数据集上接受压力测试。在这些比赛中发现的见解已经融入到现实世界的数据科学实践中。</p>
+			<p>然而，在企业环境中，预测能力很少成为算法选择的唯一考虑因素。模型透明度可能是另一个例子。作为一种过度简化，内在可解释的参数模型(GLM)可能比非参数模型预测性差。非参数模型，如随机森林、GBM、XGBoost和深度学习神经网络是难以解释的黑盒，但经常产生卓越的预测。(请注意，GAM和RuleFit算法将模型透明性与预测相结合，这通常与黑盒方法不相上下。)</p>
+			<p>除了纯粹的建模标准之外，在建模和部署决策中还有业务和实现方面的考虑。我们将在后面的章节中更详细地讨论这些。</p>
+			<p>在本节的剩余部分，我们将给出决策树、随机森林和梯度推进模型的高级概述。我们将展示Lending Club的数据，同时关注两个特定的boosting实现:H2O GBM和XGBoost。</p>
+			<p class="callout-heading">算法在行业中的普及程度</p>
+			<p class="callout">我们与多个行业的数十家客户合作的集体经验导致了以下一般观察结果。首先，分类问题比回归问题普遍得多。其次，在选择算法时，可解释分类问题的黄金标准仍然是逻辑回归(GLM)。最常见的非参数算法选择是某种形式的梯度增强，目前是GBM、XGBoost或LightGBM实现。梯度推进的流行得益于它在Kaggle排行榜上的频繁出现(无论是单独出现还是集体出现)。</p>
+			<h2 id="_idParaDest-88"><a id="_idTextAnchor088"/>决策树简介</h2>
+			<p>每个随机森林<a id="_idIndexMarker258"/>或GBM实现的核心是决策树的概念。决策树既可以用于<em class="italic">分类</em>，将观察值分配给离散的组，也可以用于<em class="italic">回归</em>，观察值是数值结果。</p>
+			<p>通过形成树状<a id="_idIndexMarker259"/>结构的<em class="italic">条件控制语句</em>进行观察分配。一般的决策树算法可以描述如下:</p>
+			<ol>
+				<li value="1">搜索所有候选预测值，确定产生最大预测能力的变量分割。</li>
+				<li>对于每个新创建的分支，从<em class="italic">步骤1 </em>开始重复变量分割过程。</li>
+				<li>继续，直到满足停止标准。</li>
+			</ol>
+			<p>用于分裂的函数包括信息熵和基尼系数。让我们用熵来说明它们。在信息论中，随机变量的熵是变量结果中不确定性的平均水平。纯分类树节点或同类分类树节点的熵为零。在每个候选分裂处，我们计算熵并选择具有最低熵的分裂。</p>
+			<p>从概念上讲，我们可以继续分裂，直到所有的节点都是纯的，但这将产生一个极度过拟合的树。相反，我们利用如下停止标准:</p>
+			<ul>
+				<li>拆分后每个节点所需的最小观测值数量</li>
+				<li>基于选定的截止值，熵的减少是不够的</li>
+				<li>树的最大深度</li>
+			</ul>
+			<p>举例来说，让我们假设我们正在构建一个决策树来模拟1912年泰坦尼克号沉没时幸存的概率。我们的数据包括姓名、性别、年龄、预订的舱位等级、票价、客舱或卧铺的位置、乘客登机的城市、任何旅伴等等。生成的决策树可以在下图中找到。</p>
+			<p>第一次拆分最大程度地提高了预测能力(通过最大程度地降低熵):</p>
+			<ul>
+				<li>实验对象是男性吗？如果是，则由<code>Age &lt; 18</code>规则创建下一个分割。</li>
+				<li>对于18岁以上的男性，这个末端或<em class="italic">叶</em>节点的存活概率是17%。</li>
+				<li>对于18岁以下的男性，还需要再分一次:<code>3rd Class</code>。</li>
+				<li>对于18岁以下的第三类男性，存活概率为14%。</li>
+				<li>对于18岁以下的第一类和第二类男性，存活概率为44%。</li>
+				<li><code>Male=Yes</code>分支上的树在这些叶节点处停止分裂，因为满足了一个或多个停止标准。</li>
+			</ul>
+			<p>对<code>Male=No</code>分支进行类似的过程。注意，根据这个模型，非<code>3rd Class</code>的雌性有95%的生存概率。对于<code>3rd Class</code>女性乘客，生存概率取决于她们在哪里登机，导致38%或70%的生存概率叶节点。决策树模型支持<em class="italic">妇女和儿童优先</em>的精神，以应对海上紧急情况；</p>
+			<div><div><img src="img/Figure_5.2_B16721.jpg" alt="Figure 5.2 – A decision tree modeling the survival probabilities on the Titanic&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.2–模拟泰坦尼克号生存概率的决策树</p>
+			<p>决策树有一些明显的优势。它们的布局很容易理解，它们的解释，正如我们刚刚演示的，也很简单。算法训练<a id="_idIndexMarker261"/>，评分很快。当涉及非线性关系、特征分布、相关特征和缺失值时，决策树是健壮的。另一方面，它们不能有效地模拟线性关系。它们有很大的差异，这意味着，在某种程度上，树木很容易过度生长。也许它们最大的缺点是单个决策树不能很好地预测，这是决策树方法的最初开发者首先提出的问题。</p>
+			<p>为了弥补决策树较差的预测特性，已经开发了基于个体树集合的算法。一般来说，集成方法的目标是通过组合多个<em class="italic">弱学习者</em>(在我们的例子中是决策树)的信息来创建一个<em class="italic">强学习者</em>。对树的两种集成方法bagging和boosting的适应分别产生了随机森林和梯度boosting算法。接下来我们将回顾这些集合方法及其在H2O的实现。</p>
+			<h2 id="_idParaDest-89"><a id="_idTextAnchor089"/>随机森林</h2>
+			<p><strong class="bold"> Bagging </strong>(是<em class="italic"> bootstrap aggregating </em>的缩写)是一种集合<a id="_idIndexMarker262"/>方法，它将模型拟合到数据的bootstrap<a id="_idIndexMarker263"/>样本，并对它们进行平均。<strong class="bold">自举</strong>是一种重采样方法，从数据<a id="_idIndexMarker264"/>行中进行替换采样。这在行(或观察)空间中产生了随机性。随机森林是决策树的装袋方法，它给列(或变量)空间增加了随机性。</p>
+			<p>随机森林算法可以描述如下:</p>
+			<ol>
+				<li value="1">基于随机选择的数据行构建深度树。</li>
+				<li>在每次分割时，仅评估要分割的变量的随机子集。</li>
+				<li>重复多次，创建一个<em class="italic">森林</em>作为所有树的集合。</li>
+				<li>获取森林中所有树的平均值。</li>
+			</ol>
+			<p>H2O包括随机森林的两种实现，<strong class="bold">分布式随机森林</strong> ( <strong class="bold"> DRF </strong>)和<strong class="bold">极度随机树</strong> ( <strong class="bold"> XRT </strong>)。在下面的章节中，我们将总结这些算法。</p>
+			<h3>分布式随机森林(DRF)</h3>
+			<p>DRF是H2O默认的随机<a id="_idIndexMarker265"/>森林实现。该算法的亮点<a id="_idIndexMarker266"/>如下:</p>
+			<ul>
+				<li>DRF的每棵树都是平行建造的。</li>
+				<li>通过在候选特征的随机子集中选择最具区分性的阈值来创建分裂规则。</li>
+			</ul>
+			<h3>极度随机化的树(XRT)</h3>
+			<p>XRT算法给分割规则<a id="_idIndexMarker268"/>过程增加了额外的<a id="_idIndexMarker267"/>随机性。这具有以(略微)增加偏差为代价减少模型方差的效果。通过设置<code>histogram_type="Random"</code>启用XRT:</p>
+			<ul>
+				<li>XRT的每棵树都是平行建造的。</li>
+				<li>该算法将为每个候选变量随机创建阈值，而不是找到最具区分性的阈值。该组中最好的被挑选作为分割规则。</li>
+			</ul>
+			<p>两个<a id="_idIndexMarker269"/>随机森林实现<a id="_idIndexMarker270"/>的超参数是共享的。</p>
+			<h3>随机森林超参数</h3>
+			<p>H2O的随机森林方法<a id="_idIndexMarker271"/>需要以下超参数:</p>
+			<ul>
+				<li>要建立的树的数量，<code>ntrees</code>(默认为50)。</li>
+				<li>树的最大深度，<code>max_depth</code>(默认为20)。请注意，过大的值会导致过度拟合。</li>
+				<li>每片叶子的最小观察值，<code>min_rows</code>(默认为1)。</li>
+			</ul>
+			<p>额外的超参数<a id="_idIndexMarker272"/>可用于调整随机森林模型。你可以在<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/drf.html">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/drf . html</a>找到它们。网格搜索可以帮助进行超参数选择和模型优化。</p>
+			<h2 id="_idParaDest-90"><a id="_idTextAnchor090"/>梯度推进</h2>
+			<p>Boosting是一种集合<a id="_idIndexMarker273"/>方法，它顺序组合模型，每个新模型都建立在前一个模型的残差上。提升树基于一系列相对较浅的决策树。</p>
+			<p>提升树算法<a id="_idIndexMarker274"/>可以描述如下:</p>
+			<ol>
+				<li value="1">从构建一个浅层决策树开始。</li>
+				<li>将浅层决策树拟合到前一棵树的残差中。</li>
+				<li>将残差树乘以收缩参数(或学习率)。</li>
+				<li>重复<em class="italic">步骤2 </em>和<em class="italic"> 3 </em>直到满足停止条件。</li>
+			</ol>
+			<p>基于残差的构建<a id="_idIndexMarker275"/>使算法集中于模型预测不佳的区域。该过程如下图所示:</p>
+			<div><div><img src="img/Figure_5.3_B16721.jpg" alt="Figure 5.3 – The H2O GBM algorithm&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.3–H2O GBM算法</p>
+			<p>GBM方法产生高度预测的模型，但是必须小心避免过度拟合。H2O包括两个版本的梯度增强:H2O GBM和XGBoost。在下面的章节中，我们将总结这些算法。</p>
+			<h3>H2O GBM</h3>
+			<p>H2O GBM实现<a id="_idIndexMarker276"/>遵循原始算法，如《T21统计学习的要素 <em class="italic"> Jerome H. Friedman、Robert Tibshirani和Trevor Hastie </em>一书中所述，进行了修改以提高大型复杂数据的性能。我们可以总结如下:</p>
+			<ul>
+				<li>GBM中的每棵树都是并行构建的。</li>
+				<li>分类变量可以分成组，而不只是使用布尔分裂。</li>
+				<li>共享直方图用于计算切割点。</li>
+				<li>H2O使用直方图仓的贪婪搜索，优化平方误差的改善。</li>
+			</ul>
+			<p>这个实现的一个重要优势是H2O GBM自然地处理高基数分类变量(也就是有很多类别的分类变量)。</p>
+			<h3>XGBoost</h3>
+			<p>XGBoost与经典的<a id="_idIndexMarker278"/> GBM非常相似，主要区别在于包含了一个针对变量数量的惩罚项。从数学上讲，这意味着它在成本函数中包含正则化项。树木在宽度上生长，而不是在深度上生长。</p>
+			<p>另一种流行的GBM方法是LightGBM。LightGBM算法通过重复分割获得最大收益的一片叶子来构建所需深度的树。与XGBoost不同，树木生长在<em class="italic">深度</em>而不是<em class="italic">宽度</em>。理论上，LightGBM针对稀疏数据进行了优化。虽然H2O没有直接实现LightGBM，但它提供了一种方法，使用XGBoost中的一组选项(比如设置<code>tree_method="hist"</code>和<code>grow_policy="lossguide"</code>)来模拟<a id="_idIndexMarker279"/>light GBM方法。更多详情请参考<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/xgboost.html">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/xgboost . html</a>。</p>
+			<h3>增强超参数</h3>
+			<p>H2O的所有增压方法都需要<a id="_idIndexMarker280"/>以下超参数:</p>
+			<ul>
+				<li>要建的树的数量，<code>ntrees</code>(默认为50)。</li>
+				<li>最大树深，<code>max_depth</code>(默认为6)。</li>
+				<li>收缩参数或学习率，<code>learn_rate</code>(默认为0.3)。</li>
+			</ul>
+			<p>简单地将树添加到boosting方法而没有进一步的限制会导致过度拟合。网格搜索有助于超参数调整过程。用于增压的附加超参数将在<em class="italic">网格搜索模型优化</em>章节中介绍。</p>
+			<h2 id="_idParaDest-91"><a id="_idTextAnchor091"/>基线模型训练</h2>
+			<p>回到Lending Club的数据，现在我们已经准备好为我们正在考虑的每个算法建立基线模型。所谓基线，我们指的是以合理或缺省值进行设置的模型。这将是模型优化的起点。</p>
+			<p>正如在第3章 、<em class="italic">基础工作流程-数据到可部署模型</em>中所讨论的，我们从<code>bad_loan</code>响应和所有模型的同一套预测器开始:</p>
+			<pre class="source-code">response = "bad_loan"</pre>
+			<pre class="source-code">omit = ["issue_d", response]</pre>
+			<pre class="source-code">predictors = list(set(loans.columns) - set(omit)) </pre>
+			<p>在前面的代码中，我们从预测器中删除了<code>bad_loan</code>响应变量和<code>issue_d</code>原始日期变量。回想一下，<code>issue_d</code>用于创建两个特征，<code>issue_d_month</code>和<code>issue_d_year</code>，它们包含在预测器中。</p>
+			<p>接下来，我们使用训练-验证-测试分割拟合基线H2O GBM模型，然后使用5重交叉验证拟合基线XGBoost模型。</p>
+			<h3>基线GBM培训-验证-测试模型</h3>
+			<p>我们适合的第一个模型<a id="_idIndexMarker282"/>是默认的H2O GBM，按照60%–20%的训练-验证比例进行训练，默认设置如下:</p>
+			<pre class="source-code">from h2o.estimators.gbm import H2OGradientBoostingEstimator</pre>
+			<pre class="source-code">gbm = H2OGradientBoostingEstimator(seed = 25)</pre>
+			<pre class="source-code">gbm.train(x = predictors,</pre>
+			<pre class="source-code">          y = response,</pre>
+			<pre class="source-code">          training_frame = train,</pre>
+			<pre class="source-code">          validation_frame = valid,</pre>
+			<pre class="source-code">          model_id = "gbm_baseline")</pre>
+			<p>这里，<code>gbm.train</code>命令中的<code>model_id</code>参数是可选的，用于标记模型对象，以便在H2O流中识别。</p>
+			<p>我们将在第7章 、<em class="italic">理解ML模型</em>中更深入地研究模型诊断<a id="_idIndexMarker283"/>和可解释性。这里，我们仅使用其中的几个命令来帮助比较梯度推进算法。首先，我们使用<code>model_performance</code>方法可视化基线GBM模型在所有分割中的表现:</p>
+			<pre class="source-code">%matplotlib inline</pre>
+			<pre class="source-code">gbm.model_performance(train).plot()</pre>
+			<p><code>%matplotlib</code>命令允许在Jupyter笔记本中显示数字。这仅需要一次，在Jupyter之外不需要。第一条ROC曲线用于列车分离:</p>
+			<div><div><img src="img/Figure_5.4_B16721.jpg" alt="Figure 5.4 – The ROC curve for the GBM train split&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.4–GBM列车分离的ROC曲线</p>
+			<p>验证分割的第二个ROC曲线使用类似的代码:</p>
+			<pre class="source-code">gbm.model_performance(valid).plot()</pre>
+			<p>这将产生以下输出:</p>
+			<div><div><img src="img/Figure_5.5_B16721.jpg" alt="Figure 5.5 – The ROC curve for the GBM validation split&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.5–GBM验证分割的ROC曲线</p>
+			<p>测试分割的ROC曲线<a id="_idIndexMarker284"/>使用类似的代码:</p>
+			<pre class="source-code">gbm.model_performance(test).plot()</pre>
+			<p>这将产生以下输出:</p>
+			<div><div><img src="img/Figure_5.6_B16721.jpg" alt="Figure 5.6 – The ROC curve for the GBM test split&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.6–GBM测试分割的ROC曲线</p>
+			<p>为了提取这些分割的AUC，我们输入以下内容:</p>
+			<pre class="source-code">print(gbm.model_performance(train).auc(),</pre>
+			<pre class="source-code">      gbm.model_performance(valid).auc(),</pre>
+			<pre class="source-code">      gbm.model_performance(test).auc())</pre>
+			<p>Jupyter笔记本中生成的代码块<a id="_idIndexMarker285"/>和结果如下所示:</p>
+			<div><div><img src="img/Figure_5.7_B16721.jpg" alt="Figure 5.7 – The GBM model performance results from the Jupyter notebook&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.7–Jupyter笔记本电脑的GBM型号性能结果</p>
+			<p>此外，训练和验证性能值存储在模型对象中:</p>
+			<pre class="source-code">gbm.auc(train = True, valid = True)</pre>
+			<p>这将返回一个字典，如下所示:</p>
+			<div><div><img src="img/Figure_5.8_B16721.jpg" alt="Figure 5.8 – AUC from the GBM model object in the Jupyter notebook&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.8-Jupyter笔记本中GBM模型对象的AUC</p>
+			<p>这些结果表明基线GBM模型在训练数据上过度拟合。这并不意外。</p>
+			<p>让我们快速看一下模型解释，我们将在第7章 、<em class="italic">理解ML模型</em>中更深入地讨论。变量重要性图根据预测不良贷款的相对重要性对变量进行排序。一个变量的相对重要性是通过检查该变量是否用于分割并计算所有树的平方误差的减少来确定的。</p>
+			<p>下面是生成可变重要性图的代码:</p>
+			<pre class="source-code">gbm.varimp_plot(20)</pre>
+			<p>生成的图如下:</p>
+			<div><div><img src="img/Figure_5.9_B16721.jpg" alt="Figure 5.9 – The baseline GBM variable importance plot&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.9–基线GBM变量重要性图</p>
+			<p>得到的变量<a id="_idIndexMarker286"/>重要性图，如图<em class="italic">图5.9 </em>所示，显示了地址州，这是一个高基数分类变量，有50个级别对应于美国的州，是迄今为止最重要的变量。</p>
+			<h3>基线XGBoost交叉验证模型</h3>
+			<p>让我们使用5重交叉验证<a id="_idIndexMarker287"/>和训练测试分割来构建我们的基线XGBoost模型:</p>
+			<pre class="source-code">from h2o.estimators import H2OXGBoostEstimator</pre>
+			<pre class="source-code">xgb = H2OXGBoostEstimator(nfolds = 5, seed = 25)</pre>
+			<pre class="source-code">xgb.train(x = predictors,</pre>
+			<pre class="source-code">          y = response,</pre>
+			<pre class="source-code">          training_frame = train_cv,</pre>
+			<pre class="source-code">          model_id = "xgb")</pre>
+			<p>在前面的代码中，<code>nfolds</code>设置折叠的次数，<code>seed</code>是可选的，包含在这里是为了指导目的，<code>model_id</code>是在H2O流中使用的可选标识符。</p>
+			<p>我们可以直接从模型对象获得训练集和交叉验证集的AUC:</p>
+			<pre class="source-code">xgb.auc(train = True, xval = True)</pre>
+			<p>这会产生以下结果:</p>
+			<div><div><img src="img/Figure_5.10_B16721.jpg" alt="Figure 5.10 – The XGBoost model train and cross-validation performance results&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.10–XG boost模型训练和交叉验证性能结果</p>
+			<p>测试集AUC要求<a id="_idIndexMarker288"/>包含测试数据，并根据这些数据进行评分:</p>
+			<pre class="source-code">xgb.model_performance(test_cv).auc()</pre>
+			<p>这会产生以下输出:</p>
+			<div><div><img src="img/Figure_5.11_B16721.jpg" alt="Figure 5.11 – The XGBoost model test performance results from the Jupyter notebook&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.11–Jupyter笔记本电脑的XGBoost模型测试性能结果</p>
+			<p>使用一点Python代码，我们可以轻松地将这些结果合并到一个字典中:</p>
+			<pre class="source-code">perf = xgb.auc(train = True, xval = True)</pre>
+			<pre class="source-code">perf["test"] = xgb.model_performance(test_cv).auc()</pre>
+			<pre class="source-code">perf</pre>
+			<p>该Python代码块产生以下内容:</p>
+			<div><div><img src="img/Figure_5.12_B16721.jpg" alt="Figure 5.12 – XGBoost model performance as a dictionary&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.12–将XGBoost模型性能作为字典</p>
+			<p>同样，AUC值<a id="_idIndexMarker289"/>证实基线模型对训练数据过度拟合，并且过于乐观。交叉验证和测试AUC值大致相同的事实令人欣慰，因为这意味着交叉验证程序更准确地反映了您可能在样本外测试数据中看到的情况。这是一项重要的检查，可能并不总是如此，尤其是当训练和测试划分覆盖不同的时间段时。接下来，让我们考虑基线XGBoost模型的可变重要性图:</p>
+			<pre class="source-code">xgb.varimp_plot(20)</pre>
+			<p>结果如下:</p>
+			<div><div><img src="img/Figure_5.13_B16721.jpg" alt="Figure 5.13 – A baseline XGBoost variable importance plot&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.13–基线XGBoost变量重要性图</p>
+			<p>GBM和XGBoost基线模型的变量<a id="_idIndexMarker290"/>重要性图的比较展示了这两种提升算法之间的一些差异。此外，它还向我们介绍了一个更细致的讨论，即在考虑多种选择的情况下，如何选择一种算法。</p>
+			<p>注意，H2O GBM模型中最重要的变量是<code>addr_state</code>，一个高基数分类变量(大约有50个级别对应于美国的州)。XGBoost默认为分类变量级别的一键编码。One-hot编码用一个数值变量表示分类变量的每个级别，该级别中的行包含1，否则包含0。具有50个级别的分类变量(如<code>addr_state</code>)的一键编码产生对应于每个状态的50个新的、相对稀疏的变量。在XGBoost可变重要性图中，各州单独出现，重要性低得多，如前面图中的<code>addr_state_FL</code>、<code>addr_state_CA</code>和<code>addr_state_NV</code>。</p>
+			<p>数据科学家总是可以用特性工程方法(如目标编码)来解决这个问题。目标编码是一种用有代表性的数值替换分类变量级别的方法，我们将在后面详细讨论。如果实现了目标编码，那么在XGBoost和H2O GBM之间的选择可能会归结为纯粹的性能。另一方面，如果目标编码不是一个选项，那么H2O GBM应该是提升算法的选择。</p>
+			<p>换句话说，XGBoost需要目标编码，而H2O GBM为数据科学家提供了直接建模高基数分类变量或者使用这些变量的目标编码版本的选项。这很好地说明了算法、功能工程选择和潜在的其他因素(如业务、合规性或法规考虑)之间的相互作用。</p>
+			<p>接下来，我们将把我们的<a id="_idIndexMarker291"/>注意力转向通过使用网格搜索找到用于模型优化的超参数设置来改进我们的基线模型。</p>
+			<h1 id="_idParaDest-92"><a id="_idTextAnchor092"/>网格搜索模式优化</h1>
+			<p>选择一种算法来构建<a id="_idIndexMarker292"/>预测模型是不够的。许多算法<a id="_idIndexMarker293"/>都有超参数，其值对模型的预测能力有直接影响。那么，如何选择超参数的值呢？</p>
+			<p>强力方法会创建一个包含所有可能值的网格，并对它们进行搜索。这种方法计算量很大，需要大量的时间，最终产生的结果并不比我们通过其他方法所能达到的好多少。我们概述了一个网格搜索策略，该策略已被证明在合理的时间内构建优化模型是有效的。</p>
+			<p>总体策略<a id="_idIndexMarker294"/>首先需要使用<strong class="bold">笛卡尔</strong>网格搜索来调整一些关键参数。这些关键参数是我们预计会对结果产生最大影响的参数。然后，我们使用随机网格搜索微调其他参数。这种两阶段的方法允许我们首先关注计算量大的参数。</p>
+			<p>根据我们在许多领域的许多数据集上使用梯度增强方法的经验，我们的策略遵循以下原则:</p>
+			<ol>
+				<li value="1">最大允许树深度(<code>max_depth</code>)的最佳值在很大程度上取决于数据和问题。更深的树，尤其是深度超过10的树，可能需要更长的时间来训练。为了节省时间，最好首先将近似深度缩小到一个小范围的值。</li>
+				<li>我们增加树的数量(<code>ntrees</code>)，直到验证集误差开始增加。</li>
+				<li>非常低的学习率(<code>learn_rate</code>)被普遍推荐。这通常会产生更好的准确性，但是需要更多的树和额外的计算时间。一个聪明的替代方法是从一个相对较高的学习率(比如0.05或0.02)开始，通过使用<code>learn_rate_annealing</code>来迭代缩小它。例如，设置<code>learn_rate=0.02</code>和<code>learn_rate_annealing=0.995</code>可以显著加快收敛速度，而不会牺牲太多精度。这对于超参数搜索非常有用。对于更快的扫描，可以尝试0.05和0.99的值。</li>
+				<li>分别使用<code>sample_rate</code>和<code>col_sample_rate</code>对行和列进行采样，降低了验证和测试集错误率，并提高了通用性。对于大多数数据集来说，一个好的起点是在行和列上都进行70%到80%的采样(比率在0.7到0.8之间)。可选地，可以设置每棵树的列采样率参数(<code>col_sample_rate_per_tree</code>)。与<code>col_sample_rate</code>是乘法关系。例如，将两个参数都设置为0.9会导致总共81%的列被考虑进行拆分。</li>
+				<li>提前停止使用<code>stopping_rounds</code>、<code>stopping_metric</code>、<code>stopping_tolerance</code>可以使网格搜索更加高效。对于我们的需求，我们可以使用5、AUC和1e-4作为良好的起点。这意味着如果验证AUC在5次迭代后没有提高超过0.0001，计算将结束。</li>
+				<li>为了提高高度不平衡的分类数据集的预测精度，可以设置<code>sample_rate_per_class</code>参数。这实现了基于特定响应类的分层行抽样。参数值以比率数组的形式输入，每个响应类一个比率，按字典顺序排列。</li>
+				<li>大多数其他选项对模型性能的影响相对较小。也就是说，它们可能值得用随机超参数搜索来调整。</li>
+			</ol>
+			<p>接下来，我们将为Lending Club数据<a id="_idIndexMarker298"/>构建<a id="_idIndexMarker297"/>优化的H2O GBM模型，并将结果与基线模型进行比较。</p>
+			<h2 id="_idParaDest-93"><a id="_idTextAnchor093"/>步骤1–笛卡尔网格搜索，关注最佳树深度</h2>
+			<p>最佳的<code>max_depth</code>参数值<a id="_idIndexMarker299"/>对于正在建模的用例和数据<a id="_idIndexMarker300"/>来说是非常具体的。此外，它对模型训练时间有着深远的影响。换句话说，较大的树深度值比较小的值需要更多的计算。首先，我们将使用快速笛卡尔网格搜索来关注好的候选值<code>max_depth</code>。</p>
+			<p>这里，我们使用提前停止结合学习速率退火来加速收敛并有效地调整<code>max_depth</code>参数:</p>
+			<ol>
+				<li value="1">我们从定义超参数开始:<pre>from h2o.grid.grid_search import H2OGridSearch hyperparams = {     "max_depth": list(range(2, 14, 2))  }</pre></li>
+				<li>We follow our strategy by defining an excessive number of trees with early stopping enabled. We use learning rate annealing, as shown in the following code block, to shrink the <code>learn_rate</code> and sample 80% of the rows and columns. Also, we score every 10 trees in order to make the early stopping reproducible. For model builds with large amounts of data, we might want to score every 100 or 1,000 trees:<pre>gbm_grid = H2OGradientBoostingEstimator(
+    ntrees = 10000,
+    stopping_metric = "AUC",
+    stopping_rounds = 5,
+    stopping_tolerance = 1e-4,
+    learn_rate = 0.05,
+    learn_rate_annealing = 0.99,
+    sample_rate = 0.8,
+    col_sample_rate = 0.8,
+    score_tree_interval = 10,
+    seed = 25
+)</pre><p class="callout-heading">设置分数树间隔参数</p><p class="callout">在模型网格<a id="_idIndexMarker301"/>搜索期间对树进行评分本质上是对计算资源的浪费，因为它需要更多的时间来达到最佳解决方案。但是，需要使早期停止过程可再现。我们希望将该值设置得足够高，以确保再现性，但又不浪费计算周期。这在很大程度上是特定于数据和问题的。即使对于这个问题，我们之前使用的值10可能也太激进了；100可能更合适。</p></li>
+				<li>现在我们定义<a id="_idIndexMarker302"/>网格，并将搜索<a id="_idIndexMarker303"/>标准设置为笛卡尔:<pre>grid = H2OGridSearch(     gbm_grid,     hyperparams,     grid_id = "gbm_depth_grid",     search_criteria = {"strategy": "Cartesian"} )</pre></li>
+				<li>然后，我们拟合网格，如下面的代码块所示:<pre>grid.train(x = predictors,            y = response,            training_frame = train,            validation_frame = valid)</pre></li>
+				<li>为了显示基于AUC的降序<a id="_idIndexMarker305"/>值的网格搜索<a id="_idIndexMarker304"/>结果，我们使用以下代码:<pre>sorted_grid = grid.get_grid(     sort_by = "auc", decreasing = True) print(sorted_grid)</pre></li>
+			</ol>
+			<p>这将导致以下结果:</p>
+			<div><div><img src="img/Figure_5.14_B16721.jpg" alt="Figure 5.14 – Tuning the maximum tree depth parameter value&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.14–调整最大树深度参数值</p>
+			<p>对于该数据和H2O GBM算法，2到6的<code>max_depth</code>值似乎给出了最好的结果。接下来，我们将<a id="_idIndexMarker306"/>在2到6的范围内搜索，并调整<a id="_idIndexMarker307"/>任何附加参数。</p>
+			<h2 id="_idParaDest-94"><a id="_idTextAnchor094"/>步骤2–随机网格搜索以调整其他参数</h2>
+			<p>既然我们已经将<a id="_idIndexMarker308"/>集中在最大树深度的一个好范围上，我们可以<a id="_idIndexMarker309"/>如下设置我们的调优超参数:</p>
+			<pre class="source-code">hyperparams_tune = {</pre>
+			<pre class="source-code">    "max_depth" : list(range(2, 6, 1)),</pre>
+			<pre class="source-code">    "sample_rate" : [x/100. for x in range(20,101)],</pre>
+			<pre class="source-code">    "col_sample_rate" : [x/100. for x in range(20,101)],</pre>
+			<pre class="source-code">    "min_split_improvement": [0, 1e-8, 1e-6, 1e-4]</pre>
+			<pre class="source-code">}</pre>
+			<p><code>min_split_improvement</code>参数试图减少GBM和XGBoost模型中的过度拟合，要求每次分割不会导致更差的误差测量。我们将尝试该参数的四种不同设置。</p>
+			<p>在下面的搜索标准中，为了便于说明，我们将运行时间限制为5分钟。此外，我们将构建的模型数量限制为10个。根据您的使用情况，您可能希望大幅增加运行时间，或者干脆完全排除这些选项:</p>
+			<pre class="source-code">search_criteria_tune = {</pre>
+			<pre class="source-code">    "strategy" : "RandomDiscrete",</pre>
+			<pre class="source-code">    "max_runtime_secs" : 300,</pre>
+			<pre class="source-code">    "max_models" : 10, </pre>
+			<pre class="source-code">    "stopping_rounds" : 5,</pre>
+			<pre class="source-code">    "stopping_metric" : "AUC",</pre>
+			<pre class="source-code">    "stopping_tolerance" : 1e-3</pre>
+			<pre class="source-code">}</pre>
+			<p>此外，我们还设置了最终的网格参数:</p>
+			<pre class="source-code">gbm_final_grid = H2OGradientBoostingEstimator(</pre>
+			<pre class="source-code">    ntrees = 10000,</pre>
+			<pre class="source-code">    learn_rate = 0.05,</pre>
+			<pre class="source-code">    learn_rate_annealing = 0.99,</pre>
+			<pre class="source-code">    score_tree_interval = 10,</pre>
+			<pre class="source-code">    seed = 12345</pre>
+			<pre class="source-code">)</pre>
+			<p>我们拟合最终的网格，如下面的<a id="_idIndexMarker311"/>代码块中的<a id="_idIndexMarker310"/>所示:</p>
+			<pre class="source-code">final_grid = H2OGridSearch(</pre>
+			<pre class="source-code">    gbm_final_grid,</pre>
+			<pre class="source-code">    hyper_params = hyperparams_tune,</pre>
+			<pre class="source-code">    grid_id = "gbm_final_grid",</pre>
+			<pre class="source-code">    search_criteria = search_criteria_tune)</pre>
+			<p class="callout-heading">进一步的文件</p>
+			<p class="callout">还有其他几个可用的超参数<a id="_idIndexMarker312"/>列在H2O文档中，网址为<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/parameters.html">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/parameters . html</a>。</p>
+			<p class="callout">关于网格搜索<a id="_idIndexMarker313"/>的更多细节可以在<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/grid-search.html#grid-search-in-python">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/grid-search . html # grid-search-in-python</a>找到。</p>
+			<p>现在我们训练模型。请注意，如下所示的<code>max_runtime_secs</code>设置会覆盖<code>search_criteria_tune</code>中设置的值:</p>
+			<pre class="source-code">final_grid.train(</pre>
+			<pre class="source-code">    x = predictors,</pre>
+			<pre class="source-code">    y = response,</pre>
+			<pre class="source-code">    max_runtime_secs = 180,</pre>
+			<pre class="source-code">    training_frame = train,</pre>
+			<pre class="source-code">    validation_frame = valid</pre>
+			<pre class="source-code">)</pre>
+			<p>3分钟或更短时间后，我们查看按<code>AUC</code>排序的<a id="_idIndexMarker314"/>网格<a id="_idIndexMarker315"/>搜索结果:</p>
+			<pre class="source-code">grid = final_grid.get_grid(sort_by = "auc", </pre>
+			<pre class="source-code">                           decreasing = True)</pre>
+			<pre class="source-code">grid</pre>
+			<p>输出如下所示:</p>
+			<div><div><img src="img/Figure_5.15_B16721.jpg" alt="Figure 5.15 – The grid search results for GBM model optimization&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.15–GBM模型优化的网格搜索结果</p>
+			<p class="callout-heading">优化策略结果</p>
+			<p class="callout">这个练习显示了超参数调整的重要性。尽管我们通过仅搜索3分钟并生成10个模型来限制这种优化，但是10个模型中有9个的性能优于具有默认值的基线GBM模型。</p>
+			<p>我们可以根据之前的排行榜轻松选择最佳型号，并提取其AUC性能值:</p>
+			<pre class="source-code">best_gbm = grid.models[0]</pre>
+			<pre class="source-code">perf = best_gbm.auc(train = True, valid = True)</pre>
+			<pre class="source-code">perf["test"] = best_gbm.model_performance(test).auc()</pre>
+			<pre class="source-code">perf</pre>
+			<p>这个Python代码块<a id="_idIndexMarker316"/>产生了下面的<a id="_idIndexMarker317"/>:</p>
+			<div><div><img src="img/Figure_5.16_B16721.jpg" alt="Figure 5.16 – The performance of the best optimized GBM model from the grid search&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.16-网格搜索中最佳优化GBM模型的性能</p>
+			<p>我们的网格搜索策略是微调机器学习模型的超参数的一种非常好的方式。接下来，我们将探索H2O的AutoML。</p>
+			<h1 id="_idParaDest-95">H2O汽车公司</h1>
+			<p>最有效的建模和调整方法<a id="_idIndexMarker318"/>是利用H2O汽车公司。AutoML通过多种算法构建模型，同时根据模型类型实施适当的<a id="_idIndexMarker319"/>网格搜索和模型优化。用户可以指定约束条件，例如计算时间限制或对创建的模型数量的限制。</p>
+			<p>AutoML的一些特性包括<a id="_idIndexMarker320"/>如下:</p>
+			<ul>
+				<li>AutoML使用精心选择的超参数空间来训练glm、GBM和dnn的随机网格。</li>
+				<li>使用验证集或交叉验证来调整单个模型。</li>
+				<li>默认情况下训练两个堆叠集合模型:<em class="italic">所有模型</em>和一个轻量级<em class="italic">最佳系列</em>集合。</li>
+				<li>AutoML返回所有型号的排序<a id="_idIndexMarker321"/>排行榜。</li>
+				<li>任何模型都可以很容易地推广到生产。</li>
+			</ul>
+			<p><strong class="bold">堆叠系综</strong>是高度预测的模型，通常<a id="_idIndexMarker322"/>出现在排行榜的顶部。与我们之前介绍的其他集成方法(如bagging和boosting)类似，我们通过将来自多个预测模型的信息组合成一个模型来堆叠工作。与依赖弱学习者作为组件模型的bagging和boosting不同，stacking通过优化组合一组不同的强预测模型来工作。<em class="italic">所有模型</em>堆叠集合是通过组合AutoML运行中调查的整个模型列表创建的。<em class="italic">最佳系列</em>套装最多包含六个组件型号。它的性能通常可与所有型号的合奏相媲美，但没有那么复杂，通常更适合生产。(更多关于stacked ensembles的信息，请参见<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/stacked-ensembles.html">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/stacked-ensembles . html</a>)。</p>
+			<p>使用AutoML训练模型相对简单:</p>
+			<pre class="source-code">from h2o.automl import H2OAutoML</pre>
+			<pre class="source-code">aml = H2OAutoML(max_models = 10,</pre>
+			<pre class="source-code">                max_runtime_secs_per_model = 60,</pre>
+			<pre class="source-code">                exclude_algos = ["DeepLearning"],</pre>
+			<pre class="source-code">                seed = 25)</pre>
+			<pre class="source-code">aml.train(x = predictors, </pre>
+			<pre class="source-code">          y = response, </pre>
+			<pre class="source-code">          training_frame = train_cv)</pre>
+			<p class="callout-heading">AutoML运行时参数选择</p>
+			<p class="callout">我们的<code>max_runtime_secs_per_model</code>和<code>max_models</code>参数值允许我们快速<a id="_idIndexMarker325"/>筛选多种模型类型，同时限制整体运行时间。这既不是最佳选择，也不推荐，而是在教程或课堂环境中用来演示AutoML。相反，您可以将整个<code>max_runtime_secs</code>参数设置为一个显式值。默认值为3，600(即1小时)。</p>
+			<p>H2O汽车公司训练<a id="_idIndexMarker326"/>以下算法(按顺序):</p>
+			<ul>
+				<li>三个XGBoost GBMs</li>
+				<li>GLMs网格</li>
+				<li>一个DRF</li>
+				<li>五个H2O GBM</li>
+				<li>深层神经网络</li>
+				<li>极度随机的森林</li>
+				<li>XGBoost GBMs、H2O GBMs和深度神经网络的随机网格</li>
+				<li>两个堆叠系综模型</li>
+			</ul>
+			<p>如果没有足够的时间来完成所有这些算法，一些可以从排行榜中省略。</p>
+			<h2 id="_idParaDest-96"><a id="_idTextAnchor096"/>AutoML排行榜</h2>
+			<p>AutoML对象包含<a id="_idIndexMarker327"/>一个车型排行榜及其交叉验证的车型性能<a id="_idIndexMarker328"/>。您可以通过指定<code>leaderboard_frame</code>参数为特定数据集创建排行榜。</p>
+			<p>模型按照一个度量标准进行排序，该度量标准的默认值基于问题类型:</p>
+			<ul>
+				<li>对于回归来说，这就是离经叛道。</li>
+				<li>对于二元分类，AUC是默认度量。</li>
+				<li>对于多类分类，我们使用平均每类误差。</li>
+				<li>为了方便起见，还提供了Logloss <a id="_idIndexMarker329"/>等其他指标。</li>
+			</ul>
+			<p>接下来，我们打印出排行榜:</p>
+			<pre class="source-code">print(aml.leaderboard)</pre>
+			<div><div><img src="img/Figure_5.17_B16721.jpg" alt="Figure 5.17 – The AutoML leaderboard&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.17–AutoML排行榜</p>
+			<p>正如预期的那样，堆叠的组合<a id="_idIndexMarker330"/>模型胜过排行榜上所有的单个模型。可以选择这些模型中的任何一个进行进一步的研究和可能的部署。接下来，我们将向您展示如何选择顶级型号。</p>
+			<h3>检查顶级模特</h3>
+			<p><code>aml.leader</code>对象包含排行榜中的最佳模型<a id="_idIndexMarker331"/>，包括训练和交叉验证数据的详细信息。我们使用以下代码打印最佳模型的训练、交叉验证和测试数据的AUC值:</p>
+			<pre class="source-code">best = aml.leader</pre>
+			<pre class="source-code">perf = best.auc(train = True, xval = True)</pre>
+			<pre class="source-code">perf["test"] = best.model_performance(test_cv).auc()</pre>
+			<pre class="source-code">perf</pre>
+			<p>产生的<a id="_idIndexMarker332"/>值如下:</p>
+			<div><div><img src="img/Figure_5.18_B16721.jpg" alt="Figure 5.18 – The performance of the best model from the AutoML leaderboard&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.18–AutoML排行榜中最佳车型的性能</p>
+			<h3>检查选定的模型</h3>
+			<p>实际上，领先的型号<a id="_idIndexMarker333"/>可能不是你最终投入生产的型号。正如前面提到的，其他考虑因素，比如建模类型、法规或遵从性要求、内部业务偏好，以及模型批准的可能性，在确定使用哪个模型时都会发挥作用。</p>
+			<p class="callout-heading">使用排行榜的其他原因</p>
+			<p class="callout">使用AutoML并探索其排行榜的最明显原因<a id="_idIndexMarker334"/>是找到顶级车型并将其投入生产。如前所述，这可能是不允许的。让我们考虑一个场景，我只能将一台GLM投入生产。那么，为什么要用AutoML去拟合其他模型呢？一个答案是，最佳模型给了我一个我也可以报告的实际上限。<em class="italic"> GLM的AUC为0.69905，而最佳模型的AUC为0.71336 </em>。</p>
+			<p class="callout">在商业环境中，我应该总是能够将绩效差异转化为成本降低或利润增加。换句话说，通过使用所选模型而不是最佳模型，转化为美元和美分的AUC差异是“做生意的成本”或“桌上还剩多少钱”。</p>
+			<p>在这里，我们演示如何从排行榜中选择任何型号。顶级个人(非整体)模特排在第三位。我们使用以下代码选择该模型，并根据AUC检查其性能:</p>
+			<pre class="source-code">select = h2o.get_model(aml.leaderboard[2, "model_id"])</pre>
+			<pre class="source-code">perf = select.auc(train = True, xval = True)</pre>
+			<pre class="source-code">perf["test"] = select.model_performance(test_cv).auc()</pre>
+			<pre class="source-code">perf</pre>
+			<p>这将导致以下结果:</p>
+			<div><div><img src="img/Figure_5.19_B16721.jpg" alt="Figure 5.19 – The performance of the selected model from the AutoML leaderboard&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.19–AutoML排行榜中所选车型的性能</p>
+			<p>一旦通过AutoML选择了模型对象<a id="_idIndexMarker335"/>，所有的模型诊断和解释程序都将可用，我们将在第7章 、<em class="italic">理解ML模型</em>中介绍这些程序。</p>
+			<h1 id="_idParaDest-97"><a id="_idTextAnchor097"/>特征工程选项</h1>
+			<p>在这一节中，我们将展示特征工程<a id="_idIndexMarker336"/>如何产生更好的预测模型。仅次于数据清理，特征工程通常是建模过程中最耗时的任务。它也可以成为一个伟大的预测模型的“秘方”。</p>
+			<p>那么，特征工程是什么意思呢？简而言之，它是如何从原始数据中提取信息，使其既能被建模算法使用，又能解释手头的问题。例如，日期或日期时间对象可能在数据中表示为字符串或数字(例如，Unix时间是从1970年1月1日00:00:00 UTC开始的秒数)。有了这些特性，算法很容易将日期视为分类变量或连续数值的级别。这两种形式都不是很有帮助。然而，嵌入在这些原始数据中的信息不仅包括日期、月份和年份，还包括星期几、周末或工作日、季节、假期等等。如果对象包含时间，那么您还可以生成一天中的小时、时间(例如，早上、下午、晚上或晚上)等等。</p>
+			<p>创建哪些特性<a id="_idIndexMarker337"/>很大程度上取决于用例。即使在最好的情况下，大多数工程特征可能不会被模型算法选择。主题专业知识和对问题背景的理解在设计好的特性中扮演着重要的角色。例如，贷款中使用的债务收入比除以客户每月的收入。这一工程特性在风险建模中被证明是如此具有预测性，以至于它被赋予了自己的名字和缩写，DTI。</p>
+			<p class="callout-heading">主题专业知识和功能工程</p>
+			<p class="callout">我们的一位同事是一位卓有成就的数据科学家、多项Kaggle特级大师和博士，他曾评论说，他不喜欢FinTech数据科学竞赛，因为“其中Fin多于Tech。”他的意思是，至少在某种程度上，这些问题让他对自己没有经验的主题有了更深刻的理解。</p>
+			<p>特征工程的另一个很好的例子是预测建模环境中的自然语言处理。NLP <a id="_idIndexMarker338"/>试图将单词、词义和句子表示为数值，这些数值可以自然地纳入机器学习算法中。TF-IDF和单词嵌入(word2vec)就是两种这样的方法。我们将在<a href="B16721_06_Final_SK_ePub.xhtml#_idTextAnchor106"> <em class="italic">第六章</em> </a>、<em class="italic">高级模型构建-第二部分</em>的<em class="italic">波光粼粼的建模</em>部分，以及<a href="B16721_08_Final_SK_ePub.xhtml#_idTextAnchor137"> <em class="italic">第八章</em> </a>、<em class="italic">将所有这些放在一起</em>的详细借贷俱乐部分析中更详细地介绍这些。</p>
+			<p>在本节的剩余部分，我们将深入研究目标编码。目标编码是可用的最常见和最有效的特征工程选项之一。我们<a id="_idIndexMarker339"/>将在<strong class="bold">借贷俱乐部模式</strong>中说明它的使用。在<a href="B16721_08_Final_SK_ePub.xhtml#_idTextAnchor137"> <em class="italic">第8章</em> </a>、<em class="italic">综合起来</em>中，我们将实施额外的特征工程配方来改进预测模型。</p>
+			<h2 id="_idParaDest-98"><a id="_idTextAnchor098"/>目标编码</h2>
+			<p>目标编码用代表目标变量的某个函数(如平均值)的数值代替分类的<a id="_idIndexMarker340"/>级别。下图说明了平均目标编码:</p>
+			<div><div><img src="img/Figure_5.20_B16721.jpg" alt="Figure 5.20 – Mean target encoding&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.20–平均目标编码</p>
+			<p>方法很简单:用它们各自的平均值(<strong class="bold"> 0.75 </strong>、<strong class="bold"> 0.66 </strong>和<strong class="bold"> 1.00 </strong>)替换分类特征级别(<strong class="bold"> A </strong>、<strong class="bold"> B </strong>和<strong class="bold"> C </strong>)。</p>
+			<p>目标编码<a id="_idIndexMarker342"/>是一个聪明的想法，在精神上，类似于统计随机和混合效果模型中的随机效果<a id="_idIndexMarker343"/>。事实上，对于某些简单的情况，您可以证明均值目标编码实际上产生随机效应的经验贝叶斯估计。这意味着目标编码背后的意图是基于合理的原则。</p>
+			<p>然而，目标编码使用目标的函数作为输入来预测目标。这就是数据泄露的定义。数据泄露会导致过于乐观的模型，这些模型不能很好地概括，在实践中最多是误导。H2O使用精心构建的交叉验证程序实现目标编码。本质上，这通过基于数据的其他折叠计算每行的目标编码值来消除数据泄漏。</p>
+			<p class="callout-heading">随机效应</p>
+			<p class="callout">统计模型中随机效应估计<a id="_idIndexMarker344"/>的数学结构不会像目标编码那样受到数据泄漏的影响。这是因为目标变量中的信息是分区的，用于估计随机效应的部分与用于估计其他模型参数的部分是分开的。</p>
+			<p>我们使用<strong class="bold"> H2O-3目标编码估计器</strong>用目标变量的平均值替换分类值<a id="_idIndexMarker345"/>。我们通过以下方式调整目标编码:</p>
+			<ul>
+				<li>将<code>data_leakage_handling</code>设置为<code>k-fold</code>控制数据泄漏。</li>
+				<li>向目标平均值添加随机<code>noise</code>有助于防止过度拟合。</li>
+				<li>我们通过<code>blending</code>对小组规模较小的类别进行调整。</li>
+			</ul>
+			<p>任何具有较少<a id="_idIndexMarker346"/>观察值的分类级别将导致<a id="_idIndexMarker347"/>不可靠(高方差)的目标编码均值。由集团目标值和全球目标值的加权平均值组成的混合平均值可以改进这一估计。通过设置<code>blending=True</code>，目标平均值将根据分类级别的样本量进行加权。</p>
+			<p>启用混合时，<code>smoothing</code>参数控制级别的后验概率和先验概率之间的转换速率(默认值为20)。<code>inflection_point</code>参数表示我们完全信任估计值的样本大小的一半。默认值为10。</p>
+			<h3>对贷款俱乐部数据进行编码的目标</h3>
+			<p>为了确定一个分类变量<a id="_idIndexMarker348"/>是否会从目标编码中获益<a id="_idIndexMarker349"/>，首先，为该变量创建一个表，该表从最频繁到最不频繁排序。为了有效地做到这一点，我们将定义一个Python函数:</p>
+			<pre class="source-code">import numpy as npdef sorted_table(colname, data = train_cv):</pre>
+			<pre class="source-code">    tbl = data[colname].table().as_data_frame()</pre>
+			<pre class="source-code">    tbl["Percent"] = np.round((100 * tbl["Count"]/data.nrows), 2)</pre>
+			<pre class="source-code">    tbl = tbl.sort_values(by = "Count", ascending = 0)</pre>
+			<pre class="source-code">    tbl = tbl.reset_index(drop = True)</pre>
+			<pre class="source-code">    return(tbl) </pre>
+			<p>注意，前面的代码要求<a id="_idIndexMarker350"/>Python熊猫包<a id="_idIndexMarker351"/>可用，因为<code>as_data_frame</code>调用以熊猫格式输出表格。</p>
+			<p>首先，考虑<code>purpose</code>变量，它记录了贷款的目的:</p>
+			<pre class="source-code">sorted_table("purpose")</pre>
+			<p>这将返回以下内容:</p>
+			<div><div><img src="img/Figure_5.21_B16721.jpg" alt="Figure 5.21 – Levels of the purpose variable &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.21-目的变量的级别</p>
+			<p>请注意债务合并贷款的高度集中性(46%)以及信用卡贷款(13%)和其他贷款(11%)的巨大数量，其余30%在11种其他贷款用途中获得。该数据的一个选项<a id="_idIndexMarker352"/>是将类别折叠成更少的级别，并将<code>purpose</code>变量作为分类变量。如果能够以一致的方式折叠类别，这可能是有意义的。一个更好的选择是使用均值目标编码来表示所有级别，而不会过度拟合尾部百分比较小的级别。这里也将启用混合，尽管它提供的平滑量<a id="_idIndexMarker353"/>可能没有影响。<code>renewable_energy</code>类别有75个观察值，在大多数情况下，即使百分比非常小，也足以可靠地估计平均值。</p>
+			<p>第二个要考虑的变量是<code>addr_state</code>:</p>
+			<pre class="source-code">sorted_table("addr_state")</pre>
+			<p>前几行如下所示:</p>
+			<div><div><img src="img/Figure_5.22_B16721.jpg" alt="Figure 5.22 – The top ten states by count&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.22–按数量排列的前十个州</p>
+			<p>最后几行如下所示:</p>
+			<div><div><img src="img/Figure_5.23_B16721.jpg" alt="Figure 5.23 – The last seven states by count&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.23–最后七个状态的计数</p>
+			<p>高基数分类变量<a id="_idIndexMarker354"/>如<code>addr_state</code>是目标编码的主要候选对象。记录的分布<a id="_idIndexMarker355"/>也是高度倾斜的，前4个级别大约占数据的40%。混合将特别重要，因为尾部状态的原始计数非常小:</p>
+			<ol>
+				<li value="1">首先导入目标编码估计器并指定要编码的列:<pre>from h2o.estimators import H2OTargetEncoderEstimator encoded_columns = ["purpose", "addr_state"]</pre></li>
+				<li><code>k_fold</code>策略需要一个折叠列，创建如下:<pre>train_cv["fold"] = train_cv.kfold_column(     n_folds=5, seed=25)</pre></li>
+				<li>通过设置参数训练目标编码模型:<pre>te = H2OTargetEncoderEstimator(     data_leakage_handling = "k_fold",     fold_column = "fold",     noise = 0.05,     blending = True,     inflection_point = 10,     smoothing = 20 )</pre></li>
+			</ol>
+			<p>培训内容如下:</p>
+			<pre>te.train = (x = encoded_columns, y = response,
+    training_frame = train_cv)</pre>
+			<ol>
+				<li value="4">现在，创建一个新的目标编码的训练和测试集，明确地将测试集上的噪声级别设置为<code>0</code> : <pre>train_te = te.transform(frame = train_cv) test_te = te.transform(frame = test_cv, noise = 0.0)</pre></li>
+				<li>接下来，通过查看目标编码变量的直方图<a id="_idIndexMarker357"/>来检查目标编码的结果<a id="_idIndexMarker356"/></li>
+			</ol>
+			<p>这产生了下面的图:</p>
+			<div><div><img src="img/Figure_5.24_B16721.jpg" alt="Figure 5.24 – The target-encoded loan purpose variable&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.24–目标编码的贷款目的变量</p>
+			<p>以下代码为<code>addr_state_te</code>变量生成一个直方图:</p>
+			<pre>train_te["addr_state_te"].hist()</pre>
+			<p>输出如下所示:</p>
+			<div><div><img src="img/Figure_5.25_B16721.jpg" alt="Figure 5.25 – The target-encoded address state variable&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.25–目标编码的地址状态变量</p>
+			<ol>
+				<li value="6">将目标编码的<a id="_idIndexMarker358"/>变量添加到预测值<a id="_idIndexMarker359"/>列表:<pre>predictors.extend(["addr_state_te", "purpose_te"])</pre></li>
+				<li>然后，删除源列，使用列表理解以提高效率:<pre>drop = ["addr_state", "purpose"] predictors = [x for x in predictors if x not in drop]</pre></li>
+				<li>随着我们创建其他要素，我们的预测器列表将会改变。为了跟踪这些步骤，明智的做法是更新一份<code>predictors</code>列表的副本，而不是原来的:<pre>transformed = predictors.copy()</pre></li>
+				<li>Additionally, we rename our datasets using the target-encoded values for convenience:<pre>train = train_te
+test = test_te</pre><p class="callout-heading">目标编码模型应该调优到什么程度？</p><p class="callout">注意，我们使用相同的目标<a id="_idIndexMarker360"/>编码参数来转换两个不同的变量。那么，为什么不用自定义的参数设置对变量进行单独编码呢？在我们的情况下，我们不需要。唯一要改变的参数值是决定混合量的参数值:<code>inflection_point</code>和<code>smoothing</code>。对于<code>purpose</code>变量，实际上并不需要混合，因为样本大小足以产生精确的平均值。另一方面，<code>addr_state</code>变量将从混合中受益匪浅。因此，我们将参数设置为对<code>addr_state</code>合理的值。这些基本上会被<code>purpose</code>忽略。</p><p class="callout">在一个模型的输出是另一个模型的输入的情况下，请始终记住，重要的是输入模型中不同的参数设置对最终模型预测的影响。</p></li>
+				<li>让我们使用AutoML用这些新功能改装我们的模型<a id="_idIndexMarker361"/>，并打印<a id="_idIndexMarker362"/>排行榜:<pre>check = H2OAutoML(max_models = 10,                   max_runtime_secs_per_model = 60,                   exclude_algos = ["DeepLearning"],                   seed = 25) check.train(x = transformed,              y = response,              training_frame = train) check.leaderboard</pre></li>
+			</ol>
+			<p>这会产生以下输出:</p>
+			<div><div><img src="img/Figure_5.26_B16721.jpg" alt="Figure 5.26 – The AutoML leaderboard after target encoding&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.26–目标编码后的AutoML排行榜</p>
+			<p>最佳个体(非集合)模型是GBM，其性能(<strong class="bold"> 0.704491 </strong>)仅比目标<a id="_idIndexMarker364"/>编码前的最佳GBM ( <strong class="bold"> 0.703838 </strong>)稍好<a id="_idIndexMarker363"/>。人们经常会问，这种微小的性能提升值得目标编码的努力吗？那个问题完全没有抓住要点。回想一下，H2O GBM自然能够很好地处理高基数分类变量，所以性能相当的事实并不令人惊讶。</p>
+			<ol>
+				<li value="11">问什么问题才是正确的？让我们看看变量重要性，比较目标编码前后的变量:<pre>check_gbm = h2o.get_model(check.leaderboard[2, "model_id"]) check_gbm.varimp_plot(15)</pre></li>
+			</ol>
+			<p>在目标编码之前，高基数变量是最重要的:</p>
+			<div><div><img src="img/Figure_5.27_B16721.jpg" alt="Figure 5.27 – Variable importance for the H2O GBM model before target encoding&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.27-目标编码前H2O GBM模型的可变重要性</p>
+			<p>目标编码后，这些分类变量<a id="_idIndexMarker366"/>的重要性<a id="_idIndexMarker365"/>发生了变化:</p>
+			<div><div><img src="img/Figure_5.28_B16721.jpg" alt="Figure 5.28 – Variable importance for the H2O GBM model after target encoding&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.28-目标编码后H2O GBM模型的可变重要性</p>
+			<p>GBM模型的目标编码<a id="_idIndexMarker367"/>的效果与其说与整体模型<a id="_idIndexMarker368"/>性能有关，不如说与这些变量的影响和解释有关。目标编码<code>purpose</code>的重要性仅略有变化，从<em class="italic">第三</em>位变为<em class="italic">第五</em>位。目标编码<code>addr_state</code>的影响力大幅下降，从第<em class="italic">名</em>降至第<em class="italic">名</em>名。这种影响差异也导致了可解释性的差异。前一个模型主要是按州划分的，本质上意味着每个州有不同的贷款违约模型(这可能需要向监管者解释)。在后一种模型中，国家的影响以非常类似于统计模型中随机影响的方式进行调整。</p>
+			<p>数据科学家可以选择最适合他们情况的场景。目标编码<code>addr_state</code>的另一个好处是混合特性，在生产中，它将更好地概括低计数的状态。</p>
+			<p>从排行榜中选择最佳XGBoost目标编码模型:</p>
+			<pre class="source-code">check_xgb = h2o.get_model(check.leaderboard[5, "model_id"])</pre>
+			<pre class="source-code">check_xgb.varimp_plot(15)</pre>
+			<p>这产生了下面的图:</p>
+			<div><div><img src="img/Figure_5.29_B16721.jpg" alt="Figure 5.29 – The XGBoost model variable importance plot after target encoding&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.29–目标编码后的XGBoost模型变量重要性图</p>
+			<p><code>purpose</code>和<code>address_state</code>都进入了前10名，位置几乎与GBM模式相同。目标编码<a id="_idIndexMarker369"/>分类变量在XGBoost模型中比在GBM模型中更重要<a id="_idIndexMarker370"/>。在其他考虑因素相同的情况下，一些特征工程步骤可能会受到所选算法的影响。</p>
+			<h2 id="_idParaDest-99"><a id="_idTextAnchor099"/>其他特征工程选项</h2>
+			<p>有多种方法对特征工程选项进行分类，根据问题的不同，你可以采取的方法也几乎是无限的。对于一些高层次的分类，我们可以考虑以下粗略的层次结构:</p>
+			<ul>
+				<li>代数<a id="_idIndexMarker372"/>变形金刚:<ol><li value="1">对数字列进行加、减、乘或除操作，以创建新的交互功能。</li><li>使用简单的数学函数，如对数、指数、幂、根和三角函数</li></ol></li>
+				<li>基于聚类的变压器:使用k-means <a id="_idIndexMarker374"/>或其他无监督算法<a id="_idIndexMarker375"/>来创建聚类。然后，执行以下操作:<ol><li value="1">测量数值观测到指定聚类的距离。</li><li>将每个聚类视为分类变量一个级别，并以聚类编码为目标。</li></ol></li>
+				<li>数字到分类的转换:通常，宁滨分成十分位数或使用直方图，然后在每个面元内取平均值会产生良好的预测特征。</li>
+				<li>数字转换的分类<a id="_idIndexMarker377"/>:<ol><li value="1">一键或指示器值编码。</li><li>目标编码。</li><li>数字汇总编码:这与目标编码类似，只是您汇总的是一个数字预测值列，而不是目标变量；例如，每个州的平均温度。</li><li><strong class="bold">证据权重</strong>:仅用于二元分类问题。证据的权重是成功与失败之比的自然对数(好与坏，1与0之比):</li></ol></li>
+			</ul>
+			<div><div><img src="img/B16721_05_001.jpg" alt=""/>
+				</div>
+			</div>
+			<ul>
+				<li>降维变换:截断特征值或奇异值分解。</li>
+			</ul>
+			<p>作为一名数据科学家，您可以针对手头的特定问题<a id="_idIndexMarker378"/>将这些组件组合成一个合理的特性。在我们对Lending Club数据的完整分析中，我们将重温其中的一些方法，这些数据可以在第8章 、<em class="italic">汇总</em>中找到。</p>
+			<h1 id="_idParaDest-100"><a id="_idTextAnchor100"/>利用H2O流程增强您的IDE工作流程</h1>
+			<p>H2O流是一个基于网络的用户界面，可以在任何运行H2O集群的地方使用。Flow是交互式的，允许用户<a id="_idIndexMarker380"/>做一切事情，包括<a id="_idIndexMarker381"/>导入数据、构建模型、调查模型，以及将模型投入生产。虽然非常容易使用，但我们的经验是大多数数据科学家(包括作者)更喜欢用Python或R编码，而不是菜单驱动的交互界面。这一节是为那些数据科学家写的:我是编码员为什么要用Flow？</p>
+			<p>有两个主要原因:</p>
+			<ul>
+				<li><strong class="bold">监视</strong>H2O集群的状态以及正在运行的作业</li>
+				<li><strong class="bold">对数据、模型、模型诊断等的交互式调查</strong>,其中交互性是一种资产而不是一种烦恼</li>
+			</ul>
+			<h3>连接到流</h3>
+			<p>默认情况下，当集群启动时，流在H2O服务器的端口54321上启动<a id="_idIndexMarker382"/>(该端口在启动时可配置)。在你的浏览器中输入<code>Error! Hyperlink reference not valid.</code>打开Flow。Flow UI简单明了，带有有用的说明和视频:</p>
+			<div><div><img src="img/Figure_5.30_B16721.jpg" alt="Figure 5.30 – The H2O Flow UI&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.30–H2O流程用户界面</p>
+			<p>首先，让我们考虑一下Flow的<a id="_idIndexMarker383"/>监控功能。</p>
+			<h2 id="_idParaDest-101"><a id="_idTextAnchor101"/>用流量监控</h2>
+			<p>在流程中的<strong class="bold">管理</strong>菜单下，顶部<a id="_idIndexMarker384"/>三个选项分别是<strong class="bold">工作</strong>、<strong class="bold">集群状态</strong>和<strong class="bold">水表</strong>。这些都是Flow监控功能的核心，我们将分别对它们进行回顾。</p>
+			<p>流程<strong class="bold">管理</strong>菜单如下所示:</p>
+			<div><div><img src="img/Figure_5.31_B16721.jpg" alt="Figure 5.31 – The monitoring options using the Flow Admin menu&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.31–使用流量管理菜单的监控选项</p>
+			<p>我们从监控<a id="_idIndexMarker385"/>任务开始。</p>
+			<h3>监控作业</h3>
+			<p>流程命令行中的<code>getJobs</code>:</p>
+			<div><div><img src="img/Figure_5.32_B16721.jpg" alt="Figure 5.32 – Listing the job options using the Flow Admin menu&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.32–使用流程管理菜单列出作业选项</p>
+			<p>我们继续通过<a id="_idIndexMarker388"/>监控<a id="_idIndexMarker389"/>的健康状况。</p>
+			<h3>监控H2O集群运行状况</h3>
+			<p><code>getCloud</code>命令。这将监控群集的运行状况，并且是检查H2O是否工作不正常的首要位置之一:</p>
+			<div><div><img src="img/Figure_5.33_B16721.jpg" alt="Figure 5.33 – Monitoring the cluster status using the Flow Admin menu&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.33–使用流管理菜单监控集群状态</p>
+			<p>接下来，我们将监视CPU的使用情况。</p>
+			<h3>实时监控CPU使用情况</h3>
+			<p><strong class="bold">水表</strong>工具是一个有用的CPU使用监视器<a id="_idIndexMarker392"/>。它显示每个CPU <a id="_idIndexMarker393"/>的条形，颜色对应于每个CPU的活动状态。比起看着一个黑色的进度条在Jupyter笔记本的单元格上生长，水表提供了更多的信息。此外，它还实时显示了特定计算在可用计算资源中的分布情况:</p>
+			<div><div><img src="img/Figure_5.34_B16721.jpg" alt="Figure 5.34 – The H2O Flow Water Meter&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图5.34-H2O流量水表</p>
+			<p>我们还可以监控网格搜索。</p>
+			<h3>监控网格搜索</h3>
+			<p>H2O流允许您交互式地<a id="_idIndexMarker394"/>监控单个模型的构建，但是在执行多个任务时<a id="_idIndexMarker395"/>特别有用，比如网格搜索或AutoML创建。这些可以在启动时进行实时监控，并在运行期间和完成后进行审查。</p>
+			<p>我们网格搜索策略的第一步是评估模型深度。当模型运行时，我们可以打开流程并列出作业。名为<code>gbm_depth_grid</code>的作业正在运行。单击名称将打开正在运行的作业，允许我们查看更多详细信息或取消作业。这些操作在Python中并不容易实现:</p>
+			<div><div><img src="img/Figure_5.35_B16721.jpg" alt="Figure 5.35 – Grid search job monitoring within Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.35–流程中的网格搜索作业监控</p>
+			<p>在任何<a id="_idIndexMarker397"/>时间选择<strong class="bold">视图</strong>按钮<a id="_idIndexMarker396"/>打开网格:</p>
+			<div><div><img src="img/Figure_5.36_B16721.jpg" alt="Figure 5.36 – Grid search results within Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.36–流程中的网格搜索结果</p>
+			<p>随后选择任何单个网格模型的<a id="_idIndexMarker398"/>将打开<a id="_idIndexMarker399"/>一个交互式模型视图，我们将在下一节和<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第7章</em> </a>、<em class="italic">理解ML模型</em>中对此进行更详细的讨论。</p>
+			<h3>监控自动化</h3>
+			<p>监控AutoML作业<a id="_idIndexMarker400"/>类似。首先，在工作列表中搜索AutoML构建工作<a id="_idIndexMarker401"/>,并选择模型的名称链接:</p>
+			<div><div><img src="img/Figure_5.37_B16721.jpg" alt="Figure 5.37 – Selecting the AutoML build job&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.37–选择AutoML构建作业</p>
+			<p>在AutoML构建过程中，您可以实时监控进度或点击<strong class="bold">查看</strong>查看模型构建过程中的排行榜:</p>
+			<div><div><img src="img/Figure_5.38_B16721.jpg" alt="Figure 5.38 – Viewing the AutoML build job&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图5.38–查看AutoML构建作业</p>
+			<p class="callout-heading">注意:心流对于监控排行榜非常有用</p>
+			<p class="callout">交互式排行榜<a id="_idIndexMarker402"/>是实时监控AutoML工作的好方法。对于AutoML运行来说尤其如此，这些运行并不局限于快速完成，而是计划在构建模型时运行几个小时。同样，Python中可用的只是一个进度条，如果你看不到服务器上的实际工作，这个进度条会显得非常慢(图5.39)。</p>
+			<div><div><img src="img/Figure_5.39_B16721.jpg" alt="Figure 5.39 – The AutoML leaderboard in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.39–Flow中的AutoML排行榜</p>
+			<p>选择任何<a id="_idIndexMarker403"/>单个AutoML模型都会打开<a id="_idIndexMarker404"/>一个交互式模型视图。</p>
+			<h2 id="_idParaDest-102"><a id="_idTextAnchor102"/>与心流互动调查</h2>
+			<p>正如我们前面提到的，Flow中的交互性<a id="_idIndexMarker405"/>对于实时监控正在运行的作业非常有用。此外，Flow使得在建模之前探索数据和在模型构建之后评估候选模型比用Python编码更方便。菜单驱动探索的唯一潜在缺点是当再现性非常重要并且需要整个建模过程的文档时。当我们在第7章 、<em class="italic">了解ML模型</em>中讨论H2O AutoDoc功能时，我们将更详细地探讨这个主题。</p>
+			<h3>流中的交互式数据探索</h3>
+			<p>执行<a id="_idIndexMarker406"/>以下步骤:</p>
+			<ol>
+				<li value="1">在<strong class="bold">数据</strong>菜单中，选择<strong class="bold">列出所有帧</strong>:</li>
+			</ol>
+			<div><div><img src="img/Figure_5.40_B16721.jpg" alt="Figure 5.40 – Listing data frames in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.40–列出流中的数据帧</p>
+			<ol>
+				<li value="2">点击<strong class="bold"> LendingClubClean.hex </strong>链接，调出<a id="_idIndexMarker407"/>数据汇总:</li>
+			</ol>
+			<div><div><img src="img/Figure_5.41_B16721.jpg" alt="Figure 5.41 – The Lending Club data in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.41-流动中的借贷俱乐部数据</p>
+			<p>点击<code>purpose</code>列<a id="_idIndexMarker408"/>链接产生一个汇总图:</p>
+			<div><div><img src="img/Figure_5.42_B16721.jpg" alt="Figure 5.42 – The loan purpose data column in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.42–流程中的贷款目的数据列</p>
+			<ol>
+				<li value="3">接下来，点击<code>Inspect</code>上的<a id="_idIndexMarker409"/>，然后点击<code>domain</code>，将会产生一个类似于我们用Python创建的汇总表:</li>
+			</ol>
+			<div><div><img src="img/Figure_5.43_B16721.jpg" alt="Figure 5.43 – A table of the loan purpose data in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.43-流动中的贷款目的数据表</p>
+			<h3>流动中的模型探索</h3>
+			<p>选择Flow中的任何型号<a id="_idIndexMarker410"/>，无论是通过<strong class="bold">型号</strong>菜单项中的<strong class="bold">列出所有型号</strong>选项<a id="_idIndexMarker411"/>，还是通过网格搜索或AutoML排行榜，都会生成一个型号摘要:</p>
+			<div><div><img src="img/Figure_5.44_B16721.jpg" alt="Figure 5.44 – A GBM model summary from AutoML in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图5.44–来自AutoML in Flow的GBM模型摘要</p>
+			<p>模型摘要<a id="_idIndexMarker412"/>的布局让探索变得非常容易。默认显示训练集和验证集的ROC曲线<a id="_idIndexMarker413"/>和AUC值。可变重要性图也很容易获得:</p>
+			<div><div><img src="img/Figure_5.45_B16721.jpg" alt="Figure 5.45 – GBM variable importance in Flow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图5.45-GBM变量在流程中的重要性</p>
+			<p>一般来说，通过模型摘要立即获得结果<a id="_idIndexMarker414"/>比从Python客户端获得结果更方便<a id="_idIndexMarker415"/>。</p>
+			<p class="callout-heading">流程中的最佳实践</p>
+			<p class="callout">如果您正在用Python编写<a id="_idIndexMarker416"/>代码，我们强烈建议将Flow单独用作监控平台和只读工具。这是我们在自己的工作中使用的方法。代码应该包含导入数据、创建特性、拟合模型、部署模型等所有步骤。这允许您重复任何分析，并且是再现性的先决条件。对于调查和交互步骤来说，代码通常不太方便。为流动保留那些。</p>
+			<h1 id="_idParaDest-103"><a id="_idTextAnchor103"/>将所有这些放在一起——算法、特征工程、网格搜索和AutoML</h1>
+			<p>H2O的AutoML实现简单而强大，那么我们为什么需要网格搜索呢？事实上，对于许多现实世界的企业用例来说，AutoML排行榜中的任何顶级候选都是投入生产的优秀模型。AutoML生产的堆叠集合模型尤其如此。</p>
+			<p>然而，我们对网格搜索的报道不仅仅是为了满足求知欲。接下来我们将概述一个更复杂的过程，它使用AutoML，然后使用定制的网格搜索来发现和微调模型性能。</p>
+			<h2 id="_idParaDest-104"><a id="_idTextAnchor104"/>一个增强的自动程序</h2>
+			<p>以下是步骤:</p>
+			<ol>
+				<li value="1">首先对您的<a id="_idIndexMarker417"/>数据运行AutoML，创建基准排行榜。您可以调查领先的模型，了解使算法适合您的数据所需的运行时间，等等，这可能会影响未来的AutoML参数选择和预期。</li>
+				<li>第二阶段是特征工程。在开发新功能时，根据需要重复AutoML运行，以检查工程的影响，并查看从诊断中可能获得的其他见解。</li>
+				<li>完成功能工程阶段后，使用AutoML创建最终排行榜。</li>
+				<li>从排行榜中选择一款车型作为生产候选车型。如果你选择一个集合模型，你就完成了。要提高堆叠集合的性能，你能做的很少。</li>
+				<li>如果你选择一个单独的模型，比如GBM或DRF，使用该模型的参数作为进一步网格搜索的指南，采用本章概述的一般策略。使用额外的网格搜索进一步微调候选模型是可能的。</li>
+			</ol>
+			<p>对于许多问题来说，这个增强的AutoML过程可能是多余的。如果您所在的企业有快速构建和部署模型的实践，尤其是频繁更新或替换模型的业务，那么这种方法实际上可能是不值得的。基于最新数据构建的模型的优势往往超过使用这些额外的建模步骤所获得的收益。</p>
+			<p>然而，如果您所在的行业中模型审查和尽职调查过程漫长且复杂，投入生产的模型往往会在生产中停留很长时间，或者您正在开发一个以任何方式都具有高风险的模型(例如，一个直接<a id="_idIndexMarker418"/>影响人们生活的模型，而不仅仅是他们将在网站上看到的广告)，那么这个更复杂的过程可能非常值得付出额外的努力。我们已经在多个真实的用例中成功地使用了它。</p>
+			<h1 id="_idParaDest-105"><a id="_idTextAnchor105"/>总结</h1>
+			<p>在本章中，我们考虑了分割数据的不同选项，深入探索了梯度推进和随机森林等强大而流行的算法，了解了如何使用两阶段网格搜索策略优化模型超参数，利用AutoML有效拟合多个模型，并进一步研究了特征工程的选项，包括深入研究目标编码。此外，我们还看到了如何使用Flow来监控H2O系统，并以交互方式研究数据和模型。现在，您已经拥有了使用H2O平台构建有效的企业级预测模型所需的大部分工具。</p>
+			<p>然而，我们还没有完成我们的高级建模主题。在<a href="B16721_06_Final_SK_ePub.xhtml#_idTextAnchor106"> <em class="italic">第6章</em> </a>、<em class="italic">高级模型构建-第二部分</em>中，我们将讨论数据采集的最佳实践，更深入地研究检查点和改装模型，并向您展示如何确保再现性。此外，我们将全面考虑另外两个实际操作的例子:第一个展示了将Spark功能与H2O建模有效集成的Spark水管，第二个介绍了隔离森林，这是一种用于H2O异常检测的无监督学习算法。</p>
+		</div>
+	
+
+</body></html>

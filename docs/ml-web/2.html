@@ -1,0 +1,196 @@
+<html><head/><body>
+
+
+
+<title>Chapter 2. Unsupervised Machine Learning</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02"/>第二章。无监督机器学习</h1></div></div></div><p>正如我们在<a class="link" href="ch01.html" title="Chapter 1. Introduction to Practical Machine Learning Using Python">第1章</a>、<em>使用Python的实用机器学习介绍</em>中看到的，无监督学习旨在提供关于数据无标签日期的深刻信息。在许多情况下，大型数据集(就点数和要素数而言)是非结构化的，乍一看不会呈现任何信息，因此这些技术用于突出数据上的隐藏结构(聚类)或在不丢失相关信息的情况下降低其复杂性(降维)。本章将重点介绍主要的聚类算法(本章第一部分)和降维方法(本章第二部分)。通过提供一个使用Python库的实际例子，将突出这些方法的差异和优势。所有代码都可以在作者的GitHub个人资料中找到，在<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_2/">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 2/</a>文件夹中。我们现在将开始描述聚类算法。</p><div><div><div><div><h1 class="title"><a id="ch02lvl1sec13"/>聚类算法</h1></div></div></div><p>聚类算法<a id="id134" class="indexterm"/>被用于在某种有序的子集中重构数据，以便可以推断出有意义的结构。聚类可以被定义为具有一些相似特征的一组数据点。量化数据点相似性的方法决定了聚类的不同类别。</p><p>聚类算法可以根据数据处理的不同度量或假设分为不同的类别。我们将讨论现今使用的最相关的分类，它们是分布法、重心法、密度法和层次法。对于每个类别，将详细介绍一个特定的算法，我们将从讨论分布方法开始。将讨论一个比较不同算法的示例，IPython笔记本和脚本都可以在我的GitHub book文件夹中获得，该文件夹位于<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_2/">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 2/</a>。</p><div><div><div><div><h2 class="title"><a id="ch02lvl2sec11"/>配送方式</h2></div></div></div><p>这些方法<a id="id135" class="indexterm"/>假设数据来自<a id="id136" class="indexterm"/>某个分布，使用期望最大化算法寻找分布参数的最优值。期望最大化和<a id="id137" class="indexterm"/> <strong>高斯</strong>聚类的混合将在下文讨论。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec09"/>期望值最大化</h3></div></div></div><p>该算法<a id="id138" class="indexterm"/>用于寻找依赖于隐藏(未观察)变量的参数分布模型的最大似然<a id="id139" class="indexterm"/>估计。期望值最大化由迭代两步的<a id="id140" class="indexterm"/>组成:使用参数的当前值创建<a id="id141" class="indexterm"/>对数似然函数<strong>的<strong> E步</strong>，以及计算新参数值的<strong> M步</strong>，最大化E步的对数似然函数。</strong></p><p>考虑一组<em> N </em>元素，<em> {x <sup> (i) </sup> }i = 1，…，N </em>，数据的对数似然如下:</p><div><img src="img/B05143_02_8.jpg" alt="Expectation maximization"/></div><p>这里，<em> θ </em>表示参数的集合，<em> z <sup> (i) </sup> </em>就是所谓的隐变量。</p><p>我们希望在不知道<em> z <sup> (i) </sup> </em>(未观察变量)的值的情况下，找到使对数似然最大化的参数值。考虑在<em> z <sup> (i) </sup> </em>和<em> Q(z <sup> (i) </sup> ) </em>上的分布，例如<img src="img/B05143_02_9.jpg" alt="Expectation maximization"/>。因此:</p><div><img src="img/B05143_02_10.jpg" alt="Expectation maximization"/></div><p>这意味着<em> Q(z <sup> (i) </sup> ) </em>是隐变量的后验分布，<em> z <sup> (i) </sup> </em>，给定<em> x <sup> (i) </sup> </em>由<em> θ </em>参数化。期望值最大化算法来自詹森不等式的使用，它确保执行这两个步骤:</p><div><ol class="orderedlist arabic"><li class="listitem"><img src="img/B05143_02_11.jpg" alt="Expectation maximization"/></li><li class="listitem"><img src="img/B05143_02_12.jpg" alt="Expectation maximization"/></li></ol></div><p><a id="id143" class="indexterm"/>对数似然收敛到最大值，并且<a id="id144" class="indexterm"/>因此找到相关的<em> θ </em>值。</p></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec10"/>高斯混合</h3></div></div></div><p>这种方法<a id="id145" class="indexterm"/>使用高斯分布的<a id="id146" class="indexterm"/>混合来模拟整个数据集。因此，簇的数目将由混合物中所考虑的高斯数给出。给定N个元素的数据集，<em> {x <sup> (i) </sup> }i = 1，…，N </em>，其中每个<img src="img/B05143_02_13.jpg" alt="Mixture of Gaussians"/>是由混合高斯模型化的d特征向量，如下所示:</p><div><img src="img/B05143_02_14.jpg" alt="Mixture of Gaussians"/></div><p>其中:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_15.jpg" alt="Mixture of Gaussians"/>是一个隐藏变量，代表每个<em> x <sup> (i) </sup> </em>生成的高斯分量</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_16.jpg" alt="Mixture of Gaussians"/>代表高斯分量的一组平均参数</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_17.jpg" alt="Mixture of Gaussians"/>代表高斯分量的方差参数集</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_17a.jpg" alt="Mixture of Gaussians"/>是混合权重，代表高斯分量<em> k </em>产生随机选择的<em> x <sup> (i) </sup> </em>的概率，其中<img src="img/B05143_02_18.jpg" alt="Mixture of Gaussians"/>和<img src="img/B05143_02_19.jpg" alt="Mixture of Gaussians"/>是权重的集合</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_20.jpg" alt="Mixture of Gaussians"/>是高斯分量<em> k </em>与<a id="id147" class="indexterm"/>参数<img src="img/B05143_02_21.jpg" alt="Mixture of Gaussians"/>关联<a id="id148" class="indexterm"/>与点<em> x <sup> (i) </sup> </em></li></ul></div><p>因此，我们模型的参数是φ和∑。为了估计它们，我们可以写下数据集的对数似然性:</p><div><img src="img/B05143_02_22.jpg" alt="Mixture of Gaussians"/></div><p>为了找到参数值，我们应用前面章节中解释的期望值最大化算法，其中<img src="img/B05143_02_23.jpg" alt="Mixture of Gaussians"/>和<img src="img/B05143_02_24.jpg" alt="Mixture of Gaussians"/>。</p><p>在选择参数的第一个猜测之后，我们迭代以下步骤直到收敛:</p><div><ol class="orderedlist arabic"><li class="listitem"><strong> E步</strong>:权重<img src="img/B05143_02_25.jpg" alt="Mixture of Gaussians"/>由<a id="id149" class="indexterm"/>按照应用贝叶斯定理<div> <img src="img/B05143_02_26.jpg" alt="Mixture of Gaussians"/> </div>得到的规则<a id="id150" class="indexterm"/>更新</li><li class="listitem"><strong> M步</strong>:参数更新如下(这些公式来自解决最大化问题，这意味着将对数似然的导数设置为零):<div><img src="img/B05143_02_27.jpg" alt="Mixture of Gaussians"/></div><div><img src="img/B05143_02_28.jpg" alt="Mixture of Gaussians"/></div><div><img src="img/B05143_02_29.jpg" alt="Mixture of Gaussians"/></div></li></ol></div><p>注意，需要<a id="id151" class="indexterm"/>期望最大化<a id="id152" class="indexterm"/>算法，因为隐藏变量<em> z <sup> (i) </sup> </em>是未知的。否则，这将是一个监督学习问题，其中<em> z <sup> (i) </sup> </em>是训练集每个点的标签(使用的监督算法将是高斯判别分析)。因此，这是一个无监督算法，目标也是找到<em> z <sup> (i) </sup> </em>，即每个点<em> x <sup> (i) </sup> </em>与<em> K </em>高斯分量中的哪一个相关联。事实上，通过计算每个<em> K </em>类的后验概率<img src="img/B05143_02_30.jpg" alt="Mixture of Gaussians"/>，可以将每个<em> x(i) </em>分配给具有最高后验概率的类<em> k </em>。在几种情况下，该算法可以成功地用于聚类(标记)数据。</p><p>一个可能的实际例子是，一位教授有两个不同班级的学生成绩，但没有按班级标注。他想把成绩分成原来的两个班，假设每个班的成绩分布是高斯分布。另一个可使用混合高斯方法解决的示例是基于来自两个不同国家的一组人的身高值来确定每个人的国家，并假设每个国家的身高分布遵循高斯分布。</p></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl2sec12"/>质心方法</h2></div></div></div><p>这个类收集了寻找聚类中心的所有技术，将数据点<a id="id153" class="indexterm"/>分配到最近的聚类中心，并最小化中心和分配点之间的<a id="id154" class="indexterm"/>距离。这是一个优化问题，最终的中心是向量；它们可能不是原始数据集中的点。簇的数量是一个要预先指定的参数，并且生成的簇倾向于具有相似的大小，因此边界线不一定被很好地定义。这个优化问题可能导致局部最优解，这意味着不同的初始化值可能导致略有不同的聚类。<a id="id155" class="indexterm"/>最常见的方法被称为<strong> k-means </strong> ( <strong>劳氏算法</strong>)，其中最小化的距离就是<a id="id156" class="indexterm"/> <strong>欧氏范数</strong>。其他技术将中心<a id="id157" class="indexterm"/>作为聚类的中间值(<strong>k-中间值聚类</strong>)或者将中心值<a id="id158" class="indexterm"/>作为实际数据点。此外，这些方法<a id="id160" class="indexterm"/>的其他<a id="id159" class="indexterm"/>变体在定义初始中心的选择上<a id="id161" class="indexterm"/>不同(<strong>k-均值++ </strong>或<strong>模糊c-均值</strong>)。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec11"/>k-均值</h3></div></div></div><p>该算法尝试<a id="id162" class="indexterm"/>找到每个聚类的中心，作为所有<a id="id163" class="indexterm"/>成员的平均值，使中心和指定点之间的距离最小化。它可以与分类问题中的k-最近邻算法相关联，并且所得到的聚类集可以被表示为<a id="id164" class="indexterm"/><strong>Voronoi图</strong>(一种基于与一组点(在这种情况下是聚类的中心)的距离在区域中划分空间的方法)。考虑通常的数据集，<img src="img/B05143_02_31.jpg" alt="k-means"/>。该算法规定选择多个中心<em> K </em>，将初始平均聚类中心<img src="img/B05143_02_32.jpg" alt="k-means"/>分配给随机值，然后重复以下步骤直到收敛:</p><div><ol class="orderedlist arabic"><li class="listitem">对于每个数据点<em> i </em>，计算每个点<em> i </em>与每个中心<em> j </em>之间的欧几里德平方距离，找到中心索引<em>d<sub>I</sub>T9】，对应这些距离中的最小值:<img src="img/B05143_02_33.jpg" alt="k-means"/>。</em></li><li class="listitem">对于每个中心<em> j </em>，重新计算其平均值，作为具有<em> d_i j </em>等于<em> j </em>的点的平均值(即，属于具有平均值<img src="img/B05143_02_34.jpg" alt="k-means"/>的聚类的点):<div> <img src="img/B05143_02_35.jpg" alt="k-means"/> </div>有可能表明该算法相对于由以下函数给出的函数收敛:<div> <img src="img/B05143_02_36.jpg" alt="k-means"/> </div></li></ol></div><p>它随着迭代次数单调减少<a id="id165" class="indexterm"/>。由于<em> F </em>是一个<a id="id166" class="indexterm"/>非凸函数，所以不能保证最终的最小值就是全局最小值。为了避免聚类结果与局部极小值相关的问题，k-means算法通常使用不同的随机初始中心均值运行多次。则与较低的<em> F </em>值相关联的结果被选为最佳聚类解决方案。</p></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl2sec13"/>密度方法</h2></div></div></div><p>这些<a id="id167" class="indexterm"/>方法基于这样的想法:稀疏区域<a id="id168" class="indexterm"/>必须被认为是边界(或噪声),而高密度区域应该与集群的中心相关。常见的方法叫做<strong>基于密度的带噪声应用空间聚类</strong> ( <strong> DBSCAN </strong>)，通过一定的距离阈值定义两点之间的<a id="id169" class="indexterm"/>连接(为此类似于层次算法；参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第三章</a>、<em>监督机器学习</em>。仅当满足特定密度标准时，两个点才被认为是关联的(属于同一个聚类)-在特定半径内，相邻点的数量必须高于阈值。另一种流行的方法是均值漂移，其中每个数据点被分配到其邻域中密度最高的聚类。由于通过核密度估计计算密度非常耗时，因此均值漂移通常比DBSCAN或质心方法慢。这类算法的主要优点是能够定义具有任意形状的聚类，并且能够确定聚类的最佳数量，而不是将该数量先验地设置为参数，使得这些方法适合于聚类未知的数据集。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec12"/>均值漂移</h3></div></div></div><p>均值漂移是<a id="id170" class="indexterm"/>非参数算法，它在数据集上定义的密度核函数中找到局部最大值的位置<a id="id171" class="indexterm"/>。找到的局部极大值可以认为是数据集<img src="img/B05143_02_54.jpg" alt="Mean – shift"/>中聚类的中心，极大值的个数就是聚类的个数。为了用作聚类算法，每个点<img src="img/B05143_02_37.jpg" alt="Mean – shift"/>必须与其邻域的密度相关联:</p><div><img src="img/B05143_02_38.jpg" alt="Mean – shift"/></div><p>这里，<em> h </em>就是<a id="id172" class="indexterm"/>所谓的带宽；它估算的是<a id="id173" class="indexterm"/>邻域的半径，其中的点影响密度值<em> f(x <sup> (l) </sup> ) </em>(即其他点对<img src="img/B05143_02_39.jpg" alt="Mean – shift"/>的影响可以忽略不计)。<em> K </em>是满足这些条件的核函数:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_40.jpg" alt="Mean – shift"/></li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_41.jpg" alt="Mean – shift"/></li></ul></div><p><em> K(x <sup> (i) </sup> ) </em>的典型例子如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_42.jpg" alt="Mean – shift"/>:高斯内核</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_43.jpg" alt="Mean – shift"/> : Epanechnikov内核</li></ul></div><p>均值漂移算法使<em> f(x <sup> (l) </sup> ) </em>最大化，这转化为数学等式(记住在函数分析中，最大值是通过对<em> 0 </em>求导得到的):</p><div><img src="img/B05143_02_44.jpg" alt="Mean – shift"/></div><p>这里，<em> K' </em>是核密度函数<em> K </em>的导数。</p><p>因此，为了找到与特征向量<em> x <sup> (l) </sup> </em>相关联的局部最大值位置，可以计算以下迭代等式:</p><div><img src="img/B05143_02_45.jpg" alt="Mean – shift"/></div><p>这里，<img src="img/B05143_02_46.jpg" alt="Mean – shift"/>称为均值漂移向量。当在迭代<em> t=a </em>时，满足条件<img src="img/B05143_02_47.jpg" alt="Mean – shift"/>时，算法将收敛。</p><p>在<a id="id174" class="indexterm"/>等式的支持下，我们现在可以借助下图的<a id="id175" class="indexterm"/>来解释算法。在第一次迭代<em> t=0 </em>时，原始点<img src="img/B05143_02_48.jpg" alt="Mean – shift"/>(红色)在数据空间上展开，计算均值偏移向量<img src="img/B05143_02_49.jpg" alt="Mean – shift"/>，相同的点用十字(<em> x </em>)标记，用算法跟踪它们的演化。在迭代<em> 1 </em>时，将使用前述等式获得数据集，并且结果点<img src="img/B05143_02_50.jpg" alt="Mean – shift"/>在下图中以(<em> + </em>)符号显示:</p><p> </p><div><img src="img/B05143_02_01.jpg" alt="Mean – shift"/><div><p>通过迭代的均值漂移进化示意图</p></div></div><p>在前面的<a id="id176" class="indexterm"/>图中，在迭代<em> 0 </em>时，原始点<a id="id177" class="indexterm"/>显示为红色(十字)，在迭代<em> 1 </em>和<em> K </em>时，采样点(分别用符号<em> + </em>和<em> * </em>表示)向蓝色方块表示的局部密度最大值移动。</p><p>同样，在迭代<em> K </em>时，计算新的数据点<img src="img/B05143_02_51.jpg" alt="Mean – shift"/>，并在前图中用<em> * </em>符号显示。与<img src="img/B05143_02_53.jpg" alt="Mean – shift"/>相关联的密度函数值<img src="img/B05143_02_52.jpg" alt="Mean – shift"/>大于先前迭代中的值，因为算法旨在最大化它们。原始数据集现在清楚地与点<img src="img/B05143_02_51.jpg" alt="Mean – shift"/>相关联，并且它们汇聚到在前面的<a id="id178" class="indexterm"/>图中用蓝色方块标出的位置。特征向量<img src="img/B05143_02_48.jpg" alt="Mean – shift"/>现在是<a id="id179" class="indexterm"/>折叠成两个不同的局部极大值，这两个极大值代表两个聚类的中心。</p><p>为了正确使用该方法，需要考虑一些事项。</p><p>唯一需要的参数，带宽<em> h </em>，需要巧妙调整以达到良好的效果。事实上，<em> h </em>的值太低可能会导致大量的集群，而<em> h </em>的值太大可能会合并多个不同的集群。还要注意，如果特征向量维数的数量<em> d </em>很大，则均值偏移方法可能导致较差的结果。这是因为在非常高维的空间中，局部最大值的数量相应地很大，并且迭代方程很容易过早地收敛。</p></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl2sec14"/>分层方法</h2></div></div></div><p>分层方法的类别<a id="id180" class="indexterm"/>也称为<a id="id181" class="indexterm"/>基于连通性的聚类，通过基于距离度量的相似性标准收集元素来形成聚类:近的元素聚集在同一分区中，而远的元素被分成不同的聚类。这种<a id="id182" class="indexterm"/>类算法分为两种:<strong>分裂聚类</strong>和<strong>凝聚聚类</strong>。分裂方法首先将整个数据集分配给一个集群，然后将该集群分成两个不太相似(距离较远)的集群。每个分区被进一步划分，直到每个数据点本身成为一个簇。凝聚法是最常用的方法，它从数据点开始，每个数据点代表一个聚类。然后通过相似性合并这些聚类，直到剩下包含所有数据点的单个聚类。这些方法被称为<strong>层次</strong>，因为这两个类别都迭代地创建了集群的层次，如下图所示。这种分层表示法被称为<strong>树状图</strong>。横轴表示数据集的元素，纵轴表示距离值。每条水平线代表一个聚类，而垂直轴指示哪个元素/聚类形成相关的聚类:</p><div><img src="img/B05143_02_02.jpg" alt="Hierarchical methods"/></div><p>在上图中，聚集聚类从作为数据集点的许多聚类开始，<a id="id185" class="indexterm"/>以包含<a id="id186" class="indexterm"/>整个数据集的单个聚类结束。反之亦然，除法从单个聚类开始，当所有聚类每个都包含单个数据点时结束。</p><p>然后通过应用停止聚集/分裂策略的标准来形成最终的聚类。距离标准设置最大距离，超过该距离，两个集群将因距离太远而无法合并，而<em>集群数量</em>标准设置最大集群数量，以阻止层次继续合并或分割分区。</p><p>下面的算法给出了一个凝聚的例子:</p><div><ol class="orderedlist arabic"><li class="listitem">将数据集<img src="img/B05143_02_74.jpg" alt="Hierarchical methods"/>的每个元素<em> i </em>分配到不同的集群。</li><li class="listitem">计算每对聚类之间的距离，并将最近的一对合并成一个聚类，将聚类总数减少<em> 1 </em>。</li><li class="listitem">计算新群集与其他群集的距离。</li><li class="listitem">重复步骤2和3，直到只剩下一个包含所有<em> N </em>元素的集群。</li></ol></div><p>由于两个集群<em/>、<em>、【C2】</em>之间的距离<em> d(C1，C2) </em>是通过两点<img src="img/B05143_02_55.jpg" alt="Hierarchical methods"/>之间的定义来计算的，并且每个集群包含多个点，因此需要一个标准<a id="id187" class="indexterm"/>来决定在计算距离时必须考虑哪些元素<a id="id188" class="indexterm"/>(链接标准)。两个集群<em> C1 </em>和<em> C2 </em>的共同联动标准如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>单联动</strong>:C1<em>的任一元素与C2 </em>的任一元素之间的距离中的<a id="id189" class="indexterm"/>最小距离由下式给出:<div> <img src="img/B05143_02_56.jpg" alt="Hierarchical methods"/> </div></li><li class="listitem" style="list-style-type: disc"><strong>完全联动</strong>:C1<em>的任一元素与C2 </em>的任一元素之间的距离中的<a id="id190" class="indexterm"/>最大距离由下式给出:<div> <img src="img/B05143_02_57.jpg" alt="Hierarchical methods"/> </div></li><li class="listitem" style="list-style-type: disc"><strong>算术平均(UPGMA)或平均连锁的未加权对分组法</strong>:C1的任一元素与C2<em>的任一元素</em>的距离中的<a id="id191" class="indexterm"/>平均<a id="id192" class="indexterm"/>距离为<img src="img/B05143_02_58.jpg" alt="Hierarchical methods"/>，其中<img src="img/B05143_02_59.jpg" alt="Hierarchical methods"/>分别为<em> C1 </em>和<em> C2 </em>的元素个数。</li><li class="listitem" style="list-style-type: disc"><strong>沃德算法</strong>:这合并了不会增加某种异质性度量<a id="id193" class="indexterm"/>的分区。它旨在加入两个集群<em> C1 </em>和<em> C2 </em>，由于它们的组合，这两个集群具有最小的变化度量增加，称为合并成本<img src="img/B05143_02_60.jpg" alt="Hierarchical methods"/>。这种情况下的距离用合并代价代替，合并代价由下式给出:<div> <img src="img/B05143_02_61.jpg" alt="Hierarchical methods"/> </div>这里，<img src="img/B05143_02_59.jpg" alt="Hierarchical methods"/>分别是C1和C2的元素个数。</li></ul></div><p>有<a id="id194" class="indexterm"/>种不同的度量<em> d(c1，c2) </em>可以选择<a id="id195" class="indexterm"/>来实现分层算法。最常见的是欧几里德距离:</p><div><img src="img/B05143_02_62.jpg" alt="Hierarchical methods"/></div><p>请注意，这类方法的时间效率不是特别高，因此它不适合对大型数据集进行聚类。它对于错误聚类的数据点(异常值)也不是非常健壮，这可能导致聚类的不正确合并。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec13"/>聚类方法的训练和比较</h3></div></div></div><p>为了比较刚才介绍的<a id="id196" class="indexterm"/>聚类方法，我们需要生成<a id="id197" class="indexterm"/>一个数据集。我们选择由均值和协方差分别等于<img src="img/B05143_02_63.jpg" alt="Training and comparison of the clustering methods"/>和<img src="img/B05143_02_64.jpg" alt="Training and comparison of the clustering methods"/>的两个二维多元正态分布给出的两个数据集类。</p><p>使用NumPy库生成数据点，并用matplotlib绘制:</p><div><pre class="programlisting">
+<strong>from matplotlib import pyplot as plt</strong>
+<strong>import numpy as np</strong>
+<strong>np.random.seed(4711)  # for repeatability </strong>
+<strong>c1 = np.random.multivariate_normal([10, 0], [[3, 1], [1, 4]], size=[100,])</strong>
+<strong>l1 = np.zeros(100)</strong>
+<strong>l2 = np.ones(100)</strong>
+<strong>c2 = np.random.multivariate_normal([0, 10], [[3, 1], [1, 4]], size=[100,])</strong>
+<strong>#add noise:</strong>
+<strong>np.random.seed(1)  # for repeatability </strong>
+<strong>noise1x = np.random.normal(0,2,100)</strong>
+<strong>noise1y = np.random.normal(0,8,100)</strong>
+<strong>noise2 = np.random.normal(0,8,100)</strong>
+<strong>c1[:,0] += noise1x</strong>
+<strong>c1[:,1] += noise1y</strong>
+<strong>c2[:,1] += noise2</strong>
+
+<strong>fig = plt.figure(figsize=(20,15))</strong>
+<strong>ax = fig.add_subplot(111)</strong>
+<strong>ax.set_xlabel('x',fontsize=30)</strong>
+<strong>ax.set_ylabel('y',fontsize=30)</strong>
+<strong>fig.suptitle('classes',fontsize=30)</strong>
+<strong>labels = np.concatenate((l1,l2),)</strong>
+<strong>X = np.concatenate((c1, c2),)</strong>
+<strong>pp1= ax.scatter(c1[:,0], c1[:,1],cmap='prism',s=50,color='r')</strong>
+<strong>pp2= ax.scatter(c2[:,0], c2[:,1],cmap='prism',s=50,color='g')</strong>
+<strong>ax.legend((pp1,pp2),('class 1', 'class2'),fontsize=35)</strong>
+<strong>fig.savefig('classes.png')</strong>
+</pre></div><p>一个正常分布的噪声被添加到两个类中，以使这个例子更加真实。结果如下图所示:</p><div><img src="img/B05143_02_03.jpg" alt="Training and comparison of the clustering methods"/><div><p>两个带噪声的多元正态类</p></div></div><p>使用<a id="id201" class="indexterm"/><code class="literal">sklearn</code>和<code class="literal">scipy</code>库实现了<a id="id200" class="indexterm"/>聚类方法，并再次使用matplotlib绘制:</p><div><pre class="programlisting">
+<strong>import numpy as np</strong>
+<strong>from sklearn import mixture</strong>
+<strong>from scipy.cluster.hierarchy import linkage</strong>
+<strong>from scipy.cluster.hierarchy import fcluster</strong>
+<strong>from sklearn.cluster import KMeans</strong>
+<strong>from sklearn.cluster import MeanShift</strong>
+<strong>from matplotlib import pyplot as plt</strong>
+
+<strong>fig.clf()#reset plt</strong>
+<strong>fig, ((axis1, axis2), (axis3, axis4)) = plt.subplots(2, 2, sharex='col', sharey='row')</strong>
+
+<strong>#k-means</strong>
+<strong>kmeans = KMeans(n_clusters=2)</strong>
+<strong>kmeans.fit(X)</strong>
+<strong>pred_kmeans = kmeans.labels_</strong>
+<strong>plt.scatter(X[:,0], X[:,1], c=kmeans.labels_, cmap='prism')  # plot points with cluster dependent colors</strong>
+<strong>axis1.scatter(X[:,0], X[:,1], c=kmeans.labels_, cmap='prism')</strong>
+<strong>axis1.set_ylabel('y',fontsize=40)</strong>
+<strong>axis1.set_title('k-means',fontsize=20)</strong>
+
+<strong>#mean-shift</strong>
+<strong>ms = MeanShift(bandwidth=7)</strong>
+<strong>ms.fit(X)</strong>
+<strong>pred_ms = ms.labels_</strong>
+<strong>axis2.scatter(X[:,0], X[:,1], c=pred_ms, cmap='prism')</strong>
+<strong>axis2.set_title('mean-shift',fontsize=20)</strong>
+
+<strong>#gaussian mixture</strong>
+<strong>g = mixture.GMM(n_components=2)</strong>
+<strong>g.fit(X) </strong>
+<strong>pred_gmm = g.predict(X)</strong>
+<strong>axis3.scatter(X[:,0], X[:,1], c=pred_gmm, cmap='prism')</strong>
+<strong>axis3.set_xlabel('x',fontsize=40)</strong>
+<strong>axis3.set_ylabel('y',fontsize=40)</strong>
+<strong>axis3.set_title('gaussian mixture',fontsize=20)</strong>
+
+<strong>#hierarchical</strong>
+<strong># generate the linkage matrix</strong>
+<strong>Z = linkage(X, 'ward')</strong>
+<strong>max_d = 110</strong>
+<strong>pred_h = fcluster(Z, max_d, criterion='distance')</strong>
+<strong>axis4.scatter(X[:,0], X[:,1], c=pred_h, cmap='prism')</strong>
+<strong>axis4.set_xlabel('x',fontsize=40)</strong>
+<strong>axis4.set_title('hierarchical ward',fontsize=20)</strong>
+<strong>fig.set_size_inches(18.5,10.5)</strong>
+<strong>fig.savefig('comp_clustering.png', dpi=100)</strong>
+</pre></div><p>k均值<a id="id202" class="indexterm"/>函数和高斯混合模型具有<a id="id203" class="indexterm"/>指定数量的聚类(<code class="literal">n_clusters =2,n_components=2</code>)，而均值漂移算法具有带宽值<code class="literal">bandwidth=7</code>。分级算法使用沃德链接来实现，并且最大(沃德)距离<code class="literal">max_d</code>被设置为<code class="literal">110</code>以停止分级。<code class="literal">fcluster</code>函数用于获得每个数据点的预测类别。使用<code class="literal">labels_</code>属性访问k-means和mean-shift方法的预测类，而高斯混合模型需要使用<code class="literal">predict</code>函数。使用<code class="literal">fit</code>函数对k均值、均值漂移和高斯混合方法进行了训练，而使用<code class="literal">linkage</code>函数对分级方法进行了训练。上述代码的输出如下图所示:</p><div><img src="img/B05143_02_04.jpg" alt="Training and comparison of the clustering methods"/><div><p>使用k-均值、均值漂移、高斯混合模型和分层沃德方法对两个多变量类别进行聚类</p></div></div><p>均值漂移<a id="id204" class="indexterm"/>和分层方法显示了两个类别，因此<a id="id205" class="indexterm"/>参数选择(带宽和最大距离)是合适的。请注意，分层方法的最大距离值是通过查看由以下代码生成的树状图(下图)来选择的:</p><div><pre class="programlisting">
+<strong>from scipy.cluster.hierarchy import dendrogram</strong>
+<strong>fig = plt.figure(figsize=(20,15))</strong>
+<strong>plt.title('Hierarchical Clustering Dendrogram',fontsize=30)</strong>
+<strong>plt.xlabel('data point index (or cluster index)',fontsize=30)</strong>
+<strong>plt.ylabel('distance (ward)',fontsize=30)</strong>
+<strong>dendrogram(</strong>
+<strong>    Z,</strong>
+<strong>    truncate_mode='lastp',  # show only the last p merged clusters</strong>
+<strong>    p=12,</strong>
+<strong>    leaf_rotation=90.,</strong>
+<strong>    leaf_font_size=12.,</strong>
+<strong>    show_contracted=True,</strong>
+<strong>)</strong>
+<strong>fig.savefig('dendrogram.png')</strong>
+</pre></div><p><code class="literal">truncate_mode='lastp'</code>标志允许我们指定要在图中显示的最后合并的数量(在本例中为<code class="literal">p=12</code>)。上图清楚地显示，当距离在<code class="literal">100</code>和<code class="literal">135</code>之间时，只剩下两个集群:</p><div><img src="img/B05143_02_05.jpg" alt="Training and comparison of the clustering methods"/><div><p>最近12次合并的层次聚类树状图</p></div></div><p>在横轴上的<a id="id206" class="indexterm"/>前图中，在最后一个<em> 12 </em>合并之前属于每个聚类的<a id="id207" class="indexterm"/>个数据点在括号()中显示。</p><p>除了高斯混合模型之外，其他三种算法都对一些数据点进行了错误分类，尤其是k-means和层次方法。该结果证明高斯混合模型是最稳健的方法，正如所预期的，因为数据集来自相同的分布假设。为了评估聚类的质量，scikit-learn提供了量化划分正确性的方法:v-measure、完整性和同质性。这些方法需要每个数据点的类的真实值，因此它们被称为外部验证过程。这是因为它们需要在应用聚类方法时不使用的附加信息。同质性，<em> h </em>，是一个介于<em> 0 </em>和<em> 1 </em>之间的分数，用于衡量每个聚类是否只包含单个类的元素。完整性，<em> c </em>，用一个在<em> 0 </em>和<em> 1 </em>之间的分数来量化一个类的所有元素是否被分配到同一个簇。考虑将每个数据点分配给不同聚类的聚类。这样，每个聚类将只包含一个类，并且同质性是<em> 1 </em>，但是除非每个类只包含一个元素，否则完整性非常低，因为类元素分布在许多聚类中。反之亦然，如果一个聚类的结果是将多个类的所有数据点分配到同一个<a id="id208" class="indexterm"/>聚类中，当然完备性是<em> 1 </em>但是同质性<a id="id209" class="indexterm"/>较差。这两个分数具有类似的公式，如下所示:</p><div><img src="img/B05143_02_65.jpg" alt="Training and comparison of the clustering methods"/></div><p>这里:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_66.jpg" alt="Training and comparison of the clustering methods"/>是类<em>C<sup>l</sup>T30】的条件熵，给定聚类分配<img src="img/B05143_02_67.jpg" alt="Training and comparison of the clustering methods"/></em></li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_02_68.jpg" alt="Training and comparison of the clustering methods"/>是给定类成员资格<img src="img/B05143_02_69.jpg" alt="Training and comparison of the clustering methods"/>的聚类的条件熵</li><li class="listitem" style="list-style-type: disc"><em> H(C <sub> l </sub> ) </em>是类的熵:<img src="img/B05143_02_70.jpg" alt="Training and comparison of the clustering methods"/></li><li class="listitem" style="list-style-type: disc"><em> H(C) </em>是星团的熵:<img src="img/B05143_02_71.jpg" alt="Training and comparison of the clustering methods"/></li><li class="listitem" style="list-style-type: disc"><em>N<sub>PC</sub>T7】是簇<em> c </em>中类<em> p </em>的元素个数，<em>N<sub>p</sub>T15】是类<em> p </em>的元素个数，<em> N <sub> c </sub> </em>是簇<em> c </em>的元素个数</em></em></li></ul></div><p>v-measure只是同质性和完整性的调和平均值:</p><div><img src="img/B05143_02_72.jpg" alt="Training and comparison of the clustering methods"/></div><p>这些<a id="id210" class="indexterm"/>度量需要真实的标签来评估聚类的质量<a id="id211" class="indexterm"/>，而这通常不是真实情况。另一种方法只采用来自聚类本身的数据，称为<strong>剪影</strong>，它<a id="id212" class="indexterm"/>计算每个数据点与其所属的聚类成员以及与其他聚类成员的相似性。如果平均起来，每个点比其余的点更类似于它自己的聚类的点，那么聚类被很好地定义，并且分数接近于<em> 1 </em>(否则，它接近于<em> -1 </em>)。对于公式，考虑每个点<em> i </em>和下列量:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><em> d <sub> s </sub> (i) </em>是点<em> i </em>到同一聚类的点的平均距离</li><li class="listitem" style="list-style-type: disc"><em> d <sub>剩余点</sub> (i) </em>是点<em> i </em>到所有其他聚类中剩余点的最小距离</li></ul></div><p>轮廓可以定义为</p><p><img src="img/B05143_02_73.jpg" alt="Training and comparison of the clustering methods"/>，侧影得分是所有数据点的<em> s(i) </em>的平均值。</p><p>我们介绍的四种聚类算法与使用<code class="literal">sklearn</code> (scikit-learn)计算的这四种度量的以下值相关联:</p><div><pre class="programlisting">
+<strong>from sklearn.metrics import homogeneity_completeness_v_measure</strong>
+<strong>from sklearn.metrics import silhouette_score</strong>
+<strong>res = homogeneity_completeness_v_measure(labels,pred_kmeans)</strong>
+<strong>print 'kmeans measures, homogeneity:',res[0],' completeness:',res[1],' v-measure:',res[2],' silhouette score:',silhouette_score(X,pred_kmeans)</strong>
+<strong>res = homogeneity_completeness_v_measure(labels,pred_ms)</strong>
+<strong>print 'mean-shift measures, homogeneity:',res[0],' completeness:',res[1],' v-measure:',res[2],' silhouette score:',silhouette_score(X,pred_ms)</strong>
+<strong>res = homogeneity_completeness_v_measure(labels,pred_gmm)</strong>
+<strong>print 'gaussian mixture model measures, homogeneity:',res[0],' completeness:',res[1],' v-measure:',res[2],' silhouette score:',silhouette_score(X,pred_gmm)</strong>
+<strong>res = homogeneity_completeness_v_measure(labels,pred_h)</strong>
+<strong>print 'hierarchical (ward) measures, homogeneity:',res[0],' completeness:',res[1],' v-measure:',res[2],' silhouette score:',silhouette_score(X,pred_h)</strong>
+<strong>The preceding code produces the following output:</strong>
+<strong>kmeans measures, homogeneity: 0.25910415428  completeness: 0.259403626429  v-measure: 0.259253803872  silhouette score: 0.409469791511</strong>
+<strong>mean-shift measures, homogeneity: 0.657373750073  completeness: 0.662158204648  v-measure: 0.65975730345  silhouette score: 0.40117810244</strong>
+<strong>gaussian mixture model measures, homogeneity: 0.959531296098  completeness: 0.959600517797  v-measure: 0.959565905699  silhouette score: 0.380255218681</strong>
+<strong>hierarchical (ward) measures, homogeneity: 0.302367273976  completeness: 0.359334499592  v-measure: 0.32839867574  silhouette score: 0.356446705251</strong>
+</pre></div><p>正如<a id="id213" class="indexterm"/>对上图的分析所预期的，<a id="id214" class="indexterm"/>高斯混合模型具有最佳的同质性、完整性和v-measure度量值(接近于<em>1</em>)；均值漂移有合理的值(在<em> 0.5 </em>左右)；而k-means和层次方法的结果是差的值(大约在<em> 0.3 </em>左右)。取而代之的是，所有方法的侧影分数都相当不错(在<em> 0.35 </em>和<em> 0.41 </em>之间)，这意味着聚类被合理地定义。</p></div></div></div></div>
+
+
+
+
+
+<title>Dimensionality reduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl1sec14"/>降维</h1></div></div></div><p><strong>降维</strong>，也称特征提取，是指将一个由大量维度给出的<a id="id215" class="indexterm"/>数据空间转换到一个更少维度的子空间的操作。得到的子空间应该仅包含初始数据的最相关信息，并且执行该操作的技术被分类为线性或非线性。降维是一种广泛的技术，用于从大型数据集中提取最相关的信息，降低其复杂性，但保留相关信息。</p><p>最著名的算法，<strong>主成分分析</strong> ( <strong> PCA </strong>)，是将原始<a id="id216" class="indexterm"/>数据线性映射到一个不相关维度的子空间中，这将在后面讨论。本段显示的代码可以在作者的GitHub book文件夹中的IPython笔记本和脚本版本中获得，该文件夹位于<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_2/">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 2/</a>。</p><div><div><div><div><h2 class="title"><a id="ch02lvl2sec15"/>主成分分析</h2></div></div></div><p><a id="id217" class="indexterm"/>主成分分析算法旨在识别数据集相关信息所在的子空间。事实上，由于数据点在某些数据维度上是相关的，主成分分析将找到数据变化的几个不相关的维度。例如，汽车轨迹可以用一系列变量来描述，如以km/h或m/s为单位的速度、以纬度和经度为单位的位置、以米为单位的距离选定点的位置以及以<a id="id218" class="indexterm"/>英里为单位的距离选定点的位置。很明显，因为速度变量和位置变量<a id="id219" class="indexterm"/>给出相同的信息(相关变量)，所以维数可以减少，因此相关子空间可以由两个不相关的维数(一个速度变量和一个位置变量)组成。PCA不仅找到不相关的变量集，还找到方差最大化的维度。也就是说，在以km/h为单位的速度和以miles/h为单位的速度之间，算法将选择具有最高方差的变量，该变量通常由函数<em>速度[km/h]= 3.6 *速度[m/s] </em>给出的两个轴之间的线表示(通常更靠近km/h轴，因为<em> 1 km/h = 3.6 m/s </em>，并且速度投影沿着km/h轴比沿着m/s轴更分散):</p><div><img src="img/B05143_02_06.jpg" alt="Principal Component Analysis (PCA)"/><div><p>以米/秒和千米/小时为单位的速度之间的线性函数</p></div></div><p>上图显示了m/s和km/h之间的线性函数。沿km/h轴的点投影具有较大的方差，而m/s轴上的投影具有较小的方差。沿线性函数<em>速度[km/h]= 3.6 *速度[m/s] </em>的方差大于两个轴。</p><p>现在我们<a id="id220" class="indexterm"/>准备<a id="id221" class="indexterm"/>详细讨论该方法及其特点。可以证明，找到方差最大化的不相关维度等价于计算以下步骤。像往常一样，我们考虑特征向量<img src="img/B05143_02_74.jpg" alt="Principal Component Analysis (PCA)"/>:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">数据集的平均值:<img src="img/B05143_02_75.jpg" alt="Principal Component Analysis (PCA)"/></li><li class="listitem" style="list-style-type: disc">均值偏移数据集:<img src="img/B05143_02_76.jpg" alt="Principal Component Analysis (PCA)"/></li><li class="listitem" style="list-style-type: disc">重新缩放的数据集，其中每个特征向量分量<img src="img/B05143_02_77.jpg" alt="Principal Component Analysis (PCA)"/>除以标准偏差<img src="img/B05143_02_78.jpg" alt="Principal Component Analysis (PCA)"/>，其中<img src="img/B05143_02_79.jpg" alt="Principal Component Analysis (PCA)"/></li><li class="listitem" style="list-style-type: disc">样本协方差矩阵:<img src="img/B05143_02_80.jpg" alt="Principal Component Analysis (PCA)"/></li><li class="listitem" style="list-style-type: disc">第<em> k个</em>最大特征值<img src="img/B05143_02_81.jpg" alt="Principal Component Analysis (PCA)"/>及其相关特征向量<img src="img/B05143_02_82.jpg" alt="Principal Component Analysis (PCA)"/></li><li class="listitem" style="list-style-type: disc">在第<em> k </em>个特征向量<img src="img/B05143_02_83.jpg" alt="Principal Component Analysis (PCA)"/>的子空间上投影的特征向量，其中<img src="img/B05143_02_84.jpg" alt="Principal Component Analysis (PCA)"/>是具有第<em> N </em>行和第<em> k </em>列的特征向量的矩阵</li></ul></div><p>最终的<a id="id222" class="indexterm"/>特征的<a id="id223" class="indexterm"/>向量(主成分)<img src="img/B05143_02_85.jpg" alt="Principal Component Analysis (PCA)"/>位于一个子空间<em>R<sup>k</sup>T27】上，该子空间仍然保留了原始向量的最大方差(和信息)。</em></p><p>请注意，这种技术在处理高维数据集时特别有用，例如在人脸识别中。在这个领域，输入图像必须与其他图像的数据库进行比较，以找到正确的人。PCA应用程序被称为<strong> Eigenfaces </strong>，它利用了每个图像中大量像素(变量)是相关的这一事实。例如，背景像素都是相关的(相同的)，因此可以应用降维，并且在较小的子空间中比较图像是给出准确结果的更快方法。在作者位于https://github.com/ai2010/eigenfaces<a class="ulink" href="https://github.com/ai2010/eigenfaces">的GitHub个人资料</a><a id="id224" class="indexterm"/>中可以找到一个实现特征脸的例子。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec14"/> PCA示例</h3></div></div></div><p>作为PCA用法的示例<a id="id225" class="indexterm"/>以及在<a class="link" href="ch01.html" title="Chapter 1. Introduction to Practical Machine Learning Using Python">第1章</a>、<em>使用Python的实用机器学习简介</em>中讨论的NumPy库，我们将确定沿直线<em> y=2x </em>分布的二维数据集的主成分，具有随机(正态分布)噪声。数据集和相应的图(见下图)是使用以下代码生成的:</p><div><pre class="programlisting">
+<strong>import numpy as np</strong>
+<strong>from matplotlib import pyplot as plt</strong>
+
+<strong>#line y = 2*x</strong>
+<strong>x = np.arange(1,101,1).astype(float)</strong>
+<strong>y = 2*np.arange(1,101,1).astype(float)</strong>
+<strong>#add noise</strong>
+<strong>noise = np.random.normal(0, 10, 100)</strong>
+<strong>y += noise</strong>
+
+<strong>fig = plt.figure(figsize=(10,10))</strong>
+<strong>#plot</strong>
+<strong>plt.plot(x,y,'ro')</strong>
+<strong>plt.axis([0,102, -20,220])</strong>
+<strong>plt.quiver(60, 100,10-0, 20-0, scale_units='xy', scale=1)</strong>
+<strong>plt.arrow(60, 100,10-0, 20-0,head_width=2.5, head_length=2.5, fc='k', ec='k')</strong>
+<strong>plt.text(70, 110, r'$v^1$', fontsize=20)</strong>
+
+<strong>#save</strong>
+<strong>ax = fig.add_subplot(111)</strong>
+<strong>ax.axis([0,102, -20,220])</strong>
+<strong>ax.set_xlabel('x',fontsize=40)</strong>
+<strong>ax.set_ylabel('y',fontsize=40)</strong>
+<strong>fig.suptitle('2 dimensional dataset',fontsize=40)</strong>
+<strong>fig.savefig('pca_data.png')</strong>
+</pre></div><p>下图<a id="id226" class="indexterm"/>显示了生成的数据集。显然，数据分布有一个方向，它对应于我们要从数据中提取的主成分<img src="img/B05143_02_86.jpg" alt="PCA example"/>。</p><div><img src="img/B05143_02_07.jpg" alt="PCA example"/><div><p>二维数据集。主分量方向v1由箭头表示。</p></div></div><p>该算法计算二维数据集和均值偏移数据集的均值，然后使用相应的标准差进行重新调整:</p><div><pre class="programlisting">
+<strong>mean_x = np.mean(x)</strong>
+<strong>mean_y = np.mean(y)</strong>
+<strong>u_x = (x- mean_x)/np.std(x)</strong>
+<strong>u_y = (y-mean_y)/np.std(y)</strong>
+<strong>sigma = np.cov([u_x,u_y])</strong>
+</pre></div><p>为了提取<a id="id227" class="indexterm"/>主分量，我们必须计算特征值和特征向量，并选择与最大特征值相关的特征向量:</p><div><pre class="programlisting">
+<strong>eig_vals, eig_vecs = np.linalg.eig(sigma)</strong>
+<strong>eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i])</strong>
+<strong>             for i in range(len(eig_vals))]</strong>
+<strong>             </strong>
+<strong>eig_pairs.sort()</strong>
+<strong>eig_pairs.reverse()</strong>
+<strong>v1 = eig_pairs[0][1]</strong>
+<strong>print v1</strong>
+<strong>array([ 0.70710678,  0.70710678]</strong>
+</pre></div><p>为了检查主成分是否如预期的那样位于直线上，我们需要重新调整其坐标:</p><div><pre class="programlisting">
+<strong>x_v1 = v1[0]*np.std(x)+mean_x</strong>
+<strong>y_v1 = v1[1]*np.std(y)+mean_y</strong>
+<strong>print 'slope:',(y_v1-1)/(x_v1-1)</strong>
+<strong>slope: 2.03082418796</strong>
+</pre></div><p>得到的斜率约为<code class="literal">2</code>，与开始时选择的值一致。<code class="literal">scikit-learn</code>库提供了一个可能的PCA算法的现成实现，而无需应用任何重新缩放或均值漂移。要使用<code class="literal">sklearn</code>模块，我们需要将重新调整的数据转换成矩阵结构，其中每一行都是一个数据点，坐标为<em> x </em>，<em> y </em>:</p><div><pre class="programlisting">
+<strong>X = np.array([u_x,u_y])</strong>
+<strong>X = X.T</strong>
+<strong>print X.shape</strong>
+<strong>(100,2)</strong>
+</pre></div><p>现在可以启动PCA模块，指定我们想要的主成分数量(本例中为<code class="literal">1</code>):</p><div><pre class="programlisting">
+<strong>from sklearn.decomposition import PCA</strong>
+<strong>pca = PCA(n_components=1)</strong>
+<strong>pca.fit(X)</strong>
+<strong>v1_sklearn = pca.components_[0]</strong>
+<strong>print v1_sklearn</strong>
+<strong>[ 0.70710678  0.70710678]</strong>
+</pre></div><p>主成分与使用逐步方法<code class="literal">[ 0.70710678  0.70710678]</code>获得的成分完全相同，因此斜率也将相同。现在可以使用两种方法将数据集<a id="id228" class="indexterm"/>转换到新的一维空间:</p><div><pre class="programlisting">
+<strong>#transform in reduced space</strong>
+<strong>X_red_sklearn = pca.fit_transform(X)</strong>
+<strong>W = np.array(v1.reshape(2,1))</strong>
+<strong>X_red = W.T.dot(X.T)</strong>
+<strong>#check the reduced matrices are equal</strong>
+<strong>assert X_red.T.all() == X_red_sklearn.all(), 'problem with the pca algorithm'</strong>
+</pre></div><p>没有抛出assert异常，所以结果显示两种方法完全一致。</p></div></div></div>
+
+
+
+
+
+<title>Singular value decomposition</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl1sec15"/>奇异值分解</h1></div></div></div><p>这种<a id="id229" class="indexterm"/>方法基于一个定理，该定理表明矩阵<em> X d x N </em>可以分解如下:</p><div><img src="img/B05143_02_87.jpg" alt="Singular value decomposition"/></div><p>这里:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><em> U </em>是一个<em> d x d </em>酉矩阵</li><li class="listitem" style="list-style-type: disc">∑是一个对角矩阵，其中对角元素s <em> i </em>被称为奇异值</li><li class="listitem" style="list-style-type: disc"><em> V </em>是一个<em>N×N</em>酉矩阵</li></ul></div><p>在我们的例子中，<em> X </em>可以由特征向量<img src="img/B05143_02_88.jpg" alt="Singular value decomposition"/>组成，其中每个<img src="img/B05143_02_89.jpg" alt="Singular value decomposition"/>是一列。我们可以减少每个特征向量<em> d </em>的维数，近似奇异值分解。实际上，我们只考虑最大的奇异值<img src="img/B05143_02_90.jpg" alt="Singular value decomposition"/>，因此:</p><div><img src="img/B05143_02_91.jpg" alt="Singular value decomposition"/></div><p><em> t </em>表示投影特征向量的新的缩减空间的维度。<em>一个</em>向量<em> x <sup> (i) </sup> </em>在新空间中使用以下公式进行变换:</p><div><img src="img/B05143_02_92.jpg" alt="Singular value decomposition"/></div><p>这意味着矩阵<img src="img/B05143_02_93.jpg" alt="Singular value decomposition"/>(不是<img src="img/B05143_02_94.jpg" alt="Singular value decomposition"/>)表示<em> t </em>维空间中的特征向量。</p><p>请注意，<a id="id230" class="indexterm"/>可能显示该方法与PCA非常相似；实际上，<code class="literal">scikit-learn</code>库使用SVD来实现PCA。</p></div>
+
+
+
+
+
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl1sec16"/>总结</h1></div></div></div><p>本章详细讨论了主要的聚类算法。我们实现了它们(使用scikit-learn)并比较了结果。此外，最相关的降维技术，主成分分析，提出和实施。现在，您应该已经掌握了在使用Python及其库的真实场景中使用主要的无监督学习技术的知识。</p><p>在下一章，我们将讨论监督学习算法，包括分类和回归问题。</p></div>
+</body></html>

@@ -1,0 +1,318 @@
+<html><head/><body>
+
+
+	
+		<title>B18335_11_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-208"><em class="italic"> <a id="_idTextAnchor215"/>第十一章</em>:灾难性遗忘</h1>
+			<p>在前两章中，我们开始研究在线机器学习和处理流数据的许多辅助任务。<a href="B18335_09_ePub.xhtml#_idTextAnchor184"> <em class="italic">第9章</em> </a>讲述了漂移检测和解决方案，<a href="B18335_10_ePub.xhtml#_idTextAnchor201"> <em class="italic">第10章</em> </a>讲述了流环境中的特性转换和缩放。本章介绍了这个辅助任务列表的第三个也是最后一个主题，即灾难性遗忘。</p>
+			<p>灾难性遗忘，也称为灾难性干扰，是机器学习模型在新更新时忘记他们所学习的内容的趋势，错误地去学习正确学习的旧趋势，因为新趋势是从新数据中学习的。</p>
+			<p>由于你在本书中已经看到了很多在线模型的例子，你会理解模型的不断更新会产生学习出错的巨大风险。在“漂移和漂移检测”一章中，我们已经简单地提到过，模型学习出错也可能被视为性能下降的真正风险。</p>
+			<p>然而，漂移往往用于指出自变量的漂移(数据漂移)或自变量和因变量之间关系的漂移(概念漂移)。由于灾难性遗忘确实是模型系数中的一个问题，我们不能真的认为灾难性遗忘是漂移的一部分。</p>
+			<p>机器学习模型，尤其是在线机器学习模型，通常以相对黑箱的方式使用，这意味着我们看它们的结果，但不一定花太多时间看内部机制。当检测错误学习的模式时，这成为一个问题。因此，机器学习的可解释性也与灾难性遗忘的主题相关，也将被涵盖。</p>
+			<p>本章将涵盖机器学习模型以错误方式更新的问题，我们称之为灾难性遗忘或灾难性推理，涵盖以下章节:</p>
+			<ul>
+				<li>定义灾难性遗忘</li>
+				<li>灾难性遗忘的检测</li>
+				<li>模型可解释性与灾难性遗忘</li>
+			</ul>
+			<h1 id="_idParaDest-209"><a id="_idTextAnchor216"/>技术要求</h1>
+			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<ol>
+				<li>转到存储库的链接。</li>
+				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
+				<li>选择<strong class="bold">下载zip文件</strong>。</li>
+			</ol>
+			<p>当您下载ZIP文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的Python编辑器访问代码。</p>
+			<h2 id="_idParaDest-210"><a id="_idTextAnchor217"/> Python环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
+			<p>如果您还不熟悉Python环境，我建议您查看一下Jupyter笔记本附带的Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VS代码，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看谷歌Colab(<a href="https://colab.research.google.com/">https://colab.research.google.com/</a>)或Kaggle笔记本(<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a>)，它们都允许你免费在在线笔记本上运行Python代码，无需任何设置。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">书中的代码通常会使用带有Python版本3.7.13的Colab和Kaggle笔记本，您可以设置自己的环境来模拟这种情况。</p>
+			<h1 id="_idParaDest-211"><a id="_idTextAnchor218"/>引入灾难性遗忘</h1>
+			<p>灾难性遗忘最初被定义为发生在(深度)神经网络上的问题。深度<a id="_idIndexMarker593"/>神经网络是一组非常复杂的机器学习模型，由于它们的极端复杂性，它们能够学习非常复杂的模式。当然，这只是在有足够数据的情况下。</p>
+			<p>神经网络已经被研究了几十年。它们曾经在数学上很有趣，但由于缺乏计算能力，实际上并不可行。目前计算能力的进步使得神经网络有可能获得他们目前正在观察的流行度。</p>
+			<p>神经网络的复杂性也使它们对灾难性遗忘问题敏感。神经网络学习的方式(从高角度来看)是通过对系数进行多次更新，并且在每次更新时，模型应该更好地拟合数据。这里可以看到神经网络参数的示意图:</p>
+			<div><div><img src="img/B18335_11_1.jpg" alt="Figure 11.1 – Schematic overview of the number of coefficients in a neural network&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.1-神经网络中系数数量的示意图</p>
+			<p>在这个示意图中，您可以看到，即使对于一个非常小的神经网络，也有许多系数。节点数量变得越大，要估计的参数数量就越大。当与传统的统计方法进行比较时，你可以看到进行如此多遍的想法<a id="_idIndexMarker594"/>是相对不同的，并且导致了与传统统计中常见的问题不同的问题。</p>
+			<p>灾难性遗忘就是这样一个问题。在1989年的一项研究中首次观察到这种现象，在该研究中提出了一项实验。这个实验在做加法(从1 + 1 = 2到1 + 9 = 10)的任务上训练神经网络。测试了一种顺序方法，其中模型首先只学习第一个任务，然后一旦掌握了第一个任务，就添加一个新任务。</p>
+			<p>这个实验和其他实验的结论是，在学习了第一个任务后增加新的任务会干扰原来学习的模型。他们观察到，必须学习的新信息越多，这种干扰就越大。最后，他们发现这个问题只发生在连续学习中。如果你同时学习所有的任务，实际上没有任何重新学习发生，所以遗忘不可能真正发生。</p>
+			<p>关于在使用神经网络的在线学习的特定情况下灾难性遗忘的更详细的科学资源，我推荐查看这里的两个链接:</p>
+			<ul>
+				<li><a href="https://proceedings.neurips.cc/paper/2021/file/54ee290e80589a2a1225c338a71839f5-Paper.pdf">https://proceedings . neur IPS . cc/paper/2021/file/54ee 290 e 80589 a2 a 1225 c 338 a 71839 f 5-paper . pdf</a></li>
+				<li><a href="https://www.cs.uic.edu/~liub/lifelong-learning/continual-learning.pdf">https://www . cs . UIC . edu/~ liub/终身学习/持续学习. pdf </a></li>
+			</ul>
+			<p>现在让我们看看<a id="_idIndexMarker595"/>灾难性遗忘是如何影响在线模型的。</p>
+			<h1 id="_idParaDest-212"><a id="_idTextAnchor219"/>在线模型中的灾难性遗忘</h1>
+			<p>尽管灾难性遗忘最初被认为是神经网络的一个问题，但你<a id="_idIndexMarker596"/>可以想象在线机器学习<a id="_idIndexMarker597"/>也有同样的持续重新学习的问题。因此，灾难性遗忘或灾难性推理的问题也存在，需要被掌握。</p>
+			<p>如果在每个新的数据点更新模型，预计系数将随时间变化。然而，由于现代机器学习算法非常复杂，并且有大量的系数或树，因此密切关注它们是一项相当困难的任务。</p>
+			<p>在一个理想的世界中，最有益的目标可能是在你的机器学习中尽量避免任何错误的学习。做到这一点的一个方法是密切关注模型性能，并保持严格的版本控制系统，以确保即使您的模型错误地学习了任何东西，它也不会被部署到生产系统中。我们将很快深入这个话题。</p>
+			<p>另一个可行的解决方案是使用漂移检测方法，正如您在第9章 中看到的那样。当您密切关注模型的性能、数据的分布以及其他KPI和描述性统计数据时，您应该能够很快检测到问题，这将允许您快速进行干预。</p>
+			<p>作为管理灾难性遗忘的第三个工具，你将在本章看到更多的模型可解释性工具。灾难性遗忘的问题之一是模型太像一个黑箱。使用模型显式领域的工具将帮助您窥视那些黑盒模型的内部。这将允许你更多地基于商业逻辑而不是技术逻辑来检测灾难性遗忘和灾难性推断。商业和技术逻辑的组合<a id="_idIndexMarker598"/>将是一个强大的组合，以应对灾难性的遗忘。</p>
+			<h1 id="_idParaDest-213"><a id="_idTextAnchor220"/>检测灾难性遗忘</h1>
+			<p>在这一章中，我们将会看到两种不同的方法可以用来检测灾难性遗忘。第一种方法是实现一个系统，该系统可以在模型学习到一些东西之后检测到模型的问题。为此，我们将分多个步骤实现一个Python示例:</p>
+			<ol>
+				<li value="1">通过在线学习开发模型培训循环。</li>
+				<li>将直接评估添加到此模型中。</li>
+				<li>将长期评估添加到此模型中。</li>
+				<li>增加一个系统，避免在错误学习的情况下更新模型。</li>
+			</ol>
+			<h2 id="_idParaDest-214"><a id="_idTextAnchor221"/>使用Python检测灾难性遗忘</h2>
+			<p>为了完成<a id="_idIndexMarker601"/>这个例子，让我们从<a id="_idIndexMarker602"/>实现一个在线回归模型开始，就像你在本书前面已经看到的那样:</p>
+			<ol>
+				<li value="1">为此，我们首先需要生成一些数据。生成本例数据的代码如下所示:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-1</p>
+			<pre>import random
+X = [
+     1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 
+     6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10
+]
+y = [
+     x + random.random() for x in X[:15]] + 
+    [x * 2 + random.random() for x in X[15:]
+]</pre>
+			<p>如果您查看这段代码，您会发现模式发生了变化。在前15次观察中，<code>y</code>被定义为<code>x + random.randint()</code>，这意味着<a id="_idIndexMarker603"/>与<code>x</code>相同，但<a id="_idIndexMarker604"/>有一些随机变化。在第15次观察之后，这种移动发生了变化，变成了<code>x * 2 + random.randint</code>，意思是<code>x</code>的两倍，增加了一些随机变化。这个例子很好地说明了模型需要如何随时间更新。</p>
+			<ol>
+				<li value="2">现在，让我们对这些数据做一个快速的图表，以便更好地了解这种转变的实际情况。这可以通过下面显示的代码来完成:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-2</p>
+			<pre>import matplotlib.pyplot as plt
+plt.scatter(X, y)</pre>
+			<p>生成的图表如下所示:</p>
+			<div><div><img src="img/B18335_11_2.jpg" alt="Figure 11.2 – The scatter plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.2–前面代码块产生的散点图</p>
+			<p>从x = 1到x = 5，第一个线性趋势明显成立，但另一个更陡的函数从x = 6开始，一直到x = 10。</p>
+			<ol>
+				<li value="3">在本例中，我们将<a id="_idIndexMarker605"/>使用River，因此<a id="_idIndexMarker606"/>有必要以正确的格式获取数据。到目前为止，您应该已经掌握了River库的数据格式，但是如果有必要，您可以参考下面的代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-3</p>
+			<pre>X_dict = [{'X': x} for x in X]
+for X_i, y_i in zip(X_dict, y):
+  print(X_i, y_i)</pre>
+			<p>该代码块的结果应该如下所示:</p>
+			<div><div><img src="img/B18335_11_3.jpg" alt="Figure 11.3 – The output resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.3–前面代码块的输出</p>
+			<ol>
+				<li value="4">现在，让我们从河流库中添加一个<code>KNNRegressor</code>函数到这个循环中，在每个<a id="_idIndexMarker607"/>新数据点，使用<a id="_idIndexMarker608"/>和<code>learn_one</code>方法更新模型。这是使用以下代码完成的:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-4</p>
+			<pre>!pip install river
+from river.neighbors import KNNRegressor
+my_knn = KNNRegressor(window_size=3)
+X_dict = [{'X': x} for x in X]
+for X_i, y_i in zip(X_dict, y):
+  my_knn.learn_one(X_i, y_i)</pre>
+			<ol>
+				<li value="5">我们可以<a id="_idIndexMarker609"/>计算这个模型的最终训练误差<a id="_idIndexMarker610"/>，从而对我们应该预期的误差量有一个大致的概念。下面的代码正是这样做的:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-4</p>
+			<pre>preds = []
+for X_i in X_dict:
+  preds.append(my_knn.predict_one(X_i))
+sum_absolute_error = 0
+for pred, real in zip(preds, y):
+  sum_absolute_error += abs(pred - real)
+mean_absolute_error = sum_absolute_error / len(preds)
+print(mean_absolute_error)</pre>
+			<p>在当前示例中，这会计算出平均绝对误差为10。</p>
+			<ol>
+				<li value="6">现在让我们更详细地了解一下模型的逐步学习质量。我们可以<a id="_idIndexMarker611"/>通过使用连续<a id="_idIndexMarker612"/>评估来做到这一点。这意味着每次我们学习的时候，我们都会评估这个模型:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-5</p>
+			<pre>my_knn = KNNRegressor(window_size=3)
+X_dict = [{'X': x} for x in X]
+step_by_step_error = []
+for i in range(len(X_dict)):
+  my_knn.learn_one(X_dict[i], y[i])
+  abs_error = abs(my_knn.predict_one(X_dict[i]) - y[i])
+  step_by_step_error.append(abs_error)</pre>
+			<ol>
+				<li value="7">以下代码将随着时间的推移绘制这些错误，以查看模型是如何学习的:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-6</p>
+			<pre>plt.plot(step_by_step_error)</pre>
+			<p>下面的图是由这段代码产生的:</p>
+			<div><div><img src="img/B18335_11_4.jpg" alt="Figure 11.4 – The plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.4–前面代码块产生的图</p>
+			<p>有趣的是，每次我们看到新的x值时，模型似乎都获得了满分，然后第二次<a id="_idIndexMarker613"/>出现相同的x值时<a id="_idIndexMarker614"/>，我们又获得了满分，但是第三次，我们有了更大的误差！</p>
+			<ol>
+				<li value="8">最好将此与最终误差进行比较，最终误差不是一步一步计算出来的，而是一次计算出来的，使用以下代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-7</p>
+			<pre>preds = []
+for X_i in X_dict:
+  preds.append(my_knn.predict_one(X_i))
+all_errors = []
+for pred, real in zip(preds, y):
+  all_errors.append(abs(pred - real))
+plt.plot(step_by_step_error)
+plt.plot(all_errors)
+plt.show()</pre>
+			<p>来自<a id="_idIndexMarker615"/>该代码块的输出如下文<a id="_idIndexMarker616"/>所示:</p>
+			<div><div><img src="img/B18335_11_5.jpg" alt="Figure 11.5 – The plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.5–前面代码块产生的图</p>
+			<p>你可以清楚地观察到，在一步步评估模型的时候，每个数据点上的误差似乎都不算太大。但是，当最后评估所有时，你看到模型实际上已经忘记了第一个数据点！这是一个很好的例子，说明灾难性遗忘在实践中是如何被观察到的。</p>
+			<ol>
+				<li value="9">最后一步，让我们在模型循环中添加一个小的评估，以帮助您意识到模型已经忘记了您的第一个分数:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-8</p>
+			<pre>my_knn = KNNRegressor(window_size=3)
+X_dict = [{'X': x} for x in X]
+step_by_step_error = []
+for i in range(len(X_dict)):
+  my_knn.learn_one(X_dict[i], y[i])
+  abs_error = abs(my_knn.predict_one(X_dict[i]) - y[i])
+  step_by_step_error.append(abs_error)
+  all_errors_recomputed = []
+  for j in range(i):
+    orig_error = step_by_step_error[j]
+    after_error = abs(my_knn.predict_one(X_dict[j]) - y[j])
+    if after_error &gt; orig_error:
+      print(f'At learning step {i}, data point {j} was partly forgotten')</pre>
+			<p>在该代码块中，制定了一条规则，一旦误差大于<a id="_idIndexMarker617"/>原始误差，就检测到遗忘。当然，这个<a id="_idIndexMarker618"/>是一个非常严格的检测机制，你可以想象其他方法来代替这个。例如，这可以是一个百分比变化，也可以是一个绝对不能超过的数字。这完全取决于你的商业案例。</p>
+			<p>现在你已经看到了使用基于模型性能的警报机制来检测灾难性遗忘的方法，让我们继续本章的下一部分，在这一部分你将看到如何使用模型的可解释性来检测灾难性遗忘。</p>
+			<h1 id="_idParaDest-215"><a id="_idTextAnchor222"/>模型可解释性与灾难性遗忘</h1>
+			<p>查看模型性能通常是跟踪你的模型的好方法，它肯定会<a id="_idIndexMarker621"/>帮助你发现<a id="_idIndexMarker622"/>模型中的某个地方出了问题。一般来说，这将是一个足够的警告机制，并且将帮助您在生产中管理您的模型。</p>
+			<p>然而，如果您想确切地了解哪里出了问题，您需要更深入地挖掘您的模型。只看性能更像是一种黑盒方法，然而我们也可以提取诸如树、系数、变量重要性等内容，以查看模型内部实际发生了什么变化。</p>
+			<p>深度钻研模型没有一个放之四海而皆准的方法。所有模型类别都有它们自己特定的数据拟合方法，因此对它们拟合程度的检验很大程度上取决于模型本身。然而，在本节的剩余部分，我们将研究机器学习中两种非常常见的结构:带系数的线性模型和树。</p>
+			<h2 id="_idParaDest-216"><a id="_idTextAnchor223"/>使用线性系数解释模型</h2>
+			<p>在第一个<a id="_idIndexMarker623"/>例子中，我们将对一些样本数据建立一个线性回归<a id="_idIndexMarker624"/>，并提取模型的系数来解释它们:</p>
+			<ol>
+				<li value="1">您可以使用以下代码为此示例创建数据:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-9</p>
+			<pre>import pandas as pd
+ice_cream_sales = [10, 9, 8, 7, 6, 5, 4, 3, 2 , 1]
+degrees_celsius = [30, 25, 20, 19, 18, 17, 15, 13, 10, 5]
+price  = [2,2, 3, 3, 4, 4, 5, 5, 6, 6]
+data = pd.DataFrame({
+    'ice_cream_sales': ice_cream_sales,
+    'degrees_celsius': degrees_celsius,
+    'price': price
+})
+data</pre>
+			<p>数据在这里以数据帧<a id="_idIndexMarker626"/>格式显示:</p>
+			<div><div><img src="img/B18335_11_6.jpg" alt="Figure 11.6 – The plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.6–前面代码块产生的图</p>
+			<ol>
+				<li value="2">让我们创建两个散点图，以便更直观地了解冰淇淋销售如何与<a id="_idIndexMarker627"/>温度和<a id="_idIndexMarker628"/>价格相关联(在这个虚构的示例中)。以下代码显示了如何创建第一个散点图:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-10</p>
+			<pre>plt.scatter(data['degrees_celsius'], data['ice_cream_sales'])</pre>
+			<p>这导致了下图:</p>
+			<div><div><img src="img/B18335_11_7.jpg" alt="Figure 11.7 – The plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.7–前面代码块产生的图</p>
+			<ol>
+				<li value="3">第二个散点图可创建如下:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-11</p>
+			<pre>plt.scatter(data['price'], data['ice_cream_sales'])</pre>
+			<p>这导致了下图:</p>
+			<div><div><img src="img/B18335_11_8.jpg" alt="Figure 11.8 – The plot resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.8–前面代码块产生的图</p>
+			<p>你可以清楚地看到，温度越高，销售额越高，温度越低，销售额越低。此外，较高的价格与较低的销售额相关，较低的价格与较高的销售额相关。</p>
+			<ol>
+				<li value="4">这是冰淇淋销售中两个合乎逻辑且可以解释的因素，但这还不是一个模型。让我们使用一个<code>LinearRegression</code>函数来模拟这种简单的线性关系:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-12</p>
+			<pre>from sklearn.linear_model import LinearRegression
+my_lr = LinearRegression()
+my_lr.fit(X = data[['degrees_celsius', 'price']], y = data['ice_cream_sales'])</pre>
+			<ol>
+				<li value="5">我们可以如下评估该模型的(样本内)拟合度:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-13</p>
+			<pre>from sklearn.metrics import r2_score
+r2_score(data['ice_cream_sales'], my_lr.predict(data[['degrees_celsius', 'price']]))</pre>
+			<p>该模型产生0.98的训练R2分数，这意味着该模型非常适合训练数据。</p>
+			<ol>
+				<li value="6">我们现在所处的阶段是，我们需要更深入地了解模型，而不仅仅是查看<a id="_idIndexMarker631"/>性能。对于线性<a id="_idIndexMarker632"/>回归，我们需要查看系数，以便能够解释它们拟合的结果。系数在以下代码中提取:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-14</p>
+			<pre>pd.DataFrame({'variable': ['degrees_celsius', 'price'], 'coefficient': my_lr.coef_})</pre>
+			<p>这将产生以下输出:</p>
+			<div><div><img src="img/B18335_11_9.jpg" alt="Figure 11.9 – The coefficients resulting from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.9–由前面的代码块产生的系数</p>
+			<p>你可以这样解释:</p>
+			<ul>
+				<li>在价格不变的情况下，每增加1摄氏度，冰淇淋销量就会增加0.15。</li>
+				<li>在温度不变的情况下，价格每增加1欧元，冰淇淋销量就会减少1.3欧元。</li>
+			</ul>
+			<h2 id="_idParaDest-217"><a id="_idTextAnchor224"/>使用树状图解释模型</h2>
+			<p>虽然查看系数对于线性模型非常有用，但有些模型没有任何系数。<a id="_idIndexMarker633"/>这基本上是任何使用树的模型<a id="_idIndexMarker634"/>的例子。树有节点，这些节点是根据是/否问题来划分的。虽然您不能从树中提取系数，但是它的优点是您可以简单地将整个树打印成图形！我们将在下一个示例中讨论这一点:</p>
+			<ol>
+				<li value="1">首先，我们需要在之前使用的数据上安装一个<code>DecisionTreeRegressor</code>函数，使用以下代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-15</p>
+			<pre>from sklearn.tree import DecisionTreeRegressor
+my_dt = DecisionTreeRegressor()
+my_dt.fit(X = data[['degrees_celsius', 'price']], y = data['ice_cream_sales'])</pre>
+			<ol>
+				<li value="2">为了大致了解模型是否合适，让我们像以前一样计算训练集的R2分数:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-16</p>
+			<pre>r2_score(data['ice_cream_sales'], my_dt.predict(data[['degrees_celsius', 'price']]))</pre>
+			<p>结果是1.0，这意味着决策树已经获得了对训练数据的完美拟合。没有什么能保证这将概括样本外的情况，但这对于解释模型来说不一定是个问题。</p>
+			<ol>
+				<li value="3">要将树提取为图像，只需使用下面的代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-17</p>
+			<pre>import sklearn
+plt.figure(figsize=(15,15))
+sklearn.tree.plot_tree(my_dt)
+plt.show()</pre>
+			<p>这将<a id="_idIndexMarker635"/>打印出整个树，<a id="_idIndexMarker636"/>让你对预测是如何做出的有一个完美的了解:</p>
+			<div><div><img src="img/B18335_11_10.jpg" alt="Figure 11.10 – The resulting dendrogram from the preceding code block &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.10–从前面的代码块得到的树形图</p>
+			<h2 id="_idParaDest-218"><a id="_idTextAnchor225"/>使用可变重要性解释模型</h2>
+			<p>作为第三种也是最后一种解释模型的方法，你可以看看变量的重要性。同样，这并不适用于所有的机器学习模型。然而，对于相当复杂的模型来说，查看所有的树状图通常太困难了，可变重要性估计是一个很好的替代品。</p>
+			<p>让我们从之前构建的<a id="_idIndexMarker640"/>决策树模型中提取<a id="_idIndexMarker639"/>变量重要性。这可以使用以下代码来完成:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块11-18</p>
+			<pre class="source-code">pd.DataFrame({<strong class="bold">'variable'</strong>: [<strong class="bold">'degrees_celsius'</strong>, <strong class="bold">'price'</strong>], <strong class="bold">'importance'</strong>: my_dt.feature_importances_})</pre>
+			<p>生成的数据帧如下所示:</p>
+			<div><div><img src="img/B18335_11_11.jpg" alt="Figure 11.11 – The importance value&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图11.11-重要性值</p>
+			<p>这告诉我们，决策树更多地使用了摄氏度，而不是价格作为预测变量。</p>
+			<h1 id="_idParaDest-219"><a id="_idTextAnchor226"/>总结</h1>
+			<p>在这一章中，你已经看到了灾难性的遗忘是如何在你的模型中导致糟糕的性能的，尤其是当数据以连续的方式到达时。尤其是当一个趋势先学会，第二个趋势跟着来的时候，忘记第一个趋势的风险是真实存在的，需要控制。</p>
+			<p>尽管这些问题没有一站式的解决方案，但是有很多事情可以避免坏的模型进入生产系统。您已经看到了如何实现持续评估指标，并且您已经看到了如何能够检测到一些趋势已经被遗忘。</p>
+			<p>基于性能的度量对于检测问题非常有用，但是不能告诉您模型内部到底哪里出错了。您已经看到了模型解释的三种方法，它们可以帮助您进一步深入大多数模型。通过从模型中提取模型已经了解的趋势或关系，您可以确定这是否符合已知的业务逻辑或常识。</p>
+			<p>在本书的下一章也是最后一章，我们将总结已经介绍过的不同主题，并考虑在处理在线模型和流数据时要记住的一些最佳实践。</p>
+			<h1 id="_idParaDest-220"><a id="_idTextAnchor227"/>延伸阅读</h1>
+			<ul>
+				<li>https://riverml.xyz/latest/api/neighbors/KNNRegressor/</li>
+				<li>线性回归:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html">https://sci kit-learn . org/stable/modules/generated/sk learn . linear _ model。LinearRegression.html</a></li>
+				<li>决策树:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html">https://sci kit-learn . org/stable/modules/generated/sk learn . tree . decision tree regressor . html</a></li>
+				<li>tree _ plot:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.plot_tree.html">https://sci kit-learn . org/stable/modules/generated/sk learn . tree . plot _ tree . html</a></li>
+			</ul>
+		</div>
+	
+
+</body></html>

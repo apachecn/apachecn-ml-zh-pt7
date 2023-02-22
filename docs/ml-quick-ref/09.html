@@ -1,0 +1,1447 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Selected Topics in Deep Learning</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">深度学习中的精选主题</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在<a href="6fd48e9f-f2fd-4b29-a006-1b151de4960f.xhtml" target="_blank">第4章</a> <em>、</em> <em>训练神经网络</em>中，我们看了什么是<strong>人工神经网络</strong> ( <strong> ANN </strong>)以及这种模型是如何构建的。你可以说深度神经网络是人工神经网络的加长版；然而，它也有自己的一系列挑战。</p>
+
+<p>在本章中，我们将了解以下主题:</p>
+
+<ul>
+
+<li>什么是深度神经网络？</li>
+
+<li>如何初始化参数</li>
+
+<li>对抗网络——生成对抗网络和贝叶斯生成对抗网络</li>
+
+<li>深高斯过程</li>
+
+<li>辛顿胶囊网络</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Deep neural networks</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">深度神经网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们回顾一下我们在<a href="6fd48e9f-f2fd-4b29-a006-1b151de4960f.xhtml" target="_blank">第4章</a> <em>“训练神经网络</em>”中学到的内容。神经网络是对人脑的机器模拟，被视为一套算法，用于从数据中提取模式。它有三个不同的层次:</p>
+
+<ul>
+
+<li>输入层</li>
+
+<li>隐蔽层</li>
+
+<li>输出层</li>
+
+</ul>
+
+<p class="CDPAlignLeft CDPAlign" style="color: black">感官数字数据(以向量的形式)通过输入层，然后通过隐藏层，以生成自己的一套感知和推理，从而在输出层产生最终结果。</p>
+
+<p class="mce-root"/>
+
+<p>你能回忆起我们在<a href="6fd48e9f-f2fd-4b29-a006-1b151de4960f.xhtml" target="_blank">第4章</a>、<em>训练神经网络</em>、<em>、</em>中学到的关于人工神经网络的层数和计数方法吗？当我们得到如下图所示的图层时，你能数出图层的数量吗？记住，我们总是只计算隐藏层和输出层。因此，如果有人问你网络中有多少层，你在回答时不要包括输入层:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-597 image-border" src="img/3c7c2035-a325-4e73-8071-99a1ae84c085.png" style="width:16.92em;height:8.00em;"/></p>
+
+<p>是的，没错——前面的架构有两层。对于以下网络呢？</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-596 image-border" src="img/20b65667-28a5-42c9-a8ba-e4d1ecfa8e30.png" style="width:19.33em;height:8.75em;"/></p>
+
+<p>这个网络有三层，其中包括两个隐藏层。随着层数的增加，模型变得更深。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Why do we need a deep learning model?</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">为什么我们需要深度学习模型？</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>深度学习模型是一个高度非线性的模型，它有多个层，多个节点依次行动来解决一个业务问题。每一层都被分配了不同的任务。</p>
+
+<p>例如，如果我们有一个人脸检测问题，隐藏层1会找出图像中存在哪些边缘。第二层找出边缘的组合，开始形成眼睛、鼻子和其他部分的形状。第3层启用对象模型，创建面部的形状。下图显示了不同的隐藏层:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-593 image-border" src="img/25fca5bd-3031-4453-8260-dc708618b000.png" style="width:36.08em;height:29.00em;"/></p>
+
+<p>在这里，我们得到了一个逻辑回归模型，也称为单层神经网络。有时，它也被称为最<strong xmlns:epub="http://www.idpf.org/2007/ops">浅网络</strong>。这里可以看到的第二个网络是双层网络。还是那句话，是浅网，但没有上一个浅。下一个架构有三层，这使得事情变得更加有趣。现在网络越来越深了。最后一种架构是六层架构，由五个隐藏层组成。层数越来越深。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Deep neural network notation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">深度神经网络符号</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>符号的解释如下:</p>
+
+<ul>
+
+<li><em> l </em>:层数为4层</li>
+
+<li><em>n<sup>【l】</sup></em>:层内节点数<em> l </em></li>
+
+</ul>
+
+<p>对于以下体系结构，如下所示:</p>
+
+<ul>
+
+<li><em>n<sup>【0】</sup>:</em>输入层的节点数，即3</li>
+
+<li><em>n<sup>【1】</sup></em>:5</li>
+
+<li><em xmlns:epub="http://www.idpf.org/2007/ops">n<sup>2</sup>T24】5</em></li>
+
+<li><em>n<sup>3</sup>:</em>3</li>
+
+<li><em>n<sup>【4】</sup></em>:1</li>
+
+<li><em>a<sup>【l】</sup></em>:层激活<em> l: </em></li>
+
+</ul>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-592 image-border" src="img/2dc827b1-5595-4a37-b9b8-d58cb1a98826.png" style="width:23.42em;height:10.83em;"/></p>
+
+<p>正如我们已经知道的那样，下面的等式穿过这些层:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> z = w <sup> T </sup> X + b </em></p>
+
+<p>因此，我们得到以下结果:</p>
+
+<ul>
+
+<li>激活:<em> a = σ(z) </em></li>
+
+<li><em>w<sup>【l】</sup></em>:层重<em> l </em></li>
+
+<li><em>b<sup>【l】</sup></em>:层内偏差<em> l </em></li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Forward propagation in a deep network</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">深层网络中的前向传播</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们看看这些等式是如何为第1层和第2层建立的。如果训练样本集为，X为前一网络的(<em> x1 </em>、<em> x2 </em>、<em> x3 </em>)。</p>
+
+<p>让我们看看这个等式是如何适用于第1层的:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/39d24283-bd5c-405f-b28c-30dbc286f3ba.png" style="width:8.67em;height:1.42em;"/></p>
+
+<p>第1层的激活功能如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/fb5b4b19-d107-4c3b-b931-830f85a5f13d.png" style="width:17.75em;height:1.75em;"/></p>
+
+<p>输入也可以表示如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/efa63eef-38f6-4f0c-a623-5f61322c8531.png" style="width:4.08em;height:1.42em;"/></p>
+
+<p>对于第2层，输入如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/8824d96b-e31e-485e-b996-ea8995819a89.png" style="width:9.67em;height:1.42em;"/></p>
+
+<p>这里应用的激活函数如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/de51ced3-93d0-4e7c-a632-668cb1a049b2.png" style="width:7.67em;height:1.75em;"/></p>
+
+<p>类似地，对于第3层，应用的输入如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/87e6ec32-b73e-4e88-8ae5-e4c1d2ab84a3.png" style="width:9.08em;height:1.33em;"/></p>
+
+<p>第三层的激活功能如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/4f055318-9468-48a3-833c-bfe8c4d84297.png" style="width:7.33em;height:1.67em;"/></p>
+
+<p>最后，这是最后一层的输入:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/ad73712c-6c74-4216-9426-ea03e83737f9.png" style="width:10.25em;height:1.50em;"/></p>
+
+<p>这是它的激活:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/fb5e5016-951f-4828-b429-6641e712e412.png" style="width:9.50em;height:1.67em;"/></p>
+
+<p>因此，广义正向传播方程结果如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/9b0cc83d-c92e-459d-8c45-005037bbaa69.png" style="width:10.67em;height:1.50em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/22c42f32-4024-4aaa-b7f0-909e019056ce.png" style="width:6.08em;height:1.50em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Parameters W and b</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">参数W和b</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>下面说一下架构。首先，让我们记下我们在上一节中学到了什么。请看下图:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-607 image-border" src="img/b3ce16ca-11d7-4056-b2e9-5ac66bb93668.png" style="width:23.83em;height:8.17em;"/></p>
+
+<p>在这里，我们可以看到以下内容:</p>
+
+<ul>
+
+<li><em> l </em>:层数:6层</li>
+
+<li><em>n<sup>【l】</sup></em>:层节点数<img class="fm-editor-equation" src="img/c830fe26-cc8a-4f06-b7d6-42cda47290ae.png" style="width:0.50em;height:1.42em;"/></li>
+
+<li><em>n<sup>【0】</sup></em>:输入层节点数:3::</li>
+
+<li><em>n<sup>【1】</sup></em>:第一层节点数:4:</li>
+
+</ul>
+
+<p>这个等式如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>n<sup>【2】</sup>= 4::n<sup>【3】</sup>= 4::n<sup>【4】</sup>= 4::n<sup>【5】</sup>= 3::n<sup>【6】</sup>= 1</em></p>
+
+<p>实现前向传播意味着隐藏层1可以通过下面的等式来表示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/02ba8710-56e1-443e-935c-7cfd7f5d91bd.png" style="width:9.08em;height:1.42em;"/> …..(1)</p>
+
+<p>你能确定正向传播的z、w和X的维数吗？</p>
+
+<p>我们来讨论一下这个。<em> X </em>表示输入层向量或节点，我们知道有3个节点。我们能找出输入层的维数吗？嗯，是的，是(<em>n<sup/></em>，1)——或者，你也可以说是(3，1)。</p>
+
+<p>第一个隐藏层呢？由于第一个隐藏层已经得到了三个节点，<em xmlns:epub="http://www.idpf.org/2007/ops">z<sup><em xmlns:epub="http://www.idpf.org/2007/ops"/></sup></em>的维数将为(<em xmlns:epub="http://www.idpf.org/2007/ops">n<sup/></em>，1)。这意味着维数将是(4，1)。</p>
+
+<p><em xmlns:epub="http://www.idpf.org/2007/ops">z<sup>【1】</sup></em>和X的尺寸已经确定。通过查看前面的等式，显然<em xmlns:epub="http://www.idpf.org/2007/ops">z<sup>【1】</sup></em>和<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em><em xmlns:epub="http://www.idpf.org/2007/ops">X</em>的维数必须相同(来自线性代数)。那么，能不能想出<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em>的尺寸？从线性代数中我们知道，只有当矩阵1的列数等于矩阵2的行数时，矩阵1和矩阵2之间的矩阵乘法才有可能。因此，<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em>的列数必须等于矩阵<em xmlns:epub="http://www.idpf.org/2007/ops"> X </em>的行数。这样会使<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em>的列数为3。然而，正如我们已经讨论过的那样，<em xmlns:epub="http://www.idpf.org/2007/ops">z<sup/></em>和<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup/></em><em xmlns:epub="http://www.idpf.org/2007/ops">X</em>的尺寸必须相同，因此前者的行数应该等于后者的行数。因此，<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup/></em>的行数将变成4。好了，我们现在已经得到了<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em>的维数，也就是(4，3)。为了使这个更一般，我们还可以说<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【1】</sup></em>的尺寸为(<em xmlns:epub="http://www.idpf.org/2007/ops">n<sup><sup/></sup></em>，<em xmlns:epub="http://www.idpf.org/2007/ops">n<sup/></em>)。同理，<em xmlns:epub="http://www.idpf.org/2007/ops">w<sup>【2】</sup></em>的维数会等于(<em xmlns:epub="http://www.idpf.org/2007/ops">n<sup>【2】</sup></em>，<em xmlns:epub="http://www.idpf.org/2007/ops">n<sup/></em>)或(当前层的节点数，上一层的节点数)。会使<em xmlns:epub="http://www.idpf.org/2007/ops">的尺寸w<sup>【2】</sup></em>(4，4)。我们来概括一下这个。让我们看看下面等式的维数:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>w<sup>【1】</sup>=(n<sup>【1】</sup>，n<sup>【l-1】</sup>)</em></p>
+
+<p>偏置<em>b<sup>【1】</sup></em>的维度呢？你能利用线性代数把它算出来吗？这对你来说一定是小菜一碟。是的，你现在可能已经猜对了。与<em>z<sup>【1】</sup></em>尺寸相同。为了大家的利益，我来解释一下。根据等式，左手边的尺寸应该等于右手边的尺寸。另外，<em>w<sup>【1】</sup></em><em>X+b<sup>【1】</sup></em>是两个矩阵的相加，众所周知，两个矩阵只有在维数相同的情况下才能相加；也就是说，它们必须具有相同的行数和列数。因此，<em>b<sup/></em>的尺寸将等于<em>w<sup/></em><em>X</em>；进而会等于<em>z<sup>【1】</sup></em>(也就是(4，1))。</p>
+
+<p>概括来说，<em>b<sup>【1】</sup>=(n<sup>【1】</sup>，1) </em>的维度。</p>
+
+<p>对于反向传播，如下所示:</p>
+
+<ul>
+
+<li>尺寸<em>d</em><em>w<sup>【l】</sup>=(n<sup>【l】</sup>，n<sup>【l-1】</sup>)</em></li>
+
+<li><em>db</em><em><sup>【l】</sup>=(n<sup>【l】</sup>，1) </em>的尺寸</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Forward and backward propagation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">向前和向后传播</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我用一个例子来告诉你向前传球和向后传球是如何工作的。</p>
+
+<p class="mce-root"/>
+
+<p>我们有一个网络，它有两层(一个隐藏层和一个输出层)。每一层(包括输入)都有两个节点。它也有偏差节点，如下图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-591 image-border" src="img/fe2b3f04-2d32-478b-9b8b-4732b81ecf6d.png" style="width:28.92em;height:18.75em;"/></p>
+
+<p>上图中使用的符号如下:</p>
+
+<ul>
+
+<li><em> IL </em>:输入层</li>
+
+<li><em> HL </em>:隐藏层</li>
+
+<li><em> OL </em>:输出层</li>
+
+<li><em> w </em>:重量</li>
+
+<li><em> B </em>:偏置</li>
+
+</ul>
+
+<p>我们已经获得了所有必填字段的值。让我们把这个输入网络，看看它是如何流动的。这里使用的激活函数是sigmoid。</p>
+
+<p>给予隐藏层的第一个节点的输入如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入1 = w1*IL1 + w3*IL2 + B1 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入1 =(0.2 * 0.8)+(0.4 * 0.15)+0.4 = 0.62</em></p>
+
+<p>给予隐藏层的第二个节点的输入如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入L2 = w2*IL1 + w4*IL2 + B1 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入L2 =(0.25 * 0.8)+(0.1 * 0.15)+0.4 = 0.615</em></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p>为了找出输出，我们将使用我们的激活函数，就像这样:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输出1 = <img class="fm-editor-equation" src="img/8b156d03-3ef6-4e23-84bd-819530ddd10c.png" style="width:7.08em;height:2.58em;"/> = 0.650219 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>output L2 =<img class="fm-editor-equation" src="img/534e2915-fe06-4d9a-940a-c198ee8bfb4f.png" style="width:6.67em;height:2.42em;"/>= 0.649081</em></p>
+
+<p>现在，这些输出将作为输入传递到输出层。让我们计算输出层中节点的输入值:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入= w5 *输出_ HL1+w7 *输出_HL2 + B2 = 0.804641 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入= w6 *输出_ HL1+w8 *输出_HL2 + B2= 0.869606 </em></p>
+
+<p>现在，让我们计算输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输出<sub>OL1</sub>=<img class="fm-editor-equation" src="img/24d98aeb-c845-4fc7-9cd0-271853b5256a.png" style="width:6.33em;height:2.33em;"/>= 0.690966</em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输出<sub>OL2</sub>=<img class="fm-editor-equation" src="img/56e40684-a2a9-4320-8c70-47b23ae15bfd.png" style="width:6.83em;height:2.50em;"/>= 0.704664</em></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Error computation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">误差计算</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>现在，我们可以使用平方误差函数计算每个输出神经元的误差，并将它们相加得到总误差:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> Etotal = </em> <img class="fm-editor-equation" src="img/ed8a52d3-9fa1-4903-9c32-db4474463294.png" style="width:10.00em;height:2.08em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> EOL1 =输出层第一个节点的误差= </em> <img class="fm-editor-equation" src="img/4fb5246b-2012-47dc-960a-b7f7ab5c16e9.png" style="width:13.25em;height:2.42em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> =0.021848 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> EOL2 =输出层第二节点错误= </em> <img class="fm-editor-equation" src="img/1598226c-3004-42d0-9f4e-afcc5b93b24c.png" style="width:14.67em;height:2.67em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> =0.182809 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>总误差= Etotal = eol 1+eol 2 = 0.021848+0.182809 = 0.204657</em></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Backward propagation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">反向传播</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>反向传播的目的是更新网络中的每个权重，使它们使实际输出更接近目标输出，从而最小化每个输出神经元和整个网络的误差。</p>
+
+<p>让我们首先关注一个输出层。我们应该找出w5的变化对总误差的影响。</p>
+
+<p>这将由<img class="fm-editor-equation" src="img/19ebbc28-eeac-4d1d-b685-1f7adeafdfa3.png" style="width:3.83em;height:2.00em;"/>决定。它是Etotal对w5的偏导数。</p>
+
+<p>让我们在这里应用链式法则:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/8b71d76e-07e9-49dc-bdaf-eda319eadd55.png" style="width:30.00em;height:3.08em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/2f68c391-d1a5-482f-a663-ab7b1ce167d7.png" style="width:33.58em;height:2.50em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/1143e171-c1c6-4fe7-9c8b-55bd3f9b062f.png" style="width:41.25em;height:3.00em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"/>
+
+<p class="mce-root"/>
+
+<p class="CDPAlignCenter CDPAlign"><em>= 0.690966–0.9 =-0.209034</em></p>
+
+<p> </p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/d7f4f53f-c931-452b-8e67-9ea901f3c615.png" style="width:16.42em;height:3.17em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/4ef3d0fd-7a77-4c98-b36d-e80053d71f84.png" style="width:14.75em;height:3.00em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> = 0.213532 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em>输入= w5 *输出1+w7 *输出2 + B2 </em></p>
+
+<p class="CDPAlignCenter"><em> <img class="fm-editor-equation" src="img/d594ec43-ddbf-45a9-883e-19c75ad8a624.png" style="width:12.42em;height:2.58em;"/> = 0.650219 </em></p>
+
+<p>现在，让我们回到旧等式:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/759a15cf-94d3-4f7f-9814-4590259b23bf.png" style="width:27.50em;height:2.83em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/dd625504-e1a7-43f4-b88c-948fb580e10c.png" style="width:35.58em;height:3.00em;"/></p>
+
+<p>为了更新权重，我们将使用以下公式。我们将学习率设置为<em> α = 0.1 </em>:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/76b005cf-55a2-4935-b7d5-9fd8d59b8ac0.png" style="width:39.92em;height:1.67em;"/></p>
+
+<p>同样，<img class="fm-editor-equation" src="img/b27156ea-8276-45b1-92e3-e1a34a2d67bc.png" style="width:11.92em;height:1.25em;"/>也是应该计算出来的。方法保持不变。我们将把这个留给计算，因为它将帮助你更好地理解概念。</p>
+
+<p>当涉及到隐藏层和计算时，方法仍然保持不变。但是，公式会有一点变化。我会帮你做公式，但剩下的计算得由你自己来做。</p>
+
+<p>我们将在这里乘坐<em> w1 </em>。</p>
+
+<p>让我们在这里应用链式法则:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/c72c8107-c603-4256-98be-ec0d735c48ae.png" style="width:28.67em;height:2.92em;"/></p>
+
+<p>这个公式必须用于<em> w2 </em>、<em> w3 </em>和<em> w4 </em>。请确保您正在对<em> E_total </em>相对于其他权重进行偏导数计算，并最终使用学习率公式获得更新后的权重。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Forward propagation equation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">正向传播方程</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>我们知道它周围的方程式。如果这个的输入是<em>a<sup>【l-1】</sup></em>，那么输出将是<em>a<sup>【l】</sup></em>。但是有一个缓存部分，无非是z<em><sup>【l】</sup></em>，如下图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-598 image-border" src="img/bd54a557-21c3-42af-8627-540138cb1f1e.png" style="width:20.58em;height:9.58em;"/></p>
+
+<p>这里这就分解成<em>w<sup>【1】</sup>a<sup>【l-1】</sup>+b<sup>【l】</sup></em>(记住<em>a<sup>【0】</sup></em>等于<em> X </em>)。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Backward propagation equation</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">反向传播方程</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>执行反向传播需要以下等式:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/ae157002-f173-49f2-8834-e62dde566376.png" style="width:11.25em;height:1.58em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-606 image-border" src="img/10786584-fc12-4a34-bc22-a86a3b48ce3e.png" style="width:19.92em;height:8.92em;"/></p>
+
+<p>这些等式会让你了解幕后发生了什么。这里，添加了一个后缀<em> d </em>，它表示在反向传播期间起作用的偏导数:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/484cc2b3-97cd-4819-bf37-e8a1449f47ff.png" style="width:12.42em;height:1.58em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/2b119630-edde-4f04-8387-58b8cf1dc790.png" style="width:9.75em;height:1.83em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Parameters and hyperparameters</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">参数和超参数</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>当我们继续建立深度学习模型时，你需要知道如何记录参数和超参数。但是我们对这些有多了解呢？</p>
+
+<p>当涉及到参数时，我们有权重和偏差。当我们开始训练网络时，首要步骤之一是初始化参数。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Bias initialization</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">偏置初始化</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>通常的做法是将偏差初始化为零，因为神经元的对称断裂由随机权重的初始化来处理。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Hyperparameters</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">超参数</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>超参数是深度学习网络的构建模块之一。它是决定网络最佳架构(例如层数)的一个因素，也是负责确保如何训练网络的一个因素。</p>
+
+<p>以下是深度学习网络的各种超参数:</p>
+
+<ul>
+
+<li><strong>学习速率</strong>:这负责决定网络训练的速度。缓慢的学习速率确保平滑的收敛，而快速的学习速率可能不具有平滑的收敛。</li>
+
+<li><strong>历元</strong>:历元数是网络在训练时消耗整个训练数据的次数。</li>
+
+<li><strong>隐藏层数</strong>:决定了模型的结构，有助于达到模型的最佳容量。</li>
+
+<li><strong>节点数(神经元)</strong>:要使用的节点数之间要有一个权衡。它决定是否已经提取了产生所需输出的所有必要信息。过拟合或欠拟合将由节点的数量决定。因此，建议将其与正则化一起使用。</li>
+
+<li><strong xmlns:epub="http://www.idpf.org/2007/ops"> Dropout </strong> : Dropout是一种正则化技术，用于通过避免过度拟合来提高泛化能力。这在第4章、<em xmlns:epub="http://www.idpf.org/2007/ops">训练神经网络</em>中详细讨论。下降值可以在0.2和0.5之间。</li>
+
+</ul>
+
+<p class="mce-root"/>
+
+<ul>
+
+<li><strong>动量</strong>:决定下一步收敛的方向。该值介于0.6和0.9之间，用于处理振荡。</li>
+
+<li><strong>批量</strong>:这是输入网络的样本数量，之后会进行参数更新。通常取32，64，128，256。</li>
+
+</ul>
+
+<p>为了找到超参数的最佳数量，谨慎的做法是采用网格搜索或随机搜索。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Use case – digit recognizer</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">用例–数字识别器</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p><strong>修改后的国家标准技术研究所</strong> ( <strong> MNIST </strong>)实际上是<em> hello world </em>的计算机视觉数据集。考虑到它在1999年的发布，这个数据集已经成为基准分类算法的主要基础。</p>
+
+<p>我们的目标是从成千上万的手写图像数据集中正确识别数字。我们策划了一套教程风格的内核，涵盖了从回归到神经网络的所有内容:</p>
+
+<pre>import numpy as np<br/>import pandas as pd<br/>import matplotlib.pyplot as plt<br/>import matplotlib.image as mpimg<br/>import seaborn as sns<br/>%matplotlib inline<br/>from sklearn.model_selection import train_test_split<br/>import itertools<br/>from keras.utils.np_utils import to_categorical # convert to one-hot-encoding<br/>from keras.models import Sequential<br/>from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D<br/>from keras.optimizers import SGD<br/>from keras.preprocessing.image import ImageDataGenerator<br/>sns.set(style='white', context='notebook', palette='deep')<br/>np.random.seed(2)<br/><br/># Load the data<br/>train = pd.read_csv("train.csv")<br/>test = pd.read_csv("test.csv")<br/><br/>Y_train = train["label"]<br/># Drop 'label' column<br/>X_train = train.drop(labels = ["label"],axis = 1)<br/><br/>Y_train.value_counts()</pre>
+
+<p>上述代码的输出如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-608 image-border" src="img/80896871-a1bb-46e5-9c71-5e2b39b1abb9.png" style="width:13.50em;height:12.42em;"/></p>
+
+<pre>X_train.isnull().any().describe()</pre>
+
+<p>这里，我们得到以下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-599 image-border" src="img/cc8d0828-a5b6-42d9-a851-660c411b9025.png" style="width:9.92em;height:6.58em;"/></p>
+
+<pre>test.isnull().any().describe()</pre>
+
+<p>这里，我们得到以下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-605 image-border" src="img/0e8f70db-2c67-40c5-a9af-59a109e83736.png" style="width:9.83em;height:6.83em;"/></p>
+
+<pre>X_train = X_train / 255.0<br/>test = test / 255.0</pre>
+
+<p>通过将图像重塑为三维，我们得到以下结果:</p>
+
+<pre> Reshape image in 3 dimensions (height = 28px, width = 28px, canal = 1)<br/>X_train = X_train.values.reshape(-1,28,28,1)<br/>test = test.values.reshape(-1,28,28,1)<br/><br/>Encode labels to one hot vectors <br/>Y_train = to_categorical(Y_train, num_classes = 10)<br/><br/># Split the dataset into train and the validation set <br/>X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size = 0.1, random_state=2)</pre>
+
+<p>通过执行以下代码，我们将能够看到编号的绘图:</p>
+
+<pre>pic = plt.imshow(X_train[9][:,:,0])</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-595 image-border" src="img/cf01e7a0-dc45-4863-8a0b-870e9f549a52.png" style="width:25.83em;height:26.00em;"/></p>
+
+<p>顺序模型现在如下所示:</p>
+
+<pre>model = Sequential()<br/>model.add(Conv2D(filters = 32, kernel_size = (5,5),padding = 'Same', activation ='relu', input_shape = (28,28,1)))<br/>model.add(Conv2D(filters = 32, kernel_size = (5,5),padding = 'Same', activation ='relu'))<br/>model.add(MaxPool2D(pool_size=(2,2)))<br/>model.add(Dropout(0.25))<br/>model.add(Conv2D(filters = 64, kernel_size = (3,3),padding = 'Same', activation ='relu'))<br/>model.add(Conv2D(filters = 64, kernel_size = (3,3),padding = 'Same', activation ='relu'))<br/>model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))<br/>model.add(Dropout(0.25))<br/>model.add(Flatten())<br/>model.add(Dense(256, activation = "relu"))<br/>model.add(Dropout(0.5))<br/>model.add(Dense(10, activation = "softmax"))</pre>
+
+<p>当我们定义优化器时，我们得到以下输出:</p>
+
+<pre># Define the optimizer<br/>optimizer = SGD(lr=0.01, momentum=0.0, decay=0.0)</pre>
+
+<p>当我们编译模型时，我们得到以下输出:</p>
+
+<pre># Compile the model<br/>model.compile(optimizer = optimizer, loss = "categorical_crossentropy", metrics=["accuracy"])<br/><br/>epochs = 5<br/>batch_size = 64</pre>
+
+<p>接下来，我们生成图像生成器:</p>
+
+<pre>datagen = ImageDataGenerator(<br/> featurewise_center=False, # set input mean to 0 over the dataset<br/> samplewise_center=False, # set each sample mean to 0<br/> featurewise_std_normalization=False, # divide inputs by std of the dataset<br/> samplewise_std_normalization=False, # divide each input by its std<br/> zca_whitening=False, # apply ZCA whitening<br/> rotation_range=10, # randomly rotate images in the range (degrees, 0 to 180)<br/> zoom_range = 0.1, # Randomly zoom image <br/> width_shift_range=0.1, # randomly shift images horizontally (fraction of total width)<br/> height_shift_range=0.1, # randomly shift images vertically (fraction of total height)<br/> horizontal_flip=False, # randomly flip images<br/> vertical_flip=False) # randomly flip images<br/>datagen.fit(X_train)<br/><br/>history = model.fit_generator(datagen.flow(X_train,Y_train, batch_size=batch_size),<br/> epochs = epochs, validation_data = (X_val,Y_val),<br/> verbose = 2, steps_per_epoch=X_train.shape[0] // batch_size)</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-600 image-border" src="img/6c892255-d1c4-47f1-b62d-ff8b95726881.png" style="width:38.83em;height:11.58em;"/></p>
+
+<p>我们预测模型如下:</p>
+
+<pre>results = model.predict(test)<br/># select with the maximum probability<br/>results = np.argmax(results,axis = 1)<br/>results = pd.Series(results,name="Label")<br/>results</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-603 image-border" src="img/5e3c6373-055f-4d8e-8465-d835d9774367.png" style="width:5.50em;height:28.75em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Generative adversarial networks</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">生成对抗网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p><strong>生成对抗网络</strong> ( <strong> GANs </strong>)是深度神经网络架构的另一种形式，是两个相互竞争又相互合作的网络的组合。它是由Ian Goodfellow和Yoshua Bengio在2014年推出的。</p>
+
+<p>GANs可以学习模仿任何数据分布，这在理想情况下意味着GANs可以被教会创建一个与任何领域的现有对象相似的对象，如图像、音乐、语音和散文。它可以创建以前从未存在过的任何物体的照片。他们在某种意义上是机器人艺术家，他们的产出令人印象深刻。</p>
+
+<p>它属于无监督学习，其中两个网络在训练时学习它们的任务。其中一个网络称为<strong>发生器</strong>，另一个称为<strong>鉴别器</strong>。</p>
+
+<p>为了更好理解，我们可以把一个<strong>干</strong>看作是一个伪造者(生产者)和一个警察(鉴别者)的例子。一开始，伪造者给警察看假钱。警察像侦探一样工作，发现这是一张假币(如果你想了解鉴别器是如何工作的，你也可以把D想象成一名侦探)。警察将他的反馈传递给伪造者，解释为什么钱是假的。伪造者根据收到的反馈进行一些调整，并制造新的假币。警察说，钱仍然是假的，他与伪造者分享他的新反馈。然后，伪造者试图根据最新的反馈制造新的假币。这个循环无限期地继续下去，直到警察被假钱愚弄，因为它看起来像真的。创建GAN模型时，发生器和鉴别器开始从头开始学习，并相互学习。看似对立，其实是在互相帮助学习。这两者之间的反馈机制有助于模型更加健壮。</p>
+
+<p>鉴别者是一个相当好的学习者，因为它能够从现实世界中学习任何东西。也就是说，如果你想让它学习猫和狗的图像，以及要求它区分这些图像的1000个不同类别，它将能够毫不费力地做到这一点，就像这样:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-609 image-border" src="img/5f4c7150-07a3-481e-a605-e43d9d713791.png" style="width:56.50em;height:29.42em;"/></p>
+
+<p>噪声进入发电机；然后，发生器的输出通过鉴频器，我们得到一个输出。与此同时，鉴别器正在根据狗的图像进行训练。然而，在最开始，即使是狗的图像也可以被鉴别器分类为非狗的图像，并且它会发现这个错误。这个错误通过网络传播回来。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Hinton's Capsule network</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">辛顿胶囊网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>深度学习之父Geoffrey Hinton通过引入一种新的网络，在深度学习领域引起了巨大的轰动。这个网络被称为<strong>胶囊网络</strong> ( <strong>胶囊网</strong>)。还提出了训练该网络的算法，称为<strong>胶囊间动态路由</strong><strong/>。2011年，Hinton在一篇名为<strong>转变自动编码器</strong>的论文中首次谈到了这一点。2017年11月，Hinton和他的团队发表了关于胶囊网络的完整论文。</p>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>The Capsule Network and convolutional neural networks</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">胶囊网络和卷积神经网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p><strong xmlns:epub="http://www.idpf.org/2007/ops">卷积神经网络</strong> ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> CNN </strong>)一直是深度学习领域最重要的里程碑之一。它让每个人都兴奋不已，也成为了新研究的基石。但是，正如他们所说，<em xmlns:epub="http://www.idpf.org/2007/ops">在这个世界上没有什么是完美的。我们热爱的CNN也不是。</em></p>
+
+<p>你能回忆起CNN是如何工作的吗？CNN最重要的工作就是执行卷积。这意味着，一旦你将一幅图像通过CNN，卷积层就会从图像像素中提取出边缘和颜色梯度等特征。其他图层会将这些功能组合成一个更复杂的图层。在它的上面，一旦密集层被保留，它使网络能够执行分类工作。下图显示了我们正在处理的图像:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-594 image-border" src="img/c0ef9182-2bff-467b-b8e4-7dc60d19db61.png" style="width:136.50em;height:35.17em;"/></p>
+
+<p>上图是一个基本的CNN网络，用于检测图像中的汽车。下图显示了一辆完好无损的汽车的图像，以及该汽车的片段图像:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-602 image-border" src="img/d34d0009-4a1a-40ab-9935-52be22d7ee52.png" style="width:43.00em;height:13.83em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p>假设我们通过CNN网络传递这两个图像(以检测汽车)——网络对这两个图像的响应会是什么？你能思考一下这个问题并给出一个答案吗？为了帮助你，一辆汽车有许多部件，如车轮、挡风玻璃、引擎盖等等，但是当所有这些部件都按顺序排列时，在人的眼中，一辆汽车就是一辆汽车。但是，对于CNN来说，只有特写才是重要的。CNN不考虑相对位置和方向关系。因此，这两个图像都将被网络分类为汽车，尽管人眼并不是这样。</p>
+
+<p>为了弥补，CNN包括最大池，这有助于增加更高层神经元的视图，从而使更高阶特征的检测成为可能。最大池使CNN工作，但同时也发生了信息丢失。这是CNN的一大缺点。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摘要</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在这一章中，我们学习了深度神经网络以及为什么我们需要深度学习模型。我们还学习了向前和向后延拓，以及参数和超参数。我们还讨论了GANs，以及深度高斯过程、胶囊网络和CNN。</p>
+
+<p>在下一章，我们将研究因果推理。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

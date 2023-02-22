@@ -1,0 +1,240 @@
+<html><head/><body>
+
+
+	
+		<title>B15781_06_Final_SZ_ePub</title>
+		
+	
+	
+		<div><div/>
+		</div>
+		<div><h1 id="_idParaDest-153"><a id="_idTextAnchor158"/> 6。构建您自己的程序</h1>
+		</div>
+		<div><p class="callout-heading">概观</p>
+			<p class="callout">在本章中，我们将介绍使用机器学习解决问题所需的所有步骤。我们将看看建立一个全面的计划所涉及的关键阶段。我们将保存一个模型，以便在每次运行时得到相同的结果，并调用一个保存的模型来使用它对看不见的数据进行预测。本章结束时，你将能够创建一个交互式版本的程序，这样任何人都可以有效地使用它。</p>
+			<h1 id="_idParaDest-154"><a id="_idTextAnchor159"/>简介</h1>
+			<p>在前面的章节中，我们介绍了机器学习的主要概念，从两种主要学习方法(监督学习和非监督学习)之间的区别开始，然后转向数据科学社区中一些最流行的算法的细节。</p>
+			<p>本章将讨论建立完整的机器学习程序的重要性，而不仅仅是训练模型。这将涉及到将模型带到下一个级别，在那里它们可以被容易地访问和使用。</p>
+			<p>我们将通过学习如何保存一个训练好的模型来做到这一点。这将允许加载性能最佳的模型，以便对看不见的数据进行预测。我们还将了解通过用户可以轻松与之交互的平台提供已保存模型的重要性。</p>
+			<p>这在团队工作时尤其重要，无论是为公司还是为研究目的，因为它允许团队的所有成员使用模型，而不需要完全理解它。</p>
+			<h1 id="_idParaDest-155"><a id="_idTextAnchor160"/>程序定义</h1>
+			<p>以下部分将涵盖构建一个全面的机器学习程序所需的关键阶段，该程序允许轻松访问经过训练的模型，以便我们可以对所有未来数据进行预测。这些阶段将应用于一个程序的构建，该程序允许银行在其营销活动中确定金融产品的促销策略。</p>
+			<h2 id="_idParaDest-156"><a id="_idTextAnchor161"/>制定计划——关键阶段</h2>
+			<p>此时，您应该能够预处理数据集，使用训练数据构建不同的模型，并比较这些模型，以便选择最适合手头数据的模型。这些是在构建程序的前两个阶段处理的一些过程，最终允许模型的创建。尽管如此，程序还应该考虑保存最终模型的过程，以及在不需要编码的情况下执行快速预测的能力。</p>
+			<p>我们刚刚讨论的过程分为三个主要阶段，将在下面的部分中进行解释。这些阶段代表了任何机器学习项目的首要要求。</p>
+			<h3 id="_idParaDest-157"><a id="_idTextAnchor162"/>准备</h3>
+			<p>准备工作包括我们到目前为止开发的所有程序，目标是根据可用信息和预期结果概述项目。以下是对这一阶段的三个过程的简要描述(这些已在前面的章节中详细讨论过):</p>
+			<ol>
+				<li><strong class="bold">数据探索</strong>:一旦确立了研究的目标，就要进行数据探索，以了解可用的数据并获得有价值的见解。除了其他用途之外，这些见解将在以后用于做出关于预处理和划分数据以及选择模型的决策。在数据探索过程中最常获得的信息包括数据集的大小(实例和要素的数量)、不相关的要素以及是否存在缺失值或明显的异常值。</li>
+				<li><strong class="bold">数据预处理</strong>:我们已经讨论过，数据预处理主要是指处理缺失值、异常值和噪声数据的过程；将定性特征转换成数字形式；并使这些价值标准化或规范化。此过程可以在任何数据编辑器(如Excel)中手动完成，也可以使用库对过程进行编码。</li>
+				<li><strong class="bold">数据分割</strong>:最后一个过程，数据分割，包括将整个数据集分割成两个或三个集合(取决于方法)，用于训练、验证和测试模型的整体性能。在此阶段，还会处理要素和分类标签的分离。</li>
+			</ol>
+			<h3 id="_idParaDest-158"><a id="_idTextAnchor163"/>创作</h3>
+			<p>此阶段包括创建适合可用数据的模型所需的所有步骤。这可以通过选择不同的算法，训练和调整它们，比较每种算法的性能，并最终选择最适合数据的算法(这意味着它可以实现更好的整体性能)来实现。这一阶段的过程将简要讨论如下:</p>
+			<ol>
+				<li value="1"><strong class="bold">算法选择</strong>:无论您决定选择一种还是多种算法，根据可用数据选择一种算法并考虑每种算法的优点是至关重要的。这一点很重要，因为许多数据科学家错误地选择神经网络来解决任何数据问题，而实际上，更简单的问题可以使用更简单的模型来解决，这些模型运行更快，在更小的数据集下表现更好。</li>
+				<li><code>X</code>)和标签类(<code>Y</code>)来确定关系模式，这将有助于归纳出看不见的数据，并在类标签不可用时做出预测。</li>
+				<li><strong class="bold">Model Evaluation</strong>: This process is handled by measuring the performance of the algorithm through the metric that's been selected for the study. As we mentioned previously, it is important to choose the metric that best represents the purpose of the study, considering that the same model can do very well in terms of one metric and poorly in terms of another. <p>在验证集上评估模型时，超参数被微调以实现最佳性能。调整好超参数后，将对测试集进行评估，以测量模型在未知数据上的整体性能。</p></li>
+				<li><strong class="bold">模型比较和选择</strong>:当基于不同的算法创建多个模型时，进行模型比较以选择优于其他模型的模型。这种比较应该通过对所有模型使用相同的指标来完成。</li>
+			</ol>
+			<h3 id="_idParaDest-159"><a id="_idTextAnchor164"/>互动</h3>
+			<p>构建全面的机器学习程序的最后阶段包括允许最终用户轻松地与模型进行交互。这包括将模型保存到文件中、调用保存有已保存模型的文件以及开发用户可以通过其与模型进行交互的通道的过程:</p>
+			<ol>
+				<li value="1"><strong class="bold">存储最终模型</strong>:这个过程是在机器学习程序的开发过程中引入的，因为它对于使模型能够不加改变地用于未来预测至关重要。考虑到大多数算法在每次运行时都是随机初始化的，这使得每次运行的结果都不同，因此保存模型的过程非常重要。保存模型的过程将在本章后面进一步解释。</li>
+				<li><code>predict</code>方法上看不见数据。这一过程也将在本章后面解释。</li>
+				<li><strong class="bold">交互渠道</strong>:最后，开发一种使用保存的模型执行预测的交互且简单的方法是至关重要的，特别是因为，在许多情况下，模型是由技术团队创建的，以供其他团队使用。这意味着一个理想的程序应该允许非专家通过简单地输入数据来使用模型进行预测。这一观点也将在本章后面详述。</li>
+			</ol>
+			<p>下图说明了前面的阶段:</p>
+			<div><div><img src="img/B15781_06_01.jpg" alt="Figure 6.1: Stages for building a machine learning program&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.1:构建机器学习程序的阶段</p>
+			<p>考虑到前面的章节已经讨论了所有的步骤，本章的其余部分将集中在构建模型的最后阶段(交互)。</p>
+			<h2 id="_idParaDest-160"><a id="_idTextAnchor165"/>了解数据集</h2>
+			<p>为了了解如何实现<em class="italic">交互</em>部分中的流程，我们将构建一个能够预测一个人是否有兴趣投资定期存款的程序，这将有助于银行确定其促销活动的目标。定期存款是指存在银行机构中在特定时间内不能提取的钱。</p>
+			<p>用于构建该程序的数据集在加州大学欧文分校机器学习知识库中可用，名称为<strong class="bold">银行营销数据集</strong>。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要下载这个数据集，请访问以下链接:<a href="http://archive.ics.uci.edu/ml/datasets/Bank+Marketing">http://archive.ics.uci.edu/ml/datasets/Bank+Marketing</a>。</p>
+			<p class="callout">数据集也可以在本书的GitHub知识库中找到:<a href="https://packt.live/2wnJyny">https://packt.live/2wnJyny</a>。</p>
+			<p class="callout">引用:【莫罗等人，2014】s .莫罗，p .科尔特斯和p .丽塔<em class="italic">。预测银行电话营销成功的数据驱动方法。</em>决策支持系统，爱思唯尔，62:22-31，2014年6月。</p>
+			<p>一旦您访问了加州大学欧文分校机器学习知识库的链接，请按照以下步骤下载数据集:</p>
+			<ol>
+				<li value="1">首先，点击<code>Data Folder</code>链接。</li>
+				<li>点击<code>bank</code>超链接触发下载</li>
+				<li>Open the <code>.zip</code> folder and extract the <code>bank-full.csv</code> file.<p>在本节中，我们将快速浏览Jupyter笔记本中的数据集。但是，在<em class="italic">活动6.01 </em>、<em class="italic">执行银行营销数据集</em>的准备和创建阶段，将鼓励您执行良好的探索并预处理数据集以达到更好的模式。</p></li>
+				<li>导入所需的库:<pre>import pandas as pd import numpy as np</pre></li>
+				<li>As we have learned thus far, the dataset can be loaded into a Jupyter Notebook using Pandas:<pre>data = pd.read_csv("bank-full.csv")
+data.head()</pre><p>前面的代码在单个列中读取一个实例的所有特性，因为<code>read_csv</code>函数使用逗号作为列的默认分隔符，而数据集使用分号作为分隔符，这可以通过显示结果DataFrame的标题看出。</p><pre>data = pd.read_csv("bank-full.csv", delimiter = ";")
+data.head()</pre><p>完成此步骤后，数据应该如下所示:</p><div><img src="img/B15781_06_03.jpg" alt="Figure 6.3: Screenshot of the data in the .csv file after splitting it into columns&#13;&#10;"/></div><p class="figure-caption">图6.3:中的数据截图。csv文件分割成列后</p><p>如前面的屏幕截图所示，该文件包含未知值，应将其视为缺失值。</p></li>
+				<li>To aid the process of dealing with missing values, all unknown values will be replaced by <code>NaN</code> using Pandas' <code>replace</code> function, as well as NumPy, as follows:<pre>data = data.replace("unknown", np.NaN)
+data.head()</pre><p>通过打印<code>data</code>变量的头，前面代码片段的输出如下:</p><div><img src="img/B15781_06_04.jpg" alt="Figure 6.4: Screenshot of the data in the .csv file after replacing unknown values&#13;&#10;"/></div><p class="figure-caption">图6.4:中的数据截图。替换未知值后的csv文件</p><p>这将允许我们在数据集的预处理过程中轻松处理缺失值。</p></li>
+				<li>Finally, the edited dataset is saved in a new <code>.csv</code> file so that it can be used for the activities throughout this chapter. You can do this by using the <code>to_csv</code> function, as follows:<pre>data.to_csv("bank-full-dataset.csv")</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2AAX2ym">https://packt.live/2AAX2ym</a>。</p><p class="callout">你也可以在<a href="https://packt.live/3ftYXnf">https://packt.live/3ftYXnf</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>该文件应包含总共45，211个实例，每个实例有16个要素和一个类标签，可以通过打印保存数据集的变量的形状来验证。类别标签是二进制的，属于<code>yes</code>或<code>no</code>类型，并指示客户是否向银行订购定期存款。</p>
+			<p>每个实例代表银行的一个客户，而特征捕获人口统计信息，以及关于在当前(和先前)促销活动期间与客户联系的性质的数据。</p>
+			<p>下表显示了所有16项功能的简要说明。这将帮助您确定每个特征与研究的相关性，并提供预处理数据所需的一些步骤:</p>
+			<div><div><img src="img/B15781_06_05.jpg" alt="Figure 6.5: A table describing the features of the dataset&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.5:描述数据集特征的表格</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">你可以在这本书的GitHub资源库中的<code>Chapter06</code>文件夹中找到前面的描述和更多内容。上例中的文件名为<code>bank-names.txt</code>，可以在名为<code>bank.zip</code>的<code>.zip</code>文件夹中找到。</p>
+			<p>使用我们在浏览数据集时获得的信息，可以继续预处理数据和训练模型，这将是以下活动的目的。</p>
+			<h2 id="_idParaDest-161"><a id="_idTextAnchor166"/>活动6.01:执行银行营销数据集的准备和创建阶段</h2>
+			<p>本活动的目标是执行<em class="italic">准备</em>和<em class="italic">创建</em>阶段的流程，以构建一个全面的机器学习问题。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">对于本章中的练习和活动，您需要在系统上安装Python 3.7、NumPy、Jupyter、Pandas和scikit-learn。</p>
+			<p>让我们考虑以下场景:您在您所在城镇的主要银行工作，营销团队决定提前了解客户是否可能订阅定期存款，以便他们可以集中精力锁定这些客户。</p>
+			<p>为此，我们为您提供了一个数据集，其中包含团队当前和之前开展的营销活动的详细信息(您已经下载并研究过的银行营销数据集)。您需要预处理数据集并比较两个模型，以便选择最佳模型。</p>
+			<p>按照以下步骤实现这一点:</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">为了提醒你如何预处理你的数据集，重温<em class="italic">第1章</em>，<em class="italic">sci kit简介-学习</em>。另一方面，为了提醒如何训练监督模型、评估性能和执行错误分析，请重温<em class="italic">第3章</em>、<em class="italic">监督学习-关键步骤</em>和<em class="italic">第4章</em>、<em class="italic">监督学习算法:预测年收入</em>。</p>
+			<ol>
+				<li value="1">打开一个Jupyter笔记本来执行此活动，并导入所有必需的元素。</li>
+				<li>将数据集加载到笔记本中。确保你加载的是之前编辑过的，名为<code>bank-full-dataset.csv</code>的，在<a href="https://packt.live/2wnJyny">https://packt.live/2wnJyny</a>也有。</li>
+				<li>考虑到研究的目的是发现有可能订阅定期存款的客户，请选择最适合衡量模型性能的指标。</li>
+				<li>Pre-process the dataset.<p>请注意，其中一个定性特征是序数，这就是为什么它必须转换为遵循相应顺序的数字形式。使用以下代码片段来完成此操作:</p><pre>data["education"] = data["education"].fillna["unknown"]
+encoder = ["unknown", "primary", "secondary", "tertiary"]
+for i, word in enumerate(encoder):
+    data["education"] = data["education"].\
+                        str.replace(word,str(i))
+    data["education"] = data["education"].astype("int64")</pre></li>
+				<li>将要素从类标注中分离出来，并将数据集分成三组(训练、验证和测试)。</li>
+				<li>对数据集使用决策树算法并训练模型。</li>
+				<li>Use the multilayer perceptron algorithm on the dataset and train the model.<p class="callout-heading">注意</p><p class="callout">你也可以用我们在本书中讨论的其他分类算法来尝试。然而，选择这两个是为了让你也能够比较训练时间的差异。</p></li>
+				<li>使用您之前选择的指标评估这两个模型。</li>
+				<li>通过执行错误分析，微调一些超参数以修复您在评估模型时检测到的问题。</li>
+				<li>比较模型的最终版本，并选择您认为最符合数据的版本。</li>
+			</ol>
+			<p>预期产出:</p>
+			<div><div><img src="img/B15781_06_06.jpg" alt="Figure 6.6: Expected output&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.6:预期产出</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">你可以在第244页找到这项活动的解决方案。</p>
+			<h1 id="_idParaDest-162"><a id="_idTextAnchor167"/>保存并加载已训练的模型</h1>
+			<p>尽管操纵数据集和训练正确模型的过程对于开发机器学习项目至关重要，但工作并没有就此结束。了解如何保存训练好的模型是关键，因为这将允许您保存超参数，以及最终模型的权重和偏差值，以便它在再次运行时保持不变。</p>
+			<p>此外，在将模型保存到文件后，了解如何加载保存的模型以便使用它对新数据进行预测也很重要。通过保存和加载模型，我们允许模型在任何时候通过许多不同的方式被重用。</p>
+			<h2 id="_idParaDest-163"><a id="_idTextAnchor168"/>保存模型</h2>
+			<p>保存模型的过程也称为<strong class="bold">序列化</strong>，由于使用许多参数(权重和偏差)的神经网络的流行，以及由于引入了更大和更复杂的数据集，使得训练过程持续几天、几周甚至几个月，因此它变得越来越重要，这些参数在每次训练模型时都会随机初始化。</p>
+			<p>考虑到这一点，保存模型的过程通过将结果标准化到模型的保存版本来帮助优化机器学习解决方案的使用。它还可以节省时间，因为它允许您直接将保存的模型应用于新数据，而无需重新培训。</p>
+			<p>有两种主要的方法来保存训练好的模型，其中一种将在本节中解释。<code>pickle</code>模块是Python中序列化对象的标准方式，它通过实现一个强大的算法来序列化模型，然后将其保存为一个<code>.pkl</code>文件。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">另一个可用于保存训练好的模型的模块是<code>joblib</code>，它是SciPy生态系统的一部分。</p>
+			<p>但是，请注意，模型只有在将来的项目中使用或用于将来的预测时才会被保存。当开发一个机器学习项目来理解当前数据时，没有必要保存它，因为分析将在模型训练后执行。</p>
+			<h2 id="_idParaDest-164"><a id="_idTextAnchor169"/>练习6.01:保存一个训练好的模型</h2>
+			<p>在下面的练习中，我们将使用我们在<em class="italic">第5章</em>、<em class="italic">人工神经网络:预测年收入</em>中下载的生育数据集。神经网络将根据训练数据进行训练，然后保存。按照以下步骤完成本练习:</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">数据集也可以在本书的GitHub知识库中找到:<a href="https://packt.live/2zBW84e">https://packt.live/2zBW84e</a>。</p>
+			<ol>
+				<li value="1">Open a Jupyter Notebook to implement this exercise and import all the required elements to load a dataset, train a multilayer perceptron, and save a trained model:<pre>import pandas as pd
+from sklearn.neural_network import MLPClassifier
+import pickle
+import os</pre><p>如前所述,<code>pickle</code>模块将用于保存训练好的模型。<code>os</code>模块用于定位Jupyter笔记本的当前工作目录，以便将模型保存在相同的路径中。</p></li>
+				<li>加载生育力数据集，并将数据分成特征矩阵<code>X</code>和目标矩阵<code>Y</code>。使用<code>header = None</code>参数，因为数据集没有标题行:<pre>data = pd.read_csv("fertility_Diagnosis.csv", header=None) X = data.iloc[:,:9] Y = data.iloc[:,9]</pre></li>
+				<li>Train a multilayer perceptron classifier over the data. Set the number of iterations to <code>1200</code> to avoid getting a warning message indicating that the default number of iterations is insufficient to achieve convergence:<pre>model = MLPClassifier(max_iter = 1200)
+model.fit(X,Y)</pre><p class="callout-heading">注意</p><p class="callout">提醒一下，调用<code>fit</code>方法的输出包含了当前正在被训练的模型及其接受的所有参数。</p></li>
+				<li>Serialize the model and save it in a file named <code>model_exercise.pkl</code>. Use the following code to do so:<pre>path = os.getcwd() + "/model_exercise.pkl"
+file = open(path, "wb")
+pickle.dump(model, file)</pre><p>在前面的代码片段中，<code>path</code>变量包含保存序列化模型的文件的路径，其中第一个元素定位当前工作目录，第二个元素定义要保存的文件名。<code>file</code>变量用于创建一个文件，该文件将保存在所需的路径中，并将文件模式设置为<code>wb</code>，表示<code>dump</code>方法应用于<code>pickle</code>模块。它获取之前创建的模型，序列化它，然后保存它。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3e18vWw">https://packt.live/3e18vWw</a>。</p><p class="callout">你也可以在https://packt.live/2B7NJpC在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>您已成功保存了一个训练模型。在下一节中，我们将会看到加载一个保存的模型。</p>
+			<h2 id="_idParaDest-165"><a id="_idTextAnchor170"/>加载模型</h2>
+			<p>加载模型的过程也称为<code>pickle</code>模块也用于加载模型。</p>
+			<p>值得一提的是，模型不需要加载到它被训练和保存的同一个代码文件中；相反，它应该被加载到任何其他文件中。这主要是因为<code>pickle</code>库的<code>load</code>方法将在一个变量中返回模型，该变量将用于应用<code>predict</code>方法。</p>
+			<p>当加载一个模型时，重要的是不仅要像我们之前做的那样导入<code>pickle</code>和<code>os</code>模块，还要导入用于训练模型的算法类。例如，要加载一个神经网络模型，需要从scikit-learn的<code>neural_network</code>模块导入<code>MLPClassifier</code>类。</p>
+			<h2 id="_idParaDest-166"><a id="_idTextAnchor171"/>练习6.02:加载已保存的模型</h2>
+			<p>在本练习中，使用不同的Jupyter笔记本，我们将加载先前训练的模型(<em class="italic">练习6.01 </em>、<em class="italic">保存训练的模型</em>)并执行预测。按照以下步骤完成本练习:</p>
+			<ol>
+				<li value="1">打开一个Jupyter笔记本来实现这个练习。</li>
+				<li>Import the <code>pickle</code> and <code>os</code> modules. Also, import the <code>MLPCLassifier</code> class:<pre>import pickle
+import os
+from sklearn.neural_network import MLPClassifier</pre><p>如前所述,<code>pickle</code>模块将用于加载训练好的模型。<code>os</code>模块用于定位Jupyter笔记本的当前工作目录，以便找到包含已保存模型的文件。</p></li>
+				<li>Use <code>pickle</code> to load the saved model, as follows:<pre>path = os.getcwd() + "/model_exercise.pkl"
+file = open(path, "rb")
+model = pickle.load(file)</pre><p>这里，<code>path</code>变量用于存储包含已保存模型的文件的路径。接下来，<code>file</code>变量用于使用<code>rb</code>文件模式打开文件，这代表<code>load</code>方法被应用到<code>pickle</code>模块上以反序列化和加载模型到<code>model</code>变量中。</p></li>
+				<li>Use the loaded model to make a prediction for an individual, with the following values as the values for the features: <code>-0.33, 0.67, 1, 1, 0, 0, 0.8, -1, 0.5</code>.<p>将对<code>model</code>变量应用<code>predict</code>方法得到的输出存储在一个名为<code>pred</code>的变量中:</p><pre>pred = model.predict([[-0.33,0.67,1,1,0,0,0.8,-1,0.5]])
+print(pred)</pre><p>通过打印<code>pred</code>变量，我们得到的预测值等于<code>O</code>，这意味着个人的诊断发生了改变，如下所示:</p><pre>['O']</pre></li>
+			</ol>
+			<p>您已经成功加载了一个保存的模型。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2MXyGS7">https://packt.live/2MXyGS7</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3dYgVxL">https://packt.live/3dYgVxL</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-167"><a id="_idTextAnchor172"/>活动6.02:保存并加载银行营销数据集的最终模型</h2>
+			<p>考虑下面的场景:您必须保存使用银行营销数据集创建的模型，以便将来可以使用它，而无需重新训练模型，也没有每次得到不同结果的风险。为此，您需要保存并加载您在<em class="italic">活动6.01 </em>、<em class="italic">中创建的模型，为银行营销数据集</em>执行准备和创建阶段。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">以下活动将分为两个部分。</p>
+			<p class="callout">第一部分执行保存模型的过程，将使用来自<em class="italic">活动6.01 </em>、<em class="italic">的同一个Jupyter笔记本执行银行营销数据集</em>的准备和创建阶段。第二部分包括加载保存的模型，这将使用不同的Jupyter笔记本来完成。</p>
+			<p>按照以下步骤完成本活动:</p>
+			<ol>
+				<li value="1">从<em class="italic">活动6.01 </em>、<em class="italic">中打开Jupyter笔记本，执行银行营销数据集</em>的准备和创建阶段。</li>
+				<li>For learning purposes, take the model that you selected as the best model, remove the <code>random_state</code> argument, and run it a couple of times. <p>确保每次运行模型时都运行精度指标的计算，以便查看每次运行所实现的性能差异。当你认为你在之前的运行中得到的所有结果中找到了一个性能良好的模型时，请随意停止。</p><p class="callout-heading">注意</p><p class="callout">本书中获得的结果使用了<code>2</code>中的一个<code>random_state</code>。</p></li>
+				<li> Save the model that you choose as the best performing one in a file named <code>final_model.pkl</code>. <p class="callout-heading">注意</p><p class="callout">确保使用<code>os</code>模块将模型保存在与当前Jupyter笔记本相同的路径中。</p></li>
+				<li>打开一个新的Jupyter笔记本，导入所需的模块和类。</li>
+				<li>加载模型。</li>
+				<li>Perform a prediction for an individual by using the following values: <code>42</code>, <code>2</code>, <code>0</code>, <code>0</code>, <code>1</code>, <code>2</code>, <code>1</code>, <code>0</code>, <code>5</code>, <code>8</code>, <code>380</code>, <code>1</code>, <code>-1</code>, <code>0</code>.<p>预期产出:</p><pre>[0] </pre><p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第253页找到。</p></li>
+			</ol>
+			<h1 id="_idParaDest-168"><a id="_idTextAnchor173"/>与训练有素的模特互动</h1>
+			<p>一旦创建并保存了模型，就到了构建全面的机器学习程序的最后一步:允许与模型轻松交互。该步骤不仅允许模型被重用，而且通过允许您仅使用输入数据来执行分类，为机器学习解决方案的实现引入了效率。</p>
+			<p>有几种与模型交互的方式，选择哪种方式取决于用户的性质(经常使用模型的人)。可以通过不同的方式访问机器学习项目，其中一些需要使用API、在线或离线程序(应用程序)或网站。</p>
+			<p>此外，一旦基于用户的偏好或专业知识定义了通道，对最终用户和模型之间的连接进行编码是非常重要的，这可以是反序列化模型并加载它，然后执行分类，并最终返回再次显示给用户的输出的函数或类。</p>
+			<p>下图显示了通道和模型之间建立的关系，其中左边的图标代表模型，中间的图标是执行连接的函数或类(中介)，右边的图标是通道。这里，正如我们前面解释的，通道将输入数据提供给中介，中介然后将信息提供给模型以执行分类。分类的输出被发送回中介，中介沿着通道传递输出以便显示:</p>
+			<div><div><img src="img/B15781_06_07.jpg" alt="Figure 6.7: Illustration of the interaction between the user and the model&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.7:用户和模型之间交互的图示</p>
+			<h2 id="_idParaDest-169"><a id="_idTextAnchor174"/>练习6.03:创建一个类和一个通道来与一个经过训练的模型进行交互</h2>
+			<p>在本练习中，我们将在文本编辑器中创建一个类，该类获取输入数据并将其提供给在<em class="italic">练习6.01 </em>、<em class="italic">中训练过的模型，使用<code>Fertility Diagnosis</code>数据集保存训练过的模型</em>。此外，我们将在Jupyter笔记本中创建一个表单，用户可以在其中输入数据并获得预测。</p>
+			<p>要在文本编辑器中创建类，请按照下列步骤操作:</p>
+			<ol>
+				<li value="1">打开首选的文本编辑器，如PyCharm。</li>
+				<li>进口<code>pickle</code>和<code>os</code> : <pre>import pickle import os</pre></li>
+				<li>创建一个类对象，命名为<code>NN_Model</code> : <pre>Class NN_Model(object):</pre></li>
+				<li>Inside of the class, create an initializer method that loads the file containing the saved model (<code>model_exercise.pkl</code>) into the code:<pre>def __init__(self):
+    path = os.getcwd() + "/model_exercise.pkl"
+    file = open(path, "rb")
+    self.model = pickle.load(file)</pre><p class="callout-heading">注意</p><p class="callout">记住在类对象内部缩进这个方法。</p><p>一般来说，一个类对象中的所有方法都必须有<code>self</code>参数。另一方面，当使用<code>self</code>语句定义模型的变量时，可以在同一类的任何其他方法中使用该变量。</p></li>
+				<li>Inside the class named <code>NN_Model</code>, create a <code>predict</code> method. It should take in the feature values and input them as arguments to the <code>predict</code> method of the model so that it can feed them into the model and make a prediction:<pre>def predict(self, season, age, childish, trauma, \
+            surgical, fevers, alcohol, smoking, sitting):
+    X = [[season, age, childish, trauma, surgical, \
+          fevers, alcohol, smoking, sitting]]
+    return self.model.predict(X)</pre><p class="callout-heading">注意</p><p class="callout">记住在类对象内部缩进这个方法。</p></li>
+				<li>Save the code as a Python file (<code>.py</code>) and name it <code>exerciseClass.py</code>. The name of this file will be used to load the class into the Jupyter Notebook for the following steps.<p>现在，让我们编写程序的前端解决方案，包括创建一个用户可以输入数据并获得预测的表单。</p><p class="callout-heading">注意</p><p class="callout">出于学习目的，将在Jupyter笔记本中创建该表单。然而，通常情况下，前端是以网站、应用程序或类似的形式出现的。</p></li>
+				<li>打开一个Jupyter笔记本。</li>
+				<li>要导入在<em class="italic">步骤6 </em>中保存为Python文件的模型类，请使用下面的代码片段:<pre>from exerciseClass import NN_Model</pre></li>
+				<li>Initialize the <code>NN_Model</code> class and store it in a variable called <code>model</code>:<pre>model = NN_Model()</pre><p>通过调用保存在Python文件中的类，初始化器方法被自动触发，它将保存的模型加载到变量中。</p></li>
+				<li>创建一组变量，用户可以在其中输入每个特性的值，然后将这些值提供给模型。使用以下值:<pre>a = 1      # season in which the analysis was performed b = 0.56   # age at the time of the analysis c = 1      # childish disease d = 1      # accident or serious trauma e = 1      # surgical intervention f = 0      # high fevers in the last year g = 1      # frequency of alcohol consumption h = -1     # smoking habit i = 0.63   # number of hours spent sitting per day</pre></li>
+				<li>使用<code>predict</code>方法对<code>model</code>变量进行预测。将特征值作为参数输入，考虑到您必须以在文本编辑器<pre>pred = model.predict(season=a, age=b, childish=c, \                      trauma=d, surgical=e, fevers=f, \                      alcohol=g, smoking=h, sitting=i) print(pred)</pre>中创建<code>predict</code>函数时相同的方式命名它们</li>
+				<li>By printing the prediction, we get the following output:<pre>['N']</pre><p>这意味着该个体具有正常的诊断。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考https://packt.live/2MZPjg0的<a href="https://packt.live/2MZPjg0"/>。</p><p class="callout">你也可以在https://packt.live/3e4tQOC在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>您已经成功创建了一个函数和一个通道来与您的模型进行交互。</p>
+			<h2 id="_idParaDest-170"><a id="_idTextAnchor176"/>活动6.03:允许与银行营销数据集模型交互</h2>
+			<p>考虑以下场景:在看到您在上一个活动中展示的结果后，您的老板要求您为他构建一个非常简单的方法，用他将在下个月收到的数据来测试模型。如果所有的测试都运行良好，他会要求你以更有效的方式启动程序。因此，你决定与你的老板共用一个Jupyter笔记本，他可以输入信息并得到预测。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">以下活动将分两部分展开。第一部分将涉及构建连接通道和模型的类，这将使用文本编辑器来开发。第二部分将是创建通道，这将在Jupyter笔记本上完成。</p>
+			<p>按照以下步骤完成本活动:</p>
+			<ol>
+				<li value="1">在文本编辑器中，创建一个包含两个主要方法的类对象。一个应该是加载保存的模型的初始化器，而另一个应该是一个<code>predict</code>方法，其中数据被提供给模型以检索输出。</li>
+				<li>在Jupyter笔记本中，导入并初始化您在上一步中创建的类。接下来，创建保存新观测的所有特征的值的变量。使用以下值:<code>42</code>、<code>2</code>、<code>0</code>、<code>0</code>、<code>1</code>、<code>2</code>、<code>1</code>、<code>0</code>、<code>5</code>、<code>8</code>、<code>380</code>、<code>1</code>、<code>-1</code>、<code>0</code>。</li>
+				<li>应用<code>predict</code>方法进行预测。</li>
+			</ol>
+			<p>预期输出:当您完成此活动时，您将得到<code>0</code>作为输出。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这项活动的解决方案可在第254页找到。</p>
+			<h1 id="_idParaDest-171"><a id="_idTextAnchor177"/>摘要</h1>
+			<p>本章总结了基于训练数据成功训练机器学习模型所需的所有概念和技术。在本章中，我们介绍了构建一个全面的机器学习程序的想法，该程序不仅考虑了准备数据集和创建理想模型所涉及的阶段，还考虑了与使模型可供未来使用相关的阶段，这是通过执行三个主要过程来完成的:保存模型、加载模型和创建一个允许用户轻松地与模型交互并获得结果的通道。</p>
+			<p>为了保存和加载模型，引入了<code>pickle</code>模块。该模块能够序列化模型并将其保存在一个文件中，同时也能够反序列化它以在将来使用该模型。</p>
+			<p>此外，为了使用户能够访问模型，需要根据将与模型交互的用户类型来选择理想的渠道(例如，API、应用程序、网站或表单)。然后，需要编写一个中介来连接通道和模型。这个中介通常以函数或类的形式出现。</p>
+			<p>这本书的主要目的是介绍scikit-learn的库，以一种简单的方式开发机器学习解决方案。在讨论了数据探索和预处理的重要性和涉及的不同技术后，这本书将其知识分为机器学习的两个主要领域，即监督和非监督学习。讨论了最常见的算法。</p>
+			<p>最后，我们解释了通过执行误差分析来测量模型性能的重要性，以便提高模型对未知数据的整体性能，并最终选择最能代表数据的模型。应该保存这个最终模型，以便将来可以使用它进行可视化或执行预测。</p>
+		</div>
+		<div><div/>
+		</div>
+		<div><div/>
+		</div>
+		<div><div/>
+		</div>
+	
+
+</body></html>

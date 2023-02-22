@@ -1,0 +1,634 @@
+<html><head/><body>
+
+
+    
+        <title>Data Experimentation and Visualization Using Azure</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">使用Azure进行数据实验和可视化</h1>
+                
+            
+            
+                
+<p>在前一章中，我们学习了如何在云中导航不同的Azure服务来实现ML解决方案。我们意识到，以编程方式训练定制ML模型以及自动化基础设施和部署的最佳服务是Azure ML服务。在本章中，我们将设置Azure ML工作空间，创建一个训练集群，并在Azure中收集所有工件的同时执行数据实验。</p>
+<p>首先，您将学习如何准备ML工作空间并与之交互。一旦设置好，你将能够在Azure中执行和跟踪实验，以及训练好的模型、图、度量和代码快照。这些都可以在您的创作Python环境中完成；比如使用Azure ML的compute实例的Jupyter类似于Data Science VMs(dsvm)或者任何在PyCharm、VS Code中运行的Python解释器等等。我们将首先在创作环境中本地运行实验代码，然后逐渐转移到自动扩展的训练集群。</p>
+<p>在本章的第二部分，我们将应用所学的知识并执行降维来可视化高维数据集。我们还将跟踪这些可视化以及Azure ML中的关键指标。首先我们将比较两种线性投影:<strong>主成分分析</strong> ( <strong> PCA </strong>)和<strong>线性判别分析</strong> ( <strong> LDA </strong>)作为无监督和有监督嵌入的例子。然后我们再来看两个流行的无监督非线性技术:<strong> t分布随机邻居嵌入</strong> ( <strong> t-SNE </strong>)和<strong>一致流形逼近和投影</strong> ( <strong> UMAP </strong>)。这将帮助你快速试验任何数据集，并将你的试验保存在Azure ML中。</p>
+<p>让我们开始设置您的Azure ML工作空间。我们建议你使用Azure Cloud Shell、Azure ML和Azure ML计算实例，在你的Azure帐户中关注我们。如果有些内容听起来仍然不熟悉，请不要担心；我们将一步一步地解决设置和实验问题。</p>
+<p>以下是本章将涉及的主题:</p>
+<ul>
+<li class="mce-root">准备您的Azure ML工作区</li>
+<li>可视化高维数据</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Preparing your Azure ML workspace</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">准备您的Azure ML工作区</h1>
+                
+            
+            
+                
+<p>在第一部分中，我们将使用Azure命令行在Azure中设置ML工作区。这将帮助您重复创建开发、试运行和生产环境。你可以在本地机器上完成部分工作，比如运行Azure命令行脚本或简单的Python创作环境，或者使用Azure Cloud Shell在云中完成。在Azure中使用预配置的shell是最快的方法，因为所有必需的扩展和别名都已经为您预安装和配置好了。</p>
+<p>然后，我们将从您的创作和实验环境(例如，您的本地开发机器或Azure ML中的小型笔记本虚拟机)运行简单的实验，然后平稳地过渡到Azure ML计算集群——Azure上高度可扩展的执行环境。这种设置的好处在于，从那时起，您将能够决定是要在本地开发机器上运行代码(并且仍然受益于Azure ML的许多功能),还是要在预配置的虚拟机或可自动扩展的计算集群上运行代码。</p>
+<p>发现Azure ML的一个很好的方法是获取一个当前的ML项目，并开始添加来自Azure ML的一些片段来增强该项目。我们将开始跟踪工作目录、输出工件(例如，一个经过训练的模型)，以及您的实验每次运行的所有相关度量。稍后，我们可以注册模型并在执行环境之间切换，或者调整参数。这应该会让您从当前的工作流中非常平稳地过渡，并为Azure ML提供出色的入门体验——一次只使用几行代码。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Setting up the ML Service workspace</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">设置ML服务工作空间</h1>
+                
+            
+            
+                
+<p>在本书中，我们将尽可能多地尝试自动化手动步骤，为您提供一种重现所有环境和实验的方法。有许多不同的方法来以编程方式在Azure中设置资源:ARM模板、Azure CLI、Azure SDKs、Terraform，以及更多可用的工具。总的来说，我们将使用Azure CLI来设置和配置Azure ML工作区，稍后专门使用用于Python的Azure ML SDK来设置和配置训练集群和其他资源。</p>
+<p>使用这种方法将极大地促进Azure中执行的所有任务的可重复性和自动化。如果你是Azure CLI的新手，你应该通过Azure文档中提供的信息继续安装它:<a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows">https://docs . Microsoft . com/en-us/CLI/Azure/install-Azure-CLI-windows</a>。如果您已经安装了Azure CLI，请确保您有最新的可用版本，这是许多新的ML功能所必需的。</p>
+<p>让我们按照以下步骤设置Azure ML工作空间:</p>
+<ol>
+<li>首先，我们需要为Azure CLI安装Azure ML扩展。这将允许您通过命令行与Azure ML进行交互。让我们使用以下命令安装ML扩展:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az extension add -n azure-cli-ml</strong></pre>
+<ol start="2">
+<li>安装后，您将能够使用<kbd>az ml</kbd>命令来使用该扩展。确保在继续之前，您运行以下命令来浏览Azure CLI ML扩展提供的操作:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az ml -h</strong><br/><br/><strong>Group</strong><br/><strong> az ml : Access Machine Learning commands.</strong><br/><br/><strong>Subgroups:</strong><br/><strong> computetarget : Access compute context related commands.</strong><br/><strong> datastore : Manage and use datastores.</strong><br/><strong> experiment : Manage experiments in the AzureML Workspace.</strong><br/><strong> folder : Access folder related commands.</strong><br/><strong> model : Manage machine learning models.</strong><br/><strong> pipeline : Access and manage machine learning pipelines.</strong><br/><strong> run : Manage and submit AzureML runs.</strong><br/><strong> service : Manage operationalized services.</strong><br/><strong> workspace : Access workspace related commands.</strong></pre>
+<ol start="3">
+<li>接下来，在<kbd>westus2</kbd>区域创建一个新的资源组<kbd>mldemo</kbd>，并创建一个Azure ML工作区<kbd>mldemows</kbd>。这不仅会创建工作区，还会创建ML项目所需的所有其他资源，比如<kbd>StorageAccount</kbd>、<kbd>ServicePrincipal</kbd>、<kbd>AppInsights</kbd>和<kbd>KeyVault</kbd>容器。这些服务都是Azure ML工作空间的一部分:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az group create -n mldemo -l westus2</strong><br/><strong>{ ... }</strong><br/><br/><strong>$ az ml workspace create -w mldemows -g mldemo</strong><br/><strong>Deploying StorageAccount with name mldemowsstorage01509a813.</strong><br/><strong>Deploying AppInsights with name mldemowsinsightsd847e989.</strong><br/><strong>Deployed AppInsights with name mldemowsinsightsd847e989.</strong><br/><strong>Deploying KeyVault with name mldemowskeyvaultba9841b6.</strong><br/><strong>Deployed KeyVault with name mldemowskeyvaultba9841b6.</strong><br/><strong>Deployed StorageAccount with name mldemowsstorage01509a813.</strong><br/><strong>Deploying Workspace with name mldemows.</strong><br/><strong>Deployed Workspace with name mldemows.</strong><br/><strong>{ ... }</strong></pre>
+<p style="padding-left: 60px">如您所见，前面的命令创建了运行ML实验所需的多个资源，以及Azure ML工作空间。<kbd>KeyVault</kbd>将用于自动管理您引擎盖下的秘密和密钥；<kbd>StorageAccount</kbd>将用于存储源文件、训练好的模型、数据等工件；<kbd>AppInsights</kbd>将用于跟踪你的实验部署的度量和遥测数据。</p>
+<ol start="4">
+<li>下一步，我们将切换到shell中的工作目录，并将Azure ML工作区配置导出到磁盘。这将帮助我们从该文件加载配置，而不是在脚本中跟踪您的订阅ID和ML工作区名称:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az ml folder attach -w mldemows -g mldemo -e mldemos </strong><br/><strong>{</strong><br/><strong>  "Experiment name": "mldemos",</strong><br/><strong>  "Project path": "~/ch03-data-experimentation",</strong><br/><strong>  "Resource group": "mldemo",</strong><br/><strong>  "Subscription id": "***",</strong><br/><strong>  "Workspace name": "mldemows"</strong><br/><strong>}</strong></pre>
+<p style="padding-left: 60px">前面的命令在当前工作目录中创建一个包含您的工作区配置的<kbd>.azureml/</kbd>文件夹。它还创建了一个<kbd>.amlignore</kbd>文件，该文件定义了Azure ML服务应该忽略的文件和文件夹的所有文件模式。这些文件不会在实验运行的快照过程中上传——类似于您的版本控制系统中的<kbd>.gitignore</kbd>文件。</p>
+<ol start="5">
+<li>在接下来的步骤中，我们可以安装Python扩展来从Python内部与Azure ML交互。该扩展非常强大，让您不仅可以与Azure ML交互，还可以创建培训集群、部署集群等等。</li>
+</ol>
+<p>请注意，只有在您自己的机器上运行您的实验时，才需要这样做——而不是在预先配置的Azure ML Compute或Azure中的<strong> Data Science虚拟机</strong> ( <strong> DSVM </strong>)上。</p>
+<p style="padding-left: 60px">如果在本地运行，需要安装用于Azure和Azure ML的Python SDK。下面是如何使用pip和Python 3实现这一点的一个片段:</p>
+<pre style="padding-left: 60px"><strong>python3 -m pip install azure-cli azureml-sdk<br/></strong></pre>
+<p style="padding-left: 60px">如果你想在云中运行你的创作环境，你可以简单地在Azure中导航到你的机器学习工作区，并打开Azure ML接口以使用那里提供的笔记本查看器。下面的截图展示了Azure ML界面。您可以在左侧菜单中看到“笔记本”选项卡。选择此选项卡可直接在您的工作区中为您提供一个成熟的笔记本电脑环境:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-954 image-border" src="img/777a9df4-5ac9-4782-aeba-2a80a45dd174.png" style="width:57.50em;height:27.58em;"/></p>
+<p style="padding-left: 60px">要在此环境中运行代码，请单击Compute并为您的笔记本创建一个计算实例。完成后，如果您喜欢这些环境，您还会看到启动单独的Jupyter笔记本或JupyterLab会话的选项。但是，您也可以通过在安装了Azure和Azure ML Python SDKs的本地运行以下代码来继续。下面的截图展示了这在Azure ML界面中的样子。您可以单击JupyterLab在此计算实例上打开一个JupyterLab会话:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-955 image-border" src="img/79fffa3a-9b3d-42db-b947-f668fed6c428.png" style="width:56.75em;height:26.25em;"/></p>
+<p style="padding-left: 60px">前面的屏幕截图向您展示了如何通过简单地部署一个计算实例，在Azure ML工作区中快速建立一个成熟的创作和实验环境。如果您喜欢更加集成的体验，您也可以切换回左侧菜单中的“笔记本”选项卡，并使用此计算执行笔记本。</p>
+<p>计算实例以前称为笔记本电脑虚拟机，类似于预先配置的DSVMs。</p>
+<ol start="6">
+<li>接下来，我们可以从这个文件加载工作区配置，而无需在每个实验中显式指定工作区和订阅。在交互式Python笔记本环境或您手边的任何Python解释器中，您可以运行以下代码在当前上下文中加载您的工作空间:</li>
+</ol>
+<pre style="padding-left: 60px">from azureml.core import Workspace<br/><br/>ws = Workspace.from_config()</pre>
+<p style="padding-left: 60px">前面的代码将从我们之前使用Azure CLI创建的配置目录中加载您的配置。每当您在Azure ML计算实例中运行代码时，您都会获得这些与您的工作空间一起预先配置的设置。</p>
+<p>在Python中加载工作空间将提示您登录到您的Azure帐户，以允许您当前的计算环境和Azure ML工作空间之间的通信。</p>
+<p>运行前面的代码块将输出一个交互式链接，以便使用设备代码登录到您的Azure帐户。请点击链接并使用所提供的代码进行登录，以授予您当前的执行环境对Azure ML工作区的访问权限。如果您运行非交互式Python脚本而不是笔记本环境，您可以提供Azure CLI凭据来登录您的Azure帐户，如下所示:</p>
+<pre>from azureml.core import Workspace<br/>from azureml.core.authentication import AzureCliAuthentication<br/>cli_auth = AzureCliAuthentication()<br/>ws = Workspace.from_config(auth=cli_auth)</pre>
+<p>一旦您成功地将工作空间加载到<kbd>ws</kbd>对象中，您就可以继续为您的ML实验添加跟踪功能。我们将使用这个对象来创建实验、运行、记录指标和注册模型。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Running a simple experiment with Azure ML</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用Azure ML运行一个简单的实验</h1>
+                
+            
+            
+                
+<p>从Azure ML开始的一个很好的用例是向现有的ML管道添加高级日志、跟踪和监控功能。想象一下，您有一个中心位置来跟踪所有数据科学家的ML实验，监控您的训练和验证指标，收集您的训练模型和其他输出文件，以及保存当前环境的快照。我们可以通过简单地在您的培训脚本中添加几行代码来实现这一点。</p>
+<p>在Azure ML工作空间中，一个实验将一组<strong>运行</strong>分组。运行是您的实验(您的训练脚本)的一次执行，具有不同的设置、模型、代码、数据等等，但是具有相同的可比较的度量。您可以使用运行来测试给定实验的多个假设，并跟踪相同实验中的所有结果。然后运行用于跟踪和收集信息。我们现在将创建一个实验，然后创建一个运行:</p>
+<ol>
+<li>首先，加载并创建一个实验。以下代码行将创建一个新的实验，或者在ML工作区中加载一个现有的实验，并使用提供的名称:</li>
+</ol>
+<pre style="padding-left: 60px"># Load or create an experiment<br/>exp = Experiment(workspace=ws, name="cifar10_cnn_local")</pre>
+<p style="padding-left: 60px">上面的代码创建了一个名为<kbd>cifar10_cnn_local</kbd>的实验，用于跟踪新的运行，仅此而已。如果同名的实验已经存在，调用将返回现有的实验。现在，该实验中的所有运行都分组在一起，可以在单个仪表板上显示和分析。</p>
+<ol start="2">
+<li>一旦我们加载了一个实验，我们就可以创建一个<kbd>run</kbd>对象，并开始为当前的Python脚本或笔记本记录这次运行:</li>
+</ol>
+<pre style="padding-left: 60px"># Create and start an interactive run<br/>run = exp.start_logging(snapshot_directory='examples')</pre>
+<p style="padding-left: 60px">前面的代码实际上不仅创建和初始化了一个新的运行；它还获取当前环境的快照——通过<kbd>snapshot</kbd>目录定义——并将它上传到Azure ML工作区。要禁用这个特性，您需要显式地将<kbd>snapshot_directory=None</kbd>传递给<kbd>start_logging()</kbd>函数。您可能想知道为什么我们指定一个单独的目录，而不是引用当前目录。这样做的原因是我们只想在这里跟踪<kbd>examples</kbd>目录，因为它包含了我们所有的代码样本。但是，请随意将其设置为当前目录。</p>
+<p style="padding-left: 60px">此外，同样使用<kbd>.amlignore</kbd>文件，我们可以指定当前工作目录的哪一部分不应该在工作区中被跟踪。只需使用两行代码，您就可以自动跟踪每次实验运行的快照——因此永远不会丢失代码或配置，并且总是会返回到您的一次ML运行所使用的特定代码、参数或模型。这还不是很令人印象深刻，但我们才刚刚开始。</p>
+<p style="padding-left: 60px">以下快照显示了在Azure ML服务中运行的特定实验的跟踪文件:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-1130 image-border" src="img/d5c8eff3-2841-4e78-a609-2b7cd4b5ea21.png" style="width:51.00em;height:30.00em;"/></p>
+<ol start="3">
+<li>如果你在脚本中运行你的代码，而不是在笔记本中，将你的训练代码包装在一个<kbd>try</kbd> - <kbd>except</kbd>块中是一个很好的实践，以便将你的运行状态传播给Azure。如果训练运行失败，那么该运行将在Azure中被报告为失败运行。您可以通过使用以下代码片段来实现这一点:</li>
+</ol>
+<pre style="padding-left: 60px">run = exp.start_logging()<br/>try:<br/>  # train your model here<br/>  run.complete()<br/>except:<br/>  run.cancel()<br/>  raise</pre>
+<p style="padding-left: 60px">我们包含了<kbd>raise</kbd>语句，以便在出现错误时使脚本失败。这通常不会发生，因为所有的异常都被捕获了。您可以通过使用<kbd>with</kbd>语句来简化前面的代码。这将产生相同的结果，并且更容易阅读:</p>
+<pre style="padding-left: 60px">with exp.start_logging() as run:<br/>  # train your model here<br/>  pass</pre>
+<ol start="4">
+<li>除了在运行开始前上传的<kbd>snapshot</kbd>目录之外，<kbd>outputs</kbd>和<kbd>logs</kbd>目录在运行中是特殊的。一旦使用<kbd>run.complete()</kbd>完成一次运行，<kbd>outputs</kbd>目录的所有内容都会自动上传到Azure ML工作区。在一个使用Keras的简单示例中，我们可以将每个时期的最佳模型检查到<kbd>outputs</kbd>目录，并因此自动对每个实验的训练模型进行版本化和跟踪:</li>
+</ol>
+<pre style="padding-left: 60px">import os<br/>from keras.calbacks import ModelCheckpoint<br/><br/>outputs_dir = os.path.join(os.getcwd(), 'outputs')<br/>model_name = 'keras_cifar10_trained_model.h5'<br/>model_path = os.path.join(outputs_dir, model_name)<br/><br/># define a checkpoint callback<br/>checkpoint_cb = ModelCheckpoint(model_path,<br/>  monitor='val_loss',<br/>  save_best_only=True)<br/><br/># train the model<br/>model.fit(x_train, y_train,<br/>  batch_size=batch_size,<br/>  epochs=epochs,<br/>  validation_data=(x_test, y_test),<br/>  callbacks=[checkpoint_cb])</pre>
+<p style="padding-left: 60px">在前面的代码中，我们训练了一个Keras模型，并在每次迭代中将最佳模型写入定义的输出文件夹。因此，每当我们使用之前的实验跟踪运行训练时，一旦运行完成，模型就会自动上传。</p>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>我们可以看到(在下面的截图中)最好的模型被上传到了Azure ML工作区。这也非常方便，因为你不会失去你的训练模型了。最重要的是，所有工件都存储在Blob存储中，这是高度可伸缩且廉价的:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-845 image-border" src="img/24cf3142-c792-4637-8d80-2a75a8879e01.png" style="width:51.75em;height:26.08em;"/></p>
+<p>如果训练脚本是通过<kbd>ScriptRunConfig</kbd>调用的，而不是直接执行的，那么日志目录将会是流式的——我们将在下一节中看到这一点。这意味着您的日志将会出现并在发生时得到更新，而不仅仅是在每次运行结束时。</p>
+<p>另一个要添加的实用工具是在Azure ML的模型工件存储中注册训练好的模型。为此，您只需要调用<kbd>run.register_model()</kbd>方法，如下面的代码片段所示:</p>
+<pre style="padding-left: 60px"># Upload the best model<br/>run.upload_file(model_name, model_path)<br/><br/># Register the best model<br/>run.register_model(model_name, model_path=model_name, <br/>    model_framework='TfKeras')</pre>
+<p>在前面的代码中，我们首先强制上传模型。这是必需的，因为所有输出资源都是在运行完成时才上传，而不是立即上传。因此，在上传模型之后，我们可以简单地在模型存储中注册它。模型被版本化，并在模型存储中可用，如下面的屏幕截图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-956 image-border" src="img/e04c3264-4e18-47af-bf34-f6a1f0c71321.png" style="width:28.25em;height:42.42em;"/></p>
+<p>然后，该模型可用于Azure ML服务的自动部署。我们将在<a href="c6e3ad17-9212-42ee-ae25-b111e530518a.xhtml">第11章</a>、<em>部署和操作机器学习模型</em>中更详细地了解这一点。</p>
+<p>使用以前的代码，我们总是在新模型可用时用新版本更新模型。然而，这并不自动意味着新模型具有更好的训练或验证性能。因此，一种常见的方法是，只有当指定的度量比先前存储的实验的最高度量更好时，才注册新的模型。让我们实现这一点。我们可以使用以下函数从定义的实验中返回一个指标生成器:</p>
+<pre style="padding-left: 60px">from azureml.core import Run<br/><br/>def get_metrics_from_exp(experiment, metric, status='Completed'):<br/>  for run in Run.list(exp, status=status):<br/>    yield run.get_metrics().get(metric)</pre>
+<p>前面的生成器函数为每个完成的运行生成指定的跟踪指标。现在，我们可以使用这个函数返回所有先前实验运行的最佳度量。我们使用最佳指标来比较当前模型的评估分数，并决定我们是否应该注册新版本的模型。只有当当前模型的性能优于先前记录的模型时，我们才应该这样做。此功能的代码如下所示:我们期望模型跟踪一个叫做<kbd>Test accuracy</kbd>的指标。我们将在下一节学习如何记录这一指标:</p>
+<pre style="padding-left: 60px"># Get the highest test accuracy<br/>best_test_acc = max(get_metrics_from_exp(exp, 'Test accuracy'))<br/><br/># Evaluate the current model<br/>scores = model.evaluate(x_test, y_test, verbose=1)<br/><br/># Upload the model<br/>run.upload_file(model_name, model_path)<br/><br/>if scores[0] &gt; best_test_acc:<br/>  # Register the best model as a new version<br/>  run.register_model(model_name, model_path=model_name)</pre>
+<p>在前面的代码中，我们现在只在新模型的分数高于先前存储的最佳分数时才注册该模型。尽管如此，我们还是上传并跟踪了实验运行的模型二进制文件。现在我们知道了如何运行一个简单的实验，让我们在下一节学习如何记录指标和跟踪结果。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Logging metrics and tracking results</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">记录指标和跟踪结果</h1>
+                
+            
+            
+                
+<p>我们已经看到了三个有用的特性，用于在Azure ML工作空间中跟踪快照代码、上传输出工件和注册训练的模型文件。这些特性可以通过几行代码添加到任何现有的实验和培训Python脚本或笔记本中。同样，我们可以扩展实验脚本来跟踪各种变量，例如每个时期的训练精度和验证损失，以及最佳模型的测试集精度。</p>
+<p>使用<kbd>run.log()</kbd>方法，您可以在训练和实验期间跟踪任何参数。您只需提供一个名称和值，Azure会为您完成剩下的工作。后端会自动检测您是否发送了一个值列表——因此，当您在同一次运行中多次记录相同的值时，会有多个值具有相同的键——或者每次运行只发送一个值，例如，测试性能。在Azure ML UI中，这些值将自动用于显示您的训练表现。数值列表用于可视化您的运行性能，而每次运行的单个数值将用于显示您的实验性能。</p>
+<p>让我们看一个例子，在这个例子中，我们使用了两种类型的指标。下面是一个简单的片段，展示了如何跟踪培训、验证和测试性能:</p>
+<pre>for i in range(epochs):<br/>  model.fit(X_train, y_train)<br/>  scores = model.evaluate(x_val, y_val)<br/>  run.log('Validation loss', scores[0])<br/>  run.log('Validation accuracy', scores[1])<br/><br/># Evaluate trained model<br/>scores = model.evaluate(x_test, y_test)<br/>run.log('Test loss', scores[0])<br/>run.log('Test accuracy', scores[1])</pre>
+<p>前面的代码将这些值记录到ML工作空间运行中。当您在Azure门户的UI中打开运行时，列表值会自动转换为折线图，如以下屏幕截图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-957 image-border" src="img/67ef9667-99df-458d-9033-243d46a2de23.png" style="width:47.75em;height:33.42em;"/></p>
+<p>另一个漂亮的特性是ML workspace实验为您提供了所有运行的良好概览。它会自动使用每次运行记录的数值，并将其显示在仪表板上。您可以修改显示的值和用于在单次运行中聚合这些值的聚合方法。</p>
+<p>下面的屏幕截图直接在实验仪表板上显示了最小测试损失和最大测试准确度:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-959 image-border" src="img/a3063c50-56b7-4c27-bc34-cf30ca8ef430.png" style="width:54.50em;height:23.33em;"/></p>
+<p>这是跟踪运行值并显示相应实验值的最简单方法。然而，我们已经可以看到，这些智能可视化也非常有帮助。值得一提的是，所有这些都是通过简单地向您现有的ML训练脚本添加几行代码来实现的，与您使用的框架无关。</p>
+<p>将值记录到Azure ML的命令可以很容易地转换成更高级别的操作符来扩展您的ML项目。一个例子是在fit生成器中执行每个时期的Keras回调。我们可以编写这样一个类似于内置<kbd>RemoteMonitor</kbd>回调的回调函数:</p>
+<pre>from keras.callbacks import Callback<br/>import numpy as np<br/> <br/>class AzureMlKerasCallback(Callback):<br/> <br/>  def __init__(self, run)<br/>    super(AzureMlKerasCallback, self).__init__()<br/>    self.run = run<br/> <br/>  def on_epoch_end(self, epoch, logs=None):<br/>    logs = logs or {}<br/>    send = {}<br/>    send['epoch'] = epoch<br/>    for k, v in logs.items(): <br/>      if isinstance(v, (np.ndarray, np.generic)):<br/>        send[k] = v.item()<br/>      else:<br/>        send[k] = v<br/>    for k, v in send.items():<br/>      if isinstance(v, list):<br/>        self.run.log_list(k, v)<br/>      else:<br/>        self.run.log(k, v)</pre>
+<p>前面的代码实现了一个简单的Keras回调函数。它收集要在字典中发送的指标，可以是数组或单个指标。现在，我们不再手工记录每个参数，而是简单地使用Keras训练脚本中的回调函数，如以下代码所示:</p>
+<pre># Create an Azure Machine Learning monitor callback<br/>azureml_cb = AzureMlKerasCallback(run)<br/><br/>model.fit(x_train, y_train,<br/>  batch_size=batch_size,<br/>  epochs=epochs,<br/>  validation_data=(x_test, y_test),<br/>  callbacks=[azureml_cb])</pre>
+<p>前面的代码使用回调函数自然地扩展了Keras，以跟踪Azure ML服务中的训练和验证损失和准确性。您可以在本书提供的源代码中找到完整的工作示例。也可以为其他ML库编写类似的模块；我们把这个留给你做练习。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Scheduling and running scripts</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">计划和运行脚本</h1>
+                
+            
+            
+                
+<p>在上一节中，我们看到了如何用几行代码注释您现有的ML实验和训练代码，以便跟踪相关的度量并在您的工作空间中运行工件。在本节中，我们将从直接调用训练脚本转移到调度训练脚本在本地机器上运行。您可能会立即问为什么这个额外的步骤是有用的，因为直接调用训练脚本和安排训练脚本在本地运行之间没有太大的区别。</p>
+<p>这一练习背后的主要动机是，在后续步骤中，我们可以将执行目标更改为远程目标，并在云中的计算集群而不是本地机器上运行训练代码。这将是一个巨大的优势，因为我们现在可以轻松地在本地测试代码，然后将相同的代码部署到云中高度可扩展的计算环境中。</p>
+<p>另一个区别是，当调度训练脚本而不是调用它时，标准输出和错误流，以及<kbd>logs</kbd>目录中的所有文件将直接传输到Azure ML工作空间运行。这为您带来了巨大的好处——现在，您可以在ML工作空间中实时跟踪脚本输出，即使您的代码正在计算集群上运行。</p>
+<p>让我们在一个<em>创作</em>脚本中实现它。我们称之为<em>创作</em>脚本(或<em>创作</em>环境)，当脚本或环境的工作是安排另一个培训或实验脚本时。当我们谈到实际运行和执行训练或实验脚本的脚本或环境时，我们指的是<em>执行</em>脚本(或<em>执行</em>环境)。</p>
+<p>我们需要在创作脚本中定义两件事——定义执行环境的运行配置<kbd>RunConfiguration</kbd>和指定应该执行的脚本的运行脚本配置<kbd>ScriptRunConfig</kbd>。下面是定义这两者的代码片段:</p>
+<pre>from azureml.core.runconfig import RunConfiguration<br/>from azureml.core import ScriptRunConfig<br/>import os<br/><br/>run_local = RunConfiguration()<br/>run_local.environment.python.user_managed_dependencies = True<br/><br/>script_folder = os.path.join(os.getcwd(), 'examples')<br/>src = ScriptRunConfig(source_directory=script_folder,<br/>                      script='cifar10_cnn_remote.py',<br/>                      run_config=run_local)<br/>run = exp.submit(src)<br/>run.wait_for_completion(show_output = True)</pre>
+<p>在前面的代码中，我们像前面几节一样提供了<kbd>exp</kbd>对象。首先，我们用用户管理的依赖项创建一个本地运行配置来定义执行环境。这意味着当我们在本地运行时，所有的依赖项都已经提供了。当我们随后将这个训练跑步转移到云中时，我们只需要更改跑步配置。</p>
+<p>在下一行中，我们定义了想要在本地执行的目录和培训文件。最后，我们提交脚本，运行它，并等待它完成。现在，我们可以在ML workspace运行的日志部分跟踪脚本的输出，如下面的屏幕截图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img src="img/ab7080a8-10cc-428d-9755-1c4391958601.png" style="width:48.00em;height:37.33em;"/></p>
+<p>这非常方便，因为现在我们不需要知道代码最终在哪里执行。我们关心的只是看到输出；进度；并跟踪所有的度量、生成的模型以及所有其他的工件。通过调用<kbd>print(run.get_portal_url())</kbd>方法可以检索到当前运行的链接。然而，我们可以在笔记本环境中嵌入一个小部件，直接在JupyterLab中提供相同(或更多)的功能，而不是每次运行训练脚本时都导航到Azure门户。为此，我们需要用下面的代码片段替换<kbd>run.wait_for_completion()</kbd>行:</p>
+<pre>from azureml.widgets import RunDetails<br/><br/>RunDetails(run).show()</pre>
+<p>最后，如果我们想转移到远程执行环境，我们需要推断运行上下文。在执行脚本中，我们现在从当前执行上下文中加载<kbd>run</kbd>对象，而不是像前面几节那样创建一个新的运行。我们可以用下面的语句改变<kbd>exp.start_logging</kbd>调用:</p>
+<pre>from azureml.core import Run<br/><br/># Load the current run<br/>run = Run.get_context()</pre>
+<p>在前面的代码中，我们用从当前上下文自动推断出<kbd>run</kbd>对象的代码替换了前面的<kbd>start_logging()</kbd>方法。当<kbd>run</kbd>对象通过实验被调度时，它将自动与实验链接。这对于远程执行来说非常方便，因为我们不再需要显式指定<kbd>run</kbd>对象。</p>
+<p>使用推断出的<kbd>run</kbd>对象，我们可以记录值、上传文件和文件夹，以及注册模型，就像在前面的小节中一样。您可以在本书提供的源代码中找到一个工作示例。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Adding cloud compute to the workspace</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">将云计算添加到工作空间</h1>
+                
+            
+            
+                
+<p>在Azure ML服务中，您可以在Azure中使用两种不同类型的计算目标——托管和非托管。托管计算将直接从ML工作区内进行管理，而非托管计算将仅连接到您的工作区。当ML工作空间被删除时，所有被管理的计算目标也将被删除，而未被管理的(附加的)计算目标将继续存在。</p>
+<p>在Azure中训练ML模型的推荐计算目标是托管Azure ML计算服务——一个在Azure订阅中直接管理的自动扩展计算集群。如果你已经将Azure用于批处理工作负载，你会发现它类似于Azure Batch和Azure Batch AI，配置更少，并且紧密嵌入在Azure ML中。您可以通过单击“Training clusters”在UI中的“Compute”菜单下找到它。在SDK中，我们使用<kbd>Amlcompute</kbd>计算类型(Azure ML Compute cluster的缩写)来定义这样一个训练集群。</p>
+<p>让我们使用Azure ML Python SDK创建一个新的计算目标作为执行环境:</p>
+<pre>from azureml.core.compute import ComputeTarget, AmlCompute<br/><br/>compute_config = AmlCompute.provisioning_configuration(<br/>  vm_size='STANDARD_D2_V2',<br/>  max_nodes=4)<br/><br/>cpu_cluster = ComputeTarget.create(ws, cpu_cluster_name, compute_config)<br/>cpu_cluster.wait_for_completion(show_output=True)</pre>
+<p>前面的代码使用<kbd>STANDARD_D2_V2</kbd>虚拟机(2个CPU、7 GB RAM和100 GB HDD)作为工作节点，直接在您的Azure ML工作空间中创建一个针对ML优化的自动扩展计算集群。正如您所看到的，我们正在调整工作节点的最大数量以及所需的虚拟机大小和更多参数，如VNet、子网、SSL或负载平衡器配置。您甚至可以为您的计算集群配置低优先级虚拟机。</p>
+<p>您还可以定义使用GPU作为工作节点的虚拟机类型，例如，<kbd>Standard_NC6</kbd> (6个CPU、56 GB RAM、340 GB SSD、1个GPU和12 GB GPU内存)，只需更改配置即可。这很好，因为与Azure Databricks等其他托管集群相比，您不需要为头节点或主节点付费，只需要为工作节点付费。我们将在<a href="ef8acb66-47eb-415f-ba95-680d645e2ef3.xhtml">第7章</a>、<em>在Azure上训练深度神经网络</em>中更详细地讨论深度学习的虚拟机类型，并在<a href="8a4eafa1-2b6b-4fca-ab84-edaeeb149b25.xhtml">第9章</a>、<em>在Azure ML集群上运行分布式机器学习</em>中对GPU集群进行分布式训练。</p>
+<p>值得注意的是，设置和配置您的集群也可以使用Azure ML CLI或Azure ML SDK的任何其他支持的语言来完成。</p>
+<p>你可能会问自己，在某个特定的位置，Azure ML有哪些可用的VM类型。您可以使用<kbd>AmlCompute.supported_vmsizes()</kbd>方法检索一个最新的列表，并传递您的工作区和(可选)您的目标位置:</p>
+<pre>from azureml.core.compute import AmlCompute<br/><br/>AmlCompute.supported_vmsizes(workspace=ws, location='northeurope')</pre>
+<p>现在，我们返回创作脚本，并将执行目标更改为在这个远程计算集群<kbd>amldemocompute</kbd>上执行培训脚本。在这种情况下，我们按名称加载计算目标，并等待它可用—如果它不存在，我们就创建它。如果将以下脚本封装在一个函数中，该函数将配置作为参数，并在创建集群之前阻止执行，那么该脚本会非常方便:</p>
+<pre>from azureml.core.compute import ComputeTarget, AmlCompute<br/>from azureml.core.compute_target import ComputeTargetException<br/> <br/># Choose a name for your AML cluster<br/>aml_cluster_name = "amldemocompute"<br/><br/># Configure your compute cluster<br/>vm_size='STANDARD_D2_V2'<br/>max_nodes=4<br/><br/># Verify that the cluster exists already<br/>try:<br/>  aml_cluster = ComputeTarget(workspace=ws, name=aml_cluster_name)<br/>except ComputeTargetException:<br/>  print('Cluster not `%s` found, creating one now.' % aml_cluster_name)<br/>  compute_config = AmlCompute.provisioning_configuration(<br/>    vm_size=vm_size, max_nodes=max_nodes)<br/>  aml_cluster = ComputeTarget.create(ws, aml_cluster_name, compute_config)<br/> <br/># Wait until the cluster is ready<br/>aml_cluster.wait_for_completion(show_output=True)</pre>
+<p>在前面的代码中，我们重用了前面的功能来创建集群，并将它们嵌入到一个函数中，该函数要么返回集群并启动它(如果它存在)，要么创建一个全新的集群。</p>
+<p>接下来，我们必须配置运行配置，从而配置我们想要在其中运行代码的计算目标上的环境。这意味着我们需要配置培训脚本所需的所有库、框架和服务。这种环境可以由Docker基本映像以及其他Conda包来定义:</p>
+<pre>from azureml.core.runconfig import RunConfiguration<br/>from azureml.core.conda_dependencies import CondaDependencies<br/>from azureml.core.runconfig import DEFAULT_CPU_IMAGE<br/> <br/># Create a remote run configuration<br/>run_amlcompute = RunConfiguration()<br/> <br/>run_amlcompute.target = aml_cluster<br/>run_amlcompute.environment.docker.enabled = True<br/>run_amlcompute.environment.docker.base_image = DEFAULT_CPU_IMAGE<br/><br/>ds_packages = [<br/>  'numpy', 'pandas', 'matplotlib', 'seaborn', 'scikit-learn', 'keras'<br/>]<br/><br/>run_amlcompute.auto_prepare_environment = True<br/>run_amlcompute.environment.python.user_managed_dependencies = False<br/>run_amlcompute.environment.python.conda_dependencies = <br/>  CondaDependencies.create(conda_packages=ds_packages)</pre>
+<p>在前面的代码中，我们创建了一个新的运行配置，并指定了基本Docker映像，以及要安装在该环境中的其他Conda包。我们定义了通用数据科学库，并将它们附加到我们的Conda环境的培训集群中。</p>
+<p>请注意，一旦您为作业运行创建了此运行配置，它将被加载到您的容器注册表中，该注册表会自动添加到您的Azure ML工作区中。</p>
+<p>最后，我们修改脚本配置，以便它使用新创建的运行配置作为计算目标:</p>
+<pre>from azureml.core import ScriptRunConfig<br/>from azureml.widgets import RunDetails<br/> <br/>script = 'cifar10_cnn_remote.py'<br/>script_folder = os.path.join(os.getcwd(), 'examples')<br/><br/>src = ScriptRunConfig(<br/> source_directory=script_folder,<br/> script=script,<br/> run_config=run_amlcompute)<br/>run = exp.submit(src)<br/>RunDetails(run).show()</pre>
+<p>训练脚本现在在Azure上的远程计算目标中执行。在ML工作区中，收集快照、输出和日志看起来非常类似于本地运行。但是，我们现在还可以看到用于此次运行的Docker环境构建的日志，如下面的屏幕截图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-850 image-border" src="img/52edc805-4e65-40fe-af39-81a346d2f6ce.png" style="width:51.75em;height:21.58em;"/></p>
+<p>让我们再次捕捉当我们将运行提交给Azure ML时发生了什么:</p>
+<ul>
+<li>Azure ML在Docker中构建配置好的环境，如果它还不存在的话。</li>
+<li>Azure ML在私有容器注册表中注册您的环境，因此它可以被其他脚本和部署重用。</li>
+<li>Azure ML将您的脚本执行排队。</li>
+<li>Azure ML Compute初始化并扩展一个计算节点。</li>
+<li>Azure ML Compute执行脚本。</li>
+<li>Azure ML Compute捕获日志、工件和指标，并将它们流式传输到Azure ML。</li>
+<li>Azure ML在Blob存储中存储所有工件，在应用洞察中存储您的指标。</li>
+<li>Azure ML通过UI或API为你提供了所有关于运行的信息。</li>
+<li>Azure ML内联Juptyer笔记本中用作创作环境的所有日志。</li>
+<li>Azure ML Compute会在<em> x </em>分钟不活动后自动缩减集群。</li>
+</ul>
+<p>这简直不可思议。考虑到设置Azure ML工作空间只花了我们大约5分钟的时间，我们为所有ML工作负载提供了一个成熟的批处理计算调度和执行环境。这个环境的许多部分都可以根据您的喜好进行调整和配置，最棒的是:一切都可以通过Azure CLI或Azure SDK实现自动化。在本书的以下章节中，我们将使用Python SDK来配置、启动、缩放和删除用于训练和评分的聚类。</p>
+<p>在下一章中，我们将学习如何执行降维以可视化高维数据集，并像Azure ML中的指标一样自动跟踪它们。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Visualizing high-dimensional data</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">可视化高维数据</h1>
+                
+            
+            
+                
+<p>处理新数据集的第一步应该是系统地研究数据，通过手动检查数据集来找到模式、假设和见解。虽然这个建议一开始可能对您有意义，但当您的数据集在电子表格中包含数千个数值时，它将很难遵循。你应该如何浏览数据？你应该寻找什么？又能得到哪些感悟？</p>
+<p>快速洞察和充分理解数据的一个好方法是将数据可视化。这也有助于您识别数据中的聚类以及不规则和异常，所有这些都需要在所有进一步的数据处理中加以考虑。但是，如何可视化具有10、100、1000个特征维度的数据集呢？你应该把分析放在哪里？</p>
+<p>在本节中，我们将回答所有这些问题。首先，我们将探索Azure ML功能，用您的实验注册Matplotlib图形。这将对您的所有特征工作非常有帮助，因为您将能够将可视化附加到您的所有实验，从而有助于在稍后阶段理解您的数据、模型和实验。</p>
+<p>然后，我们将研究线性嵌入技术PCA(无监督降维)和LDA(一种监督技术，用于在给定目标标签的情况下计算数据集中的判别向量)。然后，我们将这两种技术与两种流行的无监督非线性嵌入技术进行比较，t-SNE和UMAP——t-SNE的广义和更快版本。在你的工具链中拥有这四种技术将有助于你理解数据集和创建有意义的可视化。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Tracking figures in experiments in Azure ML</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">在Azure ML中跟踪实验中的数字</h1>
+                
+            
+            
+                
+<p>在上一节中，我们发现了如何使用Azure ML跟踪ML实验的指标和文件。数据转换和ML脚本的其他重要输出是可视化、数据分布图、关于模型的见解以及解释结果。因此，Azure ML提供了一种类似的方法来跟踪图像、图形和Matplotlib引用的指标。</p>
+<p>让我们来看一个典型的场景；我们将从查看高维数据的最简单方法开始:一个可视化所有特征组合的二维网格。该可视化也被称为<strong> pairplot </strong>，是可视化库<strong> seaborn </strong>中的标准可视化类型。</p>
+<p>下面的截图显示了流行的iris flower数据集的pairplot，它包含四个特征维度(<kbd>sepal_length</kbd>、<kbd>sepal_width</kbd>、<kbd>petal_length</kbd>和<kbd>petal_width</kbd>)和一个目标类(<kbd>species</kbd>)。在网格单元中，我们可以看到两个特征维度组合的微小散点图。沿着对角线，我们简单地画出特征尺寸的分布。作为附加信息，我们在每个单元格中将目标类编码为<kbd>hue</kbd>:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-960 image-border" src="img/e3427fe0-5f4a-4eb8-b410-f9b77966a801.png" style="width:40.00em;height:35.50em;"/></p>
+<p>要在笔记本中复制该图，请运行以下代码片段。首先，我们加载seaborn库中打包的iris数据集，接下来，我们调用<kbd>pairplot()</kbd>方法绘制它。这将返回一个Matplotlib图形，并在笔记本环境中显示它:</p>
+<pre>import seaborn as sns<br/>sns.set(style="ticks")<br/><br/>df = sns.load_dataset("iris")<br/>sns.pairplot(df, hue="species")</pre>
+<p>前面的代码很有趣，因为它是一种非常简单的可视化高维数据的方式，类似于您在接收新数据集时首先要做的事情。虽然它对于非常高维的数据并不真正有用，但它为我们提供了一个很好的起点。我们将在接下来的章节中研究更复杂的技术。</p>
+<p>更有趣的是，我们如何在我们的数据实验和准备脚本中，以及随后在训练和优化管道中自动嵌入像前面那样的代码。通过几行代码，我们可以跟踪所有的Matplotlib图形，并将它们附加到我们的实验运行中。为此，我们只需将Matplotlib引用传递给<kbd>run.log_image()</kbd>方法，并给它一个合适的名称。以下代码片段显示了这在实验中的表现:</p>
+<pre>with exp.start_logging() as run:<br/>  fig = sns.pairplot(df, hue="species")<br/>  run.log_image("pairplot", plot=fig)</pre>
+<p class="mce-root">现在，这是令人惊奇的部分。通过调用带有Matplotlib引用的函数，Azure ML将呈现该图，保存它，并将其附加到实验运行中。下面的截图显示了点击了Images选项卡的Azure ML UI。您可以看到我们刚刚创建并注册的<kbd>pairplot</kbd>图像，附在跑步记录上:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-962 image-border" src="img/ca14ff7c-185f-4996-8692-f11677af12c0.png" style="width:50.08em;height:28.75em;"/></p>
+<p>这看起来是一个微小的特性，但在现实世界的实验中却非常有用。习惯于自动生成数据、模型和结果的图，并将它们附加到您的跑步中。无论您以后何时进行实验，您都将拥有已经附加到您的跑步、度量和配置的所有可视化。</p>
+<p>考虑在训练回归模型时存储回归图，在训练分类模型时存储混淆矩阵和ROC曲线。为神经网络训练基于树的集成和激活时，存储您的特征重要性。您只需实现一次，就可以为您的数据和ML管道添加大量有用的信息。</p>
+<p>当使用AutoML和HyperDrive优化参数、预处理、特征工程和模型选择时，您将获得大量现成的可视化结果，帮助您理解数据、模型和结果。</p>
+<p>让我们来发现一些对可视化数据集洞察力和高维数据有用的算法。为了简洁起见，本节省略了生成嵌入的代码，但是可以在本书相应的Github资源库中找到。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Unsupervised dimensionality reduction with PCA</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">无监督的PCA降维方法</h1>
+                
+            
+            
+                
+<p>最流行的线性降维技术是PCA，因为它是一种无监督的方法，因此不需要任何训练标签。PCA嵌入线性变换数据集，使得结果投影不相关。这个项目的轴被称为<strong>主成分</strong>，并且以这样的方式计算，即它们中的每一个都具有下一个最高的方差。</p>
+<p>主成分是数据中最高方差的方向。这意味着主成分或特征向量描述了数据集的最强方向，下一个维度显示了与前一个方向的正交差异。在NLP中，主要组件对应于高级概念——在推荐引擎中，它们对应于用户或项目特征。</p>
+<p>PCA可以作为协方差或相关矩阵的特征值分解来计算，或者通过使用SVD在非方阵上计算。PCA和特征值分解通常用作可视化的数据实验步骤，而SVD通常用作稀疏数据集的降维，例如NLP的词袋模型。我们将在<a href="2e9b480a-5003-4fc8-a5c6-bc2ba75c21b3.xhtml">第5章</a>、<em>使用NLP的高级特征提取</em>中看到SVD的实际应用。</p>
+<p>嵌入技术可以通过简单地移除除了第一个<em> x </em>分量之外的所有分量来用作降维，因为这些第一个也是最大的分量解释了数据集的一定百分比的方差。因此，我们移除具有低方差的数据以接收低维数据集。</p>
+<p>对PCA后的数据进行二维可视化(或在任何嵌入技术后),就是对变换数据集的前两个分量进行可视化——两个最大的主分量。生成的数据沿轴(主成分)旋转，缩放，并以零为中心。如下图所示，所有可视化都在<em> x </em>轴上投影了最高方差，在<em> y </em>轴上投影了第二高方差，依此类推。</p>
+<p>图中显示了PCA应用于三个日益复杂的数据集:</p>
+<ul>
+<li><strong>鸢尾花数据集</strong>:三类四个特征维度</li>
+<li><strong>UCI葡萄酒识别数据集</strong>:三类十三个特征维度</li>
+<li><strong>MNIST手写数字数据集</strong> : 10个类别和784个特征尺寸(28×28像素图像)</li>
+</ul>
+<p>作为第一个观察，我们应该承认，我们可以在二维空间显示所有这三个数据集，并立即识别集群，这是一个伟大的第一步。如果你回到鸢尾花配对图可视化，看看萼片宽度对萼片长度散点图，我们将无法在数据中看到线性可分离的集群。然而，通过将数据投射到前两个主成分上，我们可以在左图中看到，所有的聚类看起来都是线性可分的(在二维空间中)。</p>
+<p>当看右边的UCI葡萄酒数据集时，我们已经可以看出这些聚类不再非常明显了。现在，13个特征尺寸沿着前两个主成分被投影，最高方差沿着<em> x </em>轴，第二高方差沿着<em> x </em>轴。在PCA中，聚类形状通常与<em> x </em>轴对齐，因为这是算法的工作方式:</p>
+<div><img class="aligncenter size-full wp-image-963 image-border" src="img/0928d20a-8dfb-4199-9733-976eb21fd731.png" style="width:50.83em;height:17.75em;"/></div>
+<p>最后，当查看MNIST手写数字数据集的更复杂的嵌入时，除了顶部的数字0的群集之外，我们看不到许多群集。数据以零为中心，并缩放到-30和30之间的范围。因此，我们已经可以看出PCA的缺点——它没有考虑任何目标标签，因此没有对可分离的类进行优化:</p>
+<div><img class="aligncenter size-full wp-image-964 image-border" src="img/d6dbdb3a-048d-49b7-93a6-dc2bb673a2d4.png" style="width:28.92em;height:23.75em;"/></div>
+<p>让我们来看看一种将目标标签考虑在内的技术。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Using LDA for supervised projections</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">使用LDA进行监督投影</h1>
+                
+            
+            
+                
+<p>在LDA中，我们对输入数据执行线性变换(类似于PCA ),并对变换进行优化，以使结果方向具有最高的类间方差和最低的类内方差。这意味着优化会尝试使同一聚类的样本接近聚类的均值，同时尝试使聚类的均值尽可能远离。</p>
+<p>在LDA中，我们还接收一组线性加权方向作为结果变换。数据以0为中心，方向按最高的类间方差排序。因此，在这个意义上，LDA类似于考虑目标标签的PCA。LDA和PCA都没有真正的调谐旋钮，除了我们希望保留在投影中的分量数量和可能的随机初始化种子。</p>
+<p>当查看与上一节相同的数据集的以下可视化时，我们可以看到数据被转换为二维，其方式是聚类平均值在<em> x </em>轴上彼此相距最远。我们观察到虹膜(左)和UCI葡萄酒(右)识别数据集的效果相同。我们可以在两种嵌入中观察到的另一个有趣的事实是，数据也可以线性分离。我们几乎可以在两种可视化效果中放置两条直线来区分集群:</p>
+<div><img class="aligncenter size-full wp-image-965 image-border" src="img/5e413e59-ea6d-41d8-8b69-b19dda262e58.png" style="width:51.50em;height:18.75em;"/></div>
+<p>就数据按类的可分性而言，前面两个数据集的LDA嵌入看起来相当好。前面的屏幕截图将给出一个有把握的估计，即两个数据集的线性分类器应该实现很好的性能，例如，95%以上的准确率。虽然这可能只是一个大概的估计，但我们已经知道通过最少的分析和数据预处理可以从线性分类器中得到什么。不幸的是，大多数真实世界的嵌入看起来更像下面的数字，而不像前两个数字:</p>
+<p class="mce-root"/>
+<div><img class="aligncenter size-full wp-image-966 image-border" src="img/10a5f9a3-dde4-472d-a2ad-419f967d1fc2.png" style="width:33.00em;height:27.75em;"/></div>
+<div><p>大多数真实世界的数据都是高维的，通常有10个甚至100个以上的特征维。在前面的示例中，我们再次看到底部包含0位数字的群集和左侧包含4位和6位数字的两个群集的良好分离。所有其他的集群都被绘制在彼此之上，看起来不像是线性可分的。因此，我们可以说线性分类器不会表现得很好，可能只有大约30%的准确率——这仍然比随机分类器好得多。然而，我们无法真正说出我们期望从复杂的非线性模型中获得什么样的性能，甚至可能是非参数模型，如基于决策树的集成分类器。</p>
+<p>正如我们所看到的，LDA毫不奇怪地比PCA表现得更好，因为它考虑了类别标签。对于小于100维和分类目标变量的线性可分数据集，这是一种很好的嵌入技术。LDA的扩展是<strong>二次判别分析</strong> ( <strong> QDA </strong>)，它使用两个变量的组合来执行非线性预测。</p>
+</div>
+<p>如果您正在处理连续的目标变量，您可以使用一种非常类似的技术，称为<strong>方差分析</strong> ( <strong> ANOVA </strong>)来建模集群之间的方差。ANOVA变换的结果表明数据集中的方差是否归因于不同分量的方差的组合。</p>
+<p>正如我们所见，PCA和LDA在分离高维数据(如图像数据)时表现不佳。在手写图像数据集中，我们只处理来自28 x 28像素图像的<em>784个特征尺寸。想象一下，您的数据集由1024 x 1024像素的图像组成，您的数据集将有超过一百万个维度。因此，对于非常高维的数据集，我们确实需要一种更好的嵌入技术。</em></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Non-linear dimension reduction with t-SNE</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">基于t-SNE的非线性降维</h1>
+                
+            
+            
+                
+<p>几年前，将高维数据集投影到二维或三维是极其困难和繁琐的。如果您想要在二维图形上可视化图像数据，您可以使用之前讨论过的任何技术(如果它们能够计算出结果的话),或者尝试一些奇特的嵌入方法，比如自组织地图。</p>
+<p>然而，在2012年末，在默克Viz Kaggle竞赛中排名第一的团队使用了t-SNE嵌入——这是一种非常规的发布伟大嵌入算法的方式。然而，自那场比赛结束以来，t-SNE一直定期在其他Kaggle比赛中使用，并被大公司用于嵌入高维数据集，取得了巨大的成功。</p>
+<p>t-SNE将高维特征投影到二维或三维空间，同时最小化高维和低维空间中相似点的差异。因此，彼此接近的高维特征向量很可能在二维嵌入中彼此接近。</p>
+<p>下面的截图显示了t-SNE应用于虹膜和UCI葡萄酒识别数据集。正如我们所看到的，复杂的非线性嵌入并不比简单的PCA或LDA技术好多少。然而，它的真正威力是在非常大和高维的数据集上凸显出来的，多达3000万次对数千种特征维度的观察:</p>
+<div><img class="aligncenter size-full wp-image-967 image-border" src="img/7d60255d-84df-4893-af50-08742bc8e0a7.png" style="width:53.83em;height:18.92em;"/></div>
+<p>正如我们在下面的截图中看到的，t-SNE在MNIST数据集上表现得更好，毫不费力地分离了10个手写数字的聚类。虽然在二维LDA嵌入中分离数据似乎是不可能的——其中前二维仅解释了总方差的47%——t-SNE嵌入表明99%的准确性是可能的:</p>
+<div><img class="aligncenter size-full wp-image-968 image-border" src="img/e8cecf23-5fd0-47e6-8f45-1a21fb3cd085.png" style="width:27.75em;height:23.17em;"/></div>
+<p>这种可视化的美妙之处不仅在于我们可以看到数据实际上是可分离的，我们还可以想象当分类器根据数据进行训练时，混淆矩阵会是什么样子——只需查看前面的可视化即可。下面是一些观察结果(在PCA或LDA嵌入中我们不容易识别),这些观察结果是我们可以从嵌入中推断出来的:</p>
+<ul>
+<li>有三组1，其中一组远离平均值。</li>
+<li>有三组9，其中一组看起来像1，另一组看起来像7。</li>
+<li>有一串看起来像8的3。</li>
+<li>有一小簇看起来像8的2。</li>
+<li>3和9的群集非常接近，所以它们可能看起来很相似。</li>
+<li>由0、4和6组成的群集与其他群集相距甚远。</li>
+</ul>
+<p>这些都是很棒的见解，因为您现在知道在手动探索样本时，在您的数据中应该期待什么和寻找什么。它还可以帮助您调整您的特征工程，例如，尝试区分1、7和9，因为它们将导致以后的大多数错误分类。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Generalizing t-SNE with UMAP</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用UMAP推广t-SNE</h1>
+                
+            
+            
+                
+<p>降维UMAP是一种通用流形学习和降维算法。它是基于黎曼几何和代数拓扑的t-SNE的推广。</p>
+<p>总的来说，UMAP执行与t-SNE相似的结果，具有拓扑方法、更好的特征维度可伸缩性和运行时更快的计算。由于它速度更快，并且在拓扑结构方面表现略好，所以它很快受到欢迎。</p>
+<p class="mce-root">如果我们再次查看iris和UCI葡萄酒识别数据集的嵌入，我们会看到与之前t-SNE相似的效果。得到的嵌入看起来合理，但并不比LDA的线性可分结果更好。然而，我们不能只通过比较结果来衡量计算性能，这就是UMAP真正的亮点:</p>
+<div><img class="aligncenter size-full wp-image-969 image-border" src="img/61e719c2-6ef9-4702-a25c-5b1040d0d714.png" style="width:50.75em;height:18.58em;"/></div>
+<p class="mce-root">当涉及到更高维的数据时，比如MNIST手写数字数据集，UMAP作为一种二维嵌入技术表现得非常好。它在嵌入时将簇简化为完全可分离的实体，簇之间的重叠最小，距离很大。类似的观察结果，如类1和类9的聚类仍然是可能的，但是在下面的屏幕截图中，聚类看起来更容易分离:</p>
+<div><img class="aligncenter size-full wp-image-970 image-border" src="img/e6754dff-9791-4155-a3c1-8942a3433bb6.png" style="width:29.33em;height:24.50em;"/></div>
+<p>从这些数据实验和可视化技术中，我们希望您获得以下关键知识:</p>
+<ul>
+<li>执行PCA以尝试分析特征向量。</li>
+<li>执行LDA或ANOVA以了解数据的差异。</li>
+<li>如果有复杂的高维数据，请执行UMAP嵌入。</li>
+</ul>
+<p>有了这些知识，我们可以直接进入数据处理和特征工程，知道哪些数据样本将容易处理，哪些样本将在未来导致高误分类率。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>在这一章中，我们设置了我们的Azure ML工作空间，创建了我们的第一个Azure ML计算集群(<kbd>Amlcompute</kbd>)，并在集群上运行了一个初始实验。从工作区的设置到集群的创建和培训脚本的提交，一切都是自动化的。</p>
+<p>Azure ML帮助你跟踪实验、度量、训练脚本、日志、训练模型、工件、度量、图像等等。在本章中，我们从一个小的ML脚本开始，一步一步地添加额外的功能来利用现代ML基础设施和管理技术。我们注册实验，在本地和计算集群上执行运行，在每次运行时存储训练文件夹的快照，收集每个时期的训练分数和每次运行的测试分数，并将输出直接传输回笔记本电脑环境。通过几行代码，您可以将训练好的模型与所有以前注册的模型进行比较。然后，您可以将该模型注册为新版本。</p>
+<p>然后，您学习了可视化高维数据集的降维技术。Azure ML的伟大之处在于，您还可以在计算集群上执行数据实验和分析，并跟踪所有生成的数字和输出。我们比较了无监督PCA和有监督LDA——两者都是线性嵌入。然后，我们比较了线性技术和非线性降维，如t-SNE和广义形式，UMAP。所有这些技术对于理解数据、主成分、判别方向和可分性都非常有用。</p>
+<p>在下一章中，我们将使用到目前为止学到的所有知识，通过执行数据加载(ETL)、数据准备和特征提取来开始数据建模。试着养成一种习惯，创建你的数据的可视化，并在你的Azure ML实验中以图形的形式附上它们。</p>
+
+
+            
+
+            
+        
+    
+
+
+</body></html>

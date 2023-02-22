@@ -1,0 +1,140 @@
+<html><head/><body>
+
+
+
+<title>Chapter 7. Unsupervised Learning</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07"/>第七章。无监督学习</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>自组织地图</strong> -可视化热图</li><li class="listitem" style="list-style-type: disc"><strong>矢量量化</strong> -图像聚类</li></ul></div><div><div><div><div><h1 class="title"><a id="ch07lvl1sec37"/>简介</h1></div></div></div><p><strong>自组织映射(SOM) </strong>:自组织映射属于一类基于竞争学习的无监督学习，其中输出神经元相互竞争被激活，结果是在任何时候只有一个神经元被激活。这个被激活的神经元被称为获胜神经元。这种竞争可以通过神经元之间的横向抑制连接(负反馈路径)来诱导/实现，导致神经元自我组织。SOM可以想象成一个片状的神经网络，节点排列成规则的，通常是二维的网格。SOM的主要目标是将输入的任意维信号转换成一维或二维离散映射，并以拓扑有序的方式自适应地执行这种转换。在竞争学习的过程中，神经元被选择性地调谐到各种输入模式(刺激)或输入模式的类别。如此调整的神经元(获胜神经元)的位置变得有序，并且在网格上为输入特征创建了有意义的坐标系。SOM因此形成输入模式所需的地形图。</p><p><strong>矢量量化</strong>:量化是用有限的一组标量或矢量来映射无限的一组标量或矢量的过程。量化在信号处理、语音处理和图像处理领域有应用。矢量量化对数据块进行量化，而不是对单个标量值进行量化。量化输出是索引值，该索引值指示来自称为码本的有限向量集的另一个数据块(向量)。所选向量通常是输入数据块的近似值。再现向量被称为编码器和解码器。编码器获取一个输入向量，该向量确定最佳表示再现向量，并传输该向量的索引。解码器获取该索引并形成再现向量。</p></div></div>
+
+
+
+
+
+<title>Self-organizing map - visualizing of heatmaps</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec38"/>热图的自组织地图可视化</h1></div></div></div><p>在过去的十年中，信息呈指数级增长。如果手动完成，从这样的数据库获得新知识是困难的、昂贵的和耗时的。当数据超过一定的大小和复杂性限制时，这甚至是不可能的。因此，在过去几年中，大规模多维数据集的自动化分析和可视化已经成为许多科学研究的焦点。这种分析和可视化的主要目的是发现数据中的规律和关系，从而获得隐藏的和潜在有用的知识。自组织映射(SOM)是一种无监督的神经网络算法，它将高维数据投影到二维映射上。投影保留了数据的拓扑结构，因此相似的数据项将被映射到地图上的附近位置。</p><div><div><div><div><h2 class="title"><a id="ch07lvl2sec46"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch07lvl3sec117"/>步骤1 -探索数据</h3></div></div></div><p>首先需要加载以下软件包:</p><pre class="programlisting">
+<strong>&gt; install.packages("kohonen")
+&gt; library(kohonen)</strong>
+</pre><div><div><h3 class="title"><a id="note20"/>注意</h3><p>版本信息:此页面的代码在R版本3.3.2中测试过(2016-10-31)</p></div></div><p>创建样本数据集:</p><pre class="programlisting">
+<strong>    &gt; training_frame &lt;- data[, c(2,4,5,8)]</strong>
+</pre><p>将带有训练数据的数据框更改为矩阵:<code class="literal">scale()</code>作为一个函数对<code class="literal">training_frame</code>矩阵的列进行居中和缩放。<code class="literal">as.matrix()</code>函数根据<code class="literal">scale(training_frame)</code>的结果创建一个矩阵。</p><pre class="programlisting">
+<strong>    &gt; training_matrix &lt;- as.matrix(scale(training_frame))</strong>
+</pre><p>印刷<code class="literal">training_matrix</code>:</p><pre class="programlisting">
+<strong>    &gt; training_matrix</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_07_001.jpg" alt="Step 1 - exploring data"/></div><p>
+</p><p>
+</p><div><img src="img/image_07_002.jpg" alt="Step 1 - exploring data"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch07lvl3sec118"/>步骤2 -训练模型</h3></div></div></div><p>创建SOM网格:<code class="literal">somgrid()</code>描绘了自组织地图网格的功能。<code class="literal">xdim = 20</code>和<code class="literal">ydim=20</code>是网格的尺寸，而<code class="literal">topo="hexagonal"</code>代表网格的拓扑结构:</p><pre class="programlisting">
+<strong>    &gt; som_grid &lt;- somgrid(xdim = 20, ydim=20, topo="hexagonal")</strong>
+</pre><p>训练自组织映射:<code class="literal">som()</code>是自组织映射的功能，用于将高维光谱或模式映射到2D。使用欧几里德距离度量。<code class="literal">training_matrix</code>是数据矩阵，<code class="literal">rlen=1000</code>是将完整数据集呈现给网络进行训练的次数，α是学习率。<code class="literal">keep.data = TRUE</code>表示数据需要保存在返回对象中，<code class="literal">n.hood="circular"</code>表示邻域的形状:</p><pre class="programlisting">
+<strong>&gt; som_model &lt;- som(training_matrix,</strong>
+<strong>+ grid=som_grid,</strong>
+<strong>+ rlen=1000,</strong>
+<strong>+ alpha=c(0.05,0.01),</strong>
+<strong>+ keep.data = TRUE,</strong>
+<strong>+ n.hood="circular")</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch07lvl3sec119"/>步骤3 -绘制模型</h3></div></div></div><p>绘制<code class="literal">som_model</code>对象:</p><pre class="programlisting">
+<strong>    &gt; plot(som_model, main ="Training Progress", type="changes", col = "red")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_07_003.jpg" alt="Step 3 - plotting the model"/></div><p>
+</p><p>基于节点计数绘制模型:</p><pre class="programlisting">
+<strong>    &gt; plot(som_model, main ="Node Count", type="count")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_07_004.jpg" alt="Step 3 - plotting the model"/></div><p>
+</p><p>基于邻域距离绘制模型。</p><pre class="programlisting">
+<strong>    &gt; plot(som_model, main ="Neighbour Distances", type="dist.neighbours")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_07_005.jpg" alt="Step 3 - plotting the model"/></div><p>
+</p><p>以下代码基于<code class="literal">type = "codes"</code>绘制模型。</p><pre class="programlisting">
+<strong>    &gt; plot(som_model, type="codes")</strong>
+</pre><p>结果如下:</p><p>以下代码基于属性图绘制模型。</p><div><img src="img/image_07_006.jpg" alt="Step 3 - plotting the model"/></div><p>结果如下:</p><p>The following code plots the model based on property plot.</p><pre class="programlisting">
+<strong>    &gt; plot(som_model, type = "property", property = som_model$codes[,4], main=names(som_model$data)[4])</strong>
+</pre><p>The result is as follows:</p><p><a id="ch07lvl1sec39"/>矢量量化-图像聚类</p><div><img src="img/image_07_007.jpg" alt="Step 3 - plotting the model"/></div><p>数字媒体领域的技术发展产生了大量图像形式的非文本信息。如果程序能够理解这些图像的意义并理解它们的含义，这将导致大量不同的应用。一个这样的应用可以是使用机器人从医院病人提取恶性组织，使用身体扫描图像来解释组织的位置。图像被认为是传达信息的最重要的媒介之一。信息检索的潜力是巨大的，以至于用户可能会被检索到的信息量所淹没。图像的非结构化格式挑战分类和聚类技术。机器学习算法用于提取信息以理解图像。理解图像的第一步是分割图像并识别图像中的不同物体。为此，可以使用直方图和频域变换等功能。</p></div></div></div>
+
+
+
+
+
+<title>Vector quantization - image clustering</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl2sec47"/>准备就绪</h1></div></div></div><p>让我们开始吧。</p><div><div><div><div><h2 class="title"><a id="ch07lvl3sec120"/>步骤1 -收集和描述数据</h2></div></div></div><p>使用JPEG文件。</p><div><div><div><div><h3 class="title"><a id="ch07lvl2sec48"/>怎么做...</h3></div></div></div><p>让我们进入细节。</p></div></div><div><div><div><div><h2 class="title"><a id="ch07lvl3sec121"/>第2步-探索数据</h2></div></div></div><p>首先需要加载以下软件包:</p><div><div><div><div><h3 class="title"><a id="note21"/>注意</h3></div></div></div><p>版本信息:这个页面的代码在R版本3.3.2中测试过</p><pre class="programlisting">
+<strong>&gt; install.packages("jpeg")
+&gt; install.packages("ggplot2")
+&gt; library(jpeg)
+&gt; library(ggplot2)</strong>
+</pre><div><div><h3 class="title"><code class="literal">readJPEG()</code>函数用于读取JPEG文件格式的图像，并将其转换为光栅数组:。</h3><p><a id="ch07lvl3sec122"/>步骤3 -数据清理</p></div></div><p>探索<code class="literal">img</code>的尺寸:<code class="literal">dim()</code>函数返回<code class="literal">img</code>帧的尺寸。<code class="literal">img</code>数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>    &gt; img &lt;- readJPEG("d:/Image.jpg")</strong>
+</pre></div><div><div><div><div><h3 class="title">现在让我们打印出<code class="literal">img_Dim</code>:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; img_Dim &lt;- dim(img)</strong>
+</pre><p>Now let's print the <code class="literal">img_Dim</code>:</p><pre class="programlisting">
+<strong>    &gt; img_Dim</strong>
+</pre><p>The result is as follows:</p><p>现在，我们将RGB(红色、绿色和蓝色- RGB通道大致遵循人眼的颜色受体)通道分配给数据帧。然后将结果存储在<code class="literal">img_RGB_channels</code>数据帧中:</p><div><img src="img/image_07_008.jpg" alt="Step 3 - data cleaning"/></div><p><a id="ch07lvl3sec123"/>步骤4 -可视化清理后的数据</p><p>让我们绘制原始图像:</p><pre class="programlisting">
+<strong>&gt; img_RGB_channels &lt;- data.frame(
++ x = rep(1:img_Dim[2], each = img_Dim[1]),
++ y = rep(img_Dim[1]:1, img_Dim[2]),
++ R = as.vector(img[,,1]),
++ G = as.vector(img[,,2]),
++ B = as.vector(img[,,3])
++ )</strong>
+</pre></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>Let's plot the original image:</p><pre class="programlisting">
+<strong>&gt; plotTheme &lt;- function() {
+theme(
+panel.background = element_rect(
+size = 3,
+colour = "black",
+fill = "white"),
+axis.ticks = element_line(
+size = 2),
+panel.grid.major = element_line(
+colour = "gray80",
+linetype = "dotted"),
+panel.grid.minor = element_line(
+colour = "gray90",
+linetype = "dashed"),
+axis.title.x = element_text(
+size = rel(1.2),
+face = "bold"),
+axis.title.y = element_text(
+size = rel(1.2),
+face = "bold"),
+plot.title = element_text(
+size = 20,
+face = "bold",
+Unsupervised Learning
+[ 327 ]
+vjust = 1.5)
+)
+}
+&gt; ggplot(data = img_RGB_channels, aes(x = x, y = y)) +
++ geom_point(colour = rgb(img_RGB_channels[c("R", "G", "B")])) +
++ labs(title = "Original Image: Colorful Bird") +
++ xlab("x") +
++ ylab("y") +
++ plotTheme()</strong>
+</pre><p>The result is as follows:</p><p><a id="ch07lvl3sec124"/>步骤5 -建立模型并可视化</p><div><img src="img/image_07_009.jpg" alt="Step 4 - visualizing cleaned data"/></div><p>分配聚类颜色:</p></div><div><div><div><div><h3 class="title">进行k-means聚类:<code class="literal">kmeans()</code>作为函数对数据矩阵<code class="literal">img_RGB_channels</code>进行聚类。<code class="literal">centers = kClusters</code>表示初始聚类的数量:</h3></div></div></div><p>产生对应于红、绿和蓝基色的给定强度的颜色。</p><pre class="programlisting">
+<strong>    &gt; kClusters &lt;- 3</strong>
+</pre><p>用三个集群绘制图像:</p><pre class="programlisting">
+<strong>    &gt; kMeans_clst &lt;- kmeans(img_RGB_channels[, c("R", "G", "B")], centers = kClusters)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; kColours &lt;- rgb(kMeans_clst$centers[kMeans_clst$cluster,])</strong>
+</pre><p>Plotting the image with three clusters:</p><pre class="programlisting">
+<strong>&gt; ggplot(data = img_RGB_channels, aes(x = x, y = y)) +
++ geom_point(colour = kColours) +
++ labs(title = paste("k-Means Clustering of", kClusters, "Colours"))
++
++ xlab("x") +
++ ylab("y") +
++ plotTheme()</strong>
+</pre><p>The result is as follows:</p><p>分配聚类颜色:</p><div><img src="img/image_07_010.jpg" alt="Step 5 - building the model and visualizing it"/></div><p>执行k均值聚类:</p><p>产生对应于红、绿和蓝基色的给定强度的颜色。</p><pre class="programlisting">
+<strong>    &gt; kClusters &lt;- 5</strong>
+</pre><p>用五个集群绘制图像:</p><pre class="programlisting">
+<strong>    &gt; kMeans_clst &lt;- kmeans(img_RGB_channels[, c("R", "G", "B")], centers = kClusters)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; kColours &lt;- rgb(kMeans_clst$centers[kMeans_clst$cluster,])</strong>
+</pre><p>Plotting the image with five clusters:</p><pre class="programlisting">
+<strong>&gt; ggplot(data = img_RGB_channels, aes(x = x, y = y)) +
++ geom_point(colour = kColours) +
++ labs(title = paste("k-Means Clustering of", kClusters, "Colours"))
++
++ xlab("x") +
++ ylab("y") +
++ plotTheme()</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_07_011.jpg" alt="Step 5 - building the model and visualizing it"/></div><p>
+</p></div></div></div>
+</body></html>

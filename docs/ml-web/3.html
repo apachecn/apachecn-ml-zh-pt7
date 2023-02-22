@@ -1,0 +1,439 @@
+<html><head/><body>
+
+
+
+<title>Chapter 3. Supervised Machine Learning</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03"/>第三章。监督机器学习</h1></div></div></div><p>本章将讨论最相关的回归和分类技术。所有这些算法共享相同的后台过程，并且通常算法的名称指的是分类和回归方法。线性回归算法、朴素贝叶斯、决策树和支持向量机将在下面的部分中讨论。为了理解如何使用这些技术，将使用上述方法解决一个分类和回归问题。本质上，一个带标签的训练数据集将用于<em>训练模型</em>，这意味着找到参数的值，正如我们在引言中讨论的那样。像往常一样，代码可以在我的GitHub文件夹中找到，地址是<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_3/">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 3/</a>。</p><p>我们将用一个可能用于分类的额外算法来结束这一章，尽管它不是专门为此目的而设计的(隐马尔可夫模型)。我们现在将开始解释当预测与数据集相关联的真实标签时方法中的误差的一般原因。</p><div><div><div><div><h1 class="title"><a id="ch03lvl1sec17"/>模型误差估计</h1></div></div></div><p>我们说过<a id="id231" class="indexterm"/>训练的模型用于预测新数据的标签，预测的质量取决于模型<em>概括</em>的能力，即正确预测训练数据中不存在的情况。这是文献中一个众所周知的问题，与两个概念有关:输出的偏差和方差。</p><p>偏差是由于算法中的错误假设而产生的误差。给定一个标签为<em>y<sub>t</sub>T16】的点<em> x <sup> (t) </sup> </em>，如果用不同的训练集训练，模型会有偏差，预测的标签<em>y<sub>t</sub><sup>pred</sup></em>将始终不同于<em> y <sub> t </sub> </em>。而方差误差是指给定点<em> x <sup> (t) </sup> </em>的不同的、错误预测的标签。解释这些概念的一个经典示例是考虑一个以真值为中心的圆(真标签)，如下图所示。预测的标注越靠近中心，模型越无偏，方差越低(下图中的左上)。这里还显示了其他三种情况:</em></p><div><img src="img/5143_03_01.jpg" alt="Model error estimation"/><div><p>方差和偏差示例。</p></div></div><p>具有<a id="id232" class="indexterm"/>低方差和低偏差误差的模型将具有集中在红色中心(真实标签)的蓝点预测标签(如上图所示)。当预测值远离真实标签时，会出现高偏差误差，而当预测值范围较大时，会出现高方差。</p><p>我们已经看到标签可以是连续的，也可以是离散的，分别对应回归分类问题。大多数模型都适合解决这两个问题，我们将使用词回归和分类引用同一个模型。更正式地，给定一组<em> N </em>数据点和相应的标签<img src="img/B05143_03_18.jpg" alt="Model error estimation"/>，具有一组参数<img src="img/B05143_03_19.jpg" alt="Model error estimation"/>和真实参数值<img src="img/B05143_03_20.jpg" alt="Model error estimation"/>的模型<a id="id233" class="indexterm"/>将具有<strong>均方误差</strong> ( <strong> MSE </strong>)，等于:</p><div><img src="img/B05143_03_21.jpg" alt="Model error estimation"/></div><p>我们将使用<a id="id234" class="indexterm"/>MSE作为衡量标准来评估本章中讨论的方法。现在我们将开始描述广义线性方法。</p></div></div>
+
+
+
+
+
+<title>Generalized linear models</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec18"/>广义线性模型</h1></div></div></div><p>广义线性模型<a id="id235" class="indexterm"/>是一组试图找到在标签<em>y<sub>I</sub>T19】和特征向量<em> x <sup> (i) </sup> </em>之间形成线性关系的<em> M </em>参数<img src="img/B05143_03_22.jpg" alt="Generalized linear models"/>的模型，如下所示:</em></p><div><img src="img/B05143_03_23.jpg" alt="Generalized linear models"/></div><p>这里，<img src="img/B05143_03_24.jpg" alt="Generalized linear models"/>是模型的误差。用于寻找参数的算法试图最小化由成本函数<em> J </em>定义的模型的总误差:</p><div><img src="img/B05143_03_25.jpg" alt="Generalized linear models"/></div><p>使用名为<strong>批量梯度下降</strong>的迭代算法实现<em> J </em>的最小化<a id="id236" class="indexterm"/>:</p><div><img src="img/B05143_03_26.jpg" alt="Generalized linear models"/></div><p>这里α称为学习率，是收敛速度和收敛精度的权衡。另一种算法叫做<strong>随机梯度下降</strong>，即<a id="id237" class="indexterm"/>是<img src="img/B05143_03_27.jpg" alt="Generalized linear models"/>的循环:</p><div><img src="img/B05143_03_28.jpg" alt="Generalized linear models"/></div><p>为每个训练示例<em> i </em>更新θ <sub> j </sub>而不是等待对整个训练集求和。最后一种算法收敛在<em> J </em>的最小值附近，通常比批量梯度下降更快，但是最终解可能在参数的真实值附近振荡。以下段落描述了最常见的模型<img src="img/B05143_03_29.jpg" alt="Generalized linear models"/>和相应的成本函数<em> J </em>。</p><div><div><div><div><h2 class="title"><a id="ch03lvl3sec15"/>线性回归</h2></div></div></div><p>线性回归<a id="id239" class="indexterm"/>是最简单的算法，基于<a id="id240" class="indexterm"/>模型:</p><div><img src="img/B05143_03_30.jpg" alt="Linear regression"/></div><p>成本函数和更新规则是:</p><div><img src="img/B05143_03_31.jpg" alt="Linear regression"/></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl3sec16"/>岭回归</h2></div></div></div><p>岭回归，也被称为吉洪诺夫正则化，在成本函数中增加了一个项:</p><div><img src="img/B05143_03_32.jpg" alt="Ridge regression"/></div><p><img src="img/B05143_03_33.jpg" alt="Ridge regression"/>，其中λ为正则化参数。附加项具有所需的功能，即<a id="id244" class="indexterm"/>在所有可能的解决方案中优选某一组参数<a id="id245" class="indexterm"/>，惩罚与<em> 0 </em>不同的所有参数θ <sub> j </sub>。最后一组θ<sub>j</sub>T9】在<em> 0 </em>附近收缩，降低了参数的方差，但引入了偏置误差。用上标<em> l </em>表示来自线性回归的参数，岭回归参数与以下公式相关:</p><div><img src="img/B05143_03_34.jpg" alt="Ridge regression"/></div><p>这清楚地表明，λ值越大，脊参数在<em> 0 </em>附近收缩得越多。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl3sec17"/>套索回归</h2></div></div></div><p>Lasso回归是<a id="id246" class="indexterm"/>一种类似于岭回归的算法，<a id="id247" class="indexterm"/>唯一的区别在于正则化项是参数绝对值的和:</p><div><img src="img/B05143_03_35.jpg" alt="Lasso regression"/></div><div><img src="img/B05143_03_33.jpg" alt="Lasso regression"/></div></div><div><div><div><div><h2 class="title">逻辑回归</h2></div></div></div><p>尽管有<a id="id248" class="indexterm"/>的名字，这种算法用于(二元)分类<a id="id249" class="indexterm"/>问题，所以我们定义标签<img src="img/B05143_03_36.jpg" alt="Logistic regression"/>。该模型被赋予所谓的逻辑函数，表示为:</p><div><img src="img/B05143_03_37.jpg" alt="Logistic regression"/></div><p>在这种情况下，成本函数定义如下:</p><div><img src="img/B05143_03_38.jpg" alt="Logistic regression"/></div><p>由此，更新规则在形式上与线性回归相同(但是模型定义<img src="img/B05143_03_39.jpg" alt="Logistic regression"/>不同):</p><div><img src="img/B05143_03_40.jpg" alt="Logistic regression"/></div><p>注意，对点<em> p </em>、<img src="img/B05143_03_41.jpg" alt="Logistic regression"/>的预测是在<em> 0 </em>和<em> 1 </em>之间的连续值。因此，通常，为了估计类别标签，我们有一个阈值<img src="img/B05143_03_41.jpg" alt="Logistic regression"/> =0.5，这样:</p><div><img src="img/B05143_03_42.jpg" alt="Logistic regression"/></div><p>逻辑回归算法适用于使用一对一或一对一技术的多标签问题。使用第一种方法，通过训练<em> K </em>逻辑回归模型来解决关于<em> K </em>类的<a id="id251" class="indexterm"/>问题，每个模型假设所考虑的类<em> j </em>的标签为<em> +1 </em>，所有其余的为<em> 0 </em>。第二种方法包括为每对标签训练一个模型(<img src="img/B05143_03_43.jpg" alt="Logistic regression"/>训练模型)。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec17"/>广义线性模型的概率解释</h2></div></div></div><p>现在<a id="id252" class="indexterm"/>我们已经看到了广义的<a id="id253" class="indexterm"/>线性模型，让我们找到满足关系式的参数θ <sub> j </sub>:</p><div><img src="img/B05143_03_44.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><p>在线性回归的情况下，我们可以假设<img src="img/B05143_03_24.jpg" alt="Probabilistic interpretation of generalized linear models"/>为正态分布，均值<em>为0 </em>，方差<sup>为2 </sup>，这样概率<img src="img/B05143_03_45.jpg" alt="Probabilistic interpretation of generalized linear models"/>等于:</p><div><img src="img/B05143_03_46.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><p>因此，系统的总可能性可以表示如下:</p><div><img src="img/B05143_03_47.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><p>在逻辑回归<a id="id255" class="indexterm"/>算法的<a id="id254" class="indexterm"/>情况下，我们假设逻辑函数本身就是概率:</p><div><img src="img/B05143_03_48.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><div><img src="img/B05143_03_49.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><p>那么这种可能性可以表示为:</p><div><img src="img/B05143_03_50.jpg" alt="Probabilistic interpretation of generalized linear models"/></div><p>在这两种情况下，可以证明最大化似然等价于最小化成本函数，因此梯度下降将是相同的。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec18"/> k近邻(KNN)</h2></div></div></div><p>这是一种<a id="id256" class="indexterm"/>非常简单的分类(或回归)方法，其中给定一组具有相应标签<em>y<sub>I</sub>T14】的特征向量<img src="img/B05143_03_51.jpg" alt="k-nearest neighbours (KNN)"/>，测试点<em> x <sup> (t) </sup> </em>被分配给标签值，其中<a id="id257" class="indexterm"/>在<em> K </em>最近邻居<img src="img/B05143_03_52.jpg" alt="k-nearest neighbours (KNN)"/>中找到大多数标签出现，使用如下距离测量:</em></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>欧几里得</strong> : <img src="img/B05143_03_53.jpg" alt="k-nearest neighbours (KNN)"/></li><li class="listitem" style="list-style-type: disc"><strong>曼哈顿</strong> : <img src="img/B05143_03_54.jpg" alt="k-nearest neighbours (KNN)"/></li><li class="listitem" style="list-style-type: disc"><strong>闵可夫斯基</strong> : <img src="img/B05143_03_55.jpg" alt="k-nearest neighbours (KNN)"/>(如果<em> q=2 </em>，这减少到欧几里德距离)</li></ul></div><p>在回归的情况下，值<em> y <sub> t </sub> </em>是通过用标签<img src="img/B05143_03_56.jpg" alt="k-nearest neighbours (KNN)"/> <img src="img/B05143_03_57.jpg" alt="k-nearest neighbours (KNN)"/>的平均值替换大多数出现次数来计算的。最简单的平均值(或大多数出现)具有统一的权重，因此每个点具有相同的重要性，而不管它们与x<em><sup>【t】</sup></em>的实际距离。然而，可以使用权重等于距离<em> x <sup> (t) </sup> </em>的倒数的加权平均值。</p></div></div>
+
+
+
+
+
+<title>Naive Bayes</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec19"/>朴素贝叶斯</h1></div></div></div><p><strong>朴素贝叶斯</strong>是<a id="id258" class="indexterm"/>一种基于贝叶斯概率定理和对特征的条件独立性假设的分类算法。给定一组<em> m </em>特征、<img src="img/B05143_03_58.jpg" alt="Naive Bayes"/>和一组标签(类)<img src="img/B05143_03_59.jpg" alt="Naive Bayes"/>，拥有<a id="id259" class="indexterm"/>标签<em> c </em>(也给定特征集<em> x <sub> i </sub> </em>)的概率由贝叶斯定理表示:</p><div><img src="img/B05143_03_60.jpg" alt="Naive Bayes"/></div><p>这里:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_61.jpg" alt="Naive Bayes"/>叫做似然分布</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_62.jpg" alt="Naive Bayes"/>是后验分布</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_63.jpg" alt="Naive Bayes"/>是先验分布</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_64.jpg" alt="Naive Bayes"/>被称为证据</li></ul></div><p>与特征集<img src="img/B05143_03_58.jpg" alt="Naive Bayes"/>相关联的预测类将是值<em> p </em>，使得概率最大化:</p><div><img src="img/B05143_03_65.jpg" alt="Naive Bayes"/></div><p>然而，这个方程是无法计算的。所以，需要一个假设。</p><p>使用条件概率<img src="img/B05143_03_66.jpg" alt="Naive Bayes"/>的规则，我们可以将<a id="id260" class="indexterm"/>前面公式的分子写成如下:</p><div><img src="img/B05143_03_67.jpg" alt="Naive Bayes"/></div><div><img src="img/B05143_03_68.jpg" alt="Naive Bayes"/></div><div><img src="img/B05143_03_69.jpg" alt="Naive Bayes"/></div><p>我们现在使用假设每个特征<em>x<sub>I</sub>T11】是条件独立的给定<em> c </em>(例如，为了计算概率<em> x <sub> 1 </sub>给定<em> c </em>，标签<em> c </em>的知识使得另一个特征<em>x<sub>0</sub>T25】的知识冗余，<img src="img/B05143_03_70.jpg" alt="Naive Bayes"/>):</em></em></em></p><div><img src="img/B05143_03_71.jpg" alt="Naive Bayes"/></div><p>在这种假设下，标签为<em> c </em>的概率等于:</p><p><img src="img/B05143_03_72.jpg" alt="Naive Bayes"/>–––––––––(1)</p><p>这里，分子中的<em> +1 </em>和分母中的<em> M </em>都是常数，对于避免<a id="id261" class="indexterm"/><em>0/0</em>的情况(<strong>拉普拉斯平滑</strong>)很有用。</p><p>由于<a id="id262" class="indexterm"/>(<strong>1</strong>)的分母不依赖于标签(它是在所有可能的标签上求和的)，最终的预测标签<em> p </em>是通过寻找(<strong> 1 </strong>的分子的最大值获得的:</p><p><img src="img/B05143_03_73.jpg" alt="Naive Bayes"/>–––––––––(2)</p><p>给定通常的训练集<img src="img/B05143_03_74.jpg" alt="Naive Bayes"/>，其中<img src="img/B05143_03_75.jpg" alt="Naive Bayes"/> ( <em> M </em>特征)对应于标签集<img src="img/B05143_03_76.jpg" alt="Naive Bayes"/>，概率<em> P(y=c) </em>在频率项中简单地计算为与类别<em> c </em>相关联的训练样本的数量超过样本总数<img src="img/B05143_03_77.jpg" alt="Naive Bayes"/>。相反，条件概率<img src="img/B05143_03_78.jpg" alt="Naive Bayes"/>通过遵循一个分布来评估。我们将要讨论<a id="id263" class="indexterm"/>两个模型，<strong>多项朴素贝叶斯</strong>和<a id="id264" class="indexterm"/>高斯朴素贝叶斯。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec19"/>多项式朴素贝叶斯</h2></div></div></div><p>让我们假设我们<a id="id265" class="indexterm"/>想要确定由一组单词出现<img src="img/B05143_03_79.jpg" alt="Multinomial Naive Bayes"/>给出的电子邮件<em> s </em>是否是垃圾邮件<em> (1) </em>或者不是<em> (0) </em>以便<img src="img/B05143_03_80.jpg" alt="Multinomial Naive Bayes"/>。<em> M </em>是词汇量的大小(特征的数量)。有<img src="img/B05143_03_81.jpg" alt="Multinomial Naive Bayes"/>文字和<em> N </em>训练实例(邮件)。</p><p>每个电子邮件<em> x <sup> (i) </sup> </em>带有标签<em> y <sub> i </sub> </em>使得<img src="img/B05143_03_82.jpg" alt="Multinomial Naive Bayes"/>是单词<em> j </em>在<a id="id266" class="indexterm"/>词汇表中出现在训练示例<em> l </em>中的次数。对于<a id="id267" class="indexterm"/>示例，<img src="img/B05143_03_83.jpg" alt="Multinomial Naive Bayes"/>表示单词<em> 1 </em>或<em>w<sub>1</sub>T35】在第三封电子邮件中出现的次数。在这种情况下，应用关于可能性的多项式分布:</em></p><div><img src="img/B05143_03_84.jpg" alt="Multinomial Naive Bayes"/></div><p>这里，前面的归一化常数可以被丢弃，因为它们不依赖于标签<em> y </em>，因此<em> arg max </em>运算符不会受到影响。重要的部分是对单个单词<em>w<sub>j</sub>T43】的评估:在训练集上的概率；</em></p><div><img src="img/B05143_03_85.jpg" alt="Multinomial Naive Bayes"/></div><p>这里<em> N <sub> iy </sub> </em>是单词<em> j </em>出现的次数，与标签<em> y </em>相关联，<em> N <sub> y </sub> </em>是训练集的标签为<em> y </em>的部分。</p><p>这是<img src="img/B05143_03_78.jpg" alt="Multinomial Naive Bayes"/>、<img src="img/B05143_03_86.jpg" alt="Multinomial Naive Bayes"/>对等式(<strong> 1 </strong>)和多项式分布似然的类比。由于概率上的指数，通常对数被应用于<a id="id268" class="indexterm"/>计算<a id="id269" class="indexterm"/>最终算法<em> (2) </em>:</p><div><img src="img/B05143_03_87.jpg" alt="Multinomial Naive Bayes"/></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec20"/>高斯朴素贝叶斯</h2></div></div></div><p>如果特征<a id="id270" class="indexterm"/>向量<em> x <sup> (i) </sup> </em>有连续值，可以应用此<a id="id271" class="indexterm"/>方法。比如我们要将图像分类到<em> K </em>类中，每个特征<em> j </em>为一个像素，<em>x<sub>j</sub><sup>(I)</sup></em>为带有<em> N </em>图像和标签<img src="img/B05143_03_76.jpg" alt="Gaussian Naive Bayes"/>的训练集中第<em>I</em>图像的第<em>j</em>像素。给定由像素<img src="img/B05143_03_88.jpg" alt="Gaussian Naive Bayes"/>表示的未标记图像，在这种情况下，等式(<strong> 1 </strong>)中的<img src="img/B05143_03_78.jpg" alt="Gaussian Naive Bayes"/>变为:</p><div><img src="img/B05143_03_89.jpg" alt="Gaussian Naive Bayes"/></div><p>这里:</p><div><img src="img/B05143_03_90.jpg" alt="Gaussian Naive Bayes"/></div><p>并且:</p><div><img src="img/B05143_03_91.jpg" alt="Gaussian Naive Bayes"/></div></div></div>
+
+
+
+
+
+<title>Decision trees</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec20"/>决策树</h1></div></div></div><p>这类<a id="id272" class="indexterm"/>算法旨在通过生成一组从特征值中学习的简单规则来预测分割数据集的未知标签。例如，考虑基于湿度、风、温度和压力的值来决定今天是否带伞的情况。这是一个分类问题，基于100天的数据，决策树的示例可以如下图所示。下面是一个示例表:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>湿度(%)</p>
+</th><th style="text-align: left" valign="bottom">
+<p>压力(毫巴)</p>
+</th><th style="text-align: left" valign="bottom">
+<p>风速(千米/小时)</p>
+</th><th style="text-align: left" valign="bottom">
+<p>温度(℃)</p>
+</th><th style="text-align: left" valign="bottom">
+<p>雨伞</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>56</p>
+</td><td style="text-align: left" valign="top">
+<p>1,021</p>
+</td><td style="text-align: left" valign="top">
+<p>5</p>
+</td><td style="text-align: left" valign="top">
+<p>21</p>
+</td><td style="text-align: left" valign="top">
+<p>是</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>65</p>
+</td><td style="text-align: left" valign="top">
+<p>1,018</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>18</p>
+</td><td style="text-align: left" valign="top">
+<p>不</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>80</p>
+</td><td style="text-align: left" valign="top">
+<p>1,020</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>17</p>
+</td><td style="text-align: left" valign="top">
+<p>不</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>81</p>
+</td><td style="text-align: left" valign="top">
+<p>1,015</p>
+</td><td style="text-align: left" valign="top">
+<p>11</p>
+</td><td style="text-align: left" valign="top">
+<p>20</p>
+</td><td style="text-align: left" valign="top">
+<p>是</p>
+</td></tr></tbody></table></div><div><img src="img/5143_03_02.jpg" alt="Decision trees"/><div><p>基于100天的记录预测是否带伞的决策树。</p></div></div><p>在前面的<a id="id273" class="indexterm"/>图中，方块中的数字代表带伞的日子，而圆圈中的数字表示不需要带伞的日子。</p><p>决策树呈现两种类型的节点:决策节点，当应用决策拆分时，它有两个(或更多)分支；和叶节点。停止标准通常是决策节点的最大数量(树的深度)或继续分裂的最小数据点(通常大约2到5)。决策树学习的问题是从所有可能的节点组合中构建出<em>最佳</em>树，也就是估计要应用的规则的层次结构(换句话说，第一个决策节点应该在湿度上还是在温度上，等等)。更正式地说，给定一个训练集为<img src="img/B05143_03_92.jpg" alt="Decision trees"/>的<em>x<sup>(I)</sup></em>in<em>R<sup>m</sup></em>以及相应的标签<em> y <sub> i </sub> </em>，我们需要找到在节点<em> k </em>处划分数据<em> S </em>的最佳规则。如果所选择的特征<em> j </em>是连续的，则每个分割规则由特征<sub>jT26】和阈值<em>t<sup>j</sup>T30】k</em></sub>T32】给出，该阈值将<img src="img/B05143_03_93.jpg" alt="Decision trees"/>中的<em> S </em>分割成<img src="img/B05143_03_94.jpg" alt="Decision trees"/>和<img src="img/B05143_03_96.jpg" alt="Decision trees"/>、<img src="img/B05143_03_97.jpg" alt="Decision trees"/>。节点<em> k </em>的最佳分割规则<img src="img/B05143_03_98.jpg" alt="Decision trees"/>与杂质<em> I </em>函数的最小值相关联，该函数测量该规则能够将多少数据分成具有不同标签的分区(即，每个分支将包含最少量的标签混合):</p><div><img src="img/B05143_03_99.jpg" alt="Decision trees"/></div><div><img src="img/B05143_03_100.jpg" alt="Decision trees"/></div><p>这里，<img src="img/B05143_03_101.jpg" alt="Decision trees"/>分别是左右分支上的数据点的数量。<em> N <sub> k </sub></em></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">分支的熵:<img src="img/B05143_03_103.jpg" alt="Decision trees"/></li><li class="listitem" style="list-style-type: disc">分支机构的基尼系数:<img src="img/B05143_03_104.jpg" alt="Decision trees"/></li><li class="listitem" style="list-style-type: disc">误分类:<img src="img/B05143_03_105.jpg" alt="Decision trees"/> <div> <ul class="itemizedlist"> <li class="listitem" style="list-style-type: disc">均方误差(方差):<img src="img/B05143_03_106.jpg" alt="Decision trees"/>(其中<img src="img/B05143_03_107.jpg" alt="Decision trees"/> ) </li> </ul> </div></li></ul></div><p>请注意，<a id="id275" class="indexterm"/>后者通常用于回归问题，而其他则用于分类。还要注意，通常在文献中，<em>信息增益</em>定义是作为节点<em> k </em>和<img src="img/B05143_03_108.jpg" alt="Decision trees"/>处的<em> H </em>之差引入的</p><p><img src="img/B05143_03_109.jpg" alt="Decision trees"/>哪里<img src="img/B05143_03_110.jpg" alt="Decision trees"/></p><p>如果特征<em> j </em>是离散的，具有<em> d </em>个可能值，则没有二进制阈值<em>t<sup>j</sup>kT49】要计算，并且数据被分割到<em> d </em>分区中。测量值<em> H </em>是在<em> d </em>子集上计算的。</em></p><p>例如，我们可以使用熵作为杂质度量<em> H </em>来确定前面示例的第一个节点的规则(<em> k=0 </em>)。</p><p>所有的特征都是连续的，所以需要<em>t<sup>j</sup>T63】0T65】的值。假设<em> j=0 </em>是湿度，并按升序排序，我们拥有的数据集中可能的湿度值如下:</em></p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><tbody><tr><td style="text-align: left" valign="top">
+<p>h</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>0</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>一</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>….</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>98</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>99</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>雨伞</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>是</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>不</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>….</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>不</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>不</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>湿度</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p><strong> 58 </strong></p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>62</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>….</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>88</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>89</p>
+</td></tr><tr><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top">
+<p>&lt;</p>
+</td><td style="text-align: left" valign="top">
+<p>&gt; =</p>
+</td><td style="text-align: left" valign="top">
+<p>&lt;</p>
+</td><td style="text-align: left" valign="top">
+<p>&gt; =</p>
+</td><td style="text-align: left" valign="top">
+<p>&lt;</p>
+</td><td style="text-align: left" valign="top">
+<p>&gt; =</p>
+</td><td style="text-align: left" valign="top">
+<p>&lt;</p>
+</td><td style="text-align: left" valign="top">
+<p>&gt; =</p>
+</td><td style="text-align: left" valign="top">
+<p>&lt;</p>
+</td><td style="text-align: left" valign="top">
+<p>&gt; =</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>是</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>11</p>
+</td><td style="text-align: left" valign="top">
+<p>14</p>
+</td><td style="text-align: left" valign="top">
+<p>32</p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td><td style="text-align: left" valign="top">
+<p>20</p>
+</td><td style="text-align: left" valign="top">
+<p>29</p>
+</td><td style="text-align: left" valign="top">
+<p>12</p>
+</td><td style="text-align: left" valign="top">
+<p>78</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>不</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>89</p>
+</td><td style="text-align: left" valign="top">
+<p>21</p>
+</td><td style="text-align: left" valign="top">
+<p>33</p>
+</td><td style="text-align: left" valign="top">
+<p>13</p>
+</td><td style="text-align: left" valign="top">
+<p>60</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>49</p>
+</td><td style="text-align: left" valign="top">
+<p>22</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td></tr><tr><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_111.jpg" alt="Decision trees"/> </div></td><td colspan="2" style="text-align: center" valign="top">
+<p><strong> 0.5 </strong></p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>0.99</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>0.85</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>0.76</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>0.76</p>
+</td></tr></tbody></table></div><p>因此，湿度特征的阈值<a id="id276" class="indexterm"/>为<img src="img/B05143_03_112.jpg" alt="Decision trees"/>= 58；同样，我们可以计算出温度<em>t<sup>1</sup>T85】0T87】风速<em>t<sup>2</sup>T91】0</em>和压力<em>t<sup>3</sup><sub>0</sub></em>的阈值。现在我们可以记录以确定第一个节点的最佳规则，计算四个特征中每一个的杂质:</em></p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><tbody><tr><td rowspan="2" colspan="2" style="text-align: center" valign="top">
+<p>是</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>雨伞</p>
+</td><td rowspan="2" colspan="2" style="text-align: center" valign="top">
+<p>是</p>
+<p>不</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>雨伞</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>不</p>
+</td><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top"> </td></tr><tr><td rowspan="2" style="text-align: left" valign="top">
+<p>湿度j=0</p>
+</td><td style="text-align: left" valign="top"><div><img src="img/B05143_03_113.jpg" alt="Decision trees"/>T2】</div></td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td rowspan="2" style="text-align: left" valign="top">
+<p>温度j=1</p>
+</td><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_114.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>21</p>
+</td><td style="text-align: left" valign="top">
+<p>32</p>
+</td></tr><tr><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_115.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>11</p>
+</td><td style="text-align: left" valign="top">
+<p>89</p>
+</td><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_116.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>11</p>
+</td><td style="text-align: left" valign="top">
+<p>36</p>
+</td></tr><tr><td colspan="4" style="text-align: center" valign="top">
+<p>杂质:</p><div><img src="img/B05143_03_117.jpg" alt="Decision trees"/></div>
+</td><td colspan="4" style="text-align: center" valign="top">
+<p>杂质:</p><div><img src="img/B05143_03_118.jpg" alt="Decision trees"/></div>
+</td></tr><tr><td rowspan="2" colspan="2" style="text-align: center" valign="top">
+<p>是</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>雨伞</p>
+</td><td rowspan="2" colspan="2" style="text-align: center" valign="top">
+<p>是</p>
+<p>不</p>
+</td><td colspan="2" style="text-align: center" valign="top">
+<p>雨伞</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>不</p>
+</td><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top"> </td><td style="text-align: left" valign="top"> </td></tr><tr><td rowspan="2" style="text-align: left" valign="top">
+<p>风力j=2</p>
+</td><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_119.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>48</p>
+</td><td style="text-align: left" valign="top">
+<p>5</p>
+</td><td rowspan="2" style="text-align: left" valign="top">
+<p>压力j=3</p>
+</td><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_120.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>39</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td></tr><tr><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_121.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>46</p>
+</td><td style="text-align: left" valign="top"><div> <img src="img/B05143_03_122.jpg" alt="Decision trees"/> </div></td><td style="text-align: left" valign="top">
+<p>45</p>
+</td><td style="text-align: left" valign="top">
+<p>13</p>
+</td></tr><tr><td colspan="4" style="text-align: center" valign="top">
+<p><strong>杂质</strong>:</p><div><img src="img/B05143_03_123.jpg" alt="Decision trees"/></div>
+</td><td colspan="4" style="text-align: center" valign="top">
+<p>杂质:</p><div><img src="img/B05143_03_124.jpg" alt="Decision trees"/></div>
+</td></tr></tbody></table></div><p>因此，对于<a id="id277" class="indexterm"/>节点<em> 0 </em>，最佳规则由下式给出:</p><div><img src="img/B05143_03_125.jpg" alt="Decision trees"/></div><p>即具有阈值<em>t<sup>2</sup>T32】0T34】的风特征。我们可以重复相同的过程，为下面的决策节点找到最佳规则，直到树的末尾。</em></p><p>决策树学习能够处理大型数据集，尽管它往往不能很好地泛化，特别是对于一大组特征(<em> N </em> ≈ <em> M </em>)。在这种情况下，建议设置较小的树深度或使用一些降维技术。设置要分割的最小数据点数或叶节点中的最小数据点数也有助于防止过度拟合。这种算法可能导致树过于复杂；它们可以被<em>修剪</em>以减少不影响预测质量的分支。各种修剪技术都是可用的，但它们超出了本书的范围。还要注意，可以同时训练一系列决策树，组成所谓的<strong>随机森林</strong>。<a id="id278" class="indexterm"/>随机森林用原始数据点的随机样本训练每棵树，并且特征的随机子集可用于每个决策节点学习。结果是回归问题中预测的平均值或分类问题中的大多数。</p></div>
+
+
+
+
+
+<title>Support vector machine</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec21"/>支持向量机</h1></div></div></div><p>这种算法，<strong>支持向量机</strong> ( <strong> SVM </strong>)试图将数据集<img src="img/B05143_03_126.jpg" alt="Support vector machine"/>几何分离成两个子集，分别标记为<em> y <sub> i </sub> =+1 </em>和<em> y <sub> i </sub> =-1 </em>。下图显示了数据<a id="id279" class="indexterm"/>被完美地分成两类(空心圆和黑圆)，也就是黑线给出的判定边界(或超平面)完全分开两类的数据的情况(换句话说，没有错误分类的数据点):</p><div><img src="img/5143_03_03.jpg" alt="Support vector machine"/><div><p>由黑线(决策边界)分成两类(空圆和实心圆)的数据集草图</p></div></div><p>超平面在数学上由方程<img src="img/B05143_03_127.jpg" alt="Support vector machine"/>描述，其中<img src="img/B05143_03_128.jpg" alt="Support vector machine"/>是超平面到原点的距离，<em> w </em>是超平面的法线。该算法的目标是最大化决策边界到数据点的距离。在实践中，我们考虑距离超平面最近的点<em> i </em>，称为支持向量，它们位于两个平面<em>H<sub>1</sub>T9】、<em>H<sub>2</sub>T13】中，距离决策边界的距离为<em> d <sub> 1 </sub> </em>、<em> d <sub> 2 </sub> </em>，使得:</em></em></p><p><img src="img/B05143_03_129.jpg" alt="Support vector machine"/>对于<em>H<sub>1</sub>T26】使得<em>y<sub>I</sub>=+1</em>––––––1</em></p><p><img src="img/B05143_03_130.jpg" alt="Support vector machine"/>用于<em>H<sub>2</sub>T35】使得<em>y<sub>I</sub>=-1</em>––––––2</em></p><p>假设<em>d<sub>1</sub>= d<sub>2</sub>T45】，共同的距离被称为余量，以便支持向量机<a id="id280" class="indexterm"/>方法找到使余量最大化的<em> w </em>和<em> b </em>的值。</em></p><p>由于<em>H<sub>1</sub>T54】和<em>H<sub>2</sub>T58】之间的距离是由<img src="img/B05143_03_131.jpg" alt="Support vector machine"/>给出的，所以余量等于<img src="img/B05143_03_132.jpg" alt="Support vector machine"/>，支持向量机算法等价于:</em></em></p><p><img src="img/B05143_03_133.jpg" alt="Support vector machine"/>使得<img src="img/B05143_03_134.jpg" alt="Support vector machine"/>，</p><p>这里，增加了平方运算和因子<img src="img/B05143_03_135.jpg" alt="Support vector machine"/>，允许使用二次规划方法来解决数学问题。现在，这个问题可以用拉格朗日乘数a <em> <sub> i </sub> &gt; 0 </em>改写成拉格朗日形式:</p><div><img src="img/B05143_03_136.jpg" alt="Support vector machine"/></div><p>设定相对于<img src="img/B05143_03_137.jpg" alt="Support vector machine"/>和<em> b </em>到<em> 0 </em>的导数，我们得到:</p><p><img src="img/B05143_03_138.jpg" alt="Support vector machine"/>––––––––三</p><p><img src="img/B05143_03_139.jpg" alt="Support vector machine"/>––––––––四</p><p>所以<a id="id281" class="indexterm"/>优化后的拉格朗日量变成了:</p><div><img src="img/B05143_03_140.jpg" alt="Support vector machine"/></div><p>这里，<img src="img/B05143_03_141.jpg" alt="Support vector machine"/>。</p><p>这被称为原问题的对偶形式，它只取决于a <em> i </em>的最大化:</p><div><img src="img/B05143_03_142.jpg" alt="Support vector machine"/></div><p>解<img src="img/B05143_03_143.jpg" alt="Support vector machine"/>(a<em><sub>I</sub>= 0</em>返回空向量的情况)是使用称为二次规划的技术找到的，并通过公式<strong> (3) </strong>表示支持向量<em> w </em>:</p><p><img src="img/B05143_03_144.jpg" alt="Support vector machine"/>––––––––五。</p><p>a <em> s </em>满足方程(方程<strong>(1)</strong><strong>(2)</strong>的组合):</p><div><img src="img/B05143_03_145.jpg" alt="Support vector machine"/></div><p>代入方程<strong> (3) </strong>，两边乘以<em>y<sub>s</sub>T5(即<em> +1 </em>或<em> -1 </em>，得到:</em></p><div><img src="img/B05143_03_146.jpg" alt="Support vector machine"/></div><p>对所有支持向量<em>N<sub>s</sub>T14】进行平均<a id="id282" class="indexterm"/>我们可以对参数<em> b </em>进行更好的估计:</em></p><p><img src="img/B05143_03_147.jpg" alt="Support vector machine"/>––––––––六</p><p>等式<strong> (5) </strong>和<strong> (6) </strong>返回定义支持向量机算法的参数值，由此可以预测所有测试点<em> t </em>的类别:</p><div><img src="img/B05143_03_148.jpg" alt="Support vector machine"/></div><div><img src="img/B05143_03_149.jpg" alt="Support vector machine"/></div><p>如果一条线不能将数据点完全分为两类，我们需要允许数据点因错误<img src="img/B05143_03_150.jpg" alt="Support vector machine"/>而被错误分类，例如:</p><div><img src="img/B05143_03_151.jpg" alt="Support vector machine"/></div><div><img src="img/B05143_03_152.jpg" alt="Support vector machine"/></div><p>我们需要最大限度地提高利润率，尽量减少错误分类的错误。这个条件被转换成这个等式:</p><p><img src="img/B05143_03_153.jpg" alt="Support vector machine"/>使得<img src="img/B05143_03_154.jpg" alt="Support vector machine"/></p><p>这里，设置<a id="id283" class="indexterm"/>参数<em> C </em>以平衡带有误分类误差的余量的大小(<em> C=0 </em>很小没有误分类和最大余量，<em> C &gt; &gt; 1 </em>许多误分类点和窄余量)。应用与前面相同的方法，对偶问题服从拉格朗日乘数条件，上限为<em> C </em>:</p><div><img src="img/B05143_03_155.jpg" alt="Support vector machine"/></div><p>到目前为止，我们只处理了两类问题。实际问题可能有多个类别，通常使用两种程序来采用这种方法(如逻辑回归所示):一对所有或一对一。给定一个关于<em> M </em>类的问题，第一种方法训练<em> M </em> SVM模型，每一个都假定被考虑的类<em> j +1 </em>和所有其余的<em> -1 </em>的标签。第二种方法改为为每对类<em> i </em>、<em> j </em>训练一个模型，从而得到<img src="img/B05143_03_156.jpg" alt="Support vector machine"/>训练的模型。显然，第二种方法在计算上更昂贵，但结果通常更精确。</p><p>同理，SVM可用于回归问题，即无论何时<em> y <sub> i </sub> </em>在<em> -1 </em>和<em> 1 </em>之间连续。在这种情况下，目标是找到参数<em> w </em>和<em> b </em>，使得:</p><div><img src="img/B05143_03_157.jpg" alt="Support vector machine"/></div><p>我们假设真实值<em>t<sub>I</sub>T3】可能与最大值<img src="img/B05143_03_158.jpg" alt="Support vector machine"/>的预测值<em>y<sub>I</sub>T7】不同，并且根据<em>y<sub>I</sub>T14】是大于还是小于<em>t<sub>I</sub>T18<a id="id284" class="indexterm"/>预测可能进一步被错误分类为大约<img src="img/B05143_03_159.jpg" alt="Support vector machine"/>。下图显示了位于真实值<em>t<sub>I</sub>T28】附近的各种预测<em>y<sub>I</sub>T24】以及相关的误差:</em></em></em></em></em></em></p><div><img src="img/5143_03_04.jpg" alt="Support vector machine"/><div><p>预测值<em> y <sub> i </sub> </em>位于真实值<em> <sub> ti </sub> </em>附近</p></div></div><p>最小化问题变成:</p><div><img src="img/B05143_03_160.jpg" alt="Support vector machine"/></div><p>使得:</p><div><img src="img/B05143_03_161.jpg" alt="Support vector machine"/></div><p>有可能<a id="id285" class="indexterm"/>显示相关联的对偶问题现在等于:</p><p><img src="img/B05143_03_162.jpg" alt="Support vector machine"/>以<img src="img/B05143_03_163.jpg" alt="Support vector machine"/>为准。</p><p>这里，<img src="img/B05143_03_164.jpg" alt="Support vector machine"/>是拉格朗日乘数。</p><p>新的预测<em>y<sub>p</sub>T44】可以通过应用公式<img src="img/B05143_03_165.jpg" alt="Support vector machine"/>来找到，其中参数<em> b </em>可以像之前一样获得——对由与子集<img src="img/B05143_03_166.jpg" alt="Support vector machine"/>和<img src="img/B05143_03_167.jpg" alt="Support vector machine"/>相关联的支持向量给出的子集<em> S </em>求平均:</em></p><div><img src="img/B05143_03_168.jpg" alt="Support vector machine"/></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec21"/>内核绝招</h2></div></div></div><p>在某个空间中存在不可线性分离的数据集，但是如果在正确的空间中对其进行变换，那么超平面可以将数据分成期望的两个或更多个类。考虑下图<a id="id287" class="indexterm"/>所示的<a id="id286" class="indexterm"/>示例:</p><div><img src="img/5143_03_05.jpg" alt="Kernel trick"/><div><p>在二维空间中，左边显示的数据集是不可分的。在三维空间中映射数据集，这两个类是可分的。</p></div></div><p>我们可以清楚地看到，两类在二维空间中不是线性可分的(左图)。假设我们然后对数据应用核函数<em> K </em>，使得:</p><div><img src="img/B05143_03_169.jpg" alt="Kernel trick"/></div><p>数据现在可以通过一个二维平面分离(右图)。将SVM算法上的核函数应用于矩阵<em>H<sub>ij</sub>T60】，替换变量<em> i </em>、<em> j </em>上的点积:</em></p><div><img src="img/B05143_03_170.jpg" alt="Kernel trick"/></div><p>在<a id="id289" class="indexterm"/> SVM算法上使用的流行的<a id="id288" class="indexterm"/>内核函数有:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">线性内核:<img src="img/B05143_03_171.jpg" alt="Kernel trick"/></li><li class="listitem" style="list-style-type: disc">径向基核函数(RBF): <img src="img/B05143_03_172.jpg" alt="Kernel trick"/></li><li class="listitem" style="list-style-type: disc">多项式内核:<img src="img/B05143_03_173.jpg" alt="Kernel trick"/></li><li class="listitem" style="list-style-type: disc">Sigmoid内核:<img src="img/B05143_03_174.jpg" alt="Kernel trick"/></li></ul></div></div></div>
+
+
+
+
+
+<title>A comparison of methods</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec22"/>方法的比较</h1></div></div></div><p>我们现在可以测试本章讨论的方法来解决一个回归问题和一个分类问题。为了避免过度拟合，数据集通常被分成两组:训练集和测试集，前者用于拟合模型参数，后者用于评估模型的准确性。然而，可能有必要使用第三个集合，即验证集合，其中的超参数(例如，SVM的<em> C </em>和<img src="img/B05143_03_175.jpg" alt="A comparison of methods"/>，或者岭回归中的α)可以被优化。原始数据集可能太小，不允许分成三个数据集，并且结果可能会受到训练集、验证集和测试集上数据点的特定选择的影响。解决这个问题的一个常见方法是按照所谓的交叉验证程序评估模型——数据集被分成<em> k </em>个子集(称为折叠),模型被训练如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">使用褶皱的<em> k-1 </em>作为训练数据来训练模型。</li><li class="listitem" style="list-style-type: disc">产生的<a id="id292" class="indexterm"/>模型在剩余的<a id="id293" class="indexterm"/>部分数据上进行测试。</li><li class="listitem" style="list-style-type: disc">重复该程序，重复次数与开始时决定的折叠次数一样多，每次使用不同的<em> k-1 </em>折叠进行训练(因此测试折叠也不同)。通过对不同的<em> k次</em>迭代获得的精度进行平均，获得最终精度。</li></ul></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec22"/>回归问题</h2></div></div></div><p>我们使用的是<a id="id294" class="indexterm"/>波士顿郊区的住房数据集，存储在<a class="ulink" href="http://archive.ics.uci.edu/ml/datasets/Housing">http://archive.ics.uci.edu/ml/datasets/Housing</a>和作者的存储库中(<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_3/">https://github . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 3/</a>)，其中<a id="id295" class="indexterm"/>也提供了本段中使用的代码。该数据集有13个特征:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">各城镇的人均犯罪率</li><li class="listitem" style="list-style-type: disc"><strong> ZN </strong>:面积超过25，000平方英尺的住宅用地比例</li><li class="listitem" style="list-style-type: disc"><strong> INDUS </strong>:每镇非零售营业亩数比例</li><li class="listitem" style="list-style-type: disc"><strong> CHAS </strong> : Charles River虚拟变量(<em> = 1 </em>如果区域边界为河流；<em> 0 </em>否则)</li><li class="listitem" style="list-style-type: disc"><strong> NOX </strong>:氮氧化物浓度(百万分之一)</li><li class="listitem" style="list-style-type: disc">RM :每个住宅的平均房间数</li><li class="listitem" style="list-style-type: disc"><strong>楼龄</strong>:1940年前建成的自住单位比例</li><li class="listitem" style="list-style-type: disc"><strong> DIS </strong>:距离波士顿五个就业中心的加权距离</li><li class="listitem" style="list-style-type: disc"><strong> RAD </strong>:放射状公路可达性指标</li><li class="listitem" style="list-style-type: disc"><strong>税</strong>:每万美元的全价值财产税税率</li><li class="listitem" style="list-style-type: disc"><strong> PTRATIO </strong>:按城镇划分的学生-教师比率</li><li class="listitem" style="list-style-type: disc"><strong>b</strong>:<em>1000(bk-0.63)^2</em>，其中<em> Bk </em>是按城镇划分的黑人比例</li><li class="listitem" style="list-style-type: disc"><strong> LSTAT </strong>:我们要预测的较低社会地位人口的百分比和标签是MEDV，它代表房屋价值(以1000美元计)</li></ul></div><p>为了评估模型的质量，计算引言中定义的均方误差和决定系数<em>R<sup>2</sup>T7】。<em>R<sup>2</sup>T11】由下式给出:</em></em></p><div><img src="img/B05143_03_176.jpg" alt="Regression problem"/></div><p>这里，<em>y<sub>I</sub>T15】predT17】表示<a id="id296" class="indexterm"/>来自模型的预测标签。</em></p><p>最好的结果是<em> R <sup> 2 </sup> =1 </em>，这意味着模型完美地拟合了数据，而<em> R <sup> 2 </sup> =0 </em>与具有恒定直线的模型相关联(负值表示拟合越来越差)。使用<code class="literal">sklearn</code>库计算训练线性回归、岭回归、拉索回归和SVM回归的代码如下(IPython notebook at<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_3/">https://github . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 3/</a>):</p><div><img src="img/5143_03_06.jpg" alt="Regression problem"/></div><div><img src="img/5143_03_07.jpg" alt="Regression problem"/></div><p>使用pandas库加载房屋数据，并通过应用函数<code class="literal">df.iloc[np.random.permutation(len(df))]</code>重新排列以随机化交叉验证折叠子集数据(已使用10个折叠)。该脚本的输出如下:</p><div><img src="img/5143_03_08.jpg" alt="Regression problem"/></div><p>使用随机森林(50棵树)获得最佳<a id="id297" class="indexterm"/>模型拟合；它返回平均决定系数<em> 0.86 </em>和<em> MSE=11.5 </em>。正如所料，决策树回归器比随机森林具有更低的<em> R <sup> 2 </sup>和更高的MSE(分别为<em> 0.67 </em>和<em> 25 </em>)。采用<strong> rbf核</strong> ( <em> C=1，</em> <img src="img/B05143_03_177.jpg" alt="Regression problem"/>)的支持向量机<a id="id298" class="indexterm"/>是最差的模型，在<em> R <sup> 2 </sup> </em>处有巨大的MSE误差<em> 83.9 </em>和<em> 0.0 </em>，而采用线性核(<em> C=1 </em>，<img src="img/B05143_03_177.jpg" alt="Regression problem"/>的SVM返回了一个像样的模型(<em> 0)。lasso和ridge回归变量具有可比的结果，大约为<em>0.7 R<sup>2</sup>T68】和<em> 24 </em> MSE。改善模型结果的一个重要步骤是特征选择。经常发生的情况是，只有全部特征的子集与执行模型训练相关，而其他特征可能对模型没有任何贡献。因为忽略了误导性的数据并且减少了训练时间(需要考虑的特征更少)，所以特征选择可以改善<em>R<sup>2</sup>T78】。</em></em></em></em></p><p>有许多技术可以提取特定模型的最佳特征，但在这种情况下，我们探索所谓的递归特征消除方法(RSE ),该方法主要考虑与最大绝对权重相关的属性，直到选择了所需数量的特征。在SVM算法的情况下，权重只是<em> w </em>的值，而对于回归，它们是模型参数θ。使用<code class="literal">sklearn</code>内置函数<code class="literal">RFE</code>，仅指定最佳的<a id="id299" class="indexterm"/>四个属性(<code class="literal">best_features</code>):</p><div><img src="img/5143_03_09.jpg" alt="Regression problem"/></div><p>输出是:</p><div><img src="img/5143_03_10.jpg" alt="Regression problem"/></div><p><code class="literal">RFE</code>函数<a id="id300" class="indexterm"/>返回一列布尔值(<code class="literal">support_</code>属性),表明哪些特征被选中(真值)哪些没有被选中(假值)。然后，像我们之前所做的那样，使用所选择的特征来评估模型。</p><p>即使仅使用四个特征，最佳模型仍然是具有50棵树的随机森林，并且<em>R<sup>2</sup>T13】仅略低于使用全套特征训练的模型的R<em>R<sup>2</sup>2</em>(T14】0.82</em>对<em> 0.86 </em>)。其他模型——lasso、ridge、决策树和线性SVM回归器——具有更显著的<em> R <sup> 2 </sup> </em>下降，但结果仍然与它们相应的完全训练模型相当。注意，KNN算法不提供特征的权重，因此不能应用<code class="literal">RFE</code>方法。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec23"/>分类问题</h2></div></div></div><p>为了测试本章中学习的<a id="id301" class="indexterm"/>分类器，基于描述汽车主要特征(购买价格、维护成本、车门数量、载客人数、行李箱尺寸和安全性)的六个特征的汽车评估质量数据集(不准确、准确、良好和非常好)。数据集可以在<a class="ulink" href="http://archive.ics.uci.edu/ml/datasets/Car+Evaluation">http://archive.ics.uci.edu/ml/datasets/Car+Evaluation</a>或者我的GitHub账号上找到，还有这里讨论的代码(<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_3/">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 3/</a>)。为了评估分类的准确性，我们将使用精度、召回率和f值。给定只有两个类(阳性和阴性)的数据集，我们定义真阳性点的数量(<em> tp </em>)正确标记为阳性的点的数量(<em> fp </em>)错误标记为阳性的点的数量(阴性点)和假阴性的数量(<em> fn </em>)错误分配给阴性类的点的数量。使用这些定义，精确度、召回率和f-measure可以计算如下:</p><div><img src="img/B05143_03_178.jpg" alt="Classification problem"/></div><div><img src="img/B05143_03_179.jpg" alt="Classification problem"/></div><div><img src="img/B05143_03_180.jpg" alt="Classification problem"/></div><p>在分类<a id="id302" class="indexterm"/>问题中，给定类别<em> C </em>的完美精度(<em> 1.0 </em>)意味着分配给类别<em> C </em>的每个点都属于类别<em> C </em>(没有关于类别<em> C </em>被错误标记的点的数量的信息)，而等于<em> 1.0 </em>的召回意味着来自类别<em> C </em>的每个点都被标记为属于类别<em/></p><p>注意，在多个类别的情况下，这些度量通常被计算为标签数量的许多倍，每次将一个类别视为正面，而将所有其他类别视为负面。然后使用多个类别度量的不同平均值来估计总精度、召回率和f-measure。</p><p>对汽车数据集进行分类的代码如下。首先，我们将所有的库和数据加载到pandas数据框架中。</p><div><img src="img/5143_03_11.jpg" alt="Classification problem"/></div><p>以下是分类的<a id="id303" class="indexterm"/>特征值:</p><div><pre class="programlisting">
+<strong>buying 0      v-high, high, med, low</strong>
+<strong>maintenance 1  v-high, high, med, low</strong>
+<strong>doors 2       2, 3, 4, 5-more</strong>
+<strong>persons 3     2, 4, more</strong>
+<strong>lug_boot 4    small, med, big</strong>
+<strong>safety 5      low, med, high</strong>
+<strong>car evaluation 6 unacc,acc,good,vgood</strong>
+</pre></div><p>这些被映射成在分类算法中使用的数字:</p><div><img src="img/5143_03_12.jpg" alt="Classification problem"/></div><p>由于我们需要计算并保存所有方法的度量，我们编写一个标准函数<code class="literal">CalcMeasures</code>，并将标签的向量<code class="literal">Y</code>与特征<code class="literal">X</code>分开:</p><div><img src="img/5143_03_13.jpg" alt="Classification problem"/></div><p>使用了一个<code class="literal">10</code>交叉<a id="id304" class="indexterm"/>验证折叠，代码为:</p><div><img src="img/5143_03_14.jpg" alt="Classification problem"/></div><p>测量值存储在数据帧中:</p><div><img src="img/5143_03_15.jpg" alt="Classification problem"/></div><p>每个测量值已经评估了四次，即根据索引映射填充数组的汽车评估类的数量:</p><div><pre class="programlisting">'acc': 0, 'unacc': 2, 'good': 1, 'vgood': 3</pre></div><p>最好的模型<a id="id306" class="indexterm"/>是具有rbf核的SVM(<em>C = 50</em>)，但是随机森林(50棵树)和决策树也返回极好的结果(对于所有四个类，度量值超过<em> 0.9 </em>)。朴素贝叶斯、逻辑回归和具有线性核的SVM(<em>C = 50</em>)返回较差的模型，尤其是对于准确、良好和非常好的类，因为具有这些标签的点很少:</p><div><img src="img/5143_03_16.jpg" alt="Classification problem"/></div><p>从百分比来看，非常好(v-good)和良好分别为3.993%和3.762%，而不准确为70.0223%，准确为22.222%。因此，我们可以得出结论，这些算法不适合预测数据集中很少出现的类。</p></div></div>
+
+
+
+
+
+<title>Hidden Markov model</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec23"/>隐马尔可夫模型</h1></div></div></div><p>虽然这个方法<a id="id307" class="indexterm"/>不能被严格地认为是监督学习算法，但它也可以用来执行一些真正类似于分类的事情，所以我们决定在这里包含它。为了介绍这个主题，我们将举一个例子。考虑这样一个简单的例子，通过观察他的目光来预测你面前的推销员是否在说谎(两种状态<img src="img/B05143_03_181.jpg" alt="Hidden Markov model"/>):目光接触、向下看或看向一边(每个观察值<em>O<sub>I</sub>T5】分别具有值<em> 0 </em>、<em> 1 </em>和<em> 2 </em>)。想象一下对推销员的眼色的一系列观察O=O <em> <sub> 0 </sub> </em>，O <em> <sub> 1 </sub> </em>，O <em> <sub> 2 </sub> </em>，O <em> <sub> 3 </sub> </em>，O <em> <sub> 4 </sub> </em>，…是<em> 0，1，0，2，… </em>我们要推断的转移矩阵<em/></em></p><div><img src="img/B05143_03_182.jpg" alt="Hidden Markov model"/></div><p><em> A </em>、<em> a <sub> ij </sub> </em>的任何条目表示在时间<em> t+1 </em>停留在状态<em> S <sub> i </sub>的概率，给定时间<em> t </em>的状态<em> S <sub> j </sub> </em>。因此，<em>0.3</em>(<em>a<sub>01</sub></em>)是假设业务员在<em> t </em>时刻躺在句子上，在<em> t+1 </em>时刻不躺在句子上的概率，<em> 0.6 (a <sub> 10 </sub> ) </em>反之亦然， <em> 0.7(a <sub> 00 </sub> ) </em>代表业务员在时间<em> t </em>和时间<em> t+10.4(a <sub> 11 </sub> ) </em>是他在时间<em> t </em>真诚后，在时间<em> t+1 </em>没有躺在句子上的概率。 以类似的方式，可以定义矩阵<em> B </em>，该矩阵将<a id="id308" class="indexterm"/>销售员的意图与其三种可能的行为相关联:</em></p><div><img src="img/B05143_03_183.jpg" alt="Hidden Markov model"/></div><p>任何条目<em> b <sub> j(k) </sub> </em>都是在时间<em> t </em>给出状态<em> S <sub> j </sub> </em>在时间<em> t </em>出现观测值<em> k </em>的概率。例如，<em>0.7</em>(<em>b<sub>00</sub></em>)、<em>0.1</em>(<em>b<sub>01</sub></em>)、<em>0.2</em>(<em>b<sub>02</sub></em>)是在给定行为观察—的情况下，销售员说谎的概率下图描述了这些关系:</p><div><img src="img/5143_03_17.jpg" alt="Hidden Markov model"/><div><p>推销员行为——两状态隐马尔可夫模型</p></div></div><p>推销员的初始状态分布也可以定义为:<img src="img/B05143_03_184.jpg" alt="Hidden Markov model"/>(他在时间<em> 0 </em>的第一句话中，稍微倾向于说谎而不是说真话)。注意，所有这些矩阵<img src="img/B05143_03_185.jpg" alt="Hidden Markov model"/>都是行随机的；也就是说，这些行总计为<em> 1 </em>，并且不直接依赖于时间。一个<strong>隐马尔可夫模型</strong> ( <strong> HMM </strong>)由三个矩阵(<img src="img/B05143_03_186.jpg" alt="Hidden Markov model"/>)的组合给出，这三个矩阵描述了已知的<a id="id309" class="indexterm"/>观察值序列<em> O=O <sub> 0 </sub>，O <sub> 1 </sub>，…O <sub> T-1 </sub> </em>与相应的隐藏状态序列<em> S=S <sub> 0 </sub>，S <sub> 1 </sub>之间的关系一般来说，该算法使用的标准符号概括如下:</em></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><em> T </em>是观察序列的长度<em>O = O<sub>0</sub>T33】，O <sub> 1 </sub>，… O <sub> T-1 </sub>和隐藏状态序列<em> S=S <sub> 0 </sub>，S <sub> 1 </sub>，…S<sub>T-1</sub>T45】</em></em></li><li class="listitem" style="list-style-type: disc">N是模型中可能的(隐藏的)状态的数量</li><li class="listitem" style="list-style-type: disc"><em> M </em>是可能观察值的数量:<img src="img/B05143_03_187.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc"><em> A </em>是状态转移矩阵</li><li class="listitem" style="list-style-type: disc"><em> B </em>是观测概率矩阵</li><li class="listitem" style="list-style-type: disc">π是初始状态分布</li></ul></div><p>在前面的例子中，<em> M=3 </em>，<em> N=2 </em>，我们设想预测推销员在讲话过程中的意图序列(即隐藏状态)<em> S=S <sub> 0 </sub>，S <sub> 1 </sub>，… S <sub> T-1 </sub> </em>，观察他的行为值<em> O=O <sub>这是通过计算每个状态序列<em> S </em>的概率来实现的:</sub></em></p><div><img src="img/B05143_03_188.jpg" alt="Hidden Markov model"/></div><p>例如，固定<em> T=4 </em>、<em> S=0101 </em>和<em> O=1012 </em>:</p><div><img src="img/B05143_03_189.jpg" alt="Hidden Markov model"/></div><p>同样的，我们可以计算隐藏状态所有其他组合的概率，找到最可能的序列<em> S </em>。寻找最可能序列<em> S </em>的有效算法是<a id="id310" class="indexterm"/>维特比算法，它包括计算从<em> 0 </em>到<em> t </em>直到<em> T-1 </em>的部分序列集合的最大概率。在实践中，我们计算以下数量:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_190.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc">对于<em> t=1，…，T-1 </em>和<em> i=0，…，N-1 </em>，来自不同状态<em> j </em>的可能路径中，在时间<em> t </em>处于状态<em> i </em>的最大概率为<img src="img/B05143_03_191.jpg" alt="Hidden Markov model"/>。与<img src="img/B05143_03_192.jpg" alt="Hidden Markov model"/>的最大值相关联的部分序列是直到时间<em> t </em>的最可能的部分序列。</li><li class="listitem" style="list-style-type: disc">最终的<a id="id311" class="indexterm"/>最可能序列与时间<em> T-1 </em> : <img src="img/B05143_03_193.jpg" alt="Hidden Markov model"/>的最大概率相关联。</li></ul></div><p>例如，给定前面的模型，长度<em> T=2 </em>的最可能序列可以被计算为:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><em> P(10)=0.0024 </em></li><li class="listitem" style="list-style-type: disc"><em>P(00)= 0.0294</em><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">所以d<em>1</em>(0)= P(00)= 0.0294</li></ul></div></li><li class="listitem" style="list-style-type: disc"><em> P(01)=0.076 </em></li><li class="listitem" style="list-style-type: disc"><em>P(11)= 0.01</em><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">所以d<em><sub>1</sub>(1)= P(01)= 0.076</em></li></ul></div></li></ul></div><p>而最后最有可能的序列是<em> 00 </em>(两个连续的假句子)。</p><p>考虑最可能序列的另一种方法是最大化正确状态的数量；也就是说，每次考虑具有最大概率<img src="img/B05143_03_194.jpg" alt="Hidden Markov model"/>的状态<em> i </em>。使用一种称为反向算法的算法，可以显示给定状态<em> i </em>、<img src="img/B05143_03_195.jpg" alt="Hidden Markov model"/>的概率为:</p><div><img src="img/B05143_03_196.jpg" alt="Hidden Markov model"/></div><p>这里:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_197.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_198.jpg" alt="Hidden Markov model"/>和<img src="img/B05143_03_199.jpg" alt="Hidden Markov model"/>部分观察序列的概率<a id="id312" class="indexterm"/>直到时间<em> t </em>，其中HMM处于开状态<em> i </em> : <img src="img/B05143_03_200.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_201.jpg" alt="Hidden Markov model"/>和<img src="img/B05143_03_202.jpg" alt="Hidden Markov model"/>给定时间<em> t </em>等于<em> i </em>的状态，在时间<em> t </em>之后直到<em> T-1 </em>的部分序列的概率:<img src="img/B05143_03_203.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc">在时间<em> t </em>之前和之后停留在状态<em> i </em>的概率的组合产生了<img src="img/B05143_03_204.jpg" alt="Hidden Markov model"/>的值。</li></ul></div><p>请注意，计算最可能序列的两种方法不一定返回相同的结果。</p><p>反向问题——在给定序列<em> O=O <sub> 0 </sub>，O <sub> 1 </sub>，…O <sub> T-1 </sub> </em>以及参数<em> N </em>，<em> M </em>的值的情况下，找到最佳HMM<img src="img/B05143_03_205.jpg" alt="Hidden Markov model"/>—也可以使用<a id="id313" class="indexterm"/> <strong> Baum-Welch算法</strong>迭代求解。将在时间<em> t </em>出现在状态<em> i </em>以及在时间<em> t+1 </em>出现在状态<em> j </em>的概率定义为:</p><p><img src="img/B05143_03_206.jpg" alt="Hidden Markov model"/>其中<img src="img/B05143_03_207.jpg" alt="Hidden Markov model"/>为<img src="img/B05143_03_208.jpg" alt="Hidden Markov model"/>和<img src="img/B05143_03_209.jpg" alt="Hidden Markov model"/>。</p><p>那么<a id="id314" class="indexterm"/>鲍姆-韦尔奇算法如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">初始化<img src="img/B05143_03_210.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc">计算<img src="img/B05143_03_211.jpg" alt="Hidden Markov model"/>和<img src="img/B05143_03_212.jpg" alt="Hidden Markov model"/></li><li class="listitem" style="list-style-type: disc">重新计算模型矩阵为:<img src="img/B05143_03_213.jpg" alt="Hidden Markov model"/>其中<img src="img/B05143_03_214.jpg" alt="Hidden Markov model"/>和<img src="img/B05143_03_215.jpg" alt="Hidden Markov model"/>为Kronacker符号，如果<img src="img/B05143_03_216.jpg" alt="Hidden Markov model"/>等于<em> 1 </em>，否则等于<em> 0 </em></li><li class="listitem" style="list-style-type: disc">迭代直到收敛:<img src="img/B05143_03_217.jpg" alt="Hidden Markov model"/></li></ul></div><p>在下一节<a id="id315" class="indexterm"/>中，我们将展示一段Python代码，它实现了这些等式来测试HMM算法。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec24"/>一个Python例子</h2></div></div></div><p>像往常一样，下面讨论的<code class="literal">hmm_example.py</code>文件可以在<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_3/">https://github . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 3/</a>获得。</p><p>我们开始定义<a id="id316" class="indexterm"/>一个类，在这个类中我们传递模型<a id="id317" class="indexterm"/>矩阵:</p><div><pre class="programlisting">
+<strong>class HMM:</strong>
+<strong>    def __init__(self):</strong>
+<strong>        </strong>
+<strong>self.pi = pi</strong>
+<strong>        self.A = A</strong>
+<strong>        self.B = B</strong>
+</pre></div><p>维特比算法和正确状态数的最大化在以下两个函数中实现:</p><div><pre class="programlisting">
+<strong>    def ViterbiSequence(self,observations):</strong>
+<strong>        deltas = [{}]</strong>
+<strong>        seq = {}</strong>
+<strong>        N = self.A.shape[0]</strong>
+<strong>        states = [i for i in range(N)]</strong>
+<strong>        T = len(observations)</strong>
+<strong>        #initialization</strong>
+<strong>        for s in states:</strong>
+<strong>            deltas[0][s] = self.pi[s]*self.B[s,observations[0]]</strong>
+<strong>            seq[s] = [s]</strong>
+<strong>        #compute Viterbi</strong>
+<strong>        for t in range(1,T):</strong>
+<strong>            deltas.append({})</strong>
+<strong>            newseq = {}</strong>
+<strong>            for s in states:</strong>
+<strong>                (delta,state) = max((deltas[t-1][s0]*self.A[s0,s]*self.B[s,observations[t]],s0) for s0 in states)</strong>
+<strong>                deltas[t][s] = delta</strong>
+<strong>                newseq[s] = seq[state] + [s]</strong>
+<strong>            seq = newseq</strong>
+<strong>            </strong>
+<strong>        (delta,state) = max((deltas[T-1][s],s) for s in states)</strong>
+<strong>        return  delta,' sequence: ', seq[state]</strong>
+<strong>        </strong>
+<strong>    def maxProbSequence(self,observations):</strong>
+<strong>        N = self.A.shape[0]</strong>
+<strong>        states = [i for i in range(N)]</strong>
+<strong>        T = len(observations)</strong>
+<strong>        M = self.B.shape[1]</strong>
+<strong>        # alpha_t(i) = P(O_1 O_2 ... O_t, q_t = S_i | hmm)</strong>
+<strong>        # Initialize alpha</strong>
+<strong>        alpha = np.zeros((N,T))</strong>
+<strong>        c = np.zeros(T) #scale factors</strong>
+<strong>        alpha[:,0] = pi.T * self.B[:,observations[0]]</strong>
+<strong>        c[0] = 1.0/np.sum(alpha[:,0])</strong>
+<strong>        alpha[:,0] = c[0] * alpha[:,0]</strong>
+<strong>        # Update alpha for each observation step</strong>
+<strong>        for t in range(1,T):</strong>
+<strong>            alpha[:,t] = np.dot(alpha[:,t-1].T, self.A).T * self.B[:,observations[t]]</strong>
+<strong>            c[t] = 1.0/np.sum(alpha[:,t])</strong>
+<strong>            alpha[:,t] = c[t] * alpha[:,t]</strong>
+
+<strong>        # beta_t(i) = P(O_t+1 O_t+2 ... O_T | q_t = S_i , hmm)</strong>
+<strong>        # Initialize beta</strong>
+<strong>        beta = np.zeros((N,T))</strong>
+<strong>        beta[:,T-1] = 1</strong>
+<strong>        beta[:,T-1] = c[T-1] * beta[:,T-1]</strong>
+<strong>        # Update beta backwards froT end of sequence</strong>
+<strong>        for t in range(len(observations)-1,0,-1):</strong>
+<strong>            beta[:,t-1] = np.dot(self.A, (self.B[:,observations[t]] * beta[:,t]))</strong>
+<strong>            beta[:,t-1] = c[t-1] * beta[:,t-1]</strong>
+<strong>            </strong>
+<strong>        norm = np.sum(alpha[:,T-1])</strong>
+<strong>        seq = ''</strong>
+<strong>        for t in range(T):</strong>
+<strong>            g,state = max(((beta[i,t]*alpha[i,t])/norm,i) for i in states)</strong>
+<strong>            seq +=str(state)</strong>
+<strong>            </strong>
+<strong>        return seq</strong>
+</pre></div><p>由于概率的<a id="id318" class="indexterm"/>相乘将导致<a id="id319" class="indexterm"/>下溢问题，所有的α<em><sub>t</sub>(I)</em>和β<em><sub>t</sub>(I)</em>都被乘以一个常数，使得对于<img src="img/B05143_03_218.jpg" alt="A Python example"/>:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_219.jpg" alt="A Python example"/></li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_03_220.jpg" alt="A Python example"/>哪里<img src="img/B05143_03_221.jpg" alt="A Python example"/></li></ul></div><p>现在，我们可以用销售员意图示例中的矩阵初始化HMM模型，并使用前面的两个函数:</p><div><pre class="programlisting">
+<strong>pi = np.array([0.6, 0.4])</strong>
+<strong>A = np.array([[0.7, 0.3],</strong>
+<strong>                           [0.6, 0.4]])</strong>
+<strong>B = np.array([[0.7, 0.1, 0.2],</strong>
+<strong>                           [0.1, 0.6, 0.3]]) </strong>
+<strong>hmmguess = HMM(pi,A,B)   </strong>
+<strong>print 'Viterbi sequence:',hmmguess.ViterbiSequence(np.array([0,1,0,2]))</strong>
+<strong>print 'max prob sequence:',hmmguess.maxProbSequence(np.array([0,1,0,2])) </strong>
+</pre></div><p>结果是:</p><div><pre class="programlisting">
+<strong>Viterbi: (0.0044, 'sequence: ', [0, 1, 0, 0])</strong>
+<strong>Max prob sequence: 0100</strong>
+</pre></div><p>在这种特殊情况下，两种方法返回相同的序列，您可以很容易地验证，通过改变初始矩阵，算法可能会导致不同的结果。我们得到行为序列；目光接触、向下看、目光接触、向旁边看可能与推销员状态的顺序有关；说谎，不说谎，说谎，说谎的概率为<em> 0.0044 </em>。</p><p>在给定观察序列和参数<em> N </em>和<em> M </em>的情况下，还可以<a id="id320" class="indexterm"/>实现Baum-Welch算法<a id="id321" class="indexterm"/>来找到最佳HMM。代码如下:</p><div><pre class="programlisting">
+<strong>    def train(self,observations,criterion):</strong>
+
+<strong>        N = self.A.shape[0]</strong>
+<strong>        T = len(observations)</strong>
+<strong>        M = self.B.shape[1]</strong>
+
+<strong>        A = self.A</strong>
+<strong>        B = self.B</strong>
+<strong>        pi = copy(self.pi)</strong>
+<strong>        </strong>
+<strong>        convergence = False</strong>
+<strong>        while not convergence:</strong>
+
+<strong>            # alpha_t(i) = P(O_1 O_2 ... O_t, q_t = S_i | hmm)</strong>
+<strong>            # Initialize alpha</strong>
+<strong>            alpha = np.zeros((N,T))</strong>
+<strong>            c = np.zeros(T) #scale factors</strong>
+<strong>            alpha[:,0] = pi.T * self.B[:,observations[0]]</strong>
+<strong>            c[0] = 1.0/np.sum(alpha[:,0])</strong>
+<strong>            alpha[:,0] = c[0] * alpha[:,0]</strong>
+<strong>            # Update alpha for each observation step</strong>
+<strong>            for t in range(1,T):</strong>
+<strong>                alpha[:,t] = np.dot(alpha[:,t-1].T, self.A).T * self.B[:,observations[t]]</strong>
+<strong>                c[t] = 1.0/np.sum(alpha[:,t])</strong>
+<strong>                alpha[:,t] = c[t] * alpha[:,t]</strong>
+
+<strong>            #P(O=O_0,O_1,...,O_T-1 | hmm)</strong>
+<strong>            P_O = np.sum(alpha[:,T-1])</strong>
+<strong>            # beta_t(i) = P(O_t+1 O_t+2 ... O_T | q_t = S_i , hmm)</strong>
+<strong>            # Initialize beta</strong>
+<strong>            beta = np.zeros((N,T))</strong>
+<strong>            beta[:,T-1] = 1</strong>
+<strong>            beta[:,T-1] = c[T-1] * beta[:,T-1]</strong>
+<strong>            # Update beta backwards froT end of sequence</strong>
+<strong>            for t in range(len(observations)-1,0,-1):</strong>
+<strong>                beta[:,t-1] = np.dot(self.A, (self.B[:,observations[t]] * beta[:,t]))</strong>
+<strong>                beta[:,t-1] = c[t-1] * beta[:,t-1]</strong>
+
+<strong>            gi = np.zeros((N,N,T-1));</strong>
+
+<strong>            for t in range(T-1):</strong>
+<strong>                for i in range(N):</strong>
+<strong>                    </strong>
+<strong>                    gamma_num = alpha[i,t] * self.A[i,:] * self.B[:,observations[t+1]].T * \</strong>
+<strong>                            beta[:,t+1].T</strong>
+<strong>                    gi[i,:,t] = gamma_num / P_O</strong>
+<strong>  </strong>
+<strong>            # gamma_t(i) = P(q_t = S_i | O, hmm)</strong>
+<strong>            gamma = np.squeeze(np.sum(gi,axis=1))</strong>
+<strong>            # Need final gamma element for new B</strong>
+<strong>            prod =  (alpha[:,T-1] * beta[:,T-1]).reshape((-1,1))</strong>
+<strong>            gamma_T = prod/P_O</strong>
+<strong>            gamma = np.hstack((gamma,  gamma_T)) #append one Tore to gamma!!!</strong>
+
+<strong>            newpi = gamma[:,0]</strong>
+<strong>            newA = np.sum(gi,2) / np.sum(gamma[:,:-1],axis=1).reshape((-1,1))</strong>
+<strong>            newB = copy(B)</strong>
+<strong>            </strong>
+<strong>            sumgamma = np.sum(gamma,axis=1)</strong>
+<strong>            for ob_k in range(M):</strong>
+<strong>                list_k = observations == ob_k</strong>
+<strong>                newB[:,ob_k] = np.sum(gamma[:,list_k],axis=1) / sumgamma</strong>
+
+<strong>            if np.max(abs(pi - newpi)) &lt; criterion and \</strong>
+<strong>                   np.max(abs(A - newA)) &lt; criterion and \</strong>
+<strong>                   np.max(abs(B - newB)) &lt; criterion:</strong>
+<strong>                convergence = True;</strong>
+<strong>  </strong>
+<strong>            A[:],B[:],pi[:] = newA,newB,newpi</strong>
+
+<strong>        self.A[:] = newA</strong>
+<strong>        self.B[:] = newB</strong>
+<strong>        self.pi[:] = newpi</strong>
+<strong>        self.gamma = gamma</strong>
+</pre></div><p>请注意，代码使用了来自模块<code class="literal">copy</code>的浅层副本，它创建了一个新的容器，其中填充了对原始对象内容的引用(在本例中为<code class="literal">pi</code>、<code class="literal">B</code>)。也就是说，<code class="literal">newpi</code>是与<code class="literal">pi</code>不同的对象，但是<code class="literal">newpi[0]</code>是<code class="literal">pi[0]</code>的引用。相反，需要NumPy挤压函数来从矩阵中删除冗余维度。</p><p>使用相同的<a id="id322" class="indexterm"/>行为序列<em> O=0，1，0，2 </em>，我们得到<a id="id323" class="indexterm"/>最优模型由下式给出:</p><p><img src="img/B05143_03_222.jpg" alt="A Python example"/>、<img src="img/B05143_03_223.jpg" alt="A Python example"/>、<img src="img/B05143_03_224.jpg" alt="A Python example"/></p><p>这意味着状态序列必须从一个真正的推销员的句子开始，并在两个状态<em>位于</em>和<em>不位于</em>之间持续振荡。一个真正的推销员的句子(不是谎言)当然与目光接触值有关，而谎言则与低头和侧视行为有关。</p><p>在这个关于HMM的简单介绍中，我们假设每个观察值是一个标量值，但是在实际应用中，每个<em>O<sub>I</sub>T21通常是一个特征向量。通常，这种方法用于分类训练尽可能多的HMM l <em> <sub> i </sub> </em>，作为类别进行预测，然后在测试时间选择具有最高<img src="img/B05143_03_225.jpg" alt="A Python example"/>的类别。继续这个例子，我们可以想象构建一个<em>真机</em>来测试我们与之交谈的每一个销售人员。想象一下，对于我们说话人的每一句话(观察)<em> O <sub> i </sub> </em>，我们可以提取三个可能值的三个特征眼神<em> e <sub> i </sub> </em>(目光接触、向下看、向旁边看)、三个可能值的语音声音<em> v <sub> i </sub> </em>(太响、太低、平)以及两个可能值的手部动作<em> h <sub> i </sub> </em>(抖动和在训练的时候，我们让我们的朋友说谎，然后我们用这些观察来训练一个使用Baum-Welch的HMM l <em> 0 </em>。我们重复训练过程，但使用真实的句子，并训练l <em> 1 </em>。测试的时候，我们把业务员<em> O </em>的句子录下来，两个都算:<img src="img/B05143_03_226.jpg" alt="A Python example"/>，<img src="img/B05143_03_227.jpg" alt="A Python example"/>。类预测将是概率最高的一个。</em></p><p>注意，HMM已经应用于各种领域，但是其表现相当好的应用<a id="id324" class="indexterm"/>是语音识别<a id="id325" class="indexterm"/>任务、手写字符识别和动作识别。</p></div></div>
+
+
+
+
+
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec24"/>总结</h1></div></div></div><p>本章讨论了主要的分类和回归算法，以及实现它们的技术。现在，您应该能够理解每种方法可以在什么情况下使用，以及如何使用Python及其库(sklearn和pandas)来实现它。</p><p>在下一章中，我们将介绍用于从网络数据中学习的最相关的技术(网络数据挖掘)。</p></div>
+</body></html>

@@ -1,0 +1,467 @@
+<html><head/><body>
+
+
+
+
+
+
+
+
+
+  <title>Chapter_3</title>
+
+  
+
+  
+
+
+
+
+
+
+
+  <div><h1 class="chapterNumber">3</h1>
+
+    <h1 id="_idParaDest-46" class="chapterTitle">使用Kaggle笔记本电脑工作和学习</h1>
+
+    <p class="normal">Kaggle笔记本——直到最近<a id="_idIndexMarker171"/>还被称为<strong class="keyWord">内核</strong>——是<a id="_idIndexMarker172"/>浏览器中的Jupyter笔记本，可以免费运行。这意味着你可以在任何有网络连接的设备上进行实验，尽管比手机大的东西可能是个好主意。该环境的技术规范(截至撰写本文时)引自Kaggle网站；最新版本可在<a href="https://www.kaggle.com/docs/notebooks">https://www.kaggle.com/docs/notebooks</a>验证:</p>
+
+    <ul>
+
+      <li class="bulletList">CPU/GPU的执行时间为12小时，TPU为9小时</li>
+
+      <li class="bulletList">20千兆字节的自动保存的磁盘空间(<code class="inlineCode">/kaggle/working</code>)</li>
+
+      <li class="bulletList">在当前会话之外不会保存的额外暂存磁盘空间(在<code class="inlineCode">/kaggle/working</code>之外)</li>
+
+    </ul>
+
+    <p class="normal"><strong class="keyWord"> CPU规格:</strong></p>
+
+    <ul>
+
+      <li class="bulletList">4个CPU内核</li>
+
+      <li class="bulletList">16千兆字节的内存</li>
+
+    </ul>
+
+    <p class="normal"><strong class="keyWord"> GPU规格:</strong></p>
+
+    <ul>
+
+      <li class="bulletList">2个CPU内核</li>
+
+      <li class="bulletList">13千兆字节的内存</li>
+
+    </ul>
+
+    <p class="normal"><strong class="keyWord"> TPU规格:</strong></p>
+
+    <ul>
+
+      <li class="bulletList">4个CPU内核</li>
+
+      <li class="bulletList">16千兆字节的内存</li>
+
+    </ul>
+
+    <p class="normal">在本章中，我们将讨论以下主题:</p>
+
+    <ul>
+
+      <li class="bulletList">设置笔记本</li>
+
+      <li class="bulletList">运行您的笔记本</li>
+
+      <li class="bulletList">将笔记本保存到GitHub</li>
+
+      <li class="bulletList">充分利用笔记本电脑</li>
+
+      <li class="bulletList">Kaggle学习课程</li>
+
+    </ul>
+
+    <p class="normal">事不宜迟，让我们开始吧。我们需要做的第一件事是弄清楚如何设置一个笔记本。</p>
+
+    <h1 id="_idParaDest-47" class="heading-1">设置笔记本</h1>
+
+    <p class="normal">创建笔记本有两种主要方法:从首页或从数据集。</p>
+
+    <p class="normal">要继续第一种方法，请转到<a href="https://www.kaggle.com/">https://www.kaggle.com/</a>的<a id="_idIndexMarker174"/>登录页面左侧菜单的<strong class="screenText">代码</strong>部分，并点击<strong class="screenText"> +新笔记本</strong>按钮。如果您计划进行一项涉及上传您自己的数据集的实验，这是首选方法:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_01.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.1:从代码页创建一个新的笔记本</p>
+
+    <p class="normal">或者，您<a id="_idIndexMarker175"/>可以转到您感兴趣的数据集页面，并单击那里的<strong class="screenText">新笔记本</strong>按钮，正如我们在前一章中看到的:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_02.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.2:从数据集页面创建新的笔记本</p>
+
+    <p class="normal">无论您选择哪种<a id="_idIndexMarker176"/>方式，点击<strong class="screenText">新建笔记本</strong>后，您将被带到您的<strong class="keyWord">笔记本</strong>页面:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_03.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.3:笔记本页面</p>
+
+    <p class="normal">在上面显示的新<strong class="keyWord">笔记本</strong>页面的<a id="_idIndexMarker177"/>右侧，我们有许多可以调整的设置:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_04.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.4:笔记本电脑选项</p>
+
+    <p class="normal">我们将简单讨论一下设置。首先是编码<strong class="screenText">语言</strong>。截至本文撰写之时，Kaggle环境只允许<a id="_idIndexMarker178"/> Python和R作为编写笔记本的可用选项。默认情况下，新笔记本的初始化语言设置为Python——如果您想使用R，点击下拉菜单并选择<strong class="screenText"> R </strong>。</p>
+
+    <p class="normal">接下来是<strong class="screenText">环境</strong>:这个开关<a id="_idIndexMarker179"/>允许你决定是否总是使用最新的Docker环境(风险选项；快速获得更新，但依赖关系可能会随着未来的更新而中断)或者将笔记本固定到Kaggle提供的环境的原始版本(安全的选择)。后一个选项是默认选项，除非您正在进行非常活跃的开发工作，否则没有真正的理由去修改它。</p>
+
+    <p class="normal"><strong class="screenText">加速器</strong>允许<a id="_idIndexMarker180"/>用户选择如何运行代码:在CPU上(无加速)，在GPU上(几乎任何涉及深度学习的严肃应用都需要)，或者在TPU上。请记住，从CPU转移到(单个)GPU只需要对代码进行最少的更改，并且可以通过系统设备检测来处理。</p>
+
+    <p class="normal">将您的代码迁移到TPU需要更精细的重写，从数据处理开始。要记住的重要一点是，当您在笔记本上工作时，可以在CPU/GPU/TPU之间切换，但每次这样做时，环境都会重新启动，您需要从头开始运行所有代码。</p>
+
+    <p class="normal">最后，我们有<a id="_idIndexMarker181"/><strong class="screenText">互联网</strong>开关，可以启用或禁用在线访问。例如，如果您已连接并需要安装额外的软件包，依赖项的下载和安装将在后台自动进行。需要明确禁用互联网访问的最常见情况是，提交参赛作品时明确禁止在线访问。</p>
+
+    <p class="normal">使用笔记本的一个重要方面是，你可以随时拿一个现有的(由你自己或另一个Kaggler创建的)并克隆它来修改和调整以适应你的需要。这可以通过点击笔记本页面右上角的<strong class="screenText">复制和编辑</strong>按钮来实现。在卡格尔<a id="_idIndexMarker182"/>的说法中，这个过程被称为<strong class="keyWord">分叉</strong>:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_05.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.5:派生现有笔记本</p>
+
+    <div><p class="normal"><strong class="keyWord">礼仪注意事项</strong>:如果你以前参加过Kaggle比赛，你可能会注意到排行榜上充斥着得分好的笔记本的叉子的叉子。在别人的工作基础上进行创作没有错——但如果你这样做了，记得投票支持原作者，并明确表扬参考作品的创作者。</p>
+
+    </div>
+
+    <p class="normal">默认情况下，您创建的笔记本是私有的(仅对您可见)。如果您想让其他人可以使用它，您可以选择添加协作者，以便只有明确添加到列表中的用户才能查看或编辑内容，或者将笔记本公开，在这种情况下，每个人都可以看到它。</p>
+
+    <h1 id="_idParaDest-48" class="heading-1">运行您的笔记本</h1>
+
+    <p class="normal">所有的编码都完成了，<a id="_idIndexMarker183"/>笔记本看起来工作正常，你可以开始执行了。为此，请转到笔记本页面的右上角，点击<strong class="screenText">保存版本</strong>。</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_06.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.6:保存您的脚本</p>
+
+    <p class="normal"><strong class="screenText">保存&amp;运行全部</strong>通常<a id="_idIndexMarker184"/>用于执行脚本，但也有一个<strong class="screenText">快速保存</strong>选项，可用于在准备提交之前保存脚本的中间版本:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_07.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.7:保存版本的不同选项</p>
+
+    <p class="normal">一旦您启动了<a id="_idIndexMarker185"/>您的脚本，您可以前往左下角并点击<strong class="screenText">活动事件</strong>:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_08.png" alt="Obraz zawierający tekst, zrzut ekranu, monitor, ekran  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.8:监控活动事件</p>
+
+    <p class="normal">通过这种方式，您可以监控笔记本的行为。正常执行与消息<strong class="screenText">运行</strong>相关联；否则显示为<strong class="screenText">失败</strong>。如果您出于某种原因决定终止正在运行的会话(例如，您意识到您<a id="_idIndexMarker186"/>忘记使用最近的数据)，您可以通过单击<strong class="screenText">活动事件</strong>下脚本条目右侧的三个点来完成，您将收到一个弹出窗口，如下图所示:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_09.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.9:取消笔记本执行</p>
+
+    <h1 id="_idParaDest-49" class="heading-1">将笔记本保存到GitHub</h1>
+
+    <p class="normal">最近推出的一个功能(见<a href="https://www.kaggle.com/product-feedback/295170">https://www.kaggle.com/product-feedback/295170</a>)允许你将你的代码或笔记本存储到<a id="_idIndexMarker188"/>版本控制库GitHub(<a href="https://github.com/">https://github.com/</a>)。您可以将您的工作存储到公共和私有存储库中，这将在您保存代码版本时自动发生。这样一个功能对于与你的Kaggle队友分享你的作品，以及向更广泛的公众展示你的作品是非常有用的。</p>
+
+    <p class="normal">为了启用此功能，您需要打开笔记本；在<strong class="screenText">文件</strong>菜单中，选择<strong class="screenText">链接到GitHub </strong>选项。</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_10.png" alt="00.PNG"/></figure>
+
+    <p class="packt_figref">图3.10:启用GitHub特性</p>
+
+    <p class="normal">在<a id="_idIndexMarker189"/>选择选项后，你必须将你的GitHub <a id="_idIndexMarker190"/>账号链接到笔记本。第一次选择链接时，会明确要求您提供链接权限。对于新笔记本的任何后续链接，该操作将自动执行。</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_11.png" alt="01.PNG"/></figure>
+
+    <p class="packt_figref">图3.11:链接到GitHub</p>
+
+    <p class="normal">只有在链接您的笔记本后，您才可以在保存工作时将其同步到您选择的存储库:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_12.png" alt="02.PNG"/></figure>
+
+    <p class="packt_figref">图3.12:将您的工作提交给GitHub</p>
+
+    <p class="normal">在决定了存储库和分支上的<a id="_idIndexMarker191"/>(从而允许您存储工作的<a id="_idIndexMarker192"/>不同开发阶段)之后，您可以更改您将要推送到存储库的文件的名称，并修改提交消息。</p>
+
+    <p class="normal">如果你决定不再想在GitHub上同步某个特定的笔记本，你所要做的就是回到<strong class="screenText">文件</strong>菜单，选择<strong class="screenText">解除与GitHub </strong>的链接。最后，如果你想让Kaggle停止与你的GitHub库连接，你可以从<strong class="screenText">我的链接账户</strong>下的Kaggle账户页面或者GitHub的设置页面(<a href="https://github.com/settings/applications">https://github.com/settings/applications</a>)取消你的账户链接。</p>
+
+    <h1 id="_idParaDest-50" class="heading-1">充分利用笔记本电脑</h1>
+
+    <p class="normal">Kaggle <a id="_idIndexMarker193"/>免费提供一定数量的资源，配额每周重置。你有一定的时间可以同时使用GPU和GPU对于TPU来说是30个小时，但是对于GPU来说，这个数字可能每周都不同(你可以在这里找到描述“浮动”配额政策的官方声明:<a href="https://www.kaggle.com/product-feedback/173129">https://www.kaggle.com/product-feedback/173129</a>)。您可以随时在自己的个人资料中监控您的使用情况:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_13.png" alt="Obraz zawierający tekst  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.13:加速器配额的当前状态</p>
+
+    <p class="normal">虽然乍一看这些金额似乎很大，但这种最初的印象可能具有欺骗性；很快用完你的配额其实是相当容易的。一些实用的建议可以帮助您控制资源的使用:</p>
+
+    <ul>
+
+      <li class="bulletList">当你<strong class="keyWord">初始化</strong>你的笔记本时，配额计数器(测量你使用你选择的加速器、GPU或TPU的时间)开始运行。</li>
+
+      <li class="bulletList">这意味着你应该总是从检查设置下的GPU是否被禁用开始(参见上面的<em class="italic">图3.6 </em>)。首先编写样板文件，检查语法，并在添加实际依赖于GPU初始化的代码部分时启用/禁用GPU。一个提醒:换加速器笔记本会重启。</li>
+
+      <li class="bulletList">在一小部分数据上端到端地运行代码来感受执行时间通常是一个好主意。通过这种方式，您可以最大限度地降低代码因超出此限制而崩溃的风险。</li>
+
+    </ul>
+
+    <p class="normal">有时，Kaggle免费提供的资源不足以完成手头的任务，你需要转移到更强大的机器上。最近的一次肿瘤分类比赛就是一个很好的例子:<a href="https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification/data">https://www . ka ggle . com/c/rsna-miccai-brain-tumor-radio genomic-class ification/data</a>。</p>
+
+    <p class="normal">如果原始数据超过100GB，则需要调整图像大小/缩减图像采样(这可能会对模型性能产生不利影响)，或者在能够处理高分辨率图像的环境中训练模型。您可以自己设置整个环境(这种设置的一个例子是在第2章的<em class="chapterRef">中使用Google Colab </em>中的<em class="italic">部分)，或者您可以留在笔记本的框架内，但交换底层机器。这就是谷歌云AI笔记本的用武之地。</em></p>
+
+    <h2 id="_idParaDest-51" class="heading-2">升级到谷歌云平台(GCP)</h2>
+
+    <p class="normal">升级到GCP的明显好处是获得更强大的硬件:特斯拉P100 GPU(由Kaggle免费提供)对于许多应用程序来说是不错的，但在性能方面不是顶级的，16GB RAM也可能相当有限，特别是在大型NLP模型或高分辨率图像处理等资源密集型应用程序中。虽然执行时间的改进是显而易见的，导致开发周期中更快的迭代，但这是有代价的:您需要决定您准备花费多少。对于一台处理数据的强大机器来说，时间就是金钱。</p>
+
+    <p class="normal">为了将您的笔记本迁移到GCP环境，请转到右侧的边线菜单，然后单击<strong class="screenText">升级到谷歌云人工智能笔记本</strong>:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_14.png" alt="Obraz zawierający tekst  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.14:升级到谷歌云人工智能笔记本选项</p>
+
+    <p class="normal">您将看到以下提示<a id="_idIndexMarker196"/>:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_15.png" alt="Obraz zawierający tekst  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.15:升级到谷歌云AI平台笔记本提示</p>
+
+    <p class="normal">当您<a id="_idIndexMarker197"/>点击<strong class="screenText">继续</strong>时，您将被重定向至谷歌云平台控制台，在这里您需要配置您的付费选项。提醒一下:<strong class="keyWord"> GCP不自由。如果这是你的第一次，你需要完成一个指导你完成必要步骤的教程。</strong></p>
+
+    <h2 id="_idParaDest-52" class="heading-2">超越一步</h2>
+
+    <p class="normal">正如本章前面提到的，Kaggle笔记本<a id="_idIndexMarker198"/>是教育和参加比赛的绝佳工具；但它们还有另一个非常有用的用途，即作为投资组合的一部分，你可以用来展示你的数据科学技能。</p>
+
+    <p class="normal">在构建您的数据科学组合时，有许多潜在的标准需要考虑(品牌、受众范围、向您的潜在雇主推销等)，但如果没有人能找到这些标准，这些标准都无关紧要。因为Kaggle是谷歌的一部分，笔记本被世界上最流行的搜索引擎编入索引；因此，如果有人正在寻找与您的代码相关的主题，它会显示在他们的搜索结果中。</p>
+
+    <p class="normal">下面，我举一个个人的例子:几年前，我为一个比赛写了一个笔记本。我想解决的问题是对抗性验证(对于那些不熟悉这个主题的人来说:一个相当简单的方法来看看你的训练集和测试集是否有相似的分布，就是构建一个二进制分类器来区分它们；这个概念在<em class="chapterRef">第6章</em>、<em class="italic">设计良好验证</em>中有更详细的介绍。在写这一章的时候，我试着搜索笔记本，你瞧，它在搜索结果中显示得很高(注意，我在查询中没有提到Kaggle或任何个人信息，比如我的名字):</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_16.png" alt="Obraz zawierający tekst  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.16:康拉德的笔记本出现在谷歌上</p>
+
+    <p class="normal">继续使用笔记本来展示你的技能组合的其他好处:就像<strong class="keyWord">竞赛</strong>、<strong class="keyWord">数据集</strong>和<strong class="keyWord">讨论</strong>、<strong class="keyWord">笔记本</strong>可以获得投票/奖牌，从而确定你在进步系统和排名中的位置。你可以远离竞赛的轨道，通过专注于社区欣赏的高质量代码，成为专家、大师或特级大师。</p>
+
+    <p class="normal">最新版本的进展要求可在<a href="https://www.kaggle.com/progression">https://www.kaggle.com/progression</a>找到；下面我们给出了与专家层和主层相关的快照:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_17.png" alt="Obraz zawierający tekst  Opis wygenerowany automatycznie"/></figure>
+
+    <p class="packt_figref">图3.17:层级递进要求</p>
+
+    <p class="normal">在<a id="_idIndexMarker200"/>笔记本类别中取得进展可能是一次富有挑战性的经历；虽然比竞赛容易，但肯定比讨论难。最受欢迎的笔记本电脑是那些与特定竞争相关的笔记本电脑:探索性数据分析、端到端概念验证解决方案，以及排行榜追逐；不幸的是，人们通常会克隆得分最高的公共笔记本，调整一些参数以提高得分，并发布它以获得广泛好评(如果upvotes可以被视为情绪的衡量标准的话)。这并不意味着阻止读者在Kaggle上发表高质量的作品——大多数Kagglers确实欣赏小说作品，从长远来看，质量确实占优势——但对预期的现实调整是必要的。</p>
+
+    <p class="normal">你的Kaggle个人资料<a id="_idIndexMarker201"/>拥有追随者，让你有可能链接其他职业网络，如LinkedIn或GitHub，因此你可以利用你在社区内获得的联系:</p>
+
+    <figure class="mediaobject"><img src="img/B17574_03_18.png" alt=""/></figure>
+
+    <p class="packt_figref">图3.18:康拉德的Kaggle简介</p>
+
+    <p class="normal">在这个时代，人们很容易对“社区建设”的说法持怀疑态度，但在Kaggle的案例中，这恰好是真的。他们的品牌认知度在数据科学领域首屈一指，无论是从业者还是真正做足功课的招聘人员都是如此。在实践中，这意味着一个(足够体面的)Kaggle个人资料已经可以让你进门了；众所周知，这往往是最困难的一步。</p>
+
+    <div><div><img src="img/Martin_Henze.png" alt=""/>
+
+      </div>
+
+      <p class="intervieweeName">马丁·亨策</p>
+
+      <p class="normal"><a href="https://www.kaggle.com/headsortails">https://www.kaggle.com/headsortails</a></p>
+
+      <p class="normal">我们有幸与Martin Henze(又名正面或反面)交谈，他是笔记本和讨论领域的Kaggle大师，也是爱迪生软件公司的数据科学家。马丁也是《每周T21笔记本:隐藏的宝石》的作者，这是一本每周收集的逃避公众注意的最好的笔记本。你可以通过关注他的Kaggle个人资料或他在Twitter和LinkedIn上的账户来获得关于新的隐藏宝石帖子的通知。</p>
+
+      <p class="interviewHeader">你最喜欢哪种比赛，为什么？就技术和解决方法而言，你在Kaggle上的专长是什么？</p>
+
+      <p class="normal"><em class="italic">很长一段时间，我关注的是EDA(探索性数据分析)笔记本，而不是排行榜预测本身。在Kaggle之前，我的大部分经验都是关于表格数据的，我的大部分EDA笔记本都处理从新推出的表格挑战中提取复杂的见解。我仍然认为这是我在Kaggle上的专长，我已经花了大量的时间来精心设计我的笔记本的结构、数据可视化和讲故事。</em></p>
+
+      <p class="interviewHeader">你是如何对待一场Kaggle比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
+
+      <p class="normal">即使Kaggle已经脱离了表格竞赛，我仍然坚信数据本身是任何挑战中最重要的方面。很容易过早地关注模型架构和超参数调优。但在许多比赛中，成功的关键仍然是以数据为中心的方法，这种方法建立在对数据集及其怪癖和特性的详细了解之上。对于图像数据、NLP、时间序列以及你能想到的任何其他数据结构都是如此。因此，我总是先从广泛的EDA开始，然后构建一个简单的基线模型，一个CV框架，然后慢慢迭代这个管道的复杂性。</p>
+
+      <p class="normal"><em class="italic">与我的数据科学日常工作相比，主要的区别可能是，大多数有经验的人能够在新挑战的第一周内建立的基线模型被认为足以投入生产。在许多情况下，在最初的几天之后，就评分标准而言，我们已经有超过80%的人找到了最终赢家的解决方案。当然，Kaggle的乐趣和挑战是找到创造性的方法来获得最后的百分之几，比如说，准确性。但在行业工作中，你的时间通常更有效地花在处理新项目上。</em></p>
+
+
+
+      <p class="interviewHeader">Kaggle对你的职业生涯有帮助吗？如果有，如何实现？</p>
+
+      <p class="normal"><em class="italic">卡格尔极大地塑造和支持了我的职业生涯。在Kaggle社区的美好经历促使我从学术界转向工业界。今天，我在一家科技初创公司担任数据科学家，我通过Kaggle挑战不断成长和磨练自己的技能。</em></p>
+
+      <p class="normal">对我来说，我专注于构建大量的Kaggle笔记本对我帮助很大，因为我可以很容易地将它们用作我的作品集。我不知道招聘经理会多久看一次这些资源，但我经常有这样的印象，我的硕士头衔可能比我的博士学位打开了更多的大门。或者可能是两者的结合。在任何情况下，我都非常推荐拥有一个公共笔记本的文件夹。此外，在我找工作的过程中，我将我在Kaggle上学到的策略用于各种带回家的任务，它们很好地服务了我。</p>
+
+      <p class="interviewHeader">以你的经验来看，没有经验的Kagglers经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
+
+      <p class="normal"><em class="italic">我认为我们都是在经历中不断成长的</em> <em class="italic"> <a id="_idIndexMarker204"/> </em> <em class="italic">。我们现在都比十年前、五年前甚至一年前更聪明。这样一来，一个经常被忽视的重要方面是，你想要对你正在做的事情有一个计划，并执行和记录这个计划。对于新的Kagglers来说，这是一个完全可以理解的错误，因为一切都是新奇和复杂的，至少有些令人困惑。我知道当我第一次加入的时候Kaggle让我很困惑。你可以做很多事情:论坛、数据集、挑战、课程。竞争可能是完全令人生畏的:</em>神经元细胞实例分割；股市波动预测<em class="italic">。那些东西到底是什么？但是比赛也是最好的起点。</em></p>
+
+      <p class="normal">因为当一场比赛开始时，没有人真正了解它。是的，也许有一个人已经完成了几乎相同主题的博士学位。但是那些很少见。其他人，我们几乎都是从零开始。挖掘数据，玩损失函数，运行一些简单的入门模型。当你开始参加比赛时，作为社区的一员，你会以一种加速的方式经历所有的学习曲线。你可以和那些能给你提供大量想法的人一起学习。但是你仍然需要一个计划。</p>
+
+      <p class="normal">这个计划很重要，因为很容易盲目地运行一些实验，看到所有的GPU RAM都被使用，并对此感觉良好。但是你忘了你的模型的哪个版本做得最好，本地验证和排行榜之间有关联吗？我已经测试过这个参数组合了吗？所以写下你要做的事情，然后记录结果。有越来越多的工具为您记录日志，但这也可以通过自定义脚本轻松完成。</p>
+
+
+
+      <p class="normal"><em class="italic">机器学习在很大程度上仍然是一门实验科学，高效实验的关键是做好计划，并写下所有结果，以便你可以比较和分析它们。</em></p>
+
+      <p class="interviewHeader">你在过去的比赛中犯过什么错误？</p>
+
+      <p class="normal">我犯了很多 <em class="italic"> <a id="_idIndexMarker205"/> </em> <em class="italic">错误，我希望我能从中吸取教训。没有一个健壮的交叉验证框架就是其中之一。不考虑训练和测试之间的差异。做太多的EDA而忽略了模型构建——这可能是我在最初几场比赛中犯的标志性错误。做得不够，错过了一些重要的事情——是的，也是这样。没有选择我的最后两个提交。(最后没什么区别，但我还是不会再忘记了。)</em></p>
+
+      <p class="normal">然而，关于错误的观点与我之前关于实验和制定计划的观点相似。如果你能从错误中学习，如果错误能帮助你成长和进步，那么错误是好的。你仍然想避免犯那些可以通过预见避免的容易的错误。但是在机器学习(和科学！)失败是这个过程的一部分。不是所有的事情都会一直有效。这很好。但是你不想一次又一次地犯同样的错误。所以唯一真正的错误是没有从错误中吸取教训。Kaggle比赛如此，生活中也是如此。</p>
+
+      <p class="interviewHeader">对于数据分析或机器学习，你有什么特别推荐的工具或库吗？</p>
+
+      <p class="normal">我知道我们越来越生活在一个Python的世界里，但是当谈到表格争论和数据可视化时，我仍然更喜欢R和它的tidyverse: dplyr、ggplot2、lubridate等等。新的tidymodels框架是sklearn的有力竞争者。即使你是一个死忠的Python爱好者，偶尔看看熊猫和朋友以外的东西也是值得的。不同的工具往往会导致不同的观点和更多的创造力。在深度学习方面，我发现PyTorch最直观的是它的FastAI界面。当然，现在每个人都喜欢拥抱脸；而且理由很充分。</p>
+
+      <p class="interviewHeader">当一个人参加比赛时，他应该记住或做的最重要的事情是什么？</p>
+
+      <p class="normal"><em class="italic">最重要的</em> <em class="italic"> <a id="_idIndexMarker206"/> </em> <em class="italic">事情就是要记得去玩，去学东西。比赛期间和比赛结束后，人们分享了如此多有价值的见解和智慧，如果不从中汲取和成长，那将是一种耻辱。即使你唯一关心的事情是获胜，你也只能通过学习和尝试，站在这个社区的肩膀上来实现。但是Kaggle比排行榜有更多的东西，一旦你开始贡献和回馈社区，你将会以一种更加全面的方式成长。我保证。</em></p>
+
+    </div>
+
+    <h1 id="_idParaDest-53" class="heading-1">Kaggle学习课程</h1>
+
+    <p class="normal">关于Kaggle的很多事情都是关于获取知识的。无论是你在竞赛中学到的东西，还是你在不断增长的知识库中找到的数据集，或者是一个迄今未知的模型类的演示，总有一些新的东西需要发现。这个收藏的最新成员是在https://www.kaggle.com/learn标签下收集的课程。这些微型课程由Kaggle营销为“获得独立数据科学项目所需技能的最快方式”，核心统一主题是跨各种主题的速成课程介绍。每门课都分成小章节，后面是编码练习题。这些课程是用笔记本来讲授的，其中一些必要的理论和阐述与你需要自己编码和实现的部分混合在一起。</p>
+
+    <p class="normal">下面，我们提供了最有用的工具的简要概述:</p>
+
+    <ul>
+
+      <li class="bulletList"><strong class="keyWord">Intro to ML/Intermediate ML</strong>: <a href="https://www.kaggle.com/learn/intro-to-machine-learning">https://www.kaggle.com/learn/intro-to-machine-learning</a> and<a id="_idIndexMarker209"/> <a href="https://www.kaggle.com/learn/intermediate-machine-learning">https://www.kaggle.com/learn/intermediate-machine-learning</a>
+
+    <p class="normal">这两个课程最好被视为两部分:第一部分介绍机器学习中使用的不同类别的模型，接下来是对不同模型的共同主题的讨论，如欠拟合/过拟合或模型验证。第二个更深入到特征工程，处理缺失值和分类变量。对刚开始ML旅程的人有用。</p>
+
+</li>
+
+    </ul>
+
+    <ul>
+
+      <li class="bulletList"><strong class="keyWord">pandas</strong>: <a href="https://www.kaggle.com/learn/pandas">https://www.kaggle.com/learn/pandas</a>
+
+    <p class="normal">这门<a id="_idIndexMarker210"/>课程提供了现代数据科学中使用的最基本工具之一的速成介绍。您首先学习如何创建、读取和写入数据，然后继续学习数据清理(索引、选择、组合、分组等)。对初学者(pandas的功能有时会让人不知所措)和从业者(作为复习/参考)都有用。</p>
+
+</li>
+
+    </ul>
+
+    <ul>
+
+      <li class="bulletList"><strong class="keyWord">Game AI</strong>: <a href="https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning">https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning</a>
+
+    <p class="normal">本课程是Kaggle在学习模块中介绍的课程中以技术为中心的部分的完美总结。您将编写一个游戏代理，修改它的性能，并使用minimax算法。<em class="italic">这可能最好被看作是强化学习的实践导向介绍</em>。</p>
+
+</li>
+
+    </ul>
+
+    <ul>
+
+      <li class="bulletList"><strong class="keyWord">Machine Learning Explainability</strong>: <a href="https://www.kaggle.com/learn/machine-learning-explainability">https://www.kaggle.com/learn/machine-learning-explainability</a>
+
+    <p class="normal">构建<a id="_idIndexMarker212"/>模型很有趣，但在现实世界中，并不是每个人都是数据科学家，所以你可能会发现自己需要向他人解释你做了什么。这就是这个关于模型可解释性<a id="_idIndexMarker213"/>的迷你课程的用武之地:你将学会用三种不同的方法评估你的特征有多相关:排列重要性、SHAP和部分依赖图。<em class="italic">对任何在商业环境中与ML一起工作的人都非常有用，在商业环境中，项目的生死取决于信息传达得如何。</em></p>
+
+</li>
+
+    </ul>
+
+    <ul>
+
+      <li class="bulletList"><strong class="keyWord">AI Ethics</strong>: <a href="https://www.kaggle.com/learn/intro-to-ai-ethics">https://www.kaggle.com/learn/intro-to-ai-ethics</a>
+
+    <p class="normal">这最后一门课程<a id="_idIndexMarker214"/>是对命题的一个非常有趣的补充:它讨论了指导人工智能系统道德设计的实用工具。您将学习如何识别人工智能模型中的偏见，检查人工智能公平的概念，并找出如何通过交流ML模型信息来增加透明度。<em class="italic">对从业者非常有用，因为“负责任的人工智能”是一个我们会越来越多地在</em>中听到的短语。</p>
+
+</li>
+
+    </ul>
+
+    <p class="normal">除了Kaggle创建的<a id="_idIndexMarker215"/>原创内容，平台上还有其他通过用户创建的笔记本提供的学习机会；鼓励读者自己去探索它们。</p>
+
+    <div><div><img src="img/Andrada_Olteanu.png" alt=""/>
+
+      </div>
+
+      <p class="intervieweeName">安德拉达·奥尔特亚努</p>
+
+      <p class="normal"><a href="https://www.kaggle.com/andradaolteanu">https://www.kaggle.com/andradaolteanu</a></p>
+
+      <p class="normal">Andrada Olteanu是Kaggle笔记本电脑大师之一，他非常鼓励从笔记本电脑中学习。Andrada是Z by HP全球数据科学大使、Endava的数据科学家和Weights&amp;bias的开发专家。我们采访了安德拉达，了解她的笔记本电脑竞赛、职业生涯以及更多内容。</p>
+
+      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在Kaggle上的特长是什么？</p>
+
+      <p class="normal"><em class="italic">我想说我在Kaggle上的专长更倾向于数据可视化，因为它使我能够将艺术和创造力与数据结合起来。</em></p>
+
+      <p class="normal">我不会说我有最喜欢的竞争类型，但我宁愿说我喜欢偶尔改变一下，选择我觉得有趣的。</p>
+
+
+
+      <p class="normal"><em class="italic">ka ggle的魅力在于，人们可以学习数据科学的多个领域(计算机视觉、NLP、探索性数据分析和统计、时间序列等)，同时还可以熟悉和熟悉许多主题(如体育、医疗领域、金融和加密货币、全球事件等)。)</em></p>
+
+      <p class="normal">另一件很棒的事情是，例如，如果一个人想要更熟练地处理文本数据，那么几乎总是会有一个需要NLP的Kaggle竞赛。或者，如果你想学习如何对音频文件进行预处理和建模，也可以参加一些比赛。</p>
+
+      <p class="interviewHeader">告诉我们你参加的一个特别有挑战性的比赛，以及你用什么样的洞察力来完成这个任务。</p>
+
+      <p class="normal"><em class="italic">我参加过的最具挑战性的“比赛”是“Kaggle数据科学与机器学习年度调查”。我知道这不是一场“真正的”比赛——涉及排行榜和重型机器学习——但对我来说，这是我在其中“流汗”并学到最多的比赛之一。</em></p>
+
+      <p class="normal">这是一个笔记本电脑竞赛，用户必须变得有创意，才能赢得Kaggle放在桌面上的5个奖品中的一个。我已经连续两年参加了。在第一年(2020年)，它挑战了我更“基本”的可视化技能，并迫使我跳出框框思考(我获得了第三名)；在第二年(2021年)，我通过学习D3为它准备了大约4个月，试图在我的数据可视化技能上达到一个完全不同的水平(仍在复习中；至今获得“早期笔记本奖”奖)。在这里我能给出的最好的见解是:</p>
+
+      <ul>
+
+        <li class="bulletList"><em class="italic">首先，不要让</em> <em class="italic"> <a id="_idIndexMarker217"/> </em> <em class="italic">内的数据丢失，尽量创建尽可能准确的</em> <em class="italic"> <a id="_idIndexMarker218"/> </em> <em class="italic">图形；如果有必要的话，建立双重验证方法，以确保你所表达的清晰简洁。没有什么比展示不准确见解的漂亮图表更糟糕的了。</em></li>
+
+        <li class="bulletList">试着在你周围寻找灵感:从自然中，从电影中，从你的工作中。你可以利用惊人的主题和有趣的方式来美化你的形象。</li>
+
+      </ul>
+
+      <p class="interviewHeader">Kaggle对你的职业生涯有帮助吗？如果有，如何实现？</p>
+
+      <p class="normal">是的。非常多。我相信我现在的职业生涯在很大程度上归功于卡格尔，对此我永远心存感激。通过Kaggle，我成为了惠普的Z大使；我还发现了权重&amp;偏差，这是一个令人惊叹的机器学习实验平台，现在我是他们的自豪的开发专家。最后但同样重要的是，通过这个平台，我联系到了我现在在Endava的首席数据科学家，他招募了我，从那以后我一直与他一起工作。简而言之，我在Endava的职位和我与两家大公司的联系(惠普和Weights&amp;bias)是我在Kaggle平台上活动的直接结果。</p>
+
+
+
+      <p class="normal"><em class="italic">我认为Kaggle最被忽视的方面是社区。Kaggle拥有最大的人才库，所有人都聚集在一个方便的地方，人们可以在那里联系、互动和学习。</em></p>
+
+      <p class="normal"><em class="italic">利用这一点的最佳方式是，例如，从Kaggle的每个部分(竞赛、数据集、笔记本——如果你愿意，还有讨论)挑选前100个人，在Twitter/LinkedIn上关注每个在个人资料中分享了这些信息的人。这样，你可以开始定期与这些了不起的人交流，他们有着丰富的见解和知识。</em></p>
+
+      <p class="interviewHeader">你在过去的比赛中犯过什么错误？</p>
+
+      <p class="normal">我过去在比赛中犯的最大错误就是没有参加比赛。我相信这是初学者在进入平台时犯的最大、最基本的错误。</p>
+
+      <p class="normal">出于恐惧(我说的是个人经验)，他们认为自己没有准备好，或者他们只是不知道如何开始。幸运的是，如果你遵循一个简单的系统，进入任何比赛都会变得非常容易:</p>
+
+      <ul>
+
+        <li class="bulletList"><em class="italic">参加任何你喜欢或听起来有趣的比赛。</em></li>
+
+        <li class="bulletList"><em class="italic">浏览描述页面和数据。</em></li>
+
+        <li class="bulletList"><em class="italic">如果你有</em> <em class="italic"> <a id="_idIndexMarker219"/> </em> <em class="italic">不知道如何下手，不用担心！只要进入“代码”部分，四处寻找那些有很多upvotes的笔记本，或者是由</em> <em class="italic"> <a id="_idIndexMarker220"/> </em> <em class="italic">有经验的人，比如特级大师做的。开始做一个“代码随行”笔记本，你可以看看别人做了什么，然后“复制”它，自己研究并尝试改进它。在我看来，这是最好的学习方式——你永远不会停滞不前，你会在具体的项目中边做边学。</em></li>
+
+      </ul>
+
+      <p class="interviewHeader">当一个人参加比赛时，他应该记住或做的最重要的事情是什么？</p>
+
+      <p class="normal">他们应该记住失败是可以接受的，因为这通常是最好的学习方式。</p>
+
+      <p class="normal">他们还应该记住的是，始终向竞赛大师学习，因为他们通常是分享和解释人们可能永远不会想到的机器学习技术的人。学习的最好方法是看看那些“已经成功了”的人，这样你的成功之路就不会那么崎岖不平，反而会更容易、更顺利、更快。带2-3个你真正佩服的大师，让他们成为你的老师；研究他们的笔记本，跟着编码，尽可能多地学习。</p>
+
+      <p class="interviewHeader">你使用其他比赛平台吗？他们和Kaggle相比如何？</p>
+
+      <p class="normal">我从未使用过任何其他竞赛平台——只是因为我觉得Kaggle拥有一切。</p>
+
+    </div>
+
+    <h1 id="_idParaDest-54" class="heading-1">摘要</h1>
+
+    <p class="normal">在本章中，我们讨论了Kaggle笔记本电脑，这是一种多用途的开放编码环境，可用于教育和实验，以及推广您的数据科学项目组合。现在，您可以创建自己的笔记本，有效地利用可用资源，并将结果用于竞赛或您的个人项目。</p>
+
+    <p class="normal">在下一章，我们将介绍讨论论坛，这是在Kaggle上交换想法和意见的主要形式。</p>
+
+    <h1 id="_idParaDest-55" class="heading-1">加入我们书的不和谐空间</h1>
+
+    <p class="normal">加入这本书的Discord workspace，每月与作者进行一次<em class="italic">向我提问</em>会议:</p>
+
+    <p class="normal"><a href="https://packt.link/KaggleDiscord">https://packt.link/KaggleDiscord</a></p>
+
+    <p class="normal"><img src="img/QR_Code40480600921811704671.png" alt=""/></p>
+
+  </div>
+
+
+
+</body></html>

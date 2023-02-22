@@ -1,0 +1,881 @@
+<html><head/><body>
+
+
+
+
+
+
+
+
+
+  <title>Chapter_7</title>
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+  <div><h1 class="chapterNumber">七</h1>
+
+    <h1 id="_idParaDest-113" class="chapterTitle">时间序列的机器学习模型</h1>
+
+    <p class="normal">近年来，机器学习已经取得了很大进展，这反映在可用于时间序列预测的方法中。我们已经在<em class="chapterRef">第四章</em>、<em class="italic">时序机器学习简介</em>中介绍了一些最先进的时序机器学习方法。在本章中，我们将介绍更多的机器学习方法。</p>
+
+    <p class="normal">我们将介绍通常用作基线方法的方法，或者在性能、易用性或适用性方面表现突出的方法。我将引入k-最近邻，使用动态时间扭曲和梯度提升作为时间序列的基线，我们还将介绍其他方法，如Silverkite和梯度提升。最后，我们将使用其中的一些方法进行应用练习。</p>
+
+    <p class="normal">我们将讨论以下主题:</p>
+
+    <ul>
+
+      <li class="bullet">时间序列的更多机器学习方法</li>
+
+      <li class="bullet">具有动态时间弯曲的k-最近邻</li>
+
+      <li class="bullet">银风筝</li>
+
+      <li class="bullet">梯度推进</li>
+
+      <li class="bullet">Python练习</li>
+
+    </ul>
+
+    <p class="normal">如果你在寻找关于最先进的机器学习算法的讨论，请参考<em class="chapterRef">第4章</em>、<em class="italic">时序的机器学习介绍</em>。对算法的讨论将假设那一章的一些信息。我们将在接下来的章节中介绍的算法对于预测和预报任务来说都是极具竞争力的。</p>
+
+    <p class="normal">我们将在这里更详细地讨论算法。</p>
+
+    <h1 id="_idParaDest-114" class="title">时间序列的更多机器学习方法</h1>
+
+    <p class="normal">我们将在本节中介绍的算法对于预测和预报任务来说都是极具竞争力的。如果你在寻找关于最先进的机器学习算法的讨论，请参考<em class="chapterRef">第4章</em>、<em class="italic">时间序列的机器学习介绍</em>。</p>
+
+    <p class="normal">在前一章中，我们已经简要讨论了其中的一些算法，但我们将在这里更详细地讨论<a id="_idIndexMarker559"/>它们，我们还将介绍其他我们以前没有讨论过的算法，如Silverkite、梯度增强和k-最近邻。</p>
+
+    <p class="normal">我们将为2021年发布的一个库(facebook的Kats)专门开辟一个单独的练习区。Kats提供了许多高级功能，包括超参数调整和集成学习。在这些特性之上，它们实现了基于TSFresh库的特征提取，并包含了许多模型，包括Prophet、SARIMA等。他们声称，与其他超参数调优算法相比，他们针对时间序列的超参数调优在基准测试中要快6-20倍。</p>
+
+    <p class="normal">该图提供了所选时间序列机器学习库的受欢迎程度的概述:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_01.png" alt="more_machine_learning-star_history.png"/></figure>
+
+    <p class="packt_figref">图7.1:时序机器学习库的流行程度</p>
+
+    <p class="normal">截至2021年年中，Kats和GreyKite最近才发布，尽管它们在GitHub上获得了一些明星，但它们还没有积累到足以与TSFresh的人气相匹敌的水平。我已经包含了TSFresh，尽管它是一个用于特性生成而不是预测的库。我发现看到它与我们在这章使用的其他库相比有多重要是很有趣的。在TSFresh之后，SKTime位居第二，它在相对较短的时间内吸引了大量明星。</p>
+
+    <p class="normal">我们将在本章的实际例子中使用其中的一些库。</p>
+
+    <p class="normal">另一个重要的问题是验证，值得单独讨论这个问题。</p>
+
+    <h2 id="_idParaDest-115" class="title">确认</h2>
+
+    <p class="normal">我们之前在<em class="chapterRef">第4章</em>、<em class="italic">时序机器学习介绍</em>中讨论过验证。通常，在机器学习任务中，我们使用k-fold交叉验证，其中对<a id="_idIndexMarker563"/>数据的分割是伪随机执行的，因此训练和测试/验证数据集可以来自数据的任何部分，只要它没有用于训练(<strong class="keyword">样本外数据</strong>)。</p>
+
+    <p class="normal">对于时间序列数据，这种验证方式可能会导致对模型性能的过度自信，因为实际上，时间序列往往会根据趋势、季节性和时间序列特征的变化而随时间发生变化。</p>
+
+    <p class="normal">因此，对于时间序列，通常在所谓的<strong class="keyword">前推验证</strong>中执行验证。这意味着<a id="_idIndexMarker564"/>我们根据过去的数据训练模型，我们将在最新的数据上测试它。这将消除乐观偏见，并在模型部署后为我们提供更现实的性能评估。</p>
+
+    <p class="normal">在训练、验证和测试数据集方面，这意味着我们将完全在训练和验证数据集上调整模型参数，并且我们将基于一组时间上更先进的数据对我们的测试进行基准测试，如下图所示(来源:Greykite库的GitHub库):</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_02.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/(A Document Being Saved By screencaptureui 20)/Screenshot 2021-06-06 at 21.39.47.png"/></figure>
+
+    <p class="packt_figref">图7.2:步行验证</p>
+
+    <p class="normal">在逐步验证中，我们在数据的初始段进行训练，然后在<a id="_idIndexMarker565"/>训练集之后的一段时间进行测试。接下来，我们向前滚动并重复该过程。这样，我们就有了多个样本期外的结果，并且可以合并这些期内的结果。有了步行向前，我们不太可能遭受过度拟合。</p>
+
+    <h1 id="_idParaDest-116" class="title">具有动态时间弯曲的k-最近邻</h1>
+
+    <p class="normal">k-最近邻是一种众所周知的机器学习方法(有时也打着基于案例推理的幌子)。在kNN中，我们可以使用距离度量来查找相似的数据点。然后，我们可以将这些最近邻居的已知标签作为输出，并使用函数以某种方式整合它们。</p>
+
+    <p class="normal"><em class="italic">图7.3 </em>举例说明了kNN用于分类的基本思想(来源——维基共享:<a href="https://commons.wikimedia.org/wiki/File:KnnClassification.svg">https://Commons . WikiMedia . org/wiki/File:kNN classification . SVG</a>):</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_03.png" alt="/Users/ben/Downloads/Machine-Learning for Time-Series with Python/knn.png"/></figure>
+
+    <p class="packt_figref">图7.3:分类的K-最近邻</p>
+
+    <p class="normal">我们已经知道一些数据点。在上图中，这些点表示为正方形和三角形，它们分别代表两个不同类别的数据点。给定一个新的数据点，用圆圈表示，我们找到最接近它的已知数据点。在这个例子中，我们发现新点类似于三角形，所以我们可以假设新点也属于三角形类。</p>
+
+    <p class="normal">虽然这种<a id="_idIndexMarker568"/>方法在概念上非常简单，但它经常作为一种强大的基线方法，或者有时甚至可以与更复杂的机器学习算法相媲美，即使我们只比较最近的邻居<em class="italic"> ( </em> <em class="italic">、𝑘 </em> <em class="italic"> =1) </em>。</p>
+
+    <p class="normal">该算法中的重要超参数是:</p>
+
+    <ul>
+
+      <li class="bullet">输出所基于的相邻要素的数量(k)</li>
+
+      <li class="bullet">积分函数(例如，平均值或最频繁出现的值)</li>
+
+      <li class="bullet">用于查找最近数据点的距离函数</li>
+
+    </ul>
+
+    <p class="normal">我们在<em class="chapterRef">第4章</em>、<em class="italic">时间序列机器学习介绍</em>中讨论了动态时间弯曲，作为一种可用于比较两个时间序列之间相似性(或等价地，距离)的度量。这些序列甚至可以有不同的长度。动态时间弯曲已经被证明是时间序列的一种非常强的距离度量。</p>
+
+    <p class="normal">我们可以使用kNN结合动态时间弯曲作为距离度量来寻找相似的时间序列，这种方法已经被证明是难以超越的，尽管目前的技术水平已经超越了它。</p>
+
+    <h1 id="_idParaDest-117" class="title">银风筝</h1>
+
+    <p class="normal">Silverkite算法与LinkedIn发布的Greykite库一起发布。它被明确地设计成快速、准确和直观的目标。该算法在2021年的一份出版物中进行了描述(“生产系统的灵活预测模型”，作者Reza Hosseini等人)。</p>
+
+    <p class="normal">根据LinkedIn的说法，它可以处理不同类型的趋势和季节性，如每小时、每天、每周、重复事件和假期，以及短期影响。在LinkedIn中，它既用于短期预测，例如1天的头部，也用于长期预测范围，例如1年以后。</p>
+
+    <p class="normal">LinkedIn中的用例包括优化预算决策、设置业务指标目标，以及提供足够的基础设施来处理高峰流量。此外，一个使用案例是对新冠肺炎疫情的恢复进行建模。</p>
+
+    <p class="normal">时间序列被建模为趋势、变化点和季节性的叠加组合，其中季节性包括假日/事件影响。然后，趋势建模如下:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_001.png" alt="" style="height: 3.5em;"/></figure>
+
+    <p class="normal">其中K是变化点的数量，并且<em class="italic">t</em>T6】I是第I个变化点的时间索引。因此，<img src="img/B17577_07_002.png" alt="" style="height: 1em;"/>是第I个变化点的指示函数。函数f(t)可以是线性的、平方根的、二次的、任意组合的或者完全自定义的。</p>
+
+    <p class="normal">Silverkite还为假期构造了指示器变量。假日可以按名称或国家指定，甚至可以完全自定义。</p>
+
+    <p class="normal">可以手动指定变化点，也可以使用回归模型自动检测候选点，然后使用自适应套索算法进行选择(周惠，2006)。</p>
+
+    <p class="normal">除了趋势、季节性和节假日，Silverkite还包括一个自回归项，该自回归项是基于窗口平均值而不是独立获取滞后值计算的(<em class="italic">选择降水过程的二元马尔可夫模型</em>)，Reza Hosseini等人，2011年)。</p>
+
+    <p class="normal">这个自回归<a id="_idIndexMarker570"/>术语是使用Pasty库指定的，使用一个公式小型语言，其形式如下:</p>
+
+    <pre class="programlisting gen"><code class="hljs">y ~ a + a:b + np.log(x)
+
+</code></pre>
+
+    <p class="normal">在这个公式中，左边的y被定义为三项之和，<code class="Code-In-Text--PACKT-">a</code>、<code class="Code-In-Text--PACKT-">a:b</code>和<code class="Code-In-Text--PACKT-">np.log(x)</code>。术语<code class="Code-In-Text--PACKT-">a:b</code>是两个因素a和b之间的交互。Pasty中的模型模板本身是高度可定制的，因此该接口提供了高度的灵活性。</p>
+
+    <p class="normal">最后，Silverkite提供了几种模型类型，如岭回归、弹性网和增强树，支持损失函数、MSE和稳健回归的分位数损失。</p>
+
+    <p class="normal">根据LinkedIn在几个数据集上的基准测试，Silverkite在预测误差方面优于auto-Arima(pmdarima库)和Prophet。然而，Silverkite的速度大约是Prophet的四倍，我们将在第9章、<em class="italic">概率模型</em>中介绍。</p>
+
+    <h1 id="_idParaDest-118" class="title">梯度推进</h1>
+
+    <p class="normal"><strong class="keyword">XGBoost</strong>(<strong class="keyword">极端梯度推进</strong>的简称)是<a id="_idIndexMarker571"/>对<a id="_idIndexMarker572"/>分类和回归问题梯度推进的一种高效实现(Jerome Friedman，“<em class="italic">Greedy function approximation:a Gradient Boosting machine</em>”，2001)。梯度推进又称为<strong class="keyword">梯度推进机</strong> ( <strong class="keyword"> GBM </strong>)或<strong class="keyword">梯度推进回归树</strong> ( <strong class="keyword"> GBRT </strong>)。一个特例是LambdaMART，用于排名应用程序。除了XGBoost其他的<a id="_idIndexMarker573"/>实现还有微软的光照梯度提升机(LightGBM)，Yandex的Catboost。</p>
+
+    <p class="normal">渐变<a id="_idIndexMarker574"/>助推树是树的集合体。这类似于随机森林等装袋算法；然而，由于这是一种提升算法，因此计算每棵树都是为了逐渐减小误差。随着每一次新的迭代，贪婪地选择一棵树，并且基于权重项将其预测添加到先前的预测中。还有一个正则项<a id="_idIndexMarker575"/>惩罚复杂性并减少过度拟合，类似于正则化的贪婪森林(RGF)。</p>
+
+    <p class="normal"><strong class="keyword"> XGBoost </strong>算法于2016年由陈天琦和Carlos guest rin(<em class="italic">XGBoost:一个可扩展的树提升系统</em>”)发表，并在许多分类和回归基准上推动了发展。它被用在许多解决卡吉尔问题的成功方案中。事实上，在2015年，29个挑战获奖的解决方案中，有17个解决方案使用了XGBoost。</p>
+
+    <p class="normal">它的设计<a id="_idIndexMarker576"/>是高度可扩展的，具有针对加权分位数的梯度提升算法的扩展，以及基于更智能的缓存模式、分片和稀疏处理的可扩展性和并行化的改进。</p>
+
+    <p class="normal">作为回归的特例，XGBoost可用于预测。在这种情况下，基于过去的值训练模型以预测未来的值，这可以应用于单变量以及多变量时间序列。</p>
+
+    <h1 id="_idParaDest-119" class="title">Python练习</h1>
+
+    <p class="normal">让我们把本章学到的东西付诸实践。</p>
+
+    <p class="normal">关于<a id="_idIndexMarker577"/>需求，在这一章中，我们将分别为每个部分安装需求。可以从终端、笔记本或anaconda navigator执行安装。</p>
+
+    <p class="normal">在接下来的几节中，我们将演示预测中的分类，因此其中一些方法是不可比的。读者被邀请使用每种方法做预测和分类，然后比较结果。</p>
+
+    <p class="normal">需要注意的是，Kats和Greykite(在撰写本文时)都是非常新的库，所以<a id="_idIndexMarker578"/>可能仍然会频繁地改变依赖关系。他们可能会钉住你的NumPy版本或者其他常用的库。因此，我建议您在虚拟环境中为每个部分分别安装它们。</p>
+
+    <p class="normal">我们将在下一节介绍这个设置。</p>
+
+    <h2 id="_idParaDest-120" class="title">虚拟环境</h2>
+
+    <p class="normal">在Python虚拟环境中，安装在其中的所有库、二进制文件和脚本都与安装在其他虚拟环境中的库、二进制文件和脚本以及安装在系统中的库、二进制文件和脚本相隔离。这意味着<a id="_idIndexMarker579"/>我们可以安装不同的库，比如Kats和Greykite，而不必担心它们之间或与我们计算机上安装的其他库之间的兼容性问题。</p>
+
+    <p class="normal">让我们浏览一下<a id="_idIndexMarker580"/>一个使用anaconda的Jupyter笔记本使用虚拟环境的快速教程介绍(同样，您可以使用virtualenv或pipenv之类的工具)。</p>
+
+    <p class="normal">在<em class="chapterRef">第1章</em>、<em class="italic">Python时序介绍</em>中，我们介绍了Anaconda的安装，所以我们将跳过安装。请参考该章节或前往conda.io获取说明。</p>
+
+    <p class="normal">要创建虚拟环境，您必须指定一个名称:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">conda create --name myenv
+
+</code></pre>
+
+    <p class="normal">这将创建一个同名目录(<code class="Code-In-Text--PACKT-">myenv</code>)，所有的库和脚本都将安装在这个目录中。</p>
+
+    <p class="normal">如果我们想要使用这个环境，我们必须首先激活它，这意味着我们设置<code class="Code-In-Text--PACKT-">PATH</code>变量来包含我们新创建的目录:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">conda activate myenv
+
+</code></pre>
+
+    <p class="normal">我们现在可以使用像pip这样的工具，默认使用conda捆绑的工具，或者直接使用conda命令来安装库。</p>
+
+    <p class="normal">我们可以将Jupyter或Jupyter labs安装到我们的环境中，然后启动它。这意味着我们的Jupyter环境将包含所有的依赖项，因为我们已经单独安装了它们。</p>
+
+    <p class="normal">让我们从带有动态时间扭曲的kNN算法开始<a id="_idIndexMarker581"/>。正如我提到的，这种算法经常作为比较的一个不错的基线。</p>
+
+    <h2 id="_idParaDest-121" class="title">Python中动态时间弯曲的k近邻算法</h2>
+
+    <p class="normal">在这一节中，我们将根据一段时间内机器人的力和扭矩测量结果对故障进行分类。</p>
+
+    <p class="normal">我们将使用<a id="_idIndexMarker583"/>一个非常简单的<a id="_idIndexMarker584"/>分类器kNN，并且<a id="_idIndexMarker585"/>也许我们应该提醒一下，这种方法涉及到逐点距离，这通常会成为计算的瓶颈。</p>
+
+    <p class="normal">在这一节中，我们将把TSFresh在管道中的特征提取与kNN算法结合起来。正如您在阅读代码片段时会发现的那样，时序管道确实有助于使事情变得简单。</p>
+
+    <p class="normal">让我们安装tsfresh和tslearn:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">pip install tsfresh tslearn
+
+</code></pre>
+
+    <p class="normal">我们将在tslearn中使用kNN分类器。我们甚至可以在scikit-learn中使用kNN分类器，它允许指定一个定制的度量。</p>
+
+    <p class="normal">在这个例子中，我们将从UCI机器学习库中下载一个机器人执行失败的数据集，并将其存储在本地。该数据集包含故障检测后机器人上的力和扭矩测量值。对于每个样本，任务是对机器人是否会报告故障进行分类:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from tsfresh.examples import load_robot_execution_failures
+
+from tsfresh.examples.robot_execution_failures import download_robot_execution_failures
+
+download_robot_execution_failures()
+
+df_ts, y = load_robot_execution_failures()
+
+</code></pre>
+
+    <p class="normal">这些列包括时间和来自传感器<code class="Code-In-Text--PACKT-">F_x</code>、<code class="Code-In-Text--PACKT-"> F_y</code>、<code class="Code-In-Text--PACKT-"> F_z</code>、<code class="Code-In-Text--PACKT-"> T_x</code>、<code class="Code-In-Text--PACKT-"> T_y</code>和<code class="Code-In-Text--PACKT-"> T_z</code>的信号的六个时间序列。目标变量<code class="Code-In-Text--PACKT-">y</code>可以取值True或False，指示是否有故障。</p>
+
+    <p class="normal">检查这两种课程的频率总是很重要的:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">print(f"{y.mean():.2f}")
+
+</code></pre>
+
+    <p class="normal">y的平均值是0.24。</p>
+
+    <p class="normal">我们可以<a id="_idIndexMarker586"/>然后使用TSFresh提取<a id="_idIndexMarker587"/>时间序列特征<a id="_idIndexMarker588"/>，如<em class="italic">第3章，预处理时间序列</em>中所述。我们可以估算缺失值，并根据与目标的相关性选择特征。在TSFresh中，统计测试的p值用于计算特征显著性:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from tsfresh import extract_features
+
+from tsfresh import select_features
+
+from tsfresh.utilities.dataframe_functions import impute
+
+extracted_features = impute(extract_features(df_ts, column_id="id", column_sort="time"))
+
+features_filtered = select_features(extracted_features, y)
+
+</code></pre>
+
+    <p class="normal">我们可以继续使用<code class="Code-In-Text--PACKT-">features_filtered</code>数据帧，它包含了我们的特征——之前的传感器信号和TSFresh特征。</p>
+
+    <p class="normal">让我们通过进行网格搜索来找到一些较好的邻居数量值:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
+
+from tslearn.neighbors import KNeighborsTimeSeriesClassifier
+
+knn = KNeighborsTimeSeriesClassifier()
+
+param_search = {
+
+    'metric' : ['dtw'],
+
+    'n_neighbors': [1, 2, 3]
+
+}
+
+tscv = TimeSeriesSplit(n_splits=2)
+
+gsearch = GridSearchCV(
+
+    estimator=knn,
+
+    cv=tscv,
+
+    param_grid=param_search
+
+)
+
+gsearch.fit(
+
+    features_filtered,
+
+    y
+
+)
+
+</code></pre>
+
+    <p class="normal">我们正在<a id="_idIndexMarker589"/>使用scikit-learn的<code class="Code-In-Text--PACKT-">TimeSeriesSplit</code>来分割时间序列。这是为了网格搜索。</p>
+
+    <p class="normal">或者，我们<a id="_idIndexMarker590"/>可以让<a id="_idIndexMarker591"/>基于一个索引进行拆分。</p>
+
+    <p class="normal">我们可以尝试很多参数，尤其是kNN分类器中的距离度量。如果您想尝试一下，请参见<code class="Code-In-Text--PACKT-">TSLEARN_VALID_METRICS</code>了解tslearn支持的指标的完整列表。</p>
+
+    <p class="normal">下面做几个COVID案例的预测。在下一节中，我们将从Silverkite算法开始。Silverkite自带LinkedIn 2021年发布的Greykite库。</p>
+
+    <h2 id="_idParaDest-122" class="title">银风筝</h2>
+
+    <p class="normal">在撰写本文时，Greykite的版本是0 . 1 . 1——它还没有完全稳定。它的依赖关系<a id="_idIndexMarker592"/>可能与常用库的新版本<a id="_idIndexMarker593"/>冲突，包括Jupyter笔记本。不要担心，如果你安装在你的虚拟环境或谷歌Colab库。</p>
+
+    <p class="normal">继续安装该库及其所有依赖项:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">pip install greykite
+
+</code></pre>
+
+    <p class="normal">既然安装了Greykite，我们就可以使用它了。</p>
+
+    <p class="normal">我们将从<em class="italic">我们的世界数据</em>数据集加载COVID案例，这可能是可用COVID数据的最佳来源之一:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">import pandas as pd
+
+owid_covid = pd.read_csv("<strong class="hljs-slc">https://covid.ourworldindata.org/data/owid-covid-data.csv</strong>")
+
+owid_covid["<strong class="hljs-slc">date</strong>"] = pd.to_datetime(owid_covid["<strong class="hljs-slc">date</strong>"])
+
+df = owid_covid[owid_covid.location == "<strong class="hljs-slc">France</strong>"].set_index("<strong class="hljs-slc">date</strong>", drop=True).resample('<strong class="hljs-slc">D</strong>').interpolate(method='<strong class="hljs-slc">linear</strong>')
+
+</code></pre>
+
+    <p class="normal">我们正在关注法国的案例。</p>
+
+    <p class="normal">我们从设置Greykite元数据参数开始。然后，我们将这个对象传递到预测器配置中:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from greykite.framework.templates.autogen.forecast_config import (
+
+    ForecastConfig, MetadataParam
+
+)
+
+metadata = MetadataParam(
+
+    time_col="date",
+
+    value_col="new_cases",
+
+    freq="D"
+
+)
+
+</code></pre>
+
+    <p class="normal">我们的时间列是<code class="Code-In-Text--PACKT-">date</code>，我们的值列是<code class="Code-In-Text--PACKT-">new_cases</code>。</p>
+
+    <p class="normal">我们现在将创建<code class="Code-In-Text--PACKT-">forecaster</code>对象，它创建预测并存储结果:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">import warnings
+
+from greykite.framework.templates.forecaster import Forecaster
+
+from greykite.framework.templates.model_templates import ModelTemplateEnum
+
+forecaster = Forecaster()
+
+    warnings.filterwarnings("ignore", category=UserWarning)
+
+    result = forecaster.run_forecast_config(
+
+        df=yahoo_df,
+
+        config=ForecastConfig(
+
+            model_template=ModelTemplateEnum.SILVERKITE_DAILY_90.name,
+
+            forecast_horizon=90,
+
+            coverage=0.95,
+
+            metadata_param=metadata
+
+        )
+
+    ) 
+
+</code></pre>
+
+    <p class="normal">预测范围为90天；我们将预测未来90天。我们的预测区间是95%。Silverkite和Prophet都支持通过预测区间来量化<a id="_idIndexMarker595"/>不确定性。95%的覆盖率意味着95%的实际值应该落在预测区间内。在Greykite中，_ <code class="Code-In-Text--PACKT-">components.uncertainty</code>模型提供了关于不确定性的附加配置选项。</p>
+
+    <p class="normal">我添加了一行来忽略训练期间的<code class="Code-In-Text--PACKT-">UserWarning</code>类型的警告，否则，在目标列中大约有500行关于0的警告。</p>
+
+    <p class="normal">让我们从结果对象中画出原始的时间序列。我们可以覆盖我们的预测:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">forecast = result.forecast
+
+forecast.plot().show(renderer="<strong class="hljs-slc">colab</strong>")
+
+</code></pre>
+
+    <p class="normal">如果你不在Google Colab上，请省去<code class="Code-In-Text--PACKT-">renderer</code>参数！</p>
+
+    <p class="normal">我们得到如下的情节:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_04.png" alt=""/></figure>
+
+    <p class="packt_figref">图7.4:预测与实际时间序列(Silverkite)</p>
+
+    <p class="normal">预测<a id="_idIndexMarker596"/>在<code class="Code-In-Text--PACKT-">forecast</code> <a id="_idIndexMarker597"/>对象的<code class="Code-In-Text--PACKT-">df</code>属性中:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">forecast.df.head().round(2)
+
+</code></pre>
+
+    <p class="normal">这些是预测的置信区间上限和下限:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_05.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_wsZ8St/Screenshot 2021-08-30 at 21.25.06.png"/></figure>
+
+    <p class="packt_figref">图7.5:预测与实际时间序列表(Silverkite)</p>
+
+    <p class="normal">我们可能<a id="_idIndexMarker598"/>想要为我们的模型获得一些性能指标。我们<a id="_idIndexMarker599"/>可以在维持测试集上获得历史预测的性能，如下所示:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from collections import defaultdict
+
+backtest = result.backtest
+
+backtest_eval = defaultdict(list)
+
+for metric, value in backtest.train_evaluation.items():
+
+    backtest_eval[metric].append(value)
+
+    backtest_eval[metric].append(backtest.test_evaluation[metric])
+
+metrics = pd.DataFrame(backtest_eval, index=["train", "test"]).T
+
+metrics.head()
+
+</code></pre>
+
+    <p class="normal">我们的绩效指标如下所示:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_06.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_UgQpeb/Screenshot 2021-08-30 at 21.28.22.png"/></figure>
+
+    <p class="packt_figref">图7.6:拒绝数据的性能指标(Silverkite)</p>
+
+    <p class="normal">我已经<a id="_idIndexMarker600"/>将指标截为前五个。</p>
+
+    <p class="normal">我们可以<a id="_idIndexMarker601"/>将我们的模型方便地应用于新数据，如下所示:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">model = result.model
+
+future_df = result.timeseries.make_future_dataframe(
+
+    periods=4,
+
+    include_history=False
+
+)
+
+model.predict(future_df)
+
+</code></pre>
+
+    <p class="normal">预测看起来是这样的:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_07.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_LxjFCi/Screenshot 2021-08-30 at 21.31.08.png"/></figure>
+
+    <p class="packt_figref">图7.7:预测数据框架(Silverkite)</p>
+
+    <p class="normal">请注意，您的结果可能会有所不同。</p>
+
+    <p class="normal">我们可以<a id="_idIndexMarker602"/>通过改变预测器运行配置中的<code class="Code-In-Text--PACKT-">model_template</code>参数来使用其他预测器模型。例如，我们可以将<a id="_idIndexMarker603"/>设置为<code class="Code-In-Text--PACKT-">ModelTemplateEnum.PROPHET.name</code>，以便采用脸书的先知模型。</p>
+
+    <p class="normal">我们的银风筝之旅到此结束。接下来，我们将通过使用XGBoost应用监督回归方法进行预测。让我们做一些梯度推进！</p>
+
+    <h2 id="_idParaDest-123" class="title">梯度推进</h2>
+
+    <p class="normal">我们也可以使用监督机器学习进行时间序列预测。为此，我们可以使用日期和以前的值来预测未来。</p>
+
+    <p class="normal">首先，我们需要安装XGBoost:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">pip install xgboost
+
+</code></pre>
+
+    <p class="normal">在这个例子中，我们将使用<a id="_idIndexMarker605"/>雅虎每日收盘数据，就像在本章的其他练习部分一样。</p>
+
+    <p class="normal">让我们一步一步地进行准备和建模。</p>
+
+    <p class="normal">我们首先需要特征化数据。这里，我们将通过提取日期特征来做到这一点，但请参见kNNs上的部分，这里使用的是TSFresh的特征提取。您可能希望通过组合这两种特征提取策略或者完全依赖TSFresh来改变这个示例。</p>
+
+    <p class="normal">我们将像以前一样从数据数据集中的<em class="italic">我们的世界中重新加载新的COVID病例:</em></p>
+
+    <pre class="programlisting code"><code class="hljs-code">import pandas as pd
+
+owid_covid = pd.read_csv("<strong class="hljs-slc">https://covid.ourworldindata.org/data/owid-covid-data.csv</strong>")
+
+owid_covid["<strong class="hljs-slc">date</strong>"] = pd.to_datetime(owid_covid["<strong class="hljs-slc">date</strong>"])
+
+df = owid_covid[owid_covid.location == "<strong class="hljs-slc">France</strong>"].set_index("<strong class="hljs-slc">date</strong>", drop=True).resample('<strong class="hljs-slc">D</strong>').interpolate(method='<strong class="hljs-slc">linear</strong>').reset_index()
+
+</code></pre>
+
+    <p class="normal">对于特征提取，变压器是方便的。转换器基本上是一个具有<code class="Code-In-Text--PACKT-">fit()</code>和<code class="Code-In-Text--PACKT-">transform()</code>方法的类，这些方法可以使转换器适应数据集并相应地转换<a id="_idIndexMarker606"/>数据。下面是根据日期注释数据集的<code class="Code-In-Text--PACKT-">DateFeatures</code>转换器<a id="_idIndexMarker607"/>的代码:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from sklearn.base import TransformerMixin, BaseEstimator
+
+class DateFeatures(TransformerMixin, BaseEstimator):
+
+    features = [
+
+        "hour",
+
+        "year",
+
+        "day",
+
+        "weekday",
+
+        "month",
+
+        "quarter",
+
+    ]
+
+    
+
+    def __init__(self):
+
+        super().__init__()
+
+    def transform(self, df: pd.DataFrame):
+
+        Xt = []
+
+        for col in df.columns:
+
+            for feature in self.features:
+
+                date_feature = getattr(
+
+                    getattr(
+
+                        df[col], "dt"
+
+                    ), feature
+
+                )
+
+                date_feature.name = f"{col}_{feature}"
+
+                Xt.append(date_feature)
+
+        
+
+        df2 = pd.concat(Xt, axis=1)
+
+        return df2
+
+    def fit(self, df: pd.DataFrame, y=None, **fit_params):
+
+        return self
+
+</code></pre>
+
+    <p class="normal">这个转换器相对简单，因为它提取日期列的一系列特性，比如小时、年、日、工作日、月、一年中的周和季度。这些特征对于在机器学习环境中描述或注释时间序列数据可能是非常强大的。</p>
+
+    <p class="normal">你可以在GitHub上找到这个例子的完整代码。我提供了一个额外的转换器，用于本章中省略的循环特性。</p>
+
+    <p class="normal">我们将如下的<a id="_idIndexMarker609"/>变压器应用于数据帧的<code class="Code-In-Text--PACKT-">date</code>列:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from sklearn.compose import ColumnTransformer
+
+from sklearn.pipeline import Pipeline, make_pipeline
+
+preprocessor = ColumnTransformer(
+
+    transformers=[(
+
+        "<strong class="hljs-slc">date</strong>",
+
+        make_pipeline(
+
+            DateFeatures(),
+
+            ColumnTransformer(transformers=[
+
+                ("<strong class="hljs-slc">cyclical</strong>", CyclicalFeatures(),
+
+                  ["<strong class="hljs-slc">date_day</strong>", "<strong class="hljs-slc">date_weekday</strong>", "<strong class="hljs-slc">date_month</strong>"]
+
+                )
+
+            ], remainder="passthrough")
+
+        ), ["<strong class="hljs-slc">date</strong>"],
+
+  ),], remainder="passthrough"
+
+)
+
+</code></pre>
+
+    <p class="normal">在我们想要为预测提供额外的外部特征的情况下，设置<code class="Code-In-Text--PACKT-">remainder="passthrough"</code>参数。<code class="Code-In-Text--PACKT-"> </code></p>
+
+    <p class="normal">我们可以定义这些预处理步骤的流水线以及一个模型，以便它可以被拟合并应用于预测:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from xgboost import XGBRegressor
+
+pipeline = Pipeline(
+
+    [
+
+        ("<strong class="hljs-slc">preprocessing</strong>", preprocessor),
+
+         ("xgb", XGBRegressor(objective="<strong class="hljs-slc">reg:squarederror</strong>", n_estimators=<strong class="hljs-slc">1000</strong>))
+
+    ]
+
+)
+
+</code></pre>
+
+    <p class="normal">预测器<a id="_idIndexMarker610"/>是一个XGBoost回归器。在调整方面，我没有做太多的努力。我们唯一要改变的参数是估计量的数量。我们将使用1000的集合大小(树的数量)。</p>
+
+    <p class="normal">现在是时候将数据集分成训练集和测试集了。这包括两个问题:</p>
+
+    <ul>
+
+      <li class="bullet">我们需要提前将特性与值结合起来</li>
+
+      <li class="bullet">我们需要根据截止时间将数据集一分为二</li>
+
+    </ul>
+
+    <p class="normal">我们先为此设置基本参数。首先，我们想预测给定时间范围内的未来。其次，我们需要决定用于训练和测试的数据点数量:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">TRAIN_SIZE = int(len(df) * <strong class="hljs-slc">0.9</strong>)
+
+HORIZON = <strong class="hljs-slc">1</strong>
+
+TARGET_COL = "<strong class="hljs-slc">new_cases</strong>"
+
+</code></pre>
+
+    <p class="normal">我们将90%的分数用于训练，我们预测未来90天:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">X_train, X_test = df.iloc[HORIZON:TRAIN_SIZE], df.iloc[TRAIN_SIZE+HORIZON:]
+
+y_train = df.shift(periods=HORIZON).iloc[HORIZON:TRAIN_SIZE][TARGET_COL]
+
+y_test = df.shift(periods=HORIZON).iloc[TRAIN_SIZE+HORIZON:][TARGET_COL]
+
+</code></pre>
+
+    <p class="normal">这既做了对齐又做了水平。因此，我们有了用于测试和训练的数据集，包括我们希望用XGBoost预测的特征和标签。</p>
+
+    <p class="normal">现在，我们<a id="_idIndexMarker612"/>可以训练我们的XGBoost回归模型<a id="_idIndexMarker613"/>，根据我们用转换器生成的特性和当前值来预测未来的值。</p>
+
+    <p class="normal">我们可以按照以下方式安装管道:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">FEATURE_COLS = ["date"]
+
+pipeline.fit(X_train[FEATURE_COLS], y_train)
+
+</code></pre>
+
+    <p class="normal">我们可以看到以下管道参数:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_08.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_VPuhp5/Screenshot 2021-08-30 at 23.08.52.png"/></figure>
+
+    <p class="packt_figref">图7.8:管道参数</p>
+
+    <p class="normal">如果我们从头到尾创建一系列日期，我们可以获得整个时间段的模型预测:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">MAX_HORIZON = <strong class="hljs-slc">90</strong>
+
+X_test_horizon = pd.Series(pd.date_range(
+
+    start=df.date.<strong class="hljs-slc">min()</strong>, 
+
+    periods=<strong class="hljs-slc">len</strong>(df) + MAX_HORIZON,
+
+    name="<strong class="hljs-slc">date</strong>"
+
+)).reset_index()
+
+</code></pre>
+
+    <p class="normal">应用于<code class="Code-In-Text--PACKT-">X_test</code>的管道的<code class="Code-In-Text--PACKT-">predict()</code>方法给了我们预测:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">forecasted = pd.concat(
+
+    [pd.Series(pipeline.predict(X_test_horizon[FEATURE_COLS])), pd.Series(X_test_horizon.date)],
+
+    axis=1
+
+)
+
+forecasted.columns = [TARGET_COL, "<strong class="hljs-slc">date</strong>"]
+
+</code></pre>
+
+    <p class="normal">我们可以<a id="_idIndexMarker614"/>对实际案例做同样的事情:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">actual = pd.concat(
+
+    [pd.Series(df[TARGET_COL]), pd.Series(df.date)],
+
+    axis=1
+
+)
+
+actual.columns = [TARGET_COL, "<strong class="hljs-slc">date</strong>"]
+
+</code></pre>
+
+    <p class="normal">现在，我们<a id="_idIndexMarker615"/>可以将预测值与实际值<code class="Code-In-Text--PACKT-">y_test</code>进行对比，绘制成图:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">fig, ax = plt.subplots(figsize=(12, 6))
+
+forecasted.set_index("date").plot(linestyle='--', ax=ax)
+
+actual.set_index("date").plot(linestyle='-.', ax=ax)
+
+plt.legend(["forecast", "actual"])
+
+</code></pre>
+
+    <p class="normal">这是我们得到的情节:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_09.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_Vnji3v/Screenshot 2021-08-30 at 23.29.17.png"/></figure>
+
+    <p class="packt_figref">图7.9:预测与实际(XGBoost)</p>
+
+    <p class="normal">我们可以像这样<a id="_idIndexMarker616"/>提取测试<a id="_idIndexMarker617"/>期间的性能指标:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from sklearn.metrics import mean_squared_error
+
+test_data = actual.merge(forecasted, on="<strong class="hljs-slc">date</strong>", suffixes=("<strong class="hljs-slc">_actual</strong>", "<strong class="hljs-slc">_predicted</strong>"))
+
+mse = mean_squared_error(test_data.new_cases_actual, test_data.new_cases_predicted, squared=False)  # RMSE
+
+<strong class="hljs-slc">print("The root mean squared error (RMSE) on test set: {:.2f}".format(mse))</strong>
+
+</code></pre>
+
+    <p class="normal">我们应该会看到这样的情况:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">The root mean squared error (RMSE) on test set: 12753.41
+
+</code></pre>
+
+    <p class="normal">接下来，我们将为Kats中的时间序列预测创建一个集成模型。</p>
+
+    <h2 id="_idParaDest-124" class="title">带有kat的套装</h2>
+
+    <p class="normal">Kats的安装应该非常简单，只需两步。首先，我们安装fbprophet，这是脸书先知库的旧版本:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">conda install -c conda-forge fbprophet 
+
+</code></pre>
+
+    <p class="normal">现在我们用pip安装Kats:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">pip install kats
+
+</code></pre>
+
+    <p class="normal">或者，在Colab上，我们可以像这样安装kat:</p>
+
+    <pre class="programlisting con"><code class="hljs-con">!MINIMAL=1 pip install kats
+
+!pip install "numpy==1.20"
+
+</code></pre>
+
+    <p class="normal">我们将像以前一样加载COVID案例数据集。这是最后一行:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">df = owid_covid[owid_covid.location == "<strong class="hljs-slc">France</strong>"].set_index("<strong class="hljs-slc">date</strong>", drop=True).resample('<strong class="hljs-slc">D</strong>').interpolate(method='<strong class="hljs-slc">linear</strong>').reset_index()
+
+</code></pre>
+
+    <p class="normal">我们将配置我们的集合模型，拟合它，然后做一个预测。</p>
+
+    <p class="normal">首先，我们合奏的配置:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from kats.models.ensemble.ensemble import EnsembleParams, BaseModelParams
+
+from kats.models.ensemble.kats_ensemble import KatsEnsemble
+
+from kats.models import linear_model, quadratic_model
+
+model_params = EnsembleParams(
+
+            [
+
+                BaseModelParams("linear", linear_model.LinearModelParams()),
+
+                BaseModelParams("quadratic", quadratic_model.QuadraticModelParams()),
+
+            ]
+
+        )
+
+</code></pre>
+
+    <p class="normal">这里，我们只包括两个不同的模型，但是我们可以包括其他和更多的模型，并且我们可以定义更好的参数。这只是一个例子；对于一个更现实的练习，我留给读者，我建议添加ARIMA和θ模型。我们需要为每个预测模型定义超参数。</p>
+
+    <p class="normal">我们还需要创建集合参数，定义如何计算集合集合以及分解应该如何工作:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">KatsEnsembleParam = {
+
+    "<strong class="hljs-slc">models</strong>": model_params,
+
+    "<strong class="hljs-slc">aggregation</strong>": "<strong class="hljs-slc">weightedavg</strong>",
+
+    "<strong class="hljs-slc">seasonality_length</strong>": 30,
+
+    "<strong class="hljs-slc">decomposition_method</strong>": "<strong class="hljs-slc">additive</strong>",
+
+}
+
+</code></pre>
+
+    <p class="normal">要使用Kats的时间序列，我们必须将数据从DataFrame或序列转换成Kats时间序列对象。我们可以将COVID病例数据转换如下:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">from kats.consts import TimeSeriesData
+
+TARGET_COL = "new_cases"
+
+df_ts = TimeSeriesData(
+
+    value=df[TARGET_COL], time=df["date"]
+
+)
+
+</code></pre>
+
+    <p class="normal">对于转换来说，重要的是Kats可以推断出指数的频率。这个可以用<code class="Code-In-Text--PACKT-">pd.infer_freq()</code>测试。在我们的例子中，<code class="Code-In-Text--PACKT-">pd.infer_freq(df["date"])</code>应该为每日频率返回<code class="Code-In-Text--PACKT-">D </code>。</p>
+
+    <p class="normal">现在我们可以创建我们的<code class="Code-In-Text--PACKT-">KatsEnsemble </code>并安装它:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">m = KatsEnsemble(
+
+    data=df_ts, 
+
+    params=KatsEnsembleParam
+
+).fit()
+
+</code></pre>
+
+    <p class="normal">我们可以使用<code class="Code-In-Text--PACKT-">predict()</code>方法对每个模型进行单独的预测。如果我们想要得到集合输出，我们必须在<code class="Code-In-Text--PACKT-">predict()</code>之后调用<code class="Code-In-Text--PACKT-">aggregate()</code>:</p>
+
+    <pre class="programlisting code"><code class="hljs-code">m.predict(steps=90)
+
+m.aggregate()
+
+m.plot()
+
+plt.ylabel(TARGET_COL)
+
+</code></pre>
+
+    <p class="normal">我们预测未来90天。这些预测被存储为模型的一部分，因此我们不需要捕获返回的预测。然后，我们可以汇总每个模型的预测。同样，我们不需要获取返回的DataFrame，因为它存储在<a id="_idIndexMarker622"/>模型对象(<code class="Code-In-Text--PACKT-">m.fcst_df</code>)中。</p>
+
+    <p class="normal">最后，我们<a id="_idIndexMarker623"/>使用Kats便利函数绘制聚合数据帧:</p>
+
+    <figure class="mediaobject"><img src="img/B17577_07_10.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_Ou1y0x/Screenshot 2021-08-30 at 23.38.36.png"/></figure>
+
+    <p class="packt_figref">图7.10: Kats集合模式预报</p>
+
+    <p class="normal">因为我们可以通过改变基本模型参数和添加<a id="_idIndexMarker624"/>新模型来调整这个集合模型，这可以给我们很多改进的空间<a id="_idIndexMarker625"/>。</p>
+
+    <p class="normal">是时候总结一下我们所学的知识来结束这一章了。</p>
+
+    <h1 id="_idParaDest-125" class="title">摘要</h1>
+
+    <p class="normal">在这一章中，我们已经讨论了Python中流行的时序机器学习库。然后，我们讨论并尝试了一种用于机器人故障分类的具有动态时间弯曲的k-最近邻算法。我们讨论了时间序列预测中的验证，并尝试了三种不同的方法来预测COVID案例:Silverkite、使用XGBoost的梯度增强和Kats中的集合模型。</p>
+
+  </div>
+
+
+
+</body></html>

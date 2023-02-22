@@ -1,0 +1,564 @@
+<html><head/><body>
+<html>
+  <head>
+    <title>Chapter 2. Data Exploration with RMS Titanic</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02" class="calibre1"/>第二章。RMS Titanic的数据探索</h1></div></div></div><p class="calibre7">在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem">从CSV文件中读取大量数据集</li><li class="listitem">转换字符变量的类型</li><li class="listitem">检测缺失值</li><li class="listitem">输入缺失值</li><li class="listitem">探索和可视化数据</li><li class="listitem">用决策树预测乘客存活率</li><li class="listitem">用混淆矩阵验证预测的能力</li><li class="listitem">用ROC曲线评估绩效</li></ul></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Chapter 2. Data Exploration with RMS Titanic</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h1 class="title" id="calibre_pb_1"><a id="ch02lvl1sec18" class="calibre1"/>简介</h1></div></div></div><p class="calibre7">数据探索<a id="id132" class="calibre1"/>帮助数据消费者专注于搜索信息，以期从收集的信息中形成真实的分析。此外，随着数据管理、分析、建模和评估步骤的完成，用户可以从他们关注的数据中获得洞察力和有价值的观点。</p><p class="calibre7">在真实的数据探索项目中，探索过程包括六个步骤。它们如下:</p><div><ol class="orderedlist"><li class="listitem" value="1">问正确的问题。</li><li class="listitem" value="2">数据收集。</li><li class="listitem" value="3">数据管理。</li><li class="listitem" value="4">基本探索性数据分析。</li><li class="listitem" value="5">高级探索性数据分析。</li><li class="listitem" value="6">模型评估。</li></ol><div/></div><p class="calibre7">以下是对这六个步骤的详细解释:</p><div><ol class="orderedlist"><li class="listitem" value="1"><strong class="calibre2">问正确的问题</strong>:当用户提出他们的问题时，例如“探索结束后，我的预期发现是什么？”，或者“通过探索我能提取什么样的信息？，“将给出不同的<a id="id133" class="calibre1"/>结果。因此，首先要问正确的问题，因为问题本身决定了探索的目的和目标。</li><li class="listitem" value="2"><strong class="calibre2">数据收集</strong>:一旦确定了勘探目标，用户就可以开始从数据源中收集或提取与<a id="id134" class="calibre1"/>勘探目标相关的数据。大多数情况下，从不同系统收集的数据显得杂乱无章，格式多样。显然，原始数据可能来自不同的来源，如文件、数据库或互联网。从这些来源检索数据需要文件IO功能、JDBC/ODBC、网络爬虫等的帮助。这个提取的数据被称为<strong class="calibre2">原始数据</strong>，这是因为<a id="id136" class="calibre1"/>没有经过处理，或者没有经过任何其他处理。大多数原始数据不容易被大多数分析工具或可视化程序使用。</li><li class="listitem" value="3"><strong class="calibre2">数据管理</strong>:<a id="id137" class="calibre1"/>的下一个阶段是数据管理(或争论)，这一步有助于将原始数据映射为更方便的<a id="id138" class="calibre1"/>格式以供消费。在此阶段，有许多过程，如数据解析、排序、合并、过滤、缺失值补全，以及其他过程来转换和组织数据，并使其适合消费结构。稍后，映射的数据可以进一步用于数据聚合、分析或可视化。</li><li class="listitem" value="4"><strong class="calibre2">基础探索性数据分析</strong>:在数据管理阶段之后，用户可以对数据处理进行进一步的分析。最基本的分析是执行<a id="id139" class="calibre1"/>探索性数据<a id="id140" class="calibre1"/>分析。探索性数据分析包括通过总结数据集的特征来分析数据集。执行基本的统计、聚合和可视化方法也是帮助用户理解数据特征的关键任务，这有利于用户通过绘图轻松捕捉大多数、趋势和异常值。</li><li class="listitem" value="5"><strong class="calibre2">高级探索性数据分析</strong>:到目前为止，描述性统计给出了数据特征的<a id="id141" class="calibre1"/>一般性描述<a id="id142" class="calibre1"/>。然而，人们希望为用户生成推理规则，以基于输入参数来预测数据特征。因此，机器学习的应用使得用户能够生成推理模型，其中用户<a id="id143" class="calibre1"/>可以输入训练数据集来生成<a id="id144" class="calibre1"/>预测模型。在此之后，预测模型可用于基于给定参数预测输出值或标签。</li><li class="listitem" value="6"><strong class="calibre2">模型评估</strong>:最后，为了评估生成模型在给定<a id="id146" class="calibre1"/>问题的<a id="id145" class="calibre1"/>数据估计中是否表现最佳，必须进行模型选择。这里的选择方法涉及很多步骤，包括数据预处理，参数调优，甚至机器学习算法的切换。然而，有一件事必须牢记在心，那就是最简单的模型在预测或探索能力方面经常取得最好的结果；而复杂的模型通常会导致过度拟合。</li></ol><div/></div><p class="calibre7">在下面的例子中，我们将基于泰坦尼克号沉船幸存者的数据集执行一个样本数据探索。我们在这里演示的步骤遵循了如何从在线数据源Kaggle通过数据管理清理数据；进行基本的探索性数据分析，以发现可能预测存活率的重要属性；使用分类算法执行高级探索性数据分析，以预测给定数据的存活率；最后，执行模型评估以生成预测模型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Reading a Titanic dataset from a CSV file</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec19" class="calibre1"/>从CSV文件中读取大量数据集</h1></div></div></div><p class="calibre7">为了开始<a id="id147" class="calibre1"/>的探索，我们需要从ka ggle(【https://www.kaggle.com/】<a class="calibre1" href="https://www.kaggle.com/"/>)检索一个数据集。我们曾经在第一章<a class="calibre1" title="Chapter 1. Practical Machine Learning with R" href="part0015_split_000.html#page">中看过<a id="id148" class="calibre1"/>的一些例子</a>，<em class="calibre8">实用机器学习用R </em>。在这里，我们介绍处理现实世界问题的方法。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Reading a Titanic dataset from a CSV file</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">要从Kaggle检索数据，你需要首先注册一个Kaggle账户(<a class="calibre1" href="https://www.kaggle.com/account/register">https://www.kaggle.com/account/register</a>)。然后，登录帐户进行进一步探索:</p><div><img src="img/00030.jpeg" alt="Getting ready" class="calibre9"/><div><p class="calibre12">Kaggle.com</p></div></div><p class="calibre10"> </p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Reading a Titanic dataset from a CSV file</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec45" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行<a id="id149" class="calibre1"/>以下步骤从CSV文件中读取<a id="id150" class="calibre1"/>Titanic数据集:</p><div><ol class="orderedlist"><li class="listitem" value="1">前往<a class="calibre1" href="http://www.kaggle.com/c/titanic-gettingStarted/data">http://www.kaggle.com/c/titanic-gettingStarted/data</a>检索数据列表。</li><li class="listitem" value="2">您可以看到可供下载的数据文件列表， 如下表所示:<div><table border="1" class="calibre15"><colgroup class="calibre16"><col class="calibre17"/><col class="calibre17"/></colgroup><thead class="calibre18"><tr class="calibre19"><th valign="bottom" class="calibre20"><p class="calibre21">文件名</p> </th> <th valign="bottom" class="calibre20"> <p class="calibre21">可用格式</p></th></tr></thead><tbody class="calibre22"><tr class="calibre19"><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">train</code></p></td><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">.csv</code>(59.76 kb)</p></td></tr><tr class="calibre19"><td valign="top" class="calibre23"><p class="calibre21">【T2 </p></td></tr><tr class="calibre19"><td valign="top" class="calibre23"><p class="calibre21"/></td><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">.csv</code>【3.18 kb】</p></td></tr><tr class="calibre19"><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">genderclassmodel</code></p></td><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">.csv</code><code class="literal">.csv</code>【3】</p></td></tr><tr class="calibre19"><td valign="top" class="calibre23"><p class="calibre21"><code class="literal">test</code></p></td></tr></tbody></table></div></li><li class="listitem" value="3">将<a id="id151" class="calibre1"/>训练数据(<a class="calibre1" href="https://www.kaggle.com/c/titanic-gettingStarted/download/train.csv">https://www . ka ggle . com/c/titanic-getting started/download/train . CSV</a>)下载到本地磁盘。</li><li class="listitem" value="4">然后，确保下载的文件放在当前目录下。您可以使用<code class="email">getwd</code>功能查看当前工作目录。如果下载的文件不在工作目录中，请将文件移动到当前工作目录。或者，您可以使用<code class="email">setwd()</code>设置下载文件所在的工作目录:<div> <pre class="programlisting"> <strong class="calibre2">&gt; getwd()</strong> <strong class="calibre2">[1] "C:/Users/guest"</strong> </pre> </div></li><li class="listitem" value="5">接下来，可以使用<code class="email">read.csv</code>将数据加载到数据帧中。在这里，可以使用<a id="id152" class="calibre1"/><code class="email">read.csv </code>函数读取<code class="email">train.csv</code>来构造变量名为<code class="email">train.data</code>的数据。然而，为了将空字符串视为<code class="email">NA</code>，可以指定<code class="email">na.strings</code>等于<code class="email">"NA"</code>或空字符串:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.data = read.csv("train.csv", na.strings=c("NA", ""))</strong> </pre> </div></li><li class="listitem" value="6">然后，使用<code class="email">str</code>功能检查加载的数据:<div> <pre class="programlisting"> <strong class="calibre2">&gt; str(train.data)</strong> <strong class="calibre2">'data.frame': 891 obs. of  12 variables:</strong> <strong class="calibre2"> $ PassengerId: int  1 2 3 4 5 6 7 8 9 10 ...</strong> <strong class="calibre2"> $ Survived   : int  0 1 1 1 0 0 0 0 1 1 ...</strong> <strong class="calibre2"> $ Pclass     : int  3 1 3 1 3 3 1 3 3 2 ...</strong> <strong class="calibre2"> $ Name       : Factor w/ 891 levels "Abbing, Mr. Anthony",..: 109 191 358 277 16 559 520 629 417 581 ...</strong> <strong class="calibre2"> $ Sex        : Factor w/ 2 levels "female","male": 2 1 1 1 2 2 2 2 1 1 ...</strong> <strong class="calibre2"> $ Age        : num  22 38 26 35 35 NA 54 2 27 14 ...</strong> <strong class="calibre2"> $ SibSp      : int  1 1 0 1 0 0 0 3 0 1 ...</strong> <strong class="calibre2"> $ Parch      : int  0 0 0 0 0 0 0 1 2 0 ...</strong> <strong class="calibre2"> $ Ticket     : Factor w/ 681 levels "110152","110413",..: 524 597 670 50 473 276 86 396 345 133 ...</strong> <strong class="calibre2"> $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...</strong> <strong class="calibre2"> $ Cabin      : Factor w/ 148 levels "","A10","A14",..: 1 83 1 57 1 1 131 1 1 1 ...</strong> <strong class="calibre2"> $ Embarked   : Factor w/ 4 levels "","C","Q","S": 4 2 4 4 4 3 4 4 4 2 ...</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Reading a Titanic dataset from a CSV file</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec46" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">为了开始数据探索，我们首先从Kaggle下载了泰坦尼克号数据集，这是一个包含许多数据竞赛和数据集的网站。为了将数据加载到数据框中，该方法演示了如何应用<code class="email">read.csv</code>函数加载带有<code class="email">na.strings</code>参数的数据集，目的是将空字符串和<code class="email">"NA"</code>转换为NA值。为了查看数据集的结构，我们使用了<code class="email">str</code>函数来紧凑地显示<code class="email">train.data</code>；你可以发现数据集包含乘客的人口统计信息和生存标签。这里收集的数据足够好，初学者可以练习如何处理和分析数据。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Reading a Titanic dataset from a CSV file</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch02lvl2sec47" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">在<a id="id153" class="calibre1"/> Kaggle上，科学上的许多数据都与竞赛有关，这些竞赛大多涉及设计一种机器学习方法来解决现实世界的问题。</p><p class="calibre7">Kaggle上的大多数比赛都是由学术界或企业团体举办的，如亚马逊或脸书。事实上，他们创造这些竞赛并提供奖励，如奖金或工作前景(见https://www.kaggle.com/competitions<a class="calibre1" href="https://www.kaggle.com/competitions"/>)。于是，就有很多<a id="id154" class="calibre1"/>数据科学家被吸引注册了Kaggle账号参加比赛。一个pilot exploration的初学者可以参加其中一个比赛，这将有助于他们通过用机器学习技能解决现实世界的问题来获得经验。</p><p class="calibre7">作为参赛者，为了创造一个更具挑战性的学习环境，参与者需要提交他们的输出答案，并将收到评估分数，这样每个人都可以评估自己在排行榜上的排名。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Converting types on character variables</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec20" class="calibre1"/>转换字符变量的类型</h1></div></div></div><p class="calibre7">在R中，由于<a id="id155" class="calibre1"/>名义变量、序数变量、区间变量和比率变量在统计建模中被区别对待，我们必须<a id="id156" class="calibre1"/>将名义变量从字符转换成因子。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Converting types on character variables</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch02lvl2sec48" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">您需要通过将Titanic训练数据加载到R会话中来完成前面的配方，使用<code class="email">read.csv</code>函数并分配一个等于NA和空字符串("")的参数<code class="email">na.strings</code>。然后，将从<code class="email">train.csv</code>加载的数据分配到<code class="email">train.data</code>变量中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Converting types on character variables</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec49" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来转换字符变量的类型:</p><div><ol class="orderedlist"><li class="listitem" value="1">使用<code class="email">str</code>功能打印泰坦尼克号数据概览:<div> <pre class="programlisting"> <strong class="calibre2">&gt; str(train.data)</strong> <strong class="calibre2">'data.frame':  891 obs. of  12 variables:</strong> <strong class="calibre2"> $ PassengerId: int  1 2 3 4 5 6 7 8 9 10 ...</strong> <strong class="calibre2"> $ Survived   : int  0 1 1 1 0 0 0 0 1 1 ...</strong> <strong class="calibre2"> $ Pclass     : int  3 1 3 1 3 3 1 3 3 2 ...</strong> <strong class="calibre2"> $ Name       : Factor w/ 891 levels "Abbing, Mr. Anthony",..: 109 191 358 277 16 559 520 629 417 581 ...</strong> <strong class="calibre2"> $ Sex        : Factor w/ 2 levels "female","male": 2 1 1 1 2 2 2 2 1 1 ...</strong> <strong class="calibre2"> $ Age        : num  22 38 26 35 35 NA 54 2 27 14 ...</strong> <strong class="calibre2"> $ SibSp      : int  1 1 0 1 0 0 0 3 0 1 ...</strong> <strong class="calibre2"> $ Parch      : int  0 0 0 0 0 0 0 1 2 0 ...</strong> <strong class="calibre2"> $ Ticket     : Factor w/ 681 levels "110152","110413",..: 524 597 670 50 473 276 86 396 345 133 ...</strong> <strong class="calibre2"> $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...</strong> <strong class="calibre2"> $ Cabin      : Factor w/ 147 levels "A10","A14","A16",..: NA 82 NA 56 NA NA 130 NA NA NA ...</strong> <strong class="calibre2"> $ Embarked   : Factor w/ 3 levels "C","Q","S": 3 1 3 3 3 2 3 3 3 1 ...</strong> </pre> </div></li><li class="listitem" value="2">为了<a id="id157" class="calibre1"/>将变量从<code class="email">int</code>数值类型转换为<code class="email">factor</code>分类类型，您<a id="id158" class="calibre1"/>可以将<code class="email">factor</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; train.data$Survived = factor(train.data$Survived)</strong> <strong class="calibre2">&gt; train.data$Pclass = factor(train.data$Pclass)</strong> </pre> </div></li><li class="listitem" value="3">用<code class="email">str</code>函数再次打印出变量，你可以看到<code class="email">Pclass</code>和<code class="email">Survived</code>现在被转换成如下的因子:<div> <pre class="programlisting"> <strong class="calibre2">&gt; str(train.data)</strong> <strong class="calibre2">'data.frame':  891 obs. of  12 variables:</strong> <strong class="calibre2"> $ PassengerId: int  1 2 3 4 5 6 7 8 9 10 ...</strong> <strong class="calibre2"> $ Survived   : Factor w/ 2 levels "0","1": 1 2 2 2 1 1 1 1 2 2 ...</strong> <strong class="calibre2"> $ Pclass     : Factor w/ 3 levels "1","2","3": 3 1 3 1 3 3 1 3 3 2 ...</strong> <strong class="calibre2"> $ Name       : Factor w/ 891 levels "Abbing, Mr. Anthony",..: 109 191 358 277 16 559 520 629 417 581 ...</strong> <strong class="calibre2"> $ Sex        : Factor w/ 2 levels "female","male": 2 1 1 1 2 2 2 2 1 1 ...</strong> <strong class="calibre2"> $ Age        : num  22 38 26 35 35 NA 54 2 27 14 ...</strong> <strong class="calibre2"> $ SibSp      : int  1 1 0 1 0 0 0 3 0 1 ...</strong> <strong class="calibre2"> $ Parch      : int  0 0 0 0 0 0 0 1 2 0 ...</strong> <strong class="calibre2"> $ Ticket     : Factor w/ 681 levels "110152","110413",..: 524 597 670 50 473 276 86 396 345 133 ...</strong> <strong class="calibre2"> $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...</strong> <strong class="calibre2"> $ Cabin      : Factor w/ 147 levels "A10","A14","A16",..: NA 82 NA 56 NA NA 130 NA NA NA ...</strong> <strong class="calibre2"> $ Embarked   : Factor w/ 3 levels "C","Q","S": 3 1 3 3 3 2 3 3 3 1 ...</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Converting types on character variables</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec50" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">谈<a id="id159" class="calibre1"/>谈<a id="id160" class="calibre1"/>统计，有四种度量:标称、序数、区间、比率。名义变量用来标注变量，比如性别和<a id="id161" class="calibre1"/>名字；序数变量，是对非数字<a id="id162" class="calibre1"/>概念的度量，如满意度和幸福度。区间变量<a id="id163" class="calibre1"/>显示数字刻度，它不仅告诉我们<a id="id164" class="calibre1"/>顺序，还可以显示数值之间的差异，如摄氏温度。比率变量表示连续量的大小与单位量的比率。比率变量提供顺序、值之间的差异和真零值，如体重和身高。在R中，不同的测量值以不同的方式计算，因此您应该在对数据集应用描述性或推理性分析之前执行类型转换。</p><p class="calibre7">在这个配方中，我们首先使用<code class="email">str</code>功能显示训练数据的结构。从数据的结构中，您可以找到属性名、数据类型以及每个属性中包含的前几个值。从<code class="email">Survived</code>和<code class="email">Pclass</code>属性中，可以看到数据类型为<code class="email">int</code>。如图表1 ( <em class="calibre8">前言</em>所列的变量描述，可以看到<code class="email">Survived</code> (0 =否；1 =是)和<code class="email">Pclass</code> (1 =第1；2 =第二；3 =第三)是分类变量。因此，我们通过<code class="email">factor</code>函数将数据从字符转换为因子类型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Converting types on character variables</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">除了factor，还有更多类型转换函数。对于数值型，有<code class="email">is.numeric()</code>和<code class="email">as.numeric()</code>；对于人品，有:<code class="email">is.character()</code>和<code class="email">as.character()</code>。对于vector，有:<code class="email">is.vector()</code>和<code class="email">as.vector()</code>；对于矩阵，有<code class="email">is.matrix()</code>和<code class="email">as.matrix()</code>。最后，对于数据帧，有:<code class="email">is.data.frame()</code>和<code class="email">as.data.frame()</code>。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Detecting missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec21" class="calibre1"/>检测缺失值</h1></div></div></div><p class="calibre7">缺失的<a id="id165" class="calibre1"/>值会降低样本的代表性，此外，可能会扭曲关于总体的推断。这个方法将集中于检测Titanic数据集中缺失的值。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Detecting missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">您需要通过属性<code class="email">Pclass</code>和因子类型<code class="email">Survived</code>完成前面的配方。</p><p class="calibre7">在R中，丢失的<a id="id167" class="calibre1"/>值用符号<strong class="calibre2"> NA </strong> ( <strong class="calibre2">不可用</strong>)，而<a id="id168" class="calibre1"/>不可能的值是<strong class="calibre2"> NaN </strong> ( <strong class="calibre2">不是数字</strong>)。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Detecting missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec53" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行<a id="id169" class="calibre1"/>以下步骤<a id="id170" class="calibre1"/>检测缺失值:</p><div><ol class="orderedlist"><li class="listitem" value="1"><code class="email">is.na</code>函数用于表示属性的哪个索引包含NA值。在这里，我们先将其应用到<code class="email">Age</code>属性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; is.na(train.data$Age)</strong> </pre> </div></li><li class="listitem" value="2"><code class="email">is.na</code>函数指示<code class="email">Age</code>属性的缺失值。要得到缺失值的大概数目，可以执行<code class="email">sum</code>来计算这个:<div> <pre class="programlisting"> <strong class="calibre2">&gt; sum(is.na(train.data$Age) == TRUE)</strong> <strong class="calibre2">[1] 177</strong> </pre> </div></li><li class="listitem" value="3">为了计算缺失值的百分比，采用的一种方法是统计缺失值与非缺失值的数量:<div> <pre class="programlisting"> <strong class="calibre2">&gt; sum(is.na(train.data$Age) == TRUE) /  length(train.data$Age)</strong> <strong class="calibre2">[1] 0.1986532</strong> </pre> </div></li><li class="listitem" value="4">要获得属性缺失值的百分比，可以使用<code class="email">sapply</code>来计算所有属性的百分比:<div> <pre class="programlisting"> <strong class="calibre2">&gt; sapply(train.data, function(df) {</strong> <strong class="calibre2">+               sum(is.na(df)==TRUE)/ length(df);</strong> <strong class="calibre2">+           }) </strong> <strong class="calibre2">PassengerId    Survived      Pclass        Name         Sex         Age </strong> <strong class="calibre2">0.000000000 0.000000000 0.000000000 0.000000000 0.000000000 0.198653199 </strong> <strong class="calibre2">      SibSp       Parch      Ticket        Fare       Cabin    Embarked </strong> <strong class="calibre2">0.000000000 0.000000000 0.000000000 0.000000000 0.771043771 0.002244669 </strong> </pre> </div></li><li class="listitem" value="5">除了简单地查看丢失数据的百分比，用户还可以使用<code class="email">Amelia</code>包来可视化丢失的值。这里，我们使用<code class="email">install.packages</code>和<code class="email">require</code>来安装<code class="email">Amelia</code>并加载软件包。但是在安装和加载<code class="email">Amelia</code>包之前，需要先安装<code class="email">Rcpp</code>，预先:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("Amelia")</strong> <strong class="calibre2">&gt; require(Amelia)</strong> </pre> </div></li><li class="listitem" value="6">Then, use the <code class="email">missmap</code> function to plot the missing value map:<div><pre class="programlisting">
+<strong class="calibre2">&gt; missmap(train.data, main="Missing Map")</strong>
+</pre></div><div><img src="img/00031.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">丢失的泰坦尼克号数据集地图</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Detecting missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">在R中，丢失的值通常用符号<code class="email">"NA"</code>表示不可用。大多数<a id="id171" class="calibre1"/>函数(如<code class="email">mean</code>或<code class="email">sum</code>)在数据集中遇到安娜值时可能会输出NA。虽然您可以指定一个参数(如<code class="email">na.rm</code>)来消除NA的影响，但最好估算或删除数据集中的缺失数据，以防止缺失值的影响扩散。为了找出Titanic数据集中缺失的值，我们首先将所有NA值相加，然后除以每个属性中值的数量，然后，我们使用<code class="email">sapply</code>将计算应用于所有属性。</p><p class="calibre7">除此之外，为了使用表格显示计算结果，您可以利用<code class="email">Amelia</code>包在一个图表上绘制每个属性的缺失值图。缺失值的可视化使用户能够更好地理解每个数据集中的缺失百分比。从前面的截图中，您可能已经观察到缺少的值是米色的，而它的观察值是暗红色的。<em class="calibre8">x</em>-轴显示不同的属性名，<em class="calibre8"> y </em>轴显示记录的索引。很明显，大部分舱显示丢失的数据，并且它还显示当计算<code class="email">Age</code>属性时，大约19.87%的数据丢失，并且在<code class="email">Embarked</code>属性中有两个值丢失。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Detecting missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">为了处理<a id="id172" class="calibre1"/>丢失的值，我们<a id="id173" class="calibre1"/>引入了<code class="email">Amelia</code>来可视化它们。除了键入控制台命令，您还可以使用<code class="email">Amelia</code>和<code class="email">AmeliaView</code>的交互式GUI，它允许用户从窗口环境中加载数据集、管理选项和运行<code class="email">Amelia</code>。</p><p class="calibre7">要开始运行<code class="email">AmeliaView</code>，只需在R控制台中键入<code class="email">AmeliaView()</code>:</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; AmeliaView()</strong>
+</pre></div><div><img src="img/00032.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">AmeliaView</p></div></div><p class="calibre10"> </p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Imputing missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec22" class="calibre1"/>输入缺失值</h1></div></div></div><p class="calibre7">在检测到每个<a id="id175" class="calibre1"/>属性中缺失值的<a id="id174" class="calibre1"/>数量后，我们必须估算缺失值，因为它们可能会对从数据中得出的结论产生重大影响。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Imputing missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">该配方需要在R进程中加载<code class="email">train.data</code>，并通过将<code class="email">Pclass</code>和<code class="email">Survived</code>转换为因子类型来完成之前的配方。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Imputing missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec57" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来估算缺失值:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先列出<strong class="calibre2">启运港</strong>的分布<a id="id176" class="calibre1"/>。这里，我们添加了<code class="email">useNA = "always"</code>参数来显示<code class="email">train.data</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; table(train.data$Embarked, useNA = "always")</strong>  <strong class="calibre2">   C    Q    S &lt;NA&gt; </strong> <strong class="calibre2"> 168   77  644    2 </strong> </pre> </div>中包含的NA值的数量</li><li class="listitem" value="2">将<a id="id177" class="calibre1"/>两个<a id="id178" class="calibre1"/>缺失值分配给一个更有可能的端口(即计数最多的端口)，在本例中为南安普敦:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.data$Embarked[which(is.na(train.data$Embarked))] = 'S';</strong> <strong class="calibre2">&gt; table(train.data$Embarked, useNA = "always")</strong>  <strong class="calibre2">   C    Q    S &lt;NA&gt; </strong> <strong class="calibre2"> 168   77  646    0 </strong> </pre> </div></li><li class="listitem" value="3">为了发现<code class="email">train.data</code>名字中包含的头衔类型，我们先用blank(一种正则表达式模式为<code class="email">"\\s+"</code>)对<code class="email">train.data$Name</code>进行标记，然后用<code class="email">table</code>函数统计出现的频率。在此之后，由于名称title经常以句点结尾，我们使用正则表达式grep包含句点的单词。最后，<code class="email">sort</code>表中按降序排列:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.data$Name = as.character(train.data$Name)</strong> <strong class="calibre2">&gt; table_words = table(unlist(strsplit(train.data$Name, "\\s+")))</strong> <strong class="calibre2">&gt; sort(table_words [grep('\\.',names(table_words))], decreasing=TRUE)</strong>  <strong class="calibre2">      Mr.     Miss.      Mrs.   Master. </strong> <strong class="calibre2">      517       182       125        40 </strong> <strong class="calibre2">      Dr.      Rev.      Col.    Major. </strong> <strong class="calibre2">        7         6         2            2 </strong> <strong class="calibre2">    Mlle.     Capt. Countess.    Don. </strong> <strong class="calibre2">        2         1         1                1 </strong> <strong class="calibre2">Jonkheer.        L.     Lady .      Mme. </strong> <strong class="calibre2">        1         1         1         1 </strong> <strong class="calibre2">      Ms.      Sir. </strong> <strong class="calibre2">        1         1 </strong> </pre> </div></li><li class="listitem" value="4">要获得哪个标题包含丢失的值，可以使用<code class="email">stringr</code>包提供的<code class="email">str_match</code>来获得包含句点的子字符串，然后将<a id="id180" class="calibre1"/>列与<code class="email">cbind</code>绑定在一起<a id="id179" class="calibre1"/>。最后，通过使用table函数获取缺失值的统计数据，您可以对每个标题进行计数:<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(stringr) </strong> <strong class="calibre2">&gt; tb = cbind(train.data$Age, str_match(train.data$Name, " [a-zA-Z]+\\."))</strong> <strong class="calibre2">&gt; table(tb[is.na(tb[,1]),2])</strong>  <strong class="calibre2">     Dr.  Master.    Miss.      Mr.     Mrs. </strong> <strong class="calibre2">       1        4            36       119       17 </strong> </pre> </div></li><li class="listitem" value="5">对于包含缺失值的标题，估算数据的一种方法是为每个标题分配平均值(不包含缺失值):<div> <pre class="programlisting"> <strong class="calibre2">&gt; mean.mr = mean(train.data$Age[grepl(" Mr\\.", train.data$Name) &amp; !is.na(train.data$Age)])</strong> <strong class="calibre2">&gt; mean.mrs = mean(train.data$Age[grepl(" Mrs\\.", train.data$Name) &amp; !is.na(train.data$Age)])</strong> <strong class="calibre2">&gt; mean.dr = mean(train.data$Age[grepl(" Dr\\.", train.data$Name) &amp; !is.na(train.data$Age)])</strong> <strong class="calibre2">&gt; mean.miss = mean(train.data$Age[grepl(" Miss\\.", train.data$Name) &amp; !is.na(train.data$Age)])</strong> <strong class="calibre2">&gt; mean.master =  mean(train.data$Age[grepl(" Master\\.", train.data$Name) &amp; !is.na(train.data$Age)])</strong> </pre> </div></li><li class="listitem" value="6">然后，用各标题的平均值赋值缺失值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.data$Age[grepl(" Mr\\.", train.data$Name) &amp; is.na(train.data$Age)] = mean.mr</strong> <strong class="calibre2">&gt; train.data$Age[grepl(" Mrs\\.", train.data$Name) &amp; is.na(train.data$Age)] = mean.mrs</strong> <strong class="calibre2">&gt; train.data$Age[grepl(" Dr\\.", train.data$Name) &amp; is.na(train.data$Age)] = mean.dr</strong> <strong class="calibre2">&gt; train.data$Age[grepl(" Miss\\.", train.data$Name) &amp; is.na(train.data$Age)] = mean.miss</strong> <strong class="calibre2">&gt; train.data$Age[grepl(" Master\\.", train.data$Name) &amp; is.na(train.data$Age)] = mean.master</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Imputing missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec58" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">为了估算<code class="email">Embarked</code>属性的缺失值，我们首先使用<code class="email">table</code>函数生成已装载端口的统计数据。<code class="email">table</code>功能对<code class="email">train.data</code>中的两个NA值进行计数。从数据集描述中，我们识别出C、Q和S(C =瑟堡，Q =皇后镇，S =南安普顿)。由于我们不知道这两个丢失的值属于哪个类别，一种可能的方法是将丢失的值分配给最可能的端口，即<code class="email">Southampton</code>。</p><p class="calibre7">至于<a id="id181" class="calibre1"/>的另一个属性<code class="email">Age</code>，虽然大约有20%的值丢失，但用户仍然可以根据每个乘客的标题推断出丢失的<a id="id182" class="calibre1"/>值。为了发现数据集的名称中有多少个标题，我们建议在<code class="email">Name</code>属性中计数分段单词的方法，这有助于计算每个给定标题的缺失值的数量。生成的单词表显示了常见的标题，如<code class="email">Mr</code>、<code class="email">Mrs</code>、<code class="email">Miss</code>和<code class="email">Master</code>。你可以参考维基百科中的英文敬语条目来获得每个标题的描述。</p><p class="calibre7">考虑到缺失数据，我们将每个标题的平均值重新分配给具有相应标题的缺失值。但是，对于<code class="email">Cabin</code>属性，缺少的值太多了，我们无法从任何引用属性中推断出该值。因此，我们发现试图使用该属性进行进一步分析是行不通的。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Imputing missing values</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch02lvl2sec59" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">这里我们列出了维基百科中的敬语条目供你参考。根据它(<a class="calibre1" href="http://en.wikipedia.org/wiki/English_honorific">http://en.wikipedia.org/wiki/English_honorific</a>):</p><div><ul class="itemizedlist"><li class="listitem">先生:这个<a id="id183" class="calibre1"/>是用在男人身上的，不管他的婚姻状况如何</li><li class="listitem">主人:这是给年轻男子或男孩用的，尤其是在英国</li><li class="listitem">小姐:它通常用于未婚女性，虽然也用于已婚女艺人</li><li class="listitem">这是给已婚妇女用的</li><li class="listitem">博士:在美国，这是指拥有第一个专业学位的人</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec23" class="calibre1"/>探索和可视化数据</h1></div></div></div><p class="calibre7">输入缺失值后，应进行探索性分析，包括使用可视化<a id="id185" class="calibre1"/>图的<a id="id184" class="calibre1"/>和汇总<a id="id186" class="calibre1"/>方法来总结数据特征。结果有助于<a id="id187" class="calibre1"/>用户更好地理解使用中的数据。下面的食谱将介绍如何使用基本绘图技术，以帮助用户进行探索性分析。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch02lvl2sec60" class="calibre1"/>准备就绪</h2></div></div></div><p class="calibre7">该配方需要通过输入<code class="email">age</code>和<code class="email">Embarked</code>属性中缺失的值来完成前一个配方。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec61" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来浏览和可视化数据:</p><div><ol class="orderedlist"><li class="listitem" value="1">First, you can use a bar plot and histogram to generate descriptive statistics for each attribute, starting with passenger survival:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$Survived), main="Passenger Survival",  names= c("Perished", "Survived"))</strong>
+</pre></div><div><img src="img/00033.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客生存</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">We can generate the bar plot of passenger class:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$Pclass), main="Passenger Class",  names= c("first", "second", "third"))</strong>
+</pre></div><div><img src="img/00034.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客等级</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="3">Next, we<a id="id188" class="calibre1"/> outline the <a id="id189" class="calibre1"/>gender data with <a id="id190" class="calibre1"/>the <a id="id191" class="calibre1"/>bar plot:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$Sex), main="Passenger Gender")</strong>
+</pre></div><div><img src="img/00035.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客性别</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="4">We then plot the histogram of the different ages with the <code class="email">hist</code> function:<div><pre class="programlisting">
+<strong class="calibre2">&gt; hist(train.data$Age, main="Passenger Age", xlab = "Age")</strong>
+</pre></div><div><img src="img/00036.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客年龄</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">We <a id="id192" class="calibre1"/>can plot the bar plot<a id="id193" class="calibre1"/> of sibling <a id="id194" class="calibre1"/>passengers<a id="id195" class="calibre1"/> to get the following:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$SibSp), main="Passenger Siblings")</strong>
+</pre></div><div><img src="img/00037.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客兄弟姐妹</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="6">Next, we can get the distribution of the passenger parch:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$Parch), main="Passenger Parch")</strong>
+</pre></div><div><img src="img/00038.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客车厢</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="7">Next, we<a id="id196" class="calibre1"/> plot the histogram <a id="id197" class="calibre1"/>of the <a id="id198" class="calibre1"/>passenger<a id="id199" class="calibre1"/> fares:<div><pre class="programlisting">
+<strong class="calibre2">&gt; hist(train.data$Fare, main="Passenger Fare", xlab = "Fare")</strong>
+</pre></div><div><img src="img/00039.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">客运费</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="8">Finally, one can look at the port of embarkation:<div><pre class="programlisting">
+<strong class="calibre2">&gt; barplot(table(train.data$Embarked), main="Port of Embarkation")</strong>
+</pre></div><div><img src="img/00040.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">启航港口</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="9">Use <code class="email">barplot</code> to<a id="id200" class="calibre1"/> find<a id="id201" class="calibre1"/> out which gender is <a id="id202" class="calibre1"/>more<a id="id203" class="calibre1"/> likely to perish during shipwrecks:<div><pre class="programlisting">
+<strong class="calibre2">&gt; counts = table( train.data$Survived, train.data$Sex)</strong>
+<strong class="calibre2">&gt; barplot(counts,  col=c("darkblue","red"), legend = c("Perished", "Survived"), main = "Passenger Survival by Sex")</strong>
+</pre></div><div><img src="img/00041.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">按性别划分的乘客存活率</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="10">Next, we should examine whether the <code class="email">Pclass</code> factor of each passenger may affect the survival rate:<div><pre class="programlisting">
+<strong class="calibre2">&gt; counts = table( train.data$Survived, train.data$Pclass)</strong>
+<strong class="calibre2">&gt; barplot(counts,  col=c("darkblue","red"), legend =c("Perished", "Survived"), main= "Titanic Class Bar Plot" )</strong>
+</pre></div><div><img src="img/00042.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">按等级划分的乘客存活率</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="11">Next, we<a id="id204" class="calibre1"/> examine<a id="id205" class="calibre1"/> the gender <a id="id206" class="calibre1"/>composition<a id="id207" class="calibre1"/> of each <code class="email">Pclass</code>:<div><pre class="programlisting">
+<strong class="calibre2">&gt; counts = table( train.data$Sex, train.data$Pclass)</strong>
+<strong class="calibre2">&gt; barplot(counts,  col=c("darkblue","red"), legend = rownames(counts), main= "Passenger Gender by Class")</strong>
+</pre></div><div><img src="img/00043.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">按等级划分的乘客性别</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="12">Furthermore, we examine the histogram of passenger ages:<div><pre class="programlisting">
+<strong class="calibre2">&gt; hist(train.data$Age[which(train.data$Survived == "0")], main= "Passenger Age Histogram", xlab="Age", ylab="Count", col ="blue", breaks=seq(0,80,by=2))</strong>
+<strong class="calibre2">&gt; hist(train.data$Age[which(train.data$Survived == "1")], col ="red", add = T, breaks=seq(0,80,by=2))</strong>
+</pre></div><div><img src="img/00044.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">乘客年龄直方图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="13">To <a id="id208" class="calibre1"/>examine more <a id="id209" class="calibre1"/>details about<a id="id210" class="calibre1"/> the<a id="id211" class="calibre1"/> relationship between the age and survival rate, one can use a <code class="email">boxplot</code>:<div><pre class="programlisting">
+<strong class="calibre2">&gt; boxplot(train.data$Age ~ train.data$Survived, </strong>
+<strong class="calibre2">+         main="Passenger Survival by Age",</strong>
+<strong class="calibre2">+         xlab="Survived", ylab="Age")</strong>
+</pre></div><div><img src="img/00045.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">按年龄划分的乘客存活率</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="14">为了<a id="id212" class="calibre1"/>将不同<a id="id214" class="calibre1"/>年龄<a id="id215" class="calibre1"/>的人<a id="id213" class="calibre1"/>分成不同的组，如儿童(13岁以下)、青少年(13岁至19岁)、成人(20岁至65岁)、老年人(65岁以上)，执行以下命令:<div> <pre class="programlisting"> <strong class="calibre2">&gt;train.child = train.data$Survived[train.data$Age &lt; 13]</strong> <strong class="calibre2">&gt; length(train.child[which(train.child == 1)] ) / length(train.child)</strong> <strong class="calibre2"> [1] 0.5797101</strong>  <strong class="calibre2">&gt; train.youth = train.data$Survived[train.data$Age &gt;= 15 &amp; train.data$Age &lt; 25]</strong> <strong class="calibre2">&gt; length(train.youth[which(train.youth == 1)] ) / length(train.youth)</strong> <strong class="calibre2">[1] 0.4285714</strong>  <strong class="calibre2">&gt; train.adult  = train.data$Survived[train.data$Age &gt;= 20 &amp; train.data$Age &lt; 65]</strong> <strong class="calibre2">&gt; length(train.adult[which(train.adult == 1)] ) / length(train.adult)</strong> <strong class="calibre2"> [1] 0.3659218</strong>  <strong class="calibre2">&gt; train.senior  = train.data$Survived[train.data$Age &gt;= 65]</strong> <strong class="calibre2">&gt; length(train.senior[which(train.senior == 1)] ) / length(train.senior)</strong> <strong class="calibre2">[1] 0.09090909</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec62" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在我们预测存活率之前，我们应该首先使用聚合和可视化方法来检查每个属性如何影响乘客的命运。因此，我们通过生成每个属性的条形图和直方图来开始检查。</p><p class="calibre7">前面列表中截图的图形给出了Titanic数据集每个属性的轮廓。根据第一张截图，在海难中遇难的乘客多于幸存的乘客。三等舱的乘客是船上三等舱中人数最多的，这也反映了一个事实，即三等舱是泰坦尼克号上最经济的舱(第二步)。就性别分布而言，男性乘客多于女性乘客(步骤3)。至于年龄分布，步骤4中的截图显示，大多数乘客的年龄在20至40岁之间。根据步骤5中的截图，大多数乘客有一个或更少的兄弟姐妹。第六步截图显示，大部分乘客有0到2张parch。</p><p class="calibre7">在步骤7的截图中，票价直方图显示票价存在差异，这可能是泰坦尼克号上不同乘客等级的结果。最后，第8步中的截图显示，船停了三次搭载乘客。</p><p class="calibre7">当我们<a id="id216" class="calibre1"/>从<a id="id217" class="calibre1"/>开始探索<code class="email">sex</code>属性时，通过<a id="id218" class="calibre1"/>得出的柱状图来判断，它清楚地表明在海难中，女性乘客比男性有更高的<a id="id219" class="calibre1"/>存活率(步骤9)。除此之外，维基百科关于皇家邮轮泰坦尼克号(<a class="calibre1" href="http://en.wikipedia.org/wiki/RMS_Titanic">http://en.wikipedia.org/wiki/RMS_Titanic</a>)的条目解释道<em class="calibre8">“由于一些官员在登上救生艇时遵循了‘妇女和儿童优先’的协议，过多的男性留在了船上</em>。因此，女性幸存者人数超过男性幸存者是合理的。换句话说，简单地用<code class="email">sex</code>就可以高度准确地预测一个人是否会活下来。</p><p class="calibre7">然后，我们检查乘客等级是否影响存活率(步骤10)。在这里，从<code class="email">Pclass</code>的定义出发，每个等级的票价都根据质量进行了相应的定价；头等舱票价高，三等舱票价低。由于每位乘客的阶级似乎表明了他们的社会和经济地位，因此可以合理地假设，较富裕的乘客可能有更多的机会生存下来。</p><p class="calibre7">不幸的是，班级和存活率之间没有相关性，所以结果没有显示我们假设的现象。然而，在我们检查了<code class="email">pclass</code>的组成中的<code class="email">sex</code>(步骤11)后，结果显示大多数三等舱乘客是男性；富人更倾向于生存的假设可能没有那么具体。</p><p class="calibre7">接下来，我们通过直方图和箱线图研究了年龄和乘客命运之间的关系(步骤12)。条形图用水平柱显示年龄分布，其中红色柱代表幸存的乘客，而蓝色柱代表死亡的乘客。很难从不同年龄组来区分存活率的差异。我们创建的柱状图并没有证明不同年龄组的乘客更有可能幸存。另一方面，图中显示船上大多数人的年龄在20到40岁之间，但没有显示这个群体是否比老人或小孩更有可能存活(步骤13)。在这里，我们介绍了一种盒图，这是一种标准化的绘图技术，显示数据的分布和信息，如最小值、第一个四分位数、中值、第三个四分位数、最大值和异常值。</p><p class="calibre7">后来，我们通过将乘客年龄分为四组，进一步检验了年龄组是否与乘客命运有任何关系。统计数据显示，儿童群体(13岁以下)比年轻人(13岁至20岁)、成年人(20岁至65岁)和老年人(65岁以上)更有可能存活。结果显示，较年轻年龄组的人更有可能在海难中幸存。然而，我们注意到这可能是由“妇女和儿童优先”协议造成的。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch02lvl2sec63" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">除了使用条形图、直方图和箱线图来可视化数据的<a id="id220" class="calibre1"/>之外，还可以应用<code class="email">vcd</code>包<a id="id221" class="calibre1"/>中的<code class="email">mosaicplot</code>来检查<a id="id223" class="calibre1"/>多个分类变量之间的关系<a id="id222" class="calibre1"/>。例如，当我们检查<code class="email">Survived</code>和<code class="email">Pclass</code>变量之间的关系时，应用程序执行如下:</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; mosaicplot(train.data$Pclass ~ train.data$Survived, </strong>
+<strong class="calibre2">+           main="Passenger Survival Class", color=TRUE,  </strong>
+<strong class="calibre2">+  xlab="Pclass", ylab="Survived")</strong>
+</pre></div><div><img src="img/00046.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">按等级划分的乘客存活率</p></div></div><p class="calibre10"> </p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Exploring and visualizing data</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_5"><a id="ch02lvl2sec64" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">关于沉船的更多信息，人们可以阅读皇家邮轮泰坦尼克号的历史(请参考维基百科<a class="calibre1" href="http://en.wikipedia.org/wiki/Sinking_of_the_RMS_Titanic">http://en.wikipedia.org/wiki/Sinking_of_the_RMS_Titanic</a>中的<em class="calibre8">皇家邮轮泰坦尼克号</em>沉没的条目)，因为当时实施的一些协议可能极大地影响了乘客的存活率。</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting passenger survival with a decision tree</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec24" class="calibre1"/>用决策树预测乘客存活率</h1></div></div></div><p class="calibre7"><a id="id224" class="calibre1"/>探索性分析帮助用户深入了解单个或多个变量<a id="id225" class="calibre1"/>如何影响存活率。然而，它没有确定哪些组合可以生成预测模型，从而预测乘客的存活率。另一方面，机器学习可以从训练数据集生成预测模型，以便用户可以应用该模型从给定的属性预测可能的标签。在这份食谱中，我们将介绍如何使用决策树从给定的变量中预测乘客存活率。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting passenger survival with a decision tree</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">我们将使用在之前的配方中已经使用过的数据<code class="email">train.data</code>。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting passenger survival with a decision tree</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec66" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用决策树预测乘客存活率:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，我们用三个输入参数构建一个数据分割函数<code class="email">split.data</code>:<code class="email">data</code>、<code class="email">p</code>和<code class="email">s</code>。<code class="email">data</code>参数代表输入数据集，<code class="email">p</code>参数代表从输入数据集生成子集的比例，<code class="email">s</code>参数代表随机种子:<div> <pre class="programlisting"> <strong class="calibre2">&gt; split.data = function(data, p = 0.7, s = 666){</strong> <strong class="calibre2">+     set.seed(s)</strong> <strong class="calibre2">+     index = sample(1:dim(data)[1])</strong> <strong class="calibre2">+     train = data[index[1:floor(dim(data)[1] * p)], ]</strong> <strong class="calibre2">+     test = data[index[((ceiling(dim(data)[1] * p)) + 1):dim(data)[1]], ]</strong> <strong class="calibre2">+     return(list(train = train, test = test))</strong> <strong class="calibre2">+ } </strong> </pre> </div></li><li class="listitem" value="2">然后，我们拆分数据，将70%分配给训练数据集，剩下的30%分配给测试数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; allset= split.data(train.data, p = 0.7) </strong> <strong class="calibre2">&gt; trainset = allset$train </strong> <strong class="calibre2">&gt; testset = allset$test</strong> </pre> </div></li><li class="listitem" value="3">对于条件树，必须使用party包中的<code class="email">ctree</code>函数；因此，我们安装并加载党包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages('party')</strong> <strong class="calibre2">&gt; require('party')</strong> </pre> </div></li><li class="listitem" value="4">然后我们使用<code class="email">Survived</code>作为标签来生成使用中的预测模型。在<a id="id226" class="calibre1"/>之后，我们将分类树模型赋值为<a id="id227" class="calibre1"/>变量<code class="email">train.ctree</code>:<div><pre class="programlisting"> <strong class="calibre2">&gt; train.ctree = ctree(Survived ~ Pclass + Sex + Age + SibSp + Fare + Parch + Embarked, data=trainset)</strong> <strong class="calibre2">&gt; train.ctree</strong>  <strong class="calibre2">   Conditional inference tree with 7 terminal nodes</strong>  <strong class="calibre2">Response:  Survived </strong> <strong class="calibre2">Inputs:  Pclass, Sex, Age, SibSp, Fare, Parch, Embarked </strong> <strong class="calibre2">Number of observations:  623 </strong>  <strong class="calibre2">1) Sex == {male}; criterion = 1, statistic = 173.672</strong> <strong class="calibre2">  2) Pclass == {2, 3}; criterion = 1, statistic = 30.951</strong> <strong class="calibre2">    3) Age &lt;= 9; criterion = 0.997, statistic = 12.173</strong> <strong class="calibre2">      4) SibSp &lt;= 1; criterion = 0.999, statistic = 15.432</strong> <strong class="calibre2">        5)*  weights = 10 </strong> <strong class="calibre2">      4) SibSp &gt; 1</strong> <strong class="calibre2">        6)*  weights = 11 </strong> <strong class="calibre2">    3) Age &gt; 9</strong> <strong class="calibre2">      7)*  weights = 282 </strong> <strong class="calibre2">  2) Pclass == {1}</strong> <strong class="calibre2">    8)*  weights = 87 </strong> <strong class="calibre2">1) Sex == {female}</strong> <strong class="calibre2">  9) Pclass == {1, 2}; criterion = 1, statistic = 59.504</strong> <strong class="calibre2">    10)*  weights = 125 </strong> <strong class="calibre2">  9) Pclass == {3}</strong> <strong class="calibre2">    11) Fare &lt;= 23.25; criterion = 0.997, statistic = 12.456</strong> <strong class="calibre2">      12)*  weights = 85 </strong> <strong class="calibre2">    11) Fare &gt; 23.25</strong> <strong class="calibre2">      13)*  weights = 23 </strong> </pre></div></li><li class="listitem" value="5">We <a id="id228" class="calibre1"/>use a <code class="email">plot</code> function <a id="id229" class="calibre1"/>to plot the tree:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(train.ctree, main="Conditional inference tree of Titanic Dataset")</strong>
+</pre></div><div><img src="img/00047.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">泰坦尼克号数据集的条件推理树</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting passenger survival with a decision tree</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec67" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">该菜谱介绍了如何使用条件推理树<code class="email">ctree</code>来预测乘客存活率。虽然条件推理树不是解决<a id="id230" class="calibre1"/>分类问题的唯一方法，但它是理解预测乘客存活率的决策路径的简单方法。</p><p class="calibre7">我们首先使用我们实现的函数<code class="email">split.data</code>将数据分成一个训练和测试集。因此，我们可以使用训练集来生成预测模型，然后在模型评估的配方中对测试数据集使用该预测模型。然后，我们安装并加载<code class="email">party</code>包，使用<code class="email">ctree</code>构建预测模型，标签为<code class="email">Survived</code>。在不考虑任何特定属性的情况下，我们将<code class="email">Pclass</code>、<code class="email">Sex</code>、<code class="email">Age</code>、<code class="email">SibSp</code>、<code class="email">Parch</code>、<code class="email">Embarked</code>和<code class="email">Fare</code>等属性作为训练属性，除了<code class="email">Cabin</code>，因为该属性的大部分值都是缺失的。</p><p class="calibre7">在构建预测模型之后，我们可以以文本方式打印出决策路径和节点，或者使用绘图函数来绘制决策树。从决策树中，用户可以看到什么样的变量组合可能有助于预测存活率。根据前面的截图，用户可以找到<code class="email">Pclass</code>和<code class="email">Sex</code>的组合，这是预测存活率的一个很好的决策边界(节点9)。这张照片显示，头等舱和二等舱的女性乘客大多在海难中幸存。男性乘客，包括二等舱和三等舱的乘客以及9岁以上的乘客，几乎都在海难中丧生。从树中，人们可能会发现诸如<code class="email">Embarked</code>和<code class="email">Parch</code>的属性丢失了。这是因为条件推理树在分类时认为这些属性不太重要。</p><p class="calibre7">从决策树中，用户可以看到什么样的变量组合可能有助于预测存活率。此外，条件推理树有助于在分类过程中选择重要的属性；人们可以检查构建的树，以查看选择的属性是否与自己的假设相匹配。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Predicting passenger survival with a decision tree</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">这个食谱涵盖了与分类算法和条件推理树相关的问题。由于我们不讨论适配算法的背景知识，如果需要，用户最好使用<code class="email">help</code>功能查看<code class="email">party</code>包中与<code class="email">ctree</code>相关的文档。</p><p class="calibre7">有一个类似<a id="id232" class="calibre1"/>的基于决策树的包，名为<code class="email">rpart</code>。<code class="email">party</code>和<code class="email">rpart</code>的<a id="id233" class="calibre1"/>区别在于，party包中的<code class="email">ctree</code>避免了<code class="email">party</code>包中的<code class="email">rpart</code>和<code class="email">ctree</code>的后续变量选择偏差，倾向于选择具有许多可能分裂或许多缺失值的变量。与其他方法不同，<code class="email">ctree</code>使用显著性测试程序来选择变量，而不是选择最大化信息度量的变量。</p><p class="calibre7">除了<code class="email">ctree</code>，还可以使用<code class="email">svm</code>生成预测模型。要加载<code class="email">svm</code>函数，首先加载<code class="email">e1071</code>包，然后使用<code class="email">svm</code>构建来生成这个预测:</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; install.packages('e1071')</strong>
+<strong class="calibre2">&gt; require('e1071')</strong>
+<strong class="calibre2">&gt; svm.model = svm(Survived ~ Pclass + Sex + Age + SibSp + Fare + Parch + Embarked, data = trainset, probability = TRUE)</strong>
+</pre></div><p class="calibre7">在这里，我们<a id="id234" class="calibre1"/>使用<code class="email">svm</code>来展示<a id="id235" class="calibre1"/>在使用r时，您可以如何轻松地立即在同一数据集上使用不同的机器学习算法。有关如何使用<code class="email">svm</code>的更多信息，请参考<a class="calibre1" title="Chapter 6. Classification (II) – Neural Network and SVM" href="part0072_split_000.html#page">第6章</a>、<em class="calibre8">分类(II)–神经网络、SVM </em>。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Validating the power of prediction with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">用混淆矩阵验证预测的能力</h1></div></div></div><p class="calibre7">构建预测模型后，在预测标签时验证模型如何执行<a id="id236" class="calibre1"/>是很重要的。在之前的配方中，我们用<code class="email">ctree</code>和<a id="id237" class="calibre1"/>构建了一个模型，将数据预先分割成一个训练和测试集。现在，用户将学会通过使用混淆矩阵来验证<code class="email">ctree</code>在生存预测中的表现。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Validating the power of prediction with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">在评估预测模型之前，首先要确保生成的训练集和测试数据集在R会话中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Validating the power of prediction with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch02lvl2sec70" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来验证预测能力:</p><div><ol class="orderedlist"><li class="listitem" value="1">我们开始使用构建的<code class="email">train.ctree</code>模型来预测测试集的生存:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ctree.predict = predict(train.ctree, testset)</strong> </pre> </div></li><li class="listitem" value="2">首先我们安装<code class="email">caret</code>包，然后加载:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("caret")</strong> <strong class="calibre2">&gt; require(caret)</strong> </pre> </div></li><li class="listitem" value="3">加载<code class="email">caret</code>后，可以使用混淆矩阵生成输出矩阵的统计:<div> <pre class="programlisting"> <strong class="calibre2">&gt; confusionMatrix(ctree.predict, testset$Survived)</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">          Reference</strong> <strong class="calibre2">Prediction   0   1</strong> <strong class="calibre2">         0 160  25</strong> <strong class="calibre2">         1  16  66</strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">               Accuracy : 0.8464          </strong> <strong class="calibre2">                 95% CI : (0.7975, 0.8875)</strong> <strong class="calibre2">    No Information Rate : 0.6592          </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : 4.645e-12       </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">                  Kappa : 0.6499          </strong> <strong class="calibre2"> Mcnemar's Test P-Value : 0.2115          </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">            Sensitivity : 0.9091          </strong> <strong class="calibre2">            Specificity : 0.7253          </strong> <strong class="calibre2">         Pos Pred Value : 0.8649          </strong> <strong class="calibre2">         Neg Pred Value : 0.8049          </strong> <strong class="calibre2">             Prevalence : 0.6592          </strong> <strong class="calibre2">         Detection Rate : 0.5993          </strong> <strong class="calibre2">   Detection Prevalence : 0.6929          </strong> <strong class="calibre2">      Balanced Accuracy : 0.8172          </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">       'Positive' Class : 0</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Validating the power of prediction with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec71" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在<a id="id238" class="calibre1"/>建立<a id="id239" class="calibre1"/>之前配方中的预测模型后，测量所建立模型的性能是很重要的。可以通过预测结果是否匹配测试数据集中包含的原始标签来评估性能。可以通过使用由caret包提供的混淆矩阵来生成混淆矩阵，这是一种测量预测准确性的方法。</p><p class="calibre7">为了生成混淆矩阵，用户需要首先安装并加载<code class="email">caret</code>包。混淆矩阵显示，单纯使用<code class="email">ctree</code>可以达到高达84%的准确率。通过调整所使用的属性，或者通过将分类算法替换为SVM、<code class="email">glm</code>或随机森林，可以生成更好的预测模型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Validating the power of prediction with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch02lvl2sec72" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">caret包(<em class="calibre8">分类和回归训练</em>)有助于非常方便地迭代和比较<a id="id240" class="calibre1"/>不同的预测模型。该软件包还包含几个功能，包括:</p><div><ul class="itemizedlist"><li class="listitem">数据拆分</li><li class="listitem">常见预处理:创建虚拟变量、识别零方差和接近零方差预测值、寻找相关预测值、居中、缩放和<a id="id241" class="calibre1"/>等</li><li class="listitem">培训(使用交叉验证)</li><li class="listitem">常见的<a id="id242" class="calibre1"/>可视化(例如，<code class="email">featurePlot</code>)</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Assessing performance with the ROC curve</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch02lvl1sec26" class="calibre1"/>使用ROC曲线评估绩效</h1></div></div></div><p class="calibre7">另一种测量是通过使用ROC曲线(这需要<code class="email">ROCR</code>包)，它根据其真阳性率对其假阳性率绘制一条<a id="id243" class="calibre1"/>曲线。本食谱将介绍<a id="id244" class="calibre1"/>我们如何使用ROC曲线来衡量预测模型的性能。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Assessing performance with the ROC curve</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">在应用ROC曲线评估预测模型之前，首先确保生成的训练集、测试数据集和构建的预测模型<code class="email">ctree.predict</code>在R会话内。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Assessing performance with the ROC curve</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">如何做到这一点...</h2></div></div></div><p class="calibre7">执行以下步骤来评估预测性能:</p><div><ol class="orderedlist"><li class="listitem" value="1">准备概率矩阵:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.ctree.pred = predict(train.ctree, testset)</strong> <strong class="calibre2">&gt; train.ctree.prob =  1- unlist(treeresponse(train.ctree, testset), use.names=F)[seq(1,nrow(testset)*2,2)]</strong> </pre> </div></li><li class="listitem" value="2">安装并加载<code class="email">ROCR</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("ROCR")</strong> <strong class="calibre2">&gt; require(ROCR)</strong> </pre> </div></li><li class="listitem" value="3">从概率:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.ctree.prob.rocr = prediction(train.ctree.prob, testset$Survived)</strong> </pre> </div>创建<a id="id245" class="calibre1"/>一个<code class="email">ROCR</code>预测<a id="id246" class="calibre1"/>对象</li><li class="listitem" value="4">为ROC曲线(<code class="email">tpr=true positive rate, fpr=false positive rate</code>)和曲线下面积(AUC)准备ROCR绩效对象:<div> <pre class="programlisting"> <strong class="calibre2">&gt; train.ctree.perf = performance(train.ctree.prob.rocr, "tpr","fpr")</strong> <strong class="calibre2">&gt; train.ctree.auc.perf =  performance(train.ctree.prob.rocr, measure = "auc", x.measure = "cutoff")</strong> </pre> </div></li><li class="listitem" value="5">Plot the ROC curve, with colorize as <code class="email">TRUE</code>, and put <code class="email">AUC</code> as the title:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(train.ctree.perf, col=2,colorize=T, main=paste("AUC:", train.ctree.auc.perf@y.values))</strong>
+</pre></div><div><img src="img/00048.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">预测模型的ROC</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Assessing performance with the ROC curve</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch02lvl2sec75" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">这里，我们首先从概率矩阵创建预测对象，然后为ROC曲线(<code class="email">tpr=true positive rate</code>、<code class="email">fpr=false positive rate</code>)和AUC准备ROCR性能对象。最后，我们使用plot函数绘制ROC <a id="id247" class="calibre1"/>曲线。</p><p class="calibre7">前面截图中画出的结果<a id="id248" class="calibre1"/>是这样解释的:曲线下越大(一个完美的预测会使AUC等于1)，模型的预测精度越好。我们的模型返回值0.857，这表明简单条件推理树模型足够强大，可以进行生存预测。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Assessing performance with the ROC curve</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch02lvl2sec76" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">要获得更多关于ROCR的信息，你可以阅读论文<em class="calibre8"> Sing，T. </em>，<em class="calibre8"> Sander，O. </em>，<em class="calibre8"> Berenwinkel，N. </em>和<em class="calibre8"> Lengauer，T. </em> (2005)。<em class="calibre8"> ROCR:可视化R中的分类器性能</em>。<em class="calibre8">生物信息学，21(20)，3940-3941 </em>。</li></ul></div></div></div></body></html>
+</body></html>

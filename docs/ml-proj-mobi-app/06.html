@@ -1,0 +1,881 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Handwritten Digit Classifier Using Adversarial Learning</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">使用对抗学习的手写数字分类器</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p class="mce-root">在这一章中，我们将构建一个Android应用程序，它可以识别自由手写并使用对抗性学习对数字进行分类。我们将使用MNIST数据集进行数字分类。我们将研究<strong>生成对抗网络</strong> ( <strong>甘斯</strong>)的基础知识。</p>
+
+<p>在本章中，我们将详细了解以下内容:</p>
+
+<ul>
+
+<li>GAN基础</li>
+
+<li>了解<strong>修改后的国家标准技术研究院</strong> ( <strong> MNIST </strong>)数据库</li>
+
+<li>构建分类器</li>
+
+<li>构建Android应用程序</li>
+
+</ul>
+
+<p>这个应用程序的代码可以在https://github . com/intrepidkarthi/MLmobileapps/tree/master/chapter 6找到。以及<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://github . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Generative Adversarial Networks</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">生成对抗网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>GANs是一类用于无监督ML的<strong>机器学习</strong> ( <strong> ML </strong>)算法，由两个相互竞争的深度神经网络组成(因此单词<em> adversarial </em>)。2014年，Ian Goodfellow和蒙特利尔大学的其他研究人员(包括Yoshua Bengio)引入了gan。</p>
+
+<p>伊恩·古德菲勒关于甘的论文:<a href="https://arxiv.org/abs/1406.2661" target="_blank">著</a>。</p>
+
+<p>gan有模仿任何数据的潜力。这意味着GANs可以被训练来创建任何数据的相似版本，如图像、音频或文本。举个简单的例子，佳士得以432，000美元的价格出售了一幅由GANs基于斯坦福大学的Robbie Barrat编写的开源代码生成的肖像。</p>
+
+<p>GAN的简单工作流程如下图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-829 image-border" src="img/6336efc0-ca50-4bd6-816f-e0855792aa1f.png" style="width:33.00em;height:15.33em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Generative versus discriminative algorithms</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">生成算法与判别算法</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>要理解GANs，我们应该知道判别和生成算法是如何工作的。判别算法尝试预测标签并对输入数据进行分类，或者将它们归类到数据所属的位置。另一方面，生成算法试图预测给定某个标签的特征。</p>
+
+<p>例如，判别算法可以预测电子邮件消息是垃圾邮件还是非垃圾邮件。这里，<em> spam </em>是其中一个标签，从消息中抓取的文本被认为是输入数据。如果你认为标签为<em> y </em>，输入为<em> x </em>，我们可以用公式表示如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> p(y|x) </em></p>
+
+<p>这意味着在给定<em xmlns:epub="http://www.idpf.org/2007/ops"> x </em>的情况下<em xmlns:epub="http://www.idpf.org/2007/ops"> y </em>的概率，也就是说在给定包含单词的情况下<em xmlns:epub="http://www.idpf.org/2007/ops">电子邮件是垃圾邮件的概率。</em></p>
+
+<p>另一方面，生成算法试图猜测这些输入特征<em> x </em>的可能性有多大。生成模型关心的是<em>你如何得到x </em>，而判别模型关心的是<em> y </em>和<em> x </em>之间的关系。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mceNonEditable"/>
+
+<p class="mceNonEditable"/>
+
+<p>按照我们在本章中使用MNIST数据库的例子，生成器将生成图像并将它们传递给鉴别器。如果图像确实来自MNIST数据集，鉴别器将对其进行认证。生成器生成图像，希望它能通过鉴别器，希望它能被验证，即使它是假的，如上图所示。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Steps in GAN</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">GAN中的步骤</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>基于我们的示例，假设我们正在传递数字作为输入:</p>
+
+<ol>
+
+<li>生成器将随机数作为输入，并返回一个图像作为输出。</li>
+
+<li>输出图像被传入鉴别器，同时鉴别器也接收来自数据集的输入。</li>
+
+<li>鉴别器接受真实和伪造的输入图像，并返回介于0和1之间的概率，其中<em> 1 </em>表示对真实性的预测，而<em> 0 </em>表示伪造。</li>
+
+</ol>
+
+<p>在我们的应用程序中，我们通过将用户手绘的图像作为伪图像之一进行传递，并尝试获取它的概率值，来表示相同的情况。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Understanding the MNIST database</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">了解MNIST数据库</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>MNIST数据集由60，000个手写数字组成。它还包含一个由10，000个数字组成的测试数据集。虽然它是NIST数据集的一个子集，但该数据集中的所有数字都经过了大小归一化，并以28 x 28像素大小的图像为中心。这里每个像素都包含一个0-255的灰度值。</p>
+
+<p>可以在http://yann.lecun.com/exdb/mnist/的<br xmlns:epub="http://www.idpf.org/2007/ops"/>T3找到MNIST数据集。<br xmlns:epub="http://www.idpf.org/2007/ops"/>https://www.nist.gov/srd/nist-special-database-19<br xmlns:epub="http://www.idpf.org/2007/ops"/><a xmlns:epub="http://www.idpf.org/2007/ops" href="https://www.nist.gov/srd/nist-special-database-19" target="_blank"/>可以找到NIST数据集。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Building the TensorFlow model</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">构建张量流模型</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在这个应用程序中，我们将构建一个基于MNIST数据集的TensorFlow模型，用于我们的Android应用程序。一旦我们有了TensorFlow模型，我们将把它转换成TensorFlow Lite模型。下载模型和构建张量流模型的分步过程如下。</p>
+
+<p>这是我们的模型如何工作的架构图。实现相同目的的方法将进一步解释:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/1cb5638e-fb88-47ec-96c8-9c9398131ee1.png" style="width:25.42em;height:23.92em;"/></p>
+
+<p>使用TensorFlow，我们可以用一行Python代码下载数据，如下所示:</p>
+
+<pre>import tensorflow as tf<br/>from tensorflow.examples.tutorials.mnist import input_data<br/># Reading data<br/>mnist = input_data.read_data_sets("./data/", one_hot=True)</pre>
+
+<p>现在我们已经下载了MNIST数据集。之后，我们将读取前面显示的数据。现在我们可以运行脚本来下载数据集。我们将从控制台运行该脚本，如下所示:</p>
+
+<pre><strong> &gt; python mnist.py</strong><br/><strong>Successfully downloaded train-images-idx3-ubyte.gz 9912422 bytes.</strong><br/><strong>Extracting MNIST_data/train-images-idx3-ubyte.gz</strong><br/><strong>Successfully downloaded train-labels-idx1-ubyte.gz 28881 bytes.</strong><br/><strong>Extracting MNIST_data/train-labels-idx1-ubyte.gz</strong><br/><strong>Successfully downloaded t10k-images-idx3-ubyte.gz 1648877 bytes.</strong><br/><strong>Extracting MNIST_data/t10k-images-idx3-ubyte.gz</strong><br/><strong>Successfully downloaded t10k-labels-idx1-ubyte.gz 4542 bytes.</strong><br/><strong>Extracting MNIST_data/t10k-labels-idx1-ubyte.gz</strong></pre>
+
+<p>一旦我们准备好数据集，我们将添加一些变量，我们将在我们的应用程序中使用如下。我们需要定义这些变量来控制TensorFlow框架所要求的在每一层上建立模型的参数:</p>
+
+<pre>image_size = 28<br/>labels_size = 10<br/>learning_rate = 0.05<br/>steps_number = 1000<br/>batch_size = 100</pre>
+
+<p>这个分类过程很简单。28 x 28图像中存在的像素数量是784。因此，我们有相应数量的输入层。一旦我们建立了架构，我们将训练网络并评估获得的结果，以了解模型的有效性和准确性。</p>
+
+<p>现在，让我们定义我们之前添加的变量。根据模型是处于训练阶段还是测试阶段，不同的数据将通过分类器。训练过程需要标签，以便能够将它们与当前预测相匹配。这在变量中定义如下:</p>
+
+<pre># Define placeholders<br/>training_data = tf.placeholder(tf.float32, [None, <br/>                               image_size*image_size])<br/>labels = tf.placeholder(tf.float32, [None, labels_size])</pre>
+
+<p>随着计算图评估的进行，占位符将被填充。在训练过程中，我们调整偏差和权重的值，以提高结果的准确性。为此，我们将定义如下所示的<kbd>weight</kbd>和<kbd>bias</kbd>参数:</p>
+
+<pre># Variables to be tuned<br/>W = tf.Variable(tf.truncated_normal([image_size*image_size, <br/>                labels_size], stddev=0.1))<br/>b = tf.Variable(tf.constant(0.1, shape=[labels_size]))</pre>
+
+<p>一旦我们有了可以调整的变量，我们就可以在下一步中构建输出:</p>
+
+<pre class="mce-root">#Build the network (only output layer)<br/>output = tf.matmul(training_data, W) + b</pre>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Training the neural network</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">训练神经网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>通过优化损失，我们可以让训练过程发挥作用。我们需要减少实际标签值和网络预测值之间的差异；<strong>交叉熵</strong>是用来定义这种损失的术语。</p>
+
+<p>在张量流中，交叉熵由以下方法提供:</p>
+
+<pre>tf.nn.softmax_cross_entropy_with_logits</pre>
+
+<p>此方法将softmax应用于模型的预测。Softmax类似于逻辑回归，产生一个介于0和1.0之间的小数。例如，电子邮件分类器的逻辑回归输出为0.9，表明电子邮件有90%的可能性是垃圾邮件，有10%的可能性不是垃圾邮件。所有概率的总和为1.0，如下表中的示例所示。</p>
+
+<p>Softmax是通过输出层之前的神经网络层实现的。softmax图层必须具有与输出图层相同的节点数:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/60284289-e799-4862-a4b4-b9aeb6498d1a.png" style="width:15.83em;height:8.50em;"/></p>
+
+<p>使用<kbd>tf.reduce_mean</kbd>方法定义损失，并且在训练步骤中使用<kbd>GradientDescentOptimizer()</kbd>方法来最小化损失:</p>
+
+<pre class="file hljs makefile"># Defining the loss
+
+loss = <br/>  tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, <br/>                 logits=output))
+
+
+
+# Training step with gradient descent
+
+train_step = <br/>    tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)</pre>
+
+<p>通过调整输出中的<kbd>W</kbd>和<kbd>b</kbd> ( <kbd>weight</kbd>和<kbd>bias</kbd>参数)的值，<kbd>GradientDescentOptimizer()</kbd>方法将采取几个步骤。这些值将被调整，直到我们减少损失并接近更准确的预测:</p>
+
+<div><pre class="file hljs makefile"># Accuracy calculation
+
+correct_prediction = tf.equal(tf.argmax(output, 1), tf.argmax(labels, <br/>                              1))
+
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</pre></div>
+
+<p>我们通过初始化会话和变量开始训练，如下所示:</p>
+
+<pre class="file hljs dockerfile"># Run the training
+
+sess = tf.InteractiveSession()
+
+sess.run(tf.global_variables_initializer())</pre>
+
+<p>基于先前定义的步数参数，算法将使用训练数据集运行。我们按步骤数运行优化器，如下所示:</p>
+
+<pre class="file hljs dockerfile">for i in range(steps_number):
+
+  # Get the next batch
+
+  input_batch, labels_batch = mnist.train.next_batch(batch_size)
+
+  feed_dict = {training_data: input_batch, labels: labels_batch}
+
+
+
+  # Run the training step
+
+  train_step.run(feed_dict=feed_dict)</pre>
+
+<p>通过TensorFlow，我们可以测量我们算法的准确性。我们可以打印精度值。只要精度水平提高，我们就可以不断改进，并找到停止的阈值，如下所示:</p>
+
+<div><pre class="file hljs dockerfile"># Print the accuracy progress on the batch every 100 steps
+
+  if i%100 == 0:
+
+    train_accuracy = accuracy.eval(feed_dict=feed_dict)
+
+    print("Step %d, batch accuracy %g %%"%(i, train_accuracy*100))</pre></div>
+
+<p>一旦训练完成，我们就可以评估网络的性能。我们可以使用训练数据来衡量绩效:</p>
+
+<pre class="file hljs dockerfile"># Evaluate on the test set
+
+test_accuracy = accuracy.eval(feed_dict={training_data: <br/>                   mnist.test.images, labels: mnist.test.labels})
+
+print("Test accuracy: %g %%"%(test_accuracy*100))</pre>
+
+<p>当我们运行Python脚本时，控制台上的输出如下:</p>
+
+<pre><strong>Step 0, training batch accuracy 13 %</strong><br/><strong>Step 100, training batch accuracy 80 %</strong><br/><strong>Step 200, training batch accuracy 87 %</strong><br/><strong>Step 300, training batch accuracy 81 %</strong><br/><strong>Step 400, training batch accuracy 86 %</strong><br/><strong>Step 500, training batch accuracy 85 %</strong><br/><strong>Step 600, training batch accuracy 89 %</strong><br/><strong>Step 700, training batch accuracy 90 %</strong><br/><strong>Step 800, training batch accuracy 94 %</strong><br/><strong>Step 900, training batch accuracy 91 %</strong><br/><strong>Test accuracy: 89.49 %</strong></pre>
+
+<p>现在我们已经达到了89.2%的准确率；当我们试图进一步优化我们的结果时，准确度会降低；这是我们停止训练的阈值。</p>
+
+<p>让我们为MNIST数据集构建张量流模型。在TensorFlow框架内，提供的脚本将MNIST数据集保存到TensorFlow ( <kbd>.pb</kbd>)模型中。相同的脚本附加到该应用程序的存储库中。</p>
+
+<p>该应用程序的代码可以在<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter6" target="_blank">https://github . com/intrepidkarthi/MLmobileapps/tree/master/chapter 6</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://github . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>找到。</p>
+
+<p>我们首先使用以下Python代码行训练模型:</p>
+
+<pre><strong>$:python mnist.py</strong></pre>
+
+<p>我们将运行脚本来生成我们的模型。以下脚本通过添加如下所示的一些附加参数来帮助我们导出模型:</p>
+
+<pre><strong>python mnist.py --export_dir /./mnist_model</strong></pre>
+
+<p>SavedModel可以在<kbd>/./mnist_model/</kbd>下的时间戳目录中找到(例如<kbd>/./mnist_model/1536628294/</kbd>)。</p>
+
+<p>获得的TensorFlow模型将使用<kbd>toco</kbd>转换成TensorFlow Lite模型，如下:</p>
+
+<pre>toco \<br/> --input_format=TENSORFLOW_GRAPHDEF <br/> --output_format=TFLITE \<br/> --output_file=./mnist.tflite <br/> --inference_type=FLOAT \<br/> --input_type=FLOAT <br/> --input_arrays=x \<br/> --output_arrays=output <br/> --input_shapes=1,28,28,1 \<br/> --graph_def_file=./mnist.pb</pre>
+
+<p>Toco是运行<strong> TensorFlow Lite优化转换器</strong> ( <strong> TOCO </strong>)的命令行工具，该转换器将TensorFlow模型转换为TensorFlow Lite模型。前面的<kbd>toco</kbd>命令产生<kbd>mnist.tflite</kbd>作为输出，我们将在下一节的应用程序中使用它。我们不会深入探讨<kbd>toco</kbd>工具的选项，因为在另一章中会详细讨论。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Building the Android application</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">构建Android应用程序</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们用已经建立的模型一步一步地创建Android应用程序。我们将从在Android Studio中创建一个新项目开始:</p>
+
+<ol>
+
+<li>在Android Studio中创建新应用程序:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-353 image-border" src="img/d6c6ea31-8567-4e3a-bf5c-031c52fb8b89.png" style="width:57.33em;height:39.00em;"/></p>
+
+<p class="mce-root"/>
+
+<ol start="2">
+
+<li>将创建的TensorFlow Lite模型与<kbd>labels.txt</kbd>文件一起拖到<kbd>assets</kbd>文件夹中。我们将从<kbd>assets</kbd>文件夹中读取型号和标签:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-354 image-border" src="img/2fac3bae-0198-4367-a6e2-98a27b2b5212.png" style="width:21.25em;height:33.42em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>FreeHandView for writing</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">自由书写视图</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>这个应用程序的优点之一是我们将创建一个简单的视图，用户可以在其中绘制任意数量的数字。除此之外，屏幕上的条形图将显示检测到的数字的分类。</p>
+
+<p>我们将使用逐步的过程来创建分类器。</p>
+
+<p class="mce-root">这里是我们将用来绘制数字的<kbd>FreeHandView</kbd>构造函数方法。我们用必要的参数初始化<kbd>Paint</kbd>对象，如下所示:</p>
+
+<p class="mce-root"/>
+
+<pre>public FreeHandView(Context context, AttributeSet attrs) {<br/>    super(context, attrs);<br/>    mPaint = new Paint();<br/>    mPaint.setAntiAlias(true);<br/>    mPaint.setDither(true);<br/>    mPaint.setColor(DEFAULT_COLOR);<br/>    mPaint.setStyle(Paint.Style.STROKE);<br/>    mPaint.setStrokeJoin(Paint.Join.ROUND);<br/>    mPaint.setStrokeCap(Paint.Cap.ROUND);<br/>    mPaint.setXfermode(null);<br/>    mPaint.setAlpha(0xff);<br/><br/>    mEmboss = new EmbossMaskFilter(new float[] {1, 1, 1}, 0.4f, 6, <br/>                                   3.5f);<br/>    mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);<br/>}</pre>
+
+<div><kbd>mPaint.setAntiAlias(true)</kbd>: Helper for <kbd>setFlags()</kbd>, setting or clearing the <em>ANTI_ALIAS_FLAG</em> bit. AntiAliasing smooths out the edges of what is being drawn, but is has no impact on the interior of the shape.<br/><kbd>mPaint.setDither(true)</kbd>: Helper for <kbd>setFlags()</kbd>, setting or clearing the <em>DITHER_FLAG</em> bit. Dithering affects how colors that are higher precision than the device are down-sampled.<br/> <kbd>mPaint.setColor(DEFAULT_COLOR)</kbd>: Set the paint's color.<br/> <kbd>mPaint.setStyle(Paint.Style.STROKE)</kbd>: Set the paint's style, used for controlling how primitives' geometries are interpreted (except for <kbd>drawBitmap</kbd>, which always assumes <kbd>Fill</kbd>).<br/> <kbd>mPaint.setStrokeJoin(Paint.Join.ROUND)</kbd>: Set the paint's Join.<br/> <kbd>mPaint.setStrokeCap(Paint.Cap.ROUND)</kbd>: Set the paint's Cap.<br/> <kbd>mPaint.setXfermode(null)</kbd>: Set or clear the transfer mode object.<br/> <kbd>mPaint.setAlpha(0xff)</kbd>: Helper to <kbd>setColor()</kbd>, that only assigns the color's alpha value, leaving its r, g, b values unchanged.</div>
+
+<p>在视图生命周期的<kbd>init()</kbd>方法中，我们将初始化<kbd>ImageClassifier</kbd>并传递<kbd>BarChart</kbd>对象:</p>
+
+<pre>public void init(DisplayMetrics metrics, ImageClassifier classifier, BarChart barChart) {<br/>    int height = 1000;<br/>    int width = 1000;<br/>    mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);<br/>    mCanvas = new Canvas(mBitmap);<br/><br/>    currentColor = DEFAULT_COLOR;<br/>    strokeWidth = BRUSH_SIZE;<br/>    mClassifier = classifier;<br/>    this.predictionBar = predictionBar;<br/>    this.barChart = barChart;<br/>    addValuesToBarEntryLabels();<br/>}</pre>
+
+<p>我们将使用下面库中的<kbd>Barchart</kbd>:<a href="https://github.com/PhilJay/MPAndroidChart" target="_blank">https://github.com/PhilJay/MPAndroidChart</a>。</p>
+
+<p>我们将用包含从0到9的数字的<em> x </em>轴和包含从0到1.0的概率值的<em> y </em>轴来初始化<kbd>Barchart</kbd>:</p>
+
+<pre>BarChart barChart = (BarChart) findViewById(R.id.barChart);<br/>barChart.animateY(3000);<br/>barChart.getXAxis().setEnabled(true);<br/>barChart.getAxisRight().setEnabled(false);<br/>barChart.getAxisLeft().setAxisMinimum(0.0f); // start at zero<br/>barChart.getAxisLeft().setAxisMaximum(1.0f); // the axis maximum is 100<br/>barChart.getDescription().setEnabled(false);<br/>barChart.getLegend().setEnabled(false);<br/><br/>// the labels that should be drawn on the X-Axis<br/>final String[] barLabels = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};<br/>//To format the value as integers<br/>IAxisValueFormatter formatter = new IAxisValueFormatter() {<br/><br/>    @Override<br/>    public String getFormattedValue(float value, AxisBase axis) {<br/>        return barLabels[(int) value];<br/>    }<br/>};<br/><br/>barChart.getXAxis().setGranularity(0f); // minimum axis-step (interval) is 1<br/>barChart.getXAxis().setValueFormatter(formatter);<br/>barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);<br/>barChart.getXAxis().setTextSize(5f);<br/></pre>
+
+<p>一旦我们用条形图初始化了视图，我们将调用视图生命周期的<kbd>OnDraw()</kbd>方法，根据用户手指移动的路径应用笔画。<kbd>OnDraw()</kbd>视图初始化后，方法作为视图生命周期方法的一部分被调用一次。在这里，我们将跟踪用户的手指移动，并在画布上绘制，如下所述:</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<pre>@Override<br/>protected void onDraw(Canvas canvas) {<br/>    canvas.save();<br/>    mCanvas.drawColor(backgroundColor);<br/><br/>    for (FingerPath fp : paths) {<br/>        mPaint.setColor(fp.color);<br/>        mPaint.setStrokeWidth(fp.strokeWidth);<br/>        mPaint.setMaskFilter(null);<br/><br/>        if (fp.emboss)<br/>            mPaint.setMaskFilter(mEmboss);<br/>        else if (fp.blur)<br/>            mPaint.setMaskFilter(mBlur);<br/><br/>        mCanvas.drawPath(fp.path, mPaint);<br/>    }<br/>    canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);<br/>    canvas.restore();<br/>}</pre>
+
+<p>在<kbd>onTouchEvent()</kbd>方法中，我们跟踪用户在<kbd>move/up/down</kbd>上的手指位置，并基于此启动操作。这是视图生命周期中跟踪事件的方法之一。当您触摸手机时，将会触发三个事件。我们将根据手指的运动触发动作。在<kbd>action_down</kbd>和<kbd>action_move</kbd>的情况下，我们将处理事件，用初始绘制对象属性在视图上绘制手部运动。当<kbd>action_up</kbd>事件被触发时，我们将视图保存到一个文件中，并将文件图像传递给分类器以识别数字，然后我们将使用<kbd>barChart</kbd>表示概率值:</p>
+
+<pre>@Override<br/>public boolean onTouchEvent(MotionEvent event) {<br/>    float x = event.getX();<br/>    float y = event.getY();<br/>    BarData exampleData;<br/><br/>    switch(event.getAction()) {<br/>        case MotionEvent.ACTION_DOWN :<br/>            touchStart(x, y);<br/>            invalidate();<br/>            break;<br/>        case MotionEvent.ACTION_MOVE :<br/>            touchMove(x, y);<br/>            invalidate();<br/>            break;<br/>        case MotionEvent.ACTION_UP :<br/>            touchUp();<br/>            Bitmap scaledBitmap = Bitmap.createScaledBitmap(mBitmap, <br/>                                  mClassifier.getImageSizeX(), <br/>                                  mClassifier.getImageSizeY(), true);<br/>            Random rng = new Random();<br/><br/>            try {<br/>                File mFile;<br/>                mFile = <br/>                   this.getContext().getExternalFilesDir(String.valueOf<br/>                   (rng.nextLong() + ".png"));<br/>                FileOutputStream pngFile = new FileOutputStream(mFile);<br/>            }<br/>            catch (Exception e){<br/>            }<br/>            //scaledBitmap.compress(Bitmap.CompressFormat.PNG, 90, <br/>                                    pngFile);<br/>            Float prediction = mClassifier.classifyFrame(scaledBitmap);<br/>            exampleData = updateBarEntry();<br/>            barChart.animateY(1000, Easing.EasingOption.EaseOutQuad);<br/>            XAxis xAxis = barChart.getXAxis();<br/>            xAxis.setValueFormatter(new IAxisValueFormatter() {<br/>                @Override<br/>                public String getFormattedValue(float value, AxisBase <br/>          axis) {<br/>                    return xAxisLabel.get((int) value);<br/>                }<br/>            });<br/>            barChart.setData(exampleData);<br/>            exampleData.notifyDataChanged(); // let the data know a <br/>                                             // dataset changed<br/>            barChart.notifyDataSetChanged(); // let the chart know it's <br/>                                             // data changed<br/>            break;<br/>    }<br/><br/>    return true;<br/>}</pre>
+
+<p>在<kbd>ACTION_UP</kbd>动作内部，有一个对<kbd>updateBarEntry()</kbd>的方法调用。这是我们调用分类器来获得结果概率的地方。该方法还根据分类器的结果更新<kbd>BarChart</kbd>:</p>
+
+<pre>public BarData updateBarEntry() {<br/>    ArrayList&lt;BarEntry&gt; mBarEntry = new ArrayList&lt;&gt;();<br/>    for (int j = 0; j &lt; 10; ++j) {<br/>        mBarEntry.add(new BarEntry(j, mClassifier.getProbability(j)));<br/>    }<br/>    BarDataSet mBarDataSet = new BarDataSet(mBarEntry, "Projects");<br/>    mBarDataSet.setColors(ColorTemplate.COLORFUL_COLORS);<br/>    BarData mBardData = new BarData(mBarDataSet);<br/>    return mBardData;<br/>}</pre>
+
+<p><kbd>FreeHandView</kbd>看起来像这样，空着一个<kbd>BarChart</kbd>:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-801 image-border" src="img/6e3519a6-7212-4130-9199-3a4573966cc1.png" style="width:20.50em;height:36.50em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Digit classifier</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">数字分类器</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>现在让我们写分类器。在其中，我们将首先加载模型文件。该方法从<kbd>assets</kbd>文件夹中读取模型并将其加载到内存中:</p>
+
+<pre>/** Memory-map the model file in Assets. */<br/>private MappedByteBuffer loadModelFile(Activity activity) throws IOException {<br/>    AssetFileDescriptor fileDescriptor = <br/>                   activity.getAssets().openFd(getModelPath());<br/>    FileInputStream inputStream = new <br/>          FileInputStream(fileDescriptor.getFileDescriptor());<br/>          FileChannel fileChannel = inputStream.getChannel();<br/>          long startOffset = fileDescriptor.getStartOffset();<br/>          long declaredLength = fileDescriptor.getDeclaredLength();<br/>          return fileChannel.map(FileChannel.MapMode.READ_ONLY,            <br/>                                 startOffset, declaredLength);<br/>}</pre>
+
+<p>现在让我们一帧一帧地编写TensorFlow Lite分类器。这是我们从数字分类器获得结果的地方。一旦我们收到用户输入的保存文件图像，位图将被转换成字节缓冲区，以在其上运行推理。一旦我们收到输出，使用<kbd>SystemClock</kbd>时间记录获得结果所需的时间:</p>
+
+<pre>/** Classifies a frame from the preview stream. */<br/>public float classifyFrame(Bitmap bitmap) {<br/>    if (tflite == null) {<br/>        Log.e(TAG, "classifier has not been initialized; Skipped.");<br/>        return 0.5f;<br/>    }<br/><br/>    convertBitmapToByteBuffer(bitmap);<br/>    // Here's where the classification happens!!!<br/>    long startTime = SystemClock.uptimeMillis();<br/>    runInference();<br/>    long endTime = SystemClock.uptimeMillis();<br/>    Log.d(TAG, "Timecost to run model inference: " +  <br/>                        Long.toString(endTime - startTime));<br/>    return getProbability(0);<br/>}</pre>
+
+<p><kbd>runInference()</kbd>方法从<kbd>tflite</kbd>调用<kbd>run</kbd>方法，如下所示:</p>
+
+<pre>@Override<br/>protected void runInference() {<br/>    tflite.run(imgData, labelProbArray);<br/>}</pre>
+
+<p>接下来让我们从初始化<kbd>barChart</kbd>的<kbd>MainActivity</kbd>开始应用程序。</p>
+
+<p>用以下值初始化<em> x </em>和<em> y </em>轴上的<kbd>barChart</kbd>:</p>
+
+<pre>BARENTRY = new ArrayList&lt;&gt;();<br/>initializeBARENTRY();<br/><br/>Bardataset = new BarDataSet(BARENTRY, "project");<br/><br/>BARDATA = new BarData(Bardataset);<br/>barChart.setData(BARDATA);<br/></pre>
+
+<p>初始化<kbd>FreeHandView</kbd>开始在<kbd>MainActivity</kbd>的<kbd>OnCreate()</kbd>方法内分类:</p>
+
+<pre>paintView.init(metrics, classifier, barChart);<br/></pre>
+
+<p class="CDPAlignLeft CDPAlign">当概率值达到1.00时，算法会以100%的准确率识别该数字。这里显示了一个例子:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-797 image-border" src="img/efcc6854-8fe2-478a-bd51-2edd42eedc35.png" style="width:21.67em;height:38.58em;"/></p>
+
+<p>在某些情况下，分类降低了部分匹配的概率，如下面的屏幕截图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-798 image-border" src="img/d809d1c0-838a-4195-8750-03c04ab1c763.png" style="width:24.42em;height:43.42em;"/></p>
+
+<p>也有其他情况，概率以多个部分匹配结束。下面的屏幕截图显示了一个例子。任何这种情况都需要对模型进行更严格的训练:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-800 image-border" src="img/e1a84317-468b-4872-8234-6013315a05d5.png" style="width:25.92em;height:46.08em;"/></p>
+
+<p>点击重置按钮将清除视图，以便您可以再次绘制。我们将使用以下代码行来实现它:</p>
+
+<pre>resetButton.setOnClickListener(new View.OnClickListener() {<br/>    public void onClick(View v) {<br/>        paintView.clear();<br/>    }<br/>});</pre>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:6d0d6080-3897-4636-acde-b4b62ec60a94" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摘要</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>使用这个应用程序，我们可以学习如何使用TensorFlow Lite编写一个徒手书写分类器。随着手写字母数据集上的数据越来越多，我们应该能够使用GAN识别任何语言的字母。</p>
+
+<p>在下一章，我们将使用OpenCV构建一个面部交换应用程序。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

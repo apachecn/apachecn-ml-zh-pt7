@@ -1,0 +1,699 @@
+<html><head/><body>
+
+
+    
+        <title>TensorFlow Mobile in Android</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">Android中的TensorFlow Mobile</h1>
+                
+            
+            
+                
+<p>在前一章中，我们重点介绍了监督学习和非监督学习，并了解了不同类型的学习算法。在本章中，我们将介绍TensorFlow for mobile，并使用TensorFlow for mobile完成一个示例程序实现。在第九章<a href="3e97f92b-a2d9-4618-9a3b-91552fa3fc3d.xhtml" target="_blank">，<em>的移动神经网络</em>中，我们将使用它来实现一个分类算法。但我们需要了解TensorFlow for mobile的工作原理，并能够使用它编写样本，然后才能用它实现机器学习算法。本章的目的是介绍TensorFlow、TensorFlow Lite、TensorFlow for mobile以及它们的工作方式，并尝试在Android中使用TensorFlow for mobile的动手示例。</a></p>
+<p>在本章中，我们将讨论以下主题:</p>
+<ul>
+<li>TensorFlow、TensorFlow Lite和TensorFlow for mobile简介</li>
+<li>手机TensorFlow的组件</li>
+<li>移动机器学习应用的架构</li>
+<li>在Android中使用TensorFlow构建一个示例程序</li>
+</ul>
+<p>本章结束时，你将知道如何在Android中使用TensorFlow for mobile构建一个应用程序。在<a href="3e97f92b-a2d9-4618-9a3b-91552fa3fc3d.xhtml" target="_blank">第九章</a>、<em>移动神经网络</em>中，我们将使用它来实现一个分类算法。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>An introduction to TensorFlow</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">张量流简介</h1>
+                
+            
+            
+                
+<p>TensorFlow是谷歌开发的实现机器学习的工具，2015年开源。它是一个可以安装在桌面上的产品，可以用来创建机器学习模型。一旦在桌面上构建并训练了模型，开发人员就可以将这些模型转移到移动设备上，并通过将它们集成到iOS和Android移动应用程序中，开始使用它们来预测移动应用程序中的结果。目前有两种类型的TensorFlow可用于在移动和嵌入式设备上实现机器学习解决方案:</p>
+<ul>
+<li><strong>移动设备</strong> : TensorFlow for Mobile</li>
+<li><strong>移动和嵌入式设备</strong> : TensorFlow Lite</li>
+</ul>
+<p>下表将帮助您理解TensorFlow for mobile和TensorFlow Lite之间的主要区别:</p>
+<table style="border-collapse: collapse;width: 100%" border="1">
+<tbody>
+<tr>
+<td style="width: 369px">
+<p><strong>手机张量流</strong></p>
+</td>
+<td style="width: 437px">
+<p><strong> TensorFlow Lite </strong></p>
+</td>
+</tr>
+<tr>
+<td style="width: 369px">
+<p>设计用于更大的设备。</p>
+</td>
+<td style="width: 437px">
+<p>设计用于非常小的设备。</p>
+</td>
+</tr>
+<tr>
+<td style="width: 369px">
+<p>二进制为移动优化。</p>
+</td>
+<td style="width: 437px">
+<p>二进制文件的大小非常小，针对移动和嵌入式设备进行了优化，依赖性最小，性能增强。</p>
+</td>
+</tr>
+<tr>
+<td style="width: 369px">
+<p>支持在Android、iOS和Raspberry Pi上部署CPU、GPU和TPU。</p>
+</td>
+<td style="width: 437px">
+<p>支持硬件加速。可以在iOS、Android和Raspberry Pi上部署。</p>
+</td>
+</tr>
+<tr>
+<td style="width: 369px">
+<p>建议现在在生产部署的移动设备中使用。</p>
+</td>
+<td style="width: 437px">
+<p>仍处于测试阶段，正在进行改进。</p>
+</td>
+</tr>
+<tr>
+<td style="width: 369px">
+<p>提供更广泛的运营商和ML模型支持。</p>
+</td>
+<td style="width: 437px">
+<p>支持有限的运算符，并且不是所有的ML模型都受支持。</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>TensorFlow Lite components</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">TensorFlow Lite组件</h1>
+                
+            
+            
+                
+<p>在本节中，我们将详细介绍TensorFlow Lite:整体架构、关键组件及其功能。</p>
+<p>下图提供了关键组件的高级概述，以及它们如何交互以将机器学习引入移动设备:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-919 image-border" src="img/628519c5-2f39-4323-a659-99e7b4efd8f1.png" style="width:37.33em;height:21.42em;"/></p>
+<p>以下是在设备上实施ML时需要遵循的关键步骤:</p>
+<ol>
+<li>使用TensorFlow或任何其他机器学习框架，在桌面上创建经过训练的TensorFlow/ML模型。经过训练的模型也可以使用任何云ML引擎来创建。</li>
+<li>使用TensorFlow Lite转换器将已定型的ML模型转换为TensorFlow Lite模型文件。</li>
+<li>使用这些文件编写一个移动应用程序，并将其转换成一个包，以便在移动设备上部署和执行。这些lite文件可以直接在内核或硬件加速器(如果设备中有)中解释和执行。</li>
+</ol>
+<p>以下是TensorFlow Lite的关键组件:</p>
+<ul>
+<li>模型文件格式</li>
+<li>解释者</li>
+<li>操作/内核</li>
+<li>硬件加速接口</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Model-file format</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">模型文件格式</h1>
+                
+            
+            
+                
+<p>以下是模型文件格式的亮点:</p>
+<ul>
+<li>它是轻量级的，对软件的依赖性很小。</li>
+<li>它支持量化。<ul>
+<li>这种格式是基于FlatBuffer的，因此提高了执行速度。FlatBuffer是Google的一个开源项目，最初是为视频游戏设计的。</li>
+</ul>
+</li>
+<li>FlatBuffer是一个跨平台的序列化库，类似于协议缓冲区。</li>
+<li>这种格式更节省内存，因为它不需要解析/解包步骤来在数据访问之前执行二次表示。没有封送处理步骤，因此使用的代码较少。</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Interpreter</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">解释者</h1>
+                
+            
+            
+                
+<p>以下是解释器的亮点:</p>
+<ul>
+<li>这是一个移动优化的解释器。</li>
+<li>它有助于保持移动应用的精简和快速。</li>
+<li>它使用静态图排序和定制的(动态性较低的)内存分配器来确保最小的负载、初始化和执行延迟。</li>
+<li>解释器有一个静态内存计划和一个静态执行计划。</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Ops/Kernel</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">操作/内核</h1>
+                
+            
+            
+                
+<p>一组核心操作符，既有量化的也有浮点的，其中许多已经针对移动平台进行了调整。这些可以用来创建和运行定制模型。开发人员也可以编写他们自己的自定义操作符，并在模型中使用它们。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Interface to hardware acceleration</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">硬件加速接口</h1>
+                
+            
+            
+                
+<p>TensorFlow Lite有硬件加速器接口；在Android中，它是通过Android神经网络API实现的，在iOS中，它是通过CoreML实现的。</p>
+<p>以下是预测试模型，保证开箱即可使用TensorFlow Lite:</p>
+<ul>
+<li>
+<p><strong> Inception V3 </strong>:检测图像中主要物体的流行模型。</p>
+</li>
+<li>
+<p><strong> MobileNets: </strong>可用于分类、检测和分割的计算机视觉模型。MobileNet模型比Inception V3小，但是不太精确。</p>
+</li>
+<li>
+<p><strong> On-device smart reply </strong>:一种On-device模式，通过建议上下文相关的消息，为传入的文本消息提供一键回复。</p>
+</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>The architecture of a mobile machine learning application</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">移动机器学习应用的架构</h1>
+                
+            
+            
+                
+<p>现在，我们已经了解了TensorFlow Lite的组件，接下来我们将了解移动应用程序如何与TensorFlow组件一起提供移动ML解决方案。</p>
+<p>移动应用程序应利用TensorFlow Lite模型文件对未来数据进行推断。TensorFlow Lite模型文件可以与移动应用程序打包在一起部署，也可以与移动应用程序部署包分开。下图描述了两种可能的部署方案:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-920 image-border" src="img/6bffeb98-43b8-4317-b06d-15857be6f603.png" style="width:28.33em;height:15.58em;"/></p>
+<p>每种部署都有其优点和缺点。在第一种情况下，当两者耦合时，模型文件有更多的安全性，它可以保持安全。这是一种更直接的方法。但是，由于模型文件的大小，应用程序包的大小会增加。在第二种情况下，两者是分开的，很容易单独更新模型文件，而不需要执行应用程序升级。因此，对于模型升级，可以避免与应用程序升级、部署到app store等相关的所有活动。由于这种分离，应用程序包的大小也可以最小化。但是，由于模型文件是独立的，所以应该更加小心地处理它，不要让它容易受到安全威胁。</p>
+<p>对TensorFlow Lite模型文件的移动应用程序有了一个大致的了解后，让我们来看一下整体情况。移动应用程序与TensorFlow Lite模型文件打包在一起。使用Android SDK编写的移动应用程序和TensorFlow Lite模型文件之间的这种交互通过TensorFlow Lite解释器进行，它是Android NDK层的一部分。通过从移动应用暴露给SDK层的接口来调用C函数，以便通过使用与移动应用一起部署的经过训练的TensorFlow Lite模型来进行预测或推断。下图提供了Android生态系统的SDK和NDK层的清晰视图，这些层将涉及典型的机器学习程序。也可以通过android NN层在GPU或任何专用处理器上触发执行:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-921 image-border" src="img/bf31274a-6fd3-4944-b593-0ac6b96428e8.png" style="width:37.58em;height:23.33em;"/></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Understanding the model concepts</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">理解模型概念</h1>
+                
+            
+            
+                
+<p>在使用TensorFlow编写我们的第一个程序之前，我们将简要回顾一下有助于我们理解TensorFlow Lite模型如何工作的概念。为了更好地理解，我们不会深入细节，而只是进行概念性的概述。</p>
+<p>MobileNet和Inception V3是基于<strong>卷积神经网络</strong>(<strong>CNN</strong>)的内置模型。</p>
+<p>在最基本的层面上，CNN可以被认为是一种使用相同神经元的许多相同副本的神经网络。这使得网络可以拥有大量神经元，并表达计算量大的模型，同时保持需要学习的实际参数(描述神经元行为的值)的数量相当低。</p>
+<p>这个概念可以用拼图游戏和我们通常如何解决一个的类比来理解。下图是一个需要解决的难题:</p>
+<div><img src="img/6d8c0e4b-9f45-45ea-a30b-32460471c42e.png" style="width:15.33em;height:15.33em;"/></div>
+<p>如果我们必须从提供的碎片组装这个拼图，只要想想你将如何开始解决它。你可以把不同颜色的东西放在一起。然后在同一种颜色中，你会检查图案，然后将它们组合起来。这与卷积网络训练图像分类和识别的方式相同。因此只有一小部分，每个神经元都记得。但是父代神经元明白其范围内的事物需要如何组合才能得到全局。</p>
+<p>在Inception V3和MobileNet模型中，两者都基于CNN的概念工作。这个模型训练有素，非常稳定。要使用我们的图像集，我们需要做的就是用我们的图像重新训练模型。现在我们已经有了足够的概念和理论，我们将继续使用TensorFlow Lite for Android编写我们的第一个示例程序。</p>
+<p>我们将在第9章、<em>移动神经网络</em>中使用TensorFlow for mobile进行分类应用</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Writing the mobile application using the TensorFlow model</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">使用张量流模型编写移动应用程序</h1>
+                
+            
+            
+                
+<p>我们要做什么？</p>
+<p>在本节中，我们将在TensorFlow中构建一个小的<kbd>(a+b)2</kbd>模型，将其部署到android移动应用程序中，并从Android移动设备上运行它。</p>
+<p><strong>你需要知道什么？</strong></p>
+<p>要继续本节，您需要python、TensorFlow dependencies和android studio的工作安装，以及Python和java android的一些知识。你可以在这里找到如何安装TensorFlow的说明:<a href="https://www.tensorflow.org/install/">https://www.tensorflow.org/install/</a>。</p>
+<p>如果您需要Windows的详细安装步骤，请参考本书第十一章、<em>移动应用上的ML的未来</em>中提供的截图。</p>
+<p>我们已经看到了张量流的细节。用简单的话来说TensorFlow就是把用python写的张量流程序保存到一个小文件中，这个小文件可以被我们将安装在Android应用程序中的C++原生库读取，并且可以在移动设备上执行和进行推理。为此，JNI (Java本地接口)作为Java和C++之间的桥梁。</p>
+<p>要了解张量流精简版背后的想法，请查看<a href="https://www.tensorflow.org/mobile/tflite/">https://www.tensorflow.org/mobile/tflite/.</a></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Writing our first program</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">编写我们的第一个程序</h1>
+                
+            
+            
+                
+<p>为了编写TensorFlow移动应用程序，我们需要遵循几个步骤:</p>
+<ol>
+<li>创建TF(张量流)模型</li>
+<li>保存模型</li>
+<li>冻结图表</li>
+</ol>
+<ol start="4">
+<li>优化模型</li>
+<li>编写Android应用程序并执行它</li>
+</ol>
+<p>我们现在将详细介绍每个步骤。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Creating and Saving the TF model</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">创建和保存TF模型</h1>
+                
+            
+            
+                
+<p>首先，我们首先创建一个简单的模型，并将它的计算图保存为一个序列化的<kbd>GraphDef</kbd>文件。训练完模型后，我们将它的变量值保存到一个检查点文件中。我们必须将这两个文件转换成一个优化的独立文件，这是我们在Android应用程序中需要使用的全部内容。</p>
+<p>对于本教程，我们创建一个非常简单的TensorFlow图，它实现了一个将计算<em> (a+b) <sup> 2 </sup> =c </em>的小用例。这里，我们将输入保存为<em> a </em>和<em> b </em>，输出保存为<em> c </em>。</p>
+<p>为了实现这个示例程序，我们将使用Python。因此，作为先决条件，您需要在您的机器上安装python，并使用<kbd>pip</kbd>在您的机器上安装TensorFlow库。</p>
+<p>有关如何安装Python的说明，请查看本书的软件安装/附录部分。<kbd>pip</kbd>是python自带的一个Python包管理器。</p>
+<p>一旦安装了python并正确设置了路径，就可以在命令提示符下运行<kbd>pip</kbd>命令。要安装TensorFlow，请运行以下命令:</p>
+<pre><strong>pip install tensorflow</strong></pre>
+<p>这个示例可能看起来太简单，可能不包含任何与机器学习相关的内容，但这个示例应该是理解张量流及其工作原理的良好起点:</p>
+<pre>import tensorflow as tf <br/>a = tf.placeholder(tf.int32, name='a') # input <br/>b = tf.placeholder(tf.int32, name='b') # input <br/>times = tf.Variable(name="times", dtype=tf.int32, initial_value=2) <br/>c = tf.pow(tf.add(a, b), times, name="c") <br/>saver = tf.train.Saver()<br/><br/>init_op = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init_op) tf.train.write_graph(sess.graph_def, '.', 'tfdroid.pbtxt')<br/><br/>sess.run(tf.assign(name="times", value=2, ref=times)) # save the graph <br/># save a checkpoint file, which will store the above assignment saver.save(sess, './tfdroid.ckpt')</pre>
+<p>在前面的程序中，我们创建了两个占位符，名为<em> a </em>和<em> b </em>，它们可以保存整数值。现在，你可以把占位符想象成决策树的节点。在下一行中，我们将创建一个名为times的变量。我们创建这个来存储我们需要乘以输入的次数。在这种情况下，我们给出的两个作为议程是要做为<em>【a+b】</em><sup><em>2</em></sup><em>。</em></p>
+<p>在下一行中，我们将在<em> a </em>和<em> b </em>节点上应用加法运算。对于这个总和，我们应用幂运算并将结果保存在一个名为c的新节点中。要运行代码，首先将它保存在一个扩展名为<kbd>.py</kbd>的文件中。然后使用<kbd>python</kbd>命令执行程序，如下所示:</p>
+<pre>python (filename)</pre>
+<p>运行前面的代码将生成两个文件。首先，它将TF计算图保存在一个名为<kbd>tfdroid.pbtxt</kbd>的<kbd>GraphDef</kbd>文本文件中。接下来，它将执行一个简单的赋值(通常通过实际学习来完成)，并在<kbd>tfdroid.ckpt</kbd>中保存一个模型变量的检查点。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Freezing the graph</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">冻结图表</h1>
+                
+            
+            
+                
+<p>现在我们有了这些文件，我们需要通过将检查点文件中的变量转换成包含变量值的<kbd>Const Ops</kbd>，并将它们与独立文件中的GraphDef组合起来，从而冻结图形。使用该文件可以更容易地在移动应用程序中加载模型。TensorFlow为此在<kbd>tensorflow.python.tools</kbd>中提供了<kbd>freeze_graph</kbd>:</p>
+<pre>import sys import tensorflow as tf from tensorflow.python.tools <br/>import freeze_graph from tensorflow.python.tools <br/>import optimize_for_inference_lib MODEL_NAME = 'tfdroid'<br/># Freeze the graph<br/><br/>input_graph_path = MODEL_NAME+'.pbtxt' checkpoint_path = './'+MODEL_NAME+'.ckpt' input_saver_def_path = "" input_binary = False output_node_names = "c" restore_op_name = "save/restore_all" filename_tensor_name = "save/Const:0" output_frozen_graph_name = 'frozen_'+MODEL_NAME+'.pb' output_optimized_graph_name = 'optimized_'+MODEL_NAME+'.pb' clear_devices = True freeze_graph.freeze_graph(input_graph_path, input_saver_def_path, input_binary, checkpoint_path, output_node_names, restore_op_name, filename_tensor_name, output_frozen_graph_name, clear_devices, "")</pre>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Optimizing the model file</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">优化模型文件</h1>
+                
+            
+            
+                
+<p>一旦我们有了冻结的图，我们可以通过删除图中仅在训练期间需要的部分来进一步优化仅用于推断目的的文件。根据文件，这包括:</p>
+<ul>
+<li>删除仅用于培训的操作，如检查点保存</li>
+<li>去掉图中从未到达的部分</li>
+<li>移除调试操作，如<kbd>CheckNumerics</kbd></li>
+<li>将批量标准化操作合并到预先计算的重量中</li>
+<li>将通用操作融合到统一版本中</li>
+</ul>
+<p>TensorFlow为此在<kbd>tensorflow.python.tools</kbd>中提供了<kbd>optimize_for_inference_lib</kbd>:</p>
+<pre># Optimize for inference <br/>input_graph_def = tf.GraphDef() with tf.gfile.Open(output_frozen_graph_name, "r") as f: data = f.read() input_graph_def.ParseFromString(data) <br/>output_graph_def = optimize_for_inference_lib.optimize_for_inference( input_graph_def, ["a", "b"], <br/># an array of the input node(s) ["c"], <br/># an array of output nodes tf.int32.as_datatype_enum)<br/><br/># Save the optimized graph f = tf.gfile.FastGFile(output_optimized_graph_name, "w") f.write(output_graph_def.SerializeToString()) tf.train.write_graph(output_graph_def, './', output_optimized_graph_name)</pre>
+<p>注意前面代码中的输入和输出节点。我们的图只有一个名为I的输入节点和一个名为o的输出节点。这些名称对应于您在定义张量时使用的名称。如果您使用不同的图表，您应该根据您的图表来调整这些。</p>
+<p>现在我们有了一个名为<kbd>optimized_tfdroid.pb</kbd>的二进制文件，这意味着我们已经准备好构建我们的Android应用程序了。如果您在创建<kbd>optimized_tfdroid.pb</kbd>时遇到异常，您可以使用<kbd>tfdroid.somewhat</kbd>，它是模型的一个未优化版本——它相当大。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Creating the Android app</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">创建Android应用程序</h1>
+                
+            
+            
+                
+<p>我们需要获得Android的TensorFlow库，创建一个Android应用程序，配置它使用这些库，然后在应用程序内部调用TensorFlow模型。</p>
+<p>虽然您可以从头开始编译TensorFlow库，但是使用预构建的库更容易。</p>
+<p>现在使用Android Studio创建一个包含空活动的Android项目。</p>
+<p>一旦创建了项目，就将TF库添加到项目的<kbd>libs</kbd>文件夹中。您可以从GitHub资源库中获取这些库:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/tensorflow%20simple/TensorflowSample/app/libs">https://GitHub . com/packt publishing/Machine-Learning-for-Mobile/tree/master/tensor flow % 20 simple/tensor flow sample/app/libs</a>。</p>
+<p>现在你的项目的<kbd>libs/</kbd>文件夹应该是这样的:</p>
+<pre>libs<br/>|____arm64-v8a<br/>| |____libtensorflow_inference.so<br/>|____armeabi-v7a<br/>| |____libtensorflow_inference.so<br/>|____libandroid_tensorflow_inference_java.jar<br/>|____x86<br/>| |____libtensorflow_inference.so<br/>|____x86_64<br/>| |____libtensorflow_inference.so</pre>
+<p>您需要让您的构建系统知道这些库的位置，方法是在<kbd>app/build.gradle</kbd>中的Android块中放入以下代码行:</p>
+<pre>sourceSets { main { jniLibs.srcDirs = ['libs'] } }</pre>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Copying the TF Model</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">复制TF模型</h1>
+                
+            
+            
+                
+<p>为应用程序创建一个Android资产文件夹，并将我们刚刚创建的<kbd>optimized_tfdroid.pb or tfdroid.pb</kbd>文件放入其中(<kbd>app/src/main/assets/</kbd>)。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Creating an activity</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">创建活动</h1>
+                
+            
+            
+                
+<p>点击项目并创建一个名为<kbd>MainActivity</kbd>的空活动。在该活动的布局中，粘贴以下XML:</p>
+<pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;<br/>&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"<br/>xmlns:tools="http://schemas.android.com/tools"<br/>android:id="@+id/activity_main"<br/>android:layout_width="match_parent"<br/>android:layout_height="match_parent"<br/>android:paddingBottom="@dimen/activity_vertical_margin"<br/>android:paddingLeft="@dimen/activity_horizontal_margin"<br/>android:paddingRight="@dimen/activity_horizontal_margin"<br/>android:paddingTop="@dimen/activity_vertical_margin"<br/>tools:context="com.example.vavinash.tensorflowsample.MainActivity"&gt;<br/><br/>&lt;EditText<br/>android:id="@+id/editNum1"<br/>android:layout_width="100dp"<br/>android:layout_height="wrap_content"<br/>android:layout_alignParentTop="true"<br/>android:layout_marginEnd="13dp"<br/>android:layout_marginTop="129dp"<br/>android:layout_toStartOf="@+id/button"<br/>android:ems="10"<br/>android:hint="a"<br/>android:inputType="textPersonName"<br/>android:textAlignment="center" /&gt;<br/><br/>&lt;EditText<br/>android:id="@+id/editNum2"<br/>android:layout_width="100dp"<br/>android:layout_height="wrap_content"<br/>android:layout_alignBaseline="@+id/editNum1"<br/>android:layout_alignBottom="@+id/editNum1"<br/>android:layout_toEndOf="@+id/button"<br/>android:ems="10"<br/>android:hint="b"<br/>android:inputType="textPersonName"<br/>android:textAlignment="center" /&gt;<br/><br/>&lt;Button<br/>android:text="Run"<br/>android:layout_width="wrap_content"<br/>android:layout_height="wrap_content"<br/>android:id="@+id/button"<br/>android:layout_below="@+id/editNum2"<br/>android:layout_centerHorizontal="true"<br/>android:layout_marginTop="50dp" /&gt;<br/><br/>&lt;TextView<br/>android:layout_width="wrap_content"<br/>android:layout_height="wrap_content"<br/>android:text="Output"<br/>android:id="@+id/txtViewResult"<br/>android:layout_marginTop="85dp"<br/>android:textAlignment="center"<br/>android:layout_alignTop="@+id/button"<br/>android:layout_centerHorizontal="true" /&gt;<br/>&lt;/RelativeLayout&gt;</pre>
+<p>在<kbd>mainactivity.java</kbd>文件中，粘贴以下代码:</p>
+<pre>package com.example.vavinash.tensorflowsample;<br/>import android.support.v7.app.AppCompatActivity;<br/>import android.os.Bundle;<br/>import android.widget.EditText;<br/>import android.widget.TextView;<br/>import android.widget.Button;<br/>import android.view.View;<br/>import org.tensorflow.contrib.android.TensorFlowInferenceInterface;public class MainActivity extends AppCompatActivity {<br/>    //change with the file name of your own model generated in python tensorflow.<br/>    private static final String MODEL_FILE = "file:///android_asset/tfdroid.pb";<br/><br/>    //here we are using this interface to perform the inference with our generated model. It internally     uses c++ libraries and JNI.<br/>    private TensorFlowInferenceInterface inferenceInterface;<br/>    static {<br/>        System.loadLibrary("tensorflow_inference");<br/>    }<br/>    @Override<br/>    protected void onCreate(Bundle savedInstanceState) {<br/>        super.onCreate(savedInstanceState);<br/>        setContentView(R.layout.activity_main);<br/>        inferenceInterface = new TensorFlowInferenceInterface();<br/>        //instantiatind and setting our model file as input.<br/>        inferenceInterface.initializeTensorFlow(getAssets(), MODEL_FILE);<br/>        final Button button = (Button) findViewById(R.id.button);<br/>        button.setOnClickListener(new View.OnClickListener() {<br/>            public void onClick(View v) {<br/>                final EditText editNum1 = (EditText) findViewById(R.id.editNum1);<br/>                final EditText editNum2 = (EditText) findViewById(R.id.editNum2);<br/>                float num1 = Float.parseFloat(editNum1.getText().toString());<br/>                float num2 = Float.parseFloat(editNum2.getText().toString());<br/>                int[] i = {1};<br/>                int[] a = {((int) num1)};<br/>                int[] b = {((int) num2)};<br/>                //Setting input for variable a and b in our model.<br/>                inferenceInterface.fillNodeInt("a",i,a);<br/>                inferenceInterface.fillNodeInt("b",i,b);<br/>                //performing the inference and getting the output in variable c<br/>                inferenceInterface.runInference(new String[] {"c"});<br/>                //reading received output<br/>                int[] c = {0};<br/>                inferenceInterface.readNodeInt("c", c);<br/>                //projecting to user.<br/>                final TextView textViewR = (TextView) findViewById(R.id.txtViewResult);<br/>                textViewR.setText(Integer.toString(c[0]));<br/>            }<br/>        });<br/>    }<br/>}</pre>
+<p>在前面的程序中，我们使用以下代码片段加载TensorFlow二进制文件:</p>
+<pre>System.loadLibrary("tensorflow_inference");</pre>
+<p>在create Bundle方法中，我们有主要的逻辑。这里，我们通过提供张量流模型的<kbd>.pb</kbd>文件来创建张量流推理对象，这个文件已经生成，我们在创建和保存模型一节中已经看到了</p>
+<p>然后，我们向运行按钮注册了一个点击事件。在这个例子中，我们将值提供给TensorFlow中的a和b节点并运行推理，然后我们从C节点中获取值并显示给用户。</p>
+<p>现在运行应用程序来查看<kbd>(a+b)2 = c</kbd>表达式的结果:</p>
+<p class="CDPAlignCenter CDPAlign"><img src="img/6abc781a-f565-4d2e-8273-a38058dfb194.png" style="width:16.33em;height:29.00em;"/></p>
+<p class="mce-root">在左侧，它显示了应用程序的打开屏幕。在提供的文本框中，我们需要给出<kbd>a</kbd>和<kbd>b</kbd>的值。单击Run按钮后，您将在输出区域看到结果。</p>
+<p>可以从GitHub资源库获取前面的app代码:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/tensorflow%20simple">https://GitHub . com/packt publishing/Machine-Learning-for-Mobile/tree/master/tensor flow % 20 simple</a>。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>在这一章中，我们介绍了谷歌的移动机器学习工具，并了解了该工具包的各种风格——移动TensorFlow和TensorFlow Lite。我们还探索了支持TensorFlow-ML的移动应用程序的架构。然后我们讨论了TensorFlow Lite及其组件的架构和细节，甚至演示了一个使用TensorFlow for mobile的android移动应用程序的简单用例。</p>
+<p>在下一章中，我们将使用我们在这里讨论的TensorFlow for mobile来实现一个分类算法。</p>
+
+
+            
+
+            
+        
+    
+
+
+</body></html>

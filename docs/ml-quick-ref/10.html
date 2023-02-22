@@ -1,0 +1,567 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Causal Inference</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">因果推理</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p class="mce-root">在最后一章中，我们将了解以下主题:</p>
+
+<ul>
+
+<li>时间序列中的格兰杰因果关系(因果关系的计量经济学方法)</li>
+
+<li>图形模型因果关系</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Granger causality</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">格兰杰因果关系</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在时间序列中，我们通常使用单变量数据。也就是说，我们使用单个序列来预测其未来值。假设我们正在研究谷歌的股价数据，我们被要求预测股价的未来值。在这种情况下，我们需要Google股票价格的历史数据。基于此，我们将做出预测。</p>
+
+<p>然而，有时我们需要多个时间序列来进行预测。但是为什么我们需要多个时间序列呢？有什么猜测吗？</p>
+
+<p>下图显示了谷歌的股价数据:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-611 image-border" src="img/dcfb259b-6986-47e2-958a-4f8424f6c745.png" style="width:35.33em;height:19.50em;"/></p>
+
+<p>答案是，我们需要了解和探索多个时间序列之间的关系，因为这可以提高我们的预测。例如，我们得到了<strong> GDP平减指数:服务业</strong>和<strong> WPI:所有商品</strong>的相关时间序列，如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-613 image-border" src="img/5ac9b772-c549-4d12-9691-19065159518f.png" style="width:58.83em;height:22.83em;"/></p>
+
+<p class="mce-root"/>
+
+<p>很明显，这两者似乎有关系。当我们必须预测<strong> GDP平减指数:服务</strong>时，我们可以使用<strong> WPI:所有商品</strong>时间序列数据作为输入。这叫做<strong>格兰杰因果关系</strong>。</p>
+
+<p>更恰当地说，格兰杰因果关系是考察时间序列中两个变量之间因果关系的方法之一。这种方法是对因果关系的概率解释。</p>
+
+<p>尽管我们在这里谈论因果关系，但它并不完全相同。通常，因果关系与变量<em> 1 </em>是变量2的原因的情况相关联，反之亦然。然而，由于格兰杰因果关系，我们并没有测试真正的因果关系。了解的根本原因是在时间序列中某个变量是否在另一个变量之前。</p>
+
+<p>你不是在测试真正的因果关系。你想知道的是在时间序列中某个变量是否在另一个变量之前。也就是说，如果我们在数据中找到格兰杰因果关系，那么就没有任何真正意义上的因果联系。</p>
+
+<p>当计量经济学家说原因时，他们的意思是格兰杰原因，尽管更合适的词可能是优先。格兰杰因果关系是由诺贝尔经济学奖获得者克莱夫·格兰杰教授于2003年提出的。</p>
+
+<p>让我们再看一个例子。这里，我们有经合组织国家的人均GDP。我们可以看到，一些经合组织国家的国内生产总值有类似的增长和模式。我们可以假设，由于依赖关系，这些国家对彼此的GDP增长负有责任。</p>
+
+<p>下图显示了经合组织国家的人均国内生产总值:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-616 image-border" src="img/64a5d92a-f8d2-4e59-af45-6993f3a8fb3d.png" style="width:37.67em;height:22.75em;"/></p>
+
+<p>我们可以利用一个国家的序列来预测另一个国家。通常，这种关系在金融时间序列中更为普遍。印度股市、NSE/BSE等可能会对NYSE产生影响。因此，NYSE指数可用于预测NSE指数。</p>
+
+<p>让我们给它注入一点数学知识。假设有两个时间序列，<em> X(t) </em>和<em> Y(t) </em>。如果说<em> X(t) </em>的过去值在帮助预测<em> Y(t) </em>的未来值，那么就说<em> X(t) </em>格兰杰原因<em> Y(t) </em>。</p>
+
+<p>因此，<em> Y(t) </em>是<em> Y(t) </em>滞后的函数，也是<em> X(t) </em>滞后的函数。它可以表示如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> Y(t) = f(Yt-p，Xt-p) </em></p>
+
+<p>但是，这仅适用于以下情况:</p>
+
+<ul>
+
+<li>原因发生在结果之前。这意味着<em> Y(t) = f(Xt-1) </em>，</li>
+
+<li>原因已获得关于其影响的未来值的重要信息，例如:</li>
+
+</ul>
+
+<p class="CDPAlignCenter CDPAlign"><em> Y(t) = a1 Yt-1 + b1 Xt-1 +误差</em></p>
+
+<p><em> Xt-1 </em>正在给<em> Y(t) </em>增加一个额外的效果。效果的大小由<em> b1 </em>决定。</p>
+
+<p>假设我们有两个方程:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> Yt= a0+ a1* Yt-1 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> Yt= a0 + a1*Yt-1 + a2*Xt-1 </em></p>
+
+<p>这里的零假设如下:</p>
+
+<ul>
+
+<li><em> H0: a2=0 </em>:这意味着没有其他系列的影响，其中<em> Xt-1 </em>对<em> Yt </em></li>
+
+</ul>
+
+<p>另一个假设如下:</p>
+
+<ul>
+
+<li><em> H1: a2≠ 0 </em>:这意味着有其他系列的显著影响，其中<em> Xt-1 </em>对<em> Yt </em></li>
+
+</ul>
+
+<p>我们进行t检验，以确定其他系列的<em> Xt-1 </em>对<em> Yt </em>是否有显著影响。</p>
+
+<p>如果零假设被驳回，我们可以说这是一个格兰杰因果关系的案例。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>F-test</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">f检验</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>运行该测试的基本步骤如下:</p>
+
+<ol>
+
+<li>阐明零假设及其替代方案。</li>
+
+<li>选择滞后。这可能取决于您拥有的数据量。选择滞后I和j的一种方法是进行模型顺序测试。更简单的方法是选取多个值，然后运行格兰杰检验，看看不同滞后水平的结果是否相似。</li>
+
+</ol>
+
+<ol start="3">
+
+<li>还要确定f值。这两个方程可用于找出对于所有滞后<em> j </em>是否<em> βj = 0 </em>。</li>
+
+</ol>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Limitations</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">限制</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>这种方法的不同限制如下:</p>
+
+<ul>
+
+<li>格兰杰因果关系不是真正的因果关系</li>
+
+<li>如果<em> X(t) </em>通过第三个变量<em> Z(t) </em>影响<em> Y(t) </em>，那么就很难找到格兰杰因果关系</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Use case</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">用例</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>这里，我们有一个多变量时间序列数据集，称为<kbd>AirQualityUCI</kbd>。我们必须检验氮氧化物是否与二氧化氮有格兰杰因果关系。</p>
+
+<p>由于我们在Python中没有多元格兰杰因果关系的库，我们将在R中通过使用<kbd>lmtest</kbd>包来实现这一点。</p>
+
+<p>加载<kbd>lmtest</kbd>库。如果没有这个库，您需要安装它，如下所示:</p>
+
+<pre>install.packages("lmtest")<br/>library(lmtest)</pre>
+
+<p>加载数据。然后，利用<kbd>grangertest</kbd>功能找出NOx和NO2之间是否有显著的关系:</p>
+
+<pre class="mce-root">data= read.csv("AirQualityUCI.csv")<br/>grangertest(NOx.GT. ~ NO2.GT., order = 3, data = data)</pre>
+
+<p>其输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-614 image-border" src="img/6f859784-a489-4873-a8db-ba5a66b51d3a.png" style="width:33.08em;height:9.08em;"/></p>
+
+<p>因此，f检验变得很重要，这意味着滞后NO2的系数对NOx有很大影响。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Graphical causal models</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">图形因果模型</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>该模型在<a href="64be9aad-a25e-4ea4-abbb-bc8ff4cbbe1a.xhtml" target="_blank">第8章</a> <em>“概率图形模型</em>中有详细介绍。我们也将在这里简单地研究一下。</p>
+
+<p>贝叶斯网络是有向无环图(Dag ),其中的节点表示感兴趣的变量(例如，设备的温度、患者的性别、对象的特征、事件的发生等等)。变量之间的因果影响用链接来表示。影响的强度可以通过与网络中的每个父子节点集群相关联的条件概率来表征。在下图中，我们可以看到有一个节点和一条边的因果模型:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-615 image-border" src="img/620df37b-3981-4203-b6d5-c1e7bc97b31f.png" style="width:13.67em;height:4.17em;"/></p>
+
+<p>节点代表变量，边代表变量之间的条件关系。我们寻求的是完全联合概率分布。这里所说的是条件依赖。下雨导致地面潮湿。但是，彩票中奖与其他变量无关。它具有条件独立性，如下图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-612 image-border" src="img/54801f88-0c6d-4815-80ed-84770c9f370f.png" style="width:16.25em;height:9.25em;"/></p>
+
+<p>这里，条件独立的概率如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> P(彩票，雨，湿地)= P(彩票)P(雨)P(湿地|雨)</em></p>
+
+<p>因此，我们可以说，贝叶斯网络通过将条件概率作为边来描述所有变量之间的概率分布。</p>
+
+<p>让我们看一个Python中的例子:</p>
+
+<ol>
+
+<li>首先，我们需要加载库<kbd>CausalGraphicalModel</kbd>，如下所示:</li>
+
+</ol>
+
+<pre style="padding-left: 60px">from causalgraphicalmodels import CausalGraphicalModel</pre>
+
+<ol start="2">
+
+<li>让我们建立一个条件模型，如果某人正在做一个<kbd>Job</kbd>，如果它由<kbd>Smartwork</kbd>和<kbd>Hardwork</kbd>驱动，他/她将获得奖励，并最终获得晋升:</li>
+
+</ol>
+
+<pre style="padding-left: 60px">Model = CausalGraphicalModel(<br/> nodes=["Job", "Smartwork", "Hardwork", "Reward", "Promotion"],<br/> edges=[<br/> ("Job", "Smartwork"), <br/> ("Job", "Hardwork"), <br/> ("Smartwork", "Reward"),<br/> ("Hardwork", "Reward"), <br/> ("Reward", "Promotion")<br/> ]<br/>)<br/>Model.draw()</pre>
+
+<p style="padding-left: 60px">以下是上述代码的输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1001 image-border" src="img/2fd1eb17-9b5b-43c8-96a9-f18293786a63.png" style="width:15.75em;height:18.92em;"/></p>
+
+<ol start="3">
+
+<li>让我们获得分布:</li>
+
+</ol>
+
+<pre style="padding-left: 60px">print(Model.get_distribution())<br/></pre>
+
+<p style="padding-left: 60px">然后，我们将得到以下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/8e90a859-0356-4cb2-be40-7c1bf3a651fc.png"/></p>
+
+<ol start="4">
+
+<li>让我们提取所有的条件独立性关系:</li>
+
+</ol>
+
+<pre style="padding-left: 60px">Model.get_all_independence_relationships()</pre>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/b8d32eb6-6c71-4219-a81c-416d3e40dee5.png" style="width:30.92em;height:17.83em;"/></p>
+
+<p style="padding-left: 60px">这里，我们能够评估变量之间的条件独立性。</p>
+
+<ol start="5">
+
+<li>让我们把这个和<kbd>Reward</kbd>混合起来:</li>
+
+</ol>
+
+<pre style="padding-left: 60px">Intervene = Model.do("Reward")<br/>Intervene.draw()</pre>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/941edca5-e300-421f-b430-8a7b2656af3b.png" style="width:24.33em;height:8.75em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摘要</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在这一章中，我们研究了格兰杰因果关系，这是我们使用单一时间序列来预测其未来值，以及图形因果关系模型的不同模型。图形因果模型涵盖了两个例子，这将使我们对图形因果模型有一个基本的概念。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

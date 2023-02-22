@@ -1,0 +1,706 @@
+<html><head/><body>
+
+
+	
+		<title>B16060_Solution_Final_SZ_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-207"><a id="_idTextAnchor233"/>附录</h1>
+		</div>
+		<div><h1 id="_idParaDest-208"><a id="_idTextAnchor234"/> 1。人工智能导论</h1>
+			<h2 id="_idParaDest-209"><a id="_idTextAnchor235"/>活动1.01:在井字游戏中生成所有可能的步骤序列</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<p><a id="_idTextAnchor236"/>以下步骤将帮助您完成本活动:</p>
+			<ol>
+				<li>打开新的Jupyter笔记本文件。</li>
+				<li>重用之前<em class="italic">练习1.02 </em>、<em class="italic">中<em class="italic">步骤2–9</em>的功能代码，为井字游戏</em>创建一个具有随机行为的AI。</li>
+				<li>Create a function that maps the <code>all_moves_from_board_list</code> function to each element of a list of boards. This way, we will have all of the nodes of a decision tree in each depth:<pre>def all_moves_from_board_list(board_list, sign):
+    move_list = []
+    for board in board_list:
+        move_list.extend(all_moves_from_board(board, sign))
+    return move_list</pre><p>在前面的代码片段中，我们定义了<code>all_moves_from_board</code>函数，该函数将枚举棋盘上所有可能的移动，并将移动添加到名为<code>move_list</code>的列表中。</p></li>
+				<li>Create a variable called board that contains the <code>EMPTY_SIGN * 9</code> decision tree and calls the <code>all_moves_from_board_list</code> function with the board and <code>AI_SIGN</code>. Save its output in a variable called <code>all_moves</code> and print its content:<pre>board = EMPTY_SIGN * 9
+all_moves = all_moves_from_board(board, AI_SIGN )
+all_moves</pre><p>预期输出如下:</p><pre>['X........',
+ '.X.......',
+ '..X......',
+ '...X.....',
+ '....X....',
+ '.....X...',
+ '......X..',
+ '.......X.',
+ '........X']</pre></li>
+				<li>Create a <code>filter_wins</code> function that takes the ended games out from the list of moves and appends them in an array containing the board states won by the AI player and the opponent player:<pre>def filter_wins(move_list, ai_wins, opponent_wins):
+    for board in move_list:
+        won_by = game_won_by(board)
+        if won_by == AI_SIGN:
+            ai_wins.append(board)
+            move_list.remove(board)
+        elif won_by == OPPONENT_SIGN:
+            opponent_wins.append(board)
+            move_list.remove(board)</pre><p>在前面的代码片段中，我们定义了一个<code>filter_wins</code>函数，它会将每个玩家的棋盘获胜状态添加到一个列表中。</p></li>
+				<li>Use the <code>count_possibilities</code> function, which prints and returns the number of decision tree leaves that ended with a draw, that were won by the first player, and that were won by the second player, as shown in the following code snippet:<pre>def count_possibilities():
+    board = EMPTY_SIGN * 9
+    move_list = [board]
+    ai_wins = []
+    opponent_wins = []
+    for i in range(9):
+        print('step ' + str(i) + '. Moves: ' \
+              + str(len(move_list)))
+        sign = AI_SIGN if \
+               i % 2 == 0 else OPPONENT_SIGN
+        move_list = all_moves_from_board_list\
+                    (move_list, sign)
+        filter_wins(move_list, ai_wins, \
+                    opponent_wins)
+    print('First player wins: ' + str(len(ai_wins)))
+    print('Second player wins: ' + str(len(opponent_wins)))
+    print('Draw', str(len(move_list)))
+    print('Total', str(len(ai_wins) \
+          + len(opponent_wins) + len(move_list)))
+    return len(ai_wins), len(opponent_wins), \
+           len(move_list), len(ai_wins) \
+           + len(opponent_wins) + len(move_list)</pre><p>在每个状态中，我们有多达<code>9</code>个步骤。在第0、第2、第4、第6和第8次迭代中，AI玩家移动。在所有其他迭代中，对手移动。我们在所有步骤中创建所有可能的移动，并从移动列表中取出完成的游戏。</p></li>
+				<li>Execute the number of possibilities to experience the combinatorial explosion and save the results in four variables called <code>first_player</code>, <code>second_player</code>, <code>draw</code>, and <code>total</code>:<pre>first_player, second_player, \
+draw, total = count_possibilities()</pre><p>预期输出如下:</p><pre>step 0. Moves: 1
+step 1. Moves: 9
+step 2. Moves: 72
+step 3. Moves: 504
+step 4. Moves: 3024
+step 5. Moves: 13680
+step 6. Moves: 49402
+step 7. Moves: 111109
+step 8. Moves: 156775
+First player wins: 106279
+Second player wins: 68644
+Draw 91150
+Total 266073</pre></li>
+			</ol>
+			<p>如你所见，董事会州的树总共由<code>266073</code>叶组成。<code>count_possibilities</code>函数本质上实现了一个BFS算法来遍历游戏的所有可能状态。请注意，我们对这些状态进行了多次计数，因为在<em class="italic">步骤1 </em>的右上角放置一个<code>X</code>和在<em class="italic">步骤3 </em>的左上角放置一个<code>X</code>会导致类似的可能状态，即从左上角开始，然后在右上角放置一个<code>X</code>。如果我们实现了重复状态的检测，我们将需要检查更少的节点。不过现阶段由于游戏深度有限，我们就省略这一步。</p>
+			<p>然而，决策树与<code>count_possibilities</code>检查的数据结构是相同的。在决策树中，我们通过在一定程度上调查所有可能的未来步骤来探索每个步骤的效用。在我们的例子中，我们可以通过观察固定最初几次移动后的赢和输的次数来计算最初移动的效用。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">树根是初始状态。树的内部状态是游戏没有结束并且仍然可以移动的状态。一片树叶包含一个游戏结束的状态。</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3doxPog">https://packt.live/3doxPog</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3dpnuIz">https://packt.live/3dpnuIz</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-210"><a id="_idTextAnchor237"/>活动1.02:教代理意识到其防范损失的情况</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>重用前面的<em class="italic">步骤2–6</em>、<em class="italic">练习1.03 </em>、<em class="italic">中的所有代码，教导代理赢得</em>。</li>
+				<li>Create a function called <code>player_can_win</code> that takes all the moves from the board using the <code>all_moves_from_board</code> function and iterates over them using the <code>next_move</code> variable.<p>在每次迭代中，它检查游戏是否能被玩家赢得。</p><pre>def player_can_win(board, sign):
+    next_moves = all_moves_from_board(board, sign)
+    for next_move in next_moves:
+        if game_won_by(next_move) == sign:
+            return True
+    return False</pre></li>
+				<li>Extend the AI move so that it prefers making safe moves. A move is safe if the opponent cannot win the game in the next step:<pre>def ai_move(board):
+    new_boards = all_moves_from_board(board, AI_SIGN)
+    for new_board in new_boards:
+        if game_won_by(new_board) == AI_SIGN:
+            return new_board
+    safe_moves = []
+    for new_board in new_boards:
+        if not player_can_win(new_board, OPPONENT_SIGN):
+            safe_moves.append(new_board)
+    return choice(safe_moves) \
+    if len(safe_moves) &gt; 0 else new_boards[0]</pre><p>在前面的代码片段中，我们定义了<code>ai_move</code>函数，它告诉AI如何通过查看所有可能性的列表并选择一个玩家在下一步中无法获胜的可能性来移动。如果你测试我们的新应用程序，你会发现人工智能已经做出了正确的举动。</p></li>
+				<li>Now, place this logic in the state space generator and check how well the computer player is doing by generating all the possible games:<pre>def all_moves_from_board(board, sign):
+    move_list = []
+    for i, v in enumerate(board):
+        if v == EMPTY_SIGN:
+            new_board = board[:i] + sign + board[i+1:]
+            move_list.append(new_board)
+            if game_won_by(new_board) == AI_SIGN:
+                return [new_board]
+    if sign == AI_SIGN:
+        safe_moves = []
+        for move in move_list:
+            if not player_can_win(move, OPPONENT_SIGN):
+                safe_moves.append(move)
+        return safe_moves if len(safe_moves) &gt; 0 else move_list[0:1]
+    else:
+        return move_list</pre><p>在前面的代码片段中，我们定义了一个生成所有可能移动的函数。一旦我们找到下一步可以让玩家获胜的棋，我们就返回一步来反击。我们不关心玩家是否有多种选择来一步赢得游戏——我们只是返回第一种可能性。如果人工智能不能阻止玩家获胜，我们返回所有可能的移动。</p><p>让我们看看这意味着什么，在每一步计算所有的可能性。</p></li>
+				<li>Count the options that are possible:<pre>first_player, second_player, \
+draw, total = count_possibilities()</pre><p>预期输出如下:</p><pre>step 0. Moves: 1
+step 1. Moves: 9
+step 2. Moves: 72
+step 3. Moves: 504
+step 4. Moves: 3024
+step 5. Moves: 5197
+step 6. Moves: 18606
+step 7. Moves: 19592
+step 8. Moves: 30936
+First player wins: 20843
+Second player wins: 962
+Draw 20243
+Total 42048</pre></li>
+			</ol>
+			<p>我们比以前做得更好。我们不仅再次排除了几乎2/3的可能游戏，而且，大多数时候，人工智能玩家要么获胜，要么接受平局。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2B0G9xf">https://packt.live/2B0G9xf</a>。</p>
+			<p class="callout">你也可以在https://packt.live/2V7qLpO的<a href="https://packt.live/2V7qLpO">在线运行这个例子。</a></p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-211"><a id="_idTextAnchor238"/>活动1.03:修正AI的第一步和第二步，使其无敌</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>重复使用之前<em class="italic">步骤2–4</em>、<em class="italic">活动1.02 </em>、<em class="italic">中的代码，教导代理人认识其防御损失时的情况</em>。</li>
+				<li>现在，数一下棋盘上的空白区域的数量，如果有9或7个空白区域，就进行硬编码移动。你可以尝试不同的硬编码动作。我们发现，占领任何一个角落，然后占领对面的角落，都不会导致损失。如果对手占据对角，在中间移动不会造成损失:<pre>def all_moves_from_board(board, sign):     if sign == AI_SIGN:         empty_field_count = board.count(EMPTY_SIGN)         if empty_field_count == 9:             return [sign + EMPTY_SIGN * 8]         elif empty_field_count == 7:             return [board[:8] + sign if board[8] == \                     EMPTY_SIGN else board[:4] + sign + board[5:]]     move_list = []     for i, v in enumerate(board):         if v == EMPTY_SIGN:             new_board = board[:i] + sign + board[i+1:]             move_list.append(new_board)             if game_won_by(new_board) == AI_SIGN:                 return [new_board]     if sign == AI_SIGN:         safe_moves = []         for move in move_list:             if not player_can_win(move, OPPONENT_SIGN):                 safe_moves.append(move)         return safe_moves if len(safe_moves) &gt; 0 else move_list[0:1]     else:         return move_list</pre></li>
+				<li>Now, verify the state space:<pre>first_player, second_player, draw, total = count_possibilities()</pre><p>预期输出如下:</p><pre>step 0. Moves: 1
+step 1. Moves: 1
+step 2. Moves: 8
+step 3. Moves: 8
+step 4. Moves: 48
+step 5. Moves: 38
+step 6. Moves: 108
+step 7. Moves: 76
+step 8. Moves: 90
+First player wins: 128
+Second player wins: 0
+Draw 60
+Total 188</pre></li>
+			</ol>
+			<p>修正了前两步后，我们只需要处理8种可能性，而不是504种。我们还引导人工智能进入一种状态，在这种状态下，硬编码的规则足以让它永远不会输掉一场比赛。修正步骤并不重要，因为我们会给AI硬编码的步骤，但它很重要，因为它是一个用来评估和比较每个步骤的工具。修正了前两步后，我们只需要处理8种可能性，而不是504种。我们还引导人工智能进入一种状态，在这种状态下，硬编码的规则足以让它永远不会输掉一场比赛。正如你所看到的，人工智能现在几乎是不可战胜的，只会赢或平局。</p>
+			<p>玩家对这个人工智能的最好期望是和棋。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2YnUcpA">https://packt.live/2YnUcpA</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/318TBtq">https://packt.live/318TBtq</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-212"><a id="_idTextAnchor239"/>活动1.04:连接四个</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">Open a new Jupyter Notebook file.<p>让我们通过编写<code>init</code>方法来建立<code>TwoPlayersGame</code>框架。</p></li>
+				<li>将棋盘定义为一维列表，就像井字游戏的例子一样。我们也可以使用二维列表，但是建模不会变得更容易或更困难。除了像我们在井字游戏中那样进行初始化，我们还将进一步工作。我们将生成游戏中所有可能的获胜组合，并保存它们以备将来使用，如下面的代码片段所示:<pre>from easyAI import TwoPlayersGame, Human_Player class ConnectFour(TwoPlayersGame):     def __init__(self, players):         self.players = players         self.board = [0 for i in range(42)]         self.nplayer = 1           def generate_winning_tuples():             tuples = []             # horizontal             tuples += [list(range(row*7+column, \                        row*7+column+4, 1)) \                        for row in range(6) \                        for column in range(4)]             # vertical             tuples += [list(range(row*7+column, \                        row*7+column+28, 7)) \                        for row in range(3) \                        for column in range(7)]             # diagonal forward             tuples += [list(range(row*7+column, \                        row*7+column+32, 8)) \                        for row in range(3) \                        for column in range(4)]             # diagonal backward             tuples += [list(range(row*7+column, \                        row*7+column+24, 6)) \                        for row in range(3) \                        for column in range(3, 7, 1)]             return tuples         self.tuples = generate_winning_tuples()</pre></li>
+				<li>接下来，处理<code>possible_moves</code>函数，这是一个简单的枚举。请注意，我们在移动名称中使用了从<code>1</code>到<code>7</code>的列索引，因为在人类玩家界面中用<code>1</code>开始列索引比用零更方便。对于每一列，我们检查是否有未被占用的字段。如果有一个，我们将使列一个可能的举动:<pre>    def possible_moves(self):         return [column+1 \                 for column in range(7) \                 if any([self.board[column+row*7] == 0 \                         for row in range(6)])                 ]</pre></li>
+				<li>移动就像<code>possible_moves</code>功能。我们检查move列，找到从底部开始的第一个空单元格。一旦我们找到它，我们就占领它。你也可以阅读这两个<code>make_move</code>函数的实现:<code>unmake_move</code>。在<code>unmake_move</code>函数中，我们从上到下检查列，并在第一个非空单元格处移除移动。注意，我们依赖于<code>easyAI</code>的内部表示，这样它就不会撤销没有做过的动作。否则，该函数将移除另一个玩家的令牌，而不检查谁的令牌被移除:<pre>    def make_move(self, move):         column = int(move) - 1         for row in range(5, -1, -1):             index = column + row*7             if self.board[index] == 0:                 self.board[index] = self.nplayer                 return     # optional method (speeds up the AI)     def unmake_move(self, move):         column = int(move) - 1         for row in range(6):             index = column + row*7             if self.board[index] != 0:                 self.board[index] = 0                 return</pre></li>
+				<li>因为我们已经有了必须检查的元组，所以我们可以重用井字游戏示例中的<code>lose</code>函数:<pre>    def lose(self):         return any([all([(self.board[c] == self.nopponent)                          for c in line])                     for line in self.tuples])     def is_over(self):         return (self.possible_moves() == []) or self.lose()</pre></li>
+				<li>我们最后的任务是实现打印电路板的<code>show</code>方法。我们将重用井字游戏实现，只改变<code>show</code>和<code>scoring</code>变量:<pre>    def show(self):         print('\n'+'\n'.join([             ' '.join([['.', 'O', 'X']\                       [self.board[7*row+column]] \                       for column in range(7)])             for row in range(6)]))     def scoring(self):         return -100 if self.lose() else 0 if __name__ == "__main__":     from easyAI import AI_Player, Negamax     ai_algo = Negamax(6)     ConnectFour([Human_Player(), \                  AI_Player(ai_algo)]).play()</pre></li>
+				<li>Now that all the functions are complete, you can try out the example. Feel free to play a round or two against your opponent. <p>预期输出如下:</p><div><img src="img/B16060_01_30.jpg" alt="Figure 1.30: Expected output for the Connect Four game&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图1.30:连接四个游戏的预期输出</p>
+			<p>通过完成这项活动，你已经看到对手并不完美，但它打得相当好。如果你有很强的计算机，可以增加<code>Negamax</code>算法的参数。我们鼓励你想出一个更好的启发式方法。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3esk2hI">https://packt.live/3esk2hI</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3dnkfS5">https://packt.live/3dnkfS5</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h1 id="_idParaDest-213"><a id="_idTextAnchor240"/> 2。回归导论</h1>
+			<h2 id="_idParaDest-214"><a id="_idTextAnchor241"/>活动2.01:使用多元变量的1、2和3次多项式回归预测波士顿房价</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开一个Jupyter笔记本。</li>
+				<li>Import the required packages and load the Boston House Prices data from <code>sklearn</code> into a DataFrame:<pre>import numpy as np
+import pandas as pd
+from sklearn import preprocessing
+from sklearn import model_selection
+from sklearn import linear_model
+from sklearn.preprocessing import PolynomialFeatures
+file_url = 'https://raw.githubusercontent.com/'\
+           'PacktWorkshops/'\
+           'The-Applied-Artificial-Intelligence-Workshop/'\
+           'master/Datasets/boston_house_price.csv'
+df = pd.read_csv(file_url)</pre><p><code>df</code>的输出如下:</p><div><img src="img/B16060_02_28.jpg" alt="Figure 2.28: Output displaying the dataset&#13;&#10;"/></div><p class="figure-caption"><a id="_idTextAnchor242"/>图2.28:显示数据集的输出</p><p>在本章的早些时候，您已经了解到执行线性回归所需的大多数包来自<code>sklearn</code>。我们需要导入<code>preprocessing</code>模块来缩放数据，导入<code>linear_model</code>模块来训练线性回归，导入<code>PolynomialFeatures</code>模块来转换多项式回归的输入，导入<code>model_selection</code>模块来评估每个模型的性能。</p></li>
+				<li>Prepare the dataset for prediction by converting the label and features into NumPy arrays and scaling the features:<pre>features = np.array(df.drop('MEDV', 1))
+label = np.array(df['MEDV'])
+scaled_features = preprocessing.scale(features)</pre><p><code>features</code>的输出如下:</p><div><img src="img/B16060_02_29.jpg" alt="Figure 2.29: Labels and features converted to NumPy arrays&#13;&#10;"/></div><pre>array([[-0.41978194,  0.28482986, -1.2879095 , ..., 
+        -0.66660821, -1.45900038, -1.0755623 ],
+       [-0.41733926, -0.48772236, -0.59338101, ..., 
+        -0.98732948, -0.30309415, -0.49243937],
+       [-0.41734159, -0.48772236, -0.59338101, ..., 
+        -0.98732948, -0.30309415, -1.2087274 ],
+       ...,
+       [-0.41344658, -0.48772236,  0.11573841, ..., 
+        -0.80321172,  1.17646583, -0.98304761],
+       [-0.40776407, -0.48772236,  0.11573841, ..., 
+        -0.80321172,  1.17646583, -0.86530163],
+       [-0.41500016, -0.48772236,  0.11573841, ..., 
+        -0.80321172,  1.17646583, -0.66905833]])</pre><p>如你所见，我们的特征已经被适当地缩放。</p><p>由于我们没有任何缺失值，并且我们不像在<em class="italic">练习2.03 </em>、<em class="italic">准备用于预测的Quandl数据</em>中那样尝试预测未来值，我们可以直接将标签(<code>'MEDV'</code>)和特征转换为NumPy数组。然后，我们可以使用<code>preprocessing.scale()</code>函数缩放特征数组。</p></li>
+				<li>Create three different set of features by transforming the scaled features into a suitable format for each of the polynomial regressions:<pre>poly_1_scaled_features = PolynomialFeatures(degree=1)\
+                         .fit_transform(scaled_features)
+poly_2_scaled_features = PolynomialFeatures(degree=2)\
+                         .fit_transform(scaled_features)
+poly_3_scaled_features = PolynomialFeatures(degree=3)\
+                         .fit_transform(scaled_features)</pre><p><code>poly_1_scaled_features</code>的输出如下:</p><pre>array([[ 1.        , -0.41978194,  0.28482986, ..., -0.66660821,
+        -1.45900038, -1.0755623 ],
+       [ 1.        , -0.41733926, -0.48772236, ..., -0.98732948,
+        -0.30309415, -0.49243937],
+       [ 1.        , -0.41734159, -0.48772236, ..., -0.98732948,
+        -0.30309415, -1.2087274 ],
+       ...,
+       [ 1.        , -0.41344658, -0.48772236, ..., -0.80321172,
+         1.17646583, -0.98304761],
+       [ 1.        , -0.40776407, -0.48772236, ..., -0.80321172,
+         1.17646583, -0.86530163],
+       [ 1.        , -0.41500016, -0.48772236, ..., -0.80321172,
+         1.17646583, -0.66905833]])</pre><p>我们的<code>scaled_features</code>变量已经被适当地转换为次数为<code>1</code>的多项式回归。</p><p><code>poly_2_scaled_features</code>的输出如下:</p><div><img src="img/B16060_02_31.jpg" alt="Figure 2.31: Output showing poly_2_scaled_features&#13;&#10;"/></div><pre>array([[ 1.        , -0.41978194,  0.28482986, ..., -2.28953024,
+        -1.68782164, -1.24424733],
+       [ 1.        , -0.41733926, -0.48772236, ..., -0.04523847,
+        -0.07349928, -0.11941484],
+       [ 1.        , -0.41734159, -0.48772236, ..., -0.11104103,
+        -0.4428272 , -1.76597723],
+       ...,
+       [ 1.        , -0.41344658, -0.48772236, ..., -1.36060852,
+         1.13691611, -0.9500001 ],
+       [ 1.        , -0.40776407, -0.48772236, ..., -1.19763962,
+         0.88087515, -0.64789192],
+       [ 1.        , -0.41500016, -0.48772236, ..., -0.9260248 ,
+         0.52663205, -0.29949664]])</pre><p>我们的<code>scaled_features</code>变量已经被适当地转换为<code>3</code>次数的多项式回归。</p><p>我们必须以三种不同的方式变换缩放后的要素，因为每一次多项式回归都需要不同的输入变换。</p></li>
+				<li>Split the data into a training set and a testing set with <code>random state = 8</code>:<pre>(poly_1_features_train, poly_1_features_test, \
+poly_label_train, poly_label_test) = \
+model_selection.train_test_split(poly_1_scaled_features, \
+                                 label, \
+                                 test_size=0.1, \
+                                 random_state=8)
+(poly_2_features_train, poly_2_features_test, \
+poly_label_train, poly_label_test) = \
+model_selection.train_test_split(poly_2_scaled_features, \
+                                 label, \
+                                 test_size=0.1, \
+                                 random_state=8)
+(poly_3_features_train, poly_3_features_test, \
+poly_label_train, poly_label_test) = \
+model_selection.train_test_split(poly_3_scaled_features, \
+                                 label, \
+                                 test_size=0.1, \
+                                 random_state=8)</pre><p>由于我们有三组不同的缩放变换要素，但标注集相同，因此我们必须执行三次不同的分割。通过在每次分割中使用相同的标签集和<code>random_state</code>，我们确保每次分割都获得相同的<code>poly_label_train</code>和<code>poly_label_test</code>。</p></li>
+				<li>Perform a polynomial regression of degree 1 and evaluate whether the model is overfitting:<pre>model_1 = linear_model.LinearRegression()
+model_1.fit(poly_1_features_train, poly_label_train)
+model_1_score_train = model_1.score(poly_1_features_train, \
+                                    poly_label_train)
+model_1_score_test = model_1.score(poly_1_features_test, \
+                                   poly_label_test)</pre><p><code>model_1_score_train</code>的输出如下:</p><pre>0.7406006443486721</pre><p><code>model_1_score_test</code>的输出如下:</p><pre>0.6772229017901507</pre><p>为了估计模型是否过度拟合，我们需要比较应用于训练集和测试集的模型的分数。如果训练集的分数比测试集的分数高得多，我们就过度适应了。这里的情况是，与测试集的得分<code>0.68</code>相比，1次多项式回归获得了训练集的得分<code>0.74</code>。</p></li>
+				<li>Perform a polynomial regression of degree 2 and evaluate whether the model is overfitting:<pre>model_2 = linear_model.LinearRegression()
+model_2.fit(poly_2_features_train, poly_label_train)
+model_2_score_train = model_2.score(poly_2_features_train, \
+                                    poly_label_train)
+model_2_score_test = model_2.score(poly_2_features_test, \
+                                   poly_label_test)</pre><p><code>model_2_score_train</code>的输出如下:</p><pre>0.9251199698832675</pre><p><code>model_2_score_test</code>的输出如下:</p><pre>0.8253870684280571</pre><p>与1次多项式回归一样，我们的2次多项式回归甚至比1次多项式回归拟合得更好，但最终还是取得了更好的结果。</p></li>
+				<li>Perform a polynomial regression of degree 3 and evaluate whether the model is overfitting:<pre>model_3 = linear_model.LinearRegression()
+model_3.fit(poly_3_features_train, poly_label_train)
+model_3_score_train = model_3.score(poly_3_features_train, \
+                                    poly_label_train)
+model_3_score_test = model_3.score(poly_3_features_test, \
+                                   poly_label_test)</pre><p><code>model_3_score_train</code>的输出如下:</p><pre>0.9910498071894897</pre><p><code>model_3_score_test</code>的输出如下:</p><pre>-8430.781888645262</pre><p>这些结果非常有趣，因为3次多项式回归设法用<code>0.99</code> (1是最大值)获得了接近完美的分数。这是一个警告信号，表明我们的模型过度拟合了。当模型应用于测试集并获得非常低的负得分<code>-8430</code>时，我们确认了这一警告。提醒一下，使用数据的平均值作为预测值可以得到0分。这意味着我们的第三个模型比仅仅使用平均值做出了更糟糕的预测。</p></li>
+				<li>Compare the predictions of the 3 models against the label on the testing set:<pre>model_1_prediction = model_1.predict(poly_1_features_test)
+model_2_prediction = model_2.predict(poly_2_features_test)
+model_3_prediction = model_3.predict(poly_3_features_test)
+df_prediction = pd.DataFrame(poly_label_test)
+df_prediction.rename(columns = {0:'label'}, inplace = True)
+df_prediction['model_1_prediction'] = \
+pd.DataFrame(model_1_prediction)
+df_prediction['model_2_prediction'] = \
+pd.DataFrame(model_2_prediction)
+df_prediction['model_3_prediction'] = \
+pd.DataFrame(model_3_prediction)</pre><p><code>df_prediction</code>的输出如下:</p><div><img src="img/B16060_02_32.jpg" alt="Figure 2.32: Output showing the expected predicted values&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图2.32:显示预期预测值的输出</p>
+			<p>在将<code>predict</code>函数应用于每个模型各自的测试集之后，为了获得预测值，我们将它们转换成带有标签值的单个<code>df_prediction</code>数据帧。增加多项式回归的次数并不一定意味着模型的性能会比次数较少的模型好。事实上，增加程度会导致对训练数据的过度拟合。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3eD8gAY">https://packt.live/3eD8gAY</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3etadjp">https://packt.live/3etadjp</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>在本活动中，我们学习了如何对波士顿房价数据集执行多变量1到3次多项式回归，并了解了增加次数如何导致模型过度拟合。</p>
+			<h1 id="_idParaDest-215"><a id="_idTextAnchor246"/> 3。分类介绍</h1>
+			<h2 id="_idParaDest-216"><a id="_idTextAnchor247"/>活动3.01:提高信用评分的准确性</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开一个新的Jupyter笔记本文件，执行上一个练习中的所有步骤，<em class="italic">练习3.04 </em>，<em class="italic">sci kit-Learn</em>中的K-最近邻分类。</li>
+				<li>从<code>sklearn</code> : <pre>from sklearn import neighbors</pre>进口<code>neighbors</code></li>
+				<li>创建一个名为<code>fit_knn</code>的函数，它采用以下参数:<code>k</code>、<code>p</code>、<code>features_train</code>、<code>label_train</code>、<code>features_test</code>和<code>label_test</code>。这个函数将使<code>KNeighborsClassifier</code>适合训练集，并打印训练集和测试集的准确度分数，如下面的代码片段所示:<pre>def fit_knn(k, p, features_train, label_train, \             features_test, label_test):     classifier = neighbors.KNeighborsClassifier(n_neighbors=k, p=p)     classifier.fit(features_train, label_train)     return classifier.score(features_train, label_train), \            classifier.score(features_test, label_test)</pre></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=5</code> and <code>p=2</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_1</code> and <code>acc_test_1</code>:<pre>acc_train_1, acc_test_1 = fit_knn(5, 2, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_1, acc_test_1</pre><p>预期输出如下:</p><pre>(0.78625, 0.75)</pre><p>凭借<code>k=5</code>和<code>p=2</code>，KNN取得了接近<code>0.78</code>的好成绩。但是分数与训练集和测试集相差很大，这意味着模型过度拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=10</code> and <code>p=2</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_2</code> and <code>acc_test_2</code>:<pre>acc_train_2, acc_test_2 = fit_knn(10, 2, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_2, acc_test_2</pre><p>预期输出如下:</p><pre>(0.775, 0.785)</pre><p>将邻居的数量增加到10已经降低了训练集的准确度分数，但是现在它非常接近测试集。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=15</code> and <code>p=2</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_3</code> and <code>acc_test_3</code>:<pre>acc_train_3, acc_test_3 = fit_knn(15, 2, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_3, acc_test_3</pre><p>预期输出如下:</p><pre>(0.76625, 0.79)</pre><p>使用<code>k=15</code>和<code>p=2</code>，训练集和测试集之间的差异增加了。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=25</code> and <code>p=2</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_4</code> and <code>acc_test_4</code>:<pre>acc_train_4, acc_test_4 = fit_knn(25, 2, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_4, acc_test_4</pre><p>预期输出如下:</p><pre>(0.7375, 0.77)</pre><p>增加<code>25</code>的邻居数量对训练集有很大的影响。但是，模型仍然过拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=50</code> and <code>p=2</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_5</code> and <code>acc_test_5</code>:<pre>acc_train_5, acc_test_5 = fit_knn(50, 2, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_5, acc_test_5</pre><p>预期输出如下:</p><pre>(0.70625, 0.775)</pre><p>将邻居的数量增加到<code>50</code>既没有提高模型的性能，也没有解决过度拟合的问题。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=5</code> and <code>p=1</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_6</code> and <code>acc_test_6</code>:<pre>acc_train_6, acc_test_6 = fit_knn(5, 1, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_6, acc_test_6</pre><p>预期输出如下:</p><pre>(0.8, 0.735)</pre><p>更改为曼哈顿距离有助于提高训练集的准确性，但模型仍然过拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=10</code> and <code>p=1</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_7</code> and <code>acc_test_7</code>:<pre>acc_train_7, acc_test_7 = fit_knn(10, 1, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_7, acc_test_7</pre><p>预期输出如下:</p><pre>(0.77, 0.785)</pre><p>有了<code>k=10</code>，训练集和测试集的准确率非常接近:在<code>0.78</code>左右。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=15</code> and <code>p=1</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_8</code> and <code>acc_test_8</code>:<pre>acc_train_8, acc_test_8 = fit_knn(15, 1, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_8, acc_test_8</pre><p>预期输出如下:</p><pre>(0.7575, 0.775)</pre><p>从<code>k</code>到<code>15</code>，该模型获得了更好的精度分数，并且没有过度拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=25</code> and <code>p=1</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_9</code> and <code>acc_test_9</code>:<pre>acc_train_9, acc_test_9 = fit_knn(25, 1, features_train, \
+                                  label_train, \
+                                  features_test, label_test)
+acc_train_9, acc_test_9</pre><p>预期输出如下:</p><pre>(0.745, 0.8)</pre><p>使用<code>k=25</code>，训练集和测试集的精确度之间的差异在增加，因此模型过度拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>k=50</code> and <code>p=1</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_10</code> and <code>acc_test_10</code>:<pre>acc_train_10, acc_test_10 = fit_knn(50, 1, features_train, \
+                                    label_train, \
+                                    features_test, label_test)
+acc_train_10, acc_test_10</pre><p>预期输出如下:</p><pre>(0.70875, 0.78)</pre><p>随着<code>k=50</code>的出现，模型在训练集上的表现明显下降，模型肯定是过度拟合了。</p></li>
+			</ol>
+			<p>在本练习中，我们尝试了<code>n_neighbors</code>和<code>p</code>的超参数的多种组合。我们找到的最好的是给<code>n_neighbors=10</code>和<code>p=2</code>的。有了这些超参数，模型不会过度拟合，训练集和测试集的精度分数都在<code>78%</code>左右。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2V5TOtG">https://packt.live/2V5TOtG</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/2Bx0yd8">https://packt.live/2Bx0yd8</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-217"><a id="_idTextAnchor248"/>活动3.02:sci kit-learn中的支持向量机优化</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开一个新的Jupyter笔记本文件，执行前面提到的所有步骤，<em class="italic">练习3.04 </em>，<em class="italic">sci kit中的K-最近邻分类-学习</em>。</li>
+				<li>从<code>sklearn</code>导入<code>svm</code>:<pre>from sklearn import svm</pre></li>
+				<li>创建一个名为<code>fit_knn</code>的函数，它采用以下参数:<code>features_train</code>、<code>label_train</code>、<code>features_test</code>、<code>label_test</code>、<code>kernel="linear"</code>、<code>C=1</code>、<code>degree=3</code>和<code>gamma='scale'</code>。此函数将使SVC适合训练集，并打印训练集和测试集的准确度分数:<pre>def fit_svm(features_train, label_train, \             features_test, label_test, \             kernel="linear", C=1, \             degree=3, gamma='scale'):     classifier = svm.SVC(kernel=kernel, C=C, \                          degree=degree, gamma=gamma)     classifier.fit(features_train, label_train)     return classifier.score(features_train, label_train), \            classifier.score(features_test, label_test)</pre></li>
+				<li>Call the <code>fit_knn()</code> function with the default hyperparameter values, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_1</code> and <code>acc_test_1</code>:<pre>acc_train_1, \
+acc_test_1 =  fit_svm(features_train, \
+                      label_train, \
+                      features_test, \
+                      label_test)
+acc_train_1,  acc_test_1</pre><p>预期输出如下:</p><pre>(0.71625, 0.75)</pre><p>使用默认的超参数值(线性模型)，模型的性能在训练集和测试集之间有很大的不同。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="poly"</code>, <code>C=1</code>, <code>degree=4</code>, and <code>gamma=0.05</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_2</code> and <code>acc_test_2</code>:<pre>acc_train_2, \
+acc_test_2 = fit_svm(features_train, label_train, \
+                     features_test, label_test, \
+                     kernel="poly",  C=1, \
+                     degree=4, gamma=0.05)
+acc_train_2,  acc_test_2</pre><p>预期输出如下:</p><pre>(0.68875, 0.745)</pre><p>对于四次多项式，该模型在训练集上表现不佳。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="poly"</code>, <code>C=2</code>, <code>degree=4</code>, and <code>gamma=0.05</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_3</code> and <code>acc_test_3</code>:<pre>acc_train_3, \
+acc_test_3 = fit_svm(features_train, \
+                     label_train, features_test, \
+                     label_test, kernel="poly",  \
+                     C=2, degree=4, gamma=0.05)
+acc_train_3,  acc_test_3</pre><p>预期输出如下:</p><pre>(0.68875, 0.745)</pre><p>增加正则化参数<code>C</code>，根本不会影响模型的性能。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="poly"</code>, <code>C=1</code>, <code>degree=4</code>, and <code>gamma=0.25</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_4</code> and <code>acc_test_4</code>:<pre>acc_train_4, \
+acc_test_4 = fit_svm(features_train, \
+                     label_train, features_test, \
+                     label_test, kernel="poly",  \
+                     C=1, degree=4, gamma=0.25)
+acc_train_4,  acc_test_4</pre><p>预期输出如下:</p><pre>(0.84625, 0.775)</pre><p>将gamma的值增加到<code>0.25</code>显著提高了模型在训练集上的性能。然而，在测试集上的准确性要低得多，所以模型是过拟合的。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="poly"</code>, <code>C=1</code>, <code>degree=4</code>, and <code>gamma=0.5</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_5</code> and <code>acc_test_5</code>:<pre>acc_train_5, \
+acc_test_5 = fit_svm(features_train, \
+                     label_train, features_test, \
+                     label_test, kernel="poly",  \
+                     C=1, degree=4, gamma=0.5)
+acc_train_5,  acc_test_5</pre><p>预期输出如下:</p><pre>(0.9575, 0.73)</pre><p>将gamma的值增加到<code>0.5</code>极大地提高了模型在训练集上的性能，但这肯定是过度拟合，因为测试集上的准确度分数要低得多。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="poly"</code>, <code>C=1</code>, <code>degree=4</code>, and <code>gamma=0.16</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_6</code> and <code>acc_test_6</code>:<pre>acc_train_6, \
+acc_test_6 = fit_svm(features_train, label_train, \
+                     features_test, label_test, \
+                     kernel="poly",  C=1, \
+                     degree=4, gamma=0.16)
+acc_train_6,  acc_test_6</pre><p>预期输出如下:</p><pre>(0.76375, 0.785)</pre><p>使用<code>gamma=0.16</code>，该模型获得了比最佳KNN模型更好的准确度分数。训练集和测试集的得分都在<code>0.77</code>左右。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="sigmoid"</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_7</code> and <code>acc_test_7</code>:<pre>acc_train_7, \
+acc_test_7 = fit_svm(features_train, label_train, \
+                     features_test, label_test, \
+                     kernel="sigmoid")
+acc_train_7,  acc_test_7</pre><p>预期输出如下:</p><pre>(0.635, 0.66)</pre><p>sigmoid内核获得了较低的准确度分数。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="rbf"</code> and <code>gamma=0.15</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_8</code> and <code>acc_test_8</code>:<pre>acc_train_8, \
+acc_test_8 = fit_svm(features_train, \
+                     label_train, features_test, \
+                     label_test, kernel="rbf", \
+                     gamma=0.15)
+acc_train_8,  acc_test_8</pre><p>预期输出如下:</p><pre>(0.7175, 0.765)</pre><p><code>rbf</code>内核用<code>gamma=0.15</code>取得了不错的成绩。不过，这个模型有点过度拟合了。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="rbf"</code> and <code>gamma=0.25</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_9</code> and <code>acc_test_9</code>:<pre>acc_train_9, \
+acc_test_9 = fit_svm(features_train, \
+                     label_train, features_test, \
+                     label_test, kernel="rbf", \
+                     gamma=0.25)
+acc_train_9,  acc_test_9</pre><p>预期输出如下:</p><pre>(0.74, 0.765)</pre><p>用<code>gamma=0.25</code>模型性能变好了，但还是过拟合。</p></li>
+				<li>Call the <code>fit_knn()</code> function with <code>kernel="rbf"</code> and <code>gamma=0.35</code>, save the results in <code>2</code> variables, and print them. These variables are <code>acc_train_10</code> and <code>acc_test_10</code>:<pre>acc_train_10, \
+acc_test_10 = fit_svm(features_train, label_train, \
+                      features_test, label_test, \
+                      kernel="rbf", gamma=0.35)
+acc_train_10, acc_test_10</pre><p>预期输出如下:</p><pre>(0.78125, 0.775)</pre></li>
+			</ol>
+			<p>使用<code>rbf</code>内核和<code>gamma=0.35</code>，我们在训练和测试集上得到了非常相似的结果，并且模型的性能高于我们在之前的活动中训练的最佳KNN。这是我们对德国信用数据集的最佳模型。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考https://packt.live/3fPZlMQ的<a href="https://packt.live/3fPZlMQ"/>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3hVlEm3">https://packt.live/3hVlEm3</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>在本练习中，我们为SVM分类器的主要超参数尝试了不同的值:<code>kernel</code>、<code>gamma</code>、<code>C</code>和<code>degrees</code>。我们看到了它们如何影响模型的性能以及它们过度拟合的倾向。通过反复试验，我们终于找到了最佳的超参数组合，并取得了接近0.78的准确率。这个过程被称为<strong class="bold">超参数调优</strong>，是任何数据科学项目的重要一步。</p>
+			<h1 id="_idParaDest-218"><a id="_idTextAnchor249"/> 4。决策树介绍</h1>
+			<h2 id="_idParaDest-219"><a id="_idTextAnchor250"/>活动4.01:汽车数据分类</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>将<code>pandas</code>包导入为<code>pd</code> : <pre>import pandas as pd</pre></li>
+				<li>创建一个名为<code>file_url</code>的新变量，它将包含原始数据集的URL:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/car.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>方法加载数据。:<pre>df = pd.read_csv(file_url) </pre></li>
+				<li>Print the first five rows of <code>df</code>:<pre>df.head()</pre><p>输出如下所示:</p><div><img src="img/B16060_04_13.jpg" alt="Figure 4.13: The first five rows of the dataset&#13;&#10;"/></div><p class="figure-caption">图4.13:数据集的前五行</p></li>
+				<li>从<code>sklearn</code> : <pre>from sklearn import preprocessing</pre>导入<code>preprocessing</code>模块</li>
+				<li>创建一个名为<code>encode()</code>的函数，它将数据帧和列名作为参数。这个函数将实例化<code>LabelEncoder()</code>，用列的惟一值来拟合它，并转换它的数据。它将返回转换后的列:<pre>def encode(data_frame, column):     label_encoder = preprocessing.LabelEncoder()     label_encoder.fit(data_frame[column].unique())     return label_encoder.transform(data_frame[column])</pre></li>
+				<li>创建一个<code>for</code>循环，它将遍历<code>df</code>的每一列，并用<code>encode()</code>函数对它们进行编码:<pre>for column in df.columns:     df[column] = encode(df, column)</pre></li>
+				<li>Now, print the first five rows of <code>df</code>:<pre>df.head()</pre><p>输出如下所示:</p><div><img src="img/B16060_04_14.jpg" alt="Figure 4.14: The updated first five rows of the dataset&#13;&#10;"/></div><p class="figure-caption">图4.14:数据集更新后的前五行</p></li>
+				<li>使用<code>.pop()</code>从pandas中提取class列，并将其保存在一个名为<code>label</code> : <pre>label = df.pop('class')</pre>的变量中</li>
+				<li>从<code>sklearn</code>导入<code>model_selection</code>:<pre>from sklearn import model_selection</pre></li>
+				<li>用<code>test_size=0.1</code>和<code>random_state=88</code> : <pre>features_train, features_test, label_train, label_test = \ model_selection.train_test_split(df, label, \                                  test_size=0.1, \                                  random_state=88)</pre>将数据集分成训练集和测试集</li>
+				<li>从<code>sklearn</code>导入<code>DecisionTreeClassifier</code>:<pre>from sklearn.tree import DecisionTreeClassifier</pre></li>
+				<li>实例化<code>DecisionTreeClassifier()</code>并保存在一个名为<code>decision_tree</code> : <pre>decision_tree = DecisionTreeClassifier()</pre>的变量中</li>
+				<li>Fit the decision tree with the training set:<pre>decision_tree.fit(features_train, label_train)</pre><p>输出如下所示:</p><div><img src="img/B16060_04_15.jpg" alt="Figure 4.15: Decision tree fit with the training set&#13;&#10;"/></div><p class="figure-caption">图4.15:适合训练集的决策树</p></li>
+				<li>Print the score of the decision tree on the testing set:<pre>decision_tree.score( features_test, label_test )</pre><p>输出如下所示:</p><pre>0.953757225433526</pre><p>对于我们的第一次尝试，决策树的准确率达到了<code>0.95</code>。这是了不起的。</p></li>
+				<li>从<code>sklearn.metrics</code>导入<code>classification_report</code>:<pre>from sklearn.metrics import classification_report</pre></li>
+				<li>Print the classification report of the test labels and predictions:<pre>print(classification_report(label_test, \
+      decision_tree.predict(features_test)))</pre><p>输出如下所示:</p><div><img src="img/B16060_04_16.jpg" alt="Figure 4.16: Output showing the expected classification report&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图4.16:显示预期分类报告的输出</p>
+			<p>从这个分类报告中，我们可以看到我们的模型对于所有四个类的精度分数表现得相当好。关于回忆分数，我们可以看到它在最后一节课中的表现没有那么好。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3hQDLtr">https://packt.live/3hQDLtr</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/2NkEEML">https://packt.live/2NkEEML</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>通过完成本活动，您已经准备好汽车数据集并训练了决策树模型。您已经学习了如何获得其准确性分数和分类报告，以便您可以分析其精确度和召回分数。</p>
+			<h2 id="_idParaDest-220"><a id="_idTextAnchor251"/>活动4.02:为您的汽车租赁公司进行随机森林分类</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开一个Jupyter笔记本。</li>
+				<li>重复使用<em class="italic">活动1 </em>、<em class="italic">汽车数据分类</em>的<em class="italic">步骤1 - 4 </em>中提到的代码。</li>
+				<li>从<code>sklearn.ensemble</code> : <pre>from sklearn.ensemble import RandomForestClassifier</pre>导入<code>RandomForestClassifier</code></li>
+				<li>用<code>n_estimators=100</code>、<code>max_depth=6</code>和<code>random_state=168</code>实例化一个随机森林分类器。将其保存到一个名为<code>random_forest_classifier</code> : <pre>random_forest_classifier = \ RandomForestClassifier(n_estimators=100, \                        max_depth=6, random_state=168)</pre>的变量中</li>
+				<li>Fit the random forest classifier with the training set:<pre>random_forest_classifier.fit(features_train, label_train)</pre><p>输出如下所示:</p><div><img src="img/B16060_04_17.jpg" alt="Figure 4.17: Logs of the RandomForest classifier with its hyperparameter values&#13;&#10;"/></div><p class="figure-caption">图4.17:random forest分类器的日志及其超参数值</p><p>这些是<code>RandomForest</code>分类器及其超参数值的日志。</p></li>
+				<li>Make predictions on the testing set using the random forest classifier and save them in a variable called <code>rf_preds_test</code>. Print its content:<pre>rf_preds_test = random_forest_classifier.fit(features_train, \
+                                             label_train)
+rf_preds_test</pre><p>输出如下所示:</p><div><img src="img/B16060_04_18.jpg" alt="Figure 4.18: Output showing the predictions on the testing set&#13;&#10;"/></div><p class="figure-caption">图4.18:显示测试集预测的输出</p></li>
+				<li>从<code>sklearn.metrics</code>导入<code>classification_report</code>:<pre>from sklearn.metrics import classification_report</pre></li>
+				<li>Print the classification report with the labels and predictions from the test set:<pre>print(classification_report(label_test, rf_preds_test))</pre><p>输出如下所示:</p><div><img src="img/B16060_04_19.jpg" alt="Figure 4.19: Output showing the classification report with the labels and predictions from the test set&#13;&#10;"/></div><p class="figure-caption">图4.19:显示带有测试集标签和预测的分类报告的输出</p><p>前面报告中的F1分数向我们展示了随机森林在类别<code>2</code>上表现良好，但在类别<code>0</code>和<code>3</code>上表现不佳。该模型无法准确预测类别<code>1</code>，但在测试集中只有9个观察值。准确性得分为<code>0.84</code>，而F1得分为<code>0.82</code>。</p></li>
+				<li>从<code>sklearn.metrics</code> : <pre>from sklearn.metrics import confusion_matrix</pre>导入<code>confusion_matrix</code></li>
+				<li>Display the confusion matrix on the true and predicted labels of the testing set:<pre>confusion_matrix(label_test, rf_preds_test)</pre><p>输出如下所示:</p><pre>array([[ 32, 0, 10, 0], 
+      [ 8, 0, 0, 1], 
+      [ 5, 0, 109, 0], 
+      [ 3, 0, 0, 5]])</pre><p>从这个混淆矩阵中，我们可以看到<code>RandomForest</code>模型很难准确预测第一类。它错误地预测了该类的16个病例(8 + 5 + 3)。</p></li>
+				<li>Print the feature importance score of the test set using <code>.feature_importance_</code> and save the results in a variable called <code>rf_varimp</code>. Print its contents:<pre>rf_varimp = random_forest_classifier.feature_importances_
+rf_varimp</pre><p>输出如下所示:</p><pre>array([0.12676384, 0.10366314, 0.02119621, 0.35266673, 
+       0.05915769, 0.33655239])</pre><p>前面的输出告诉我们，最重要的特性是第四个和第六个，分别对应于<code>persons</code>和<code>safety</code>。</p></li>
+				<li>从<code>sklearn.ensemble</code>导入<code>ExtraTreesClassifier</code>:<pre>from sklearn.ensemble import ExtraTreesClassifier</pre></li>
+				<li>用<code>n_estimators=100</code>、<code>max_depth=6</code>和<code>random_state=168</code>实例化<code>ExtraTreestClassifier</code>。将其保存到名为<code>random_forest_classifier</code> : <pre>extra_trees_classifier = \ ExtraTreesClassifier(n_estimators=100, \                      max_depth=6, random_state=168)</pre>的变量中</li>
+				<li>Fit the <code>extratrees</code> classifier with the training set:<pre>extra_trees_classifier.fit(features_train, label_train)</pre><p>输出如下所示:</p><div><img src="img/B16060_04_20.jpg" alt="Figure 4.20: Output with the extratrees classifier with the training set&#13;&#10;"/></div><p class="figure-caption">图4.20:带有训练集的提取树分类器的输出</p><p>这些是<code>extratrees</code>分类器及其超参数值的日志。</p></li>
+				<li>Make predictions on the testing set using the <code>extratrees</code> classifier and save them in a variable called <code>et_preds_test</code>. Print its content:<pre>et_preds_test = extra_trees_classifier.predict(features_test)
+et_preds_test</pre><p>输出如下所示:</p><div><img src="img/B16060_04_21.jpg" alt="Figure 4.21: Predictions on the testing set using extratrees&#13;&#10;"/></div><p class="figure-caption">图4.21:使用提取树对测试集的预测</p></li>
+				<li>Print the classification report with the labels and predictions from the test set:<pre>print(classification_report(label_test, \
+      extra_trees_classifier.predict(features_test)))</pre><p>输出如下所示:</p><div><img src="img/B16060_04_22.jpg" alt="Figure 4.22: Classification report with the labels and predictions from the test set&#13;&#10;"/></div><p class="figure-caption">图4.22:带有测试集标签和预测的分类报告</p><p>前面报告中显示的F1分数显示随机森林在类别<code>2</code>上表现良好，但在类别<code>0</code>上表现不佳。该模型无法准确预测类别<code>1</code>和<code>3</code>，但是在测试集中分别只有<code>9</code>和<code>8</code>个观察值。准确度分数为<code>0.82</code>，而F1分数为<code>0.78</code>。因此，我们的<code>RandomForest</code>分类器在<code>extratrees</code>中表现得更好。</p></li>
+				<li>Display the confusion matrix of the true and predicted labels of the testing set:<pre>confusion_matrix(label_test, et_preds_test)</pre><p>输出如下所示:</p><pre>array([[ 28,   0,  14,   0],
+       [  9,   0,   0,   0],
+       [  2,   0, 112,   0],
+       [  7,   0,   0,   1]])</pre><p>从这个混淆矩阵中，我们可以看到<code>extratrees</code>模型很难准确预测第一类和第三类。</p></li>
+				<li>Print the feature importance score on the test set using <code>.feature_importance_</code> and save the results in a variable called <code>et_varimp</code>. Print its content:<pre>et_varimp = extra_trees_classifier.feature_importances_
+et_varimp</pre><p>输出如下所示:</p><pre>array([0.08844544, 0.0702334 , 0.01440408, 0.37662014, 0.05965896,
+       0.39063797])</pre></li>
+			</ol>
+			<p>前面的输出告诉我们，最重要的特性是第六和第四个，分别对应于<code>safety</code>和<code>persons</code>。有趣的是看到<code>RandomForest</code>有同样的两个最重要的特征，但顺序不同。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2YoUY5t">https://packt.live/2YoUY5t</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3eswBcW">https://packt.live/3eswBcW</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h1 id="_idParaDest-221"><a id="_idTextAnchor252"/> 5。人工智能:聚类</h1>
+			<h2 id="_idParaDest-222"><a id="_idTextAnchor253"/>活动5.01:使用K均值聚类销售数据</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>Load the dataset as a DataFrame and inspect the data:<pre>import pandas as pd
+file_url = 'https://raw.githubusercontent.com/'\
+           'PacktWorkshops/'\
+           'The-Applied-Artificial-Intelligence-Workshop/'\
+           'master/Datasets/'\
+           'Sales_Transactions_Dataset_Weekly.csv'
+df = pd.read_csv(file_url)
+df</pre><p><code>df</code>的输出如下:</p><div><img src="img/B16060_05_18.jpg" alt="Figure 5.18: Output showing the contents of the dataset&#13;&#10;"/></div><p class="figure-caption">图5.18:显示数据集内容的输出</p><p>如果您查看输出，您会注意到我们的数据集包含<code>811</code>行，每行代表一个产品。它还包含<code>107</code>列，第一列是产品代码，然后是以<code>W</code>开始的<code>52</code>列，代表每周的销售数量，最后是规范化版本的<code>52</code>列，以<code>Normalized</code>开始。规范化列将是比绝对销售列更好的选择，因为它们将帮助我们的k-means算法更快地找到每个聚类的中心。因为我们要处理规范化的列，所以我们可以删除每个<code>W</code>列和<code>Product_Code</code>列。我们还可以删除<code>MIN</code>和<code>MAX</code>列，因为它们不会给我们的集群带来任何价值。还要注意的是，周数是从<code>0</code>到<code>51</code>而不是从<code>1</code>到<code>52</code>。</p></li>
+				<li>Next, create a new DataFrame without the unnecessary columns, as shown in the following code snippet (the first <code>55</code> columns of the dataset). You should use the <code>inplace</code> parameter to help you:<pre>df2 = df.drop(df.iloc[:, 0:55], inplace = False, axis = 1)</pre><p><code>df2</code>的输出如下:</p><div><img src="img/B16060_05_19.jpg" alt="Figure 5.19: Modified DataFrame&#13;&#10;"/></div><pre>drop function of the pandas DataFrame in order to remove the first <code>55</code> columns. We also set the <code>inplace</code> parameter to <code>False</code> in order to not remove the column of our original <code>df</code> DataFrame. As a result, we should only have the normalized columns from <code>0</code> to <code>51</code> in <code>df2</code> and <code>df</code> should still be unchanged.</pre></li>
+				<li>Create a k-means clustering model with <code>8</code> clusters and with <code>random state = 8</code>:<pre>from sklearn.cluster import KMeans
+k_means_model = KMeans(n_clusters=8, random_state=8)
+k_means_model.fit(df2)</pre><p>为了获得<code>8</code>聚类和可重复的结果，我们用除了<code>n_clusters=8</code>和<code>random_state=8</code>之外的每个参数的默认值构建了k-means模型。</p></li>
+				<li>Retrieve the labels from the clustering algorithm:<pre>labels = k_means_model.labels_
+labels</pre><p><code>labels</code>的输出如下:</p><div><img src="img/B16060_05_20.jpg" alt="Figure 5.20: Output array of labels&#13;&#10;"/></div><p class="figure-caption">图5.20:标签的输出数组</p><p>很难理解这个输出，但是<code>labels</code>的每个指数代表了该产品根据类似的每周销售趋势而被分配的类别。我们现在可以使用这些分类标签将产品分组在一起。</p></li>
+				<li>Now, from the first DataFrame, <code>df</code>, keep only the <code>W</code> columns and add the labels as a new column, as shown in the following code snippet:<pre>df.drop(df.iloc[:, 53:], inplace = True, axis = 1)
+df.drop('Product_Code', inplace = True, axis = 1)
+df['label'] = labels
+df</pre><p>在前面的代码片段中，我们删除了所有不需要的列，并在DataFrame中添加了<code>labels</code>作为新列。</p><p><code>df</code>的输出如下:</p><div><img src="img/B16060_05_21.jpg" alt="Figure 5.21: Updated DataFrame with the new labels as a new column&#13;&#10;"/></div><p class="figure-caption">图5.21:用新标签作为新列更新数据帧</p><p>现在我们有了标签，我们可以对<code>label</code>列执行聚合，以便计算每个分类的年平均销售额。</p></li>
+				<li>Perform the aggregation (use the <code>groupby</code> function from pandas) in order to obtain the yearly average sale of each cluster, as shown in the following code snippet:<pre>df_agg = df.groupby('label').sum()
+df_final = df[['label','W0']].groupby('label').count()
+df_final=df_final.rename(columns = {'W0':'count_product'})
+df_final['total_sales'] = df_agg.sum(axis = 1)
+df_final['yearly_average_sales']= \
+df_final['total_sales'] / df_final['count_product']
+df_final.sort_values(by='yearly_average_sales', \
+                     ascending=False, inplace = True)
+df_final</pre><p>在前面的代码片段中，我们首先使用DataFrame的<code>sum()</code>方法和<code>groupby</code>函数来计算每个<code>W</code>列和分类中每个产品的销售额总和，并将结果存储在<code>df_agg</code>中。然后，我们在<code>df</code>的单个列(任意选择)上使用<code>groupby</code>函数和<code>count()</code>方法，以获得每个集群的产品总数(注意，我们还必须在聚合后重命名<code>W0</code>列)。下一步是对<code>df_agg</code>的所有销售列求和，以获得每个分类的总销售额。最后，我们通过用<code>total_sales</code>除以<code>count_product</code>来计算每个集群的<code>yearly_average_sales</code>。我们还包括了最后一步，按照最高的<code>yearly_average_sales</code>对集群进行排序。</p><p><code>df_final</code>的输出如下:</p><div><img src="img/B16060_05_22.jpg" alt="Figure 5.22: Expected output on the sales transaction dataset&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图5.22:销售交易数据集的预期输出</p>
+			<p>现在，有了这个输出，我们看到我们的k-means模型已经成功地将性能相似的产品放在一起。我们可以很容易地看到，集群<code>3</code>中的<code>115</code>产品是最畅销的产品，而集群<code>1</code>中的<code>123</code>产品表现很差。这对于任何企业来说都是非常有价值的，因为它帮助他们自动识别和分组许多性能相似的产品，而不会对产品名称或描述有任何偏见。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3fVpSbT">https://packt.live/3fVpSbT</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3hW24Gk">https://packt.live/3hW24Gk</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>通过完成本练习，您已经学习了如何对许多产品的多个列执行k-means聚类。您还了解了即使没有标签数据，聚类对业务也是非常有用的。</p>
+			<h2 id="_idParaDest-223"><a id="_idTextAnchor254"/>活动5.02:使用均值漂移算法和凝聚层次聚类对红酒数据进行聚类</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>Load the dataset as a DataFrame with <code>sep = ";"</code> and inspect the data:<pre>import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+from sklearn.cluster import MeanShift
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram
+import scipy.cluster.hierarchy as sch
+from sklearn import metrics
+file_url = 'https://raw.githubusercontent.com/'\
+           'PacktWorkshops/'\
+           'The-Applied-Artificial-Intelligence-Workshop/'\
+           'master/Datasets/winequality-red.csv'
+df = pd.read_csv(file_url,sep=';')
+df</pre><p><code>df</code>的输出如下:</p><div><img src="img/B16060_05_23.jpg" alt="Figure 5.23: df showing the dataset as the output&#13;&#10;"/></div><p class="figure-caption">图5.23:将数据集显示为输出的df</p><p class="callout-heading">注意</p><p class="callout">前面截图的输出被截断。</p><p>我们的数据集包含<code>1599</code>行，每行代表一种红酒。它还包含<code>12</code>列，最后一列是葡萄酒的质量。我们可以看到，剩下的11列将是我们的特征，我们需要缩放它们，以帮助我们的模型的准确性和速度。</p></li>
+				<li>Create <code>features</code>, <code>label</code>, and <code>scaled_features</code> variables from the initial DataFrame, <code>df</code>:<pre>features = df.drop('quality', 1)
+label = df['quality']
+scaled_features = preprocessing.scale(features)</pre><p>在前面的代码片段中，我们将标签(<code>quality</code>)与特性分开。然后我们使用<code>sklearn</code>中的<code>preprocessing.scale</code>函数来缩放我们的特征，因为这将改进我们的模型。</p></li>
+				<li>Next, create a mean shift clustering model, then retrieve the model's predicted labels and the number of clusters created:<pre>mean_shift_model = MeanShift()
+mean_shift_model.fit(scaled_features)
+n_cluster_mean_shift = len(mean_shift_model.cluster_centers_)
+label_mean_shift = mean_shift_model.labels_
+n_cluster_mean_shift</pre><p><code>n_cluster_mean_shift</code>的输出如下:</p><pre>10</pre><p>我们的均值漂移模型已经创建了<code>10</code>个聚类，这已经超过了我们在<code>quality</code>标签中的组数。这可能会影响我们的外在分数，并可能是一个早期指标，表明具有相似物理化学性质的葡萄酒不属于同一质量组。</p><p><code>label_mean_shift</code>的输出如下:</p><div><img src="img/B16060_05_24.jpg" alt="Figure 5.24: Output array of label_mean_shift&#13;&#10;"/></div><p class="figure-caption">图5.24:label _ mean _ shift输出数组</p><p>这是一个非常有趣的输出，因为它清楚地显示了我们数据集中的大多数葡萄酒非常相似；集群<code>0</code>中的葡萄酒比其他集群中的多得多。</p></li>
+				<li>Now create an agglomerative hierarchical clustering model after creating a dendrogram and selecting the optimal number of clusters for it:<pre>dendrogram = sch.dendrogram(sch.linkage(scaled_features, \
+                            method='ward'))
+agglomerative_model = \
+AgglomerativeClustering(n_clusters=7, \
+                        affinity='euclidean', \
+                        linkage='ward')
+agglomerative_model.fit(scaled_features)
+label_agglomerative = agglomerative_model.labels_</pre><p><code>dendrogram</code>的输出如下:</p><p> </p><div><img src="img/B16060_05_25.jpg" alt="Figure 5.25: Output showing the dendrogram for the clusters&#13;&#10;"/></div><p class="figure-caption">图5.25:显示聚类树的输出</p><p>从这个输出中，我们可以看到7个集群似乎是我们模型的最佳数量。我们通过搜索最低分支和最高分支在<em class="italic"> y </em>轴上的最大差值来获得这个数字。在我们的例子中，对于七个集群，最低分支的值为<code>29</code>，最高分支的值为<code>41</code>。</p><p><code>label_agglomerative</code>的输出如下:</p><div><img src="img/B16060_05_26.jpg" alt="Figure 5.26: Array showing label_agglomerative&#13;&#10;"/></div><p class="figure-caption">图5.26:显示label _ aggregated的数组</p><p>我们可以看到，我们有一个主要的集群，<code>1</code>，但不像均值漂移模型中的情况那么多。</p></li>
+				<li>Now, compute the following extrinsic approach scores for both models:<p>a.从调整后的Rand指数开始:</p><pre>ARI_mean=metrics.adjusted_rand_score(label, label_mean_shift)
+ARI_agg=metrics.adjusted_rand_score(label, label_agglomerative)
+ARI_mean</pre><p><code>ARI_mean</code>的输出如下:</p><pre>0.0006771608724007207</pre><p>接下来，输入<code>ARI_agg</code>获得预期值:</p><pre>ARI_agg</pre><p><code>ARI_agg</code>的输出如下:</p><pre>0.05358047852603172</pre><p>我们的凝聚模型的<code>adjusted_rand_score</code>比均值漂移模型高得多，但两个分数都非常接近<code>0</code>，这意味着两个模型在真实标签方面都表现不佳。</p><p>b.接下来，计算调整后的互信息:</p><pre>AMI_mean = metrics.adjusted_mutual_info_score(label, \
+                                              label_mean_shift)
+AMI_agg = metrics.adjusted_mutual_info_score(label, \
+                                             label_agglomerative)
+AMI_mean</pre><p><code>AMI_mean</code>的输出如下:</p><pre>0.004837187596124968</pre><p>接下来，输入<code>AMI_agg</code>获得期望值:</p><pre>AMI_agg</pre><p><code>AMI_agg</code>的输出如下:</p><pre>0.05993098663692826</pre><p>我们的凝聚模型的<code>adjusted_mutual_info_score</code>比均值漂移模型高得多，但两者的得分都非常接近<code>V_mean</code>，如下所示:</p><pre>0.021907254751144124</pre><p>接下来，输入<code>V_agg</code>获得预期值:</p><pre>V_agg</pre><p><code>V_agg</code>的输出如下:</p><pre>0.07549735446050691</pre><p>我们的凝聚模型比均值漂移模型具有更高的V-Measure，但是两个分数都非常接近<code>FM_mean</code>如下所示:</p><pre>0.5721233634622408</pre><p>接下来，输入<code>FM_agg</code>获得期望值:</p><pre>FM_agg</pre><p><code>FM_agg</code>的输出如下:</p><pre>0.3300681478007641</pre><p>这一次，我们的均值漂移模型比凝聚模型具有更高的Fowlkes-Mallows分数，但两个分数仍在分数的较低范围内，这意味着两个模型在真实标签方面的表现都不是很好。</p><p>总之，使用外部方法评估，我们的两个模型都不能找到包含基于其物理化学性质的相似质量的葡萄酒的聚类。我们将通过使用固有方法评估来确认这一点，以确保我们的模型聚类定义明确，并正确地将相似的葡萄酒分组在一起。</p></li>
+				<li>Now, compute the following intrinsic approach scores for both models:<p>a.从轮廓系数开始:</p><pre>Sil_mean = metrics.silhouette_score(scaled_features, \
+                                    label_mean_shift)
+Sil_agg = metrics.silhouette_score(scaled_features, \
+                                   label_agglomerative)
+Sil_mean</pre><p><code>Sil_mean</code>的输出如下:</p><pre>0.32769323700400077</pre><p>接下来，输入<code>Sil_agg</code>获得期望值:</p><pre>Sil_agg</pre><p><code>Sil_agg</code>的输出如下:</p><pre>0.1591882574407987</pre><p>我们的均值漂移模型比凝聚模型具有更高的轮廓系数，但是两个分数都非常接近<code>CH_mean</code>如下所示:</p><pre>44.62091774102674</pre><p>接下来，输入<code>CH_agg</code>获得预期值:</p><pre>CH_agg</pre><p><code>CH_agg</code>的输出如下:</p><pre>223.5171774491095</pre><p>我们的凝聚模型比均值漂移模型具有更高的Calinski-Harabasz指数，这意味着凝聚模型比均值漂移模型具有更密集和定义更明确的聚类。</p><p>c.最后，找出戴维斯-波尔丁指数:</p><pre>DB_mean = metrics.davies_bouldin_score(scaled_features, \
+                                       label_mean_shift)
+DB_agg = metrics.davies_bouldin_score(scaled_features, \
+                                      label_agglomerative)
+DB_mean</pre><p><code>DB_mean</code>的输出如下:</p><pre>0.8106334674570222</pre><p>接下来，输入<code>DB_agg</code>获得期望值:</p><pre>DB_agg</pre><p><code>DB_agg</code>的输出如下:</p><pre>1.4975443816135114</pre><p>我们的凝聚模型比均值漂移模型具有更高的David-Bouldin指数，但两个分数都接近于<strong class="bold"> 0 </strong>，这意味着两个模型在它们的聚类定义方面都表现良好。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2YXMl0U">https://packt.live/2YXMl0U</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2Bs7sAp">https://packt.live/2Bs7sAp</a>在线运行这个例子。</p><p class="callout">您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>总之，通过内在方法评估，我们的两个模型都得到了很好的定义，并证实了我们对红酒数据集的直觉，即相似的理化性质与相似的质量无关。我们还能够看到，在我们的大多数得分中，凝聚层次模型比均值漂移模型表现得更好。</p>
+			<h1 id="_idParaDest-224"><a id="_idTextAnchor255"/> 6。神经网络和深度学习</h1>
+			<h2 id="_idParaDest-225"><a id="_idTextAnchor256"/>活动6.01:寻找Digits数据集的最佳准确度分数</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>将<code>tensorflow.keras.datasets.mnist</code>导入为<code>mnist</code> : <pre>import tensorflow.keras.datasets.mnist as mnist</pre></li>
+				<li>使用<code>mnist.load_data()</code>加载<code>mnist</code>数据集，并将结果保存到<code>(features_train, label_train), (features_test, label_test)</code> : <pre>(features_train, label_train), \ (features_test, label_test) = mnist.load_data()</pre></li>
+				<li>Print the content of <code>label_train</code>:<pre>label_train</pre><p>预期输出如下:</p><pre>array([5, 0, 4, ..., 5, 6, 8], dtype=uint8)</pre><p><code>label</code>列包含与<code>10</code>手写数字相对应的数值:<code>0</code>到<code>9</code>。</p></li>
+				<li>Print the shape of the training set:<pre>features_train.shape</pre><p>预期输出如下:</p><pre>(60000, 28, 28)</pre><p>训练集由形状<code>28</code>的<code>60,000</code>个观察值通过<code>28</code>组成。我们需要为我们的神经网络拉平输入。</p></li>
+				<li>Print the shape of the testing set:<pre>features_test.shape</pre><p>预期输出如下:</p><pre>(10000, 28, 28)</pre><p>测试集由形状<code>28</code>的<code>10,000</code>观察值和<code>28</code>观察值组成。</p></li>
+				<li>通过将<code>features_train</code>和<code>features_test</code>除以<code>255</code> : <pre>features_train = features_train / 255.0 features_test = features_test / 255.0</pre>来标准化它们</li>
+				<li>导入<code>numpy</code>为<code>np</code>，<code>tensorflow</code>为<code>tf</code>，从<code>tensorflow.keras</code> : <pre>import numpy as np import tensorflow as tf from tensorflow.keras import layers</pre>导入<code>layers</code></li>
+				<li>使用<code>np.random_seed()</code>和<code>tf.random.set_seed()</code> : <pre>np.random.seed(8) tf.random.set_seed(8)</pre>将<code>8</code>设置为NumPy和TensorFlow的种子</li>
+				<li>实例化一个<code>tf.keras.Sequential()</code>类并保存到一个名为<code>model</code> : <pre>model = tf.keras.Sequential()</pre>的变量中</li>
+				<li>用<code>input_shape=(28,28)</code>实例化<code>layers.Flatten()</code>并保存到一个名为<code>input_layer</code> : <pre>input_layer = layers.Flatten(input_shape=(28,28))</pre>的变量中</li>
+				<li>用<code>128</code>神经元和<code>activation='relu'</code>实例化一个<code>layers.Dense()</code>类，然后保存到一个名为<code>layer1</code> : <pre>layer1 = layers.Dense(128, activation='relu')</pre>的变量中</li>
+				<li>用<code>1</code>神经元和<code>activation='softmax'</code>实例化第二个<code>layers.Dense()</code>类，然后保存到一个名为<code>final_layer</code> : <pre>final_layer = layers.Dense(10, activation='softmax')</pre>的变量中</li>
+				<li>使用<code>.add()</code>将刚刚定义的三个图层添加到模型中，并在它们之间添加一个<code>layers.Dropout(0.25)</code>图层(除了展平图层):<pre>model.add(input_layer) model.add(layer1) model.add(layers.Dropout(0.25)) model.add(final_layer)</pre></li>
+				<li>用<code>0.001</code>作为学习率实例化一个<code>tf.keras.optimizers.Adam()</code>类，并保存到一个名为<code>optimizer</code> : <pre>optimizer = tf.keras.optimizers.Adam(0.001)</pre>的变量中</li>
+				<li>使用<code>.compile()</code>和<code>loss='sparse_categorical_crossentropy', optimizer=optimizer, metrics=['accuracy']</code> : <pre>model.compile(loss='sparse_categorical_crossentropy', \               optimizer=optimizer, \               metrics=['accuracy'])</pre>编译神经网络</li>
+				<li>Print a summary of the model using <code>.summary()</code>:<pre>model.summary()</pre><p>预期输出如下:</p><div><img src="img/B16060_06_29.jpg" alt="Figure 6.29: Summary of the model&#13;&#10;"/></div><p class="figure-caption">图6.29:模型总结</p><p>这个输出总结了我们的神经网络的架构。我们可以看到它由四层组成，一层是平坦层，两层是致密层，还有一层是脱落层。</p></li>
+				<li>用<code>monitor='val_loss'</code>和<code>patience=5</code>作为学习率实例化<code>tf.keras.callbacks.EarlyStopping()</code>类，并保存到一个名为<code>callback</code> : <pre>callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', \                                             patience=5)</pre>的变量中</li>
+				<li>Fit the neural networks with the training set and specify <code>epochs=10</code>, <code>validation_split=0.2</code>, <code>callbacks=[callback]</code>, and <code>verbose=2</code>:<pre>model.fit(features_train, label_train, epochs=10, \
+          validation_split = 0.2, \
+          callbacks=[callback], verbose=2)</pre><p>预期输出如下:</p><div><img src="img/B16060_06_30.jpg" alt="Figure 6.30: Fitting the neural network with the training set&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图6.30:用训练集拟合神经网络</p>
+			<p>在仅仅经过<code>10</code>个时期之后，我们在训练集和验证集上分别获得了<code>0.9825</code>和<code>0.9779</code>的准确率。这些都是惊人的结果。在本节中，您学习了如何使用TensorFlow对数字进行分类，从而从头开始构建和训练神经网络。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/37UWf7E">https://packt.live/37UWf7E</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/317R2b3">https://packt.live/317R2b3</a>在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<h2 id="_idParaDest-226"><a id="_idTextAnchor257"/>活动6.02:使用CNN评估时尚图像识别模型</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本。</li>
+				<li>将<code>tensorflow.keras.datasets.fashion_mnist</code>导入为<code>fashion_mnist</code> : <pre>import tensorflow.keras.datasets.fashion_mnist as fashion_mnist</pre></li>
+				<li>使用<code>fashion_mnist.load_data()</code>加载时尚MNIST数据集，并将结果保存到<code>(features_train, label_train), (features_test, label_test)</code> : <pre>(features_train, label_train), \ (features_test, label_test) = fashion_mnist.load_data()</pre></li>
+				<li>Print the shape of the training set:<pre>features_train.shape</pre><p>预期输出如下:</p><pre>(60000, 28, 28)</pre><p>训练集由大小为<code>28</code> * <code>28</code>的<code>60,000</code>幅图像组成。</p></li>
+				<li>Print the shape of the testing set:<pre>features_test.shape</pre><p>预期输出如下:</p><pre>(10000, 28, 28)</pre><p>测试集由尺寸为<code>28</code> * <code>28</code>的<code>10,000</code>幅图像组成。</p></li>
+				<li>用维度(<code>number_rows</code>、<code>28</code>、<code>28</code>、<code>1</code>)重塑训练集和测试集，如下面的代码片段所示:<pre>features_train = features_train.reshape(60000, 28, 28, 1) features_test = features_test.reshape(10000, 28, 28, 1)</pre></li>
+				<li>通过将<code>features_train</code>和<code>features_test</code>除以<code>255</code> : <pre>features_train = features_train / 255.0 features_test = features_test / 255.0</pre>来标准化它们</li>
+				<li>导入<code>numpy</code>为<code>np</code>，<code>tensorflow</code>为<code>tf</code>，从<code>tensorflow.keras</code> : <pre>import numpy as np import tensorflow as tf from tensorflow.keras import layers</pre>导入<code>layers</code></li>
+				<li>使用<code>np.random_seed()</code>和<code>tf.random.set_seed()</code> : <pre>np.random.seed(8) tf.random.set_seed(8)</pre>将<code>8</code>设置为<code>numpy</code>和<code>tensorflow</code>的种子</li>
+				<li>实例化一个<code>tf.keras.Sequential()</code>类并保存到一个名为<code>model</code> : <pre>model = tf.keras.Sequential()</pre>的变量中</li>
+				<li>用形状为<code>(3,3), activation='relu' and input_shape=(28,28)</code>的<code>64</code>内核实例化<code>layers.Conv2D()</code>，并将其保存到名为<code>conv_layer1</code> : <pre>conv_layer1 = layers.Conv2D(64, (3,3), \               activation='relu', input_shape=(28, 28, 1))</pre>的变量中</li>
+				<li>用形状为<code>(3,3), activation='relu'</code>的<code>64</code>内核实例化<code>layers.Conv2D()</code>，并保存到一个名为<code>conv_layer2</code> : <pre>conv_layer2 = layers.Conv2D(64, (3,3), activation='relu')</pre>的变量中</li>
+				<li>用<code>128</code>神经元和<code>activation='relu'</code>实例化<code>layers.Flatten()</code>，然后保存到一个名为<code>fc_layer1</code> : <pre>fc_layer1 = layers.Dense(128, activation='relu')</pre>的变量中</li>
+				<li>用<code>10</code>神经元和<code>activation='softmax'</code>实例化<code>layers.Flatten()</code>，然后保存到一个名为<code>fc_layer2</code> : <pre>fc_layer2 = layers.Dense(10, activation='softmax')</pre>的变量中</li>
+				<li>使用<code>.add()</code>将你刚刚定义的四个层添加到模型中，并在每个卷积层之间添加一个大小为<code>(2,2)</code>的<code>MaxPooling2D()</code>层:<pre>model.add(conv_layer1) model.add(layers.MaxPooling2D(2, 2)) model.add(conv_layer2) model.add(layers.MaxPooling2D(2, 2)) model.add(layers.Flatten()) model.add(fc_layer1) model.add(fc_layer2)</pre></li>
+				<li>用<code>0.001</code>作为学习率实例化一个<code>tf.keras.optimizers.Adam()</code>类，并保存到一个名为<code>optimizer</code> : <pre>optimizer = tf.keras.optimizers.Adam(0.001)</pre>的变量中</li>
+				<li>使用<code>.compile()</code>和<code>loss='sparse_categorical_crossentropy', optimizer=optimizer, metrics=['accuracy']</code> : <pre>model.compile(loss='sparse_categorical_crossentropy', \               optimizer=optimizer, metrics=['accuracy'])</pre>编译神经网络</li>
+				<li>Print a summary of the model using <code>.summary()</code>:<pre>model.summary()</pre><p>预期输出如下:</p><div><img src="img/B16060_06_31.jpg" alt="Figure 6.31: Summary of the model&#13;&#10;"/></div><p class="figure-caption">图6.31:模型概要</p><p>总结向我们表明，该模型需要优化的参数不止<code>240,000</code>个。</p></li>
+				<li>Fit the neural network with the training set and specify <code>epochs=5</code>, <code>validation_split=0.2</code>, and <code>verbose=2</code>:<pre>model.fit(features_train, label_train, \
+          epochs=5, validation_split = 0.2, verbose=2)</pre><p>预期输出如下:</p><div><img src="img/B16060_06_32.jpg" alt="Figure 6.32: Fitting the neural network with the training set&#13;&#10;"/></div><p class="figure-caption">图6.32:用训练集拟合神经网络</p><p>经过<code>5</code>个时期的训练后，我们在训练集和验证集上分别获得了<code>0.925</code>和<code>0.9042</code>的准确度分数。我们的模型有点过了。</p></li>
+				<li>Evaluate the performance of the model on the testing set:<pre>model.evaluate(features_test, label_test)</pre><p>预期输出如下:</p><pre>10000/10000 [==============================] - 1s 108us/sample - loss: 0.2746 - accuracy: 0.8976
+[0.27461639745235444, 0.8976]</pre></li>
+			</ol>
+			<p>在从时尚MNIST数据集预测服装图像的测试集上，我们获得了<code>0.8976</code>的准确率。可以自己尝试提高这个分数，减少过拟合。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Nzt6pn">https://packt.live/2Nzt6pn</a>。</p>
+			<p class="callout">你也可以在https://packt.live/2NlM5nd在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>在这项活动中，我们设计并训练了一个CNN架构，用于从时尚MNIST数据集中识别服装图像。</p>
+			<h2 id="_idParaDest-227"><a id="_idTextAnchor258"/>活动6.03:用RNN评估雅虎股票模型</h2>
+			<p><strong class="bold">解决方案</strong>:</p>
+			<ol>
+				<li value="1">打开一个Jupyter笔记本。</li>
+				<li>进口<code>pandas</code>为<code>pd</code>，<code>numpy</code>为<code>np</code> : <pre>import pandas as pd import numpy as np</pre></li>
+				<li>创建一个名为<code>file_url</code>的变量，包含一个到原始数据集的链接:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/yahoo_spx.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>将数据集加载到名为<code>df</code> : <pre>df = pd.read_csv(file_url)</pre>的新变量中</li>
+				<li>使用<code>.iloc</code>和<code>.values</code>提取第二列的值，并将结果保存在名为<code>stock_data</code> : <pre>stock_data = df.iloc[:, 1:2].values</pre>的变量中</li>
+				<li>从<code>sklearn.preprocessing</code>导入<code>MinMaxScaler</code>:<pre>from sklearn.preprocessing import MinMaxScaler</pre></li>
+				<li>实例化<code>MinMaxScaler()</code>并保存到一个名为<code>sc</code> : <pre>sc = MinMaxScaler()</pre>的变量中</li>
+				<li>用<code>.fit_transform()</code>将数据标准化，并将结果保存在一个名为<code>stock_data_scaled</code> : <pre>stock_data_scaled = sc.fit_transform(stock_data)</pre>的变量中</li>
+				<li>创建两个名为<code>X_data</code>和<code>y_data</code> : <pre>X_data = [] y_data = []</pre>的空数组</li>
+				<li>创建一个名为<code>window</code>的变量，它将包含值<code>30</code> : <pre>window = 30</pre></li>
+				<li>Create a <code>for</code> loop starting from the <code>window</code> value and iterate through the length of the dataset. For each iteration, append to <code>X_data</code> the previous rows of <code>stock_data_scaled</code> using <code>window</code> and append the current value of <code>stock_data_scaled</code>:<pre>for i in range(window, len(df)):
+    X_data.append(stock_data_scaled[i - window:i, 0])
+    y_data.append(stock_data_scaled[i, 0])</pre><p><code>y_data</code>将包含每天的开盘股价，而<code>X_data</code>将包含最近30天的股价。</p></li>
+				<li>将<code>X_data</code>和<code>y_data</code>转换成NumPy数组:<pre>X_data = np.array(X_data) y_data = np.array(y_data)</pre></li>
+				<li>将<code>X_data</code>整形为(行数，列数，1): <pre>X_data = np.reshape(X_data, (X_data.shape[0], \                     X_data.shape[1], 1))</pre></li>
+				<li>将前<code>1,000</code>行作为训练数据，保存到两个变量<code>features_train</code>和<code>label_train</code> : <pre>features_train = X_data[:1000] label_train = y_data[:1000]</pre></li>
+				<li>将第<code>1,000</code>行之后的行作为测试数据，保存到两个变量<code>features_test</code>和<code>label_test</code> : <pre>features_test = X_data[:1000] label_test = y_data[:1000]</pre></li>
+				<li>将<code>numpy</code>导入为<code>np</code>，<code>tensorflow</code>导入为<code>tf</code>，从<code>tensorflow.keras</code> : <pre>import numpy as np import tensorflow as tf from tensorflow.keras import layers</pre>导入<code>layers</code></li>
+				<li>使用<code>np.random_seed()</code>和<code>tf.random.set_seed()</code> : <pre>np.random.seed(8) tf.random.set_seed(8)</pre>将<code>8</code>设置为NumPy和TensorFlow的<code>seed</code></li>
+				<li>实例化一个<code>tf.keras.Sequential()</code>类并保存到一个名为<code>model</code> : <pre>model = tf.keras.Sequential()</pre>的变量中</li>
+				<li>用<code>50</code>单位、<code>return_sequences='True'</code>和<code>input_shape=(X_train.shape[1], 1)</code>实例化<code>layers.LSTM()</code>，然后保存到一个名为<code>lstm_layer1</code> : <pre>lstm_layer1 = layers.LSTM(units=50,return_sequences=True,\                           input_shape=(features_train.shape[1], 1))</pre>的变量中</li>
+				<li>用<code>50</code>单位和<code>return_sequences='True'</code>实例化<code>layers.LSTM()</code>，然后保存到名为<code>lstm_layer2</code> : <pre>lstm_layer2 = layers.LSTM(units=50,return_sequences=True)</pre>的变量中</li>
+				<li>用<code>50</code>单位和<code>return_sequences='True'</code>实例化<code>layers.LSTM()</code>，然后保存到名为<code>lstm_layer3</code> : <pre>lstm_layer3 = layers.LSTM(units=50,return_sequences=True)</pre>的变量中</li>
+				<li>用<code>50</code>单位实例化<code>layers.LSTM()</code>，并保存到一个名为<code>lstm_layer4</code> : <pre>lstm_layer4 = layers.LSTM(units=50)</pre>的变量中</li>
+				<li>用<code>1</code>神经元实例化<code>layers.Dense()</code>并保存到一个名为<code>fc_layer</code> : <pre>fc_layer = layers.Dense(1)</pre>的变量中</li>
+				<li>使用<code>.add()</code>将你刚刚定义的五个图层添加到模型中，并在每个LSTM图层之间添加一个<code>Dropout(0.2)</code>图层:<pre>model.add(lstm_layer1) model.add(layers.Dropout(0.2)) model.add(lstm_layer2) model.add(layers.Dropout(0.2)) model.add(lstm_layer3) model.add(layers.Dropout(0.2)) model.add(lstm_layer4) model.add(layers.Dropout(0.2)) model.add(fc_layer)</pre></li>
+				<li>用<code>0.001</code>作为学习率实例化一个<code>tf.keras.optimizers.Adam()</code>类，并保存到一个名为<code>optimizer</code> : <pre>optimizer = tf.keras.optimizers.Adam(0.001)</pre>的变量中</li>
+				<li>使用<code>.compile()</code>和<code>loss='mean_squared_error', optimizer=optimizer, metrics=[mse]</code> : <pre>model.compile(loss='mean_squared_error', \               optimizer=optimizer, metrics=['mse'])</pre>编译神经网络</li>
+				<li>Print a summary of the model using <code>.summary()</code>:<pre>model.summary()</pre><p>预期输出如下:</p><div><img src="img/B16060_06_33.jpg" alt="Figure 6.33: Summary of the model&#13;&#10;"/></div><p class="figure-caption">图6.33:模型摘要</p><p>总结向我们表明，该模型需要优化的参数不止<code>71,051</code>个。</p></li>
+				<li>Fit the neural network with the training set and specify <code>epochs=10, validation_split=0.2, verbose=2</code>:<pre>model.fit(features_train, label_train, epochs=10, \
+          validation_split = 0.2, verbose=2)</pre><p>预期输出如下:</p><div><img src="img/B16060_06_34.jpg" alt="Figure 6.34: Fitting the neural network with the training set&#13;&#10;"/></div><p class="figure-caption">图6.34:用训练集拟合神经网络</p><p>在对<code>10</code>时期进行训练后，我们对训练集和验证集分别取得了<code>0.0025</code>和<code>0.0033</code>的均方误差分数。我们的模型有点过度拟合了。</p></li>
+				<li>Finally, evaluate the performance of the model on the testing set:<pre>model.evaluate(features_test, label_test)</pre><p>预期输出如下:</p><pre>1000/1000 [==============================] - 0s 279us/sample - loss: 0.0016 - mse: 0.0016
+[0.00158528157370165, 0.0015852816]</pre></li>
+			</ol>
+			<p>我们在测试集上获得了<code>0.0017</code>的均方误差分数，这意味着我们可以使用过去30天的股票价格数据作为特征来非常准确地预测雅虎的股票价格。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3804U8P">https://packt.live/3804U8P</a>。</p>
+			<p class="callout">你也可以在https://packt.live/3hWtU5l在线运行这个例子。</p>
+			<p class="callout">您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>在这项活动中，我们设计并训练了一个RNN模型，根据之前30天的数据预测雅虎股票价格。</p>
+		</div>
+		<div><div/>
+		</div>
+	
+
+</body></html>

@@ -1,0 +1,1555 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Using Elastic ML Data in Kibana Dashboards</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">在Kibana仪表板中使用弹性ML数据</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>至此，您已经看到了利用弹性ML输出的多个用例和多种方式，比如获得主动警报。无论您是在开发运维团队还是在安全团队，您都可能需要可视化您的数据。可视化大量原始数据可能是一种负担，因为太多的数据源淹没了我们的眼睛可以有效捕捉的内容。这就是Kibana的可视化功能与弹性ML数据相结合的地方，可以用来突出仪表盘中真正重要的东西。</p>
+
+<p>本章将带您浏览使用弹性ML数据的可视化和仪表板的创建。通过这种方式，不熟悉ML但需要可视化数据的分析师可以在整个调查过程中得到帮助。</p>
+
+<p>首先，我们将快速浏览一下Kibana，并列出我们将使用的可视化选项。然后，我们将准备我们的数据并创建几个ML作业，最后我们将构建我们的可视化和仪表板。</p>
+
+<p>以下是我们将在本章中涉及的主题:</p>
+
+<ul>
+
+<li>可视化选项</li>
+
+<li>为异常检测分析准备数据</li>
+
+<li>构建可视化</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Visualization options in Kibana</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">基巴纳的可视化选项</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>Kibana有多个可视化数据的选项；在绘制数据图表方面，无论是折线图、条形图、饼图、数据表还是仪表图，它们都有不同且相似的选项。</p>
+
+<p>真正让他们与众不同的是用户体验或他们所服务的用例。首先，我们将简要介绍不同的可用可视化，然后在本章的后面使用它们来强调一些弹性ML的见解。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Visualization examples</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">可视化示例</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在Kibana中，如果您单击左侧面板中的Visualize选项，您将有机会为具有不同图表类型的仪表板创建可视化面板。单击添加按钮(+)显示以下一组可视化类型:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-975 image-border" src="img/5bdd0768-f2a2-4361-aef8-9ac152fde8df.png" style="width:41.33em;height:41.42em;"/></p>
+
+<p>这里我们不会一一介绍，但我们鼓励您参考位于<a href="https://www.elastic.co/guide/en/kibana/current/visualize.html" target="_blank">https://www . elastic . co/guide/en/ki Bana/current/visualize . html</a>的文档，这样您就可以熟悉不同的图表。我们将只关注数据表和热图，我们将在本章的后面使用它们来构建简单的仪表板。</p>
+
+<p>数据表是一个非常直观的可视化工具，它允许我们创建一个有序的字段列表。这对于显示可用作过滤器的字符串数据类型非常实用，例如，URIs列表(被请求的网页名称的路径)，以及每个URI在web服务器上收到的点击次数:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-976 image-border" src="img/a12550a3-6d51-4f85-b455-e0c4db23d1c7.png" style="width:29.25em;height:22.58em;"/></p>
+
+<p>我们将在本章中使用的另一种可视化方式是热图。这将允许我们呈现数据的两个方面:</p>
+
+<ul>
+
+<li>异常的严重程度</li>
+
+<li>同一图表上的多个作业，以便我们可以将异常情况相互关联</li>
+
+</ul>
+
+<p class="mce-root"/>
+
+<p>我们的热图一旦建立，将如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-977 image-border" src="img/b2521163-9d7b-499e-ac95-2292cc44bead.png" style="width:100.92em;height:66.67em;"/></p>
+
+<p>虽然这些可视化是点击驱动的，但下一种类型的可视化，使用Timelion，是基于表达式的，这使我们能够组合数据源。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Timelion</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">Timelion</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>Timelion是一个基于表达式的可视化框架，允许用户利用Elasticsearch聚合框架来构建图表。Timelion还非常强大，它允许您在同一个图表中组合来自多个来源的数据。</p>
+
+<p>稍后我们将学习如何使用这种可视化类型来组合数据源。我们的最终产品将如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-978 image-border" src="img/c940a415-bea4-414b-8578-67b5e9fd5a92.png" style="width:100.83em;height:30.08em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Time series visual builder </title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">时间序列可视化生成器</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p><strong>时序可视化构建器</strong> ( <strong> TSVB </strong>)是指标驱动的，非常适合基于时序的指标。它允许使用聚合和管道聚合，并在一个全面的图表控件中提供多种图表类型:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-979 image-border" src="img/36ffd86c-3881-4ac6-94bf-e44199263fda.png" style="width:27.83em;height:2.08em;"/></p>
+
+<p>我们将看到，我们可以使用管道聚合，对指标应用数学函数，甚至对图表进行注释。注释的使用是我们在示例仪表板中使用这种可视化的主要原因，因为它将允许分析师一眼就能捕捉到可定制图表中存在异常的地方，如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-980 image-border" src="img/21416481-e461-480a-9dbd-92d69735a9a0.png" style="width:100.75em;height:20.67em;"/></p>
+
+<p>然而，在我们能够将所有这些可视化组件组装到我们的仪表板中之前，我们需要下载并准备一些能够馈入ML作业的数据。</p>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Preparing data for anomaly detection analysis</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">为异常检测分析准备数据</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>为了用不同的可视化制作一个有效的、有代表性的仪表板，我们首先需要下载、接收和分析一个存在于公共领域的数据集。</p>
+
+<p style="font-weight: 400">我们从美国宇航局选择了一个非常古老的数据集，你可以在http://ita.ee.lbl.gov/html/contrib/NASA-HTTP.html获得。该数据集包含1995年7月1日至1995年8月31日期间NASA网站的HTTP访问日志。在写这本书的时候，它几乎是一个化石数据集，它已经有将近24年的历史了！</p>
+
+<p style="font-weight: 400">然而，日志中的信息是永恒的，非常适合我们在这里想要实现的目标。首先，让我们了解一下数据集。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>The dataset</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">数据集</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在这个数据集中，每个文档代表一个组合的Apache日志，其结构如下:</p>
+
+<pre>128.159.122.45 - - [28/Jul/1995:13:31:57 -0400] "GET /ksc.html HTTP/1.0" 200 7280 </pre>
+
+<p>前面的日志行包含以下信息:</p>
+
+<ul>
+
+<li>发出请求的主机，即IP地址</li>
+
+<li>请求的时间戳</li>
+
+<li>请求</li>
+
+<li>HTTP响应状态</li>
+
+<li>回复的大小，以字节为单位</li>
+
+</ul>
+
+<p>我们将使用Logstash将这个日志文件转换成JSON格式，然后我们可以将其索引到Elasticsearch中。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Ingesting the data</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摄取数据</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>我们使用这个数据集来简化摄取过程；Apache日志不需要对Logstash中的大量配置进行解析。我们的Logstash配置的基本结构将包含以下内容:</p>
+
+<ul>
+
+<li>使用数据集中提供的两个文件的文件输入；一个用于7月，一个用于8月</li>
+
+<li><strong>两个过滤器</strong>:一个<kbd>grok</kbd>过滤器用于解析日志行，一个<kbd>date</kbd>过滤器用于将时间戳转换成格式良好的时间戳</li>
+
+<li>一个输出告诉Logstash将数据发送到我们的Elasticsearch集群</li>
+
+</ul>
+
+<p>以下是完整的Logstash管道配置:</p>
+
+<pre>input { 
+
+  file { 
+
+    id =&gt; "nasa_file" 
+
+    path =&gt; "/Users/baha/Downloads/data/*.log" 
+
+    start_position =&gt; "beginning" 
+
+    sincedb_path =&gt; "/dev/null" 
+
+  } 
+
+} 
+
+ 
+
+filter { 
+
+  grok { 
+
+    id =&gt; "nasa_grok_filter" 
+
+    match =&gt; { "message" =&gt; "%{COMMONAPACHELOG}" } 
+
+  } 
+
+  date { 
+
+    match =&gt; ["timestamp", "dd/MMM/yyyy:HH:mm:ss Z"] 
+
+    target =&gt; "@timestamp" 
+
+    remove_field =&gt; [ "timestamp" ] 
+
+  } 
+
+} 
+
+ 
+
+output { 
+
+  elasticsearch { 
+
+    id =&gt; "nasa_elasticsearch_output" 
+
+    hosts =&gt; "localhost:9200" 
+
+    user =&gt; "elastic" 
+
+    password =&gt; "********" 
+
+    index =&gt; "nasa-%{+YYYY.MM}" 
+
+    template =&gt; "/Users/baha/Downloads/data/template.conf" 
+
+    template_name =&gt; "nasa"</pre>
+
+<p class="mce-root"/>
+
+<pre>    template_overwrite =&gt; "false" 
+
+  } 
+
+} </pre>
+
+<p>文件输入会消耗指定目录中包含的所有日志文件(在我的例子中是<kbd>NASA_access_log_Aug95.log</kbd>和<kbd>NASA_access_log_Jul95.log</kbd>)。与默认提供的扩展名相比，我在文件中添加了一个<kbd>.log</kbd>扩展名。出于测试的目的，我已经将<kbd>start_position</kbd>参数设置为从文件的开头开始，所以我们将它与<kbd>sincedb_path</kbd>结合起来，在这里保存摄取的最后位置，指向<kbd>/dev/null</kbd>。每当我更新配置或重启Logstash时，这个文件就会被使用。</p>
+
+<p>注意，在<kbd>filter</kbd>部分，我们使用<kbd>COMMONAPACHELOG</kbd> grok模式来解析包含在输入<kbd>message</kbd>字段中的日志。此外，<kbd>date</kbd>过滤器将文件的时间戳转换成日期，并存储在<kbd>@timestamp</kbd> <strong> </strong>字段中。</p>
+
+<p>最后，我们使用一个输出来索引Elasticsearch中的数据，使用<kbd>template.conf</kbd>模板文件来设置索引设置和映射。</p>
+
+<p>有关更多信息，请参见本书GitHub资源库中的<kbd>template.conf</kbd>文件，网址为<a href="https://github.com/PacktPublishing/Machine-Learning-with-the-Elastic-Stack/blob/master/Chapter07/template.conf" target="_blank">https://GitHub . com/packt publishing/Machine-Learning-with-the-Elastic-Stack/blob/master/chapter 07/template . conf</a>。</p>
+
+<p>映射对于将字段名正确映射到所需的类型(例如，字节为<kbd>integer</kbd>，响应为<kbd>keyword</kbd>)是必不可少的。否则，如果我们希望在Elasticsearch聚合或ML作业配置中有效地使用这些字段，它们可能不可用。</p>
+
+<p>在本例中，Logstash被配置为使用集中式监视和管理。所需的配置已经添加到Logstash配置的<kbd>logstash.yml</kbd>文件的末尾，该文件位于<kbd>conf</kbd>目录中，如下所示:</p>
+
+<pre># X-Pack Monitoring 
+
+xpack.monitoring.enabled: true 
+
+xpack.monitoring.elasticsearch.username: elastic 
+
+xpack.monitoring.elasticsearch.password: ********* 
+
+xpack.monitoring.elasticsearch.url: ["http://localhost:9200"] 
+
+# X-Pack Management 
+
+xpack.management.enabled: true 
+
+xpack.management.pipeline.id: ["nasa-apache-log"] 
+
+xpack.management.elasticsearch.username: elastic 
+
+xpack.management.elasticsearch.password: ********* 
+
+xpack.management.elasticsearch.url: ["http://localhost:9200"] </pre>
+
+<p>如果启用了X-Pack安全，请仅提供用户名/密码凭据。</p>
+
+<p>通过这种方式，您将能够在Kibana中添加Logstash管道，并且Logstash将在bootstrap中连接并加载它。要继续，请注意以下步骤:</p>
+
+<ol>
+
+<li>连接到Kibana并转到管理|日志存储|管道部分。</li>
+
+<li>单击创建管道按钮。</li>
+
+</ol>
+
+<p style="padding-left: 60px">这将显示以下用户界面:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-981 image-border" src="img/acf4e679-d7ff-44f1-99a3-0cdbeb598371.png" style="width:27.83em;height:39.92em;"/></p>
+
+<ol start="3">
+
+<li>从那里，启动Logstash，您应该看到来自管道的数据在Elasticsearch中被索引，如下面的监控截图所示:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-982 image-border" src="img/8f5a26a6-ba55-4c2a-8438-c5a9908c4221.png" style="width:100.92em;height:34.00em;"/></p>
+
+<p style="padding-left: 60px">相关的指标监控统计如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-983 image-border" src="img/a822eaf0-80f6-44e3-8a6b-af00452eeed8.png" style="width:100.83em;height:25.58em;"/></p>
+
+<p style="padding-left: 60px">总而言之，我们已经接收了大约350万个文档，相当于磁盘上大约1 GB的数据。如果您通过查询Elasticsearch索引来检查文档结构，您应该会看到如下内容:</p>
+
+<pre style="padding-left: 60px">{ 
+
+    "host": "mbp-de-baha.lan", 
+
+    "ident": "-", 
+
+    "auth": "-", 
+
+    "@timestamp": "1995-09-01T03:59:53.000Z", 
+
+    "path": "/Users/baha/Downloads/data/NASA_access_log_Aug95.log", 
+
+    "bytes": "39017", 
+
+    "request": "/images/kscmap-small.gif", 
+
+    "@version": "1", 
+
+    "response": "200", 
+
+    "httpversion": "1.0", 
+
+    "message": "cindy.yamato.ibm.co.jp - - [31/Aug/1995:23:59:53 -0400] \"GET /images/kscmap-small.gif HTTP/1.0\" 200 39017", 
+
+    "verb": "GET", 
+
+    "clientip": "cindy.yamato.ibm.co.jp" 
+
+  } </pre>
+
+<p>在这个阶段，我们现在准备创建一些ML工作。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Creating anomaly detection jobs</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">创建异常检测作业</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>我们将创建三个作业，以便在可视化中使用它们的结果。它们如下:</p>
+
+<ul>
+
+<li>交通分析工作</li>
+
+<li>发出请求的主机的HTTP响应代码分析</li>
+
+<li>对发出请求的主机的流量分析</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Global traffic analysis job</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">全球流量分析作业</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>第一项工作是对访问日志的简单流量分析。按照以下步骤创建它:</p>
+
+<ol>
+
+<li>访问Kibana中的机器学习部分，并在NASA访问日志索引上创建一个新的单一度量作业。</li>
+
+<li>配置该作业，使其在<kbd>clientip</kbd>字段中进行不同的计数，这使我们能够计数产生流量的IP的不同数量，如下面的屏幕截图所示:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-984 image-border" src="img/67d70eb5-b9c2-49c0-b69e-48e74ceca02d.png" style="width:100.83em;height:35.67em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<ol start="3">
+
+<li>运行该作业时，您应该会在单个指标查看器中看到与下面的屏幕截图类似的异常情况。稍后，我们将在TSVB可视化中使用这些异常作为注释:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-985 image-border" src="img/c4818741-da11-48a7-89b7-c816ae0c21ce.png" style="width:100.92em;height:34.83em;"/></p>
+
+<p>虽然ML的UI中内置的可视化对于显示异常何时发生及其严重性非常有用，但许多分析师已经在操作仪表板中收集了他们自己的可视化。他们可能希望在现有的仪表板中看到这些异常情况。</p>
+
+<p>还可能存在这样的情况，其中操作分析师可能没有权限或专业知识来使用机器学习UI来查看异常。通过将异常外化到标准的仪表板可视化中，它允许分析师在他们已经知道和理解的上下文中消费关于异常的信息。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>A HTTP response code profiling of the host making requests</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">发出请求的主机的HTTP响应代码分析</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>第二项工作将帮助分析师根据每个响应代码的请求量来检测可疑的客户端行为。以下是配置该作业的步骤:</p>
+
+<ol>
+
+<li>访问Kibana中的机器学习部分，并在NASA访问日志索引上创建一个新的高级作业:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-986 image-border" src="img/5006c7d3-843a-4766-b79c-538190715d1f.png" style="width:100.75em;height:23.17em;"/></p>
+
+<ol start="2">
+
+<li>在作业详细信息面板中命名作业:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-987 image-border" src="img/41b24077-7028-470b-ab47-9d91859ec5db.png" style="width:38.42em;height:19.58em;"/></p>
+
+<ol start="3">
+
+<li>最后，在分析配置面板中添加以下检测器，添加<kbd>response.keyword</kbd>和<kbd>clientip.keyword</kbd>作为影响者，并保存作业:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-988 image-border" src="img/145bb69b-d0b5-408e-bd7a-7fc4354c68ed.png" style="width:35.25em;height:26.08em;"/></p>
+
+<ol start="4">
+
+<li>运行作业并访问异常浏览器视图后，您应该会得到类似于以下内容的结果:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-989 image-border" src="img/00eee4ca-4ea8-46ad-8306-bd2c85d90277.png" style="width:100.83em;height:37.17em;"/></p>
+
+<ol start="5">
+
+<li>如果您单击其中一个红色方块异常，您将获得以下详细信息:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-990 image-border" src="img/c7df356d-480a-429c-879c-0f71745350d3.png" style="width:100.75em;height:81.50em;"/></p>
+
+<p>与其余主机相比，前面的主机具有异常高的200和404响应代码量。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Traffic per host analysis</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">每台主机流量分析</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>第三份工作是前一份的概括；它还将帮助我们了解哪个主机的流量异常高。我们将使用与上一个作业相同的步骤来创建该作业，不同之处在于，我们不会像前面那样拆分作业(使用by_field_name)。其步骤如下:</p>
+
+<ol>
+
+<li>在高级作业向导中创建作业:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-991 image-border" src="img/2cfae657-8663-4746-a110-d1b67fb14c33.png" style="width:37.17em;height:38.08em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<ol start="2">
+
+<li>运行该作业将为您提供一个高流量主机异常列表，如以下屏幕截图所示:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-992 image-border" src="img/49667a22-50ab-4872-a1ac-74d228d74129.png" style="width:100.92em;height:34.42em;"/></p>
+
+<ol start="3">
+
+<li class="packt_figure">单击其中一个主机异常将会显示以下输出:</li>
+
+</ol>
+
+<div><img class="alignnone size-full wp-image-994 image-border" src="img/ca33e465-0439-4ac9-afd3-78c7ce8fb141.png" style="width:100.83em;height:46.33em;"/></div>
+
+<p class="packt_figure">这里，相对主机的流量是典型流量的31倍。</p>
+
+<p class="packt_figure">因为我们有三个任务和一些异常数据要处理，所以我们准备创建一些可视化的东西并组成我们的仪表板。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Building the visualizations</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">构建可视化</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>现在我们已经有了原始数据和对这些数据完成的一些ML作业，让我们开始使用各种标准的Kibana可视化控件设计我们自己的定制仪表板的过程。但是在我们这样做之前，我们需要让Kibana知道ML results索引存在，并且我们想要从这个索引中绘制数据。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Configuring the index pattern</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">配置索引模式</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>为了让Kibana识别存储ML作业结果的索引中包含的数据，我们需要在Kibana的管理部分创建一个索引模式。导航到此部分。然后，在Kibana部分，点击索引模式，然后点击创建索引模式。</p>
+
+<p>在创建索引模式界面中，启用包含系统索引选项，并将您的索引命名为<kbd>.ml-anomalies*</kbd>，以包含我们需要的索引:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-997 image-border" src="img/89b57515-e30b-4d9d-8f3e-7bc366bbb9f4.png" style="width:70.25em;height:39.83em;"/></p>
+
+<p>单击下一步，选择@timestamp作为时间字段。最后，单击创建索引模式。</p>
+
+<p class="mce-root"/>
+
+<p>我们将在整个例子中使用这种索引模式。现在，让我们开始构建一些可视化。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Using ML data in TSVB</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">在TSVB中使用ML数据</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>正如我们在本章开始时解释的那样，TSVB非常适合度量分析用例。它使用Elasticsearch聚合API呈现图表，包括pipeline API，它允许我们用数学函数处理聚合指标结果。</p>
+
+<p>我们将要经历的示例将使用来自第一个作业的数据，呈现NASA访问日志中的流量，并用三个异常级别注释流量:次要、主要和关键。我们将分别把它们渲染成黄色、橙色和红色。</p>
+
+<p>让我们从可视化调色板开始并创建一个TSVB图表(单击Visualize，然后单击Add按钮，然后从调色板中选择Visual Builder)。您首先看到的是下面的空白图表:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-998 image-border" src="img/8ca810c8-3260-4f3a-989d-007c6b6e52d2.png" style="width:100.83em;height:46.67em;"/></p>
+
+<p class="mce-root"/>
+
+<p>请注意以下几点:</p>
+
+<ul>
+
+<li>“数据”选项卡允许您配置聚合和函数以应用于数据。</li>
+
+<li>面板选项选项卡是设置数据源的地方。</li>
+
+<li>在Annotations选项卡中，我们将使用第二个不同的数据源。这将是我们定义ML数据的地方，这样我们就可以对图表进行注释。</li>
+
+</ul>
+
+<p>首先，让我们在面板选项中配置数据源，如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-999 image-border" src="img/4258f530-91f9-453c-85a4-898797fe5e25.png" style="width:100.92em;height:43.17em;"/></p>
+
+<p>如您所见，配置非常简单:我们只是传递我们的索引模式名称，即<kbd>nasa-*</kbd>，以及时间字段@timestamp。默认情况下，其余选项可以保持不变。</p>
+
+<p>我们需要利用异常检测作业数据来注释前面的图表，并帮助用户理解在哪里(以及何时)需要注意。首先，让我们添加关键(红色)异常，如下图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1000 image-border" src="img/6f777181-4e0b-405f-bf58-417027c136a1.png" style="width:100.17em;height:41.67em;"/></p>
+
+<p>批注允许您在主数据源的顶部呈现前面的垂直线。您可以通过选择以下选项来实现这一点:</p>
+
+<ul>
+
+<li>一种颜色，红色，代表临界。</li>
+
+<li>一个索引，如<kbd>.ml-anomalies*</kbd>，它是指向异常检测作业结果的索引模式。</li>
+
+<li>时间字段(这里是时间戳)。</li>
+
+<li>用于筛选数据的查询字符串。我们已经设置了一个条件，其中所有具有高于<kbd>70</kbd>的<kbd>anomaly_score</kbd>的异常都是严重异常(与ML UI使用的<kbd>75</kbd>的标准值相反)。此外，由于跨作业的所有结果都存储在同一个索引中，我们只需要过滤掉作业的结果。这就是为什么我们添加了<kbd>job_id:nasa-traffic</kbd>，其中<kbd>nasa-traffic</kbd>是我们第一个ML作业的名称。</li>
+
+<li>一个图标(在这里，这是一个炸弹)描述了一个关键的异常。</li>
+
+<li>必填字段；我们只需要<kbd>anomaly_score</kbd>来呈现我们的注释。</li>
+
+<li>悬停在批注上时要呈现的模板。在这里，这就是<kbd>anomaly_score</kbd>本身。</li>
+
+</ul>
+
+<p>只需通过更改查询、将颜色改为橙色和图标来再现主要异常的相同内容:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1001 image-border" src="img/a937fa9d-d877-47a7-addc-db92e58aeda4.png" style="width:100.33em;height:13.08em;"/></p>
+
+<p>我们为重大异常设置的条件是<kbd>30</kbd>和<kbd>70</kbd>之间的<kbd>anomaly_score</kbd>。对轻微(蓝色)异常(得分在<kbd>1</kbd>和<kbd>30</kbd>之间)执行相同的过程，如以下截图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1002 image-border" src="img/794f17c4-f810-4099-9b24-56fa66b48e43.png" style="width:100.67em;height:12.92em;"/></p>
+
+<p>我们没有在Data选项卡中配置任何特定的方面，因为默认的计数聚合是我们正在寻找的。但是，您也可以编辑标签，使图表更有意义。标签和注释就绪后，下面是我们如何将ML数据叠加到流量之上:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1003 image-border" src="img/3b46eb62-dea5-461a-bf10-f18a1cf3967a.png" style="width:100.83em;height:17.25em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Creating a correlation Heat Map</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">创建关联热图</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在我们的检测产品组合中有多个作业的情况下，分析师可能希望在同一时间段内看到所有作业的异常情况。这相当于机器学习Kibana应用程序中的异常浏览器查看器，其中所有作业都被选中，如下面的屏幕截图所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1004 image-border" src="img/64bbc0b0-a329-41d7-a2a0-7c7a6f59d377.png" style="width:100.75em;height:20.25em;"/></p>
+
+<p>我们将要使用的Kibana可视化工具是热图，它相当于前面的截图。进入可视化部分，创建新的热图可视化:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1005 image-border" src="img/4a9a2204-be0a-4809-b0ed-81f81583cf73.png" style="width:98.75em;height:21.25em;"/></p>
+
+<p>选择<kbd>.ml-anomalies*</kbd>索引模式，它包含所有与我们到目前为止创建的工作相关的结果:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1006 image-border" src="img/1d67e429-121e-47cf-8189-346ac9874fdc.png" style="width:27.33em;height:12.92em;"/></p>
+
+<p>现在，让我们首先进入左侧面板并选择Buckets来配置热图。我们想要表示检测到的异常随时间的变化。因此，对于X轴，我们将选择一个日期直方图:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1007 image-border" src="img/3e548629-6de4-48da-bbc4-a88c45e76aac.png" style="width:24.00em;height:43.00em;"/></p>
+
+<p class="packt_figure">现在，让我们添加一个子桶，以便我们可以拆分每个作业的垂直轴。因为我们关注的是数据存在的时间段(记住，日志是1995年的！)，我们应该减少与其他工作的结果发生冲突的可能性。但是，为了确保您仍然可以在作业名称上设置过滤器，请单击“Add su B- bucket ”,选择“Y-Axis ”,然后选择要在job_id上拆分的术语聚合，如下面的屏幕截图所示:</p>
+
+<div><img class="alignnone size-full wp-image-1008 image-border" src="img/2805b5a4-faa9-468d-aacb-22161e574c02.png" style="width:24.17em;height:33.67em;"/></div>
+
+<p>如果您单击播放按钮来呈现图表，您将看到以下内容:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1009 image-border" src="img/dc9159c1-5b1c-4a40-9b5d-3cd583aa56eb.png" style="width:100.83em;height:71.58em;"/></p>
+
+<p>现在，让我们配置指标部分，以便我们可以在热图上强调每个异常随时间变化的严重性:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1010 image-border" src="img/9185627f-685e-4b2a-978f-033648ab2622.png" style="width:21.92em;height:22.25em;"/></p>
+
+<p>对于热图的最后一点，我们将在选项面板中将颜色模式更改为红色:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1011 image-border" src="img/2404c3fb-4581-4e50-a639-f5b32d0d33db.png" style="width:21.58em;height:20.33em;"/></p>
+
+<p class="mce-root"/>
+
+<p>最后，这是我们的热图:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1012 image-border" src="img/ce3fe6d3-3c0d-441e-acc6-81350fd114b9.png" style="width:89.58em;height:59.17em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Using ML data in Timelion</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">在Timelion中使用ML数据</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>Timelion是一个面向表达式的可视化框架。它允许您连接到Elasticsearch(但也可以连接到其他数据存储)，以及获取多个数据系列并组合它们。在我们的例子中，我们将进行一个非常简单的操作，计算一段时间内每个请求的平均字节数，并覆盖与流量相关的异常。</p>
+
+<p>为此，从组件面板添加一个Timelion可视化，并从添加以下表达式开始:</p>
+
+<pre>.es(index=nasa-*) </pre>
+
+<p>记住要配置时间选择器来包围数据所在的时区。前面的表达式只会吸引我们到目前为止已经看到的流量:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1013 image-border" src="img/5bdeef60-e8fc-4614-a22e-e37ec5ea1d62.png" style="width:100.83em;height:29.25em;"/></p>
+
+<p>现在，让我们计算每个请求的字节数。我们来分两个表情。这是第一个:</p>
+
+<pre>.es(index=nasa-*, metric=avg:bytes).divide(.es(index=nasa-*)) </pre>
+
+<p>这将呈现以下折线图:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1014 image-border" src="img/875a0a43-b591-4031-ba84-90c0f116cd95.png" style="width:100.83em;height:29.42em;"/></p>
+
+<p>现在，我们只需要通过完成表达式将ML结果添加到它上面，就像这样:</p>
+
+<pre>.es(index=nasa-*, metric=avg:bytes) 
+
+  .divide(.es(index=nasa-*)).yaxis(1), 
+
+.es(index='.ml-anomalies*',  
+
+    timefield=timestamp,  
+
+    metric=max:anomaly_score) 
+
+  .points(symbol=cross).yaxis(2).if(lt, 50, null) </pre>
+
+<p class="mce-root"/>
+
+<p>请注意以下几点:</p>
+
+<ul>
+
+<li>数据源由逗号分隔；第一个数据源是比率，第二个是异常检测结果</li>
+
+<li>多亏了<kbd>.points()</kbd>功能，异常以十字的形式出现</li>
+
+<li>每个数据源都有自己的y轴，以避免不同的数据比例</li>
+
+</ul>
+
+<p>结果将如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1015 image-border" src="img/55766c21-29f5-426c-9226-6424b354841d.png" style="width:100.75em;height:29.25em;"/></p>
+
+<p>我们终于创建了所有的可视化效果，现在我们可以将它们组合成同一个仪表板的一部分。</p>
+
+<p>不要忘记保存和命名你的可视化！</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Building the dashboard</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">构建仪表板</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>现在，我们开始最简单的部分；选择我们所有的可视化效果，并将其全部添加到同一个仪表板中。导航到Kibana中的仪表板部分，创建一个新的仪表板。您将看到一个空的仪表板。只需点击添加按钮来选择您的可视化。当你做到这一点，你可以随意组织你喜欢的视觉化。这是一个您可以获得的示例，首先是控制面板的顶部:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1016 image-border" src="img/76d69d33-9d63-42b8-8089-d383a24ee637.png" style="width:100.92em;height:50.58em;"/></p>
+
+<p>这是仪表板的底部:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1017 image-border" src="img/5e2c80f0-3885-496b-a079-3035d081a2f2.png" style="width:100.92em;height:47.33em;"/></p>
+
+<p class="packt_figure">仪表板突出显示了我们到目前为止构建的所有可视化，其中不仅包含我们的原始NASA访问日志，还包含跨多个作业的异常检测结果。我们已经成功地将来自Elastic ML的数据直接集成到我们自己的定制仪表板中。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摘要</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在本章中，我们使用了Kibana的不同可视化功能来呈现数据集，并利用异常检测结果进行注释和关联。这有助于分析师在他们熟悉并每天使用的仪表板框架中查看异常检测结果。</p>
+
+<p>在下一章中，<a href="44a171c9-7dc9-4798-b69a-64a9e9a47898.xhtml" target="_blank">第8章</a>，<em>使用带有Kibana画布的弹性ML</em>，<em> </em>我们将重点关注那些不一定想通过仪表板而需要信息图表风格体验的用户。这就是我们要介绍Canvas的地方，它是Kibana中一种类似PowerPoint的体验，与存储在Elasticsearch中的实时数据相连接。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

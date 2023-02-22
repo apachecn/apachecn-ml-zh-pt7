@@ -1,0 +1,604 @@
+<html><head/><body><html><head><title>Chapter 3. Utilizing Computer Vision</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03"/>第三章。利用计算机视觉</h1></div></div></div><p>当Snapchat首次推出以霹雳舞热狗为特色的过滤器时，该公司的股价飙升。然而，投资者对热狗的倒立不太感兴趣；真正让他们着迷的是Snapchat已经成功构建了一种强大的计算机视觉技术。</p><p>Snapchat应用程序现在不仅能够拍照，还能够在照片中找到热狗可以在上面跳霹雳舞的表面。他们的应用程序会将热狗放在那里，当用户移动他们的手机时，仍然可以这样做，允许热狗在同一个位置继续跳舞。</p><p>虽然跳舞的热狗可能是计算机视觉最愚蠢的应用之一，但它成功地向世界展示了这项技术的潜力。在一个充满摄像头的世界，从每天使用的数十亿部智能手机、安全摄像头和卫星，到<strong>物联网</strong> ( <strong>物联网</strong>)设备，能够解读图像对消费者和生产者都有很大好处。</p><p>计算机视觉让我们能够感知和解释大规模的真实世界。你可以这样想:没有一个分析师可以查看数百万幅卫星图像来标记采矿地点，并跟踪它们随时间的活动；这不可能。然而对于计算机来说，这不仅仅是一种可能性；这是此时此地的现实。</p><p>事实上，一些公司现在在现实世界中使用的东西是，零售商计算他们停车场的汽车数量，以估计在给定的时期内商品的销售额。</p><p>计算机视觉的另一个重要应用可以在金融领域看到，特别是在保险领域。例如，保险公司可能会使用无人机飞越屋顶，以便在问题变成昂贵的问题之前发现问题。这可以扩展到他们使用计算机视觉来检查他们投保的工厂和设备。</p><p>再看看金融领域的另一个案例，需要遵守<strong>了解客户</strong> ( <strong> KYC </strong>)规则的银行正在实现后台流程和身份验证的自动化。在金融交易中，计算机视觉可以应用于蜡烛图，以便为技术分析找到新的模式。我们可以用一整本书来讲述计算机视觉的实际应用。</p><p>在这一章中，我们将讨论计算机视觉模型的构建模块。这将包括对以下主题的关注:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">卷积层。</li><li class="listitem" style="list-style-type: disc">填充。</li><li class="listitem" style="list-style-type: disc">共用。</li><li class="listitem" style="list-style-type: disc">防止过度拟合的正则化。</li><li class="listitem" style="list-style-type: disc">基于动量的优化。</li><li class="listitem" style="list-style-type: disc">批量标准化。</li><li class="listitem" style="list-style-type: disc">超越分类的计算机视觉高级体系结构。</li><li class="listitem" style="list-style-type: disc">关于图书馆的一个说明。</li></ul></div><p>在我们开始之前，让我们看一下我们将在本章中使用的所有不同的库:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong> Keras </strong>:高级神经<a class="indexterm" id="id164"/>网络库和TensorFlow的接口。</li><li class="listitem" style="list-style-type: disc"><strong> TensorFlow </strong>:一个数据流编程<a class="indexterm" id="id165"/>和我们用于GPU加速计算的机器学习库。</li><li class="listitem" style="list-style-type: disc">Scikit-learn :一个流行的<a class="indexterm" id="id166"/>机器学习库，实现了许多经典算法和评估工具。</li><li class="listitem" style="list-style-type: disc">OpenCV :一个图像<a class="indexterm" id="id167"/>处理库，可用于基于规则的增强</li><li class="listitem" style="list-style-type: disc"><strong>NumPy</strong>:Python中用于<a class="indexterm" id="id168"/>处理矩阵的库。</li><li class="listitem" style="list-style-type: disc"><strong> Seaborn </strong>:一个绘图<a class="indexterm" id="id169"/>库。</li><li class="listitem" style="list-style-type: disc">tqdm :监控Python程序进度的工具<a class="indexterm" id="id170"/>。</li></ul></div><p>值得花点时间注意的是，除了OpenCV，所有这些库都可以通过<code class="literal">pip</code>安装；比如<code class="literal">pip install keras</code>。</p><p>然而，OpenCV需要稍微复杂一点的安装过程。这超出了本书的范围，但是这些信息在网上<a class="indexterm" id="id171"/>通过OpenCV文档得到了很好的记录，您可以在以下URL查看:<a class="ulink" href="https://docs.opencv.org/trunk/df/d65/tutorial_table_of_content_introduction.html">https://docs . OpenCV . org/trunk/df/d65/tutorial _ table _ of _ content _ introduction . html</a>。</p><p>另外，值得注意的是Kaggle和Google Colab都预装了OpenCV。要运行本章中的例子，确保你已经安装了OpenCV，并且可以用<code class="literal">import cv2</code>导入。</p><div><div><div><div><h1 class="title"><a id="ch03lvl1sec38"/>卷积神经网络</h1></div></div></div><p><strong>卷积神经网络</strong>、<strong> ConvNets </strong>，简称<strong>CNN</strong>，是计算机视觉背后的驱动引擎。ConvNets允许我们处理更大的图像，同时仍然保持网络的合理规模。</p><p><a class="indexterm" id="id172"/>卷积神经网络这个名字来源于将它们与常规神经网络区分开来的数学运算。卷积是一个矩阵在另一个矩阵上滑动的数学术语。我们将在下一节“MNIST 上的<em>滤波器”中探讨，为什么这对con vnet很重要，但为什么这不是它们的最佳名称，以及为什么con vnet实际上应该被称为<strong>滤波器网络</strong>。</em></p><p>你可能会问，“但为什么要过滤网？”答案很简单，因为它们之所以有效，是因为它们使用了过滤器。</p><p>在下一节中，我们将使用MNIST数据集，这是一个手写数字的集合，已经成为一个标准的“你好，世界！”计算机视觉应用。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec33"/>MNIST上的滤镜</h2></div></div></div><p>当计算机看到图像时，它实际上看到了什么？嗯，像素的值以数字的形式存储在计算机中。所以，当电脑<em>看到</em>一个7的黑白图像时，它实际上看到的是类似下面的东西:</p><div><img alt="Filters on MNIST" src="img/B10354_03_01.jpg"/><div><p>MNIST数据集中的数字7</p></div></div><p>以上是MNIST数据集中的一个示例。图像中的手写数字被突出显示，以使数字7对人类可见，但对<a class="indexterm" id="id175"/>计算机来说，图像实际上只是数字的集合。这意味着我们可以对图像进行各种数学运算。</p><p>在检测数字时，有几个低级特征构成一个数字。例如，在这个手写的图7中，有一条垂直直线、一条在顶部的水平线和一条穿过中间的水平线的组合。相比之下，9是由四条在顶部形成一个圆的圆形线和一条直的垂直线组成的。</p><p>我们现在能够展示ConvNets背后的中心思想。我们可以使用能够检测某种低级特征的小过滤器，例如垂直线，然后将其滑动到整个<a class="indexterm" id="id176"/>图像上，以检测图像中的所有垂直线。</p><p>下面的屏幕截图显示了一个竖线过滤器。为了检测图像中的垂直线，我们需要在图像上滑动这个3x3矩阵过滤器。</p><div><img alt="Filters on MNIST" src="img/B10354_03_02.jpg"/><div><p>垂直线过滤器</p></div></div><p>使用下一页的MNIST数据集，我们从左上角开始，切掉左上角的3×3像素网格，在这种情况下，所有像素都为零。</p><p>然后，我们对滤波器中的所有元素与图像切片中的所有元素执行逐元素乘法。然后对九个乘积求和，并加上偏差。然后，该值形成过滤器的输出，并作为新像素传递到下一层:</p><div><img alt="Filters on MNIST" src="img/B10354_03_001.jpg"/></div><p>因此，垂直线滤波器的输出将如下所示:</p><div><img alt="Filters on MNIST" src="img/B10354_03_03.jpg"/><div><p>垂直线滤波器的输出</p></div></div><p>花<a class="indexterm" id="id177"/>分钟注意垂直线可见，而水平线<a class="indexterm" id="id178"/>消失。只剩下一些艺术品了。另外，请注意过滤器是如何从一侧捕捉垂直线的。</p><p>由于它响应左侧的高像素值和右侧的低像素值，因此只有输出的右侧显示强正值。同时，线<a class="indexterm" id="id179"/>的左侧实际上显示负值。这在实践中不是一个大问题，因为对于不同种类的线和方向通常有不同的过滤器。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec34"/>添加第二个过滤器</h2></div></div></div><p>我们的垂直过滤器正在工作，但我们已经注意到，我们还需要过滤图像的水平线，以检测7。</p><p>我们的水平线过滤器可能看起来像这样:</p><div><img alt="Adding a second filter" src="img/B10354_03_04.jpg"/><div><p>水平线过滤器</p></div></div><p>使用该示例，我们现在可以使用与垂直滤镜完全相同的方式在我们的图像上滑动该滤镜，得到以下输出:</p><div><img alt="Adding a second filter" src="img/B10354_03_05.jpg"/><div><p>垂直线滤波器的输出</p></div></div><p>看到这个滤镜<a class="indexterm" id="id180"/>是如何去掉垂直线，只留下水平线的吗？现在的问题是，我们现在传递到下一层的是什么？我们将两个过滤器的输出叠加在一起，形成一个三维立方体:</p><div><img alt="Adding a second filter" src="img/B10354_03_06.jpg"/><div><p>MNIST卷积</p></div></div><p>通过添加多个<a class="indexterm" id="id181"/>卷积层，我们的ConvNet能够提取更加复杂的语义特征。</p></div></div></div></body></html>
+<html><head><title>Filters on color images</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec39"/>彩色图像上的滤镜</h1></div></div></div><p>当然，我们的过滤技术不仅限于黑白图像。在这一节中，我们将看看彩色图像。</p><p>大多数彩色图像由三层或三个通道组成，这通常称为RGB，是三层的缩写。它们由一个红色通道、一个<a class="indexterm" id="id182"/>蓝色通道和一个绿色通道组成。当这三个通道叠加在一起时，就形成了我们所熟知的传统彩色图像。</p><p>根据这个概念，图像不是平面的，而是一个立方体，一个三维矩阵。结合这个想法和我们的目标，我们想应用一个过滤器的形象，并适用于所有三个渠道一次。因此，我们将在两个三维立方体之间执行元素级乘法。</p><p>我们的3x3滤波器现在有三个深度，因此有九个参数，加上偏差:</p><div><img alt="Filters on color images" src="img/B10354_03_07.jpg"/><div><p>过滤立方体或卷积核的例子</p></div></div><p>这个立方体，<a class="indexterm" id="id183"/>被称为卷积核，在图像上滑动，就像以前的二维矩阵一样。然后再对元素乘积求和，加上偏差，结果表示下一层中的一个像素。</p><p>过滤器总是捕捉前一层的整个深度。过滤器在图像的宽度和高度上移动。同样，滤镜不会在图像的深度(即不同通道)上移动。用技术术语来说，权重，即构成过滤器的数字，在宽度和高度上是共享的，但在不同的通道上不是。</p></div></body></html>
+<html><head><title>The building blocks of ConvNets in Keras</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec40"/>喀拉斯的康文网络构建模块</h1></div></div></div><p>在这一节中，我们将构建一个简单的<a class="indexterm" id="id184"/> ConvNet，它可以用于对MNIST <a class="indexterm" id="id185"/>角色进行分类，同时了解构成现代ConvNet的不同部分。</p><p>我们可以通过运行以下代码直接从Keras导入MNIST数据集:</p><div><pre class="programlisting">from keras.datasets import mnist
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()</pre></div><p>我们的数据集包含60，000张28x28像素的图像。MNIST字符是黑白的，因此数据形状通常不包括通道:</p><div><pre class="programlisting">x_train.shape</pre></div><div><pre class="programlisting">
+
+<strong>out: (60000, 28, 28)</strong>
+
+</pre></div><p>稍后，我们将进一步了解颜色通道，但现在，让我们扩展数据维度，以表明我们只有一个单色通道。我们可以通过运行以下命令来实现这一点:</p><div><pre class="programlisting">import numpy as np
+
+x_train = np.expand_dims(x_train,-1)
+
+x_test = np.expand_dims(x_test,-1)
+
+x_train.shape</pre></div><div><pre class="programlisting">
+
+<strong>out: (60000, 28, 28, 1)</strong>
+
+</pre></div><p>随着代码的运行，您可以看到我们现在添加了一个单一的颜色通道。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec35"/> Conv2D</h2></div></div></div><p>现在我们来看一下ConvNets的核心部分:在Keras中使用卷积层。Conv2D是实际的卷积层，一个Conv2D层包含几个滤波器，如以下代码所示:</p><div><pre class="programlisting">from keras.layers import Conv2D
+
+from keras.models import Sequential
+
+
+
+model = Sequential()
+
+
+
+img_shape = (28,28,1)
+
+
+
+model.add(Conv2D(filters=6,
+
+                 kernel_size=3,
+
+                 strides=1,
+
+                 padding='valid',
+
+                 input_shape=img_shape))</pre></div><p>创建新的Conv2D层时，我们必须指定要使用的滤镜数量以及每个滤镜的大小。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec12"/>果仁大小</h3></div></div></div><p>过滤器的大小也被称为“T0”，因为单个过滤器有时被称为内核。如果我们只指定一个数字作为内核大小，Keras会假设我们的过滤器是正方形的。在这种情况下，例如，我们的过滤器将是3x3像素。</p><p>然而，可以通过向参数<code class="literal">kernel_size</code>传递一个元组来指定非方形的内核大小。例如，我们可以通过<code class="literal">kernel_size = (3,4)</code>选择一个3x4像素的滤镜。然而，这种情况非常罕见，在大多数情况下，过滤器的尺寸为3x3或5x5。根据经验，研究人员发现这是一个产生良好结果的尺寸。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec13"/>步幅大小</h3></div></div></div><p><code class="literal">strides</code>参数指定步长，也称为步幅大小，卷积滤波器以此在图像上滑动，通常称为特征图。在绝大多数情况下，滤镜逐像素移动，因此它们的<a class="indexterm" id="id191"/>步幅大小设置为1。然而，有研究人员更广泛地使用较大的步幅大小，以便减小特征图的空间大小。</p><p>像<code class="literal">kernel_size</code>一样，Keras假设如果我们只指定一个值，我们在水平和垂直方向使用相同的步幅，在大多数情况下这是正确的。但是，如果我们想使用水平方向上的步长为1，而垂直方向上的步长为2，我们可以将一个元组传递给参数，如下所示:<code class="literal">strides=(1,2)</code>。在过滤器尺寸的情况下，很少这样做。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec14"/>填充</h3></div></div></div><p>最后，我们有<a class="indexterm" id="id192"/>添加<code class="literal">padding</code>到我们的卷积层。填充会在我们的图像周围添加零。如果我们想要<a class="indexterm" id="id193"/>防止我们的特征地图缩小，这是可以做到的。</p><p>让我们考虑一个5x5像素的特征图和一个3x3的滤镜。过滤器只能在特征图上显示九次，所以我们最终会得到一个3x3的输出。这既减少了我们可以在下一个要素地图中捕获的信息量，也减少了输入要素地图的外部像素对任务的贡献。过滤器从不以它们为中心；它只检查他们一次。</p><p>填充有三个选项:不使用填充，称为“无”填充，“相同”填充和“有效”填充。</p><p>让我们来看看这三种划水方式。首先，没有填充:</p><div><img alt="Padding" src="img/B10354_03_08.jpg"/><div><p>选项1:无填充</p></div></div><p>然后我们有相同的填充:</p><div><img alt="Padding" src="img/B10354_03_09.jpg"/><div><p>选项2:相同的填充</p></div></div><p>为了确保输出<a class="indexterm" id="id194"/>与输入的大小相同，我们可以使用<code class="literal">same</code>填充。然后，Keras将在输入特征图周围添加足够多的零，这样我们就可以<a class="indexterm" id="id195"/>保持大小。然而，默认填充设置是<code class="literal">valid</code>。此填充不会保留特征图的大小，但只会确保过滤器和步幅大小确实适合输入特征图:</p><div><img alt="Padding" src="img/B10354_03_10.jpg"/><div><p>选项3:有效填充</p></div></div></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec15"/>输入形状</h3></div></div></div><p>Keras要求我们指定输入的<a class="indexterm" id="id196"/>形状。然而，这仅是第一个<a class="indexterm" id="id197"/>层所需要的。对于所有后续层，Keras将根据前一层的输出形状来推断输入形状。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec16"/>简化的Conv2D符号</h3></div></div></div><p>前一层采用28x28x1输入，并在其上滑动6个2x2大小的滤镜，逐像素进行。更常见的指定同一层的方法是使用以下代码:</p><div><pre class="programlisting">model.add(Conv2D(6,3,input_shape=img_shape))</pre></div><p>滤镜数量(这里是<code class="literal">6</code>)和滤镜大小(这里是<code class="literal">3</code>)被设置为位置参数，而<code class="literal">strides</code>和<code class="literal">padding</code>分别默认为<code class="literal">1</code>和<code class="literal">valid</code>。如果这是网络中更深的一层，我们甚至不必指定输入形状。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec17"/> ReLU激活</h3></div></div></div><p>卷积层仅<a class="indexterm" id="id198"/>执行线性步骤。组成图像的数字与过滤器相乘，这是一个线性操作。</p><p>因此，为了逼近复杂函数，我们需要用激活函数引入非线性。计算机视觉最常见的激活函数是校正线性单位，或ReLU函数，我们可以在这里看到:</p><div><img alt="ReLU activation" src="img/B10354_03_11.jpg"/><div><p>ReLU激活功能</p></div></div><p>用于生成上述图表的ReLU公式如下所示:</p><p><em> ReLU(x) = max(x，0) </em></p><p>换句话说，如果输入为正，ReLU函数将返回输入。如果不是，那么它返回零。这个非常简单的函数已经被证明是非常有用的，使得梯度下降收敛得更快。</p><p>人们经常认为ReLU更快，因为所有大于零的值的导数都只有一个，它不会像某些极值的导数一样变得非常小，例如sigmoid或tanh。</p><p>ReLU的计算开销也比sigmoid和tanh小。它<a class="indexterm" id="id199"/>不需要任何计算量很大的计算，输入值小于零就设置为零，其余的输出。然而不幸的是，ReLU激活有点脆弱，可能会“死亡”</p><p>当梯度非常大并且向负方向移动多个权重时，那么ReLU的导数也将总是零，因此权重不再更新。这可能意味着一个神经元再也不会放电了。然而，这可以通过较小的学习率来缓解。</p><p>因为ReLU速度快，计算量小，所以成为了很多从业者默认的激活函数。要在Keras中使用ReLU函数，我们可以通过运行以下代码，在激活层中将其命名为所需的激活函数:</p><div><pre class="programlisting">from keras.layers import Activation
+
+model.add(Activation('relu'))</pre></div></div></div><div><div><div><div><h2 class="title">最大池2D</h2></div></div></div><p>常见的做法是在多个卷积层之后使用一个池<a class="indexterm" id="id200"/>层。汇集减少了特征图的空间大小，这反过来减少了神经网络中所需的参数数量，从而减少了过拟合。</p><p>下面，我们可以看到一个最大池的例子:</p><div><img alt="MaxPooling2D" src="img/B10354_03_12.jpg"/><div><p>最大池化</p></div></div><p>Max pooling <a class="indexterm" id="id201"/>返回池中的最大元素。这与示例average<code class="literal">AveragePooling2D</code>形成对比，后者返回一个池的平均值。最大池通常比平均池提供更好的结果，所以它是大多数从业者使用的标准。</p><p>通过运行以下命令可以实现最大池化:</p><div><pre class="programlisting">from keras.layers import MaxPool2D
+
+
+
+model.add(MaxPool2D(pool_size=2, 
+
+                    strides=None, 
+
+                    padding='valid'))</pre></div><p>在Keras中使用最大池层时，我们必须指定所需的池大小。最常见的值是2x2池。正如<code class="literal">Conv2D</code>层一样，我们也可以指定步幅大小。</p><p>对于池层，默认步幅大小为<code class="literal">None</code>，在这种情况下，Keras会将步幅大小设置为与池大小相同。换句话说，池彼此相邻，不重叠。</p><p>我们还可以指定填充，默认选择是<code class="literal">valid</code>。然而，为<a class="indexterm" id="id202"/>池化图层指定<code class="literal">same</code>填充极其罕见，因为池化图层的目的是减小要素地图的空间大小。</p><p>我们这里的<code class="literal">MaxPooling2D</code>层采用2x2像素的池，没有重叠，并返回最大元素。指定同一层的一种更常见的方法是通过执行以下命令:</p><div><pre class="programlisting">model.add(MaxPool2D(2))</pre></div><p>在这种情况下，<code class="literal">strides</code>和<code class="literal">padding</code>都被设置为默认值，分别为<code class="literal">None</code>和<code class="literal">valid</code>。在汇集层之后通常没有激活，因为汇集层不执行线性步骤。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec37"/>展平</h2></div></div></div><p>您可能已经注意到<a class="indexterm" id="id203"/>我们的特征图是三维的，而我们想要的输出是一维向量，包含10个类别中每一个的概率。那么，我们如何从3D到1D呢？嗯，我们<code class="literal">Flatten</code>我们的特色地图。</p><p><code class="literal">Flatten</code>操作与NumPy的<code class="literal">flatten</code>操作类似。它接收一批维度为<code class="literal">(batch_size, height, width, channels)</code>的特征图，并返回一组维度为<code class="literal">(batch_size, height * width * channels)</code>的向量。</p><p>它不执行任何计算，只改变矩阵的形状。该操作没有要设置的超参数，如下面的代码所示:</p><div><pre class="programlisting">from keras.layers import Flatten
+
+
+
+model.add(Flatten())</pre></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec38"/>密集</h2></div></div></div><p>ConvNets通常由特征提取部分、卷积层以及分类部分组成。分类部分由简单的全连接层组成，我们已经在<a class="link" href="ch01.html" title="Chapter 1. Neural Networks and Gradient-Based Optimization">第1章</a>、<em>神经网络和基于梯度的优化</em>以及<a class="link" href="ch02.html" title="Chapter 2. Applying Machine Learning to Structured Data">第2章</a>、<em>将机器学习应用于结构化数据</em>中探讨过。</p><p>为了将普通层与所有其他类型的层区分开来，我们将其称为<code class="literal">Dense</code>层。在密集层中，每个输入神经元都连接到一个输出神经元。我们只需要指定我们想要的输出神经元的数量，在本例中是10个。</p><p>这可以通过运行以下代码来完成:</p><div><pre class="programlisting">from keras.layers import Dense
+
+model.add(Dense(10))</pre></div><p>在密集层的线性步骤之后，我们可以为多类回归添加一个<code class="literal">softmax</code>激活，就像我们在前两章中所做的那样，通过运行以下代码:</p><div><pre class="programlisting">model.add(Activation('softmax'))</pre></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec39"/>训练MNIST</h2></div></div></div><p>现在让我们把所有这些元素放在一起，这样我们就可以在MNIST数据集上训练一个ConvNet。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec18"/>模型</h3></div></div></div><p>首先，我们必须指定<a class="indexterm" id="id206"/>模型，这可以通过下面的代码来实现:</p><div><pre class="programlisting">from keras.layers import Conv2D, Activation, MaxPool2D, Flatten, Dense
+
+from keras.models import Sequential
+
+
+
+img_shape = (28,28,1)
+
+
+
+model = Sequential()
+
+
+
+model.add(Conv2D(6,3,input_shape=img_shape))
+
+
+
+model.add(Activation('relu'))
+
+
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Conv2D(12,3))
+
+
+
+model.add(Activation('relu'))
+
+
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Flatten())
+
+
+
+model.add(Dense(10))
+
+
+
+model.add(Activation('softmax'))</pre></div><p>在下面的代码中，您可以看到典型ConvNet的一般结构:</p><div><pre class="programlisting">Conv2D
+
+Pool 
+
+
+
+Conv2D
+
+Pool
+
+
+
+Flatten
+
+
+
+Dense</pre></div><p>卷积层和汇集层通常在这些块中一起使用；可以找到<a class="indexterm" id="id207"/>重复<code class="literal">Conv2D</code>、<code class="literal">MaxPool2D</code>组合几十次的神经网络。</p><p>我们可以使用以下命令获得模型的概述:</p><div><pre class="programlisting">model.summary()</pre></div><p>这将为我们提供以下输出:</p><div><pre class="programlisting">
+
+<strong>Layer (type)                 Output Shape              Param #   </strong>
+
+<strong>=================================================================</strong>
+
+<strong>conv2d_2 (Conv2D)            (None, 26, 26, 6)         60        </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>activation_3 (Activation)    (None, 26, 26, 6)         0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>max_pooling2d_2 (MaxPooling2 (None, 13, 13, 6)         0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>conv2d_3 (Conv2D)            (None, 11, 11, 12)        660       </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>activation_4 (Activation)    (None, 11, 11, 12)        0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>max_pooling2d_3 (MaxPooling2 (None, 5, 5, 12)          0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>flatten_2 (Flatten)          (None, 300)               0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>dense_2 (Dense)              (None, 10)                3010      </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>activation_5 (Activation)    (None, 10)                0         </strong>
+
+<strong>=================================================================</strong>
+
+<strong>Total params: 3,730</strong>
+
+<strong>Trainable params: 3,730</strong>
+
+<strong>Non-trainable params: 0</strong>
+
+<strong>_________________________________________________________________</strong>
+
+</pre></div><p>在此摘要中，您可以清楚地看到池化图层是如何缩小要素地图的大小的。单从摘要来看就不那么明显了，但是你可以看到第一个<code class="literal">Conv2D</code>层的输出是26x26像素，而输入图像是28x28像素。</p><p>通过使用<code class="literal">valid</code>填充，<code class="literal">Conv2D</code>也减少了特征图的大小，虽然只是少量的。第二个<code class="literal">Conv2D</code>图层也是如此，它将特征图从13x13像素缩小到11x11像素。</p><p>您还可以看到第一个卷积层只有60个参数，而<code class="literal">Dense</code>层有3010个参数，超过50倍。卷积层通常用很少的参数实现令人惊讶的壮举，这就是它们如此受欢迎的原因。网络中的参数总数通常可以通过卷积层和汇集层显著减少。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec19"/>加载数据</h3></div></div></div><p>我们使用的MNIST数据集预装了Keras。加载数据时，如果您想通过Keras直接使用数据集，请确保您有互联网连接，因为Keras必须先下载它。</p><p>您可以使用以下代码导入数据集:</p><div><pre class="programlisting">from keras.datasets import mnist
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()</pre></div><p>正如本章开始时所解释的，我们想要重塑数据集，以便它也可以有一个通道维度。数据集还没有通道维度，但这是我们可以做到的:</p><div><pre class="programlisting">x_train.shape</pre></div><div><pre class="programlisting">
+
+<strong>out:</strong>
+
+<strong>(60000, 28, 28)</strong>
+
+</pre></div><p>因此，我们使用NumPy添加了一个通道维度，代码如下:</p><div><pre class="programlisting">import numpy as np
+
+
+
+x_train = np.expand_dims(x_train,-1)
+
+
+
+x_test = np.expand_dims(x_test,-1)</pre></div><p>现在有一个渠道维度，正如我们在这里看到的:</p><div><pre class="programlisting">x_train.shape</pre></div><div><pre class="programlisting">
+
+<strong>out:</strong>
+
+<strong>(60000, 28, 28,1)</strong>
+
+</pre></div></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec20"/>编译和培训</h3></div></div></div><p>在前面的章节中，我们已经<a class="indexterm" id="id209"/>使用了一个热点编码目标进行多类回归。虽然我们已经重塑了数据，但目标仍保持原来的形式。它们是一个平面向量，包含每个手写图形的数字数据表示。请记住，我们在MNIST数据集中有60，000个这样的例子:</p><div><pre class="programlisting">y_train.shape</pre></div><div><pre class="programlisting">
+
+<strong>out:</strong>
+
+<strong>(60000,)</strong>
+
+</pre></div><p>通过one-hot编码转换目标是一项频繁且令人讨厌的任务，因此Keras允许我们只指定一个损失函数，将目标动态转换为one-hot。这个损失函数叫做<code class="literal">sparse_categorical_crossentropy</code>。</p><p>它与前面章节中使用的分类交叉熵损失相同，唯一的区别是它使用稀疏的，也就是说，不是一次性编码的目标。</p><p>就像以前一样，您仍然需要确保您的网络输出具有与类一样多的维度。</p><p>我们现在可以编译模型了，我们可以用下面的代码来完成:</p><div><pre class="programlisting">model.compile(loss='sparse_categorical_crossentropy',optimizer='adam',metrics=['acc'])</pre></div><p>如您所见，我们正在使用Adam优化器。亚当的确切工作方式将在下一节解释，<em>我们的神经网络</em>的更多细节，但是现在，你可以把它<a class="indexterm" id="id211"/>看作是随机梯度下降的一个更复杂的版本。</p><p>训练时，我们可以通过运行下面的代码直接<a class="indexterm" id="id212"/>在Keras中指定一个验证集:</p><div><pre class="programlisting">history = model.fit(x_train,y_train,batch_size=32,epochs=5,validation_data=(x_test,y_test))</pre></div><p>一旦我们成功运行了代码，我们将得到以下输出:</p><div><pre class="programlisting">
+
+<strong>Train on 60000 samples, validate on 10000 samples</strong>
+
+<strong>Epoch 1/10</strong>
+
+<strong>60000/60000 [==============================] - 19s 309us/step - loss: 5.3931 - acc: 0.6464 - val_loss: 1.9519 - val_acc: 0.8542</strong>
+
+<strong>Epoch 2/10</strong>
+
+<strong>60000/60000 [==============================] - 18s 297us/step - loss: 0.8855 - acc: 0.9136 - val_loss: 0.1279 - val_acc: 0.9635</strong>
+
+<strong>....</strong>
+
+<strong>Epoch 10/10</strong>
+
+<strong>60000/60000 [==============================] - 18s 296us/step - loss: 0.0473 - acc: 0.9854 - val_loss: 0.0663 - val_acc: 0.9814</strong>
+
+</pre></div><p>为了更好地了解<a class="indexterm" id="id213"/>是怎么回事，我们可以用下面的代码来绘制<a class="indexterm" id="id214"/>训练进度:</p><div><pre class="programlisting">import matplotlib.pyplot as plt
+
+
+
+fig, ax = plt.subplots(figsize=(10,6))
+
+gen = ax.plot(history.history['val_acc'], label='Validation Accuracy')
+
+fr = ax.plot(history.history['acc'],dashes=[5, 2], label='Training Accuracy')
+
+
+
+legend = ax.legend(loc='lower center', shadow=True)
+
+
+
+plt.show()</pre></div><p>这将为我们提供以下图表:</p><div><img alt="Compiling and training" src="img/B10354_03_13.jpg"/><div><p>验证和训练准确性的可视化输出</p></div></div><p>正如您在前面的图表中所看到的，该模型达到了大约98%的验证准确率，这是相当不错的！</p></div></div></div></body></html>
+<html><head><title>More bells and whistles for our neural network</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title">我们的神经网络需要更多的功能</h1></div></div></div><p>让我们花一点时间来看看我们的神经网络的其他一些元素。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec40"/>气势</h2></div></div></div><p>在前几章中，我们已经解释了梯度下降，即有人试图通过沿着地面的坡度找到下山的路。动量可以用物理学的类比来解释，即一个球从同一个山坡上滚下来。小山上的一个小突起不会使球滚向完全不同的方向。球已经有了一些动量，这意味着它的运动受到它之前运动的影响。</p><p>我们用指数加权移动平均来更新模型参数，而不是直接用它们的梯度来更新模型参数。我们用异常值梯度更新参数，然后取移动平均值，这将平滑异常值并捕捉梯度的大致方向，如下图所示:</p><div><img alt="Momentum" src="img/B10354_03_14.jpg"/><div><p>动量如何平滑梯度更新</p></div></div><p>指数加权移动平均是一个聪明的数学技巧，用于计算移动平均，而<a class="indexterm" id="id216"/>不必记忆一组以前的值。某个值<img alt="Momentum" src="img/B10354_03_002.jpg"/>的指数加权平均值<em> V </em>如下:</p><div><img alt="Momentum" src="img/B10354_03_003.jpg"/></div><p>β值为0.9意味着平均值的90%来自之前的移动平均值<img alt="Momentum" src="img/B10354_03_004.jpg"/>，10%来自新值<img alt="Momentum" src="img/B10354_03_005.jpg"/>。</p><p>使用动量使得学习对于梯度下降陷阱(例如异常梯度、局部最小值和鞍点)更加鲁棒。</p><p>我们可以通过设置beta值，用momentum增强Keras中的标准随机梯度下降优化器，我们在下面的代码中这样做:</p><div><pre class="programlisting">from keras.optimizers import SGD
+
+momentum_optimizer = SGD(lr=0.01, momentum=0.9)</pre></div><p>这个小代码片段创建了一个随机梯度下降优化器，学习率为0.01，beta值为0.9。我们可以在编译模型时使用它，正如我们现在要做的:</p><div><pre class="programlisting">model.compile(optimizer=momentum_optimizer,loss='sparse_categorical_crossentropy',metrics=['acc'])</pre></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec41"/>Adam优化器</h2></div></div></div><p>早在2015年，Diederik P. Kingma和Jimmy Ba创建了<strong>亚当</strong> ( <strong>自适应动量估计</strong>)优化器。这是使梯度下降<a class="indexterm" id="id217"/>更有效的另一种方法。在过去的几年里，这种方法已经显示出非常好的效果，因此已经成为许多从业者的标准选择。例如，我们将它用于MNIST数据集。</p><p>首先，Adam优化器计算梯度的指数加权平均值，就像动量优化器一样。它通过以下公式实现这一点:</p><div><img alt="The Adam optimizer" src="img/B10354_03_006.jpg"/></div><p>然后，它还计算平方梯度的指数加权平均值:</p><div><img alt="The Adam optimizer" src="img/B10354_03_007.jpg"/></div><p>然后，它像这样更新模型参数:</p><div><img alt="The Adam optimizer" src="img/B10354_03_008.jpg"/></div><p>这里<img alt="The Adam optimizer" src="img/B10354_03_009.jpg"/>是一个很小的数，以避免被零除。</p><p>当梯度非常大时，这种除以梯度的平方根的方法会降低更新速度。它还稳定了<a class="indexterm" id="id219"/>学习，因为学习算法不会因为离群值而偏离轨道。</p><p>利用亚当，我们有了一个新的超参数。不再只有一个动量因子<img alt="The Adam optimizer" src="img/B10354_03_010.jpg"/>，我们现在有两个动量因子<img alt="The Adam optimizer" src="img/B10354_03_011.jpg"/>和<img alt="The Adam optimizer" src="img/B10354_03_012.jpg"/>。的推荐值</p><div><img alt="The Adam optimizer" src="img/B10354_03_013.jpg"/></div><p>和<img alt="The Adam optimizer" src="img/B10354_03_014.jpg"/>分别为0.9和0.999。</p><p>我们可以像这样使用Keras中的Adam:</p><div><pre class="programlisting">from keras.optimizers import adam
+
+
+
+adam_optimizer=adam(lr=0.1,beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+
+
+
+model.compile(optimizer=adam_optimizer,loss='sparse_categorical_crossentropy',metrics=['acc'])</pre></div><p>正如你在本章前面看到的，我们也可以通过传递作为优化器的<code class="literal">adam</code>字符串来编译模型。在这种情况下，Keras将为我们创建一个Adam优化器，并选择推荐值。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec42"/>正规化</h2></div></div></div><p>正则化是一种用于避免过度拟合的<a class="indexterm" id="id220"/>技术。过度拟合是指模型与定型数据拟合得太好，因此它不能很好地概括开发或测试数据。您可能会看到，过度拟合有时也被称为“高方差”，而拟合不足，即在训练、开发和测试数据上获得较差的结果，被称为“高偏差”</p><p>在经典的统计学习中，有很多关于偏差-方差权衡的焦点。提出的论点是，非常适合训练集的模型可能会过度拟合，为了获得良好的结果，必须接受一定量的欠拟合(偏差)。在经典的统计学习中，防止过度拟合的超参数也经常防止训练集很好地拟合。</p><p>神经网络中的正则化，正如这里所提出的，很大程度上是从经典的学习算法中借用的。然而，现代机器学习研究开始接受“正交性”的概念，即不同的超参数会影响偏差和方差。</p><p>通过分离这些超参数，可以打破偏差-方差权衡，我们可以找到能够很好地概括并提供准确预测的模型。然而，到目前为止，这些努力只取得了很小的回报，因为低偏差和低方差模型需要大量的训练数据。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec21"/> L2正规化</h3></div></div></div><p>对抗过度拟合的一种流行技术是L2正则化。L2正则化将<a class="indexterm" id="id221"/>权重的平方和添加到损失函数中。我们可以在下面的公式中看到这样的例子:</p><div><img alt="L2 regularization" src="img/B10354_03_015.jpg"/></div><p>这里<em> N </em>是训练样本的数量<img alt="L2 regularization" src="img/B10354_03_016.jpg"/>是正则化超参数，它决定了我们要正则化多少，常用值在0.01左右。</p><p>将这种正则化添加到损失函数中意味着高权重增加了损失，并且算法被激励来减少权重。小的权重，即接近零的权重，意味着神经网络对它们的依赖将会减少。</p><p>因此，正则化算法将更少地依赖于每个单个特征和每个单个节点激活，而是将具有更全面的视图，考虑许多特征和激活。这将防止算法过度拟合。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec22"/> L1正则化</h3></div></div></div><p>L1正则化非常<a class="indexterm" id="id222"/>类似于L2正则化，但它不是添加平方和，而是添加绝对值之和，正如我们在该公式中看到的:</p><div><img alt="L1 regularization" src="img/B10354_03_018.jpg"/></div><p>在实践中，两者中哪一个效果最好往往有点不确定，但两者之间的差别不是很大。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec23"/>Keras中的正规化</h3></div></div></div><p>在Keras中，<a class="indexterm" id="id223"/>应用于<a class="indexterm" id="id224"/>权重的正则化子称为<strong>核_正则化子</strong>，而<a class="indexterm" id="id225"/>应用于偏差的正则化子称为<strong>偏差_正则化子</strong>。您也可以直接将正则化应用于节点的激活，以防止它们被使用<strong>activity _ regulator</strong>非常强烈地激活<a class="indexterm" id="id226"/>。</p><p>现在，让我们添加一些L2正则化到我们的网络。为此，我们需要运行以下代码:</p><div><pre class="programlisting">from keras.regularizers import l2
+
+
+
+model = Sequential()
+
+
+
+
+
+model.add(Conv2D(6,3,input_shape=img_shape, kernel_regularizer=l2(0.01)))
+
+
+
+model.add(Activation('relu'))
+
+
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Conv2D(12,3,activity_regularizer=l2(0.01)))
+
+
+
+model.add(Activation('relu'))
+
+
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Flatten())
+
+
+
+model.add(Dense(10,bias_regularizer=l2(0.01)))
+
+
+
+model.add(Activation('softmax'))</pre></div><p>在Keras的第一个卷积层中设置<code class="literal">kernel_regularizer</code>意味着正则化权重。设置<code class="literal">bias_regularizer</code>调整偏差，设置<code class="literal">activity_regularizer</code>调整层的输出激活。</p><p>在下面的例子中，正则项被设置为炫耀，但在这里它们实际上损害了我们网络的性能。正如你从<a class="indexterm" id="id227"/>前面的训练结果中看到的，我们的网络实际上并没有过度拟合，所以设置正则化子会损害这里的性能，结果是模型欠拟合。</p><p>正如我们在下面的输出中看到的，在这种情况下，模型达到了大约87%的验证准确率:</p><div><pre class="programlisting">model.compile(loss='sparse_categorical_crossentropy',optimizer = 'adam',metrics=['acc'])
+
+              
+
+history = model.fit(x_train,y_train,batch_size=32,epochs=10,validation_data=(x_test,y_test))
+
+
+
+<strong>Train on 60000 samples, validate on 10000 samples</strong>
+
+<strong>Epoch 1/10</strong>
+
+<strong>60000/60000 [==============================] - 22s 374us/step - loss: 7707.2773 - acc: 0.6556 - val_loss: 55.7280 - val_acc: 0.7322</strong>
+
+<strong>Epoch 2/10</strong>
+
+<strong>60000/60000 [==============================] - 21s 344us/step - loss: 20.5613 - acc: 0.7088 - val_loss: 6.1601 - val_acc: 0.6771</strong>
+
+<strong>....</strong>
+
+<strong>Epoch 10/10</strong>
+
+<strong>60000/60000 [==============================] - 20s 329us/step - loss: 0.9231 - acc: 0.8650 - val_loss: 0.8309 - val_acc: 0.8749</strong>
+
+</pre></div><p>您会注意到，模型<a class="indexterm" id="id228"/>在验证上比在训练集上实现了更高的准确性；这是一个明显的不适应迹象。</p></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec43"/>辍学</h2></div></div></div><p>正如Srivastava等人2014年论文的标题所示，<em>辍学是防止神经网络过度适应</em>的一种简单方法。它通过<a class="indexterm" id="id229"/>从神经网络中随机移除节点来实现这一点:</p><div><img alt="Dropout" src="img/B10354_03_15.jpg"/><div><p>辍学方法示意图。来自Srivastava等人，“辍学:防止神经网络过度拟合的简单方法”，2014年</p></div></div><p>使用dropout，每个节点都有很小的概率将其激活设置为零。这意味着学习算法不再像L2和L1正则化那样严重依赖于单个节点。因此，辍学也有一个正规化的影响。</p><p>在Keras中，辍学是一种新的图层类型。它被放在您想要应用退出的激活之后。它传递激活，但有时它将激活设置为零，达到与细胞直接脱落相同的效果。我们可以在下面的代码中看到这一点:</p><div><pre class="programlisting">from keras.layers import Dropout
+
+model = Sequential()
+
+
+
+model.add(Conv2D(6,3,input_shape=img_shape))
+
+model.add(Activation('relu'))
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Dropout(0.2))
+
+
+
+model.add(Conv2D(12,3))
+
+model.add(Activation('relu'))
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(Dropout(0.2))
+
+
+
+model.add(Flatten())
+
+
+
+model.add(Dense(10,bias_regularizer=l2(0.01)))
+
+
+
+model.add(Activation('softmax'))</pre></div><p>如果过度拟合是一个严重的问题，0.5的下降值被认为是一个很好的选择，而超过0.5的值没有太大的帮助，因为网络可以使用的值太少。在这种情况下，我们选择的dropout值为0.2，这意味着每个单元格有20%的机会被设置为零。</p><p>请注意，dropout在合并后使用:</p><div><pre class="programlisting">model.compile(loss='sparse_categorical_crossentropy',optimizer = 'adam',metrics=['acc'])
+
+              
+
+history = model.fit(x_train,y_train,batch_size=32,epochs=10,validation_data=(x_test,y_test))</pre></div><div><pre class="programlisting">
+
+<strong>Train on 60000 samples, validate on 10000 samples</strong>
+
+<strong>Epoch 1/10</strong>
+
+<strong>60000/60000 [==============================] - 22s 371us/step - loss: 5.6472 - acc: 0.6039 - val_loss: 0.2495 - val_acc: 0.9265</strong>
+
+<strong>Epoch 2/10</strong>
+
+<strong>60000/60000 [==============================] - 21s 356us/step - loss: 0.2920 - acc: 0.9104 - val_loss: 0.1253 - val_acc: 0.9627</strong>
+
+<strong>....</strong>
+
+<strong>Epoch 10/10</strong>
+
+<strong>60000/60000 [==============================] - 21s 344us/step - loss: 0.1064 - acc: 0.9662 - val_loss: 0.0545 - val_acc: 0.9835</strong>
+
+</pre></div><p>低压差值<a class="indexterm" id="id231"/>为我们创造了良好的结果，但同样，网络在验证集上比在训练集上做得更好，这是发生欠拟合的明显迹象。请注意，辍学仅适用于培训时间。当模型用于预测时，dropout不做任何事情。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec44"/>批量生产</h2></div></div></div><p><strong> Batchnorm </strong>，是<strong>batch</strong><a class="indexterm" id="id232"/><strong>normalization</strong>的简称，是一种将输入数据批量“规格化”到层的技术。每个batchnorm计算数据的平均值和标准差，并应用一个变换，使平均值为零，标准差为一。</p><p>这使得训练更容易，因为损失面变得更“圆”沿着不同输入维度的不同平均值和标准偏差将意味着网络将不得不学习更复杂的函数。</p><p>在Keras中，batchnorm也是一个新的<a class="indexterm" id="id233"/>层，您可以在以下代码中看到:</p><div><pre class="programlisting">from keras.layers import BatchNormalization
+
+
+
+model = Sequential()
+
+
+
+model.add(Conv2D(6,3,input_shape=img_shape))
+
+model.add(Activation('relu'))
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(BatchNormalization())
+
+
+
+model.add(Conv2D(12,3))
+
+model.add(Activation('relu'))
+
+model.add(MaxPool2D(2))
+
+
+
+model.add(BatchNormalization())
+
+
+
+model.add(Flatten())
+
+
+
+model.add(Dense(10,bias_regularizer=l2(0.01)))
+
+
+
+model.add(Activation('softmax'))
+
+model.compile(loss='sparse_categorical_crossentropy',optimizer = 'adam',metrics=['acc'])
+
+              
+
+history = model.fit(x_train,y_train,batch_size=32,epochs=10,validation_data=(x_test,y_test))</pre></div><div><pre class="programlisting">
+
+<strong>Train on 60000 samples, validate on 10000 samples</strong>
+
+<strong>Epoch 1/10</strong>
+
+<strong>60000/60000 [==============================] - 25s 420us/step - loss: 0.2229 - acc: 0.9328 - val_loss: 0.0775 - val_acc: 0.9768</strong>
+
+<strong>Epoch 2/10</strong>
+
+<strong>60000/60000 [==============================] - 26s 429us/step - loss: 0.0744 - acc: 0.9766 - val_loss: 0.0668 - val_acc: 0.9795</strong>
+
+<strong>....</strong>
+
+<strong>Epoch 10/10</strong>
+
+<strong>60000/60000 [==============================] - 26s 432us/step - loss: 0.0314 - acc: 0.9897 - val_loss: 0.0518 - val_acc: 0.9843</strong>
+
+</pre></div><p>Batchnorm通常通过简化训练来加速训练。你可以看到第一个时期的准确率是如何上升的:</p><div><img alt="Batchnorm" src="img/B10354_03_17.jpg"/><div><p>用batchnorm训练和验证我们的MNIST分类器的准确性</p></div></div><p>Batchnorm也有轻微的调节作用。极值经常被过度拟合，batchnorm减少了极值<a class="indexterm" id="id235"/>，类似于活动正则化。所有这些使得batchnorm成为计算机视觉中一个非常受欢迎的工具。</p></div></div></body></html>
+<html><head><title>Working with big image datasets</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec42"/>处理大型影像数据集</h1></div></div></div><p>图像往往是大文件。事实上，您很可能无法将整个图像数据集放入计算机的RAM中。</p><p>因此，我们需要<a class="indexterm" id="id236"/>从磁盘“及时”加载图像，而不是提前加载。在这一节中，我们将设置一个图像数据生成器来动态加载图像。</p><p>在这种情况下，我们将使用植物幼苗的数据集。这是由Thomas Giselsson等人于2017年通过他们的出版物<em>提供的，这是一个用于植物幼苗分类算法基准测试的公共图像数据库</em>。</p><p>该数据集可从以下链接获得:<a class="ulink" href="https://arxiv.org/abs/1711.05458">https://arxiv.org/abs/1711.05458</a>。</p><p>你可能想知道为什么我们要看植物。毕竟，工厂分类不是金融部门面临的常见问题。简单的答案是，这个数据集有助于演示许多常见的计算机视觉技术，并且在开放域许可下可用；因此，这是一个很好的训练数据集供我们使用。</p><p>希望在更相关的数据集上测试自己知识的读者应该看看<em>州立农场分心司机</em>数据集以及<em>星球:从太空了解亚马逊</em>数据集。</p><div><div><h3 class="title"><a id="note11"/>注意</h3><p>本节和堆叠预训练模型一节的代码和数据可以在这里找到并运行:<a class="ulink" href="https://www.kaggle.com/jannesklaas/stacking-vgg">https://www.kaggle.com/jannesklaas/stacking-vgg</a>。</p></div></div><p>Keras附带了一个图像数据生成器，它可以开箱即用地从磁盘加载文件。为此，您只需运行:</p><div><pre class="programlisting">from keras.preprocessing.image import ImageDataGenerator</pre></div><p>要从文件中获取生成器读数，我们首先必须指定生成器。在Keras中，<code class="literal">ImageDataGenerator</code>提供了一系列的图像增强工具，但是在我们的例子中，我们将只使用重新缩放功能。</p><p>重新缩放将图像中的所有值乘以一个常数。对于大多数常见的图像格式，颜色值的范围是从0到255，所以我们希望按1/255重新缩放。我们可以通过运行以下命令来实现这一点:</p><div><pre class="programlisting">imgen = ImageDataGenerator(rescale=1/255)</pre></div><p>然而，这还不是为我们加载图像的生成器。<code class="literal">ImageDataGenerator</code>类提供了一系列生成器，可以通过调用它的函数来创建。</p><p>要获得一个发电机加载文件，我们必须调用<code class="literal">flow_from_directory</code>。</p><p>然后，我们必须指定Keras应该使用的目录、我们想要的批量大小，在本例中为<code class="literal">32</code>，以及图像应该调整到的目标大小，在本例中为150x150像素。为此，我们只需运行以下代码:</p><div><pre class="programlisting">train_generator = imgen.flow_from_directory('train',batch_size=32, target_size=(150,150))
+
+validation_generator = imgen.flow_from_directory('validation',batch_size=32, tar get_size=(150,150))</pre></div><p>Keras是如何找到<a class="indexterm" id="id238"/>图片的，又是如何知道这些图片属于哪个类的呢？Keras生成器需要以下文件夹结构:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">根:<div> <ul class="itemizedlist"> <li class="listitem" style="list-style-type: disc">类0<div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">img</li><li class="listitem" style="list-style-type: disc">img</li><li class="listitem" style="list-style-type: disc">…</li></ul></div></li></ul></div><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">类1<div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">img</li><li class="listitem" style="list-style-type: disc">…</li></ul></div></li></ul></div><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">类1</li></ul></div></li></ul></div><p>我们的数据集已经以这种方式建立起来了，对图像进行排序以符合生成器的期望通常并不困难。</p></div></body></html>
+<html><head><title>Working with pretrained models</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec43"/>使用预训练模型</h1></div></div></div><p>训练大型计算机视觉<a class="indexterm" id="id239"/>模型不仅困难，而且计算量很大。因此，使用最初为另一个目的训练的模型，并为新的目的对它们进行微调是很常见的。这是迁移学习的一个例子。</p><p>迁移学习旨在将学习从一项任务转移到另一项任务。作为人类，我们非常善于将我们所学的知识进行转化。当你看到一只你以前没见过的狗，你不需要为这只特别的狗重新学习关于狗的一切；相反，你只是将新的知识转移到你已经知道的关于狗的知识上。每次都重新训练一个大的网络是不经济的，因为你经常会发现模型的某些部分是我们可以重用的。</p><p>在本节中，我们将微调VGG-16，最初在ImageNet数据集上训练。ImageNet竞赛是一年一度的计算机视觉竞赛，ImageNet数据集由数百万幅现实世界物体的图像组成，从狗到飞机。</p><p>在ImageNet竞赛中，研究人员竞相建立最精确的模型。事实上，ImageNet近年来推动了计算机视觉的许多进步，为ImageNet竞赛构建的模型是微调模型的流行基础。</p><p>VGG-16是由牛津大学视觉几何小组开发的模型建筑。该模型由卷积部分和分类部分组成。我们将只使用卷积部分。此外，我们将添加我们自己的分类部分，可以对植物进行分类。</p><p>VGG-16可以使用以下代码通过Keras下载:</p><div><pre class="programlisting">from keras.applications.vgg16 import VGG16
+
+vgg_model = VGG16(include_top=False,input_shape=(150,150,3))</pre></div><div><pre class="programlisting">
+
+<strong>out: </strong>
+
+<strong>Downloading data from https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5</strong>
+
+<strong>58892288/58889256 [==============================] - 5s 0us/step</strong>
+
+</pre></div><p>在下载数据的时候，我们想让Keras知道我们不想包含最上面的部分(分类部分)；我们还想让Keras知道所需的输入形状。如果我们不指定输入形状，模型将接受任何<a class="indexterm" id="id240"/>图像大小，并且不可能在顶部添加<code class="literal">Dense</code>层:</p><div><pre class="programlisting">vgg_model.summary()</pre></div><div><pre class="programlisting">
+
+<strong>out: </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>Layer (type)                 Output Shape              Param #   </strong>
+
+<strong>=================================================================</strong>
+
+<strong>input_1 (InputLayer)         (None, 150, 150, 3)       0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block1_conv1 (Conv2D)        (None, 150, 150, 64)      1792      </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block1_conv2 (Conv2D)        (None, 150, 150, 64)      36928     </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block1_pool (MaxPooling2D)   (None, 75, 75, 64)        0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block2_conv1 (Conv2D)        (None, 75, 75, 128)       73856     </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block2_conv2 (Conv2D)        (None, 75, 75, 128)       147584    </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block2_pool (MaxPooling2D)   (None, 37, 37, 128)       0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block3_conv1 (Conv2D)        (None, 37, 37, 256)       295168    </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block3_conv2 (Conv2D)        (None, 37, 37, 256)       590080    </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block3_conv3 (Conv2D)        (None, 37, 37, 256)       590080    </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block3_pool (MaxPooling2D)   (None, 18, 18, 256)       0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block4_conv1 (Conv2D)        (None, 18, 18, 512)       1180160   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block4_conv2 (Conv2D)        (None, 18, 18, 512)       2359808   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block4_conv3 (Conv2D)        (None, 18, 18, 512)       2359808   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block4_pool (MaxPooling2D)   (None, 9, 9, 512)         0         </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block5_conv1 (Conv2D)        (None, 9, 9, 512)         2359808   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block5_conv2 (Conv2D)        (None, 9, 9, 512)         2359808   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block5_conv3 (Conv2D)        (None, 9, 9, 512)         2359808   </strong>
+
+<strong>_________________________________________________________________</strong>
+
+<strong>block5_pool (MaxPooling2D)   (None, 4, 4, 512)         0         </strong>
+
+<strong>=================================================================</strong>
+
+<strong>Total params: 14,714,688</strong>
+
+<strong>Trainable params: 14,714,688</strong>
+
+<strong>Non-trainable params: 0</strong>
+
+<strong>_________________________________________________________________</strong>
+
+</pre></div><p>如你所见，VGG <a class="indexterm" id="id241"/>模型非常大，有超过1470万个可训练参数。它还由<code class="literal">Conv2D</code>和<code class="literal">MaxPooling2D</code>图层组成，这两个图层我们在处理MNIST数据集时已经了解过。</p><p>从这一点出发，我们有两种不同的方法可以继续:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">添加层并建立一个新模型。</li><li class="listitem" style="list-style-type: disc">通过相关模型对所有图像进行预处理，然后训练一个新的模型。</li></ul></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec45"/>改造VGG-16</h2></div></div></div><p>在这一部分，我们将在VGG-16模型上添加<a class="indexterm" id="id242"/>层，然后从那里开始，我们将训练新的大模型。</p><p>然而，我们不想重新训练所有那些已经被训练过的卷积层。因此，我们必须首先“冻结”VGG-16中的所有层，这可以通过运行以下命令来实现:</p><div><pre class="programlisting">for the layer in vgg_model.layers:
+
+  layer.trainable = False</pre></div><p>Keras下载VGG作为一个功能API模型。我们将在<a class="link" href="ch06.html" title="Chapter 6. Using Generative Models">第6章</a>、<em>使用生成模型</em>中了解更多关于功能API的内容，但目前，我们只想使用顺序API，它允许我们通过<code class="literal">model.add()</code>堆叠层。我们可以使用函数式API转换模型，代码如下:</p><div><pre class="programlisting">finetune = Sequential(layers = vgg_model.layers)</pre></div><p>作为运行代码的结果，我们现在已经创建了一个名为<code class="literal">finetune</code>的新模型，它的工作方式就像一个普通的顺序模型一样。我们需要记住，只有当模型实际上可以用顺序API表达时，用顺序API转换模型才有效。一些更复杂的模型无法转换。</p><p>由于我们刚才所做的一切，向我们的模型添加层现在很简单:</p><div><pre class="programlisting">finetune.add(Flatten())
+
+finetune.add(Dense(12))
+
+finetune.add(Activation('softmax'))</pre></div><p>默认情况下，新添加的层是可训练的，而重用的模型套接字则不是。我们可以像训练任何其他模型一样，在我们在前一节中定义的数据生成器上训练这个堆叠模型。这可以通过运行以下代码来执行:</p><div><pre class="programlisting">finetune.compile(loss='categorical_crossentropy',optimizer='adam',metrics = ['acc'])
+
+                 
+
+finetune.fit_generator(train_generator,epochs=8,steps_per_epoch= 4606 // 32, validation_data=validation_generator, validation_steps= 144//32)</pre></div><p>在运行之后，该模型设法实现了大约75%的验证准确率。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec46"/>随机图像增强</h2></div></div></div><p><a class="indexterm" id="id243"/>机器学习中的一个普遍问题是，无论我们有多少数据，拥有更多数据总是更好，因为这将提高我们输出的质量，同时还可以防止过度拟合，并允许我们的模型处理更多种类的输入。因此，对图像应用随机增强是很常见的，例如，旋转或随机裁剪。</p><p>这个想法是从一个图像中获取大量不同的图像，从而减少模型过度拟合的机会。对于大多数图像增强的目的，我们可以只使用Keras的。</p><p>使用OpenCV库可以进行更高级的扩充。然而，关注这一点超出了本章的范围。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec24"/>使用ImageDataGenerator增强</h3></div></div></div><p>当使用扩充的<a class="indexterm" id="id244"/>数据生成器时，我们通常只将其用于训练。验证生成器不应该使用增强功能，因为当我们验证我们的模型时，我们希望估计它在看不见的实际数据和非增强数据上的表现。</p><p>这不同于基于规则的增强，在基于规则的增强中，我们试图创建更容易分类的图像。因此，我们需要创建两个<code class="literal">ImageDataGenerator</code>实例，一个用于训练，一个用于验证。这可以通过运行以下代码来完成:</p><div><pre class="programlisting">train_datagen = ImageDataGenerator(
+
+  rescale = 1/255,
+
+  rotation_range=90,
+
+  width_shift_range=0.2,
+
+  height_shift_range=0.2,
+
+  shear_range=0.2,
+
+  zoom_range=0.1,
+
+  horizontal_flip=True,
+
+  fill_mode='nearest')</pre></div><p>这个训练数据生成器利用了一些内置的增强技术。</p><div><div><h3 class="title"><a id="note12"/>注意</h3><p><strong>注意</strong>:Keras中有更多的<a class="indexterm" id="id245"/>命令可用。要获得完整列表，您应该参考https://keras.io/<a class="ulink" href="https://keras.io/">的Keras文档。</a></p></div></div><p>在下面的列表中，我们突出显示了几个常用的命令:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">rescale</code>缩放图像中的数值。我们以前使用过它，也将使用它进行验证。</li><li class="listitem" style="list-style-type: disc"><code class="literal">rotation_range</code>是随机旋转图像的范围(0到180度)。</li><li class="listitem" style="list-style-type: disc"><code class="literal">width_shift_range</code>和<code class="literal">height_shift_range</code>是水平或垂直随机拉伸图像的范围(相对于图像大小，这里为20%)。</li><li class="listitem" style="list-style-type: disc"><code class="literal">shear_range</code>是一个随机应用剪切的范围(同样，相对于图像)。</li><li class="listitem" style="list-style-type: disc"><code class="literal">zoom_range</code>是随机放大图片的范围。</li><li class="listitem" style="list-style-type: disc"><code class="literal">horizontal_flip</code>指定是否随机翻转图像。</li><li class="listitem" style="list-style-type: disc"><code class="literal">fill_mode</code>指定如何填充旋转产生的空白空间。</li></ul></div><p>我们可以通过多次运行一个图像来检查生成器做了什么。</p><p>首先，我们需要导入Keras图像工具并指定一个图像路径(这是随机选择的)。这可以通过运行以下命令来完成:</p><div><pre class="programlisting">from keras.preprocessing import image
+
+fname = 'train/Charlock/270209308.png'</pre></div><p>然后，我们需要加载图像<a class="indexterm" id="id246"/>并将其转换为NumPy数组，这是通过以下代码实现的:</p><div><pre class="programlisting">img = image.load_img(fname, target_size=(150, 150))
+
+img = image.img_to_array(img)</pre></div><p>如前所述，我们必须向图像添加一个批处理大小维度:</p><div><pre class="programlisting">img = np.expand_dims(img,axis=0)</pre></div><p>然后我们使用刚刚创建的<code class="literal">ImageDataGenerator</code>实例，但是我们将使用<code class="literal">flow</code>而不是<code class="literal">flow_from_directory</code>，这允许我们将数据直接传递给生成器。然后，我们传递一个我们想要使用的图像，我们可以这样做:</p><div><pre class="programlisting">gen = train_datagen.flow(img, batch_size=1)</pre></div><p>在一个循环中，我们在生成器上调用<code class="literal">next</code>四次:</p><div><pre class="programlisting">for i in range(4):
+
+    plt.figure(i)
+
+    batch = next(gen)
+
+    imgplot = plt.imshow(image.array_to_img(batch[0]))
+
+    
+
+plt.show()</pre></div><p>这将产生以下输出:</p><div><img alt="Augmentation with ImageDataGenerator" src="img/B10354_03_18.jpg"/><div><p>一些随机修改图像的样本</p></div></div></div></div></div></body></html>
+<html><head><title>The modularity tradeoff</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec44"/>模块化权衡</h1></div></div></div><p>这一章已经展示了用一些基于规则的系统来帮助机器学习模型是可能的，而且通常是有用的。您可能还注意到，数据集中的图像都被裁剪为只显示一种植物。</p><p>虽然我们可以建立一个模型来为我们定位和分类植物，除了分类之外，我们还可以建立一个系统来输出植物应该直接接受的处理。这回避了我们应该如何模块化我们的系统的问题。</p><p>端到端深度学习风靡了好几年。如果给定大量数据，深度学习模型可以学习原本需要一个具有许多组件的系统花更长时间学习的内容。然而，端到端深度学习确实有几个缺点:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">端到端的深度学习需要海量的数据。因为模型有如此多的参数，为了避免过度拟合，需要大量的数据。</li><li class="listitem" style="list-style-type: disc">端到端深度学习很难调试。如果你用一个黑盒模型替换你的整个系统，你几乎没有希望找出某些事情发生的原因。</li><li class="listitem" style="list-style-type: disc">有些东西很难学，但作为代码写下来很容易，尤其是健全检查规则。</li></ul></div><p>最近，研究人员开始使他们的模型更加模块化。一个很棒的例子就是哈和施密德图伯的<em>世界模型</em>，这里可以读到:<a class="ulink" href="https://worldmodels.github.io/">的</a>。在这个过程中，他们对视觉信息进行了编码，对未来进行了预测，并用三种不同的模型选择了行动。</p><p>在实践方面，我们可以看看Airbnb，他们将结构建模与机器学习结合起来，用于他们的定价引擎。可以在这里了解更多:<a class="ulink" href="https://medium.com/airbnb-engineering/learning-market-dynamics-for-optimal-pricing-97cffbcc53e3">https://medium . com/Airbnb-engineering/learning-market-dynamics-for-optimal-pricing-97 cffbcc 53 e 3</a>。建模者知道预订大致遵循泊松分布，也有季节性影响。因此，Airbnb建立了一个模型来直接预测分布和季节性的参数，而不是让模型直接预测预订量。</p><p>如果你有少量的<a class="indexterm" id="id248"/>数据，那么你的算法的性能需要来自人类的洞察力。如果一些子任务可以很容易地用代码表达，那么用代码表达通常会更好。如果您需要可解释性，并且想知道为什么做出某些选择，那么具有清晰可解释的中间输出的模块化设置是一个不错的选择。然而，如果一项任务很难，并且您不确切知道它需要哪些子任务，并且您有大量数据，那么使用端到端的方法通常更好。</p><p>很少使用纯粹的端到端方法。例如，图像总是从相机芯片进行预处理，你从来没有真正处理过原始数据。</p><p>聪明地划分任务可以提高性能，降低风险。</p></div></body></html>
+<html><head><title>Computer vision beyond classification</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec45"/>超越分类的计算机视觉</h1></div></div></div><p>正如我们所看到的，有许多技术可以用来使我们的图像分类器工作得更好。这些技术在本书中都会用到，不仅仅是计算机视觉应用。</p><p>在本章的最后一节，我们将讨论一些超出图像分类的方法。这些任务通常需要比我们在本章所讨论的更有创造性地使用神经网络。</p><p>为了最大限度地了解这一部分，你不需要太担心所介绍的技术的细节，而是看看研究人员如何创造性地使用神经网络。我们采用这种方法是因为你会发现你要解决的任务需要相似的创造力。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec47"/>面部识别</h2></div></div></div><p>面部识别对于零售机构有很多<a class="indexterm" id="id250"/>应用。例如，如果您在前台，您可能希望在自动取款机上自动识别您的客户，或者您可能希望提供基于面部的安全功能，如iPhone提供的功能。然而，在后台，您需要遵守KYC法规，该法规要求您识别与您合作的客户。</p><p>表面上，面部识别看起来像一个分类任务。你给机器一张人脸图像，它就会预测出是哪个人。问题是你可能有数百万的顾客，但是每个顾客只有一两张图片。</p><p>最重要的是，你可能会不断获得新客户。你不能每次得到一个新客户就改变你的模型，如果一个简单的分类方法必须在数百万个类别中选择，而每个类别只有一个例子，那么它就会失败。</p><p>这里的创造性见解是，您可以查看两个图像是否显示同一张脸，而不是对客户的脸进行分类。您可以在下图中看到这一想法的直观表示:</p><div><img alt="Facial recognition" src="img/B10354_03_19.jpg"/><div><p>暹罗网络示意图</p></div></div><p>为此，您必须先运行这两个图像。连体网络是一类包含两个或更多相同子网的神经网络架构，两个子网都是相同的，并且包含相同的权重。在Keras中，您可以通过首先定义层，然后在两个网络中使用它们来实现这样的设置。然后，这两个网络输入到一个单一的分类层，该分类层确定两幅图像是否显示同一张脸。</p><p>为了避免每次我们想要识别一张脸时都通过整个siame网络运行我们数据库中的所有客户图像，通常保存siame网络的最终输出。图像的暹罗网络的最终输出被称为人脸嵌入。当我们想要识别顾客时，我们将顾客面部图像的嵌入与存储在我们数据库中的嵌入进行比较。我们可以使用单个分类图层来实现这一点。</p><p>存储面部嵌入是非常有益的，因为除了允许面部聚类之外，它将为我们节省大量的计算成本。面孔会根据性别、年龄和种族等特征聚集在一起。通过只将一幅图像与同一群中的图像进行比较，我们可以节省更多的计算能力，从而获得更快的识别速度。</p><p>有两种方法来训练暹罗网络。我们可以通过创建匹配和非匹配图像对，然后使用二进制交叉熵分类损失来训练整个模型，从而将它们与分类器一起训练。然而，另一个在许多方面更好的选择是训练模型直接生成人脸嵌入。这种方法在Schroff，Kalenichenko和Philbin的2015年论文中有所描述，<em> FaceNet:用于人脸识别和聚类的统一嵌入</em>，你可以在这里阅读:【https://arxiv.org/abs/1503.03832】T4。</p><p>想法是创建三个一组的图像:一个锚图像，一个显示与锚图像相同的脸的正图像，和一个显示与锚图像不同的脸的负图像。三重损失用于使锚的嵌入和正片的嵌入之间的距离更小，而锚和负片之间的距离更大。</p><p>损失函数看起来像这样:</p><div><img alt="Facial recognition" src="img/B10354_03_019.jpg"/></div><p>这里<img alt="Facial recognition" src="img/B10354_03_020.jpg"/>是一个锚图像，<img alt="Facial recognition" src="img/B10354_03_021.jpg"/>是暹罗网络的输出，锚图像的嵌入。三联体损失是锚和正极之间的欧几里德距离减去锚和负极之间的欧几里德距离。一个小常数，<img alt="Facial recognition" src="img/B10354_03_022.jpg"/>，是正负对之间强制的边距。要达到零损耗，距离之差需要为<img alt="Facial recognition" src="img/B10354_03_023.jpg"/>。</p><p>您应该能够理解，您可以使用神经网络来预测两个项目在语义上是否相同，以便绕过大型分类问题。您可以通过一些二元分类任务来训练暹罗模型，也可以通过将输出视为嵌入并使用三元组损失来训练暹罗模型。这种洞察力不仅仅局限于面孔。如果您想要比较时间序列来对事件进行分类，那么您可以使用完全相同的方法。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec48"/>包围盒预测</h2></div></div></div><p>很可能在某个<a class="indexterm" id="id253"/>点，你会对定位图像中的物体感兴趣。例如，假设你是一家保险公司，需要检查它承保的屋顶。让人们爬上屋顶检查它们是很昂贵的，所以另一种方法是使用卫星图像。获得图像后，你现在需要在其中找到<a class="indexterm" id="id254"/>屋顶，正如我们在下面的截图中看到的。然后，您可以裁剪出屋顶，并将屋顶图像发送给您的专家，由他们进行检查:</p><div><img alt="Bounding box prediction" src="img/B10354_03_20.jpg"/><div><p>屋顶周围有边框的加州房屋</p></div></div><p>你需要的是包围盒预测。边界框预测器输出几个边界框的坐标以及对框中显示什么对象的预测。</p><p>有两种方法可以获得这样的边界框。</p><p>一个<strong>基于区域的卷积神经网络</strong> ( <strong> R-CNN </strong>)重用一个分类模型。它拍摄一幅图像，并在图像上滑动分类模型。<a class="indexterm" id="id255"/>结果是图像不同部分的许多分类。使用该特征图，区域建议网络执行回归任务以得出边界框，并且分类网络为每个边界框创建<a class="indexterm" id="id256"/>分类。</p><p>这种方法已经得到了完善，最终在任和其他人的2016年论文中得到体现，提供了“更快的R-CNN:利用区域提议网络实现实时对象检测”<em>，但在图像上滑动分类器的基本概念仍然保持不变。</em></p><p><strong>你只看一次</strong> ( <strong> YOLO </strong>)，另一方面，使用仅由卷积层组成的单一模型。它将一个<a class="indexterm" id="id257"/>图像划分为一个网格，并为每个网格单元预测一个对象类。然后它为每个网格单元预测几个可能的包含对象的边界框<a class="indexterm" id="id258"/>。</p><p>对于每个边界框，它回归坐标、宽度和高度值，以及该边界框实际包含对象的置信度得分。然后，它消除所有置信度过低或与另一个置信度更高的边界框重叠过大的边界框。</p><div><div><h3 class="title"><a id="note13"/>注意</h3><p>有关更详细的描述，请阅读雷德蒙和法尔哈迪2016年的论文<em> YOLO9000:更好、更快、更强</em>，可在<a class="ulink" href="https://arxiv.org/abs/1612.08242">https://arxiv.org/abs/1612.08242</a>获得。进一步阅读包括2018年的论文，<em> YOLOv3:增量改进</em>。这在<a class="ulink" href="https://arxiv.org/abs/1804.027">https://arxiv.org/abs/1804.027</a>有售。</p><p>这两篇论文都写得很好，半开玩笑，更详细地解释了YOLO的概念。</p></div></div><p>YOLO相对于R-CNN的主要优势是它要快得多。不必使用大型分类模型会更有效率。然而，R-CNN的主要优势是它比YOLO模型更准确。如果你的任务需要实时分析，你应该使用YOLO；然而，如果你不需要实时速度，但只是想要最好的准确性，那么使用R-CNN是一条路要走。</p><p>包围盒检测经常被用作许多处理步骤中的一个。在保险案例中，包围盒检测器将裁剪出所有的屋顶。然后，屋顶图像可以由人类专家进行判断，或者由一个单独的深度学习模型对受损的屋顶进行分类。当然，您可以训练一个对象定位器来直接区分受损和完好的屋顶，但在实践中，这通常不是一个好主意。</p><p>如果你有兴趣阅读更多关于这方面的内容，<a class="link" href="ch04.html" title="Chapter 4. Understanding Time Series">第四章</a>，<em>理解时间序列</em>，有一个关于模块化的大讨论。</p></div></div></body></html>
+<html><head><title>Exercises</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec46"/>练习题</h1></div></div></div><p>时尚MNIST是MNIST的替代者，但它不是手写数字，而是对衣服进行分类。尝试一下我们在本章中使用的关于时尚MNIST的技巧。他们是如何合作的？什么能产生好的结果？你可以在https://www.kaggle.com/zalando-research/fashionmnist的Kaggle上找到数据集。</p><p>接受鲸鱼识别挑战，阅读顶级内核和讨论帖子。链接可以在这里找到:【https://www.kaggle.com/c/whale-categorization-playground】T2。通过侥幸认出鲸鱼的任务类似于通过面孔认出人类。有一些好的内核展示了边界框和连体网络。我们还没有涵盖解决该任务所需的所有技术工具，所以不要担心代码的细节，而是要关注所示的概念。</p></div></body></html>
+<html><head><title>Summary</title><meta content="DocBook XSL Stylesheets V1.75.2" name="generator"/>
+
+<meta content="urn:uuid:ee7bbf81-ee0c-427b-9574-49bd7094315d" name="Adept.expected.resource"/></head><body id="page"><div><div><div><div><h1 class="title"><a id="ch03lvl1sec47"/>总结</h1></div></div></div><p>在这一章中，你已经看到了计算机视觉模型的构建模块。我们已经学习了卷积层，以及ReLU激活和正则化方法。您还看到了许多创造性地使用神经网络的方法，例如使用连体网络和边界框预测器。</p><p>您还在一个简单的基准测试任务——MNIST数据集上成功地实现和测试了所有这些方法。我们扩大了训练规模，使用预训练的VGG模型对数千张植物图像进行分类，然后使用Keras生成器从磁盘上动态加载图像，并定制VGG模型以适应我们的新任务。</p><p>我们还了解了图像增强的重要性以及在构建计算机视觉模型时的模块化权衡。许多这样的构建模块，如卷积、batchnorm和dropout，用于计算机视觉以外的其他领域。它们是计算机视觉应用之外的基本工具。通过在这里学习它们，你已经准备好在时间序列或生成模型中发现广泛的可能性。</p><p>计算机视觉在金融行业有许多应用，特别是在后台办公功能以及替代alpha世代中。这是现代机器学习的一个应用，可以转化为当今许多公司的实际价值。越来越多的公司将基于图像的数据源纳入他们的决策；你现在已经准备好正面解决这些问题了。</p><p>在本章的过程中，我们已经看到，一个成功的计算机视觉项目涉及整个管道，与处理模型相比，处理管道通常具有相似或更大的好处。</p><p>在下一章，我们将看看最具代表性和最常见的金融数据形式:时间序列。我们将使用更传统的统计方法来处理预测网络流量的任务，如<strong>ARIMA</strong>(T2【自回归综合移动平均的缩写)，以及基于现代神经网络的方法。您还将了解自相关和傅立叶变换的特征工程。最后，您将学习如何比较和对比不同的预测方法，并构建高质量的预测系统。</p></div></body></html></body></html>

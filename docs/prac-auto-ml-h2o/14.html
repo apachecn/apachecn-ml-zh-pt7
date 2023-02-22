@@ -1,0 +1,186 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Chapter 11: Working with Model Object, Optimized (MOJO)</title>
+
+</head>
+<body>
+<div><div><h1 class="chapter-number" id="_idParaDest-160"><a id="_idTextAnchor210"/> 11</h1>
+<h1 id="_idParaDest-161"><a id="_idTextAnchor211"/>使用模型对象，优化(MOJO)</h1>
+<p>正如我们在<a href="B17298_10.xhtml#_idTextAnchor196"> <em class="italic">第10章</em></a><em class="italic">使用普通旧Java对象(POJO)</em>中了解到的，当使用生产系统时，我们需要可以轻松部署到生产服务器的可移植软件。在<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)服务中，ML模型<a id="_idIndexMarker1079"/>的可移植性和自给自足性尤为重要。这有助于工程师定期部署新模型，而不必担心由于任何依赖问题而破坏生产中的系统。</p>
+<p>H2O的POJOs模型很好地解决了这个问题。模型POJO是H2O模型，可以以Java POJOs的形式提取出来，您可以使用<code>h2o-genmodel.jar</code>直接运行这些模型。</p>
+<p>然而，模型POJOs有某些缺点，使它们不能成为所有这些问题的最佳解决方案。说到软件包的可移植性，包括POJOs，对象越小，部署就越快。POJOs对源文件的大小有一个固有的限制，最大为1 GB。因此，大于1 GB的模型不能被提取为POJOs，同时，大型模型的部署和执行可能会很慢。</p>
+<p>这就是为什么H2O.ai的团队创建了POJO的替代方案，称为<strong class="bold">模型对象，优化了</strong> ( <strong class="bold"> MOJO </strong>)。MOJOs是低延迟、自给自足的独立对象，可以很容易地在生产中部署。它们是POJO的更小更快的对应物，和POJO一样容易提取和使用。</p>
+<p>在本章中，我们将讨论以下主题:</p>
+<ul>
+<li>理解什么是魔咒</li>
+<li>将H2O模型提取为MOJOs</li>
+<li>查看模型MOJOs</li>
+<li>使用H2O汽车模型MOJOs进行预测</li>
+</ul>
+<p>本章结束时，您将能够理解POJO和MOJO之间的区别，使用Python、R或H2O流以MOJO的形式提取训练模型，然后使用这些MOJO模型加载您的ML程序以进行预测。</p>
+<h1 id="_idParaDest-162"><a id="_idTextAnchor213"/>技术要求</h1>
+<p>在本章中，您将需要以下内容:</p>
+<ul>
+<li>您首选的web浏览器的最新版本</li>
+<li>您选择的一个集成开发环境</li>
+<li>(可选)朱庇特项目的朱庇特笔记本(<a href="https://jupyter.org/">https://jupyter.org/</a>)</li>
+</ul>
+<p>本章进行的所有实验都是在终端上进行的。您可以自由地使用相同的设置，或者使用您选择的任何IDE执行相同的实验。本章的所有代码示例都可以在GitHub上找到，网址为<a href="https://github.com/PacktPublishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter%2011">https://GitHub . com/packt publishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter % 2011</a>。</p>
+<h1 id="_idParaDest-163">了解什么是魔咒</h1>
+<p><strong class="bold">mojo</strong>是H2O模式POJOs的对应物，技术上工作方式相同。H2O可以构建和<a id="_idIndexMarker1082"/>提取以mojo形式训练的模型，您可以使用提取的mojo来部署和预测入站数据。</p>
+<p>那么，MOJOs和POJOs有什么不同呢？</p>
+<p>POJOs有一些缺点，使得它们在生产环境中的使用不太理想，如下所示:</p>
+<ul>
+<li>大于1 GB的源文件不支持POJO，因此任何大于<a id="_idIndexMarker1085"/> 1 GB的型号都不能编译成POJO。</li>
+<li>POJOs不支持堆叠整体模型或Word2Vec模型。</li>
+</ul>
+<p>另一方面，<a id="_idIndexMarker1086"/>mojo有以下<a id="_idIndexMarker1087"/>额外好处:</p>
+<ul>
+<li>魔咒没有大小限制</li>
+<li>MOJOs通过移除ML树并使用通用的树遍历算法来计算导航模型，从而解决了大尺寸问题</li>
+<li>MOJOs比POJOs体积更小，速度更快</li>
+<li>MOJOs支持使用H2O AutoML训练的所有类型的模型</li>
+</ul>
+<p>根据H2O的内部实验和测试，如https://docs . H2O . ai/H2O/latest-stable/H2O-docs/productionizing . XHTML # benefits-of-MOJO-over-POJO所述，人们注意到MOJO模型的磁盘空间比相应的POJO模型小大约20-25倍。当<strong class="bold">热评分</strong>时，MOJOs的速度也是POJOs的两倍，热评分是在JVM已经能够优化<a id="_idIndexMarker1089"/>执行路径之后进行的。在<strong class="bold">冷评分</strong>期间，即在JVM已经<a id="_idIndexMarker1090"/>优化执行路径之前进行评分时，MOJOs的执行速度比POJOs快10-40倍。随着模型规模的增加，MOJOs比POJOs更有效。</p>
+<p>H2O的内部测试还表明，当用5000棵深度为25的树进行测试时，POJOs在对大约50棵深度为5的非常小的树运行二项式分类时表现更好，但MOJOs在多项式分类方面表现更好。</p>
+<p>现在我们知道了什么是mojo，以及它们的好处，让我们看看如何使用简单的例子提取使用H2O的AutoML as MOJOs训练的模型。</p>
+<h1 id="_idParaDest-164"><a id="_idTextAnchor215"/>提取H2O模型作为魔咒</h1>
+<p>就像POJOs一样，你<a id="_idIndexMarker1091"/>可以使用任何H2O支持的语言提取使用<a id="_idIndexMarker1092"/> H2O的AutoML训练的模型。</p>
+<p>在下面的小节中，我们将学习如何使用Python和<a id="_idIndexMarker1093"/> R编程语言提取模型mojo，以及如何使用H2O流提取模型mojo。</p>
+<h2 id="_idParaDest-165"><a id="_idTextAnchor216"/>在Python中提取H2O模型作为MOJOs</h2>
+<p>让我们看看如何使用Python将<a id="_idIndexMarker1096"/>模型提取为mojo<a id="_idIndexMarker1097"/>。我们将对运行AutoML的<a id="_idIndexMarker1098"/>使用相同的<strong class="bold"> Iris flower数据集</strong>。</p>
+<p>按照以下步骤使用H2O AutoML训练模型。然后，我们将提取领导者模型，并将其作为MOJO下载:</p>
+<ol>
+<li>导入<code>h2o</code>模块并启动您的H2O服务器:<pre>import h2o h2o.init()</pre></li>
+<li>通过在系统中传递数据集的适当位置来导入Iris数据集。执行以下命令:<pre>data_frame = h2o.import_file("Dataset/iris.data")</pre></li>
+<li>通过执行以下命令设置特征和标签名称:<pre>features = data_frame.columns label = "C5" features.remove(label)</pre></li>
+<li>通过执行以下命令将<code>max_model</code>参数值设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code>，初始化H2O AutoML对象:<pre>aml=h2o.automl.H2OAutoML(max_models=10, seed = 5)</pre></li>
+<li>通过将训练数据集、特征列和标签列作为参数传递来启动AutoML过程，如下所示:<pre>aml.train(x = features, y = label, training_frame = data_frame) </pre></li>
+<li>一旦<a id="_idIndexMarker1099"/>训练完成<a id="_idIndexMarker1100"/>，您<a id="_idIndexMarker1101"/>可以通过执行以下命令查看AutoML排行榜:<pre>print(aml.leaderboard)</pre></li>
+</ol>
+<p>您应该会看到以下排行榜:</p>
+<div><div><img alt="Figure 11.1 – AutoML leaderboard for extracting MOJOs  " height="272" src="img/B17298_11_001.jpg" width="766"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图11.1–提取MOJOs的AutoML排行榜</p>
+<ol>
+<li value="7">您可以使用<code>aml.leader</code>获得AutoML培训的领导者模型。所有模型都有一个内置函数<code>download_mojo()</code>，它提取并下载模型MOJO文件:<pre>aml.leader.download_mojo()</pre></li>
+</ol>
+<p>这应该会将模型MOJO下载到您的设备上。您也可以使用<code>model_id</code>从排行榜下载特定型号。让我们下载DRF模型，它在排行榜上排名第四。执行以下命令:</p>
+<pre>DRF_model = h2o.get_model(aml.leaderboard[3,0])
+DRF_model.download_mojo()</pre>
+<p>您还可以通过<a id="_idIndexMarker1102"/>将<code>path</code>参数和<a id="_idIndexMarker1103"/>位置传递给<code>download_mojo()</code>函数，来指定MOJO文件的下载路径。您也可以通过在<code>download_mojo()</code>函数中将<code>get_genmodel_jar</code>作为<code>True</code>传递来下载<code>h2o-genmodel.jar</code>和<a id="_idIndexMarker1104"/>以及MOJO文件。</p>
+<p>让我们看看如何在<a id="_idTextAnchor217"/> R编程语言中做同样的事情。</p>
+<h2 id="_idParaDest-166"><a id="_idTextAnchor218"/>提取H2O模型作为R中的MOJOs</h2>
+<p>类似于我们如何用Python从AutoML排行榜中提取模型，我们可以用R编程语言做同样的事情。我们将再次使用相同的Iris flower数据集，使用H2O AutoML训练模型，然后提取leader模型，将其作为POJO下载。请遵循以下步骤:</p>
+<ol>
+<li value="1">导入<code>h2o</code>模块并启动您的H2O服务器:<pre>library(h2o) h2o.init()</pre></li>
+<li>通过传递数据集在系统中的位置来导入数据集。执行以下命令:<pre>data_frame &lt;- h2o.importFile("Dataset/iris.data")</pre></li>
+<li>通过执行以下命令设置特征和标签名称:<pre>label &lt;- "C5" features &lt;- setdiff(names(data), label)</pre></li>
+<li>通过将定型数据集、要素列和标签列作为参数传递来触发AutoML。同样，将<code>max_models</code>设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code> : <pre>aml &lt;- h2o.automl(x = features, y = label, training_frame = data_frame, max_models=10, seed = 5)</pre></li>
+<li>一旦<a id="_idIndexMarker1108"/>训练<a id="_idIndexMarker1109"/>完成并且你有了排行榜，你就可以使用<code>aml@leaderboard</code>进入<a id="_idIndexMarker1110"/>领导者模式。使用相同的命令，我们可以下载领导者模型作为MOJO，就像这样:<pre>h2o.download_pojo(aml@leaderboard)</pre></li>
+</ol>
+<p>这将开始下载模型MOJO压缩文件到您的设备。与Python类似，在R中，您可以指定下载路径并将<code>get_genmodel_jar</code>参数设置为<em class="italic"> True </em>来下载<code>h2o-genmodel.jar</code>文件以及MOJO ZIP文件。</p>
+<p>既然我们知道了如何在R编程语言中提取模型MOJO，让我们学习如何在H2O流中做同样的事情。</p>
+<h2 id="_idParaDest-167"><a id="_idTextAnchor219"/>提取H2O模型作为H2O流中的MOJOs</h2>
+<p>在<a id="_idIndexMarker1112"/> H2O流中下载<a id="_idIndexMarker1111"/>模型魔咒就像使用POJOs一样简单。在<strong class="bold">下载POJO </strong>按钮的右边，有另一个下载MOJO模型的按钮。</p>
+<p>正如您在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第2章</em> </a>、<em class="italic">使用H2O流程(H2O的Web UI) </em>中所了解的，在<em class="italic">使用H2O流程中的模型训练功能</em>部分，您可以访问特定的模型信息。</p>
+<p>在<strong class="bold"> Actions </strong>子部分中，您有一个名为<strong class="bold">Model Deployment Package(MOJO)</strong>的交互按钮，如下面的屏幕截图所示:</p>
+<div><div><img alt="Figure 11.2 – The Download Model Deployment Package (MOJO) button  " height="207" src="img/B17298_11_002.jpg" width="1162"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图11.2–下载模型部署包(MOJO)按钮</p>
+<p>只需点击这个按钮将下载模型作为一个魔咒。所有模型都可以通过使用H2O流中的这个交互式按钮以这种方式下载。</p>
+<p>与POJOss不同的是，在POJO中只有一个Java文件，MOJOs可以作为压缩文件<strong class="bold">下载，压缩文件</strong>包含某些<strong class="bold">配置设置</strong>的集合<a id="_idIndexMarker1113"/>以及其他文件。如果您愿意，您可以提取并研究这些文件，但是从实现的角度来看，我们将使用整个ZIP文件并在我们的服务中使用它。</p>
+<p>但是不管文件类型有什么不同，不管是Java文件还是ZIP文件，<code>h2o-genmodel.jar</code>都有针对这两种文件类型的解释器和阅读器，您可以使用它们来读取模型并做出预测。</p>
+<p>既然我们已经提取了模型MOJO，那么让我们探索MOJO中的一个特殊特性，在这里我们可以图形化地查看一个已训练模型的内容。</p>
+<h1 id="_idParaDest-168"><a id="_idTextAnchor220"/>查看模特魔咒</h1>
+<p>您可以通过使用一个名为<strong class="bold"> Graphviz </strong>的Java工具，将MOJO模型<a id="_idIndexMarker1115"/>视为简单的人类可读图形。Graphviz是一款可视化<a id="_idIndexMarker1116"/>软件，用于以图表或图形的形式图形化地可视化结构信息。它是一个方便的工具，经常被用来以简单的图像显示网络、网页设计和ML中的技术细节。</p>
+<p>您可以在不同的操作系统中安装Graphviz库，如下所示:</p>
+<ul>
+<li><strong class="bold"> Linux </strong>:你可以<a id="_idIndexMarker1117"/>在你的终端运行下面的命令来下载这个库:<pre><strong class="bold">sudo apt install graphviz</strong></pre></li>
+<li><code>brew</code>到<a id="_idIndexMarker1118"/>在你的Mac系统中安装这个库。在您的Mac终端中执行以下命令:<pre><strong class="bold">brew install graphviz</strong></pre></li>
+<li>Windows:Graphviz有一个Windows安装程序，你可以从http://www.graphviz.org/download/.下载</li>
+</ul>
+<p>一旦你安装了Graphviz，你可以从终端使用<code>PrintMojo</code>功能来图形化地查看模型，生成一个<strong class="bold"> PNG文件</strong>。</p>
+<p>让我们试一试。执行以下步骤:</p>
+<ol>
+<li value="1">一旦你<a id="_idIndexMarker1120"/>下载了你的model MOJO文件并安装了Graphviz，你将需要把<code>h2o.jar</code>文件放在同一个路径中来访问<code>hex</code>类中的<code>printMojo()</code>函数。可以从http://H2O-release . S3 . amazonaws . com/H2O/rel-zumbo/2/index . XHTML下载<code>h2o.jar</code>文件。</li>
+<li>一旦你的文件准备好了，在同一个目录中打开你的终端并执行下面的命令:<pre><strong class="bold">java -cp h2o.jar hex.genmodel.tools.PrintMojo --tree 0 -i "DRF_1_AutoML_4_20220801_225630.zip" -o model.gv -f 20 -d 3</strong></pre></li>
+</ol>
+<p>我们正在使用从实验中下载的DRF模型，该实验是在<em class="italic">将H2O模型提取为Python </em>部分中的MOJO。该命令生成一个<code>model.gv</code>文件，Graphviz可视化工具可以用它来可视化模型。</p>
+<ol>
+<li value="3">现在，使用Graphviz工具通过<code>model.gv</code>文件构建一个PNG文件。执行下面的代码:<pre><strong class="bold">dot -Tpng model.gv -o model.png</strong></pre></li>
+</ol>
+<p>这将生成<code>model.png</code>文件。</p>
+<ol>
+<li value="4">现在，打开<code>model.png</code>文件；您应该会看到模型的图像。该模型应该如下所示:</li>
+</ol>
+<div><div><img alt="Figure 11.3 – Model image generated from MOJO using Graphviz  " height="509" src="img/B17298_11_003.jpg" width="1210"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图11.3–使用Graphviz从MOJO生成的模型图像</p>
+<p>前面的<a id="_idIndexMarker1121"/>图很好地展示了<code>PrintMojo</code>的决策树如何在不需要Graphviz库的情况下运行。但是，这个选项只在Java 8 <a id="_idTextAnchor221"/>和更高版本中可用。</p>
+<ol>
+<li value="5">让我们尝试使用<code>PrintMojo</code>函数来生成模型图像。按顺序执行这些步骤，在不使用Graphviz的情况下生成模型的图像。</li>
+<li>与之前的实验相似，我们使用Graphviz打印了模型MOJO，确保您已经下载了模型MOJO，并将其与您的<code>h2o.jar</code>文件一起复制到一个目录中。现在，在同一个文件夹中打开一个终端，执行下面的命令:<pre><strong class="bold">java -cp h2o.jar hex.genmodel.tools.PrintMojo --tree 0 -i "DRF_1_AutoML_7_20220622_170835.zip" -o tree.png --format png</strong></pre></li>
+</ol>
+<p>该命令的输出应该生成一个<code>tree.png</code>文件夹，其中包含决策树的图像。该图应该如下所示:</p>
+<div><div><img alt="Figure 11.4 – Graphical images for class Iris-setosa using PrintMojo without Graphviz  " height="245" src="img/B17298_11_004.jpg" width="492"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图11.4–使用不带Graphviz的PrintMojo的Iris-setosa类图形图像</p>
+<p>由于我们使用的是在虹膜数据集上训练过的ML模型，因此我们有一个<a id="_idIndexMarker1123"/>多项式分类模型。因此，在<code>tree.png</code>文件中，每个类都有单独的图像——一个用于<code>Iris-setosa</code>，一个用于<code>Iris-virginica</code>，一个用于<code>Iris-versicolor</code>。</p>
+<p>请注意，此功能仅适用于基于树的算法，如DRF、GBM和XGBoost。不支持查看线性模型，如GLM和深度学习模型。</p>
+<p>现在我们知道了如何从模型mojo中查看模型，让我们学习如何使用mojo进行预测。</p>
+<h1 id="_idParaDest-169"><a id="_idTextAnchor222"/>使用H2O汽车模型MOJOs进行预测</h1>
+<p>使用MOJOs进行预测与我们使用POJOS模型进行预测是一样的，尽管有一些小的变化。与POJO类似，编译和运行model MOJO来进行预测也依赖于<code>h2o-genmodel.jar</code>文件。</p>
+<p>因此，让我们继续快速运行一个实验，我们可以使用model MOJO和<code>h2o-genmodel.jar</code>文件来进行预测。我们将编写一个Java程序来导入<code>h2o-genmodel.jar</code>文件，并使用它的类来加载和使用我们的模型MOJO来进行预测。</p>
+<p>因此，让我们首先创建一个文件夹，在其中保存实验所需的H2O MOJO文件，然后编写一些使用它的代码。</p>
+<p>请遵循以下步骤:</p>
+<ol>
+<li value="1">打开您的终端，通过执行以下命令创建一个空文件夹:<pre>mkdir H2O_MOJO cd H2O_MOJO</pre></li>
+<li>现在，通过执行下面的命令将您的模型MOJO文件复制到这个文件夹中:<pre>mv ~/Downloads/DRF_1_AutoML_7_20220622_170835.zip .</pre></li>
+</ol>
+<p>确保将模型MOJO的名称<code>DRF_1_AutoML_7_20220622_170835.zip</code>更改为您正在使用的模型MOJO。</p>
+<ol>
+<li value="3">然后，你需要下载<code>h2o-genmodel.jar</code>文件。正如你在<a href="B17298_10.xhtml#_idTextAnchor196"> <em class="italic">第10章</em></a><em class="italic">使用普通旧Java对象(POJO)</em>中所学的，有两种方法可以做到这一点。您可以从您当前运行的本地H2O服务器下载<code>h2o-genmodel.jar</code>文件，或者，如果您正在使用<code>h2o-genmodel</code>，如下所示:<pre>&lt;dependency&gt;         &lt;groupId&gt;ai.h2o&lt;/groupId&gt;         &lt;artifactId&gt;h2o-genmodel&lt;/artifactId&gt;         &lt;version&gt;3.35.0.2&lt;/version&gt; &lt;/dependency&gt;</pre></li>
+</ol>
+<p>这方面的专家知识库可以在这里找到:https://mvnrepository.com/artifact/ai.h2o/h2o-genmodel.</p>
+<ol>
+<li value="4">现在，让我们<a id="_idIndexMarker1127"/>创建一个Java程序，它将使用<a id="_idIndexMarker1128"/> model MOJO进行预测。在您的终端<a id="_idTextAnchor223"/>中执行以下命令，创建一个名为<code>main.java</code>的Java程序:<pre><strong class="bold">vim main.java</strong></pre></li>
+</ol>
+<p>这将打开<code>vim</code>编辑器，您可以在其中编写代码。</p>
+<ol>
+<li value="5">让我们开始编写我们的Java程序:<pre>import hex.genmodel.easy.RowData; import hex.genmodel.easy.EasyPredictModelWrapper; import hex.genmodel.easy.prediction.*; import hex.genmodel.MojoModel;</pre> <pre>public class main { }</pre> <pre>public static void main(String[] args) throws Exception { }</pre> <pre>EasyPredictModelWrapper modelMOJO = new EasyPredictModelWrapper(MojoModel.load("DRF_1_AutoML_7_20220622_170835.zip"));</pre> <pre>RowData row = new RowData(); row.put("C1", 5.1); row.put("C2", 3.5); row.put("C3", 1.4); row.put("C4", 0.2);</pre> <pre>MultinomialModelPrediction predictionResultHandler = modelMOJO.predictMultinomial(row);</pre> <pre>System.out.println("Predicted Class of Iris flower is: " + predictionResultHandler.label);</pre><ol><li>首先，导入必要的依赖项，如下所示:</li></ol><ol><li value="2">然后，创建<code>main</code>类，如下所示:</li></ol><ol><li value="3">然后，在<code>main</code>类中，创建一个<code>main</code>函数，如下所示:</li></ol><ol><li value="4">在<a id="_idIndexMarker1129"/>这个<code>main</code>函数中，通过使用<code>MojoModel.load()</code>函数<a id="_idIndexMarker1130"/>加载MOJO模型并传递模型MOJO的位置来创建<code>EasyPredictModelWrapper</code>对象。这方面的代码如下:</li></ol><ol><li value="5">既然我们已经将模型MOJO加载并包装在<code>EasyPredictModelWrapper</code>中，让我们创建将用于进行预测的样本数据。将以下代码添加到您的文件中:</li></ol><ol><li value="6">类似于我们在使用模型POJOs进行预测时所做的，我们需要一个预测处理程序来存储来自模型MOJOs的预测结果。用于POJOs的预测处理程序也适用于MOJOs。因此，让我们创建一个适当的多项式预测处理程序对象，如下所示:</li></ol><ol><li value="7">现在，让我们添加必要的<code>print</code>语句，这样我们就有了一个清晰而简单的方式来理解输出。添加以下<code>print</code>语句:</li></ol></li>
+</ol>
+<p><code>predictionResultHandler.label</code>将包含预测的标签值。</p>
+<ol>
+<li value="8">让我们打印出不同类别的概率。添加以下代码:</li>
+</ol>
+<pre>System.out.println("Class probabilities are: ");
+for (int labelClassIndex = 0; labelClassIndex &lt; predictionResultHandler.classProbabilities.length; labelClassIndex++) {
+        System.out.println(predictionResultHandler.classProbabilities[labelClassIndex]);
+}</pre>
+<ol>
+<li value="9">确保所有大括号都正确闭合，然后保存文件。</li>
+</ol>
+<ol>
+<li value="6">一旦你的文件准备好了，只需执行下面的命令来编译文件:<pre><strong class="bold">javac -cp h2o-genmodel.jar -J-Xmx2g -J-XX:MaxPermSize=128m main.java</strong></pre></li>
+<li>一旦<a id="_idIndexMarker1133"/>编译成功，通过在您的终端中运行<a id="_idIndexMarker1134"/>以下命令来执行编译后的文件:<pre><strong class="bold">java -cp .:h2o-genmodel.jar main</strong></pre></li>
+</ol>
+<p>您应该得到以下输出:</p>
+<div><div><img alt="Figure 11.5 – Prediction results from the H2O model MOJO implementation  " height="158" src="img/B17298_11_005.jpg" width="565"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图11.5-H2O模型MOJO实施的预测结果</p>
+<p>如您所见，使用model MOJO和使用POJO一样简单。两者都易于提取并在生产中使用。然而，对于大尺寸的模型来说，MOJOs得益于更小和更快，这使它们与POJOs相比有一点优势。</p>
+<p>恭喜你！您现在知道了如何构建、提取和部署模型MOJOs来进行预测。</p>
+<h1 id="_idParaDest-170"><a id="_idTextAnchor224"/>总结</h1>
+<p>在本章中，我们从了解POJOs的缺点开始。然后，我们了解到H2O创造了一个POJO的对应物，叫做MOJOs，它没有POJO的问题。然后，我们学习了什么是MOJOs，以及使用MOJOs的好处。我们了解到MOJOs比POJOs更小更快。在H2O的内部实验中，人们发现MOJOs在处理大型ML模型时表现更好。</p>
+<p>之后，我们学习了如何实际提取使用AutoML作为MOJOs训练的ML模型。我们知道如何在Python、R和H2O流中下载MOJOs。我们在MOJOs中遇到的另一个好处是有一个叫做<code>PrintMojo</code>的特殊功能，可以用来创建人类可以阅读的ML模型的图形图片。这也使得理解ML模型的内容变得容易。</p>
+<p>在这个知识的基础上，我们实现了一个实验，其中我们使用了<code>h2o-genmodel.jar</code>文件，以及模型MOJO，来对样本数据进行预测，从而帮助我们更好地理解如何在生产中使用MOJO。</p>
+<p>在下一章，我们将探索各种设计模式，我们可以用来实现H2O汽车。这将有助于我们了解如何使用H2O AutoML实现理想的ML解决方案。</p>
+</div>
+</div></body>
+</html></body></html>

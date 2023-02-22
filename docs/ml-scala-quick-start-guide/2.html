@@ -1,0 +1,761 @@
+<html><head/><body>
+
+
+    
+        <title>Scala for Regression Analysis</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">用于回归分析的Scala</h1>
+                
+            
+            
+                
+<p>在本章中，我们将详细学习回归分析。我们将从回归分析工作流程开始学习，之后是<strong>线性回归</strong> ( <strong> LR </strong>)和<strong>广义线性回归</strong> ( <strong> GLR </strong>)算法。然后，我们将开发一个回归模型，使用LR和g LR算法以及它们在Scala中基于Spark ML的实现来预测交通中的慢度。最后，我们将学习交叉验证的超参数调整和网格搜索技术。简而言之，在这个端到端项目中，我们将学习以下主题:</p>
+<ul>
+<li>回归分析概述</li>
+<li>回归分析算法</li>
+<li>通过实例学习回归分析</li>
+<li>线性回归</li>
+<li>广义线性回归</li>
+<li>超参数调整和交叉验证</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Technical requirements</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">技术要求</h1>
+                
+            
+            
+                
+<p>确保在您的机器上安装并配置了Scala 2.11.x和Java 1.8.x。</p>
+<p>这几章的代码文件可以在GitHub上找到:</p>
+<p><a href="https://github.com/PacktPublishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/Chapter02" target="_blank">https://github . com/packt publishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/chapter 02</a></p>
+<p>请观看以下视频，了解实际运行的代码:</p>
+<p><a href="http://bit.ly/2GLlQTl" target="_blank">http://bit.ly/2GLlQTl</a></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>An overview of regression analysis</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">回归分析概述</h1>
+                
+            
+            
+                
+<p>在前一章中，我们已经对<strong>机器学习</strong> ( <strong> ML </strong>)过程有了一些基本的了解，因为我们已经看到了回归和分类之间的基本区别。回归分析是一组统计过程，用于估计一组变量(称为因变量)与一个或多个自变量之间的关系。因变量的值取决于自变量的值。</p>
+<p>回归分析技术有助于我们理解这种依赖性，即当任何一个自变量发生变化，而其他自变量保持不变时，因变量的值是如何变化的。举个例子，我们假设一个人年纪大了，银行里的存款会更多。在这里，<strong>储蓄金额</strong>(以百万美元计)取决于年龄(即<strong>年龄</strong>以年计):<br/></p>
+<table style="border-collapse: collapse;border-color: #000000" border="1">
+<tbody>
+<tr>
+<td>
+<p><strong>年龄(年)</strong></p>
+</td>
+<td>
+<p><strong>储蓄(百万美元)</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p>40</p>
+</td>
+<td>
+<p>1.5</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>50</p>
+</td>
+<td>
+<p>5.5</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>60</p>
+</td>
+<td>
+<p>10.8</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>70</p>
+</td>
+<td>
+<p>6.7</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>因此，我们可以在2D图中绘制这两个值，其中因变量(<strong>储蓄</strong>)绘制在<em>y</em>-轴上，自变量(<strong>年龄</strong>)应绘制在<em>x</em>-轴上。一旦这些数据点被绘制出来，我们就可以看到它们之间的相关性。如果理论图表确实代表了变老对储蓄的影响，那么我们就可以说，一个人越老，他的银行账户里的储蓄就越多。</p>
+<p>现在的问题是，我们如何判断年龄在多大程度上帮助一个人在银行账户中获得更多的钱？要回答这个问题，可以在图表上所有数据点的中间画一条线。这条线称为回归线，可以使用回归分析算法精确计算。回归分析算法采用离散或连续(或两者兼有)输入要素并生成连续值。</p>
+<p>分类任务用于预测类别属性的标签，而回归任务用于对类别属性进行数值预测。</p>
+<p>使用这种回归模型对未知的和新的观察结果进行预测，就像创建一个由多个组件共同工作的数据管道，其中我们在两个阶段观察算法的性能:学习和推理。在整个过程中，为了使预测模型成功，数据在所有ML任务中充当一等公民。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Learning</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">学问</h1>
+                
+            
+            
+                
+<p>学习阶段的重要任务之一是准备数据并将其转换为特征向量(每个特征的数字向量)。可以将特征向量格式的训练数据输入到学习算法中来训练模型，该模型可以用于推理。通常，当然基于数据大小，运行算法可能需要几个小时(甚至几天)才能使要素收敛到一个有用的模型中，如下图所示:</p>
+<div><img class="alignnone size-full wp-image-532 image-border" src="img/4e9cb443-9b8c-406f-b6ad-bd6718fbba96.png" style="width:58.75em;height:11.42em;"/></div>
+<p>学习和训练预测模型—它展示了如何从训练数据生成特征向量，以训练生成预测模型的学习算法</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Inferencing</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">推理</h1>
+                
+            
+            
+                
+<p>在推理阶段，经过训练的模型用于智能地使用该模型，例如从从未见过的数据进行预测、提出建议以及推断未来的规则。通常，与学习阶段相比，它花费的时间更少，有时甚至是实时的。因此，推理就是根据新的(即未观察到的)数据测试模型，并评估模型本身的性能，如下图所示:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-533 image-border" src="img/4c8a4f15-9b49-4993-8a42-50525807292c.png" style="width:55.92em;height:12.00em;"/></p>
+<p>从现有模型向预测分析推理(从未知数据生成特征向量以进行预测)</p>
+<p>总之，当使用回归分析时，目标是预测一个连续的目标变量。既然我们已经知道了如何为监督学习任务构建一个基本的工作流程，那么了解一些可用的回归算法将会为如何应用这些回归算法提供更多的具体信息。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Regression analysis algorithms</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">回归分析算法</h1>
+                
+            
+            
+                
+<p>有许多算法被提出并可用，它们可用于回归分析。例如，LR试图找到变量之间的关系和依赖关系。它使用线性函数对连续因变量<em> y </em>(即标签或目标)和一个或多个自变量<em> x </em>之间的关系进行建模。回归算法的示例包括:</p>
+<ul>
+<li><strong>线性回归</strong> ( <strong> LR </strong>)</li>
+<li><strong>广义线性回归</strong> ( <strong> GLR </strong>)</li>
+<li><strong>生存回归</strong> ( <strong> SR </strong>)</li>
+<li><strong>等渗回归</strong> ( <strong> IR </strong>)</li>
+<li><strong>决策树回归器</strong> ( <strong> DTR </strong>)</li>
+<li><strong>随机森林回归</strong> ( <strong> RFR </strong>)</li>
+<li><strong>梯度助推树木回归</strong> ( <strong> GBTR </strong>)</li>
+</ul>
+<p>我们首先用最简单的LR算法来解释回归，该算法对因变量<em> y </em>之间的关系进行建模，这涉及到相互依赖的变量<em> x </em>的线性组合:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-534 image-border" src="img/11963a25-c48f-40da-a3e7-5f14b4f4ff65.png" style="width:25.67em;height:12.92em;"/></p>
+<p>在前面的方程式字母中，<em>β<sub>0</sub>T40】和<em>β<sub>1</sub>T44】分别是<em> y </em>轴截距和直线斜率的两个常数。LR是关于学习模型，它是输入示例(数据点)的特征的线性组合。</em></em></p>
+<p>看看下图，想象红线不在那里。我们有一些蓝色的点(数据点)。是否可以合理的开发一个机器学习(回归)模型来分离其中的大部分？现在，如果我们在两类数据之间画一条直线，它们几乎是分开的，不是吗？这样的线(在我们的例子中是红色的)被称为决策边界，在回归分析的情况下也被称为回归线(更多信息请参见下面的例子):</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-536 image-border" src="img/ed09f3bd-c70c-461d-96d9-ceab36e4465d.png" style="width:38.67em;height:22.08em;"/></p>
+<p>如果给我们一个带标签的例子集合，比如说<img class="fm-editor-equation" src="img/4bbeb78b-a1d8-46cf-a394-d26d3489e864.png" style="width:6.08em;height:1.58em;"/>，其中<em> N </em>是数据集中的样本数，<em>x<sub>I</sub>T54】是样本的<em> D </em>维特征向量<em> i = 1，2… N </em>，而<em>y<sub>I</sub>T62】是实数值<em> y ∈ R </em>然后综合这些，下一步就是建立下面的数学模型，<em> f </em>:</em></em></p>
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/000a67b5-7349-4298-8ca3-3c8e63c0d435.png" style="width:10.00em;height:1.67em;"/></p>
+<p>这里，<em> w </em>是一个<em> D </em>维参数化向量，<em> b </em>是一个实数。符号<em> f <sub> w，b</sub>T9】表示模型<em> f </em>由值<em> w </em>和<em> b </em>参数化。一旦我们有了一个明确定义的模型，现在就可以用它来预测未知的<em> y </em>对于给定的<em> x，</em>即<em> y ← f <sub> w，b </sub> (x) </em>。然而，有一个问题，因为模型是用两个不同的值(<em> w </em>，<em> b </em>)参数化的，这将意味着当应用于相同的样本时，即使来自相同的分布，模型也倾向于产生两个不同的预测。</em></p>
+<p class="CDPAlignLeft CDPAlign">从字面上看，它可以被称为优化问题——目标是找到最优(例如，最小值)值<img class="fm-editor-equation" src="img/ee4deb14-39bd-475d-b9d7-77be4da025a6.png" style="width:3.42em;height:1.83em;"/>,这样参数的最优值将意味着模型倾向于做出更准确的预测。简而言之，在LR模型中，我们旨在找到<img class="fm-editor-equation" src="img/d17f18d1-2969-40c3-bc5c-9d45e3f90ca0.png" style="width:1.00em;height:1.17em;"/>和<img class="fm-editor-equation" src="img/14c7a856-3f2d-47a4-9510-8404fb177d51.png" style="width:0.67em;height:1.50em;"/>的最佳值，以最小化以下目标函数:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/a0097bfe-fc96-41dc-8b43-7da46a2d8f17.png" style="width:18.75em;height:4.00em;"/></p>
+<p>在前面的等式中，表达式<em> (f <sub> w，b</sub>(X<sub>I</sub>)-y<sub>I</sub>)<sup>2</sup></em>称为<strong>损失函数</strong>，它是对样本<em> i </em>给出错误预测的惩罚(即误差或损失)的度量。这个损失函数是平方误差损失的形式。然而，也可以使用其他损失函数，如下式所示:</p>
+<div><img class="fm-editor-equation" src="img/11416c4c-02dc-44cb-8170-db2194fe7101.png" style="width:18.58em;height:4.33em;"/></div>
+<div><img class="fm-editor-equation" src="img/c9bbc527-8893-436e-9f81-be0e0fc582b7.png" style="width:18.67em;height:4.33em;"/></div>
+<div><p>等式1中的<strong>平方误差</strong> ( <strong> SE </strong>)称为<em>L<sub>2</sub>T53】损失，这是回归分析任务的默认损失函数。另一方面，方程(<em> 2) </em>中的<strong>绝对误差</strong> ( <strong> AE </strong>)称为<em> L <sub> 1 </sub> </em>损失。</em></p>
+</div>
+<div><p>在数据集有许多异常值的情况下，使用<em> L <sub> 1 </sub> </em> loss比<em> L <sub> 2 </sub> </em>更推荐，因为<em> L <sub> 1 </sub> </em>对异常值更鲁棒。</p>
+</div>
+<div><p>所有基于模型的学习算法都有一个与之相关的损失函数。然后，我们试图通过最小化成本函数来找到最佳模型。在我们的LR情况下，成本函数由平均损失(也称为经验风险)定义，它可以被公式化为通过将模型拟合到可能包含许多样本的训练数据而获得的所有惩罚的平均值。</p>
+</div>
+<p><em>图4 </em>显示了一个简单线性回归的例子。假设这个想法是预测<strong>的储蓄金额</strong>对<strong>的年龄</strong>。因此，在这种情况下，我们有一个自变量<em> x </em>(即一组1D数据点，在我们的情况下，还有<strong>年龄</strong>)和一个因变量<em> y </em>(储蓄金额<strong>(以百万美元计)</strong>)。一旦我们有了一个训练好的回归模型，我们就可以使用这条线来预测新的未标记输入示例的目标值<em>y<sub>l</sub>T17】，<em> x <sub> l </sub>。</em>然而，在<em> D </em>维特征向量(例如<em> 2D </em>或<em> 3D </em>的情况下，它将是一个平面(对于<em> 2D </em>)或一个超平面(对于<em>T42】= 3D</em>):</em></p>
+<div><img class="alignnone size-full wp-image-691 image-border" src="img/113ca892-0d37-4fd7-8dc6-0e149613c560.png" style="width:160.58em;height:65.33em;"/></div>
+<p>图4:回归线分离数据点以解决年龄与储蓄量的关系:I)左边的模型根据训练数据分离数据点:ii)右边的模型预测未知的观察值</p>
+<p>现在，您看到了为什么回归超平面尽可能靠近训练示例这一要求如此重要:如果<em>图4 </em>(右边的模型)中的蓝线远离蓝点，则预测<em> y <sub> l </sub> </em>不太可能是正确的。最佳拟合线是回归分析的结果，它预计会穿过大多数数据点。然而，在实践中，由于回归误差的存在，它不会通过所有的数据点。</p>
+<p>回归误差是任何数据点(实际)和直线(预测)之间的距离。</p>
+<p>由于解决回归问题本身就是一个优化问题，我们希望误差尽可能小，因为较小的误差有助于提高预测精度，同时预测看不见的观察值。尽管LR算法在许多情况下不是很有效，但最好的事情是LR模型通常不会过度拟合，这对于更复杂的模型来说是不太可能的。</p>
+<p>在前一章中，我们讨论了过度拟合(一种模型在训练期间预测非常好，但在应用于测试集时会产生更多错误的现象)和欠拟合(如果您的训练错误较低而验证错误较高，则您的模型很可能会过度拟合您的训练数据)。这两种现象通常是由偏差和方差引起的。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Performance metrics</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">性能指标</h1>
+                
+            
+            
+                
+<p>为了测量回归模型的预测性能，根据回归误差提出并使用了几个度量，可以概括如下:</p>
+<ul>
+<li><strong>均方误差(MSE) </strong>:它是预测值与估计值之差的度量，即一条拟合线与数据点的接近程度。MSE越小，拟合越接近数据。</li>
+<li><strong>均方根误差(RMSE) </strong>:它是MSE的平方根，但与垂直轴上绘制的量具有相同的单位。</li>
+<li><strong> R平方</strong>:用于评估数据与拟合的回归线在0到1之间的接近程度的决定系数。R平方越高，模型就越符合您的数据。</li>
+<li><strong>平均绝对误差(MAE) </strong>:不考虑方向的连续变量的<em>精度</em>的度量。MAE越小，模型就越适合您的数据。</li>
+</ul>
+<p>既然我们知道了回归算法如何工作，以及如何使用几个指标来评估性能，下一个重要的任务就是应用这些知识来解决现实生活中的问题。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Learning regression analysis through examples</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">通过实例学习回归分析</h1>
+                
+            
+            
+                
+<p>在上一节中，我们讨论了一个简单的现实问题(即<strong>年龄</strong>对<strong>储蓄</strong>)。然而，在实践中，有几个现实生活中的问题，其中涉及更多的因素和参数(即数据属性)，回归也可以应用。先介绍一个现实生活中的问题。想象一下，你住在巴西的圣保罗市，在那里你每天都要浪费几个小时的宝贵时间，因为不可避免的原因，如公共汽车抛锚、卡车坏了、车辆过剩、事故受害者、超车、消防车、涉及危险货物的事故、缺电、火灾和洪水。</p>
+<p>现在，为了测量浪费了多少工时，我们可以开发一种自动化技术，它可以预测交通的缓慢程度，这样你就可以避开某些路线，或者至少粗略估计一下你到达城市中的某个地点需要多长时间。使用机器学习的预测分析应用程序可能是预测这种缓慢的首选解决方案之一。是的，为此我们将在下一节使用巴西圣保罗市的城市交通行为数据集。<strong> <br/> </strong></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Description of the dataset</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">数据集的描述</h1>
+                
+            
+            
+                
+<p>数据集下载自<a href="https://archive.ics.uci.edu/ml/datasets/Behavior+of+the+urban+traffic+of+the+city+of+Sao+Paulo+in+Brazil">https://archive . ics . UCI . edu/ml/datasets/Behavior+of+the+urban+traffic+of+the+city+of+Sao+Paulo+in+Brazil</a>。它包含2009年12月14日和2009年12月18日之间巴西圣保罗市的城市交通行为记录。该数据集具有以下特征:</p>
+<ul>
+<li><strong>小时</strong>:花在路上的总时间</li>
+<li><strong>固定母线</strong>:固定母线数量</li>
+<li><strong>坏车</strong>:坏车数量</li>
+<li><strong>车辆过剩</strong>:多余车辆数</li>
+<li><strong>事故受害者</strong>:道路或路边的事故受害者人数</li>
+<li><strong>超越</strong>:超越或接管案例数</li>
+<li><strong>消防车</strong>:消防车及车辆数量</li>
+</ul>
+<ul>
+<li><strong>涉及货运的事件</strong>:卡车运输的散装货物数量</li>
+<li><strong>危险品事故</strong>:事故涉及运输散装货车数量</li>
+<li><strong>缺电</strong>:受灾地区无电的小时数</li>
+<li><strong>火灾</strong>:火灾次数</li>
+<li><strong>淹没点</strong>:淹没区点数</li>
+<li><strong>表现</strong>:显示正在施工或危险迹象的地点数量</li>
+<li><strong>无轨电车网络缺陷</strong>:无轨电车网络缺陷数量</li>
+<li><strong>道路上的树木</strong>:道路上或路边造成障碍的树木数量</li>
+<li><strong>旗语关闭</strong>:作为信号使用的带有臂、灯或旗帜的机械装置的数量</li>
+<li><strong>间歇旗语</strong>:在特定时间内作为信号使用的带有手臂、灯或旗帜的机械装置的数量</li>
+<li><strong>交通缓慢</strong>:由于上述原因，人们被堵在路上的平均小时数</li>
+</ul>
+<p>最后一个特性是我们想要预测的目标列。由于我使用了该数据集，我想感谢以下出版物:</p>
+<p>费雷拉，R. P .，阿丰索，c .，，萨希，R. J. (2011年11月)。结合人工智能技术预测圣保罗市的城市车辆交通行为。第十届巴西计算智能大会(CBIC) -巴西福塔莱萨。(第1-7页)，2011年。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Exploratory analysis of the dataset</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">数据集的探索性分析</h1>
+                
+            
+            
+                
+<p>首先，我们读取<strong>探索性数据分析</strong> ( <strong> EDA </strong>)的训练集。读者可以参考<kbd>EDA.scala</kbd>文件。一旦提取出来，就会有一个名为<kbd>Behavior of the urban traffic of the city of Sao Paulo in Brazil.csv</kbd>的CSV文件。让我们将文件重命名为<kbd>UrbanTraffic.csv</kbd>。另外，<kbd>Slowness in traffic (%)</kbd>，也就是最后一列，以不寻常的格式表示慢度的百分比:它用逗号(<kbd>,</kbd>)表示实数，例如，<kbd>4,1</kbd>而不是<kbd>4.1</kbd>。所以我用句点(<kbd>.</kbd>)替换了该列中所有逗号(<kbd>,</kbd>)的实例。否则，Spark CSV阅读器会将该列视为<kbd>String</kbd>类型:</p>
+<pre><strong>val</strong> filePath= "data/UrbanTraffic.csv"</pre>
+<p>首先，让我们使用<kbd>read.csv()</kbd>方法加载、解析并创建一个DataFrame，但是使用Databricks CSV格式(也称为<kbd>com.databricks.spark.csv</kbd>)，方法是将它设置为读取CSV文件的头，这直接应用于所创建的DataFrame的列名；并且<kbd>inferSchema</kbd>属性被设置为<kbd>true</kbd>，因为如果您不显式指定<kbd>inferSchema</kbd>配置，浮点值将被视为字符串<em>。</em>这可能导致<kbd>VectorAssembler</kbd>引发异常，如<kbd>java.lang.IllegalArgumentException: Data type StringType is not supported</kbd>:</p>
+<pre class="mce-root"><strong>val </strong>rawTrafficDF = spark.read<br/>      .option("header", "true")<br/>      .option("inferSchema", "true")<br/>      .option("delimiter", ";")<br/>      .format("com.databricks.spark.csv")<br/>      .load("data/UrbanTraffic.csv")<br/>      .cache</pre>
+<p>现在，让我们打印刚刚创建的DataFrame的模式，以检查并确保结构得到保留:</p>
+<pre class="mce-root">rawTrafficDF.printSchema()</pre>
+<p class="mce-root">从下面的截图可以看出，Spark数据帧的模式已经被正确识别。此外，正如所料，我的ML算法的所有特性都是数值型的(换句话说，以整数或双精度格式):</p>
+<p class="mce-root CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-538 image-border" src="img/4d2ffd9c-b6b3-41e5-a06e-ef7868fed189.png" style="width:34.33em;height:21.17em;"/></p>
+<p>您可以看到没有一列是分类特征。所以，我们不需要任何数值转换。现在让我们使用<kbd>count()</kbd>方法来看看数据集中有多少行:</p>
+<pre>println(rawTrafficDF.count())</pre>
+<p class="mce-root">这给出了135个样本计数<strong>。</strong>现在让我们使用<kbd>show()</kbd>方法来查看数据集的快照，但是只显示了一些选定的列，这样更有意义，而不是显示所有的列。但是可以随意使用<kbd>rawTrafficDF.show()</kbd>查看所有栏目:</p>
+<pre>rawTrafficDF.select("Hour (Coded)", "Immobilized bus", "Broken Truck", <br/>                    "Vehicle excess", "Fire", "Slowness in traffic (%)").show(5)</pre>
+<p class="mce-root">由于<kbd>Slowness in traffic (%)</kbd>列包含连续值，我们必须处理一个回归任务。既然我们已经看到了数据集的快照，那么有必要使用<kbd>sql()</kbd>接口查看一些其他统计数据，例如Spark SQL的平均索赔或损失、最小和最大损失:</p>
+<div><img class="alignnone size-full wp-image-539 image-border" src="img/a076e247-3e92-4e9f-9f63-9848530ada55.png" style="width:118.58em;height:31.17em;"/></div>
+<p>不过，在此之前，让我们将最后一列从<kbd>Slowness in traffic (%)</kbd>重命名为<kbd>label</kbd>，因为ML模型会对此有所抱怨。即使在回归模型上使用了<kbd>setLabelCol</kbd>之后，它仍然会查找名为<kbd>label</kbd>的列。这就引入了一个恶心的错误说法<kbd>org.apache.spark.sql.AnalysisException: cannot resolve 'label' given input columns</kbd>:</p>
+<pre><strong>var </strong>newTrafficDF = rawTrafficDF.withColumnRenamed("Slowness in traffic (%)", "label")</pre>
+<p>因为我们想要执行一些SQL查询，所以我们需要创建一个临时视图，以便可以在内存中执行操作:</p>
+<pre>newTrafficDF.createOrReplaceTempView("slDF")</pre>
+<p>现在让我们以百分比的形式平均慢度(与标准小时的偏差):</p>
+<pre>spark.sql("SELECT avg(label) as avgSlowness FROM slDF").show()</pre>
+<p>前面的代码行应该显示平均每天跨路线10%的延迟，并基于其他因素:</p>
+<pre><br/> <strong>+------------------+</strong><br/><strong> | avgSlowness      |</strong><br/><strong> +------------------+</strong><br/><strong> |10.051851851851858|</strong><br/><strong> +------------------+</strong></pre>
+<p>另外，我们可以看到城市中的洪水点的数量。但是，为此我们可能需要做一些额外的工作，将列名改为单个字符串，因为它是包含空格的多字符串，所以SQL无法解析它:</p>
+<pre>newTrafficDF = newTrafficDF.withColumnRenamed("Point of flooding", "NoOfFloodPoint")<br/>spark.sql("SELECT max(NoOfFloodPoint) FROM slDF").show()</pre>
+<p>这将显示多达七个非常危险的洪水点:</p>
+<pre><strong>+-------------------+</strong><br/><strong>|max(NoOfFloodPoint)|</strong><br/><strong>+-------------------+</strong><br/><strong>|                  7|</strong><br/><strong>+-------------------+</strong></pre>
+<p>然而，<kbd>describe()</kbd>方法将更加灵活地给出这些类型的统计数据。让我们对所选的列执行此操作:</p>
+<pre>rawTrafficDF.select("Hour (Coded)", "Immobilized bus", "Broken Truck", <br/>                    "Point of flooding", "Fire", "Slowness in traffic (%)")<br/>                    .describe().show()</pre>
+<p class="mce-root">因此，我们可以看到，慢度在<kbd>3.4</kbd>和<kbd>23.4</kbd>之间变化，相当高。这就是为什么我们需要有效的数据处理步骤，以便能够保持这种关系。现在让我们转而关注数据预处理:</p>
+<p class="mce-root CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-540 image-border" src="img/1f6af703-9e8a-4f0c-a96b-09601ef91887.png" style="width:164.17em;height:25.42em;"/></p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Feature engineering and data preparation</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">特征工程和数据准备</h1>
+                
+            
+            
+                
+<p>既然我们已经看到了数据集的一些属性，并且没有空值或分类特征，我们不需要任何其他预处理或中间转换。我们只需要在拥有训练集和测试集之前做一些功能工程。</p>
+<p>获得这些集合之前的第一步是准备Spark回归模型可以使用的训练数据。为此，Spark分类和回归算法需要两个组件，称为<kbd>features</kbd>和<kbd>label</kbd>。幸运的是，我们已经有了<kbd>label</kbd>专栏。接下来，<kbd>features</kbd>列必须包含除了<kbd>label</kbd>列之外的所有列的数据，这可以使用<kbd>VectorAssembler()</kbd>转换器来实现。</p>
+<p>由于所有的列都是数字，我们可以直接从Spark ML库中使用<kbd>VectorAssembler()</kbd>将一个给定的列列表转换成一个向量列。因此，让我们收集理想列的列表。您可能已经猜到，我们必须排除<kbd>label</kbd>列，这可以使用标准Scala的<kbd>dropRight()</kbd>方法来完成:</p>
+<pre class="mce-root"><strong>val </strong>colNames = newTrafficDF.columns.dropRight(1) <strong>   <br/><br/>val</strong> assembler = new VectorAssembler()<br/>    .setInputCols(colNames)<br/>    .setOutputCol("features")</pre>
+<p>现在我们有了<kbd>VectorAssembler()</kbd>估计器，我们现在调用<kbd>transform()</kbd>方法，它将把选择的列嵌入到一个向量列中:</p>
+<pre>val assembleDF = assembler.transform(newTrafficDF).select("features", "label")  <br/>assembleDF.show()</pre>
+<p>正如所料，前面代码段的最后一行显示了具有<kbd>label</kbd>和<kbd>features</kbd>的组合数据帧，这是训练ML算法所需要的:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-541 image-border" src="img/a0b68aa4-2797-4b5e-9a8f-644d1d4edf84.png" style="width:14.25em;height:19.17em;"/></p>
+<p>我们现在可以继续生成单独的训练集和测试集。此外，我们可以缓存这两个集合以实现更快的内存访问。我们使用60%的数据来训练模型，另外40%将用于评估模型:</p>
+<pre class="mce-root"><strong>val</strong> seed = 12345L<br/><strong>val</strong> splits = data.randomSplit(Array(0.60, 0.40), seed)<br/><strong>val</strong> (trainingData, validationData) = (splits(0), splits(1))<br/><br/>trainingData.cache // cache in memory for quicker access<br/>validationData.cache // cache in memory for quicker access</pre>
+<div><p class="mce-root">在我们开始训练回归模型之前，这就是我们所需要的。首先，我们开始训练LR模型并评估性能。</p>
+</div>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Linear regression</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">线性回归</h1>
+                
+            
+            
+                
+<p class="mce-root">在本节中，我们将开发一个预测分析模型，使用LR算法预测每行数据的交通缓慢度。首先，我们创建一个LR估计量如下:</p>
+<pre class="mce-root"><strong>val</strong> lr = new LinearRegression()<br/>     .setFeaturesCol("features")<br/>     .setLabelCol("label")</pre>
+<p>然后我们调用<kbd>fit()</kbd>方法对训练集进行如下训练:</p>
+<pre>println("Building ML regression model")<br/>val lrModel = lr.fit(trainingData)</pre>
+<p>现在我们有了合适的模型，这意味着它现在能够做出预测。因此，让我们开始评估训练集和验证集上的模型，并计算RMSE、MSE、MAE、R平方等:</p>
+<pre class="mce-root">println("Evaluating the model on the test set and calculating the regression metrics")<br/>// **********************************************************************<br/>val trainPredictionsAndLabels = lrModel.transform(testData).select("label", "prediction")<br/>                                            .map {case Row(label: Double, prediction: Double) <br/>                                            =&gt; (label, prediction)}.rdd<br/><br/>val testRegressionMetrics = new RegressionMetrics(trainPredictionsAndLabels)    </pre>
+<p>太好了！我们已经成功计算出了训练集和测试集的原始预测。现在，我们已经获得了训练集和验证集的性能指标，让我们来观察训练集和验证集的结果:</p>
+<pre class="mce-root">val results = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetrics.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetrics.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetrics.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetrics.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetrics.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(results)</pre>
+<p>前面的代码段应该显示类似的内容。但是，由于随机性，您可能会体验到略有不同的输出:</p>
+<pre><strong>=====================================================================</strong><br/><strong> TrainingData count: 80</strong><br/><strong> TestData count: 55</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 7.904822843038552</strong><br/><strong> TestData RMSE = 2.8115516788845536</strong><br/><strong> TestData R-squared = 0.3699441827613118</strong><br/><strong> TestData MAE = 2.2173672546414536</strong><br/><strong> TestData explained variance = 20.293395978801147</strong><br/><strong> =====================================================================</strong></pre>
+<p>现在我们也有了对测试集的预测，但是，我们不能直接说这是一个好的还是最优的回归模型。为了用较低的MAE进一步改善结果，Spark还提供了线性回归实现的通用版本，称为GLR。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Generalized linear regression (GLR)</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">广义线性回归(GLR)</h1>
+                
+            
+            
+                
+<p>在LR中，假设输出遵循高斯分布。相比之下，在<strong>广义线性模型</strong> ( <strong> GLMs </strong>)中，响应变量<em>Y<sub>I</sub>T9】遵循某种形式的概率分布的参数集的某种随机分布。正如我们在前面的例子中看到的，跟踪和创建GLR估计量并不困难:</em></p>
+<pre class="mce-root"><strong>val</strong> glr = new GeneralizedLinearRegression()<br/>      .setFamily("gaussian")//continuous value prediction (or gamma)<br/>      .setLink("identity")//continuous value prediction (or inverse)<br/>      .setFeaturesCol("features")<br/>      .setLabelCol("label")</pre>
+<p>对于基于GLR的预测，基于数据类型支持以下响应和身份链接函数(来源:<a href="https://spark.apache.org/docs/latest/ml-classification-regression.html#generalized-linear-regression">https://spark . Apache . org/docs/latest/ml-classification-regression . html # generalized-linear-regression</a>):</p>
+<div><img class="alignnone size-full wp-image-542 image-border" src="img/fbc3b29b-50ad-4c25-9c92-8a25f3fdd716.png" style="width:33.33em;height:17.83em;"/></div>
+<p class="mce-root">然后我们调用<kbd>fit()</kbd>方法对训练集进行训练，如下所示:</p>
+<pre>println("Building ML regression model")<br/><strong>val</strong> glrModel = glr.fit(trainingData)</pre>
+<div><p>Spark中通过<kbd>GeneralizedLinearRegression</kbd>接口的当前实现最多只支持4096个特性。现在我们有了拟合的模型(这意味着它现在能够进行预测)，让我们开始在训练集和验证集上评估模型，并计算RMSE、MSE、MAE、R平方等:</p>
+</div>
+<pre class="mce-root">// **********************************************************************<br/>println("Evaluating the model on the test set and calculating the regression metrics")<br/>// **********************************************************************<br/>val trainPredictionsAndLabels = glrModel.transform(testData).select("label", "prediction")<br/>                                            .map { case Row(label: Double, prediction: Double) <br/>                                            =&gt; (label, prediction) }.rdd<br/><br/>val testRegressionMetrics = new RegressionMetrics(trainPredictionsAndLabels)</pre>
+<p>太好了！我们已经成功计算出了训练集和测试集的原始预测。现在，我们已经获得了训练集和测试集的性能指标，让我们观察一下训练集和验证集的结果:</p>
+<pre class="mce-root"><strong>val </strong>results = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetrics.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetrics.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetrics.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetrics.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetrics.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(results)</pre>
+<p>前面的代码段应该显示类似的结果。但是，由于随机性，您可能会体验到略有不同的输出:</p>
+<pre><br/> <strong>=====================================================================</strong><br/><strong> TrainingData count: 63</strong><br/><strong> TestData count: 72</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 9.799660597570348</strong><br/><strong> TestData RMSE = 3.130440958965741</strong><br/><strong> TestData R-squared = -0.1504361865072692</strong><br/><strong> TestData MAE = 2.5046175463628546</strong><br/><strong> TestData explained variance = 19.241059408685135</strong><br/><strong> =====================================================================</strong></pre>
+<p>使用GLR，我们可以看到一个稍微差一点的MAE值，RMSE也更高。如果你看到这两个例子，我们不必调整超参数，只是让模型训练和评估每个参数的单个值。我们甚至可以使用正则化参数来减少过度拟合。但是，ML管道的性能通常会随着超参数调整而提高，这通常是通过网格搜索和交叉验证来完成的。在下一节中，我们将讨论如何通过交叉验证的模型获得更好的性能。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Hyperparameter tuning and cross-validation</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">超参数调整和交叉验证</h1>
+                
+            
+            
+                
+<p>在机器学习中，超参数这个术语指的是那些不能直接从常规训练过程中学习到的参数。这些是你可以在机器学习算法上调整的各种旋钮。超参数通常通过用参数的不同组合训练模型来决定，并通过测试来决定哪一个效果最好。最终，提供最佳模型的组合将是我们的最终超参数。设置超参数会对训练模型的性能产生重大影响。</p>
+<p>另一方面，交叉验证通常与超参数调整结合使用。交叉验证(也称为<strong> </strong>旋转估计)是一种模型验证技术，用于评估统计分析和结果的质量。交叉验证有助于描述数据集，以便在训练阶段使用验证集测试模型。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Hyperparameter tuning</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">超参数调谐</h1>
+                
+            
+            
+                
+<p>不幸的是，没有捷径或直接的方法来根据明确的方法选择正确的超参数组合——当然，经验会有所帮助。例如，在训练随机森林时，矩阵分解、k-means或逻辑/LR算法可能是合适的。以下是此类超参数的一些典型示例:</p>
+<ul>
+<li>基于树的算法中的树叶、箱或树的深度的数量</li>
+<li>迭代次数</li>
+<li>正则化值</li>
+<li>矩阵分解中潜在因子的个数</li>
+<li>k-均值聚类中的聚类数等等</li>
+</ul>
+<p class="mce-root">从技术上讲，超参数形成了一个称为参数网格的<em> n </em>维空间，其中<em> n </em>是超参数的数量。这个空间中的每个点都是一个特定的超参数配置，这是一个超参数向量。</p>
+<p>在<a href="33fe7442-ce44-4a18-bac6-0e08e9b1ae1e.xhtml">第一章</a>、【Scala机器学习介绍中讨论过，过拟合和欠拟合是机器学习中两个有问题的现象。因此，有时完全收敛到最佳模型参数集通常不是必要的，甚至可能是优选的，因为几乎最佳拟合的模型往往在新数据或设置上表现得更好。换句话说，如果您关心最佳拟合模型，您真的不需要最佳参数集。</p>
+<p class="mce-root">实际上，我们不能探索这个空间中的每一个点，所以通常使用网格搜索该空间中的子集。下图显示了一些高层次的想法:</p>
+<div><img class="alignnone size-full wp-image-692 image-border" src="img/01205c83-200d-47ce-aa8a-d7c03f2909ea.png" style="width:163.58em;height:70.83em;"/></div>
+<p>图5:ML模型的超参数调整</p>
+<p>虽然这种方案有几种方法，但随机搜索或网格搜索可能是最广为人知的技术:<em> <br/> </em></p>
+<ul>
+<li><strong>网格搜索</strong>:使用这种方法，在你想要测试的字典中定义不同的超参数。然后，在将它们馈送到ML模型之前，构建参数网格，使得可以用不同的组合来执行训练。最后，算法会告诉您哪种超参数组合的精确度最高。</li>
+<li class="graf graf--p graf-after--p"><strong>随机搜索</strong>:正如你所理解的，用所有可能的超参数组合来训练一个ML模型是一个非常昂贵和耗时的操作。然而，我们通常没有那么大的灵活性，但我们仍然希望调整这些参数。在这种情况下，随机搜索可能是一种变通方法。通过评估超参数空间中的<em> n </em>个均匀随机点来执行随机搜索，并选择模型给出最佳性能的正确组合。</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Cross-validation</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">交叉验证</h1>
+                
+            
+            
+                
+<p>交叉验证有两种，称为穷举交叉验证，包括留p-out交叉验证和留1-out交叉验证，非穷举交叉验证是基于K-fold交叉验证和重复随机子采样交叉验证，例如5-fold或10-fold交叉验证，非常常见。</p>
+<p>在大多数情况下，使用10重交叉验证，而不是在验证集上进行测试。此外，训练集应该尽可能大(因为更多具有质量特征的数据有利于训练模型)，这不仅是为了训练模型，而且是因为大约5%到10%的训练集可以用于交叉验证。</p>
+<p>使用K倍交叉验证技术，完整的训练数据被分成K个子集。在K-1个子集上训练模型；最后一个留着验证。这个过程重复K次，使得每次K个子集之一被用作验证集，而其他K-1个子集被用于形成训练集。这样，每个子集(折叠)至少被用于训练和验证一次。</p>
+<p>最后，已经获得的不同机器学习模型通过分类器的装袋(或推进)方案或通过平均(即回归)来结合。下图解释了10重交叉验证技术:</p>
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-693 image-border" src="img/460bc239-46e0-4317-8bfa-48b326d6ae45.png" style="width:51.58em;height:36.00em;"/></p>
+<p>图6: 10重交叉验证技术</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Tuning and cross-validation in Spark ML</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">Spark ML中的调整和交叉验证</h1>
+                
+            
+            
+                
+<p>在Spark ML中，在执行交叉验证之前，我们需要一个<kbd>paramGrid</kbd>(这是一个参数网格)。<kbd>ParamGridBuilder</kbd>接口用于定义<kbd>CrossValidator</kbd>必须搜索的超参数空间，最后，<kbd>CrossValidator()</kbd>将我们的管道、LR回归器的超参数空间和交叉验证的折叠数作为参数。</p>
+<p>因此，让我们通过指定最大迭代次数、正则化参数值、容差值和弹性网络参数来开始创建<kbd>paramGrid</kbd>，如LR模型所示(因为我们观察到此模型的MAE较低):</p>
+<pre class="mce-root">// ***********************************************************<br/>println("Preparing K-fold Cross Validation and Grid Search")<br/>// ***********************************************************<br/>val paramGrid = new ParamGridBuilder()<br/>      .addGrid(lr.maxIter, Array(10, 20, 30, 50, 100, 500, 1000))<br/>      .addGrid(lr.regParam, Array(0.001, 0.01, 0.1))<br/>      .addGrid(lr.tol, Array(0.01, 0.1))<br/>      .build()</pre>
+<div><p>正则化参数通过减少估计回归参数的方差来减少过度拟合。现在，为了获得更好、更稳定的性能，我们可以执行10重交叉验证。因为我们的任务是预测连续值，所以我们需要定义<kbd>RegressionEvaluator</kbd>，即回归的评估器，它需要两个输入列——<kbd>prediction</kbd>和<kbd>label</kbd>——并基于MSE、RMSE、R平方和MAE评估定型:</p>
+</div>
+<pre class="mce-root">println("Preparing 10-fold Cross Validation")<br/><strong>val</strong> numFolds = 10 //10-fold cross-validation<br/><strong>val</strong> cv = new CrossValidator()<br/>      .setEstimator(lr)<br/>      .setEvaluator(new RegressionEvaluator())<br/>      .setEstimatorParamMaps(paramGrid)<br/>      .setNumFolds(numFolds)</pre>
+<p>太棒了，我们创造了交叉验证估计量。现在是时候训练LR模型了:</p>
+<pre>println("Training model with the Linear Regression algorithm")<br/><strong>val</strong> cvModel = cv.fit(trainingData)</pre>
+<p>顺便说一下，Spark提供了一种使用<kbd>save()</kbd>方法保存训练好的ML模型的方法:</p>
+<pre>// Save the workflow<br/>cvModel.write.overwrite().save("model/LR_model")  </pre>
+<p>然后可以使用<kbd>load()</kbd>方法从磁盘恢复相同的模型:</p>
+<pre><strong>val</strong> sameCVModel = LinearRegressionModel.load("model/LR_model")</pre>
+<p class="mce-root">然后，我们在类似于LR和GLR模型的测试集上计算模型的指标:</p>
+<pre class="mce-root">println("Evaluating the cross validated model on the test set and calculating the regression metrics")<br/>val trainPredictionsAndLabelsCV = cvModel.transform(testData).select("label", "prediction")<br/>                                      .map { case Row(label: Double, prediction: Double)<br/>                                      =&gt; (label, prediction) }.rdd<br/><br/>val testRegressionMetricsCV = new RegressionMetrics(trainPredictionsAndLabelsCV)</pre>
+<p class="mce-root">最后，我们收集指标并打印出来，以获得一些见解:</p>
+<pre class="mce-root"><strong>val</strong> cvResults = "\n=====================================================================\n" +<br/>      s"TrainingData count: ${trainingData.count}\n" +<br/>      s"TestData count: ${testData.count}\n" +<br/>      "=====================================================================\n" +<br/>      s"TestData MSE = ${testRegressionMetricsCV.meanSquaredError}\n" +<br/>      s"TestData RMSE = ${testRegressionMetricsCV.rootMeanSquaredError}\n" +<br/>      s"TestData R-squared = ${testRegressionMetricsCV.r2}\n" +<br/>      s"TestData MAE = ${testRegressionMetricsCV.meanAbsoluteError}\n" +<br/>      s"TestData explained variance = ${testRegressionMetricsCV.explainedVariance}\n" +<br/>      "=====================================================================\n"<br/>println(cvResults)</pre>
+<p>前面的代码段应该显示类似的内容。但是，由于随机性，您可能会体验到略有不同的输出:</p>
+<pre><strong> =====================================================================</strong><br/><strong> TrainingData count: 80</strong><br/><strong> TestData count: 55</strong><br/><strong> =====================================================================</strong><br/><strong> TestData MSE = 7.889401628365509</strong><br/><strong> TestData RMSE = 2.8088078660466453</strong><br/><strong> TestData R-squared = 0.3510269588724132</strong><br/><strong> TestData MAE = 2.2158433237623667</strong><br/><strong> TestData explained variance = 20.299135214455085</strong><br/><strong> =====================================================================</strong></pre>
+<p>正如我们所看到的，RMSE和MAE都略低于未经交叉验证的LR模型。理想情况下，这些指标的值应该更低。然而，由于训练和测试集的规模较小，可能LR和GLR模型都过拟合。尽管如此，我们仍将尝试在第四章、<em> Scala中使用稳健的回归分析算法，用于基于树的集成技术</em>。更具体地说，我们将尝试用决策树、随机森林和GBTRs来解决同样的问题。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>在这一章中，我们看到了如何使用LR和g LR算法开发一个回归模型来分析保险理赔。我们还看到了如何使用交叉验证和网格搜索技术来提高GLR模型的性能，这提供了超参数的最佳组合。最后，我们看到了一些常见问题，以便类似的回归技术可以应用于解决其他现实生活中的问题。</p>
+<p class="mce-root">在下一章中，我们将通过一个名为“通过流失预测分析即将离任的客户”的现实问题，看到另一种名为“分类”的监督学习技术。Scala中将使用几种分类算法进行预测。客户流失预测对企业来说至关重要，因为它可以帮助您发现可能会取消订阅、产品或服务的客户，还可以通过预测哪些客户可能会取消服务订阅来最大限度地减少客户流失。</p>
+
+
+            
+
+            
+        
+    
+
+
+</body></html>

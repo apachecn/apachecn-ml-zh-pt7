@@ -1,0 +1,586 @@
+<html><head/><body>
+
+
+
+<title>Chapter 2. Classification</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02"/>第二章。分类</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">判别函数分析-来自井的盐水的地质测量</li><li class="listitem" style="list-style-type: disc">多项逻辑回归——理解学生的课程选择</li><li class="listitem" style="list-style-type: disc">Tobit回归-测量学生的学术能力</li><li class="listitem" style="list-style-type: disc">泊松回归-了解加拉帕戈斯群岛的物种</li></ul></div><div><div><div><div><h1 class="title"><a id="ch02lvl1sec10"/>简介</h1></div></div></div><p><strong>判别分析</strong>用于区分不同的观察值组，并将新的观察值分配到先前定义的组中。例如，如果要进行一项研究，以调查区别(1)灵长类、(2)鸟类或(3)松鼠所吃水果的变量，研究人员可以收集每个动物群体所吃的这些物种的许多水果特征的数据。大多数水果自然会归入这三类中的一类。判别分析可以用来确定哪些变量是鸟类、灵长类动物或松鼠吃水果的最佳预测因子。判别分析通常用于生物物种分类、肿瘤的医学分类、面部识别技术以及信用卡和保险行业中，用于确定风险。判别分析的主要目标是判别和分类。关于判别分析的假设是多元正态性、组内方差-协方差相等以及变量的低多重共线性。</p><p><strong>多项逻辑回归</strong>用于根据多个自变量预测因变量的分类位置或类别成员的概率。当因变量有两个以上的标称或无序类别时使用，其中自变量的哑编码相当常见。自变量可以是二分的(二元的)或连续的(区间或比例的)。多项逻辑回归使用最大似然估计来评估分类成员的概率。它使用最大似然估计，而不是传统多元回归中使用的最小二乘估计。假设了分布的一般形式。使用估计参数的初始值，并计算样本来自具有这些参数的总体的可能性。迭代地调整估计参数的值，直到获得估计参数的最大似然值。</p><p><strong> Tobit回归</strong>用于描述非负因变量与自变量之间的关系。它也被称为删失回归模型，旨在估计因变量中存在左删失或右删失时变量之间的线性关系。当值等于或高于某个阈值的病例都采用该阈值的值时，就会进行审查，因此真实值可能等于该阈值，但也可能更高。Tobit模型已在大量应用中使用，在这些应用中，观察到因变量对于样本中的一些个人是零(汽车支出、医疗支出、工作时间、工资等)。这个模型是针对度量因变量的，它的局限性在于，只有当它高于或低于某个截止水平时，我们才能观察到它。例如:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">工资可能受到最低工资的限制</li><li class="listitem" style="list-style-type: disc">捐赠给慈善机构的金额</li><li class="listitem" style="list-style-type: disc">顶级编码收入</li><li class="listitem" style="list-style-type: disc">个人使用的时间和休闲活动</li></ul></div><p><strong>泊松回归</strong>处理因变量为计数的情况。泊松回归与常规多元回归相似，只是因变量(Y)是遵循泊松分布的观察计数。因此，Y的可能值是非负整数:0、1、2、3等等。据推测，大数量是罕见的。因此，泊松回归类似于逻辑回归，也有一个离散的响应变量。然而，响应并不像在逻辑回归中那样局限于特定的值。</p></div></div>
+
+
+
+
+
+<title>Discriminant function analysis - geological measurements on brines from wells</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl1sec11"/>判别函数分析——对井内卤水的地质测量</h1></div></div></div><p>让我们假设需要对从矿井中收集的古代文物进行研究。已经从矿井中收集了岩石样本。对采集的岩石样品进行了地球化学测量。对收集的文物进行了类似的研究。为了将样本分离到它们被挖掘的矿井中，DFA可以用作一个函数。然后可以将该函数应用于伪像，以预测哪个矿是每个伪像的来源。</p><div><div><div><div><h2 class="title"><a id="ch02lvl2sec1"/>做好准备</h2></div></div></div><p>为了执行判别函数分析，我们将使用从矿山收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec0"/>步骤1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">BRINE</code>的地质学数据分析数据集。这可以从http://www.kgs.ku.edu/Mathgeo/Books/Stat/ASCII/BRINE.TXT的<a class="ulink" href="http://www.kgs.ku.edu/Mathgeo/Books/Stat/ASCII/BRINE.TXT">中得到。数据集采用标准形式，行对应于样本，列对应于变量。每个样本都被分配到一个地层单位，列在最后一栏。数据集中有19个案例和8个变量。八个数字测量包括以下内容:</a></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">No</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">HCO3</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">SO4</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">CL</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">CA</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">MG</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">NA</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Group</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl2sec2"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec1"/>第2步-探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">    &gt; <strong>library(MASS)</strong>
+</pre><div><div><h3 class="title"><a id="note1"/>注</h3><p>版本信息:此页面的代码在R版本3.2.3中进行了测试(2015-12-10)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">brine.txt</code>的txt数据文件开始。我们将数据保存到<code class="literal">brine</code>数据框，如下所示:</p><pre class="programlisting">
+<strong>&gt; brine &lt;- read.table("d:/brine.txt", header=TRUE, sep=",", row.names=1)</strong>
+</pre><p>接下来我们将打印<code class="literal">brine</code>数据帧。<code class="literal">head()</code>函数返回<code class="literal">brine</code>数据帧。<code class="literal">brine</code>数据帧作为输入参数传递。使用以下代码:</p><pre class="programlisting">    &gt; <strong>head(brine)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    HCO3    SO4      Cl      Ca      Mg       Na   GROUP</strong>
+<strong>1   10.4   30.0    967.1    95.9    53.7    857.7     1</strong>
+<strong>2    6.2   29.6   1174.9   111.7    43.9   1054.7     1</strong>
+<strong>3    2.1   11.4   2387.1   348.3   119.3   1932.4     1</strong>
+<strong>4    8.5   22.5   2186.1   339.6    73.6   1803.4     1</strong>
+<strong>5    6.7   32.8   2015.5   287.6    75.1   1691.8     1</strong>
+<strong>6    3.8   18.9   2175.8   340.4    63.8   1793.9     1</strong>
+</pre><p>DFA假设多元正态性。在进行分析之前，必须检查数据以验证正态性。</p><p>为了验证转换的适当性，对数据进行绘图。<code class="literal">pairs</code> <code class="literal">()</code>功能用于绘制数据。它产生一个散点图矩阵。交叉图应仅比较第1-6列中的测量变量，最后一列(第7列)是组的名称。请考虑以下情况:</p><pre class="programlisting">
+<strong>&gt; pairs(brine[ ,1:6])</strong>
+</pre><p>剧情如下截图所示:</p><p>
+</p><div><img src="img/image_02_001.jpg" alt="Step 2 - exploring data"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec2"/>步骤3 -转换数据</h3></div></div></div><p>可以看出，数据呈彗星状分布。这表明需要对数据进行对数转换，这在地球化学数据中很常见。良好的做法是首先制作整个数据集的副本，然后仅对地球化学测量值应用对数变换。因为数据也包括零；应该对数据集进行<code class="literal">log+1</code>转换，而不是<code class="literal">log</code>转换。<code class="literal">brine</code>数据帧被复制到<code class="literal">brine.log</code>数据帧。对数据帧进行对数变换。如前所述，执行对数转换。请看下面的代码:</p><pre class="programlisting">
+<strong>    &gt; brine.log &lt;- brine</strong>
+<strong>    &gt; brine.log[ ,1:6] &lt;- log(brine[ ,1:6]+1)</strong>
+<strong>    &gt; pairs(brine.log[ ,1:6])</strong>
+</pre><p>数据转换后，为了使用<code class="literal">pairs()</code>函数数据框重新评估正态条件，<code class="literal">brine.log</code>被重新绘制。这种分布似乎更为正常。与之前的图相比，偏斜度有所降低:</p><pre class="programlisting">    &gt; <strong>pairs(brine.log[ ,1:6])</strong>
+</pre><p>剧情如下截图所示:</p><p>
+</p><div><img src="img/image_02_002.jpg" alt="Step 3 - transforming data"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec3"/>步骤4 -训练模型</h3></div></div></div><p>下一步是训练模型。这是通过判别函数分析实现的。调用<code class="literal">lda()</code>函数执行判别函数分析，如下所示:</p><pre class="programlisting">
+<strong>&gt; brine.log.lda &lt;- lda(GROUP ~ HCO3 + SO4 + Cl + Ca + Mg + Na, data=brine.log)</strong>
+</pre><p>这个调用的格式很像线性回归或ANOVA，因为我们指定了一个公式。这里，应将<code class="literal">GROUP</code>变量视为因变量，将地球化学测量值视为自变量。在这种情况下，没有对变量之间的交互进行建模，因此变量被添加了<code class="literal">+</code>而不是<code class="literal">*</code>。因为没有调用<code class="literal">attach()</code>，所以数据框的名称必须提供给数据参数。运行DFA后，第一步是查看结果，如下所示:</p><pre class="programlisting">    &gt; <strong>brine.log.lda</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>lda(GROUP ~ HCO3 + SO4 + Cl + Ca + Mg + Na, data = brine.log)</strong>
+<strong>Prior probabilities of groups:</strong>
+<strong>        1             2             3 </strong>
+<strong>0.3684211     0.3157895     0.3157895 </strong>
+<strong>Group means:</strong>
+<strong>        HCO3        SO4         Cl         Ca         Mg         Na</strong>
+<strong>1   1.759502   3.129009   7.496891   5.500942   4.283490   7.320686</strong>
+<strong>2   2.736481   3.815399   6.829565   4.302573   4.007725   6.765017</strong>
+<strong>3   1.374438   2.378965   6.510211   4.641049   3.923851   6.289692</strong>
+<strong>Coefficients of linear discriminants:</strong>
+<strong>                  LD1             LD2</strong>
+<strong>HCO3      -1.67799521      0.64415802</strong>
+<strong>SO4        0.07983656      0.02903096</strong>
+<strong>Cl         22.27520614     -0.31427770</strong>
+<strong>Ca        -1.26859368      2.54458682</strong>
+<strong>Mg        -1.88732009     -2.89413332</strong>
+<strong>Na       -20.86566883      1.29368129</strong>
+<strong>Proportion of trace:</strong>
+<strong>      LD1        LD2 </strong>
+<strong>   0.7435     0.2565</strong>
+</pre><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">输出的第一部分显示拟合的公式。</li><li class="listitem" style="list-style-type: disc">第二部分是组的先验概率，它反映了每个组在数据集中的比例。换句话说，如果没有测量值，而测量样本的数量代表了各组的实际相对丰度，则先验概率将描述任何未知样本属于每个组的概率。</li><li class="listitem" style="list-style-type: disc">第三部分显示了组均值，这是每个组的每个变量的平均值表。浏览此表可以帮助您了解这些组在一个或多个变量方面是否有所不同。</li><li class="listitem" style="list-style-type: disc">第四部分报告判别函数的系数(a、b和c)。因为有三组，所以有3-1个线性判别式(如果只有两组，则只需要1 [2-1]个线性判别式)。对于每个线性判别式(<code class="literal">LD1</code>和<code class="literal">LD2</code>)，有一个系数依次对应于每个变量。</li><li class="listitem" style="list-style-type: disc">最后，第五部分显示了迹线的比例，它给出了由每个判别函数解释的方差。这里，第一个判别式解释了75%的方差，其余的由第二个判别式解释。</li></ul></div></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec4"/>步骤5 -对数据进行分类</h3></div></div></div><p><code class="literal">predict()</code>功能也是<code class="literal">MASS</code>包的一部分，它使用<code class="literal">lda()</code>结果将样本分配给各组。换句话说，由于<code class="literal">lda()</code>导出了一个线性函数，可以对组进行分类，<code class="literal">predict()</code>允许您将该函数应用于相同的数据，以查看分类函数有多成功。遵循统计惯例，x-hat是x的预测，(hat被添加到对象名称中，以清楚地表明这些是预测)。请考虑以下情况:</p><pre class="programlisting">    &gt; <strong>brine.log.hat &lt;- predict(brine.log.lda)</strong>
+</pre><p>让我们将<code class="literal">brine.log.hat</code>打印如下:</p><pre class="programlisting">
+<strong>&gt; brine.log.hat</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>$class</strong>
+<strong> [1] 2 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3</strong>
+<strong>Levels: 1 2 3</strong>
+<strong>$posterior</strong>
+<strong>              1                2                3</strong>
+<strong>1    2.312733e-01     7.627845e-01     5.942270e-03</strong>
+<strong>2    9.488842e-01     3.257237e-02     1.854347e-02</strong>
+<strong>3    8.453057e-01     9.482540e-04     1.537461e-01</strong>
+<strong>4    9.990242e-01     8.794725e-04     9.632578e-05</strong>
+<strong>5    9.965920e-01     2.849903e-03     5.581176e-04</strong>
+<strong>6    9.984987e-01     1.845534e-05     1.482872e-03</strong>
+<strong>7    8.676660e-01     7.666611e-06     1.323263e-01</strong>
+<strong>8    4.938019e-03     9.949035e-01     1.584755e-04</strong>
+<strong>9    4.356152e-03     9.956351e-01     8.770078e-06</strong>
+<strong>10   2.545287e-05     9.999439e-01     3.066264e-05</strong>
+<strong>11   2.081510e-02     9.791728e-01     1.210748e-05</strong>
+<strong>12   1.097540e-03     9.989023e-01     1.455693e-07</strong>
+<strong>13   1.440307e-02     9.854613e-01     1.356671e-04</strong>
+<strong>14   4.359641e-01     2.367602e-03     5.616683e-01</strong>
+<strong>15   6.169265e-02     1.540353e-04     9.381533e-01</strong>
+<strong>16   7.500357e-04     4.706701e-09     9.992500e-01</strong>
+<strong>17   1.430433e-03     1.095281e-06     9.985685e-01</strong>
+<strong>18   2.549733e-04     3.225658e-07     9.997447e-01</strong>
+<strong>19   6.433759e-02     8.576694e-03     9.270857e-01</strong>
+<strong>$x</strong>
+<strong>              LD1            LD2</strong>
+<strong>1      -1.1576284     -0.1998499</strong>
+<strong>2     -0.1846803      0.6655823</strong>
+<strong>3       1.0179998      0.6827867</strong>
+<strong>4      -0.3939366      2.6798084</strong>
+<strong>5      -0.3167164      2.0188002</strong>
+<strong>6       1.0061340      2.6434491</strong>
+<strong>7       2.0725443      1.5714400</strong>
+<strong>8      -2.0387449     -0.9731745</strong>
+<strong>9      -2.6054261     -0.2774844</strong>
+<strong>10     -2.5191350     -2.8304663</strong>
+<strong>11     -2.4915044      0.3194247</strong>
+<strong>12     -3.4448401      0.1869864</strong>
+<strong>13     -2.0343204     -0.4674925</strong>
+<strong>14      1.0441237     -0.0991014</strong>
+<strong>15      1.6987023     -0.6036252</strong>
+<strong>16      3.9138884     -0.7211078</strong>
+<strong>17      2.7083649     -1.3896956</strong>
+<strong>18      2.9310268     -1.9243611</strong>
+<strong>19      0.7941483     -1.2819190</strong>
+</pre><p>输出从每个样本的指定分类开始。接下来，它列出了每组每个样本的后验概率，每行(即每个样本)的概率总和为1.0。这些后验概率衡量每个分类的强度。如果一个样本的这些概率中的一个比所有其他的都大得多，那么这个样本就被分配到一个具有高度确定性的组中。如果两个或更多的概率几乎相等，分配就不那么确定了。如果有许多组，以下命令是一种快速查找每个样本的最大概率的方法:</p><pre class="programlisting">
+<strong>&gt; apply(brine.log.hat$posterior, MARGIN=1, FUN=max)</strong>
+<strong>        1           2             3  4             5         6             7         8 </strong>
+<strong>0.7627845 0.9488842 0.8453057 0.9990242 0.9965920 0.9984987 0.8676660 0.9949035 </strong>
+<strong>        9          10          11        12          13        14          15        16 </strong>
+<strong>0.9956351 0.9999439 0.9791728 0.9989023 0.9854613 0.5616683 0.9381533 0.9992500 </strong>
+<strong>       17          18          19 </strong>
+<strong>0.9985685 0.9997447 0.9270857</strong>
+</pre><p>由于数据集中的大多数概率都很大(&gt; 0.9)，这表明集合中的大多数样本都被分配到一个组中。</p><p>如果这些概率中的大多数都很大，则总体分类是成功的。<code class="literal">predict()</code>输出的最后一部分列出了每个判别函数轴的每个样本的分数。可以绘制这些分数，以图形方式显示各组在判别函数中的分布，就像可以绘制主成分分析的分数一样，如下所示:</p><pre class="programlisting">
+<strong>&gt; plot(brine.log.lda)</strong>
+</pre><p>这三个群体占据明显不同且不重叠的区域。只有一个组1接近组2的情况，因此可以清楚地声明区分是成功的。</p><p>该图如下图所示:</p><p>
+</p><div><img src="img/image_02_003.jpg" alt="Step 5 - classifying the data"/></div><p>
+</p><p>第二种类型的图显示了沿着特定判别函数轴的数据图，如下所示:</p><pre class="programlisting">
+<strong>&gt; plot(brine.log.lda, dimen=1, type="both")</strong>
+</pre><p>
+</p><div><img src="img/image_02_004.jpg" alt="Step 5 - classifying the data"/></div><p>
+</p><p>再次，注意沿着判别函数1的组的良好分离，并且对于组2尤其如此。</p></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec5"/>第6步-评估模型</h3></div></div></div><p>必须评估DFA在分组中的有效性，这是通过比较<code class="literal">predict()</code>所做的分配和实际的分组分配来完成的。<code class="literal">table()</code>功能对此最有用。按照惯例，调用它时将实际赋值作为第一个参数，将拟合赋值作为第二个参数，如下所示:</p><pre class="programlisting">
+<strong>&gt; tab &lt;- table(brine.log$GROUP, brine.log.hat$class)</strong>
+</pre><p>打印标签的值。</p><pre class="programlisting">
+<strong>    &gt; tab</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>      1   2   3</strong>
+<strong>  1   6   1   0</strong>
+<strong>  2   0   6   0</strong>
+<strong>  3   0   0   6</strong>
+</pre><p>输出中的行对应于原始数据中指定的组，列对应于DFA进行的分类。在完美的分类中，大值将位于对角线上，零在对角线之外，这将指示属于组1的所有样本被DFA区分为属于组1，等等。该表的形式可以让您相当深入地了解哪些组是可靠地被区分的。它还可以显示哪些群体可能会被混淆，以及哪些类型的错误分类比其他类型更常见。以下命令将计算整体预测准确性，即位于对角线上的事例的比例:</p><pre class="programlisting">
+<strong>&gt; sum(tab[row(tab) == col(tab)]) / sum(tab)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>[1] 0.9473684</strong>
+</pre><p>这里的预测准确率几乎达到95%，相当成功。这种方法测量所谓的再替代误差，即当所有样本都用于开发判别函数时，样本的分类效果如何。</p><p>评估DFA的第二种方法是留一交叉验证(也称为刀切验证)，它排除了一个观察值。这种评估DFA的方法使用被遗漏的数据，即排除一个观察值。我们现在只剩下n - 1次观察。这种交叉验证技术是针对数据集中的每个样本自动完成的。为此，将<code class="literal">CV=TRUE</code>(考虑交叉验证)添加到<code class="literal">lda()</code>调用中，如下所示:</p><pre class="programlisting">
+<strong>&gt; brine.log.lda &lt;- lda(GROUP ~ HCO3 + SO4 + Cl + Ca + Mg + Na, data=brine.log, CV=TRUE) </strong>
+</pre><p>区分的成功可以用类似的方法来衡量，如下所示:</p><pre class="programlisting">
+<strong>&gt; tab &lt;- table(brine.log$GROUP, brine.log.lda$class)</strong>
+</pre><p>打印tab的值，如下所示:</p><pre class="programlisting">
+<strong>&gt; tab</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>      1   2   3</strong>
+<strong>  1  6   1   0</strong>
+<strong>  2   1   4   1</strong>
+<strong>  3   1   0   5</strong>
+<strong>&gt; sum(tab[row(tab) == col(tab)]) / sum(tab)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>[1] 0.7894737</strong>
+</pre><p>在这个数据集中，刀切验证的准确性要低得多(只有79%的准确性)，反映出重新替换错误总是高估了DFA的性能。这种差异在像这样的小数据集上尤其常见，而判别函数分析在大数据集上通常要成功得多。</p></div></div></div>
+
+
+
+
+
+<title>Multinomial logistic regression - understanding program choices made by students</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl1sec12"/>多项逻辑回归——了解学生的项目选择</h1></div></div></div><p>让我们假设高中生要参加一个项目。学生们有机会选择他们喜欢的课程。学生的选择基于三个选项。这些选择是一般项目，职业项目和学术项目。每个学生的选择是基于每个学生的写作成绩和社会经济地位。</p><div><div><div><div><h2 class="title"><a id="ch02lvl2sec3"/>准备就绪</h2></div></div></div><p>为了完成这个食谱，我们将使用一个学生的数据集。第一步是收集数据。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec6"/>第一步——收集数据</h3></div></div></div><p>名为<code class="literal">hsbdemo</code>的学生数据集正在被利用。数据集可在<a class="ulink" href="http://voia.yolasite.com/resources/hsbdemo.csv">http://voia.yolasite.com/resources/hsbdemo.csv</a>以MS Excel格式获取。数据集中有201个数据行和13个变量。八个数字测量值如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">id</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">read</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">write</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">math</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">science</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">socst</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">awards</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">cid</code></li></ul></div><p>非数字测量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">gender</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">ses</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">schtyp</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">prog</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">honors</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl2sec4"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch02lvl3sec7"/>步骤2 -探索数据</h3></div></div></div><p>第一步是加载包。如果包不存在，则<code class="literal">library ()</code>返回错误。使用以下命令:</p><pre class="programlisting">
+<strong>    &gt; library(foreign)</strong>
+<strong>    &gt; library (nnet)</strong>
+<strong>    &gt; library (ggplot2)</strong>
+<strong>    &gt; library (reshape2)</strong>
+</pre><div><div><h3 class="title"><a id="note2"/>注</h3><p>版本信息:此页面的代码在R版本3.2.3 (2015-12-10)中进行了测试。</p></div></div><p>探索数据有助于了解数据之间的关系。标题为<code class="literal">hsbdemo.csv</code>的CSV文件需要导入到R环境中。导入的数据保存在标题为<code class="literal">ml</code>的数据框中，如下所示:</p><pre class="programlisting">
+<strong>&gt; ml &lt;- read.table("d:/hsbdemo.csv", header=TRUE, sep=",", row.names="id")</strong>
+</pre><p>使用如下<code class="literal">with()</code>功能探索感兴趣变量的描述性统计数据:</p><pre class="programlisting">
+<strong>&gt; with(ml, table(ses, prog))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    prog</strong>
+<strong>  ses         academic         general    vocation</strong>
+<strong>    high           42                9           7</strong>
+<strong>    low            19               16          12</strong>
+<strong>    middle         44               20          31</strong>
+</pre><p>让我们获得平均值和标准偏差如下:</p><pre class="programlisting">
+<strong>&gt; with(ml, do.call(rbind, tapply(write, prog, function(x) c(M = mean(x), SD = sd(x)))))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>                    M           SD</strong>
+<strong>academic     56.25714     7.943343</strong>
+<strong>general      51.33333     9.397775</strong>
+<strong>vocation     46.76000     9.318754</strong>
+</pre><p>学术的均值最高，一般的标准差最高。</p></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec8"/>第三步-训练模型</h3></div></div></div><p>为了估计多项逻辑回归，使用<code class="literal">multinom()</code>函数。<code class="literal">multinom()</code>功能不需要对数据进行整形。</p><p>为结果选择一个参照组很重要。我们可以选择我们希望用作基线的结果水平。这在<code class="literal">relevel ()</code>功能中指定。然后，我们使用<code class="literal">multinom()</code>函数运行我们的模型。由于没有对回归系数进行p值计算，因此使用Wald检验(z检验)进行p值检验。<code class="literal">multinom()</code>功能中提到的公式是响应~预测值的形式。数据帧<code class="literal">ml</code>是解释公式中出现的变量的数据帧，如下所示:</p><pre class="programlisting">
+<strong>    &gt; ml$prog2 &lt;- relevel(ml$prog, ref = "academic") </strong>
+<strong>    &gt; test &lt;- multinom(prog2 ~ ses + write, data = ml)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong># weights:  15 (8 variable)</strong>
+<strong>initial  value          219.722458 </strong>
+<strong>iter     10 value     179.983731</strong>
+<strong>final    value         179.981726 </strong>
+<strong>converged</strong>
+</pre><pre class="programlisting">
+<strong>    &gt; summary(test)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    Call:</strong>
+<strong>multinom(formula = prog2 ~ ses + write, data = ml)</strong>
+<strong>Coefficients:</strong>
+<strong>            (Intercept)       seslow   sesmiddle         write</strong>
+<strong>general     1.689478       1.1628411   0.6295638   -0.05793086</strong>
+<strong>vocation    4.235574       0.9827182   1.2740985   -0.11360389</strong>
+</pre><pre class="programlisting">
+<strong>    Std. Errors:</strong>
+<strong>            (Intercept)       seslow   sesmiddle        write</strong>
+<strong>general     1.226939       0.5142211   0.4650289   0.02141101</strong>
+<strong>vocation    1.204690       0.5955688   0.5111119   0.02222000</strong>
+<strong>Residual Deviance: 359.9635 </strong>
+<strong>AIC: 375.9635 </strong>
+</pre><p>接下来，系数测试汇总除以标准误差测试汇总，如下所示:</p><pre class="programlisting">
+<strong>&gt; z &lt;- summary(test)$coefficients/summary(test)$standard.errors</strong>
+</pre><p>显示<code class="literal">z</code>的值如下:</p><pre class="programlisting">
+<strong>&gt; z</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>           (Intercept)     seslow     sesmiddle       write</strong>
+<strong>general       1.376987   2.261364      1.353816   -2.705658</strong>
+<strong>vocation      3.515904   1.650050      2.492798   -5.112687</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec9"/>步骤4 -测试模型的结果</h3></div></div></div><p>如下进行双尾z检验:</p><pre class="programlisting">
+<strong>&gt; p &lt;- (1 - pnorm(abs(z), 0, 1))*2</strong>
+</pre><p>显示p值，如下所示:</p><pre class="programlisting">
+<strong>&gt; p</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>            (Intercept)       seslow     sesmiddle          write</strong>
+<strong>general    0.1685163893   0.02373673     0.1757949   6.816914e-03</strong>
+<strong>vocation   0.0004382601   0.09893276     0.0126741   3.176088e-07</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch02lvl3sec10"/>第5步-模型改进绩效</h3></div></div></div><p>相对风险被定义为选择一个结果类别和选择基线类别之间的比率。相对风险是线性方程右边的指数。指数回归系数是预测变量单位变化的相对风险比。</p><p>从模型中提取系数，并对其执行指数运算，如下所示:</p><pre class="programlisting">
+<strong>&gt; exp(coef(test))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    (Intercept)   seslow         sesmiddle       write</strong>
+<strong>general         5.416653   3.199009    1.876792   0.9437152</strong>
+<strong>vocation       69.101326   2.671709    3.575477   0.8926115</strong>
+</pre><p>与学术项目相比，一般项目中变量write增加一个单位的相对风险比是<code class="literal">.9437</code>。从<code class="literal">ses = 1</code>转换到<code class="literal">3</code>的相对风险比是<code class="literal">.3126</code>,因为参加的是普通项目而不是学术项目。使用预测的概率来深入了解模型。<code class="literal">fitted()</code>函数用于计算我们每个结果级别的预测概率，如下所示:</p><pre class="programlisting">
+<strong>&gt; head(pp &lt;- fitted(test))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>       academic     general    vocation</strong>
+<strong>45     .1482721   0.3382509   0.5134769</strong>
+<strong>108   0.1201988   0.1806335   0.6991678</strong>
+<strong>15    0.4186768   0.2368137   0.3445095</strong>
+<strong>67    0.1726839   0.3508433   0.4764728</strong>
+<strong>153   0.1001206   0.1689428   0.7309367</strong>
+<strong>51    0.3533583   0.2378047   0.4088370</strong>
+</pre><p>检查与两个变量<code class="literal">ses</code>和<code class="literal">write</code>之一相关的概率变化。创建小型数据集，改变一个变量，同时保持另一个变量不变。首先，将写入变量保持在其平均值，然后检查<code class="literal">ses</code>变量每个级别的预测概率，如下所示:</p><pre class="programlisting">
+<strong>    &gt; dses &lt;- data.frame(ses = c("low", "middle", "high"),write = mean(ml$write))</strong>
+<strong>    &gt; predict(test, newdata = dses, "probs")</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>     academic     general      vocation</strong>
+<strong>1   0.4396813   0.3581915   0.2021272</strong>
+<strong>2   0.4777451   0.2283359   0.2939190</strong>
+<strong>3   0.7009046   0.1784928   0.1206026</strong>
+</pre><p>使用预测概率查看连续预测变量不同值的平均预测概率，如下所示:</p><pre class="programlisting">
+<strong>&gt; dwrite &lt;- data.frame(ses = rep(c("low", "middle", "high"), each = 41), write = rep(c(30:70), 3))</strong>
+</pre><p>存储每个<code class="literal">ses</code>值的预测概率，并写如下:</p><pre class="programlisting">
+<strong>&gt; pp.write &lt;- cbind(dwrite, predict(test, newdata = dwrite, type = "probs", se = TRUE))</strong>
+</pre><p>计算<code class="literal">ses</code>每个级别内的平均概率，如下所示:</p><pre class="programlisting">
+<strong>&gt; by(pp.write[, 3:5], pp.write$ses, colMeans)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>pp.write$ses: high</strong>
+<strong>   academic     general      vocation </strong>
+<strong>  0.6164348   0.1808049   0.2027603 </strong>
+<strong>-------------------------------------------------------------------------- </strong>
+<strong>pp.write$ses: low</strong>
+<strong>   academic     general      vocation </strong>
+<strong>  0.3972955   0.3278180   0.2748864 </strong>
+<strong>-------------------------------------------------------------------------- </strong>
+<strong>pp.write$ses: middle          </strong>
+<strong>   academic     general      vocation </strong>
+<strong>  0.4256172   0.2010877   0.3732951 </strong>
+</pre><p>有时，几个情节可以传达大量信息。使用我们之前为<code class="literal">pp.write</code>对象生成的预测，我们可以针对不同级别的结果变量，按照<code class="literal">ses</code>的级别绘制预测概率与写作分数的关系。<code class="literal">melt()</code>函数获取宽格式的数据，并将一组列堆叠成一列数据。<code class="literal">lpp</code>数据帧用于指定如下数据帧:</p><pre class="programlisting">
+<strong>&gt; lpp &lt;- melt(pp.write, id.vars = c("ses", "write"), value.name = "probability")</strong>
+</pre><p>如下所示打印<code class="literal">head</code>的值:</p><pre class="programlisting">
+<strong>&gt; head(lpp)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>  ses   write   variable     probability</strong>
+<strong>1  low      30   academic    0.09843258</strong>
+<strong>2   low      31   academic    0.10716517</strong>
+<strong>3   low      32   academic    0.11650018</strong>
+<strong>4   low      33   academic    0.12645441</strong>
+<strong>5   low      34   academic    0.13704163</strong>
+<strong>6   low      35   academic    0.14827211</strong>
+</pre><p>接下来，我们绘制按程序类型分面的每一级<code class="literal">ses</code>的写值的预测概率，如下所示:</p><pre class="programlisting">
+<strong>&gt; ggplot(lpp, aes(x = write, y = probability, colour = ses)) +</strong>
+<strong>+     geom_line() +</strong>
+<strong>+     facet_grid(variable ~ ., scales="free")</strong>
+</pre><p><a id="ch02lvl1sec13"/> Tobit回归——测量学生的学习能力</p><div><img src="img/image_02_005.jpg" alt="Step 5 - model improvement performance"/></div><p>让我们用200-800分来衡量一个学生的学术能力。这种测量是基于使用阅读和数学成绩的模型。学生已经注册的项目的性质也要考虑在内。有三种类型的项目:学术类、普通类和职业类。问题是，一些学生可能正确回答了学术能力测试中的所有问题，并获得了800分，尽管这些学生的能力很可能并不真正平等。对于所有可能所有问题都答错，得200分的同学来说，可能都是这样。</p></div></div></div>
+
+
+
+
+
+<title>Tobit regression - measuring the students' academic aptitude</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title">准备就绪</h1></div></div></div><p>为了完成这个食谱，我们将使用一个学生的数据集。第一步是收集数据。</p><div><div><div><div><h2 class="title"><a id="ch02lvl3sec11"/>步骤1 -收集数据</h2></div></div></div><p>为了开发tobit回归模型，我们将使用名为Tobit的学生数据集，该数据集在<a class="ulink" href="http://www.ats.ucla.edu/stat/data/tobit.csv">http://www.ats.ucla.edu/stat/data/tobit.csv</a>以MS Excel格式提供。数据集中有201个数据行和5个变量。四个数字测量值如下:</p><div><div><div><div><h3 class="title"><code class="literal">id</code></h3></div></div></div><p><code class="literal">read</code></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">math</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">apt</code></li><li class="listitem" style="list-style-type: disc">非数字测量如下:</li><li class="listitem" style="list-style-type: disc"><code class="literal">prog</code></li></ul></div><p><a id="ch02lvl2sec6"/>怎么做...</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">让我们进入细节。</li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl3sec12"/>步骤2 -探索数据</h2></div></div></div><p>第一步是加载以下包。<code class="literal">require()</code>功能设计用于其他功能内部；如果包不存在，它返回<code class="literal">FALSE</code>并给出警告(而不是默认的<code class="literal">library ()</code>给出的错误)。使用以下命令:</p><div><div><div><div><h3 class="title"><a id="note3"/>注意</h3></div></div></div><p>版本信息:此页面的代码在R版本3.2.3中进行了测试(2015-12-10)</p><pre class="programlisting">
+<strong>    &gt; require(ggplot2)</strong>
+<strong>    &gt; require(GGally)</strong>
+<strong>    &gt; require(VGAM)</strong>
+</pre><div><div><h3 class="title">探索数据并理解变量之间的关系。首先导入名为<code class="literal">gala.txt</code>的CSV数据文件。这将把数据保存到<code class="literal">dat</code>数据框，如下所示:</h3><p>在这个数据集中，<code class="literal">apt</code>的最小值是352。这表明没有学生得到最低分200。尽管从下方进行审查是可能的，但在本数据集中并不需要。使用以下命令:</p></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; dat &lt;- read.table("d:/tobit.csv", header=TRUE, sep=",", row.names="id")</strong>
+</pre><p><a id="ch02lvl3sec13"/>步骤3 -绘制数据</p><pre class="programlisting">
+<strong>&gt; summary(dat)</strong>
+</pre><p>Write是一个函数，它给出给定平均值和标准偏差的正态分布密度，该密度已在计数指标上进行了缩放。为了生成直方图制定计数为<em>密度*样本大小*面元</em>宽度使用以下代码:</p><pre class="programlisting">
+<strong>Id         read         math      prog           apt    </strong>
+<strong>Min.   :  1.0   Min.   :28.0   Min.   :33.0   academic  : 45 Min.   :352</strong>
+<strong>1st Qu.: 50.8   1st Qu.:44.0   1st Qu.:45.0   general   :105 1st Qu.:576</strong>
+<strong>Median :100.5   Median :50.0   Median :52.0   vocational: 50 Median :633</strong>
+<strong>Mean   :100.5   Mean   :52.2   Mean   :52.6      Mean   :640</strong>
+<strong>3rd Qu.:150.2   3rd Qu.:60.0   3rd Qu.:59.0      3rd Qu.:705</strong>
+<strong>Max.   :200.0   Max.   :76.0   Max.   :75.0       Max.   :800</strong>
+</pre></div><div><div><div><div><h3 class="title">现在，我们将如下设置基础图:</h3></div></div></div><p>现在我们将准备一个直方图，在不同程序中按比例着色，正态分布覆盖如下:</p><pre class="programlisting">
+<strong>    &gt; f &lt;- function(x, var, bw = 15) {</strong>
+<strong>    dnorm(x, mean = mean(var), sd(var)) * length(var) * bw</strong>
+<strong>    }</strong>
+</pre><p>绘制的直方图如下图所示:</p><pre class="programlisting">
+<strong>&gt; p &lt;- ggplot(dat, aes(x = apt, fill=prog))</strong>
+</pre><p>Now we shall prepare a histogram, colored by proportion in different programs with a normal distribution overlaid as follows:</p><pre class="programlisting">
+<strong>&gt; p + stat_bin(binwidth=15) +</strong>
+<strong>    stat_function(fun = f, size = 1,</strong>
+<strong>    args = list(var = dat$apt))</strong>
+</pre><p>The histogram plotted is shown in the following figure:</p><p>查看前面的直方图，我们可以看到对<code class="literal">apt</code>值的审查，也就是说，与分布的其他部分相比，得分在750到800之间的情况比预期的要多得多。</p><div><img src="img/image_02_006.jpg" alt="Step 3 - plotting data"/></div><p>在下面的备选直方图中，突出显示了<code class="literal">apt</code> =800的超出情况。在下面的直方图中，断点选项生成一个直方图，其中每个唯一值<code class="literal">apt</code>都有自己的条形(通过将断点设置为包含从最小值<code class="literal">apt</code>到最大值apt的值的向量)。因为<code class="literal">apt</code>是连续的，所以<code class="literal">apt</code>的大多数值在数据集中是唯一的，尽管在接近分布中心的地方有一些apt值有两三种情况。</p><p>直方图最右侧的尖峰是针对<code class="literal">apt</code> =800的情况的条形，该条形相对于所有其他条形的高度清楚地显示了具有该值的情况的超出数量。使用以下命令:</p><p>In the following alternative histogram, the excess of cases where <code class="literal">apt</code>=800 have been highlighted. In the following histogram, the breaks option produces a histogram where each unique value of <code class="literal">apt</code> has its own bar (by setting breaks equal to a vector containing values from the minimum of <code class="literal">apt</code> to the maximum of apt). Because <code class="literal">apt</code> is continuous, most values of <code class="literal">apt</code> are unique in the dataset, although close to the center of the distribution there are a few values of apt that have two or three cases.</p><p>The spike on the far right of the histogram is the bar for cases where <code class="literal">apt</code>=800, the height of this bar, relative to all the others, clearly shows the excess number of cases with this value. Use the following command:</p><pre class="programlisting">
+<strong>&gt; p + stat_bin(binwidth = 1) + stat_function(fun = f, size = 1, args = list(var = dat$apt, </strong>
+<strong>    bw = 1))</strong>
+</pre><p><a id="ch02lvl3sec14"/>第4步-探索关系</p><div><img src="img/image_02_007.jpg" alt="Step 3 - plotting data"/></div><p>以下命令允许使用来浏览数据集中的二元关系:</p></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>现在绘制如下矩阵:</p><pre class="programlisting">
+<strong>&gt; cor(dat[, c("read", "math", "apt")])</strong>
+</pre><p>The results are as follows:</p><pre class="programlisting">
+<strong>              read        math             apt</strong>
+<strong>read     1.0000000   0.6622801   0.6451215</strong>
+<strong>math     0.6622801   1.0000000   0.7332702</strong>
+<strong>apt      0.6451215   0.7332702   1.0000000</strong>
+</pre><p>Now plot the matrix as follows:</p><pre class="programlisting">
+<strong>&gt; ggpairs(dat[, c("read", "math", "apt")])</strong>
+</pre><p>在散点图矩阵的第一行中，散点图显示了read和apt之间的关系。数学和apt之间的关系也是成立的。</p><div><img src="img/image_02_008.jpg" alt="Step 4 - exploring relationships"/></div><p><a id="ch02lvl3sec15"/>步骤5 -训练模型</p><p>运行Tobit模型，使用VGAM包的<code class="literal">vglm</code>函数，命令如下:</p></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>前面的输出告诉我们指定的选项。</p><pre class="programlisting">    &gt; <strong>summary(m &lt;- vglm(apt ~ read + math + prog, tobit(Upper = 800), data = dat))</strong>
+</pre><p>标有系数的表格给出了系数的标准误差和z统计量。汇总表中不包含p值。</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>vglm(formula = apt ~ read + math + prog, family = tobit(Upper = 800), </strong>
+<strong>    data = dat)</strong>
+</pre><pre class="programlisting">
+<strong>Pearson residuals:</strong>
+<strong>                 Min        1Q           Median        3Q       Max</strong>
+<strong>mu           -2.5684    -0.7311        -0.03976    0.7531     2.802</strong>
+<strong>loge(sd)     -0.9689    -0.6359        -0.33365    0.2364     4.845</strong>
+</pre><pre class="programlisting">
+<strong>Coefficients:</strong>
+<strong>               Estimate Std.       Error     z value     Pr(&gt;|z|)   </strong>
+<strong>(Intercept):1     209.55956     32.54590     6.439     1.20e-10 ***</strong>
+<strong>(Intercept):2       4.18476      0.05235    79.944      &lt; 2e-16 ***</strong>
+<strong>read                2.69796      0.61928     4.357     1.32e-05 ***</strong>
+<strong>math                5.91460      0.70539     8.385      &lt; 2e-16 ***</strong>
+<strong>proggeneral       -12.71458     12.40857    -1.025     0.305523    </strong>
+<strong>progvocational   -46.14327     13.70667    -3.366     0.000761 ***</strong>
+<strong>---</strong>
+<strong>Signif. codes:    0 '***'   0.001 '**'   0.01 '*'   0.05 '.' 0.1 ' ' 1</strong>
+<strong>Number of linear predictors:  2 </strong>
+<strong>Names of linear predictors: mu, loge(sd)</strong>
+<strong>Dispersion Parameter for tobit family:   1</strong>
+<strong>Log-likelihood: -1041.063 on 394 degrees of freedom</strong>
+<strong>Number of iterations: 5 </strong>
+</pre><p>托比特回归系数的解释类似于OLS回归系数的解释。线性系数效应是针对未经审查的潜在变量:</p><p>read每增加一个单位，预测值<code class="literal">apt</code>就会增加<code class="literal">2.6981</code>个点。</p><p><code class="literal">math</code>增加一个单位与<code class="literal">apt</code>预测值增加<code class="literal">5.9146</code>个单位相关。</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">prog</code>的术语有稍微不同的解释。职业项目学生的apt预测值比学术项目学生的apt预测值低<code class="literal">-46.1419</code>点。</li><li class="listitem" style="list-style-type: disc">标记为<code class="literal">(Intercept):1</code>的系数是模型的截距或常数。</li><li class="listitem" style="list-style-type: disc">标记为<code class="literal">(Intercept):2</code>的系数是一个辅助统计量。该值的指数类似于OLS回归中剩余方差的平方根。<code class="literal">65.6773</code>的值可以与学术能力的标准差相比，后者是<code class="literal">99.21</code>，这是一个实质性的减少。</li><li class="listitem" style="list-style-type: disc">最终对数可能性<code class="literal">-1041.0629</code>显示在输出的底部；它可以用于嵌套模型的比较。</li><li class="listitem" style="list-style-type: disc"><a id="ch02lvl3sec16"/>步骤6 -测试模型</li></ul></div><p>计算模型中每个系数的p值。使用z值计算每个系数的p值，然后以表格方式显示它们。<code class="literal">read</code>、<code class="literal">math</code>和<code class="literal">prog</code> = 3(职业)的系数在统计上是显著的，如下所示:</p></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>我们可以通过拟合一个不包含程序的模型并使用如下的似然比检验来测试程序类型的总体显著性:</p><pre class="programlisting">
+<strong>    &gt; ctable &lt;- coef(summary(m))</strong>
+<strong>    &gt; pvals &lt;- 2 * pt(abs(ctable[, "z value"]), df.residual(m), lower.tail = FALSE) </strong>
+<strong>    &gt; cbind(ctable, pvals)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    Estimate    Std. Error      z value       Pr(&gt;|z|)       pvals</strong>
+<strong>(Intercept):1    209.559557   32.54589921    6.438893   1.203481e-10  3.505839e-10</strong>
+<strong>(Intercept):2      4.184759    0.05234618   79.943922   0.000000e+00 1.299833e-245</strong>
+<strong>read               2.697959    0.61927743    4.356625   1.320835e-05  1.686815e-05</strong>
+<strong>math               5.914596    0.70538721    8.384892   5.077232e-17  9.122434e-16</strong>
+<strong>proggeneral      -12.714581   12.40856959   -1.024661   3.055230e-01  3.061517e-01</strong>
+<strong>progvocational   -46.143271   13.70667208   -3.366482   7.613343e-04  8.361912e-04</strong>
+</pre><p>prog变量的统计显著性由等于<code class="literal">0.0032</code>的p值表示。我们计算系数的上下95%置信区间如下:</p><pre class="programlisting">
+<strong>    &gt; m2 &lt;- vglm(apt ~ read + math, tobit(Upper = 800), data = dat) </strong>
+<strong>    &gt; (p &lt;- pchisq(2 * (logLik(m) - logLik(m2)), df = 2, lower.tail = FALSE))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong> [1] 0.003155176</strong>
+</pre><p>通过将残差标绘为1，我们可以评估绝对以及相对(皮尔逊)值和假设，如正态性和方差齐性。这将有助于检查模型和数据拟合。</p><pre class="programlisting">
+<strong>    &gt; b &lt;- coef(m)</strong>
+<strong>    &gt; se &lt;- sqrt(diag(vcov(m)))</strong>
+<strong>    &gt; cbind(LL = b - qnorm(0.975) * se, UL = b + qnorm(0.975) * se)</strong>
+</pre><p>我们还可能希望检查我们的模型与数据的吻合程度。一种开始的方法是用残差图来评估它们的绝对和相对(皮尔逊)值以及假设，如正态性和方差齐性。使用以下命令:</p><pre class="programlisting">
+<strong>      LL             UL</strong>
+<strong>(Intercept):1      145.770767   273.348348</strong>
+<strong>(Intercept):2        4.082163     4.287356</strong>
+<strong>read                 1.484198     3.911721</strong>
+<strong>math                 4.532062     7.297129</strong>
+<strong>proggeneral        -37.034931    11.605768</strong>
+<strong>progvocational     -73.007854   -19.278687</strong>
+</pre><p>剧情如下截图所示:</p><p>We may also wish to examine how well our model fits the data. One way to start is with plots of the residuals to assess their absolute as well as relative (Pearson) values and assumptions such as normality and homogeneity of variance. Use the following commands:</p><pre class="programlisting">
+<strong>    &gt; dat$yhat &lt;- fitted(m)[,1]</strong>
+<strong>    &gt; dat$rr &lt;- resid(m, type = "response")</strong>
+<strong>    &gt; dat$rp &lt;- resid(m, type = "pearson")[,1]</strong>
+<strong>    &gt; par(mfcol = c(2, 3))</strong>
+<strong>    &gt; with(dat, {</strong>
+<strong>      plot(yhat, rr, main = "Fitted vs Residuals")</strong>
+<strong>      qqnorm(rr)</strong>
+<strong>      plot(yhat, rp, main = "Fitted vs Pearson Residuals")</strong>
+<strong>      qqnorm(rp)</strong>
+<strong>      plot(apt, rp, main = "Actual vs Pearson Residuals")</strong>
+<strong>      plot(apt, yhat, main = "Actual vs Fitted")</strong>
+<strong>    })</strong>
+</pre><p>The plot is as shown in the following screenshot:</p><p>建立如下关联:</p><div><img src="img/image_02_009.jpg" alt="Step 6 - testing the model"/></div><p>结果如下:</p><p>计入的差异计算如下:</p><pre class="programlisting">
+<strong>&gt; (r &lt;- with(dat, cor(yhat, apt)))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>[1] 0.7825</strong>
+</pre><p><code class="literal">apt</code>的预测值与观测值的相关性为<code class="literal">0.7825</code>。如果我们平方这个值，我们得到多重平方相关，这表明预测值与<code class="literal">apt</code>共享61.23%的方差。</p><pre class="programlisting">
+<strong>&gt; r^2</strong>
+</pre><p><a id="ch02lvl1sec14"/>泊松回归-了解加拉帕戈斯群岛的物种</p><pre class="programlisting">
+<strong>[1] 0.6123</strong>
+</pre><p>加拉帕戈斯群岛位于太平洋，距离厄瓜多尔海岸约1000公里。该群岛由13个岛屿组成，其中5个有人居住。这些岛屿有丰富的动植物。科学家们仍然对这样一个事实感到困惑，即如此多样的物种能够在这样一个小而偏远的群岛上繁衍生息。</p></div></div></div>
+
+
+
+
+
+<title>Poisson regression - understanding species present in Galapagos Islands</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch02lvl2sec7"/>准备就绪</h1></div></div></div><p>为了完成这个食谱，我们将使用物种数据集。第一步是收集数据。</p><div><div><div><div><h2 class="title"><a id="ch02lvl3sec17"/>步骤1 -收集和描述数据</h2></div></div></div><p>我们将利用标题为<code class="literal">gala</code>的物种数据集的数量，该数据集可从<a class="ulink" href="https://github.com/burakbayramli/kod/blob/master/books/Practical_Regression_Anove_Using_R_Faraway/gala.txt">https://github . com/burakbayramli/kod/blob/master/books/Practical _ Regression _ Anove _ Using _ R _ farage/gala . txt</a>获得。</p><div><div><div><div><h3 class="title">数据集包括30个案例和数据集中的7个变量。七种数值测量包括以下内容:</h3></div></div></div><p><code class="literal">Species</code></p><p><code class="literal">Endemics</code></p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Area</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Elevation</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Nearest</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Scruz</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Adjcacent</code></li><li class="listitem" style="list-style-type: disc"><a id="ch02lvl2sec8"/>怎么做...</li><li class="listitem" style="list-style-type: disc">让我们进入细节。</li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch02lvl3sec18"/>第2步-探索数据</h2></div></div></div><p>探索这些数据将有助于了解这些关系。首先导入名为<code class="literal">gala.txt</code>的txt数据文件。我们将数据保存到gala数据框，如下所示:</p><div><div><div><div><h3 class="title"><code class="literal">regpois()</code>给出了从生态学角度来看很重要的变量的泊松回归，如下所示:</h3></div></div></div><p>接下来提供如下数据摘要:</p><pre class="programlisting">
+<strong>&gt; gala &lt;- read.table("d:/gala.txt")</strong>
+</pre><p><code class="literal">summary</code>函数将提供偏差残差、系数、<code class="literal">signif</code>代码、零偏差、残差偏差、AIC和费希尔评分迭代次数。结果如下:</p><pre class="programlisting">
+<strong>&gt; regpois &lt;- glm( Species ~ Area + Elevation + Nearest, family=poisson, data=gala)</strong>
+</pre><p>(泊松家族的分散参数取为1)</p><pre class="programlisting">
+<strong>&gt; summary(regpois)</strong>
+</pre><p>费希尔评分迭代次数:</p><pre class="programlisting">
+<strong>Deviance residuals:</strong>
+<strong>     Min          1Q      Median          3Q         Max</strong>
+<strong>-17.1900     -6.1715     -2.7125      0.7063     21.4237</strong>
+</pre><pre class="programlisting">
+<strong>Coefficients:</strong>
+<strong>                Estimate      Std. Error     z value      Pr(&gt;|z|)    </strong>
+<strong>(Intercept)    3.548e+00       3.933e-02      90.211       &lt; 2e-16 *** </strong>
+<strong>Area          -5.529e-05        1.890e-05      -2.925       0.00344 ** </strong>
+<strong>Elevation      1.588e-03        5.040e-05      31.502        &lt; 2e-16 ***</strong>
+<strong>Nearest        5.921e-03       1.466e-03      4.039          5.38e-05 ***</strong>
+<strong>---</strong>
+</pre><pre class="programlisting">
+<strong>Signif. codes:</strong>
+<strong>  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</strong>
+</pre><p>剧情如以下截图所示:</p><pre class="programlisting">
+<strong>Null deviance:</strong>
+<strong>3510.7  on 29  degrees of freedom</strong>
+</pre><pre class="programlisting">
+<strong>Residual deviance:</strong>
+<strong>1797.8  on 26  degrees of freedom</strong>
+</pre><pre class="programlisting">
+<strong>AIC:</strong>
+<strong>1966.7</strong>
+</pre><p>Number of Fisher Scoring iterations:</p><pre class="programlisting">
+<strong>5</strong>
+<strong>&gt; plot(regpois$fit,gala$Species)</strong>
+</pre><p>The plot is shown in the following screenshot:</p><p><a id="ch02lvl3sec19"/>步骤3 -绘制数据和测试经验数据</p><div><img src="img/image_02_010.jpg" alt="Step 2 - exploring the data"/></div><p><code class="literal">ppois()</code>为泊松分布函数，其中参数为<code class="literal">lambda=regpois$fit</code>，在<code class="literal">gala$Species</code>中计算如下:</p></div><div><div><div><div><h3 class="title">这些值本质上应该接近一致。通过绘制如下数值来检查均匀性:</h3></div></div></div><p>剧情结果如截图所示:</p><pre class="programlisting">
+<strong>&gt; p &lt;- ppois(gala$Species,regpois$fit)</strong>
+</pre><p>The values should be close to uniform in nature. Check the uniformity by plotting the values as follows:</p><pre class="programlisting">
+<strong>&gt; hist(p,breaks=10)</strong>
+</pre><p>The plot result is shown in the screenshot:</p><p>这个情节清楚地表明他们没有穿制服。</p><div><img src="img/image_02_011.jpg" alt="Step 3 - plotting data and testing empirical data"/></div><p>现在进行Kolmogorov-Smirnov测试，检验经验数据是否符合给定的分布。</p><p>Kolmogorov-Smirnov检验是一种拟合优度检验，它通常涉及检查来自某个未知分布的随机样本，以检验未知分布函数实际上是一个已知的指定函数的零假设。在方差分析中，我们通常使用Kolmogorov-Smirnov检验来检验正态性假设。</p><p>Kolmogorov-Smirnov检验是一种统计假设检验。我们确定一个无效假设，<img src="img/image_02_012.jpg" alt="Step 3 - plotting data and testing empirical data"/>，即我们测试的两个样本来自同一个分布。然后我们寻找证据证明这个假设应该被拒绝，并用概率来表达。如果样本来自不同分布的可能性超过置信水平，我们要求拒绝原始假设，而支持假设<img src="img/image_02_013.jpg" alt="Step 3 - plotting data and testing empirical data"/>，即两个样本来自不同分布。</p><p>为了做到这一点，我们设计了一个从样本中计算出来的单一数字，即统计量。诀窍是找到一个统计量，其值的范围不依赖于我们不知道的东西，例如在这种情况下的实际基本分布。</p><p>Kolmogorov-Smirnov检验中的检验统计非常容易；就是两个样本的经验累积分布函数之间的最大垂直距离。样本的经验累积分布是小于或等于给定值的样本值的比例。</p><p>一个样本Kolmogorov-Smirnov测试如下:</p><p>结果如下:</p><p>因此，我们可以有把握地得出结论，该模型是不充分的。</p><pre class="programlisting">
+<strong>&gt; ks.test(p,"punif")</strong>
+</pre><p><a id="ch02lvl3sec20"/>第4步——纠正泊松模型的离散化</p><pre class="programlisting">
+<strong>One-sample Kolmogorov-Smirnov test</strong>
+<strong>data:  p</strong>
+<strong>D = 0.57731, p-value = 4.134e-09</strong>
+<strong>alternative hypothesis: two-sided  </strong>
+</pre><p>现在做一个修正，因为泊松是离散的。变化如下:</p></div><div><div><div><div><h3 class="title">考虑到如下离散分布，对程序进行了修正:</h3></div></div></div><p>让我们通过绘制如下数值来检查均匀性:</p><pre class="programlisting">
+<strong>  p = 1/2*(F(Y)+F(Y-1)) </strong>
+<strong>  ; where Y are the data, </strong>
+<strong>  ; and F are the distribution functions coming from Poisson</strong>
+</pre><p>绘图结果如下图所示:</p><pre class="programlisting">
+<strong>&gt; p &lt;- 0.5*(ppois(gala$Species,regpois$fit) + ppois(gala$Species-1,regpois$fit))</strong>
+</pre><p>Let us check the uniformity by plotting the values as follows:</p><pre class="programlisting">
+<strong>&gt; hist(p,breaks=10)</strong>
+</pre><p>The plot result is shown in the following figure:</p><p>这种修正并没有太大的区别。这个情节清楚地表明他们没有穿制服。</p><div><img src="img/image_02_014.jpg" alt="Step 4 - rectifying discretization of the Poisson model"/></div><p>现在让我们再次进行Kolmogorov-Smirnov检验，以验证经验数据是否符合如下给定的分布:</p><p>结果如下:</p><p><a id="ch02lvl3sec21"/>步骤5 -使用链接函数训练和评估模型</p><pre class="programlisting">
+<strong>&gt; ks.test(p,"punif")</strong>
+</pre><p>我们将看到如何使用<code class="literal">glm( )</code>函数拟合广义线性模型，如下所示:</p><pre class="programlisting">
+<strong>    One-sample Kolmogorov-Smirnov test</strong>
+<strong>data:  p</strong>
+<strong>D = 0.58571, p-value = 2.3e-09</strong>
+<strong>alternative hypothesis: two-sided</strong>
+</pre></div><div><div><div><div><h3 class="title">让我们将<code class="literal">regpois2</code>的结果打印如下:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; regpois2 &lt;- glm( Species ~ Area + Elevation + Nearest, family=poisson(link=sqrt), data=gala)</strong>
+</pre><p><a id="ch02lvl3sec22"/>第6步-使用泊松模型进行重估</p><pre class="programlisting">
+<strong>&gt; summary(regpois2)</strong>
+</pre><p>考虑到如下离散分布，对程序进行了修正:</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>glm(formula = Species ~ Area + Elevation + Nearest, family = poisson(link = sqrt), </strong>
+<strong>    data = gala)</strong>
+<strong>Deviance Residuals: </strong>
+<strong>    Min         1Q       Median         3Q          Max  </strong>
+<strong>-19.108     -5.129     -1.335      1.846       16.918  </strong>
+<strong>Coefficients:</strong>
+<strong>                Estimate   Std. Error   z value     Pr(&gt;|z|)    </strong>
+<strong>(Intercept)    4.1764222    0.1446592    28.871    &lt; 2e-16 ***</strong>
+<strong>Area          -0.0004844    0.0001655    -2.926      0.00343 ** </strong>
+<strong>Elevation      0.0110143    0.0003372    32.664    &lt; 2e-16 ***</strong>
+<strong>Nearest        0.0083908    0.0065858     1.274      0.20264    </strong>
+<strong>---</strong>
+<strong>Signif. codes:    0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</strong>
+<strong>(Dispersion parameter for poisson family taken to be 1)</strong>
+<strong>Null deviance:   3510.7 on 29 degrees of freedom</strong>
+<strong>Residual deviance:   1377.5 on 26 degrees of freedom</strong>
+<strong>AIC: 1546.3</strong>
+<strong>Number of Fisher Scoring iterations: 5</strong>
+</pre></div><div><div><div><div><h3 class="title">通过绘制如下数值来检查均匀性:</h3></div></div></div><p>绘图结果如下图所示:</p><pre class="programlisting">
+<strong>&gt; p2 &lt;- 0.5*(ppois(gala$Species,regpois2$fit) + ppois(gala$Species-1,regpois2$fit)) </strong>
+</pre><p>Check the uniformity by plotting the values as follows:</p><pre class="programlisting">
+<strong>&gt; hist(p,breaks=10)</strong>
+</pre><p>The plot result is shown in the following figure:</p><p>再次进行Kolmogorov-Smirnov测试，以验证经验数据是否符合如下给定分布:</p><div><img src="img/image_02_015.jpg" alt="Step 6 - revaluating using the Poisson model"/></div><p>一个样本的Kolmogorov-Smirnov测试如下进行:</p><p>结果还是没有通过测试。</p><pre class="programlisting">
+<strong>&gt; ks.test(p2,"punif")</strong>
+</pre><p><a id="ch02lvl3sec23"/>第7步-使用线性模型重新评估</p><pre class="programlisting">
+<strong>data:  p2</strong>
+<strong>D = 0.47262, p-value = 3.023e-06</strong>
+<strong>alternative hypothesis: two-sided</strong>
+</pre><p>应用通常的线性模型:<code class="literal">lm()</code>函数用于拟合线性模型。可以用来进行回归、方差单层分析、协方差分析(虽然<code class="literal"> <a class="ulink" href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/aov.html">aov</a> </code>可能为这些提供了更方便的接口)。<code class="literal">reg</code>数据帧用于存储从<code class="literal">lm()</code>函数返回的结果，如下所示:</p></div><div><div><div><div><h3 class="title">现在让我们使用以下命令查看<code class="literal">reg</code>数据帧的结果:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; reg &lt;- lm(Species ~ Area+Elevation+Nearest, data=gala)</strong>
+</pre><p>现在让我们绘制reg数据帧，如下所示:</p><pre class="programlisting">
+<strong>&gt; summary(reg)</strong>
+</pre><p>下图显示了<strong>残差与拟合的</strong>图:</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>lm(formula = Species ~ Area + Elevation + Nearest, data = gala)</strong>
+<strong>Residuals:</strong>
+<strong>       Min         1Q       Median         3Q          Max </strong>
+<strong>-191.856    -33.111    -18.626      5.673      262.209 </strong>
+<strong>Coefficients:</strong>
+<strong>              Estimate   Std. Error   t value     Pr(&gt;|t|)   </strong>
+<strong>(Intercept)   16.46471     23.38884     0.704      0.48772   </strong>
+<strong>Area           0.01908      0.02676     0.713      0.48216   </strong>
+<strong>Elevation      0.17134      0.05452     3.143      0.00415 **</strong>
+<strong>Nearest        0.07123      1.06481     0.067      0.94718   </strong>
+<strong>---</strong>
+<strong>Signif. codes:    0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</strong>
+<strong>Residual standard error:   80.84 on 26 degrees of freedom</strong>
+<strong>Multiple R-squared:      0.5541,  Adjusted R-squared:  0.5027 </strong>
+<strong>F-statistic:       10.77 on 3 and 26 DF,  p-value: 8.817e-05</strong>
+</pre><p>Now let us plot the reg data frame as follows:</p><pre class="programlisting">
+<strong>&gt; plot(reg)</strong>
+</pre><p>The <strong>Residuals vs Fitted</strong> plot is shown in the folllowing figure:</p><p>正常Q-Q线性模型图如下图所示:</p><div><img src="img/image_02_016.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The Normal Q-Q linear model plot is shown in the following screenshot:</p><p><strong>刻度位置</strong>线性模型图如下图所示:</p><div><img src="img/image_02_017.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The <strong>Scale-Location</strong> linear model plot is shown in the following figure:</p><p>现在让我们通过使用下面的平方根函数来应用一个变换。<code class="literal">reg2</code>数据帧用于存储<code class="literal">lm</code>函数返回的结果:</p><div><img src="img/image_02_018.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>现在让我们来看看<code class="literal">reg</code>数据帧的结果，如下所示:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; reg2 &lt;- lm(sqrt(Species) ~ Area+Elevation+Nearest, data=gala)</strong>
+</pre><p>现在让我们绘制如下<code class="literal">reg2</code>数据帧:</p><pre class="programlisting">
+<strong>&gt; summary(reg2)</strong>
+</pre><p><strong>残差与拟合</strong>曲线如下图所示:</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>lm(formula = sqrt(Species) ~ Area + Elevation + Nearest, data = gala)</strong>
+<strong>Residuals:</strong>
+<strong>      Min          1Q      Median        3Q         Max </strong>
+<strong>-8.8057   -2.1775   -0.2086    1.3943    8.8730 </strong>
+<strong>Coefficients:</strong>
+<strong>                Estimate   Std. Error   t value     Pr(&gt;|t|)    </strong>
+<strong>(Intercept)    3.744e+00    1.072e+00     3.492     0.001729 ** </strong>
+<strong>Area          -2.253e-05    1.227e-03    -0.018     0.985485    </strong>
+<strong>Elevation      9.795e-03    2.499e-03     3.920 0.  000576 ***</strong>
+<strong>Nearest        2.002e-02    4.880e-02     0.410     0.685062    </strong>
+<strong>---</strong>
+<strong>Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</strong>
+<strong>Residual standard error:   3.705 on 26 degrees of freedom</strong>
+<strong>Multiple R-squared:    0.5799,  Adjusted R-squared:  0.5315 </strong>
+<strong>F-statistic:     11.96 on 3 and 26 DF,  p-value: 4.144e-05</strong>
+</pre><p>Now let us plot the <code class="literal">reg2</code> data frame as follows:</p><pre class="programlisting">
+<strong>&gt; plot(reg2)</strong>
+</pre><p>The <strong>Residual vs Fitted</strong> plot is shown in the following figure:</p><p><strong>正常Q-Q </strong>线性模型图如下图所示:</p><div><img src="img/image_02_019.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The <strong>Normal Q-Q</strong> linear model plot is shown in the following figure:</p><p>泊松回归<strong>比例-位置</strong>线性模型图如以下截图所示:</p><div><img src="img/image_02_020.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The Poisson regression  <strong>Scale-Location</strong> linear model plot is shown in the following screenshot:</p><p><strong>刻度位置</strong>线性模型图如下图所示:</p><div><img src="img/image_02_021.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The <strong>Scale-Location</strong> linear model plot is shown in the following figure:</p><p>让我们进行夏皮罗试验。给定一个样本X1，.。。，n个实值观测值的Xn，夏皮罗-维尔克检验(夏皮罗和维尔克，1965年)是对数据是同分布的复合假设的检验。(<strong>独立同分布</strong>)和正态，即N(，σ2)对于某未知实数和某σ &gt; 0。使用以下命令:</p><div><img src="img/image_02_022.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>结果如下:</p><p>现在让我们通过使用log函数来应用一个转换，如下所示。</p><pre class="programlisting">
+<strong>&gt; shapiro.test(reg2$res)</strong>
+</pre><p><code class="literal">reg3</code>数据帧用于存储从<code class="literal">lm()</code>函数返回的结果，如下所示:</p><pre class="programlisting">
+<strong>Shapiro-Wilk normality test</strong>
+<strong>data:  reg2$res</strong>
+<strong>W = 0.9633, p-value = 0.375</strong>
+</pre><p>现在让我们来看看<code class="literal">reg3</code>数据帧的结果，如下所示:</p><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; reg3 &lt;- lm(log(Species) ~ Area+Elevation+Nearest, data=gala)</strong>
+</pre><p>现在让我们绘制如下<code class="literal">reg3</code>数据帧:</p><pre class="programlisting">
+<strong>&gt; summary(reg3)</strong>
+</pre><p>下图显示了<strong>残差与拟合的</strong>图:</p><pre class="programlisting">
+<strong>Call:</strong>
+<strong>lm(formula = log(Species) ~ Area + Elevation + Nearest, data = gala)</strong>
+<strong>Residuals:  </strong>
+<strong>      Min        1Q      Median        3Q         Max </strong>
+<strong>-2.0739   -0.5161    0.3307    0.7472    1.6271 </strong>
+<strong>Coefficients:</strong>
+<strong>                Estimate   Std. Error   t value     Pr(&gt;|t|)    </strong>
+<strong>(Intercept)    2.3724325    0.3448586     6.879     2.65e-07 ***</strong>
+<strong>Area          -0.0002687    0.0003946    -0.681    0.50197    </strong>
+<strong>Elevation      0.0029096    0.0008039     3.620      0.00125 ** </strong>
+<strong>Nearest        0.0133869    0.0157001     0.853      0.40163    </strong>
+<strong>---</strong>
+<strong>Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</strong>
+<strong>Residual standard error:   1.192 on 26 degrees of freedom</strong>
+<strong>Multiple R-squared:      0.4789,  Adjusted R-squared:  0.4187 </strong>
+<strong>F-statistic:       7.964 on 3 and 26 DF,  p-value: 0.0006281</strong>
+</pre><p>Now let us plot the <code class="literal">reg3</code> data frame as follows:</p><pre class="programlisting">
+<strong>&gt; plot(reg3)</strong>
+</pre><p>The <strong>Residuals vs Fitted</strong> plot is shown in the following figure:</p><p>正常Q-Q线性模型图如下图所示:</p><div><img src="img/image_02_023.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The Normal Q-Q linear model plot is shown in the following figure:</p><p><strong>刻度位置</strong>线性模型图如下图所示:</p><div><img src="img/image_02_024.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>
+</p><p>The <strong>Scale-Location</strong> linear model plot is shown in the following figure:</p><p>让我们进行如下夏皮罗检验:</p><div><img src="img/image_02_025.jpg" alt="Step 7 - revaluating using the linear model"/></div><p>结果是:</p><p>Let us carry out a Shapiro test as follows:</p><pre class="programlisting">
+<strong>&gt; shapiro.test(reg3$res)</strong>
+</pre><p>The result is:</p><pre class="programlisting">
+<strong>Shapiro-Wilk normality test</strong>
+<strong>data:  reg3$res</strong>
+<strong>W = 0.91925, p-value = 0.02565</strong>
+</pre></div></div></div>
+</body></html>

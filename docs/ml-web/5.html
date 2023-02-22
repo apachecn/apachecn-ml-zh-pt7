@@ -1,0 +1,299 @@
+<html><head/><body>
+
+
+
+<title>Chapter 5. Recommendation Systems</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05"/>第五章。推荐系统</h1></div></div></div><p>每当用户面对大量他们无法在合理的时间框架内评估的产品或服务时，推荐系统就会找到其自然的应用。这些引擎是电子商务业务的重要组成部分，因为它们帮助web上的客户在与最终用户无关的大量候选商品中决定购买或选择合适的商品。典型的例子是亚马逊、网飞、易贝和Google Play商店，它们使用用户收集的历史数据向每个用户推荐他们可能喜欢购买的商品。在过去的20年里，已经开发出了不同的技术，我们将把重点放在迄今为止行业中使用的最重要的(和使用的)方法上，详细说明这些方法各自的优点和<a id="id414" class="indexterm"/>缺点。推荐系统分为<strong>基于内容的过滤</strong> ( <strong> CBF </strong>)和<strong>协同过滤</strong> ( <strong> CF </strong>)技术<a id="id415" class="indexterm"/>和其他不同的方法(关联规则、对数似然法和混合方法)将与评估其准确性的不同方法一起讨论。方法<a id="id416" class="indexterm"/>将在MovieLens数据库(来自<a class="ulink" href="http://grouplens.org/datasets/movielens/">http://grouplens.org/datasets/movielens/</a>)上进行测试，该数据库由943名用户对1682部电影的100000个电影评级(1到5个值)组成。每个用户至少有20个评级，每部电影都有一个它所属的流派列表。像往常一样，本章中显示的所有代码都可以在<code class="literal">rec_sys_methods.ipynb</code>文件中的<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_5">https://github . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 5</a>中找到。</p><p>我们将首先介绍用于排列推荐系统所采用的数据集的主矩阵，以及在开始讨论以下部分中的算法之前通常使用的度量标准。</p><div><div><div><div><h1 class="title"><a id="ch05lvl1sec30"/>效用矩阵</h1></div></div></div><p>推荐系统中使用的数据<a id="id417" class="indexterm"/>分为两类:用户和项目。每个用户喜欢某些物品，评分值<em> r <sub> ij </sub> </em>(从1到5)是与每个用户<em> i </em>和物品<em> j </em>相关联的数据，代表用户对物品的欣赏程度。这些评分值被收集在称为效用矩阵<em> R </em>的矩阵中，其中每一行<em> i </em>代表用户<em> i </em>的评分项目列表，而每一列<em> j </em>列出所有对项目<em> j </em>进行评分的用户。在我们的例子中，数据文件夹<code class="literal">ml-100k</code>包含一个名为<code class="literal">u.data</code>的文件(还有一个名为<code class="literal">u.item</code>的电影标题列表)，它已经被以下脚本转换成一个熊猫数据帧(并保存到一个<code class="literal">csv, utilitymatrix.csv</code>):</p><div><img src="img/B05143_05_01.jpg" alt="Utility matrix"/></div><p>前两行的输出如下:</p><div><img src="img/B05143_05_02.jpg" alt="Utility matrix"/></div><p>除了第一个列名(即用户id)之外，每个列名都定义了电影名称<a id="id419" class="indexterm"/>和电影在MovieLens数据库中的ID(用分号分隔)。<code class="literal">0</code>值代表缺失的值，我们希望有大量的缺失值，因为用户评价的电影远远少于1600部。请注意，评级低于50的电影已从效用矩阵中删除，因此列数为604 (603部评级超过50次的电影)。推荐系统的目标是预测这些值，但是为了使一些技术正常工作，我们有必要首先设置这些值(插补)。通常使用两种插补方法:每个用户的平均评分或每个项目的平均评分，这两种方法都在以下函数中实现:</p><div><img src="img/B05143_05_03.jpg" alt="Utility matrix"/></div><p>本章实现的很多算法都会调用这个函数，所以我们决定在这里讨论一下，作为以后使用的参考。此外，在这一章中，效用矩阵<em> R </em>将具有维度<em> N </em> × <em> M </em>以及<em> N </em>个用户和<em> M </em>个项目。由于不同算法反复使用相似性度量，我们将在下文中定义最常用的定义。</p></div></div>
+
+
+
+
+
+<title>Similarities measures</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec31"/>相似性度量</h1></div></div></div><p>为了<a id="id420" class="indexterm"/>计算两个不同的<a id="id421" class="indexterm"/>向量<em> x </em>和<em> y </em>之间的相似性<em> s </em>，这两个向量可以是用户(效用矩阵的行)或项目(效用矩阵的列)，通常使用两个度量:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">余弦相似度:<img src="img/B05143_05_28.jpg" alt="Similarities measures"/></li><li class="listitem" style="list-style-type: disc">皮尔逊相关:<img src="img/B05143_05_29.jpg" alt="Similarities measures"/>，其中<em> x </em>和<em> y </em>是两个向量的<a id="id422" class="indexterm"/>平均值。</li></ul></div><p>注意<a id="id423" class="indexterm"/>如果平均值为0，这两个度量是一致的。我们现在可以开始讨论不同的算法，从CF类别开始。以下<code class="literal">sim()</code>函数将用于评估两个向量之间的相似性:</p><div><img src="img/B05143_05_04.jpg" alt="Similarities measures"/></div><p><code class="literal">SciPy</code>库已经被用来计算两个相似性(注意余弦scipy定义与之前定义的相反，所以值从1中减去)。</p></div>
+
+
+
+
+
+<title>Collaborative Filtering methods</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec32"/>协同过滤方法</h1></div></div></div><p>这类<a id="id424" class="indexterm"/>方法是基于这样的想法:任何用户都会喜欢与他们相似的其他用户所欣赏的项目。简而言之，基本假设是，与用户<em> B </em>相似的用户<em> A </em>可能会像<em> B </em>那样对一个项目进行评级，而不是以另一种方式。在实践中，通过比较不同用户的喜好并使用最相似的用户喜好(基于记忆)推断给定用户的未来评级，或者通过从用户喜欢的事物中提取一些评级模式(基于模型)并尝试按照这些模式预测未来评级，来实现这一概念。所有这些方法都需要大量的数据才能工作，因为给定用户的推荐依赖于在数据中可以找到多少相似的用户。这个问题<a id="id425" class="indexterm"/>被称为<strong>冷启动</strong>并且在文献中被很好地研究，文献通常建议使用CF和CBF之间的某种混合方法来克服这个问题。在我们的MovieLens数据库示例中，我们假设我们有足够的数据来避免冷启动问题。CF算法的其他常见问题是可扩展性，因为计算随着用户和产品数量的增加而增加(可能需要一些并行化技术)，以及<a id="id426" class="indexterm"/>效用矩阵的稀疏性，因为任何用户通常评价的项目数量很少(插补通常是处理问题的一种尝试)。</p><div><div><div><div><h2 class="title"><a id="ch05lvl2sec32"/>基于记忆的协同过滤</h2></div></div></div><p>这个<a id="id427" class="indexterm"/>子类<a id="id428" class="indexterm"/>使用效用矩阵来计算用户或项目之间的相似性。这些方法受到可扩展性和冷启动问题的困扰，但是当它们被应用于一个或大或小的效用矩阵时，它们目前被用在许多商业系统中。我们将在下文中讨论基于用户的协同过滤和网络化协同过滤。</p><div><div><div><div><h3 class="title"><a id="ch05lvl3sec28"/>基于用户的协同过滤</h3></div></div></div><p><a id="id429" class="indexterm"/>方法使用一种<code class="literal">k-NN</code>方法(参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第3章</a>、<em>监督机器学习</em>)来查找其过去评分与所选用户的评分相似的用户，以便可以将他们的评分合并为一个加权平均值，从而返回当前用户缺失的评分。</p><p>算法如下:</p><p>对于任何给定的用户<em> i </em>和尚未评级的项目<em> j </em>:</p><div><ol class="orderedlist arabic"><li class="listitem">使用相似性度量<em> s </em>找到具有评级<em> j </em>的最相似用户<em> K </em>。</li><li class="listitem">计算尚未被<em> i </em>评价的每个项目<em> j </em>的预测评价，作为用户<em> K </em> : <div> <img src="img/B05143_05_30.jpg" alt="User-based Collaborative Filtering"/> </div>评价的加权平均值</li></ol></div><p>这里<img src="img/B05143_05_31.jpg" alt="User-based Collaborative Filtering"/>是用户<em> i </em>和<em> k </em>的平均评分，以补偿主观判断(一些用户慷慨，一些用户挑剔)<em> s(i </em>，<em> k) </em>是相似性度量，如前一段所见。请注意，我们甚至可以通过每个用户的评分分布进行标准化，以比较更相似的评分:</p><div><img src="img/B05143_05_32.jpg" alt="User-based Collaborative Filtering"/></div><p>这里σ <sub> i </sub>和σ <sub> k </sub>是用户<em> i </em>和<em> k </em>的评分标准差。</p><p>该算法具有作为输入参数的邻居数量<em> K </em>，但是在大多数应用中，通常在<code class="literal">20</code>和<code class="literal">50</code>之间的值<a id="id430" class="indexterm"/>就足够了。已经发现皮尔逊相关<a id="id431" class="indexterm"/>比余弦相似度返回<a id="id432" class="indexterm"/>更好的结果，这可能是因为减去用户评级意味着相关公式使用户更具可比性。以下代码用于预测每个用户的缺失评级。</p><p><code class="literal">u_vec</code>代表用户评价值，函数<code class="literal">FindKNeighbours</code>从这些值中找到最相似的其他用户<em> K </em>。<code class="literal">CalcRating</code>仅使用之前讨论的公式计算预测评级(没有扩展校正)。注意，在效用矩阵如此稀疏以至于没有找到邻居的情况下，预测用户的平均评级。预测评级可能会超出<code class="literal">5</code>或低于<code class="literal">1</code>，因此在这种情况下，预测评级会分别设置为<code class="literal">5</code>或<code class="literal">1</code>。</p><div><img src="img/B05143_05_05.jpg" alt="User-based Collaborative Filtering"/></div></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec29"/>基于项目的协同过滤</h3></div></div></div><p>这种<a id="id433" class="indexterm"/>方法在概念上与基于用户的CF相同，只是相似性是根据项目而不是用户来计算的。由于大多数时候用户的数量可能会比项目的数量大得多，这种方法提供了一种更具可扩展性的推荐系统，因为项目的相似性可以预先计算，并且当新用户到来时它们不会改变太多(如果用户数量<em> N </em>非常大)。</p><p>每个用户<em> i </em>和项目<em> j </em>的算法如下:</p><div><ol class="orderedlist arabic"><li class="listitem">使用<em> i </em>已经评定的相似性度量<em> s </em>找到<em> K </em>最相似的项目。</li><li class="listitem">计算预测评分作为<em> K </em>项:<div> <img src="img/B05143_05_33.jpg" alt="Item-based Collaborative Filtering"/> </div>评分的加权平均值</li></ol></div><p>注意<a id="id434" class="indexterm"/>相似性度量可能具有负值，因此我们需要将总和限制为只有正的相似性，以便具有有意义的(即正的)<em> P <sub> ij </sub> </em>(如果我们只对要推荐的最佳项目而不是评级感兴趣，项目的相对顺序无论如何都是正确的)。即使在这种情况下，在大多数应用中，<code class="literal">20</code>和<code class="literal">50</code>之间的<em> K </em>值通常是合适的。</p><p>该算法是使用类实现的，如下所示:</p><div><img src="img/B05143_05_06.jpg" alt="Item-based Collaborative Filtering"/></div><p>类<code class="literal">CF_itembased</code>的构造器计算项目相似性矩阵<code class="literal">simmatrix</code> <a id="id435" class="indexterm"/>以在任何时候使用，我们希望通过函数<code class="literal">CalcRatings</code>为用户评估缺失评分。函数<code class="literal">GetKSimItemsperUser</code>找到<em> K </em>:与所选用户(由<code class="literal">u_vec</code>给出)最相似的用户，并且<code class="literal">CalcRating</code>仅实现前面讨论的加权平均评级计算。请注意，如果找不到邻居，等级将设置为平均值或该项目的等级。</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec30"/>最简单的基于项目的协同过滤——slope one</h3></div></div></div><p>可以使用一种非常简单但有效的方法来代替使用前面讨论的度量来计算相似性。我们可以计算一个矩阵<em> D </em>，其中每个条目<em>D<sub>ij</sub>T43】是项目<em> i </em>和<em> j </em>的评级之间的平均差:</em></p><div><img src="img/B05143_05_34.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/></div><p>这里，<img src="img/B05143_05_35.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/>是一个变量，如果用户<em> k </em>对<em> i </em>和<em> j </em>项目都进行了评价，那么<img src="img/B05143_05_36.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/>就是对<em> i </em>和<em> j </em>项目都进行了评价的用户数。</p><p>那么该算法如在<em>基于项目的协同过滤</em>部分中所解释的。对于每个用户<em> i </em>和项目<em> j </em>:</p><div><ol class="orderedlist arabic"><li class="listitem">找出与<em> j </em>、<img src="img/B05143_05_37.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/>差异最小的<em> K </em>项(<code class="literal">*</code>表示可能的索引值，但为了简单起见，我们将其从<code class="literal">1</code>重新标记为<em> K </em>)。</li><li class="listitem">将预测评分计算为加权平均值:<div> <img src="img/B05143_05_38.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/> </div></li></ol></div><p>虽然这种算法比其他CF算法简单得多，但它通常与它们的<a id="id437" class="indexterm"/>精度相当，计算成本较低，并且易于实现。该实现非常类似于用于基于项目的CF的类:</p><div><img src="img/B05143_05_07.jpg" alt="Simplest item-based Collaborative Filtering – slope one"/></div><p>唯一的区别是矩阵:现在<code class="literal">difmatrix</code>用于计算<a id="id438" class="indexterm"/>项<em> i </em>、<em> j </em>之间的差异<em> d(i </em>、<em> j) </em>，如前所述，函数<code class="literal">GetKSimItemsperUser</code>现在寻找最小的<code class="literal">difmatrix</code>值来确定<em> K </em>最近邻居。因为有可能(尽管不太可能)两个项目没有被至少一个用户评级，<code class="literal">difmatrix</code>可以具有未定义的值，这些值被默认设置为<code class="literal">1000</code>。请注意，预测额定值也可能超过<code class="literal">5</code>或低于<code class="literal">1</code>，因此在这种情况下，预测额定值必须适当设置为<code class="literal">5</code>或<code class="literal">1</code>。</p></div></div><div><div><div><div><h2 class="title"><a id="ch05lvl2sec33"/>基于模型的协同过滤</h2></div></div></div><p>这种<a id="id439" class="indexterm"/>类方法使用效用矩阵来生成模型，以提取用户如何对项目进行评级的模式。模式模型返回预测的评级，填充或近似原始矩阵(矩阵分解)。文献中已经研究了各种模型<a id="id440" class="indexterm"/>，我们将讨论特定的<em>矩阵分解</em>算法——奇异值分解 ( <strong> SVD </strong>，也具有期望值最大化)、交替最小二乘 ( <strong> ALS </strong>)、随机梯度下降<strong/>(<strong>SGD</strong>，以及一般的<strong>非负矩阵分解</strong> ( 【T58</p><div><div><div><div><h3 class="title"><a id="ch05lvl3sec31"/>备选最小二乘法(ALS)</h3></div></div></div><p>这是<a id="id441" class="indexterm"/>分解矩阵<em> R </em>最简单的<a id="id442" class="indexterm"/>方法。每个用户和每个项目可以在维度为K的特征空间中表示，从而:</p><div><img src="img/B05143_05_39.jpg" alt="Alternative least square (ALS)"/></div><p>这里，<em> P N×K </em>是用户在特征空间的新矩阵，<em> Q M×K </em>是项目在同一空间的投影。因此问题被简化为最小化一个正则化的成本函数<em> J </em>:</p><div><img src="img/B05143_05_40.jpg" alt="Alternative least square (ALS)"/></div><p>这里，λ是正则化参数，它有助于通过惩罚学习参数来避免过拟合，并确保向量<em> p <sub> i </sub> </em>和<em><sub>q</sub><sup>T</sup><sub>j</sub></em>的幅度不会太大。<a id="id443" class="indexterm"/>矩阵条目<em> Mc <sub> ij </sub> </em>是检查用户<em> i </em>和项目<em> j </em>对是否实际评分所需的<a id="id444" class="indexterm"/>，所以<em> Mc <sub> ij </sub> </em>如果<em> r <sub> ij </sub> &gt; 0 </em>为<code class="literal">1</code>，否则为<code class="literal">0</code>。对于每个用户向量<em>p<sub>I</sub>T49】和项目向量<em>q<sub>J</sub>T53】设置<em> J </em>到<code class="literal">0</code>的导数，我们得到以下两个等式:</em></em></p><div><img src="img/B05143_05_41.jpg" alt="Alternative least square (ALS)"/></div><div><img src="img/B05143_05_42.jpg" alt="Alternative least square (ALS)"/></div><p>此处<em>R<sub>I</sub>T57】和<em>Mc<sub>I</sub>T61】指矩阵<em> R </em>和<em> Mc </em>的行<em> i </em>和<em>R<sub>j</sub>T71】和<em>Mc<sub>j</sub>T75】指交替固定矩阵<em> P </em>、<em> Q </em>，可以使用最小二乘法直接求解前面的方程，以下函数在Python中实现ALS算法:</em></em></em></em></p><div><img src="img/B05143_05_08.jpg" alt="Alternative least square (ALS)"/></div><p>矩阵<em> Mc </em>被称为<code class="literal">mask</code>，变量<code class="literal">l</code>代表正则化参数λ，默认设置为<code class="literal">0.001</code>，最小二乘问题已经使用<code class="literal">Numpy</code>库的<code class="literal">linalg.solve</code>函数解决。这种方法通常不如<strong>随机梯度下降</strong> ( <strong> SGD </strong>)和<strong>奇异值分解</strong> ( <strong> SVD </strong>)(参见以下章节)精确，但它非常容易实现，并且易于并行化(因此它可以很快)。</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec32"/>随机梯度下降法</h3></div></div></div><p>这个<a id="id445" class="indexterm"/>方法<a id="id446" class="indexterm"/>也属于矩阵分解子类，因为它依赖于效用矩阵<em> R </em>的近似，如下所示:</p><div><img src="img/B05143_05_43.jpg" alt="Stochastic gradient descent (SGD)"/></div><p>这里，矩阵<em> P(N×K) </em>和<em> Q(M×K) </em>表示在一个<em> K </em>维的潜在特征空间中的用户和项目。每个近似额定值<img src="img/B05143_05_44.jpg" alt="Stochastic gradient descent (SGD)"/>可表示如下:</p><div><img src="img/B05143_05_45.jpg" alt="Stochastic gradient descent (SGD)"/></div><p>找到矩阵<img src="img/B05143_05_46.jpg" alt="Stochastic gradient descent (SGD)"/>，用ALS方法解决正则化平方误差的最小化问题<em> e <sup> 2 </sup> <sub> ij </sub> </em>(代价函数<em> J </em>如<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第3章</a>，<em>监督机器学习</em>):</p><div><img src="img/B05143_05_47.jpg" alt="Stochastic gradient descent (SGD)"/></div><p>这个最小化问题是使用梯度下降法解决的(参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第3章</a>、<em>监督机器学习</em>):</p><div><img src="img/B05143_05_48.jpg" alt="Stochastic gradient descent (SGD)"/></div><div><img src="img/B05143_05_49.jpg" alt="Stochastic gradient descent (SGD)"/></div><p>这里，α是学习率(参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第三章</a>、<em>监督机器学习</em>、<img src="img/B05143_05_50.jpg" alt="Stochastic gradient descent (SGD)"/>)。该技术发现<em> R </em>在前面两个方程之间交替(固定<em>q<sub>kj</sub>T33】并求解<em>P<sub>ik</sub>T37】，反之亦然)直到收敛。SGD通常比SVD更容易并行化(因此速度更快)(参见下一节),但在寻找<a id="id447" class="indexterm"/>良好的<a id="id448" class="indexterm"/>评级方面不太精确。以下脚本给出了该方法在Python中的实现:</em></em></p><div><img src="img/B05143_05_09.jpg" alt="Stochastic gradient descent (SGD)"/></div><p>该SGD函数具有默认参数，即学习率<em> α = 0.0001 </em>，正则化参数<em> λ = l =0.001 </em>，最大迭代次数<code class="literal">1000</code>，收敛容差<code class="literal">tol = 0.001</code>。还要注意的是，计算中不考虑未评级的项目(<code class="literal">0</code>评级值)，因此使用该方法时不需要初始填充(插补)。</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec33"/>非负矩阵分解(NMF)</h3></div></div></div><p>这个<a id="id449" class="indexterm"/>是将矩阵<em> R </em>再次分解为两个矩阵<em>P</em>(<em>N</em>×<em>K</em>)和<em>Q</em>(<em>M</em>×<em>K</em>)(其中<em> K </em>是特征空间的一个维度)的一组方法，但是<a id="id450" class="indexterm"/>要求它们的元素一般的最小化问题如下:</p><div><img src="img/B05143_05_51.jpg" alt="Non-negative matrix factorization (NMF)"/></div><p>这里，α是定义使用哪个正则化项的参数(<code class="literal">0</code>平方、<code class="literal">1</code>套索正则化或它们的混合)，λ是正则化参数。已经开发了几种技术来解决这个问题，例如投影梯度、坐标下降和非负约束最小二乘法。讨论这些技术的细节已经超出了本书的范围，但是我们将使用在<code class="literal">sklearn NFM</code>中实现的坐标下降方法，该方法包含在以下函数中:</p><div><img src="img/B05143_05_10.jpg" alt="Non-negative matrix factorization (NMF)"/></div><p>注意，可以在实际因式分解发生之前进行插补，函数<code class="literal">fit_transform</code>返回<em> P </em>矩阵，而<em> Q <sup> T </sup> </em>矩阵存储在<code class="literal">nmf.components_</code>对象中。默认情况下，<em> α </em>值假定为<code class="literal">0</code>(平方正则化)<em> λ = l =0.01 </em>。由于效用矩阵具有正值(评级)，这类方法当然非常适合预测这些值。</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec34"/>奇异值分解</h3></div></div></div><p>我们已经在<a class="link" href="ch02.html" title="Chapter 2. Unsupervised Machine Learning">第2章</a>、<em>无监督机器学习</em>中<a id="id451" class="indexterm"/>讨论了这种算法，作为一种降维技术，通过分解成矩阵<em> U </em>、【σ】、<em> V </em>来近似一个矩阵(更多技术细节，您应该阅读<a class="link" href="ch02.html" title="Chapter 2. Unsupervised Machine Learning">第2章</a>、<em>无监督机器学习</em>中的相关章节)。在这种情况下，使用奇异值分解<a id="id453" class="indexterm"/>作为矩阵分解技术，但是需要一种插补方法来初步估计<a id="id454" class="indexterm"/>每个用户的缺失数据；通常，使用每个效用矩阵行(或列)的平均值或两者的组合(而不是保留零值)。除了直接将SVD应用于效用矩阵之外，从矩阵<img src="img/B05143_05_52.jpg" alt="Singular value decomposition (SVD)"/>开始，可以如下使用利用期望最大化的另一种算法(参见<a class="link" href="ch02.html" title="Chapter 2. Unsupervised Machine Learning">第2章</a>、<em>无监督机器学习</em>):</p><div><ol class="orderedlist arabic"><li class="listitem"><strong> m步</strong>:执行<img src="img/B05143_05_53.jpg" alt="Singular value decomposition (SVD)"/></li><li class="listitem"><strong>电子步骤</strong> : <img src="img/B05143_05_54.jpg" alt="Singular value decomposition (SVD)"/></li></ol></div><p>重复该程序，直到误差平方和<img src="img/B05143_05_55.jpg" alt="Singular value decomposition (SVD)"/>小于选定的公差。实现该算法和简单SVD分解的代码如下:</p><div><img src="img/B05143_05_11.jpg" alt="Singular value decomposition (SVD)"/></div><p>请注意，SVD由<code class="literal">sklearn</code>库给出，两种插补平均方法(用户评分‘平均’和项目评分‘平均’)均已实施，尽管函数<a id="id455" class="indexterm"/>默认<a id="id456" class="indexterm"/>为<em>无</em>，这意味着零值仍为初始值。对于期望最大化SVD，其他默认参数是收敛容差(0.0001)和最大迭代次数(10，000)。这种方法(尤其是使用期望值最大化的方法)比ALS慢，但准确性通常更高。还要注意，SVD方法分解效用矩阵减去用户评级的平均值，因为这种方法通常执行得更好(在SVD矩阵被计算之后，用户评级的平均值被加上)。</p><p>我们最后指出，SVD因式分解也可以在基于内存的CF中使用，以在缩减的空间(矩阵<em> U </em>或<em>V<sup>T</sup>T16】)中比较用户或项目，然后从原始效用矩阵(SVD与k-NN方法)中获取评级。</em></p></div></div></div>
+
+
+
+
+
+<title>CBF methods</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec33"/> CBF战法</h1></div></div></div><p>这个<a id="id457" class="indexterm"/>类方法依赖于描述项目的数据，这些数据然后被用来提取用户的特征。在我们的MovieLens示例中，每部电影<em> j </em>都有一组<em> G </em>二进制字段来表示它是否属于以下类型之一:未知、动作、冒险、动画、儿童、喜剧、犯罪、纪录片、戏剧、奇幻、黑色电影、恐怖、音乐、神秘、浪漫、科幻、惊悚、战争或西部。</p><p>基于这些特征(类型)，每部电影都由一个二进制向量<em>m<sub>j</sub>T26】来描述，该向量具有<em> G </em>维度(电影类型的数量)，对于电影<em> j </em>中包含的所有类型，其条目等于<code class="literal">1</code>，否则为<code class="literal">0</code>。给定前面提到的<em>效用矩阵</em>部分中存储了名为<code class="literal">dfout</code>的效用矩阵的<code class="literal">dataframe</code>，使用以下脚本将这些二进制向量<em>m<sub>j</sub>T36】从movie lens<code class="literal">database</code>收集到一个数据帧中:</em></em></p><div><img src="img/B05143_05_12.jpg" alt="CBF methods"/></div><p>电影内容矩阵已保存在<code class="literal">movies_content.csv</code>文件中，可供CBF方法使用。</p><p>基于内容的推荐系统的目标是生成具有相同字段的用户简档，以指示用户喜欢每个流派的程度。这种方法的问题是，商品的内容描述并不总是可用的，因此在电子商务环境中并不总是可能采用这种技术。优点是对特定用户的推荐独立于其他用户的评级，因此它不会遭受由于特定项目的用户评级数量不足而导致的冷启动问题。我们将讨论两种方法来寻找最佳的推荐方法。第一种方法简单地生成与每个用户观看的电影对每个流派的平均评级相关联的用户简档，并且余弦相似性被用于找到与用户偏好最相似的电影。第二种方法是正则化的线性回归模型，以从评级和电影特征中生成用户的简档特征，从而可以使用这些用户简档来预测每个用户尚未观看的电影的评级。</p><div><div><div><div><h2 class="title"><a id="ch05lvl2sec34"/>项目特征平均法</h2></div></div></div><p><a id="id458" class="indexterm"/>方法非常简单，我们将使用MovieLens示例中描述电影的特性来解释它，如前所述。该方法的目的是为每个用户<em> i </em>(长度等于<em> G </em>)生成电影流派的偏好向量<img src="img/B05143_05_56.jpg" alt="Item features average method"/>。这是通过计算平均评级<img src="img/B05143_05_58.jpg" alt="Item features average method"/>和每个流派条目<em> g </em>来完成的；<img src="img/B05143_05_57.jpg" alt="Item features average method"/>由包含类型<em> g </em>的用户<em> i </em> ( <em> Mi </em>)观看的电影的评级总和减去平均值<img src="img/B05143_05_58.jpg" alt="Item features average method"/>并除以包含类型<em> g </em>的电影的数量给出:</p><div><img src="img/B05143_05_59.jpg" alt="Item features average method"/></div><p>这里，<em>I<sub>kg</sub>T24】如果电影<em> k </em>包含流派<em> g </em>则为1；否则就是<code class="literal">0</code>。</em></p><p>然后使用余弦相似度将向量<img src="img/B05143_05_60.jpg" alt="Item features average method"/>与二进制向量m <em> j </em>进行比较，并且将具有最高相似度值的电影推荐给用户<em> i </em>。方法的实现由以下Python类给出:</p><div><img src="img/B05143_05_13.jpg" alt="Item features average method"/></div><p><a id="id459" class="indexterm"/>构造函数在<code class="literal">Movieslist</code>中存储电影标题列表，在<code class="literal">Movies</code>向量中存储电影特征，<code class="literal">GetRecMovies</code>函数生成用户风格偏好向量，即<img src="img/B05143_05_60.jpg" alt="Item features average method"/>(应用前面的公式)称为<code class="literal">features_u</code>，并返回与该向量最相似的项目。</p></div><div><div><div><div><h2 class="title"><a id="ch05lvl2sec35"/>正则化线性回归方法</h2></div></div></div><p>方法<a id="id460" class="indexterm"/>将用户的电影偏好作为线性模型的参数<img src="img/B05143_05_61.jpg" alt="Regularized linear regression method"/>进行学习，其中<img src="img/B05143_05_62.jpg" alt="Regularized linear regression method"/>为用户数量<em> N </em>和<em> G </em>为每个项目的特征(电影类型)数量。我们在用户参数<em>θ<sub>I</sub>(θ<sub>i0</sub>= 1</em>)上添加一个截距值，并且还添加具有相同值<em> m <sub> j0 </sub> =1 </em>的电影向量<em> m <sub> j </sub> </em>，以此类推<img src="img/B05143_05_63.jpg" alt="Regularized linear regression method"/>。为了学习参数q <em> <sub> i </sub> </em>的向量，我们解决下面的正则化最小化问题:</p><div><img src="img/B05143_05_64.jpg" alt="Regularized linear regression method"/></div><p>这里，<em>I<sub>ij</sub>T39】是<code class="literal">1</code>；即用户<em> i </em>看了电影，否则<em> j </em>为<code class="literal">0</code>，λ为正则化参数(见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第三章</a>，<em>监督机器学习</em>)。</em></p><p>通过应用梯度下降给出<a id="id461" class="indexterm"/>解决方案(参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第3章</a>、<em>监督机器学习</em>)。对于每个用户<em> i </em>:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><img src="img/B05143_05_65.jpg" alt="Regularized linear regression method"/> (k=0)</li><li class="listitem" style="list-style-type: disc"><img src="img/B05143_05_66.jpg" alt="Regularized linear regression method"/> (k &gt; 0)</li></ul></div><p>由于我们分别将<code class="literal">1</code>条目添加到电影和用户向量中，因此学习截距参数(<em> k=0 </em>)和其他参数之间的区别是必要的(截距不可能过度拟合，因此无需对其进行调整)。在学习了参数q <em> <sub> i </sub> </em>之后，通过简单地应用公式<img src="img/B05143_05_67.jpg" alt="Regularized linear regression method"/>中的任何缺失评级<em> r <sub> ij </sub> </em>来执行推荐。</p><p>该方法由以下代码实现:</p><div><img src="img/B05143_05_14.jpg" alt="Regularized linear regression method"/></div><p>类<code class="literal">CBF_regression</code>的构造器只是执行梯度下降来找到<a id="id462" class="indexterm"/>参数<em>θ<sub>I</sub>T7】(称为<code class="literal">Pmatrix</code>)，而函数<code class="literal">CalcRatings</code>在存储的效用矩阵<em> R </em>中找到最相似的评级向量(如果用户不在效用矩阵中)，然后它使用相应的参数向量来预测缺失的评级。</em></p></div></div>
+
+
+
+
+
+<title>Association rules for learning recommendation system</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec34"/>关联规则学习推荐系统</h1></div></div></div><p>虽然这种方法在许多商业推荐系统中并不常用，但由于历史数据的原因，关联规则学习无疑是一种值得了解的方法，它可以用来解决现实世界中的许多问题。该方法的主要概念是基于交易数据库<em> T </em>中项目出现的某种统计度量来发现项目之间的关系(例如，交易可以是用户<em> i </em>看过的电影或者<em> i </em>购买的产品)。更正式的说法是，规则可以是<em> {item1，item2} = &gt; {item3} </em>，也就是说，一组项目<em> ({item1，item2}) </em>暗示着另一组项目<em> ({item3}) </em>的存在。两个定义用于描述每个<em> X= &gt; Y </em>规则:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>支持度</strong>:给定一个<a id="id464" class="indexterm"/>项集合<em> X </em>，支持度<em> supp(X) </em>是包含集合<em> X </em>的事务在总事务中所占的部分。</li><li class="listitem" style="list-style-type: disc"><strong>置信度</strong>:它是<a id="id465" class="indexterm"/>包含集合<em> X </em>同时也包含集合<em>Y:conf(X =&gt;Y)= supp(X U Y)/supp(X)</em>的事务的分数。请注意，置信度<em> conf(X= &gt; Y) </em>可以具有与<em> conf(Y= &gt; X) </em>非常不同的值。</li></ul></div><p>支持度表示某个规则在事务数据库上出现的频率，而置信度表示如果set <em> X </em>存在，set <em> Y </em>将出现的概率。换句话说，选择支持值来过滤我们想要从数据库中挖掘的规则的数量(支持越高，满足条件的规则越少)，而置信度可以被认为是集合<em> X </em>和<em> Y </em>之间的<em>相似性</em>度量。在电影推荐系统的情况下，考虑到每个用户喜欢的电影，可以从效用矩阵<em> R </em>中生成交易数据库，并且我们寻找由仅包含一个项目(电影)的集合<em> X </em>和<em> Y </em>组成的规则。这些规则被收集在矩阵<code class="literal">ass_matrix</code>中，其中每个条目<em> ass_matrixij </em>代表规则<em> i = &gt; j </em>的置信度。对于给定用户的推荐是通过简单地将<code class="literal">ass_matrix</code>乘以他的评级<code class="literal">u_vec</code> : <img src="img/B05143_05_68.jpg" alt="Association rules for learning recommendation system"/>，并且将所有值<img src="img/B05143_05_69.jpg" alt="Association rules for learning recommendation system"/>按照对应于最推荐电影的最大值排序到最小值来获得的。所以这种方法不是预测收视率，而是电影推荐列表；然而，它是快速的，并且对于稀疏的效用矩阵也工作得很好。注意，为了尽可能快地找到所有可能的项目组合以形成集合X和Y，在文献中开发了两种算法:<em> apriori </em>和<em> fp-growth </em>(这里不讨论，因为我们只需要每个集合有一个项目的规则<em> X </em>和<em> Y </em>)。</p><p>实现方法的类如下:</p><div><img src="img/B05143_05_15.jpg" alt="Association rules for learning recommendation system"/></div><p>类构造器将效用矩阵<code class="literal">Umatrix</code>、电影标题<a id="id466" class="indexterm"/>列表<code class="literal">Movieslist</code>、支持度<code class="literal">min_support</code>、置信度<code class="literal">min_confidence</code>阈值(默认<code class="literal">0.1</code>)和<code class="literal">likethreshold</code>作为输入参数，T5是交易中考虑电影的最小评级值(默认<code class="literal">3</code>)。函数<code class="literal">combine_lists</code>查找所有可能的规则，而<code class="literal">filterSet</code>只是将规则减少到满足最小支持度阈值的子集。<code class="literal">calc_confidence_matrix</code>用满足最小阈值的置信度值填充<code class="literal">ass_matrix</code>(否则默认设置<code class="literal">0</code>)，并且<code class="literal">GetRecItems</code>返回给定用户评级的推荐电影列表<code class="literal">u_vec</code>。</p></div>
+
+
+
+
+
+<title>Log-likelihood ratios recommendation system method</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec35"/>对数似然比推荐系统方法</h1></div></div></div><p><strong>对数似然比</strong> ( <strong> LLR </strong>)是对两个事件<em> A </em>和<em> B </em>不太可能是<a id="id467" class="indexterm"/>独立的，而是一起<a id="id468" class="indexterm"/>发生的可能性大于偶然(大于单个事件发生的频率)。换句话说，LLR指示两个事件<em> A </em>和<em> B </em>之间可能存在显著的同现，其频率高于正态分布(在两个事件变量上)所预测的频率。</p><p>Ted Dunning(<a class="ulink" href="http://tdunning.blogspot.it/2008/03/surprise-and-coincidence.html">http://t Dunning . blogspot . it/2008/03/surprise-and-concurrence . html</a>)已经表明，LLR可以基于事件A和B的二项式分布，使用具有以下条目的矩阵<em> k </em>来表示:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom"> </th><th style="text-align: left" valign="bottom">
+<p>A</p>
+</th><th style="text-align: left" valign="bottom">
+<p>一个也不</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> B </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> k11 </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> k12 </em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong>不是B </strong></p>
+</td><td style="text-align: left" valign="top">
+<p><em> k21 </em></p>
+</td><td style="text-align: left" valign="top">
+<p><em> k22 </em></p>
+</td></tr></tbody></table></div><div><img src="img/B05143_05_70.jpg" alt="Log-likelihood ratios recommendation system method"/></div><p>这里，<img src="img/B05143_05_71.jpg" alt="Log-likelihood ratios recommendation system method"/>和<img src="img/B05143_05_72.jpg" alt="Log-likelihood ratios recommendation system method"/>是度量向量<em> p </em>中包含的信息的<strong>香农</strong>熵。</p><p>注:<img src="img/B05143_05_73.jpg" alt="Log-likelihood ratios recommendation system method"/>也叫<a id="id469" class="indexterm"/><strong><a id="id470" class="indexterm"/>两个事件变量<em> A </em>和<em> B </em>的互信息</strong> ( <strong> MI </strong>)，度量两个事件的发生如何相互依赖。</p><p>这个测试也被称为<em> G2 </em>，它被证明可以有效地检测罕见事件的同时发生(尤其是在文本分析中)，因此它对于稀疏数据库(或者在我们的例子中是效用矩阵)很有用。</p><p>在我们的例子中，事件<em> A </em>和<em> B </em>是用户对两部电影<em> A </em>和<em> B </em>的喜欢或不喜欢，其中<em>喜欢一部电影</em>的事件定义为评分大于<code class="literal">3</code>(反之为不喜欢)。因此，算法的实现由下面的类给出:</p><div><img src="img/B05143_05_16.jpg" alt="Log-likelihood ratios recommendation system method"/></div><p>该构造函数将效用矩阵、电影标题列表和用于定义用户是否喜欢电影的<code class="literal">likethreshold</code>(默认<code class="literal">3</code>)作为输入。函数<code class="literal">loglikelihood_ratio</code>生成具有每对电影<em> i </em>和<em> j </em>的所有LLR值的矩阵，计算矩阵<em> k </em> ( <code class="literal">calc_k</code>)和相应的LLR ( <code class="literal">calc_llr</code>)。函数<code class="literal">GetRecItems</code>根据<code class="literal">u_vec</code>给出的评分为用户返回推荐电影列表(该方法不预测评分值)。</p></div>
+
+
+
+
+
+<title>Hybrid recommendation systems</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec36"/>混合推荐系统</h1></div></div></div><p>这是一类在单个推荐器中结合了CBF和CF以获得更好结果的方法。已经尝试了几种方法，这些方法可以归纳为以下几类:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><strong>加权</strong>:将<a id="id473" class="indexterm"/> CBF和CF预测评级组合成某种加权平均值。</li><li class="listitem" style="list-style-type: disc"><strong>混合</strong> : CF <a id="id474" class="indexterm"/>和CBF预测的电影被分别找到，然后合并到一个列表中。</li><li class="listitem" style="list-style-type: disc"><strong>切换</strong>:基于<a id="id475" class="indexterm"/>特定标准，使用CF预测或CBF预测。</li><li class="listitem" style="list-style-type: disc"><strong>特征组合</strong> : CF <a id="id476" class="indexterm"/>和CBF特征一起考虑，寻找最相似的用户或物品。</li><li class="listitem" style="list-style-type: disc"><strong>特征增强</strong>:类似于<a id="id477" class="indexterm"/>特征组合，但是附加特征用于预测一些评级，然后主推荐器使用这些评级来产生推荐列表。例如，内容增强的协作过滤通过基于内容的模型学习未分级电影的分级，然后采用协作方法来定义推荐。</li></ul></div><p>作为一个例子，我们实现了两种混合特征组合方法，将项目的特征CBF方法与基于用户的CF方法相结合。第一种方法对扩展的效用矩阵采用基于用户的CF，该效用矩阵现在还包含每个用户的每个流派的平均评级。Python类如下所示:</p><div><img src="img/B05143_05_17.jpg" alt="Hybrid recommendation systems"/></div><div><img src="img/B05143_05_18.jpg" alt="Hybrid recommendation systems"/></div><p>构造器生成扩展的效用矩阵，该矩阵具有与每个用户<code class="literal">Umatrix_mfeats</code>相关联的电影流派平均评级<a id="id478" class="indexterm"/>特征。函数<code class="literal">CalcRatings</code>使用比较用户的扩展特征向量的皮尔逊相关性来找到K-NN。第二种方法将SVD分解应用于包含每个用户的流派偏好的扩展效用矩阵。</p><div><img src="img/B05143_05_19.jpg" alt="Hybrid recommendation systems"/></div><p>作为SVD方法，从用户评分的平均值中减去评分，并且从同一用户评分的平均值中减去流派偏好。</p></div>
+
+
+
+
+
+<title>Evaluation of the recommendation systems</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec37"/>推荐系统的评估</h1></div></div></div><p>我们已经讨论了迄今为止商业环境中使用的所有最相关的方法。推荐系统的评估可以离线执行(仅使用效用矩阵中的数据)或在线执行(使用效用矩阵数据和使用网站的每个用户实时提供的新数据)。在线评估程序在<a class="link" href="ch07.html" title="Chapter 7. Movie Recommendation System Web Application">第7章</a>、<em>电影推荐系统网络应用</em>中讨论，以及一个合适的在线电影推荐系统网站。在本节中，我们将使用两个常用于评估推荐系统的离线测试来评估这些方法的性能:评分的均方根误差和排名准确度。对于所有适用k重交叉验证(参见<a class="link" href="ch03.html" title="Chapter 3. Supervised Machine Learning">第3章</a>、<em>监督机器学习</em>)的评估，都执行了5重交叉验证，以获得更客观的结果。使用以下函数将效用矩阵分成5个部分:</p><div><img src="img/B05143_05_20.jpg" alt="Evaluation of the recommendation systems"/></div><p>这里<code class="literal">df</code>是<a id="id481" class="indexterm"/>一个存储效用矩阵的数据框对象，而<em> k </em>是折叠数。在验证集中，对于每个用户评级的向量<code class="literal">u_vec</code>，一半的评级已经被隐藏，从而可以预测真实值。</p><div><img src="img/B05143_05_21.jpg" alt="Evaluation of the recommendation systems"/></div><p><code class="literal">u_vals</code>存储预测值，而<code class="literal">u_test</code>包含测试算法的评分。在我们开始用不同的度量来比较不同的算法之前，我们将效用矩阵和电影内容矩阵加载到数据帧中，并将数据分成5份进行交叉验证。</p><div><img src="img/B05143_05_22.jpg" alt="Evaluation of the recommendation systems"/></div><p><code class="literal">df_vals</code>包含验证集，因此需要应用本节介绍的<code class="literal">HideRandomRatings</code>函数。</p><div><img src="img/B05143_05_23.jpg" alt="Evaluation of the recommendation systems"/></div><p>在<code class="literal">movies</code>矩阵、<code class="literal">movieslist</code>列表和数据框<code class="literal">df_trains</code>、<code class="literal">vals_vecs_folds</code>、<code class="literal">tests_vecs_folds</code>中可用的<a id="id482" class="indexterm"/>数据现在已经准备好用于训练和验证前面章节中讨论的所有方法。我们可以开始评估<strong>均方根误差</strong> ( <strong> RMSE </strong>)。</p><div><div><div><div><h2 class="title"><a id="ch05lvl2sec36"/>均方根误差(RMSE)评估</h2></div></div></div><p>此<a id="id483" class="indexterm"/>验证技术仅适用于CF方法和线性回归CBF，因为预测评级仅由这些算法生成。给定验证集中<code class="literal">u_vals</code>的每个等级<em> rij </em>，使用每种方法计算预测等级<img src="img/B05143_05_74.jpg" alt="Root mean square error (RMSE) evaluation"/>，并获得均方根误差:</p><p>RMSE = <img src="img/B05143_05_75.jpg" alt="Root mean square error (RMSE) evaluation"/></p><p>这里，<em> Nval </em>是<code class="literal">u_vals</code>向量中的等级数。该公式中平方因子的存在对大误差造成了严重的不利影响，因此具有低RMSE(最佳值)的方法的特点是小误差分布在所有预测评级上，而不是少数评级上的大误差，就像平均绝对误差MAE= <img src="img/B05143_05_76.jpg" alt="Root mean square error (RMSE) evaluation"/>更喜欢的那样。</p><p>计算基于内存的CF基于用户的方法和基于项目的方法的RMSE的代码<a id="id484" class="indexterm"/>如下:</p><div><img src="img/B05143_05_24.jpg" alt="Root mean square error (RMSE) evaluation"/></div><div><img src="img/B05143_05_25.jpg" alt="Root mean square error (RMSE) evaluation"/></div><p>对于每个<a id="id485" class="indexterm"/>方法，调用SE函数计算每个折叠的误差，然后获得折叠的总RMSE。</p><p>对于斜率为1的基于项目的CF使用5个最近邻，对于基于用户的CF使用20个最近邻，这些方法具有以下误差:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>方法</p>
+</th><th style="text-align: left" valign="bottom">
+<p>均方根误差</p>
+</th><th style="text-align: left" valign="bottom">
+<p>预测评级的数量</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p><strong> CF基于用户</strong></p>
+</td><td style="text-align: left" valign="top">
+<p>1.01</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> CF基于项目</strong></p>
+</td><td style="text-align: left" valign="top">
+<p>1.03</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong>斜坡一号</strong></p>
+</td><td style="text-align: left" valign="top">
+<p>1.08</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p><strong> CF-CBF基于用户</strong></p>
+</td><td style="text-align: left" valign="top">
+<p>1.01</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr></tbody></table></div><p>所有的都有相似的RMSE值，但最好的方法是基于项目的协同过滤。</p><p>对于<a id="id486" class="indexterm"/>基于模型的方法，<code class="literal">u_test</code>包含在效用矩阵中用于训练，然后使用以下脚本计算RMSE，而不是隐藏验证评级:</p><div><img src="img/B05143_05_26.jpg" alt="Root mean square error (RMSE) evaluation"/></div><p>该代码仅计算CBF回归和奇异值分解的RMSE，读者可以很容易地<a id="id487" class="indexterm"/>复制该代码来计算其他算法的误差，因为大多数所需的代码只是被注释了(奇异值分解期望最大化、奇异值分解、ALS和NMF)。结果如下表所示(<em> K </em>维特征空间):</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>方法</p>
+</th><th style="text-align: left" valign="bottom">
+<p>均方根误差</p>
+</th><th style="text-align: left" valign="bottom">
+<p>预测评级数量</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>CBF线性回归</p>
+<p>(a= 0.01，l =0.0001，its=50)</p>
+</td><td style="text-align: left" valign="top">
+<p>1.09</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>SGD ( K=20，50 its，a =0.00001，l=0.001)</p>
+</td><td style="text-align: left" valign="top">
+<p>1.35</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>ALS ( K=20，50 its，l =0.001)</p>
+</td><td style="text-align: left" valign="top">
+<p>2.58</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>奇异值分解(<code class="literal">imputation</code> = <code class="literal">useraverage</code>，<em> K </em> =20)</p>
+</td><td style="text-align: left" valign="top">
+<p>1.02</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>奇异值分解EM ( <code class="literal">imputation</code> = <code class="literal">itemaverage</code>，迭代次数=30，<em> K </em> =20)</p>
+</td><td style="text-align: left" valign="top">
+<p>1.03</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>混合动力SVD ( <code class="literal">imputation</code> = <code class="literal">useraverage</code>，<em> K </em> =20)</p>
+</td><td style="text-align: left" valign="top">
+<p>1.01</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>NMF ( <em> K </em> =20 <code class="literal">imputation</code> = <code class="literal">useraverage</code>)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.97</p>
+</td><td style="text-align: left" valign="top">
+<p>39,972</p>
+</td></tr></tbody></table></div><p>正如预期的那样，ALS和SGD是最差的方法，但讨论它们是因为它们从教学的角度来看是有指导意义的(它们也很慢，因为实现不如<code class="literal">sklearn</code>库中的方法优化)。</p><p>所有其他的都有相似的结果。但是，请注意，混合方法的结果略好于相应的SVD和CF基于用户的算法。请注意，预测的电影是随机选择的，因此结果可能会有所不同。</p></div><div><div><div><div><h2 class="title"><a id="ch05lvl2sec37"/>分类指标</h2></div></div></div><p>评级<a id="id488" class="indexterm"/>误差RMSE并不能真正表明方法的质量，而是一种学术上的衡量标准，并没有真正用于商业环境。网站的目标是呈现与用户相关的内容，而不考虑用户给出的确切评分。为了评估推荐项目的相关性，使用了<code class="literal">precision</code>、<code class="literal">recall</code>和<code class="literal">f1</code>(参见<a class="link" href="ch02.html" title="Chapter 2. Unsupervised Machine Learning">第2章</a>、<em>无监督机器学习</em>)度量，其中正确的预测是评分大于3的项目。这些度量是对每个算法返回的前50个项目进行计算的(如果该算法返回一个推荐列表或对其他方法具有最高预测评级的50个项目)。计算测量值的函数如下:</p><div><img src="img/B05143_05_27.jpg" alt="Classification metrics"/></div><p>这里，Boolean <code class="literal">ratingsval</code>表示该方法是返回评级还是推荐列表。我们使用函数<code class="literal">ClassificationMetrics</code>的方式与计算所有方法的RMSE的方式相同，因此评估度量的实际代码没有显示出来(您可以将它作为练习来编写)。下表总结了所有方法的结果(<em>neighbors</em>是最近邻的数量，<em> K </em>维特征空间):</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>方法</p>
+</th><th style="text-align: left" valign="bottom">
+<p>精确</p>
+</th><th style="text-align: left" valign="bottom">
+<p>回忆</p>
+</th><th style="text-align: left" valign="bottom">
+<p>第一子代</p>
+</th><th style="text-align: left" valign="bottom">
+<p>预测评级的数量</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>CF基于用户(<em>邻居</em> =20)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.6</p>
+</td><td style="text-align: left" valign="top">
+<p>0.18</p>
+</td><td style="text-align: left" valign="top">
+<p>0.26</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>基于用户的(<em>邻居</em> =20)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.6</p>
+</td><td style="text-align: left" valign="top">
+<p>0.18</p>
+</td><td style="text-align: left" valign="top">
+<p>0.26</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>混合动力SVD ( <em> K </em> =20，<code class="literal">imputation</code> = <code class="literal">useraverage</code>)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.54</p>
+</td><td style="text-align: left" valign="top">
+<p>0.12</p>
+</td><td style="text-align: left" valign="top">
+<p>0.18</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>CF基于项目(<em> neighs </em> =5)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.57</p>
+</td><td style="text-align: left" valign="top">
+<p>0.15</p>
+</td><td style="text-align: left" valign="top">
+<p>0.22</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>坡一(<em>嘶声</em> =5)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.57</p>
+</td><td style="text-align: left" valign="top">
+<p>0.17</p>
+</td><td style="text-align: left" valign="top">
+<p>0.24</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>SVD EM ( <em> K </em> =20，迭代次数=30，<code class="literal">imputation</code> = <code class="literal">useraverage</code>)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.58</p>
+</td><td style="text-align: left" valign="top">
+<p>0.16</p>
+</td><td style="text-align: left" valign="top">
+<p>0.24</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>SVD ( <em> K </em> =20，<code class="literal">imputation</code> = <code class="literal">itemaverage</code>)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.53</p>
+</td><td style="text-align: left" valign="top">
+<p>0.12</p>
+</td><td style="text-align: left" valign="top">
+<p>0.18</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>CBF回归(a = 0.01，l =0.0001，迭代次数=50次)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.54</p>
+</td><td style="text-align: left" valign="top">
+<p>0.13</p>
+</td><td style="text-align: left" valign="top">
+<p>0.2</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>SGD (K=20，a =0.00001，l =0.001)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.52</p>
+</td><td style="text-align: left" valign="top">
+<p>0.12</p>
+</td><td style="text-align: left" valign="top">
+<p>0.18</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>ALS ( <em> K </em> =20，λ =0.001，迭代次数=50)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.57</p>
+</td><td style="text-align: left" valign="top">
+<p>0.15</p>
+</td><td style="text-align: left" valign="top">
+<p>0.23</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>CBF平均值</p>
+</td><td style="text-align: left" valign="top">
+<p>0.56</p>
+</td><td style="text-align: left" valign="top">
+<p>0.12</p>
+</td><td style="text-align: left" valign="top">
+<p>0.19</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>最小抵抗力线(line of least resistance)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.63</p>
+</td><td style="text-align: left" valign="top">
+<p>0.3</p>
+</td><td style="text-align: left" valign="top">
+<p>0.39</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>NMF ( <em> K </em> =20，λ =0.001，<code class="literal">imputation</code> = <code class="literal">ssss</code>)</p>
+</td><td style="text-align: left" valign="top">
+<p>0.53</p>
+</td><td style="text-align: left" valign="top">
+<p>0.13</p>
+</td><td style="text-align: left" valign="top">
+<p>0.19</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>关联规则</p>
+</td><td style="text-align: left" valign="top">
+<p>0.68</p>
+</td><td style="text-align: left" valign="top">
+<p>0.31</p>
+</td><td style="text-align: left" valign="top">
+<p>0.4</p>
+</td><td style="text-align: left" valign="top">
+<p>39,786</p>
+</td></tr></tbody></table></div><p>从<a id="id489" class="indexterm"/>的结果可以看出，最好的方法是关联规则，LLR、基于用户的混合CBFCF和基于用户的CF方法也有很好的精度。请注意，由于要预测的电影是随机选择的，因此结果可能会有所不同。</p></div></div>
+
+
+
+
+
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl1sec38"/>总结</h1></div></div></div><p>在本章中，我们讨论了最常用的推荐系统方法，从协同过滤和基于内容的过滤到两种简单的混合算法。还要注意的是，在文献中出现了<em>模态</em>推荐系统，其中不同的数据(用户性别、人口统计、视图、位置、设备等)被合并到相同的算法中。这些方法更先进，使用它们需要更多不同的数据。</p><p>在<a class="link" href="ch07.html" title="Chapter 7. Movie Recommendation System Web Application">第7章</a>、<em>电影推荐系统web应用</em>中，我们将使用本章讨论的方法实现一个web推荐系统，但在此之前，我们将在<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第6章</a>、<em>Django入门</em>中介绍Django框架来构建Web应用。</p></div>
+</body></html>

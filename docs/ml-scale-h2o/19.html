@@ -1,0 +1,190 @@
+<html><head/><body>
+
+
+	
+		<title>B16721_14_Final_SK_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-254"><em class="italic"> <a id="_idTextAnchor256"/>第十四章</em>:大平台背景下的规模化H2O</h1>
+			<p>在前一章中，我们通过介绍H2O AI云拓宽了我们对H2O <strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)技术的看法，这是一个由多个模型构建引擎组成的<strong class="bold">端到端</strong> ML平台，一个用于模型部署、监控和管理的MLOps平台，一个用于重用和操作模型功能的功能库，以及一个用于构建<strong class="bold">人工智能</strong> ( <strong class="bold">的低代码<strong class="bold">软件开发套件</strong> ( <strong class="bold"> SDK </strong>)这本书的重点是我们所说的<strong class="bold">大规模H2O</strong>，或使用H2O核心(H2O-3和苏打水)在大规模数据集上构建准确可信的模型，H2O企业蒸汽管理H2O核心用户及其环境，以及H2O MOJO轻松灵活地将模型部署到不同的目标环境。我们了解到，这些H2O规模的组件原本是更大的H2O人工智能云平台的一部分，尽管它们可以单独部署。</strong></p>
+			<p>在这一章中，我们将探讨作为H2O人工智能云平台的一员，H2O如何实现更大的能力。更具体地说，我们将涵盖以下主题:</p>
+			<ul>
+				<li>H2O人工智能云快速回顾</li>
+				<li>探索大规模H2O基线参考解决方案</li>
+				<li>探索H2O大规模发展的新可能性</li>
+				<li>作为企业人工智能集成架构的参考H2O Wave应用</li>
+			</ul>
+			<h1 id="_idParaDest-255"><a id="_idTextAnchor257"/>技术要求</h1>
+			<p>这个链接将带你开始开发H2O波应用:<a href="https://wave.h2o.ai/docs/installation">https://wave.h2o.ai/docs/installation</a>。H2O波是开源的，可以在你的本地机器上开发。为了全面熟悉H2O人工智能云平台，你可以在https://h2o.ai/freetrial<a href="https://h2o.ai/freetrial">报名参加为期90天的H2O人工智能云试用。</a></p>
+			<h1 id="_idParaDest-256"><a id="_idTextAnchor258"/>H2O人工智能云快速回顾</h1>
+			<p>本章的目标是探索作为本书重点的大规模H2O如何在用作H2O人工智能云平台的一部分时获得新的功能。让我们首先通过重温下图来快速回顾一下H2O人工智能云，这是我们在上一章中遇到的:</p>
+			<div><div><img src="img/B16721_14_001.jpg" alt=" Figure 14.1 – Components of the H2O AI Cloud platform&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.1-H2O人工智能云平台的组件</p>
+			<p>作为一个快速的<a id="_idIndexMarker1110"/>总结，我们<a id="_idIndexMarker1111"/>看到H2O人工智能云有四个专门的建模引擎。H2O核心(H2O-3，H2O苏打水)代表H2O分布式ML用于<a id="_idIndexMarker1112"/>在大规模数据集上建立水平比例模型。在这种情况下，H2O企业Steam代表了<a id="_idIndexMarker1113"/>一个管理和提供建模引擎的更通用的工具。</p>
+			<p>我们在<a id="_idIndexMarker1114"/>看到，从H2O核心模型构建导出的<a id="_idIndexMarker1115"/> H2O MOJO可以<a id="_idIndexMarker1116"/>直接部署到H2O MLOps模型部署、监控和管理平台(尽管如此，正如在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第10章</em> </a>、<em class="italic"> H2O模型部署模式</em>中所看到的，MOJO也可以公开部署到其他目标)。请注意，H2O专门的<strong class="bold">自动ML </strong> ( <strong class="bold"> AutoML </strong>)引擎<a id="_idIndexMarker1117"/>称为无人驾驶AI <a id="_idIndexMarker1118"/>也可以产生MOJO，并可以按照<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第10章</em> </a>、<em class="italic"> H2O模型部署模式</em>所示的方式部署。我们还看到，H2O人工智能特征库可用于在模型构建和模型部署环境中共享和操作特征。</p>
+			<p>最后，我们看到H2O Wave SDK <a id="_idIndexMarker1119"/>可用于在H2O人工智能云平台的其他组件上构建人工智能应用，然后作为平台的一部分发布到H2O应用商店。</p>
+			<p>现在，让我们开始将这些碎片组合成各种H2O规模的解决方案。</p>
+			<h1 id="_idParaDest-257"><a id="_idTextAnchor259"/>探索大规模H2O基线参考解决方案</h1>
+			<p>因此，现在让我们来探索<a id="_idIndexMarker1120"/> H2O规模的组件如何从参与H2O人工智能云平台中受益。为此，让我们首先从H2O人工智能云之外的H2O规模的基线解决方案开始。基线解决方案如下图所示。我们将使用此基准来比较大规模H2O与人工智能云组件相集成的解决方案:</p>
+			<div><div><img src="img/B16721_14_002.jpg" alt="Figure 14.2 – Baseline solution for H2O at scale&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.2–大规模H2O基线解决方案</p>
+			<p class="callout-heading">重要说明</p>
+			<p class="callout">对于本章中的这个解决方案和所有解决方案，假设数据科学家使用H2O企业Steam来启动H2O-3或H2O苏打水环境。请参见<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"> <em class="italic">第3章</em> </a>、<em class="italic">基础工作流-数据到可部署模型</em>，了解该步骤的概述。</p>
+			<p>其解决方案流程的快速<a id="_idIndexMarker1121"/>概述如下:</p>
+			<ol>
+				<li>数据科学家导入一个大型数据集，并使用它来构建大规模的ML模型。参见<em class="italic">第二部分</em>、<em class="italic">中的章节，使用H2O </em>在大数据量上构建最先进的模型，深入探讨这个主题。</li>
+				<li>运营团队将模型工件(称为H2O MOJO)部署到评分环境中。参见<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第十章</em> </a>、<em class="italic"> H2O模式部署模式</em>，探讨H2O模式部署的多种目标系统。</li>
+				<li>预测由业务环境中的软件或工具消费和执行。(这里，我们假设部署的模型是一个<strong class="bold">监督学习</strong>模型，尽管它可能是一个生成非预测输出的非监督模型；例如，输入的聚类成员)。</li>
+			</ol>
+			<p>让我们使用这一基线<a id="_idIndexMarker1122"/>解决方案开始添加H2O人工智能云组件，从而了解H2O如何通过成为这一更大平台的成员来获得额外的功能。</p>
+			<h1 id="_idParaDest-258"><a id="_idTextAnchor260"/>探索H2O规模化的新可能性</h1>
+			<p>现在，让我们一步一步地了解我们可以大规模集成H2O(这本书的重点)与H2O人工智能云平台的其余部分的不同方式，从而实现更大的能力和价值。</p>
+			<h2 id="_idParaDest-259"><a id="_idTextAnchor261"/>利用H2O无人驾驶人工智能进行原型开发和功能发现</h2>
+			<p>H2O的AutoML <a id="_idIndexMarker1123"/>无人驾驶人工智能组件是一个高度自动化的模型构建工具，它使用(除其他功能外)遗传算法、人工智能试探法和彻底自动化的<strong class="bold">特征工程</strong>来构建准确和可解释的模型——通常在几个小时内——然后部署到生产系统。然而，无人驾驶人工智能无法在H2O-3和苏打水处理的数百GB到TBs大小的数据集上进行训练。</p>
+			<p>然而，对于数据科学家来说，将这些大规模数据集中的采样数据提供给无人驾驶人工智能，然后使用AutoML工具来(a)快速建立模型原型以获得早期理解，以及(b)发现有助于精确模型的自动工程特征，否则很难从纯手动和领域知识手段中找到这些特征，这是非常有用的。在这个工作流程中，从无人驾驶人工智能中获得的知识随后被用作起点，使用H2O-3或苏打水，根据原始未采样数据建立大规模模型。</p>
+			<p>下图显示了这一点，并对其进行了总结:</p>
+			<div><div><img src="img/B16721_14_003.jpg" alt="Figure 14.3 – Leveraging H2O Driverless AI for prototyping and feature discovery&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.3–利用H2O无人驾驶人工智能进行原型开发和功能发现</p>
+			<p>这里提供了利用无人驾驶人工智能快速原型化和发现大规模模型构建特征的工作流程步骤<a id="_idIndexMarker1124"/>:</p>
+			<ol>
+				<li value="1">将大容量数据集导入大规模H2O环境中固有的分布式内存架构。使用H2O-3 <code>split_frame</code>方法(此处为Python语言)将导入的数据采样成一个更小的子集(通常为10到100 GB ),并将适当的比率定义为输入参数，以获得所需的样本大小。将输出写入无人驾驶AI可以访问的暂存位置。</li>
+				<li>将采样数据集导入无人驾驶AI。使用默认值快速建立精确模型的原型。根据您的领域和数据科学经验，使用不同的设置继续进行原型设计。探索模型的解释技巧。探索对模型贡献最大的工程特征。使用<strong class="bold">自动化模型文档</strong> ( <strong class="bold"> AutoDoc </strong>)来<a id="_idIndexMarker1125"/>更深入地理解模型，并将工程特征的名称翻译成它们底层的数学和逻辑表示。</li>
+				<li>使用来自<em class="italic">步骤2 </em>的知识来指导你在H2O-3或苏打水上建立完整的大规模数据集的模型。</li>
+			</ol>
+			<p>无人驾驶AI <a id="_idIndexMarker1126"/>在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第十三章</em> </a>，<em class="italic">介绍H2O AI云</em>中有概述。下面的屏幕截图显示了一个朝着最终精确模型迭代的实验:</p>
+			<div><div><img src="img/B16721_14_004.jpg" alt="Figure 14.4 – Driverless AI finding an accurate model&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.4-无人驾驶人工智能寻找精确的模型</p>
+			<p>注意<em class="italic">图14.4 </em>的左下面板，它显示了遗传算法在模型间迭代的进度。每个方块都是一个独立的ML模型。这些<a id="_idIndexMarker1127"/>模型中的每一个都使用一个自动选择的算法(例如，XGBoost<strong class="bold">光线渐变增强模型</strong>(<strong class="bold">Light GBM</strong>)；<strong class="bold">广义线性模型</strong> ( <strong class="bold"> GLM </strong>))，探索极广的超参数<a id="_idIndexMarker1128"/>空间(例如，学习率、树深度、树数量等的组合)。</p>
+			<p>重要的是，由遗传算法构建的每个模型还探索了从原始导入数据集中设计的极其广泛的特征空间。实验将在最终的最佳模型上停止，通常是前面的顶级模型的堆叠集合。用户可以在短时间内运行许多实验，通过改变许多高级和低级设置并评估结果来进行探索。</p>
+			<p>从这些快速探索中获得的知识，包括对最终模型很重要的特征工程，可以用作用H2O-3或苏打水按比例建立模型的起点。</p>
+			<p>注意，对于较小的数据集，无人驾驶AI在短时间内找到高度预测的模型是相当有效的。然而，H2O-3和苏打水是扩展到大规模数据集或采取更可控的基于代码的方法来建立模型所必需的。如此处所示，对于基于代码的方法，首先用无人驾驶人工智能原型化一个问题，然后使用由此产生的见解和设计的<a id="_idIndexMarker1129"/>功能作为基于代码的方法的指南是有价值的。</p>
+			<p class="callout-heading">无人驾驶人工智能(AutoML)与H2O-3 (DistributedML):何时使用哪个？</p>
+			<p class="callout">无人驾驶AI是H2O AI Cloud的一个高度自动化的<strong class="bold">用户界面</strong> ( <strong class="bold"> UI </strong>)(或<strong class="bold">应用编程接口</strong>(<strong class="bold">API</strong>))AutoML组件，旨在快速找到准确可信的模型进行生产评分。当您需要高度自动化的方法(具有广泛的用户控制)来构建模型时，以及当数据集大小小于100 GB时(尽管更多资源密集型服务器实例可以处理更大的数据集)，可以使用它。</p>
+			<p class="callout">当您的数据集大于100 GB(并进入TBs)时，使用H2O-3 <a id="_idIndexMarker1131"/>或苏打水，或者当您想要更多地控制模型构建过程时，使用基于代码的方法来构建模型。请注意，H2O-3和苏打水具有AutoML功能，如第五章 、<em class="italic">高级模型构建-第一部分</em>中所述，但无人驾驶AI中的那些要复杂得多，广泛得多，自动化程度也高得多。</p>
+			<p class="callout">使用无人驾驶人工智能来原型化一个问题，并利用由此产生的见解和工程特征的发现来指导你在H2O-3或苏打水上建立模型。</p>
+			<p>我们已经看到了我们的第一个<a id="_idIndexMarker1132"/>H2O比例模型建筑的例子，它通过与H2O人工智能云平台中的一个组件进行交互来获得能力。现在让我们看看下一个例子。</p>
+			<h2 id="_idParaDest-260"><a id="_idTextAnchor262"/>集成H2O MLOps进行模型监控、管理和治理</h2>
+			<p>用H2O-3和苏打水制作的模型产生了他们自己的随时可以部署的低延迟评分神器，称为H2O魔咒。正如我们在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第十章</em> </a>、<em class="italic"> H2O模型部署模式</em>中所展示的，这个评分工件可以部署到各种各样的生产系统中，从来自<strong class="bold">代表性状态转移</strong> ( <strong class="bold"> REST </strong>)服务器的实时评分，到来自数据库的批量评分，再到来自流队列的评分(仅举几个例子)。在那一章中，我们还展示了部署到REST服务器提供了一个有用的集成模式，用于将评分预测集成到常见的<strong class="bold">商业智能</strong> ( <strong class="bold"> BI </strong>)工具中，如Microsoft Excel或Tableau。</p>
+			<p>H2O人工智能云的H2O MLOps组件是部署H2O-3或苏打水模型(或无人驾驶人工智能模型和非H2O模型——例如，scikit-learn模型)的绝佳选择。集成非常简单，如下图所示:</p>
+			<div><div><img src="img/B16721_14_005.jpg" alt="Figure 14.5 – Deployment of H2O-at-scale models to the H2O MLOps platform&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.5-H2O比例模型在H2O MLOps平台上的部署</p>
+			<p>集成这些模型的步骤非常简单，如下所示:</p>
+			<ol>
+				<li value="1">用H2O-3或苏打水建立你的模型，然后输出魔咒进行部署。</li>
+				<li>在H2O MLOps中，从UI或MLOps API部署暂存MOJO。回想一下<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第十三章</em> </a>，<em class="italic">介绍H2O AI云，</em>有很多部署选项，包括实时对批量，单个模型对冠军/挑战者，或者A/B测试。</li>
+				<li>现在可以从一个唯一的REST端点对模型进行评分。带有可选原因代码的预测已经准备好供您的系统使用，无论是web应用程序、BI工具等等。</li>
+			</ol>
+			<p>对于此流程期间和之后的所有<a id="_idIndexMarker1134"/>模型，MLOps执行重要的任务，包括监控、管理和治理模型。例如，以下屏幕截图显示了H2O MLOps的数据漂移监控屏幕:</p>
+			<div><div><img src="img/B16721_14_006.jpg" alt="Figure 14.6 – Model-monitoring screen for H2O MLOps&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.6–H2O m lops的模型监控屏幕</p>
+			<p>监控数据漂移的目的是检测实时评分数据中的特征值分布是否偏离了用于构建模型的训练数据中的特征值分布。数据漂移的存在表明或指示该模型应该用更近的数据重新训练，然后重新部署以与当前评分数据一致。</p>
+			<p>在<em class="italic">图14.6 </em>的左下面板中，所有模型特征的数据漂移以两个维度表示:垂直轴上的漂移和水平轴上的特征重要性。该视图允许将漂移划分为漂移重要性象限，高漂移和高特性重要性是最重要的漂移。有多种设置可用于定义漂移统计、测量的时间范围以及观察漂移的其他方面。还有一个工作流程来配置漂移的自动警报消息。这些既可用于数据科学家手动决定是否重新训练模型，也可用于通过H2O API进行全自动模型重新训练和部署的<a id="_idIndexMarker1135"/>。</p>
+			<p>漂移检测只是H2O MLOps的功能之一<a id="_idIndexMarker1136"/>。请参见https://docs.h2o.ai/mlops/<a href="https://docs.h2o.ai/mlops/">的H2O文档，了解H2O MLOps模型部署、监控、管理和治理功能的完整描述。</a></p>
+			<p>现在让我们看看H2O-3和苏打水是如何融入H2O人工智能特色商店的。</p>
+			<h2 id="_idParaDest-261"><a id="_idTextAnchor263"/>利用H2O人工智能特征库实现特征操作化和重用</h2>
+			<p>企业通常通过在整个组织内集中和共享环境或资产来实现规模经济。H2O人工智能特征库通过工程管道集中模型特征及其管理的可操作性来实现规模经济，以便在整个组织中重用。</p>
+			<p>通过特征库的重用发生在模型构建和模型评分上下文中。例如，假设整个组织的一个有价值的特征是资产价格与前一天相比的百分比变化。但是，想象一下，资产价格存储为每日价格，并且资产价格存储在多个源系统中。特征存储处理来自源系统的特征的检索和来自原始系统的新值的计算(即特征工程管道),并缓存结果(工程特征)以共享用于模型训练和模型评分。模型构建使用离线模式，即批量历史数据，并使用在线模式进行模型评分，即最近的数据。如下图所示:</p>
+			<div><div><img src="img/B16721_14_007.jpg" alt="Figure 14.7 – Integration of H2O AI Feature Store with H2O-3 or Sparkling Water&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.7–H2O人工智能特色商店与H2O-3或苏打水的整合</p>
+			<p>下面是<a id="_idIndexMarker1138"/>图14.7 中的<em class="italic">工作流程总结:</em></p>
+			<ol>
+				<li value="1">数据科学家建立一个模型。</li>
+				<li>在模型构建阶段，数据科学家可能会以两种不同的方式与要素存储进行交互，如下所述:<ul><li>数据科学家可以将要素发布到要素存储中，并包含相关元数据以帮助其他人进行搜索和操作。ML工程师操作来自数据源的特征的工程，以在特征存储中提供特征值。每个功能都配置了更新前的生存时间，例如，每分钟、每天或每月更新一次。</li><li>数据科学家可能会在模型构建期间搜索特征存储中的特征。他们使用功能存储API将功能及其值导入到H2O-3或苏打水加载的训练数据中(更具体地说，导入到内存中的H2OFrame，类似于DataFrame)。</li></ul></li>
+				<li>该模型被部署到H2O MLOps，该MLOps被配置为使用来自功能存储的功能。该功能会按照配置的时间间隔进行更新。</li>
+				<li>消耗<a id="_idIndexMarker1139"/>预测和可选的原因代码。</li>
+			</ol>
+			<p>我们已结束工作流，预测已被使用。现在，让我们展示数据科学家和ML工程师如何使用H2O Wave SDK快速构建具有复杂可视化和围绕模型预测的工作流的AI应用程序。</p>
+			<h2 id="_idParaDest-262"><a id="_idTextAnchor264"/>来自Wave AI应用的商业环境中的消费预测</h2>
+			<p>当ML模型<a id="_idIndexMarker1140"/>的输出被角色或自动化执行工作流消费时，它们最终获得价值。这些工作流可以基于单个预测和潜在的原因代码本身，或者基于从中获得的见解和情报。例如，客户服务代表识别出很有可能离开企业的客户，并根据模型预测可能流失的原因，主动向他们提出改进或激励措施，以留住客户。或者，分析师探索过去6个月中做出的客户流失预测的多个交互式仪表板，以深入了解客户流失的原因，并确定业务可以改进的地方以防止客户流失。</p>
+			<p>正如我们在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第13章</em> </a>、<em class="italic">介绍H2O人工智能云</em>中了解到的，H2O Wave是一款低代码SDK，数据科学家和ML工程师使用它来轻松构建人工智能应用，并将其发布到应用商店供企业或外部使用。我们所说的人工智能应用是什么意思？这里的AI应用程序是一个web应用程序，它将ML生命周期的一个或多个阶段呈现为丰富的可视化、用户交互和工作流序列。H2O Wave SDK通过将UI元素(仪表板模板、对话框和小部件)公开为基于属性的Python代码，同时抽象出构建web应用程序的复杂性，使这些易于构建。</p>
+			<p>在我们的例子中，业务角色专门使用Wave应用程序来进行消费预测，如下图所示。请注意，我们的下一个例子将是一个Wave应用程序，数据科学家使用它来管理模型再训练，而不是消耗预测:</p>
+			<div><div><img src="img/B16721_14_008.jpg" alt="Figure 14.8 – Prediction consumption in Wave AI applications&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.8–Wave人工智能应用中的预测消耗</p>
+			<p>图14.8 中的ML <a id="_idIndexMarker1141"/>工作流是一个熟悉的工作流，但是有一个Wave应用程序来消耗预测。Wave的低代码SDK支持多种集成协议，因此允许从REST端点实时使用预测和原因代码，或者从文件上传或数据仓库连接批量使用。如上图所示，从业务上下文来看，使用预测的Wave应用程序可以执行以下操作:</p>
+			<ul>
+				<li>从历史和单个预测视图中可视化预测</li>
+				<li>从全局(模型级别)和单个(单一模型评分)视图中可视化潜在预测原因代码的洞察力</li>
+				<li>对预测和见解进行商业智能分析</li>
+				<li>在循环中为人类执行工作流，以进行可视化和分析</li>
+			</ul>
+			<p>我们来看一个具体的例子。下面的屏幕截图显示了Wave应用程序的一个页面，该页面使用并显示员工流失预测的可视化效果，换句话说，就是员工离开公司的预测可能性:</p>
+			<div><div><img src="img/B16721_14_009.jpg" alt="Figure 14.9 – A Wave app visualizing employee churn&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图14.9–可视化员工流失的Wave应用程序</p>
+			<p>这个<a id="_idIndexMarker1142"/>页面显示了最新一批员工流失预测的视图。左上角的面板显示了这些预测的概率分布。我们可以看到，被模型评分的大多数员工离开的概率都很低，尽管有一个长尾巴的高概率员工。右上方的面板提供了员工离开公司的原因:它显示了Shapley值或特征对预测的贡献(原因代码)。我们看到加班、工作角色和轮班时间表是影响模型预测流失的三大因素。底部的面板显示了帮助更好地理解这些预测的可视化效果:左边的面板显示了流失可能性的地理分布，右边的面板显示了按工作角色的细分。地图上方的薄面板允许用户交互，从而滑块定义将员工分类为流失或不流失的概率阈值:结果底部的两个面板相应地刷新。</p>
+			<p>Wave应用程序的前一个屏幕截图显示了批量级别的预测，即一段时间内所有员工的得分。该应用程序还有一个页面，显示个人级别的可视化预测。当用户点击单个员工(显示相关的流失概率和其他员工数据)时，会显示Shapley值，显示导致该员工流失的可能性最大的特征。例如，一个特定的个人可能显示月收入是对预测的较大贡献，加班实际上是对个人<em class="italic">而不是</em>的贡献。这种观点表明，员工可能会离开公司，因为他们没有赚到足够的钱，并试图赚更多。这使得员工的经理可以评估加薪情况，以帮助保证他们留在公司。</p>
+			<p><em class="italic">图14.9 </em>中的<a id="_idIndexMarker1143"/>用户界面显示了商业环境中的预测，个人可以据此采取行动。请记住，H2O波是非常可扩展的，可以将您喜欢的Python包，包括Python APIs，合并到非H2O组件中。此外，请记住，这里显示的示例Wave应用程序是一个功能演示器:它不是管理员工流失的现成解决方案，而是数据科学家和ML工程师如何使用Wave SDK轻松构建人工智能应用程序的一个示例。</p>
+			<p class="callout-heading">H2O Wave SDK是非常可扩展的</p>
+			<p class="callout">图14.9 中的用户界面相当简单，但仍然可以有效地将预测放入商业和分析环境中。H2O Wave SDK是非常可扩展的，因此允许在基于它构建的应用程序中包含更高级别的功能。</p>
+			<p class="callout">例如，你可以实现HTML <strong class="bold">级联样式表</strong> ( <strong class="bold"> CSS </strong>)来给<strong class="bold">用户体验</strong> ( <strong class="bold"> UX </strong>)一个更现代或者公司特有的外观。因为Wave应用程序是容器化的，彼此隔离，所以可以安装任何Python包，并在应用程序中使用。例如，你可以实现<strong class="bold">散景</strong>来实现强大的交互式可视化，或者<strong class="bold">熊猫</strong>来实现数据操作，或者一个供应商或自己开发的Python API来与你的技术生态系统的一部分进行交互。</p>
+			<p class="callout">请注意，H2O Wave的主要意图是让你用它的SDK构建自己的人工智能应用程序，并使它们为你的需要而专门构建。应用程序在本地开发，可以由目标用户快速原型化，然后定稿、润色并发布到H2O应用商店，供企业基于角色的消费。然而，H2O将为您提供示例应用程序作为代码加速器。</p>
+			<p class="callout">你可以在<a href="https://h2o.ai/freetrial/">https://h2o.ai/freetrial/</a>注册90天免费试用H2O人工智能云，探索live Wave应用。你也可以通过访问<a href="https://wave.h2o.ai/">https://wave.h2o.ai/</a>来探索和使用<a id="_idIndexMarker1144"/> H2O Wave SDK，它是开源的。</p>
+			<p>我们<a id="_idIndexMarker1145"/>刚刚探索了如何构建Wave应用程序，以将预测作为业务分析和决策工作流程的一部分。企业用户不必是唯一的Wave应用程序用户。现在让我们来看一个Wave应用程序，它由数据科学家使用，用于驱动ML生命周期的模型构建和模型部署阶段。</p>
+			<h2 id="_idParaDest-263"><a id="_idTextAnchor265"/>在Wave AI应用中集成自动化再培训管道</h2>
+			<p>H2O Wave <a id="_idIndexMarker1146"/> SDK包括其他H2O人工智能云组件的原生API。这允许数据科学家构建Wave应用程序来完成数据科学工作流(与在业务用户环境中构建应用程序相比，如前面的示例所示)。</p>
+			<p>例如，数据科学中的一个常见需求是识别已部署模型中的数据漂移，然后用最近的数据重新训练模型，并重新部署更新后的模型。下图显示了如何使用Wave应用程序作为自动化协调器和用户界面来跟踪再培训的历史并对历史进行分析。这是一个应用程序的想法，可以有不同的定义，但总的想法应该是有帮助的。</p>
+			<p>在这里，您可以看到完整ML工作流程的概述:</p>
+			<div><div><img src="img/B16721_14_010.jpg" alt="Figure 14.10 – A Wave app for automated model retraining &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.10-自动化模型再训练的Wave应用程序</p>
+			<p><a id="_idIndexMarker1147"/>工作流程总结如下:</p>
+			<ol>
+				<li value="1">该模型是在H2O-3或苏打水(或其他H2O模型构建引擎，如无人驾驶AI)中构建和评估的。</li>
+				<li>该模型被部署到H2O MLOps，并且预测被使用。MLOps配置为检测模型上的数据漂移。</li>
+				<li>在某个时间点，漂移超过了模型的配置阈值，就会向您构建的模型再训练Wave应用程序发送警报。</li>
+				<li>模型再训练Wave应用程序在H2O模型构建引擎上触发模型的再训练(在我们的例子中，H2O-3或苏打水)。Wave应用程序将重新训练的模型部署为H2O MLOps中的挑战者(使用MLOps API)，一段时间后，Wave应用程序评估新重新训练的挑战者与现有冠军模型的性能。如果挑战者的表现优于冠军，他就会被提升来代替冠军。循环(<em class="italic">步骤3和4 </em>)从这一点继续。</li>
+			</ol>
+			<p>模型再训练Wave应用程序可以提供关于模型再训练的报告、可视化和分析。例如，可以有一个再训练历史表，包括再训练时间、漂移测量、当前状态(例如，训练进行中、部署的模型、处于挑战者状态或冠军状态)等等。可以提供可视化，提供对数据漂移、模型再训练和部署管道的更深入的了解。作为替代方案，自动化可以被人在回路中的工作流所取代，在这种工作流中，管道中的步骤是基于数据科学家的评估手动完成的。</p>
+			<p>作为一个应用程序构建框架，H2O Wave的目标是让你根据自己的规范轻松构建应用程序，并将生态系统中的其他组件集成到应用程序中。因此，您可能会想到一个与这里所示略有不同的模型再训练应用程序。H2O Wave SDK允许你构建你预想的应用程序。</p>
+			<p>在我们的<a id="_idIndexMarker1148"/>示例模型再训练应用程序中，我们将多个H2O组件集成到一个具有可视化和分析功能的Wave应用程序工作流中。在下一节中，我们将把集成扩展到你的生态系统的非H2O组件，从而提供一个强大的框架，以在你的人工智能生态系统中构建Wave应用程序。</p>
+			<h1 id="_idParaDest-264"><a id="_idTextAnchor266"/>作为企业人工智能集成架构的参考H2O Wave应用</h1>
+			<p><a id="_idIndexMarker1149"/>低代码Wave SDK <a id="_idIndexMarker1150"/>允许数据科学家、ML工程师和软件开发人员构建应用程序，将参与ML生命周期的一个或多个H2O组件集成到单个应用程序中。因此，H2O浪潮是一个强大的整合故事。</p>
+			<p>然而，有两个Wave设计事实需要重新审视，因为它们使得这个集成故事更加强大。首先，Wave应用程序部署在容器中，因此与其他Wave应用程序隔离。其次，开发人员可以将公开可用或专有的Python包和API安装并集成到应用程序中。这意味着H2O Wave应用程序可以将H2O和非H2O的组件集成到一个应用程序中。这可以有效地重申如下:H2O应用程序可以作为单一窗格构建在整个人工智能相关的企业生态系统中。如下图所示:</p>
+			<div><div><img src="img/B16721_14_011.jpg" alt="Figure 14.11 – H2O Wave AI app as a layer across your enterprise ecosystem&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.11–H2O Wave AI应用作为一个层跨越您的企业生态系统</p>
+			<p>数据<a id="_idIndexMarker1151"/>科学家、工程师和<a id="_idIndexMarker1152"/>软件开发人员因此可以构建Wave应用，将H2O人工智能云的端到端ML平台与企业生态系统及其底层云服务的人工智能相关和非人工智能相关组件相结合。多样化的应用程序托管在H2O应用程序商店，具有基于角色的访问权限，因此可供多样化的企业利益相关者消费者使用。让我们通过研究下图来进一步分解这一点。</p>
+			<div><div><img src="img/B16721_14_012.jpg" alt="Figure 14.12 – Reference H2O Wave AI app layering across your enterprise ecosystem&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图14.12–参考H2O Wave AI应用在整个企业生态系统中的分层</p>
+			<p>这是一款<a id="_idIndexMarker1153"/>参考H2O <a id="_idIndexMarker1154"/> Wave人工智能应用，展示了其作为整个人工智能相关生态系统的UI集成层的全部潜力。我们的目标是展示这方面的全套功能，并让您发挥想象力，将这一通用参考实例化到适合您特定AI需求的特定应用程序中。</p>
+			<p>让我们回顾一下这些功能，如下所示:</p>
+			<ul>
+				<li><strong class="bold">低代码Python SDK </strong> : Wave的<a id="_idIndexMarker1155"/>低代码Python SDK允许数据科学家、ML工程师和软件开发人员以熟悉的Python风格开发AI应用，专注于在小部件和模板中填充数据，忽略web应用的复杂性。如果需要，可以用CSS样式表扩展SDK，以实现特定的外观。</li>
+				<li><strong class="bold">数据连接器</strong>:Wave SDK有超过140个连接器连接到不同的数据源和目标，这使得将Wave应用程序集成到您的数据生态系统变得非常容易。</li>
+				<li><strong class="bold"> H2O人工智能云API</strong>:Wave SDK拥有H2O人工智能云平台中所有组件的API:四个模型构建引擎及其供应工具，以及MLOps和Feature Store组件。从应用程序的角度来看，这些集成提供了与ML生命周期的所有方面进行交互的强大方法。我们已经在前面讨论的评分消费和模型再训练Wave应用程序中快速浏览了这些可能性。</li>
+				<li><strong class="bold">已安装的Python包</strong>:<a id="_idIndexMarker1156"/>Wave SDK可扩展到您想要安装的任何Python包。例如，这允许您使用更专业的绘图或交互式可视化功能来扩展本机Wave UI组件，或者使用熟悉的包来操作数据。</li>
+				<li><strong class="bold">已安装的Python API</strong>:您还可以<a id="_idIndexMarker1157"/>安装Python库，作为企业生态系统其余部分的API，无论是您自己的组件、非H2O供应商的组件，还是应用程序和原生云服务。这是一种非常强大的方式来编排由连接到H2O人工智能云组件的API驱动的ML工作流，以及您企业生态系统其余部分的功能。</li>
+			</ul>
+			<p>刚刚概述的<a id="_idIndexMarker1158"/>功能和<a id="_idIndexMarker1159"/>集成为Wave应用程序实现企业人工智能分析和工作流开辟了近乎无限的途径。例如，您可以将H2O MLOps上的模型部署和监控集成到现有的多步骤治理流程工作流中。您可以构建用户界面工作流，让用户在数据目录中搜索授权的数据源，选择数据源，然后启动并访问加载了数据源的H2O模型构建环境。这只是让你开始思考的两个例子。如图<em class="italic">图14.11 </em>所示，您可以用自己独特而有创意的方式将许多部分结合在一起，将ML扩展到模型构建和评分之外，并扩展到更大的<a id="_idIndexMarker1160"/>工作流和<a id="_idIndexMarker1161"/>多利益相关方商业价值的环境中。</p>
+			<h1 id="_idParaDest-265"><a id="_idTextAnchor267"/>总结</h1>
+			<p>在本章中，我们探讨了H2O规模技术公司(H2O-3、H2O苏打水、H2O企业蒸汽和H2O MOJO)如何通过参与更大的H2O人工智能云端到端机器学习ML平台来扩展其能力。例如，我们看到了H2O-3和苏打水是如何从最初的快速原型制作和自动特征发现中获益的。同样，我们看到了H2O-3和苏打水模型如何轻松部署到H2O MLOps平台，并从其模型评分、监控和管理功能中获得价值。我们还看到了H2O人工智能功能商店如何实现功能共享，包括使用H2O-3或苏打水建立模型以及在H2O MLOps上进行模型评分。</p>
+			<p>我们开始探索H2O开源低代码Wave SDK的强大功能，以及数据科学家、ML工程师和软件开发人员如何使用它来轻松创建跨H2O组件的可视化、分析和工作流，从而实现完整的ML生命周期。这些应用被发布到H2O平台的应用商店组件，在那里它们被企业利益相关者或外部合作伙伴或企业的客户消费。我们开发的一个Wave应用程序示例是一个员工流失应用程序，用于消费、理解和响应关于个人离开公司的可能性的预测。另一个是模型再训练应用程序，数据科学家通过利用Wave应用程序的底层SDK与H2O-3和H2O MLOps的集成来管理和跟踪自动化模型再训练工作负载。</p>
+			<p>最后，我们引入了一个参考Wave人工智能应用程序来构建跨H2O和非H2O企业人工智能生态系统部分的应用程序，从而形成一个企业人工智能集成结构。</p>
+			<p>因此，我们通过将H2O的人工智能规模化，并将其置于H2O更大的端到端机器学习人工智能平台H2O人工智能云的背景下，完成了这本书。通过将其成熟和成熟的H2O at scale技术与快速创新的H2O人工智能云平台相结合，H2O.ai继续证明自己是定义和创造企业新的人工智能可能性和价值的前沿参与者。</p>
+		</div>
+	
+
+</body></html>

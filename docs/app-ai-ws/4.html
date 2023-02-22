@@ -1,0 +1,450 @@
+<html><head/><body>
+
+
+	
+		<title>B16060_04_Final_SZ_ePub</title>
+		
+	
+	
+		<div><div/>
+		</div>
+		<div><h1 id="_idParaDest-120">4.<a id="_idTextAnchor135"/>决策树简介</h1>
+		</div>
+		<div><p class="callout-heading">概观</p>
+			<p class="callout">本章将向您详细介绍两种监督学习算法。第一种算法将帮助您使用决策树来分类数据点，而另一种算法将帮助您使用随机森林来分类数据点。此外，您将学习如何手动和自动计算模型的精度、召回率和F1值。本章结束时，您将能够分析用于评估数据模型效用的指标，并根据决策树和随机森林算法对数据点进行分类。</p>
+			<h1 id="_idParaDest-121"><a id="_idTextAnchor136"/>简介</h1>
+			<p>在前两章中，我们学习了回归和分类问题之间的区别，并且我们看到了如何训练一些最著名的算法。在这一章，我们将看看另一种类型的算法:基于树的模型。</p>
+			<p>基于树的模型非常流行，因为它们可以模拟复杂的非线性模式，并且相对容易解释。在这一章中，我们将向您介绍决策树和随机森林算法，它们是业界最广泛使用的基于树的模型。</p>
+			<h1 id="_idParaDest-122"><a id="_idTextAnchor137"/>决策树</h1>
+			<p>决策树有叶子、分支和节点。节点是做出决定的地方。决策树由规则组成，我们使用这些规则来制定对数据点预测的决策(或预测)。</p>
+			<p>决策树的每个节点代表一个特征，而从内部节点出来的每个边代表树的一个可能的值或值的一个可能的区间。树的每个叶子代表树的一个标签值。</p>
+			<p>这听起来可能很复杂，但让我们来看看它的一个应用。</p>
+			<p>假设我们有一个具有以下特征的数据集，响应变量决定一个人是否有信用:</p>
+			<div><div><img src="img/B16060_04_01.jpg" alt="Figure 4.1: Sample dataset to formulate the rules&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.1:制定规则的样本数据集</p>
+			<p>记住，决策树只是一组规则。查看图4.1 中的数据集，我们可以得出以下规则:</p>
+			<ul>
+				<li>所有有房屋贷款的人都被确定为有信用的。</li>
+				<li>如果债务人有工作和学习，那么贷款是可信的。</li>
+				<li>年收入在75，000英镑以上的人是有信用的。</li>
+				<li>年收入在7.5万英镑或以下、有汽车贷款且有工作的人是有信用的。</li>
+			</ul>
+			<p>按照我们刚刚定义的规则顺序，我们可以构建一个树，如图<em class="italic">图4.2 </em>所示，并描述一种可能的信用评分方法:</p>
+			<div><div><img src="img/B16060_04_02.jpg" alt="Figure 4.2: Decision tree for the loan type&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.2:贷款类型的决策树</p>
+			<p>首先，我们确定贷款类型。根据第一条规则，房屋贷款是自动可信的。学习贷款由第二个规则描述，导致包含另一个就业决策的子树。由于我们已经涵盖了房屋贷款和学习贷款，所以只剩下汽车贷款了。第三个规则描述了收入决定，而第四个规则描述了就业决定。</p>
+			<p>每当我们必须对一个新的债务人进行评分以确定他们是否有信誉时，我们都必须从上到下遍历决策树，并观察底部的真值或假值。</p>
+			<p>显然，一个基于七个数据点的模型是非常不准确的，因为我们无法归纳出完全不符合现实的规则。因此，规则往往是基于大量数据确定的。</p>
+			<p>这不是我们创建决策树的唯一方法。我们也可以基于其他规则序列构建决策树。让我们从<em class="italic">图4.1 </em>的数据集中提取一些其他规则。</p>
+			<p><strong class="bold">观察结果1 </strong>:请注意，高于75，000的个人薪金都是可信的。</p>
+			<p><code>Income &gt; 75,000 =&gt; CreditWorthy</code>是真的。</p>
+			<p>规则1对七个数据点中的四个数据点进行分类(IDs C，E，F，G)；对于剩下的三个数据点，我们需要更多的规则。</p>
+			<p><strong class="bold">观察2 </strong>:在剩余的三个数据点中，有两个数据点没有被使用。一个是有工作的(ID D)并且是有信用的。有了这一点，我们可以宣称以下规律:</p>
+			<p><code>Income &lt;= 75,000</code>，以下成立:<code>Employed == true =&gt; CreditWorthy</code>。</p>
+			<p>注意，根据第二条规则，我们也可以将剩余的两个数据点(IDs A和B)归类为不可信。仅用两条规则，我们就对该数据集中的所有观察值进行了准确分类:</p>
+			<div><div><img src="img/B16060_04_03.jpg" alt="Figure 4.3: Decision tree for income&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.3:收入决策树</p>
+			<p>第二个决策树不太复杂。与此同时，我们不能忽视这样一个事实，该模型称，<em class="italic">收入较低的就业者偿还贷款的可能性较小</em>。不幸的是，没有足够的训练数据可用(在这个例子中只有7个观察值)，这使得我们很可能以错误的结论结束。</p>
+			<p>当基于几个数据点做出决策时，过度拟合是决策树中经常出现的问题。这个决定很少有代表性。</p>
+			<p>因为我们可以以任何可能的顺序构建决策树，所以定义一种构建决策树的有效方法是有意义的。因此，我们现在将探索一种在决策过程中对特性进行排序的方法。</p>
+			<h2 id="_idParaDest-123"><a id="_idTextAnchor138"/>熵</h2>
+			<p>在信息论中，熵度量属性的可能值随机分布的程度。随机性程度越高，属性的熵就越高。</p>
+			<p>熵是一个事件的最高可能性。如果我们事先知道结果会是什么，那么这个事件就没有随机性。所以，熵是<strong class="bold">零</strong>。</p>
+			<p>我们使用熵来排序决策树中节点的分裂。拿前面的例子来说，我们应该从哪个规则开始？应该是<code>Income &lt;= 75000</code>还是<code>is employed</code>？我们需要使用一个指标来告诉我们一个特定的分割比另一个更好。一个好的分割可以被定义为这样一个事实:它清楚地将数据分割成两个同质的组。其中一个指标是信息增益，它基于熵。</p>
+			<p>下面是计算熵的公式:</p>
+			<div><div><img src="img/B16060_04_04.jpg" alt="Figure 4.4: Entropy formula&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.4:熵公式</p>
+			<p><em class="italic"> p </em> i代表目标变量的一个可能值出现的概率。所以，如果这一列有<em class="italic"> n </em>个不同的唯一值，那么我们就有了它们每一个的概率<em class="italic">(【p</em>1<em class="italic">，p </em> 2 <em class="italic">，...，p</em>n<em class="italic">)</em>并应用公式。</p>
+			<p>要手动计算Python中一个分布的熵，我们可以使用NumPy库中的<code>np.log2</code>和<code>np.dot()</code>方法。<code>numpy</code>中没有自动计算熵的功能。</p>
+			<p>看看下面的例子:</p>
+			<pre>import numpy as np
+probabilities = list(range(1,4)) 
+minus_probabilities = [-x for x in probabilities]
+log_probabilities = [x for x in map(np.log2, probabilities)]
+entropy_value = np.dot(minus_probabilities, log_probabilities)</pre>
+			<p>概率以NumPy数组或常规列表的形式出现在<em class="italic">第2行</em>:pI。</p>
+			<p>我们需要创建一个分布在<em class="italic">行3 </em> : - <em class="italic"> p </em> i的取反值的向量</p>
+			<p>在<em class="italic">第4行</em>中，我们必须取分配列表中每个值的以2为底的对数:logi pi。</p>
+			<p>最后，我们用标量积计算和，也称为两个向量的点积:</p>
+			<div><div><img src="img/B16060_04_05.jpg" alt="Figure 4.5: Dot product of two vectors&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.5:两个向量的点积</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">你在<em class="italic">第二章</em>、<em class="italic">回归介绍</em>中第一次了解了点积。对于每个<em class="italic"> i </em>，通过将第一个向量的第<em class="italic"> i </em>个坐标乘以第二个向量的第<em class="italic"> i </em>个坐标来计算两个向量的点积。一旦我们得到了所有的产品，我们就对这些值求和:</p>
+			<p class="callout"><em class="italic"> np.dot([1，2，3]，[4，5，6]) </em></p>
+			<p class="callout">这导致1*4 + 2*5 + 3*6 = 32。</p>
+			<p>在下一个练习中，我们将在一个小样本数据集上计算熵。</p>
+			<h2 id="_idParaDest-124">练习4.01:计算熵</h2>
+			<p>在本练习中，我们将计算<em class="italic">图4.6 </em>中数据集中要素的熵:</p>
+			<div><div><img src="img/B16060_04_06.jpg" alt="Figure 4.6: Sample dataset to formulate the rules&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.6:制定规则的样本数据集</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">数据集文件也可以在我们的GitHub资源库中找到:</p>
+			<p class="callout"><a href="https://packt.live/2AQ6Uo9">https://packt.live/2AQ6Uo9</a>。</p>
+			<p>我们将计算<code>Employed</code>、<code>Income</code>、<code>LoanType</code>和<code>LoanAmount</code>特征的熵。</p>
+			<p>以下步骤将帮助您完成本练习:</p>
+			<ol>
+				<li>打开新的Jupyter笔记本文件。</li>
+				<li>将<code>numpy</code>包导入为<code>np</code> : <pre>import numpy as np</pre></li>
+				<li>Define a function called <code>entropy()</code> that receives an array of probabilities and then returns the calculated entropy value, as shown in the following code snippet:<pre>def entropy(probabilities):
+    minus_probabilities = [-x for x in probabilities]
+    log_probabilities = [x for x in map(np.log2, \
+                                        probabilities)]
+    return np.dot(minus_probabilities, log_probabilities)</pre><p>接下来，我们将计算<code>Employed</code>列的熵。该列只包含两个可能的值:<code>true</code>或<code>false</code>。<code>true</code>值在七行中出现了四次，所以它的概率是<code>4/7</code>。类似地，<code>false</code>值的概率是<code>3/7</code>，因为它在这个数据集中出现了三次。</p></li>
+				<li>Use the <code>entropy()</code> function to calculate the entropy of the <code>Employed</code> column with the probabilities <code>4/7</code> and <code>3/7</code>:<pre>H_employed = entropy([4/7, 3/7])
+H_employed</pre><p>您应该得到以下输出:</p><pre>0.9852281360342515</pre><p>这个值非常接近于零，这意味着这些组非常相似。</p></li>
+				<li>Now, use the <code>entropy()</code> function to calculate the entropy of the <code>Income</code> column with its corresponding list of probabilities:<pre>H_income = entropy([1/7, 2/7, 1/7, 2/7, 1/7])
+H_income</pre><p>您应该得到以下输出:</p><pre>2.2359263506290326</pre><p>与<code>Employed</code>列相比，<code>Income</code>的熵更高。这意味着该列的概率分布更广。</p></li>
+				<li>Use the <code>entropy</code> function to calculate the entropy of the <code>LoanType</code> column with its corresponding list of probabilities:<pre>H_loanType = entropy([3/7, 2/7, 2/7])
+H_loanType</pre><p>您应该得到以下输出:</p><pre>1.5566567074628228</pre><p>该值大于0，因此该列的概率分布很广。</p></li>
+				<li>Let's use the <code>entropy</code> function to calculate the entropy of the <code>LoanAmount</code> column with its corresponding list of probabilities:<pre>H_LoanAmount = entropy([1/7, 1/7, 3/7, 1/7, 1/7])
+H_LoanAmount</pre><p>您应该得到以下输出:</p><pre>2.128085278891394</pre><p><code>LoanAmount</code>的熵相当高，所以它的值相当随机。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/37T8DVz">https://packt.live/37T8DVz</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2By7aI6">https://packt.live/2By7aI6</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>在这里，您可以看到<code>Employed</code>列在四个不同的列中具有最低的熵，因为它在值方面具有最小的变化。</p>
+			<p>通过完成本练习，您已经学习了如何手动计算数据集每一列的熵。</p>
+			<h2 id="_idParaDest-125"><a id="_idTextAnchor140"/>信息增益</h2>
+			<p>当我们根据属性的值划分数据集中的数据点时，我们减少了系统的熵。</p>
+			<p>为了描述信息增益，我们可以计算标签的分布。最初，在<em class="italic">图4.1 </em>中，我们的数据集中有五个信誉良好的人和两个信誉不佳的人。属于初始分布的熵如下:</p>
+			<pre>H_label = entropy([5/7, 2/7])
+H_label</pre>
+			<p>输出如下所示:</p>
+			<pre>0.863120568566631</pre>
+			<p>让我们看看，如果我们根据贷款金额是否大于15，000对数据集进行分区，会发生什么情况:</p>
+			<ul>
+				<li>在组1中，我们得到一个属于15，000贷款金额的数据点。这个数据点不可信。</li>
+				<li>在第2组中，我们有五个信誉良好的个人和一个信誉不佳的个人。</li>
+			</ul>
+			<p>每组中标签的熵如下。</p>
+			<p>对于第1组，我们有以下内容:</p>
+			<pre>H_group1 = entropy([1]) 
+H_group1</pre>
+			<p>输出如下所示:</p>
+			<pre>-0.0</pre>
+			<p>对于第2组，我们有以下内容:</p>
+			<pre>H_group2 = entropy([5/6, 1/6]) 
+H_group2</pre>
+			<p>输出如下所示:</p>
+			<pre>0.6500224216483541</pre>
+			<p>为了计算信息增益，让我们计算组熵的加权平均值:</p>
+			<pre>H_group1 * 1/7 + H_group2 * 6/7</pre>
+			<p>输出如下所示:</p>
+			<pre>0.5571620756985892</pre>
+			<p>现在，为了找到信息增益，我们需要计算原始熵(<code>H_label</code>)和我们刚刚计算的熵之间的差异:</p>
+			<pre>Information_gain = 0.863120568566631 - 0.5572
+Information_gain</pre>
+			<p>输出如下所示:</p>
+			<pre>0.30592056856663097</pre>
+			<p>通过用这个规则分割数据，我们获得了一点点信息。</p>
+			<p>当创建决策树时，在每个节点上，我们的工作是使用最大化信息增益的规则来划分数据集。</p>
+			<p>我们还可以使用基尼不纯度来代替基于熵的信息增益，以构建分裂决策树的最佳规则。</p>
+			<h2 id="_idParaDest-126"><a id="_idTextAnchor141"/>基尼不纯</h2>
+			<p>除了熵，还有另一个广泛使用的指标可以用来衡量分布的随机性:基尼系数。</p>
+			<p>基尼系数的定义如下:</p>
+			<div><div><img src="img/B16060_04_07.jpg" alt="Figure 4.7: Gini Impurity&#13;&#10; &#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.7:基尼系数</p>
+			<p><em class="italic"> p </em> i这里代表目标变量的一个可能值出现的概率。</p>
+			<p>由于对数的使用，熵的计算可能会慢一点。另一方面，基尼系数在衡量随机性时不够精确。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">有些程序员更喜欢基尼不纯，因为你不用用对数计算。在计算方面，没有一个解决方案是特别复杂的，所以两个都可以使用。谈到性能，以下研究得出结论，这两个指标之间往往只有极小的差异:<a href="https://www.unine.ch/files/live/sites/imi/files/shared/documents/papers/Gini_index_fulltext.pdf">https://www . unine . ch/files/live/sites/imi/files/shared/documents/papers/Gini _ index _ full text . pdf</a>。</p>
+			<p>由此，我们了解到，我们可以通过基于信息增益或基尼不纯度分割数据来优化决策树。不幸的是，这些指标只适用于离散值。如果标签是在一个连续的区间上定义的，比如一个价格区间或者工资区间，那该怎么办？</p>
+			<p>我们必须使用其他指标。您可以从技术上理解基于连续标签创建决策树背后的想法，这是关于回归的。本章中我们可以重复使用的一个度量标准是均方误差。代替基尼杂质或信息增益，我们必须最小化均方误差来优化决策树。由于这是一个初学者的课程，我们将省略这一指标。</p>
+			<p>在下一节中，我们将讨论决策树的退出条件。</p>
+			<h2 id="_idParaDest-127"><a id="_idTextAnchor142"/>退出条件</h2>
+			<p>我们可以根据越来越具体的规则不断拆分数据点，直到决策树的每一片叶子的熵为零。问题是这种最终状态是否可取。</p>
+			<p>通常，这不是我们所期望的，因为我们有过度拟合模型的风险。当我们对模型的规则太具体、太吹毛求疵，并且做出决策的样本量太小时，我们就有做出错误结论的风险，从而识别出数据集中根本不存在于现实生活中的模式。</p>
+			<p>例如，如果我们旋转轮盘赌三次，我们得到12、25和12，这就得出结论，每一次导致值12的奇数旋转都不是明智的策略。通过假设每一个奇数自旋等于12，我们发现了一个完全由随机噪声引起的规则。</p>
+			<p>因此，对我们仍然可以分割的数据集的最小大小进行限制是一个在实践中行之有效的退出条件。例如，如果一旦数据集的大小小于50、100、200或500，就停止分割，就可以避免根据随机噪声得出结论，从而最大限度地降低模型过度拟合的风险。</p>
+			<p>另一个流行的退出条件是对树深度的最大限制。一旦我们达到一个固定的树深度，我们就对树叶中的数据点进行分类。</p>
+			<h2 id="_idParaDest-128"><a id="_idTextAnchor143"/>使用scikit-learn构建决策树分类器</h2>
+			<p>我们已经学习了如何从<code>.csv</code>文件中加载数据，如何对数据进行预处理，以及如何将数据分割成训练和测试数据集。如果您需要更新这方面的知识，您可以回到前面的章节，在那里您可以在回归和分类的背景下经历这个过程。</p>
+			<p>现在，我们将假设一组训练特征、训练标签、测试特征和测试标签已经作为<code>scikit-learn train-test-split</code>调用的返回值给出:</p>
+			<pre>from sklearn import model_selection
+features_train, features_test, \
+label_train, label_test = \
+model_selection.train_test_split(features, label, test_size=0.1, \
+                                 random_state=8)</pre>
+			<p>在前面的代码片段中，我们使用<code>train_test_split</code>将数据集(特征和标签)分成训练集和测试集。测试集代表10%的观察值(<code>test_size=0.1</code>)。<code>random_state</code>参数用于获得可重复的结果。</p>
+			<p>我们不会关注如何获得这些数据点，因为这个过程与回归和分类的情况完全相同。</p>
+			<p>是时候导入和使用scikit-learn的决策树分类器了:</p>
+			<pre>from sklearn.tree import DecisionTreeClassifier
+decision_tree = DecisionTreeClassifier(max_depth=6)
+decision_tree.fit(features_train, label_train)</pre>
+			<p>我们在<code>DecisionTreeClassifier</code>中设置一个可选参数，即<code>max_depth</code>，来限制决策树的深度。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">参数完整列表可以阅读官方文档:<a href="http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html">http://sci kit-learn . org/stable/modules/generated/sk learn . tree . decision tree classifier . html</a>。</p>
+			<p>一些比较重要的参数如下:</p>
+			<ul>
+				<li><code>criterion</code>:基尼代表基尼杂质，熵代表信息增益。这将定义将使用哪个测量来评估每个节点的分割质量。</li>
+				<li><code>max_depth</code>:该参数定义了树的最大深度。</li>
+				<li><code>min_samples_split</code>:这是分割内部节点所需的最小样本数。</li>
+			</ul>
+			<p>您还可以试验文档中列举的所有其他参数。我们将在本节中省略它们。</p>
+			<p>一旦建立了模型，我们就可以使用决策树分类器来预测数据:</p>
+			<pre>decision_tree.predict(features_test)</pre>
+			<p>您将在本节末尾的活动中构建一个决策树分类器。</p>
+			<h2 id="_idParaDest-129"><a id="_idTextAnchor144"/>分类器的性能指标</h2>
+			<p>在拆分训练和测试数据后，决策树模型有一个<code>score</code>方法来评估测试数据被模型分类的好坏(也称为准确度分数)。在前两章中，我们学习了如何使用<code>score</code>方法:</p>
+			<pre>decision_tree.score(features_test, label_test)</pre>
+			<p><code>score</code>方法的返回值是一个小于或等于1的数字。我们越接近1，我们的模型就越好。</p>
+			<p>现在，我们将了解评估模型的另一种方法。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">您也可以在上一章构建的模型上随意使用这种方法。</p>
+			<p>假设我们有一个测试特性和一个测试标签:</p>
+			<pre>predicted_label = decision_tree.predict(features_test)</pre>
+			<p>让我们使用之前的信誉良好的例子，并假设我们训练了一个决策树，现在有了它的预测:</p>
+			<div><div><img src="img/B16060_04_08.jpg" alt="Figure 4.8: Sample dataset to formulate the rules&#13; &#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.8:制定规则的样本数据集</p>
+			<p>总的来说，我们的模型做出了很好的预测，但误差很小。它错误地预测了id<code>A</code>、<code>D</code>和<code>E</code>的结果。它的准确度分数将是4 / 7 = 0.57。</p>
+			<p>我们将使用以下定义来定义一些指标，帮助您评估您的分类器有多好:</p>
+			<ul>
+				<li><code>Creditworthy</code>列，在我们的例子中)和相应的预测都具有值<code>Yes</code>。在我们的例子中，id<code>C</code>、<code>F</code>和<code>G</code>将属于这个类别。</li>
+				<li><code>No</code>。只有ID <code>B</code>会被归类为真阴性。</li>
+				<li><code>Yes</code>但真正的标签其实是<code>No</code>。ID <code>A</code>就是这种情况。</li>
+				<li><code>No</code>但真正的标签其实是<code>Yes</code>，比如对于id<code>D</code>和<code>E</code>。</li>
+			</ul>
+			<p>使用前面的四个定义，我们可以定义四个指标来描述我们的模型预测目标变量的好坏。<code>#( X )</code>符号表示<code>X</code>中数值的数量。使用技术术语，<code>#( X )</code>表示<code>X</code>的基数:</p>
+			<p><strong class="bold">定义(准确性)</strong> : <em class="italic"> #(真阳性)+ #(真阴性)/ #(数据集)</em></p>
+			<p>准确性是一种度量标准，用于确定分类器给我们正确答案的次数。这是我们用来评估分类器得分的第一个指标。</p>
+			<p>在我们之前的例子(<em class="italic">图4.8 </em>)中，准确度得分将是TP + TN / total = (3 + 1) / 7 = 4/7。</p>
+			<p>我们可以使用scikit-learn提供的函数来计算模型的精度:</p>
+			<pre>from sklearn.metrics import accuracy_score
+accuracy_score(label_test, predicted_label)</pre>
+			<p><strong class="bold">定义(精度)</strong>:<em class="italic"># true positives/(# true positives+# false positives)</em></p>
+			<p>精度以我们的分类器发现的正值为中心。这些结果有些是真阳性，有些是假阳性。高精度意味着与真阳性结果相比，假阳性结果的数量非常低。这意味着一个精确的分类器在找到肯定结果时很少出错。</p>
+			<p><strong class="bold">定义(回忆)</strong>:<em class="italic">#真阳性/(#真阳性+#假阴性)</em></p>
+			<p>回忆集中在测试数据中的正值。这些结果中的一些被分类器发现。这些才是真正的正价值观。分类器没有发现的那些正值是假阴性。具有高召回值的分类器找到大多数正值。</p>
+			<p>使用我们之前的示例(<em class="italic">图4.8 </em>，我们将得到以下度量:</p>
+			<ul>
+				<li>精度= TP / (TP + FP) = 4 / (4 + 1) = 4/6 = 0.8</li>
+				<li>回忆= TP / (TP + FN) = 4 / (4 + 2) = 4/6 = 0.6667</li>
+			</ul>
+			<p>通过这两个度量，我们可以很容易地看到我们的模型在哪里表现得更好或更差。在这个例子中，我们知道它倾向于错误分类假阴性病例。这些度量比准确性分数更精细，准确性分数只给出总体分数。</p>
+			<p>F1分数是一个结合了精确度和召回分数的指标。其值介于0和1之间。如果F1分数等于1，这意味着模型完美地预测了正确的结果。另一方面，F1值为0意味着模型无法准确预测目标变量。F1分数的优点是它考虑了假阳性和假阴性。</p>
+			<p>计算F1分数的公式如下:</p>
+			<div><div><img src="img/B16060_04_09.jpg" alt="Figure 4.9: Formula to calculate the F1 score&#13; &#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.9:计算F1分数的公式</p>
+			<p>最后一点，scikit-learn包还提供了一个方便的函数，可以一次性显示所有这些度量:<code>classification_report()</code>。分类报告有助于检查我们预测的质量:</p>
+			<pre>from sklearn.metrics import classification_report
+print(classification_report(label_test, predicted_label))</pre>
+			<p>在下一个练习中，我们将练习如何手动计算这些分数。</p>
+			<h2 id="_idParaDest-130"><a id="_idTextAnchor145"/>练习4.02:精确度、召回率和F1分数计算</h2>
+			<p>在本练习中，我们将计算模拟数据集上两个不同分类器的精度、召回值和F1值。</p>
+			<p>以下步骤将帮助您完成本练习:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>使用下面的代码将<code>numpy</code>包作为<code>np</code>导入:<pre>import numpy as np</pre></li>
+				<li>Create a <code>numpy</code> array called <code>real_labels</code> that contains the values [<code>True, True, False, True, True]</code>. This list will represent the true values of the target variable for our simulated dataset. Print its content:<pre>real_labels = np.array([True, True, False, True, True])
+real_labels</pre><p>预期产出如下:</p><pre>array([ True, True, False, True, True])</pre></li>
+				<li>Create a <code>numpy</code> array called <code>model_1_preds</code> that contains the values <code>[True, False, False, False, False]</code>. This list will represent the predicted values of the first classifier. Print its content:<pre>model_1_preds = np.array([True, False, False, False, False])
+model_1_preds</pre><p>预期产出如下:</p><pre>array([ True, False, False, False, False])</pre></li>
+				<li>Create another <code>numpy</code> array called <code>model_2_preds</code> that contains the values <code>[True, True, True, True, True]</code>. This list will represent the predicted values of the first classifier. Print its content:<pre>model_2_preds = np.array([True, True, True, True, True])
+model_2_preds</pre><p>预期产出如下:</p><pre>array([ True,  True,  True,  True,  True])</pre></li>
+				<li>Create a variable called <code>model_1_tp_cond</code> that will find the true positives for the first model:<pre>model_1_tp_cond = (real_labels == True) \
+                   &amp; (model_1_preds == True)
+model_1_tp_cond</pre><p>预期产出如下:</p><pre>array([ True, False, False, False, False])</pre></li>
+				<li>Create a variable called <code>model_1_tp</code> that will get the number of true positives for the first model by summing <code>model_1_tp_cond</code>:<pre>model_1_tp = model_1_tp_cond.sum()
+model_1_tp</pre><p>预期产出如下:</p><pre>1</pre><p>对于第一个模型，只有<code>1</code>真正的正面案例。</p></li>
+				<li>Create a variable called <code>model_1_fp</code> that will get the number of false positives for the first model:<pre>model_1_fp = ((real_labels == False) \
+               &amp; (model_1_preds == True)).sum()
+model_1_fp</pre><p>预期产出如下:</p><pre>0</pre><p>第一个模型没有假阳性。</p></li>
+				<li>Create a variable called <code>model_1_fn</code> that will get the number of false negatives for the first model:<pre>model_1_fn = ((real_labels == True) \
+               &amp; (model_1_preds == False)).sum()
+model_1_fn</pre><p>预期产出如下:</p><pre>3</pre><p>第一个分类器呈现<code>3</code>假阴性情况。</p></li>
+				<li>Create a variable called <code>model_1_precision</code> that will calculate the precision for the first model:<pre>model_1_precision = model_1_tp / (model_1_tp + model_1_fp)
+model_1_precision</pre><p>预期产出如下:</p><pre>1.0</pre><p>第一个分类器的精度分数为<code>1</code>，因此它没有预测到任何假阳性。</p></li>
+				<li>Create a variable called <code>model_1_recall</code> that will calculate the recall for the first model:<pre>model_1_recall = model_1_tp / (model_1_tp + model_1_fn)
+model_1_recall</pre><p>预期产出如下:</p><pre>0.25</pre><p>第一个模型的召回分数只有<code>0.25</code>，所以它预测了相当多的假阴性。</p></li>
+				<li>Create a variable called <code>model_1_f1</code> that will calculate the F1 score for the first model:<pre>model_1_f1 = 2*model_1_precision * model_1_recall\
+             / (model_1_precision + model_1_recall)
+model_1_f1</pre><p>预期产出如下:</p><pre>0.4</pre><p>正如所料，第一款车型的F1分数相当低。</p></li>
+				<li>Create a variable called <code>model_2_tp</code> that will get the number of true positives for the second model:<pre>model_2_tp = ((real_labels == True) \
+               &amp; (model_2_preds == True)).sum()
+model_2_tp</pre><p>预期产出如下:</p><pre>4</pre><p>第二个模型有<code>4</code>个真正的正面案例。</p></li>
+				<li>Create a variable called <code>model_2_fp</code> that will get the number of false positives for the second model:<pre>model_2_fp = ((real_labels == False) \
+               &amp; (model_2_preds == True)).sum()
+model_2_fp</pre><p>预期产出如下:</p><pre>1</pre><p>第二个模型只有一个假阳性。</p></li>
+				<li>Create a variable called <code>model_2_fn</code> that will get the number of false negatives for the second model:<pre>model_2_fn = ((real_labels == True) \
+               &amp; (model_2_preds == False)).sum()
+model_2_fn</pre><p>预期产出如下:</p><pre>0</pre><p>第二分类器没有假阴性。</p></li>
+				<li>Create a variable called <code>model_2_precision</code> that will calculate precision for the second model:<pre>model_2_precision = model_2_tp / (model_2_tp + model_2_fp) 
+model_2_precision</pre><p>预期产出如下:</p><pre>0.8</pre><p>第二个模型的精度分数相当高:<code>0.8</code>。它不会在误报方面犯太多错误。</p></li>
+				<li>Create a variable called <code>model_2_recall</code> that will calculate recall for the second model:<pre>model_2_recall = model_2_tp / (model_2_tp + model_2_fn)
+model_2_recall</pre><p>预期产出如下:</p><pre>1.0</pre><p>就回忆而言，第二个分类器做得很好，没有将观察错误分类为假阴性。</p></li>
+				<li>Create a variable called <code>model_2_f1</code> that will calculate the F1 score for the second model:<pre>model_2_f1 = 2*model_2_precision*model_2_recall \
+             / (model_2_precision + model_2_recall)
+model_2_f1</pre><p>预期产出如下:</p><pre>0.888888888888889</pre><p>第二款车型的F1分相当高。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考https://packt.live/3evqbtu的<a href="https://packt.live/3evqbtu"/>。</p><p class="callout">你也可以在https://packt.live/2NoxLdo在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+			</ol>
+			<p>在本练习中，我们了解了如何手动计算两个不同模型的精确度、召回率和F1分数。第一个分类器具有很好的精度，但是召回率很差，而第二个分类器具有很好的召回率和相当好的精度。</p>
+			<h2 id="_idParaDest-131"><a id="_idTextAnchor146"/>使用scikit-learn评估分类器的性能</h2>
+			<p>scikit-learn软件包提供了一些自动计算精确度、召回率和F1分数的功能。您需要首先导入它们:</p>
+			<pre>from sklearn.metrics import recall_score, \
+precision_score, f1_score</pre>
+			<p>要获得精度分数，您需要从您的模型中获得预测，如下面的代码片段所示:</p>
+			<pre>label_predicted = decision_tree.predict(data)
+precision_score(label_test, predicted_label, \
+                average='weighted')</pre>
+			<p>计算<code>recall_score</code>可以这样进行:</p>
+			<pre>recall_score(label_test, label_predicted, average='weighted')</pre>
+			<p>计算<code>f1_score</code>可以这样进行:</p>
+			<pre>f1_score(label_test, predicted_label, average='weighted')</pre>
+			<p>在下一节中，我们将学习如何使用另一个叫做混淆矩阵的工具来分析分类器的性能。</p>
+			<h1 id="_idParaDest-132"><a id="_idTextAnchor147"/>混淆矩阵</h1>
+			<p>之前，我们学习了如何使用一些计算出来的指标来评估分类器的性能。还有一个非常有趣的工具可以帮助您评估多类分类模型的性能:混淆矩阵。</p>
+			<p>混淆矩阵是一个正方形矩阵，其中行数和列数等于不同标签值(或类)的数量。在矩阵的列中，我们放置每个测试标签值。在矩阵的行中，我们放置每个预测的标签值。</p>
+			<p>混淆矩阵看起来像这样:</p>
+			<div><div><img src="img/B16060_04_10.jpg" alt="Figure 4.10: Sample confusion matrix&#13; &#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.10:样本混淆矩阵</p>
+			<p>在前面的示例中，混淆矩阵的第一行向我们展示了模型正在执行以下操作:</p>
+			<ul>
+				<li>正确预测A级<code>88</code>时间</li>
+				<li>当真值为B <code>3</code>倍时预测A类</li>
+				<li>当真值是C的<code>2</code>倍时预测A类</li>
+			</ul>
+			<p>我们还可以看到这样一个场景，模型在预测C时犯了很多错误，而实际值是A (16次)。混淆矩阵是一个强大的工具，可以快速而容易地识别出你的模型在哪些类上表现得好或者不好。</p>
+			<p>scikit-learn软件包提供了计算和显示混淆矩阵的功能:</p>
+			<pre>from sklearn.metrics import confusion_matrix
+confusion_matrix(label_test, predicted_label)</pre>
+			<p>在下一个活动中，您将构建一个决策树，将汽车分为不可接受、可接受、良好和对客户非常好。</p>
+			<h2 id="_idParaDest-133"><a id="_idTextAnchor148"/>活动4.01:汽车数据分类</h2>
+			<p>在本活动中，您将构建一个可靠的决策树模型，该模型能够帮助公司找到客户可能购买的汽车。我们将假设汽车租赁机构正专注于与其客户建立持久的关系。您的任务是建立一个决策树模型，将汽车分为四类:不可接受、可接受、良好和非常好。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">数据集文件也可以在我们的GitHub资源库中找到:<a href="https://packt.live/2V95I6h">https://packt.live/2V95I6h</a>。</p>
+			<p class="callout">这项活动的数据集可以在这里访问:<a href="https://archive.ics.uci.edu/ml/datasets/Car+Evaluation">https://archive.ics.uci.edu/ml/datasets/Car+Evaluation</a>。</p>
+			<p class="callout">引文-<em class="italic">杜瓦，d .，&amp;格拉夫，C..(2017).UCI机器学习知识库</em>。</p>
+			<p>它由六个不同的特征组成:<code>buying</code>、<code>maintenance</code>、<code>doors</code>、<code>persons</code>、<code>luggage_boot</code>和<code>safety</code>。目标变量对给定汽车的可接受性水平进行排名。它可以取四个不同的值:<code>unacc</code>、<code>acc</code>、<code>good</code>和<code>vgood</code>。</p>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">将数据集加载到Python中，并导入必要的库。</li>
+				<li>使用scikit-learn中的<code>LabelEncoder()</code>执行标签编码。</li>
+				<li>使用<code>pop()</code>从pandas中提取<code>label</code>变量。</li>
+				<li>现在，用<code>train_test_spit()</code>从scikit-learn中分离出训练和测试数据。我们将使用10%的数据作为测试数据。</li>
+				<li>使用<code>DecisionTreeClassifier()</code>及其方法、<code>fit()</code>和<code>predict()</code>构建决策树分类器。</li>
+				<li>用<code>score()</code>根据测试数据检查我们模型的得分。</li>
+				<li>使用scikit-learn中的<code>classification_report()</code>对模型进行更深入的评估。</li>
+			</ol>
+			<p>预期产出:</p>
+			<div><div><img src="img/B16060_04_11.jpg" alt="Figure 4.11: Output showing the expected classification report&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.11:显示预期分类报告的输出</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这项活动的解决方案可在第353页找到。</p>
+			<p>在下一节中，我们将研究随机森林分类器。</p>
+			<h1 id="_idParaDest-134"><a id="_idTextAnchor150"/>随机森林分类器</h1>
+			<p>如果考虑随机森林分类器这个名称，它可以解释如下:</p>
+			<ul>
+				<li>一个森林由多棵树组成。</li>
+				<li>这些树可以用来分类。</li>
+				<li>因为到目前为止我们用于分类的唯一一棵树是决策树，所以随机森林是决策树的森林是有意义的。</li>
+				<li>树的随机性意味着我们的决策树是以随机的方式构建的。</li>
+			</ul>
+			<p>因此，我们将基于信息增益或基尼系数来构建决策树。</p>
+			<p>一旦你理解了这些基本概念，你基本上就知道随机森林分类器是什么了。森林中的树木越多，预测就越准确。在执行预测时，每棵树都执行分类。我们收集结果，得票最多的班级获胜。</p>
+			<p>随机森林可用于回归和分类。使用随机森林进行回归时，不是统计一个类的最多票数，而是取预测结果的算术平均值(average)的平均值并返回。不过，随机森林对于回归来说不如对于分类来说理想，因为用于预测值的模型通常会失控，并且通常会返回范围很广的值。这些值的平均值往往没有太大的意义。管理回归练习中的噪音比分类更难。</p>
+			<p>随机森林通常比一个简单的决策树更好，因为它们提供了冗余。它们更好地处理异常值，并且过度拟合模型的可能性更低。只要您对创建模型时使用的数据使用决策树，它们似乎表现得很好。一旦你用它们来预测新数据，随机森林就失去了优势。随机森林广泛用于分类问题，无论是银行或电子商务的客户细分、图像分类还是医学。如果你有一个装有Kinect的Xbox，你的Kinect设备包含一个随机森林分类器来检测你的身体。</p>
+			<p>随机森林是一种集成算法。集成学习背后的思想是，我们对潜在具有不同弱点的多个代理的决策进行汇总。由于聚合投票，这些弱点被抵消，多数票可能代表正确的结果。</p>
+			<h2 id="_idParaDest-135"><a id="_idTextAnchor151"/>使用scikit-learn进行随机森林分类</h2>
+			<p>正如您可能已经猜到的，scikit-learn包用<code>RandomForestClassifier</code>类提供了一个<code>RandomForest</code>分类器的实现。这个类提供了与您目前为止看到的所有scikit-learn模型完全相同的方法——您需要实例化一个模型，然后用<code>.fit()</code>使其适合训练集，最后用<code>.predict()</code>进行预测:</p>
+			<pre>from sklearn.ensemble import RandomForestClassifier
+random_forest_classifier = RandomForestClassifier()
+random_forest_classifier.fit(features_train, label_train)
+labels_predicted = random_forest_classifier.predict\
+                   (features_test)</pre>
+			<p>在下一节中，我们将研究随机森林分类器的参数化。</p>
+			<h2 id="_idParaDest-136"><a id="_idTextAnchor152"/>随机森林分类器的参数化</h2>
+			<p>我们将考虑可能参数的一个子集，这是基于我们已经知道的，这是基于构造随机森林的描述:</p>
+			<ul>
+				<li><code>n_estimators</code>:随机森林中的树木数量。默认值为10。</li>
+				<li><code>criterion</code>:使用基尼或熵，利用每棵树中的熵来确定你使用的是基尼杂质还是信息增益。这将用于在每个节点找到最佳分割。</li>
+				<li><code>max_features</code>:森林中任意一棵树考虑的最大特征数。可能的值包括一个整数。您还可以添加一些字符串，如<code>sqrt</code>来表示特性数量的平方根。</li>
+				<li><code>max_depth</code>:每棵树的最大深度。</li>
+				<li><code>min_samples_split</code>:给定节点的数据集中执行拆分的最小样本数。这也可能会减小树的大小。</li>
+				<li><code>bootstrap</code>:一个布尔值，指示在构造树时是否对数据点使用引导。</li>
+			</ul>
+			<h2 id="_idParaDest-137"><a id="_idTextAnchor153"/>功能重要性</h2>
+			<p>随机森林分类器为您提供了关于数据分类过程中每个要素的重要性的信息。请记住，我们使用了大量随机构建的决策树来分类数据点。我们可以测量这些数据点的行为有多准确，还可以看到哪些特征对于决策至关重要。</p>
+			<p>我们可以使用以下查询来检索特征重要性分数的数组:</p>
+			<pre>random_forest_classifier.feature_importances_</pre>
+			<p>在这个六特征分类器中，第四和第六特征显然比任何其他特征都重要。第三个特征具有非常低的重要性分数。</p>
+			<p>当我们有很多特征，并且我们想要减少特征大小以避免分类器迷失在细节中时，特征重要性分数就派上了用场。当我们有很多特征时，我们有过度拟合模型的风险。因此，通过删除最不重要的特征来减少特征的数量通常是有帮助的。</p>
+			<h2 id="_idParaDest-138"><a id="_idTextAnchor154"/>交叉验证</h2>
+			<p>前面，我们学习了如何使用不同的指标来评估分类器的性能，如准确度、精确度、召回率或训练和测试集上的F1分数。目标是在彼此非常接近的两个集合上获得高分。在这种情况下，您的模型是高性能的，不容易过度拟合。</p>
+			<p>测试集用作代理，以评估您的模型是否可以很好地概括看不见的数据，或者它是否可以学习仅与训练集相关的模式。</p>
+			<p>但是在有相当多的超参数需要优化的情况下(比如对于<code>RandomForest</code>，您将不得不训练许多不同的模型，并在您的测试集上测试它们。这种情况违背了测试集的目的。把测试集想象成期末考试，它将决定你是否通过一门课程。你不会被允许一遍又一遍地通过它。</p>
+			<p>避免过多使用测试集的一个解决方案是创建一个验证集。您将在训练集上训练您的模型，并使用验证集根据超参数的不同组合来评估其得分。一旦你找到了你的最佳模型，你将使用测试集来确保它不会过度拟合。一般来说，这是任何数据科学项目的建议方法。</p>
+			<p>这种方法的缺点是减少了训练集的观察次数。如果数据集有数百万行，这不是问题。但是对于一个小的数据集，这可能是有问题的。这就是交叉验证的用武之地。</p>
+			<p>下面的<em class="italic">图4.12 </em>显示了这是一种创建多个训练数据分割的技术。对于每个拆分，训练数据被分成多个折叠(在本例中为五个)，其中一个折叠将用作验证集，而其他折叠将用于训练。</p>
+			<p>例如，对于顶部拆分，折叠5将用于验证，其他四个折叠(1到4)将用于训练模型。每次拆分都要遵循相同的过程。在经历每一次分割后，您将使用整个训练数据，最终的性能分数将是在每一次分割中训练的所有模型的平均值:</p>
+			<div><div><img src="img/B16060_04_12.jpg" alt="Figure 4.12: Cross-validation example&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图4.12:交叉验证示例</p>
+			<p>使用scikit-learn，您可以轻松地执行交叉验证，如以下代码片段所示:</p>
+			<pre>from sklearn.ensemble import RandomForestClassifier
+random_forest_classifier = RandomForestClassifier()
+from sklearn.model_selection import cross_val_score
+cross_val_score(random_forest_classifier, features_train, \
+                label_train, cv=5, scoring='accuracy')</pre>
+			<p><code>cross_val_score</code>需要两个参数:</p>
+			<ul>
+				<li><code>cv</code>:指定分割数。</li>
+				<li><code>scoring</code>:定义您想要使用的绩效指标。你可以在这里找到可能值的列表:<a href="https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter">https://sci kit-learn . org/stable/modules/model _ evaluation . html # scoring-parameter</a>。</li>
+			</ul>
+			<p>在下一节中，我们将看看<code>RandomForest</code>的一个特殊变体，叫做<code>extratrees</code>。</p>
+			<h2 id="_idParaDest-139"><a id="_idTextAnchor155"/>极度随机化的树木</h2>
+			<p>极度随机化的树通过在随机森林中已经随机化的因素之上随机化分裂规则来增加随机森林内部的随机化。</p>
+			<p>参数化类似于随机森林分类器。可以在这里看到完整的参数列表:<a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesClassifier.html">http://sci kit-learn . org/stable/modules/generated/sk learn . ensemble . extractreesclassifier . html</a>。</p>
+			<p>Python实现如下:</p>
+			<pre>from sklearn.ensemble import ExtraTreesClassifier
+extra_trees_classifier = \
+ExtraTreesClassifier(n_estimators=100, \
+                     max_depth=6)
+extra_trees_classifier.fit(features_train, label_train)
+labels_predicted = extra_trees_classifier.predict(features_test)</pre>
+			<p>在以下活动中，我们将优化<em class="italic">活动4.01 </em>、<em class="italic">汽车数据分类</em>中内置的分类器。</p>
+			<h2 id="_idParaDest-140"><a id="_idTextAnchor156"/>活动4.02:为您的汽车租赁公司进行随机森林分类</h2>
+			<p>在本次活动中，您将优化您的分类器，以便在为您的车队选择未来汽车时，让您的客户更加满意。我们将对您在本章前一活动中处理的汽车经销商数据集执行随机森林和极端随机森林分类。</p>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">遵循前面<em class="italic">活动4.01 </em>、<em class="italic">汽车数据分类</em>的<em class="italic">步骤1 - 4 </em>。</li>
+				<li>使用<code>RandomForestClassifier</code>创建一个随机森林。</li>
+				<li>使用<code>.fit()</code>训练模型。</li>
+				<li>导入<code>confusion_matrix</code>函数，求<code>RandomForest</code>的质量。</li>
+				<li>使用<code>classification_report()</code>打印分类报告。</li>
+				<li>用<code>.feature_importance_</code>打印特征重要性。</li>
+				<li>用<code>extratrees</code>模型重复<em class="italic">步骤2至6 </em>。</li>
+			</ol>
+			<p>预期产出:</p>
+			<pre>array([0.08844544, 0.0702334 , 0.01440408, 0.37662014,
+       0.05965896, 0.39063797])</pre>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这项活动的解决方案可以在第357页找到。</p>
+			<p>通过完成此活动，您已经学会了如何拟合<code>RandomForest</code>和<code>extratrees</code>模型，并分析它们的分类报告和特性重要性。现在，您可以自己尝试不同的超参数，看看是否可以改善它们的结果。</p>
+			<h1 id="_idParaDest-141"><a id="_idTextAnchor157"/>总结</h1>
+			<p>在本章中，我们学习了如何使用决策树进行预测。使用集成学习技术，我们创建了复杂的强化学习模型来预测任意数据点的类别。</p>
+			<p>决策树被证明在表面上非常准确，但它们容易过度拟合模型。随机森林和极度随机化的树通过引入一些随机元素和一种多数获胜的投票算法来减少过度拟合。</p>
+			<p>除了决策树、随机森林和极度随机化的树，我们还学习了评估模型效用的新方法。在使用众所周知的准确度分数之后，我们开始使用精确度、召回率和F1分数来评估我们的分类器工作得有多好。所有这些值都来自混淆矩阵。</p>
+			<p>在下一章中，我们将描述聚类问题，并比较和对比两种聚类算法。</p>
+		</div>
+	
+
+</body></html>

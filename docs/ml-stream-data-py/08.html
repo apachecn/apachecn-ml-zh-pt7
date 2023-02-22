@@ -1,0 +1,377 @@
+<html><head/><body>
+
+
+	
+		<title>B18335_06_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-122"><em class="italic"> <a id="_idTextAnchor129"/>第六章</em>:在线分类</h1>
+			<p>在前两章中，你已经了解了分类的一些基本概念。您首先看到了一个用例，其中River中的在线分类模型用于构建一个模型，该模型可以根据植物的一些特征来识别鸢尾属物种。这个虹膜数据集是世界上最著名的数据集之一，也是一个非常常见的分类起点。</p>
+			<p>之后，您查看了异常检测。我们讨论了如何将分类模型用于异常检测，在这些情况下，我们可以将异常标记为一类，将非异常标记为另一类。特定的异常检测模型通常更擅长这项任务，因为它们努力只理解非异常。分类模型将努力理解每一类。</p>
+			<p>在这一章中，你将更深入地了解分类。本章将首先提出什么是分类以及分类的用途的定义。然后，您将看到许多分类模型，您将了解它们的在线和离线对应物之间的差异。您还将使用River包在Python中实现多个示例。最终，这将会产生一个用例的模型基准研究，稍后将会介绍。</p>
+			<p>本章将涵盖以下主题:</p>
+			<ul>
+				<li>定义分类</li>
+				<li>识别分类的用例</li>
+				<li>河流分类算法</li>
+			</ul>
+			<h1 id="_idParaDest-123"><a id="_idTextAnchor130"/>技术要求</h1>
+			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<ol>
+				<li>转到存储库的链接。</li>
+				<li>点击绿色的<strong class="bold">代码</strong>按钮。</li>
+				<li>选择<strong class="bold">下载压缩文件</strong>。</li>
+			</ol>
+			<p>当您下载ZIP文件时，在您的本地环境中解压缩它，您将能够通过您喜欢的Python编辑器访问代码。</p>
+			<h2 id="_idParaDest-124"><a id="_idTextAnchor131"/> Python环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
+			<p>如果你还不熟悉Python环境，我建议你去看看Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)，它带有Jupyter Notebook和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VSCode，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看谷歌Colab(【https://colab.research.google.com/】)或Kaggle笔记本(<a href="https://www.kaggle.com/code">【https://www.kaggle.com/code】</a>)，它们都允许你在网上免费运行Python代码，不需要做任何设置。</p>
+			<h1 id="_idParaDest-125"><a id="_idTextAnchor132"/>定义分类</h1>
+			<p>在这一章中，你会发现分类。分类是一项受监督的机器学习任务，其中<a id="_idIndexMarker324"/>构建一个模型，将观察结果分配给一个类别。</p>
+			<p>每个人都知道的最简单的分类模型是决策树。让我们考虑一个如何使用决策树进行分类的超级简单的例子。</p>
+			<p>假设我们有一个数据集，其中有关于五个人和五种动物的观察结果。目标是使用这些数据建立一个决策树，可以用于任何新的，看不见的动物或人类。</p>
+			<p>数据可以按如下方式导入:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-1</p>
+			<pre class="source-code">import pandas as pd</pre>
+			<pre class="source-code"># example to classify human vs animal</pre>
+			<pre class="source-code">#dataset with one variable</pre>
+			<pre class="source-code">can_speak = [True,True,True,True,True,True,True,False,False,False]</pre>
+			<pre class="source-code">has_feathers = [False,False,False,False,False,True,True,False,False,False]</pre>
+			<pre class="source-code">is_human = [True,True,True,True,True,False,False,False,False,False]</pre>
+			<pre class="source-code">data = pd.DataFrame({'can_speak': can_speak, 'has_feathers': has_feathers, 'is_human': is_human})</pre>
+			<pre class="source-code">data</pre>
+			<p>数据如下图所示<a id="_idIndexMarker325"/>:</p>
+			<div><div><img src="img/B18335_06_1.jpg" alt="Figure 6.1 – The data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.1-数据</p>
+			<p>现在，为了构建决策树，你通常会使用机器学习，因为这比手工构建树要有效得多。然而，对于本例，让我们做一个简单的决策树，如下图所示:</p>
+			<div><div><img src="img/B18335_06_2.jpg" alt="Figure 6.2 – The example decision tree&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.2–示例决策树</p>
+			<p>当然这是一个模型，所以只是部分代表了真相。它对于包含10个观测值的当前数据集非常有效，但是随着数据点的增加，您将会遇到各种类型的异常，因此您需要更多的变量。</p>
+			<p>您可以用Python为这个模型编写一个<code>human</code>对<code>not human</code>分类的代码，如下所示:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-2</p>
+			<pre class="source-code">def self_made_decision_tree(observation):</pre>
+			<pre class="source-code">    if observation.can_speak:</pre>
+			<pre class="source-code">        if not observation.has_feathers:</pre>
+			<pre class="source-code">            return 'human'</pre>
+			<pre class="source-code">    </pre>
+			<pre class="source-code">    return 'not human'</pre>
+			<pre class="source-code">for i,row in data.iterrows():</pre>
+			<pre class="source-code">    print(self_made_decision_tree(row))</pre>
+			<p>结果如下:</p>
+			<div><div><img src="img/B18335_06_3.jpg" alt="Figure 6.3 – The predicted outcomes&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.3–预测结果</p>
+			<p>这背后的一般思想是，分类模型是任何机器学习模型，其使用<a id="_idIndexMarker328"/>数据来生成决策规则，以将观察分配给特定的类。在下一节中，我们将研究分类的一些用例，以便更好地了解它在实践中的用途。</p>
+			<h1 id="_idParaDest-126"><a id="_idTextAnchor133"/>识别用例的分类</h1>
+			<p><a id="_idIndexMarker329"/>分类的用例是巨大的；这是许多项目中非常常用的方法。尽管如此，让我们看一些例子来更好地理解可以从分类方法中获益的不同类型的用例。</p>
+			<h2 id="_idParaDest-127"><a id="_idTextAnchor134"/>用例1–垃圾邮件分类</h2>
+			<p>通常基于分类的第一个用例是电子邮件中的<strong class="bold">垃圾邮件检测</strong>。垃圾邮件<a id="_idIndexMarker330"/>已经存在很长时间了。发送虚假邮件来窃取人们钱财的商业模式是一个大问题，收到许多垃圾邮件会对您的电子邮件体验产生负面影响。</p>
+			<p>电子邮件服务提供商在自动检测垃圾邮件并将其发送到您的垃圾邮件/垃圾邮件箱方面取得了长足的进步。现在，这些都是自动完成的，并且非常依赖于机器学习。</p>
+			<p>如果您将这与我们的超小型分类示例进行比较，您可以想象决策树(或任何其他模型)可以获取关于每封收到的电子邮件的几种信息类型，并使用它们来决定该电子邮件是否应该被分类为垃圾邮件。这必须实时完成，因为没有人希望等待垃圾邮件检测服务最终发送他们的电子邮件。</p>
+			<p>您可以在以下资源中阅读关于此使用案例的更多信息:</p>
+			<ul>
+				<li><a href="https://www.sciencedirect.com/science/article/pii/S2405844018353404">https://www . science direct . com/science/article/pii/s 2405844018353404</a></li>
+				<li><a href="https://www.enjoyalgorithms.com/blog/email-spam-and-non-spam-filtering-using-machine-learning">https://www . enjoy algorithms . com/blog/email-spam-and-non-spam-filtering-using-machine-learning</a></li>
+			</ul>
+			<h2 id="_idParaDest-128"><a id="_idTextAnchor135"/>用例2–手机摄像头中的人脸检测</h2>
+			<p>分类的第二个例子是当你想解锁手机时的人脸检测。你的<a id="_idIndexMarker332"/>手机必须在瞬间决定它看到的这张脸是不是它主人的脸。</p>
+			<p>这个决定是分类决定，因为它归结为是/否决定:它<em class="italic">是</em>所有者，或者它<em class="italic">不是</em>所有者。这个决定通常将由机器学习做出，因为规则将非常复杂，并且很难写为<code>if</code> / <code>else</code>语句。如今，机器学习算法在这类用例方面相对较好。</p>
+			<p>有关此用例的其他更多<a id="_idIndexMarker333"/>详细示例，您可以查看以下链接:</p>
+			<ul>
+				<li><a href="https://www.xfinity.com/hub/mobile/facial-recognition-on-phone">https://www . xfinity . com/hub/mobile/face-recognition-on-phone</a></li>
+				<li><a href="https://www.nytimes.com/wirecutter/blog/how-facial-recognition-works/">https://www . nytimes . com/wire cutter/blog/how-face-recognition-works/</a></li>
+			</ul>
+			<h2 id="_idParaDest-129"><a id="_idTextAnchor136"/>用例3–在线营销广告选择</h2>
+			<p>前两个例子的最后一个例子是在线营销广告选择。现在许多网站展示个性化广告。这意味着你会看到一个与你作为客户相匹配的广告。</p>
+			<p>尽管个性化广告系统并没有发明广告；他们必须做出决定，在多个可用的广告中做出选择，以了解哪一个最适合你。这样，它就是一个分类，因为它必须在多种选择中做出决定。</p>
+			<p>如你所知，页面加载必须很快，因此，广告选择也必须在瞬间完成。实时响应是模型提供任何价值的关键。</p>
+			<p>以下<a id="_idIndexMarker335"/>链接更深入地讨论了这个用例:</p>
+			<ul>
+				<li><a href="https://www.owox.com/blog/articles/machine-learning-in-marketing/">https://www . owox . com/blog/articles/机器学习营销/ </a></li>
+				<li><a href="https://www.ibm.com/watson-advertising/thought-leadership/benefits-of-machine-learning-in-advertising">https://www . IBM . com/Watson-advertising/think-leadership/benefits-of-machine-learning-in-advertising</a></li>
+			</ul>
+			<p>在下一节中，您将看到分类更实际的一面，因为您将在River Python库中发现几种分类算法。</p>
+			<h1 id="_idParaDest-130"><a id="_idTextAnchor137"/>河流分类算法概述</h1>
+			<p>河流在线机器学习包中有大量在线分类<a id="_idIndexMarker336"/>模型可用。</p>
+			<p>一些相关的例子如下:</p>
+			<ul>
+				<li><code>LogisticRegression</code></li>
+				<li><code>Perceptron</code></li>
+				<li><code>AdaptiveRandomForestClassifier</code></li>
+				<li><code>ALMAClassifier</code></li>
+				<li><code>PAClassifier</code></li>
+			</ul>
+			<h2 id="_idParaDest-131"><a id="_idTextAnchor138"/>分类算法1–物流回归</h2>
+			<p>逻辑回归是最基本的统计分类模型之一。它对一个因变量(目标变量)建模，该因变量有两个类别(1或0)，并且可以使用多个自变量进行预测。</p>
+			<p>该模型将每个独立变量组合成对数优势；你可以把它看作线性回归中的系数，除了它们是每个变量的对数优势。模型中的分割基于逻辑函数。</p>
+			<p>您可以看到这个想法的简化示意图如下:</p>
+			<div><div><img src="img/B18335_06_4.jpg" alt="Figure 6.4 – The logistic curve&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.4–逻辑曲线</p>
+			<h3>河流中的逻辑回归</h3>
+			<p>对于在线逻辑回归，可以使用River的<code>linear_model</code>部分中的<code>LogisticRegression</code>类。现在让我们来看一个例子:</p>
+			<ol>
+				<li value="1">首先，可以从使用sklearn内置的<code>make_blobs</code>函数制作分类数据集开始，这个函数制作分类数据集。为此，您可以使用以下代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-3</p>
+			<pre>from sklearn.datasets import make_blobs
+X,y=make_blobs(shuffle=True,centers=2,n_samples=2000)</pre>
+			<ol>
+				<li value="2">要看这个数据集是什么样子，做个图很重要。为此，您可以使用以下<code>matplotlib</code>代码:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-4</p>
+			<pre>import matplotlib.pyplot as plt
+plt.scatter(X[:,0], X[:,1], c=y)</pre>
+			<p>你应该获得以下情节，或类似的东西:</p>
+			<div><div><img src="img/B18335_06_5.jpg" alt="Figure 6.5 – The data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.5-数据</p>
+			<ol>
+				<li value="3">为了确保你的模型评估是公平的，对数据进行训练测试<a id="_idIndexMarker340"/>是很重要的。你可以用sklearn的<code>train_test_split</code>做到这一点，如下图:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-5</p>
+			<pre>from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)</pre>
+			<ol>
+				<li value="4">现在让我们继续讨论逻辑回归模型的应用。以下代码显示了如何一次拟合一个数据点的模型。注意，您应该对<code>x</code>的输入数据使用JSON转换，因为这是River所要求的:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-6</p>
+			<pre>!pip install river
+from river import linear_model
+model=linear_model.LogisticRegression()
+for x_i,y_i in zip(X_train,y_train):  
+    x_json = {'val1': x_i[0], 'val2': x_i[1]}
+    print(x_json, y_i)
+    model.learn_one(x_json,y_i)</pre>
+			<p>打印出来的<a id="_idIndexMarker341"/>数据看起来会像这样:</p>
+			<div><div><img src="img/B18335_06_6.jpg" alt="Figure 6.6 – The output of Code Block 6-6&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.6–代码块6-6的输出</p>
+			<ol>
+				<li value="5">您也可以一个接一个地进行预测，或者您可以使用<code>predict_many</code>一次对测试集进行所有的<a id="_idIndexMarker342"/>预测。结果不会有任何不同。在下面的代码中，使用了<code>predict_many</code>:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-7</p>
+			<pre>import pandas as pd
+preds = model.predict_many(pd.DataFrame(X_test,columns=['val1', 'val2']))</pre>
+			<ol>
+				<li value="6">为了获得这个预测的质量度量，让我们使用<code>scikit-learn</code>的准确度分数。正如您在下面的代码块中看到的，该模型在blob数据示例上获得了100%的准确性。必须说明的是，这个blob数据示例是一个简单的预测任务，因为数据可以通过直线完全分离，如前面显示的图表所示:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-8</p>
+			<pre>from sklearn.metrics import accuracy_score
+accuracy_score(y_test, preds)</pre>
+			<p>这应该<a id="_idIndexMarker343"/>产生以下输出:</p>
+			<div><div><img src="img/B18335_06_7.jpg" alt="Figure 6.7 – The output of Code Block 6-8&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.7–代码块6-8的输出</p>
+			<h2 id="_idParaDest-132"><a id="_idTextAnchor139"/>分类算法2–感知器</h2>
+			<p>感知器是针对<a id="_idIndexMarker345"/>分类问题进行监督学习的另一种<a id="_idIndexMarker344"/>算法。它接受输入，将它们乘以权重，并通过一个激活函数对它们求和。输出是最终的分类。下图显示了一个示例:</p>
+			<div><div><img src="img/B18335_06_8.jpg" alt="Figure 6.8 – Schematic overview of a perceptron&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.8-感知器的示意图</p>
+			<h3>河流中的感知器</h3>
+			<p>像逻辑回归一样，感知器是一个常用的离线模型，它已经被改造成River的在线模型。在River中，感知器已经被实现为逻辑回归的一个特例。</p>
+			<p>你可以像逻辑回归一样使用感知器。您可以使用与前一种情况相同的代码示例，如下所示:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-9</p>
+			<pre class="source-code"># make data</pre>
+			<pre class="source-code">from sklearn.datasets import make_blobs</pre>
+			<pre class="source-code">X,y=make_blobs(shuffle=True,centers=2,n_samples=2000)</pre>
+			<pre class="source-code"># train test split</pre>
+			<pre class="source-code">from sklearn.model_selection import train_test_split</pre>
+			<pre class="source-code">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)</pre>
+			<pre class="source-code"># build the model</pre>
+			<pre class="source-code">from river import linear_model</pre>
+			<pre class="source-code">model=linear_model.Perceptron()</pre>
+			<pre class="source-code"># fit the model</pre>
+			<pre class="source-code">for x_i,y_i in zip(X_train,y_train):</pre>
+			<pre class="source-code">    x_json = {'val1': x_i[0], 'val2': x_i[1]}</pre>
+			<pre class="source-code">    model.learn_one(x_json,y_i)</pre>
+			<pre class="source-code">    </pre>
+			<pre class="source-code"># predict on the test set</pre>
+			<pre class="source-code">import pandas as pd</pre>
+			<pre class="source-code">preds = model.predict_many(pd.DataFrame(X_test,columns=['val1', 'val2']))</pre>
+			<pre class="source-code"># compute accuracy</pre>
+			<pre class="source-code">from sklearn.metrics import accuracy_score</pre>
+			<pre class="source-code">accuracy_score(y_test, preds) </pre>
+			<p>结果是<code>1.0</code>，不出所料，与逻辑回归结果的<a id="_idIndexMarker347"/>相同。</p>
+			<h2 id="_idParaDest-133"><a id="_idTextAnchor140"/>分类算法3–AdaptiveRandomForestClassifier</h2>
+			<p>在介绍中，你已经看到了决策树背后的总体思路。随机森林是改进决策树的集合模型。</p>
+			<p>随机森林背后的想法是，它们通过制作大量略有不同的决策树来减少单个决策树的错误。大量决策树中最常见的预测被保留为最终预测。</p>
+			<p>决策树的制作略有不同，方法是将每一棵决策树拟合到一个略有不同的数据集上，该数据集是通过对观测数据进行重采样而创建的。还有一个变量子集用于创建决策树拆分。</p>
+			<h3>河流中的随机森林</h3>
+			<p>对于在线学习来说，需要将数据逐个拟合到随机森林中，这并不是一件<a id="_idIndexMarker350"/>容易的事情。River的实现基于随机森林的两个关键元素，即重采样和可变子集。他们还为每个决策树增加了漂移检测:</p>
+			<ol>
+				<li value="1">让我们使用另一个数据创建函数，它创建的数据比blobs更难分离。从<code>sklearn</code>开始的这个功能被称为<code>make_classification</code>:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-10</p>
+			<pre># make data
+from sklearn.datasets import make_classification
+X,y=make_classification(shuffle=True,n_samples=2000)
+pd.DataFrame(X).head()</pre>
+			<p>数据如下图所示:</p>
+			<div><div><img src="img/B18335_06_9.jpg" alt="Figure 6.9 – The new data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.9–新数据</p>
+			<ol>
+				<li value="2">默认情况下总共生成20个变量，其中一些会自动<a id="_idIndexMarker351"/>变得更加相关，而一些则基本不相关。让我们像之前一样做一个训练测试分割:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-11</p>
+			<pre># train test split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)</pre>
+			<ol>
+				<li value="3">使用这种训练测试分割，我们可以继续构建模型:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-12</p>
+			<pre>from river import ensemble
+model = ensemble.AdaptiveRandomForestClassifier()
+# fit the model
+for x_i,y_i in zip(X_train,y_train):
+    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}
+    model.learn_one(x_json,y_i)</pre>
+			<ol>
+				<li value="4">既然模型是合适的，我们可以对测试集进行预测。这里没有<code>predict_many</code>函数，需要用<code>predict_one</code>反复做一个循环:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-13</p>
+			<pre># predict on the test set
+import pandas as pd
+preds = []
+for x_i in X_test:
+    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}
+    preds.append(model.predict_one(x_json))</pre>
+			<ol>
+				<li value="5">作为最后的<a id="_idIndexMarker352"/>步骤，让我们计算这个模型的准确性:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-14</p>
+			<pre># compute accuracy
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, preds)</pre>
+			<ol>
+				<li value="6">结果是<code>0.86</code>。当然，数据集更难预测，所以不要被误认为是一个糟糕的分数。作为额外的衡量标准，我们可以查看分类报告以了解更多信息:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-15</p>
+			<pre># classification report
+from sklearn.metrics import classification_report
+print(classification_report(y_test, preds))</pre>
+			<p>结果是下图所示的<a id="_idIndexMarker353"/>:</p>
+			<div><div><img src="img/B18335_06_10.jpg" alt="Figure 6.10 – The output of Code Block 6-15&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.10–代码块6-15的输出</p>
+			<p>在这个分类报告中，您可以看到准确率和召回率以及正面和负面的得分都相对相等。这表明分类器中不存在不平衡，这在依赖准确度分数时是重要的。</p>
+			<h2 id="_idParaDest-134"><a id="_idTextAnchor141"/>分类算法4–alma classifier</h2>
+			<p>既然<a id="_idIndexMarker354"/>已经看到了一些常用的<a id="_idIndexMarker355"/>机器学习模型以适应在线学习的方式进行分类，现在是时候看看一些更具体的模型了。第一个是ALMA分类器。</p>
+			<p><strong class="bold">近似大间隔算法</strong> ( <strong class="bold"> ALMA </strong>)分类器是分类常用的机器学习<a id="_idIndexMarker356"/>模型<strong class="bold">支持向量机</strong> ( <strong class="bold"> SVMs </strong>)的增量实现。</p>
+			<p>你在前一章看到了<a id="_idIndexMarker357"/>支持向量机的改编<a id="_idIndexMarker358"/>:单类SVM经常用于异常检测。对于分类，您可以使用常规的(两类)SVM。</p>
+			<h3>河流中的分类器</h3>
+			<p>让我们看看ALMAClassifier如何通过对相同的数据执行来比较<a id="_idIndexMarker359"/>和自适应随机森林:</p>
+			<ol>
+				<li value="1">我们从应用之前已经定义的相同代码开始:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-16</p>
+			<pre># make data
+from sklearn.datasets import make_classification
+X,y=make_classification(shuffle=True,n_samples=2000)
+# train test split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+from river import linear_model
+model = linear_model.ALMAClassifier()
+# fit the model
+for x_i,y_i in zip(X_train,y_train):
+    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}
+    model.learn_one(x_json,y_i) 
+# predict on the test set
+import pandas as pd
+preds = []
+for x_i in X_test:
+    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}
+    preds.append(model.predict_one(x_json))
+# compute accuracy
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, preds)</pre>
+			<ol>
+				<li value="2">结果是<code>0.77</code>，不如随机森林。让我们也检查一下分类<a id="_idIndexMarker360"/>报告，看看那里是否有什么变化:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-17</p>
+			<pre># classification report
+from sklearn.metrics import classification_report
+print(classification_report(y_test, preds))</pre>
+			<ol>
+				<li value="3">结果如下图所示:</li>
+			</ol>
+			<div><div><img src="img/B18335_06_11.jpg" alt="Figure 6.11 – The output of Code Block 6-17&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图6.11–代码块6-17的输出</p>
+			<p>这里有一点<a id="_idIndexMarker361"/>更多的变化，但没有什么看起来太令人震惊。总的来说，随机森林对于这些数据来说更好。</p>
+			<h2 id="_idParaDest-135"><a id="_idTextAnchor142"/>分类算法5–PAC classifier</h2>
+			<p><strong class="bold">被动-主动</strong> ( <strong class="bold"> PA </strong>)分类器是一个在线机器学习模型，与<a id="_idIndexMarker362"/>任何现有的离线模型都不相关。它基于在每一步更新模型的想法<a id="_idIndexMarker363"/>，从而解决以下问题:</p>
+			<p><em class="italic">分类器的更新通过解决约束优化问题来执行:我们希望新的分类器尽可能地接近当前的分类器，同时在最近的例子上实现至少一个单位余量。</em></p>
+			<p>这段引文摘自下面这篇关于PA算法的论文，也是进一步阅读的有趣参考:<a href="https://jmlr.csail.mit.edu/papers/volume7/crammer06a/crammer06a.pdf">https://jmlr . csail . MIT . edu/papers/volume 7/crammer 06 a/crammer 06 a . pdf</a>。</p>
+			<p>名称<em class="italic">被动-主动</em>来源于这样一种想法，即从每个新数据点快速学习的算法被认为过于主动。PA没有那么咄咄逼人。</p>
+			<h3>河流分类器</h3>
+			<p>让我们看看PA分类器<a id="_idIndexMarker364"/>如何执行与前两个模型相同的任务:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块6-18</p>
+			<pre class="source-code"># make data</pre>
+			<pre class="source-code">from sklearn.datasets import make_classification</pre>
+			<pre class="source-code">X,y=make_classification(shuffle=True,n_samples=2000)</pre>
+			<pre class="source-code"># train test split</pre>
+			<pre class="source-code">from sklearn.model_selection import train_test_split</pre>
+			<pre class="source-code">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)</pre>
+			<pre class="source-code">from river import linear_model</pre>
+			<pre class="source-code">model = linear_model.PAClassifier()</pre>
+			<pre class="source-code"># fit the model</pre>
+			<pre class="source-code">for x_i,y_i in zip(X_train,y_train):</pre>
+			<pre class="source-code">    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}</pre>
+			<pre class="source-code">    model.learn_one(x_json,y_i)</pre>
+			<pre class="source-code"># predict on the test set</pre>
+			<pre class="source-code">import pandas as pd</pre>
+			<pre class="source-code">preds = []</pre>
+			<pre class="source-code">for x_i in X_test:</pre>
+			<pre class="source-code">    x_json = {'val'+str(i): x for i,x in enumerate(x_i)}</pre>
+			<pre class="source-code">    preds.append(model.predict_one(x_json))</pre>
+			<pre class="source-code"># compute accuracy</pre>
+			<pre class="source-code">from sklearn.metrics import accuracy_score</pre>
+			<pre class="source-code">accuracy_score(y_test, preds)</pre>
+			<p>得到的<a id="_idIndexMarker365"/>分数为<code>0.85</code>。以下部分总结了我们获得的所有分数。</p>
+			<h2 id="_idParaDest-136"><a id="_idTextAnchor143"/>评估基准结果</h2>
+			<p>这给我们<a id="_idIndexMarker366"/>留下了过去三个模型的以下准确度分数:</p>
+			<div><div><img src="img/B18335_06_Table_01.jpg" alt="Table 6.1 – The table with the results&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">表6.1-结果表</p>
+			<p>AdaptiveRandomForest获得的最好成绩是<a id="_idIndexMarker367"/>，PAClassifier位居第二。ALMAClassifier表现较差，得分为<code>0.77</code>。</p>
+			<h1 id="_idParaDest-137"><a id="_idTextAnchor144"/>总结</h1>
+			<p>在本章中，您首先看到了分类及其使用案例的概述。您已经了解了它与异常检测的不同之处，但是它有时仍然可以应用于异常检测用例。</p>
+			<p>您已经了解了五种用于在线分类的模型，其中一些主要是离线模型的改编，其他的是专门为在线工作方式设计的。这两种类型都存在，在选择最终模型之前，拥有测试模型性能的工具是很重要的。</p>
+			<p>您在Python中执行的模型基准测试是以这样一种方式完成的，即在测试集上找到模型准确性方面的最佳模型。您已经看到了基准测试模型之间的明显差异，这是模型基准测试重要性的一个很好的展示。</p>
+			<p>在接下来的章节中，你将会做相同类型的模型基准测试练习，但是这一次，你将会关注于一个回归用例，它的目标与分类有着根本的不同。这带来了关于测量误差和基准的一些变化，但是从一个高层次的角度来看，与您在本章中使用的分类基准用例有许多共同之处。</p>
+			<h1 id="_idParaDest-138"><a id="_idTextAnchor145"/>延伸阅读</h1>
+			<ul>
+				<li><em class="italic">logistic regression</em>:<a href="https://riverml.xyz/latest/api/linear-model/LogisticRegression/">https://river ml . XYZ/latest/API/linear-model/logistic regression/</a></li>
+				<li><em class="italic">感知器</em>:<a href="https://riverml.xyz/latest/api/linear-model/Perceptron/">https://riverml.xyz/latest/api/linear-model/Perceptron/</a></li>
+				<li><em class="italic">AdaptiveRandomForestClassifier</em>:<a href="https://riverml.xyz/latest/api/ensemble/AdaptiveRandomForestClassifier/">https://river ml . XYZ/latest/API/ensemble/AdaptiveRandomForestClassifier/</a></li>
+				<li><em class="italic">阿尔玛</em>:<a href="https://riverml.xyz/latest/api/linear-model/ALMAClassifier/">https://riverml.xyz/latest/api/linear-model/ALMAClassifier/</a></li>
+				<li><em class="italic">ALMA</em>:<a href="https://www.jmlr.org/papers/volume2/gentile01a/gentile01a.pdf&#13;">https://www . jmlr . org/papers/volume 2/gentile 01 a/gentile 01 a . pdf</a></li>
+				<li>https://riverml.xyz/latest/api/linear-model/PAClassifier/的<em class="italic">分类器</em></li>
+				<li><em class="italic">p分类器</em>:<a href="https://jmlr.csail.mit.edu/papers/volume7/crammer06a/crammer06a.pdf&#13;">https://jmlr . csail . MIT . edu/papers/volume 7/crammer 06 a/crammer 06 a . pdf</a></li>
+				<li><em class="italic">make _ class ification</em>:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_classification.htm&#13;">https://sci kit-learn . org/stable/modules/generated/sk learn . datasets . make _ class ification . htm</a></li>
+				<li><em class="italic">make _ blobs</em>:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html">https://sci kit-learn . org/stable/modules/generated/sk learn . datasets . make _ blobs . html</a></li>
+			</ul>
+		</div>
+	
+
+</body></html>

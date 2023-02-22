@@ -1,0 +1,202 @@
+<html><head/><body>
+
+
+	
+		<title>B18335_01_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-15"><em class="italic"> <a id="_idTextAnchor014"/>第1章</em>:流式数据简介</h1>
+			<p>流分析是数据科学的新热点之一。它提出了更标准的批处理的替代框架，其中我们不再在固定的处理时间处理数据集，而是在接收时直接处理每个单独的数据点。</p>
+			<p>这种新范式对数据工程有着重要的影响，因为它需要更健壮、尤其是更快的数据接收管道。它也给数据分析和机器学习带来了巨大的变化。</p>
+			<p>直到最近，机器学习和数据分析方法和算法主要被设计为在整个数据集上工作。现在，流已经成为一个热门话题，越来越常见的情况是，整个数据集不再存在。当连续的数据流被接收到数据存储源中时，没有自然的时机来重新启动分析批处理作业。</p>
+			<p>流式分析和流式机器学习模型是专门设计用于流式数据源的模型。例如，解决方案的一部分在于更新。随着新数据的接收，流分析和机器学习需要一直更新。更新时，您可能还想忘记更旧的数据。</p>
+			<p>从批量分析转移到流分析所带来的这个问题和其他问题需要一种不同的分析和机器学习方法。这本书将奠定基础，让你开始对作为连续流接收的数据进行数据分析和机器学习。</p>
+			<p>在第一章中，您将对流式数据和批量数据之间的差异有更深入的了解。您将看到一些示例用例，展示使用流而不是转换回批处理的重要性。您还将开始使用第一个Python示例，以便对您将在本书中完成的工作类型有所了解。</p>
+			<p>在后面的章节中，您将看到更多关于架构的背景概念，然后，您将了解大量数据科学和分析使用案例，以及它们如何适应新的流模式。</p>
+			<p>在本章中，您将发现以下主题:</p>
+			<ul>
+				<li>数据科学简史</li>
+				<li>使用流数据</li>
+				<li>实时数据格式和在Python中导入示例数据集</li>
+			</ul>
+			<h1 id="_idParaDest-16"><a id="_idTextAnchor015"/>技术要求</h1>
+			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<ol>
+				<li>转到存储库的链接。</li>
+				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
+				<li>选择<strong class="bold">下载ZIP文件</strong>:</li>
+			</ol>
+			<div><div><img src="img/B18335_01_01.jpg" alt="Figure 1.1 – GitHub interface example&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.1–GitHub界面示例</p>
+			<p>当您下载ZIP文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的Python编辑器访问代码。</p>
+			<h2 id="_idParaDest-17"><a id="_idTextAnchor016"/>建立一个Python环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
+			<p>如果你还不熟悉Python环境，我建议你去看看Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)，它附带了Jupyter Notebook和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VSCode，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看谷歌Colab(<a href="https://colab.research.google.com/">https://colab.research.google.com/</a>)或Kaggle笔记本(<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a>)，它们都允许你免费在在线笔记本上运行Python代码，不需要做任何设置。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">书中的代码通常会使用带有Python版本3.7.13的Colab和Kaggle笔记本，您可以设置自己的环境来模拟这种情况。</p>
+			<h1 id="_idParaDest-18"><a id="_idTextAnchor017"/>数据科学简史</h1>
+			<p>在过去的几年里，新技术领域已经迅速占领了世界的许多地方。机器学习、人工智能和数据科学是进入我们日常生活的新领域，无论是在我们的个人生活还是在我们的职业生活中。</p>
+			<p>数据科学家如今研究的主题并不新鲜。这个领域的绝对基础是数学和统计学，这两个领域已经存在了几个世纪。例如，最小二乘回归首次发表于1805年。随着时间的推移，数学家和统计学家一直在努力寻找其他方法和模型。</p>
+			<p>在下面的时间表中，你可以看到最近的技术繁荣是如何发生的。在17世纪和18世纪，非常聪明的人已经为我们今天仍在做的统计和数学工作奠定了基础。然而，直到计算能力的发明和普及，该领域才开始蓬勃发展。</p>
+			<div><div><img src="img/B18335_01_02.jpg" alt="Figure 1.2 – A timeline of the history of data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.2–数据历史的时间线</p>
+			<p><strong class="bold">个人电脑和互联网接入</strong>是当今数据科学流行的一个重要原因。几乎每个人都有一台性能足以进行相当复杂的机器学习的计算机。这非常有助于计算机知识，而且，在线文档的可访问性也是学习的一大助推器。</p>
+			<p>大数据工具的可用性，如<strong class="bold"> Hadoop </strong>和<strong class="bold"> Spark </strong>也是数据科学普及<a id="_idIndexMarker004"/>的重要组成部分，因为它们允许<a id="_idIndexMarker005"/>从业者处理比任何人之前想象的都大的数据集。</p>
+			<p>最后，<strong class="bold">云计算</strong>让来自世界各地的数据科学家<a id="_idIndexMarker006"/>以低价获得非常强大的硬件。特别是对于大数据工具，所需硬件的价格仍然让大多数学生无法购买用于培训目的的硬件。云计算为许多人提供了使用这些用例的机会。</p>
+			<p>在本书中，你将学习如何使用<strong class="bold">流数据</strong>。记住数据科学的短暂历史是很重要的，因为流数据是那些因需要困难的硬件和设置要求而处于不利地位的技术之一。流式数据目前正在许多领域迅速普及，并有可能在未来的<a id="_idIndexMarker008"/>时期大受欢迎。现在让我们更深入地了解一下流数据的定义。</p>
+			<h1 id="_idParaDest-19"><a id="_idTextAnchor018"/>处理流数据</h1>
+			<p>流数据是以流形式传输的数据。你可能从在线视频服务<a id="_idIndexMarker009"/>中知道<strong class="bold">流媒体</strong>这个术语，你可以通过它来传输视频。当您正在观看视频的第一部分时，视频流服务将继续向您发送视频的下一部分。</p>
+			<p>处理流数据时，概念是相同的。数据格式不一定是视频，可以是对您的用例有用的任何数据类型。一个最直观的例子是工业生产线，在这条生产线上，您可以从传感器获得连续的测量结果。只要您的生产线没有暂停，您就会继续生成测量值。我们将查看以下数据流流程概述:</p>
+			<div><div><img src="img/B18335_01_03.jpg" alt="Figure 1.3 – The data streaming process&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.3–数据流流程</p>
+			<p>重要的一点是，你有一个需要实时处理的连续数据流。你不能等到生产线停下来再做分析，因为你需要马上发现潜在的问题。</p>
+			<h2 id="_idParaDest-20"><a id="_idTextAnchor019"/>流数据与批量数据</h2>
+			<p>流数据通常不在新数据科学家们倾向于开始的第一个用例中。通常首先引入的问题类型是批量用例。批量数据<a id="_idIndexMarker013"/>与流数据相反，因为它在<strong class="bold">阶段</strong>工作:你收集一堆数据，然后你处理一堆数据。</p>
+			<p>如果您将流数据视为在线视频流，您可以将批数据视为先下载整个视频，然后在下载完成后观看视频。出于分析的目的，这意味着当数据生成过程完成时，而不是当问题发生时，您将获得一堆数据的分析。</p>
+			<p>对于一些用例来说，这不是问题。然而，您可以理解<a id="_idIndexMarker014"/>在快速分析可以产生影响的使用案例中，流可以提供巨大的附加值<a id="_idIndexMarker015"/>。在以流方式接收数据的用例中，它也具有附加值，这种方式越来越普遍。在实践中，许多通过流获得附加值的用例仍然通过批处理来解决，只是因为这些方法更广为人知和更广泛。</p>
+			<p>以下概述显示了批处理过程:</p>
+			<div><div><img src="img/B18335_01_04.jpg" alt="Figure 1.4 – The batch process&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.4–批处理过程</p>
+			<h2 id="_idParaDest-21"><a id="_idTextAnchor020"/>流式数据的优势</h2>
+			<p>现在，让我们在接下来的小节中看看使用流分析而不是其他方法的一些优势<a id="_idIndexMarker016"/>。</p>
+			<h3>数据生成过程是实时的</h3>
+			<p>构建流数据分析而不是批处理系统的第一个优势是，许多数据生成过程实际上是实时的。稍后您会发现许多用例，但是一般来说，很少批量收集数据。</p>
+			<p>尽管我们大多数人习惯于围绕实时数据生成系统构建批处理系统，但直接构建流分析通常更有意义。</p>
+			<p>当然，批量分析和流式分析可以共存。然而，将批处理添加到流分析服务通常比将流功能添加到为批处理设计的系统中容易得多。从流式传输开始最有意义。</p>
+			<h3>实时洞察具有价值</h3>
+			<p>在设计数据科学解决方案时，我们并不总是首先想到流。然而，当解决方案或工具实时构建时，很少会不重视实时功能。</p>
+			<p>今天的许多分析解决方案都是实时构建的，并且工具都是可用的。在很多问题中，实时信息会在某些时候被用到。也许它不会从一开始就被使用，但当异常发生的那一天，你会发现直接进行分析有很大的竞争优势，而不是等到下一个小时或第二天早上。</p>
+			<h2 id="_idParaDest-22"><a id="_idTextAnchor021"/>成功实施流分析的例子</h2>
+			<p>我们来谈谈一些成功实施实时分析的公司的例子<a id="_idIndexMarker017"/>。第一个例子是壳牌。他们已经能够对加油站的安全摄像头进行实时分析。自动化和实时的机器学习管道能够检测人们是否在吸烟。</p>
+			<p>另一个例子是在连接的运动设备中使用传感器数据。通过实时测量心率和其他关键绩效指标，他们能够在你的身体出现任何问题时提醒你。</p>
+			<p>当然，像脸书和Twitter <a id="_idIndexMarker018"/>这样的大玩家也实时分析大量数据，例如，在检测假新闻或不良内容时。流分析有许多成功的使用案例，但与此同时，流数据也带来了一些常见的挑战。现在让我们来看看它们。</p>
+			<h2 id="_idParaDest-23"><a id="_idTextAnchor022"/>流数据的挑战</h2>
+			<p>流式数据分析<a id="_idIndexMarker019"/>目前没有批量数据分析普及。尽管这种情况正在慢慢改变，但了解处理流数据时的挑战所在还是有好处的。</p>
+			<h3>流式分析知识</h3>
+			<p>流媒体分析不太普及的一个简单原因是知识和诀窍的问题。设置流分析通常不会在学校教授，也肯定不会作为首选方法教授。互联网上可用于入门的资源也很少。由于有更多关于机器学习和分析的资源用于批处理，而批处理方法不适用于流数据，人们倾向于从数据科学的批处理应用开始。</p>
+			<h3>理解架构</h3>
+			<p>处理流数据的第二个困难是架构。尽管一些数据科学从业者具有架构、数据工程和DevOps方面的知识，但情况并非总是如此。要建立一个流媒体分析<a id="_idIndexMarker020"/>概念验证或<strong class="bold">最小可行产品</strong> ( <strong class="bold"> MVP </strong>)，所有这些技能都是需要的。对于批处理，使用脚本通常就足够了。</p>
+			<p>体系结构上的困难是流式传输所固有的，因为它需要使用实时流程，将单独收集的记录发送到将实时更新的分析处理流程。如果没有架构可以处理这一点，那么从流分析开始就没有多大意义。</p>
+			<h3>财务障碍</h3>
+			<p>处理流数据的另一个挑战是财务方面。虽然从长远来看，使用流媒体并不一定会更昂贵，但建立起步所需的基础设施可能会更昂贵。在本地开发人员PC上为MVP工作不太可能成功，因为数据需要实时处理。</p>
+			<h3>运行时问题的风险</h3>
+			<p>实时流程也有更大的运行时问题风险。当构建软件时，错误和失败时有发生。如果您正在进行日常批处理，您也许能够修复该过程，重新运行失败的批处理，并解决问题。</p>
+			<p>如果流工具出现故障，就有丢失数据的风险。由于数据应该实时接收，因此在流程超时期间生成的数据可能无法恢复。如果您的过程非常重要，您将需要设置广泛的日夜监控，并在将您的解决方案推向生产之前进行更多的质量检查。当然，这在批处理中也很重要，但在流式处理中更是如此。</p>
+			<h3>更小的分析(更少的方法容易获得)</h3>
+			<p>流式分析的最后一个挑战是，通用方法通常首先针对批量数据开发。目前有许多针对实时和流数据分析的解决方案，但仍然没有针对批量数据的解决方案多。</p>
+			<p>此外，因为流分析必须非常快速地完成以尊重实时交付，所以流用例往往以不太有趣的分析方法结束，并停留在描述或基本分析的基本级别。</p>
+			<h2 id="_idParaDest-24"><a id="_idTextAnchor023"/>如何开始使用流式数据</h2>
+			<p>对于开始处理流媒体数据的公司来说，第一步<a id="_idIndexMarker022"/>通常是从部署简单的应用程序开始，这些应用程序<strong class="bold">收集实时数据</strong>并使实时数据可以实时访问。开始的常见用例是日志数据、网站访问数据或传感器数据。</p>
+			<p>下一步<a id="_idIndexMarker023"/>通常会在实时数据源之上构建<strong class="bold">报告工具</strong>。您可以考虑实时更新的KPI仪表板，或者基于业务规则的高或低阈值的小型简单警报工具。</p>
+			<p>当这样的系统就位时，这将导致取代那些业务规则，或者在它们之上添加新的规则。您可以考虑更高级的分析工具，包括用于异常检测的实时<strong class="bold">机器学习</strong><a id="_idIndexMarker024"/>等等。</p>
+			<p>最复杂的步骤<a id="_idIndexMarker025"/>是在你的实时机器学习和你的过程之间添加自动反馈循环。毕竟，如果有可能自动化和改进<strong class="bold">决策制定</strong>的话，就没有理由停留在<strong class="bold">分析</strong>来获得业务洞察力。</p>
+			<h2 id="_idParaDest-25"><a id="_idTextAnchor024"/>流数据的常见用例</h2>
+			<p>让我们来看几个最常见的流数据用例，以便您能够更好地了解可以从流技术中受益的用例。这将涵盖三个对任何人来说都相对容易理解的用例，当然，还有更多。</p>
+			<h3>传感器数据和异常检测</h3>
+			<p>流数据<a id="_idIndexMarker026"/>的一个常见用例是传感器数据分析。传感器数据<a id="_idIndexMarker027"/>可以出现在多种用例中，例如工业生产线和物联网用例。当公司决定收集传感器数据时，通常会进行实时处理。</p>
+			<p>对于生产线而言，实时检测异常非常有价值。当出现过多异常时，可以关闭生产线，或者在交付大量不合格产品之前解决问题。</p>
+			<p>在这里可以找到一个监控艺术品湿度的流式分析<a id="_idIndexMarker028"/>的好例子:<a href="https://azure.github.io/iot-workshop-asset-tracking/step-003-anomaly-detection/">https://azure . github . io/IOT-workshop-asset-tracking/step-003-anomaly-detection/</a>。</p>
+			<h3>金融和回归预测</h3>
+			<p>金融数据是流数据的另一个重要用例<a id="_idIndexMarker029"/>。例如，在股票交易的世界<a id="_idIndexMarker030"/>中，时机很重要。你越快发现股市的上涨或下跌趋势，交易员(或算法)就能越快做出反应，卖出或买入股票并赚钱。</p>
+			<p>K.S Umadevi等人(2018)在下面的论文中描述了一个很好的例子<a id="_idIndexMarker031"/>:<a href="https://ieeexplore.ieee.org/document/8554561">https://ieeexplore.ieee.org/document/8554561</a>。</p>
+			<h3>网站和分类的点击流</h3>
+			<p>网站或应用是实时洞察的第三个常见<a id="_idIndexMarker032"/>用例。如果你能实时跟踪和分析你的访问者，你可以在你的网站上为他们提出个性化的体验。通过推荐与网站访问者相匹配的产品或服务，你可以增加你的在线销售。</p>
+			<p>Ramanna Hanamanthrao和S Thejaswini (2017)的以下论文给出了应用于点击流数据的这项技术<a id="_idIndexMarker033"/>的一个很好的用例:<a href="https://ieeexplore.ieee.org/abstract/document/8256978">https://ieeexplore.ieee.org/abstract/document/8256978</a>。</p>
+			<h2 id="_idParaDest-26"><a id="_idTextAnchor025"/>流与大数据</h2>
+			<p>了解您可能会遇到的不同流定义<a id="_idIndexMarker034"/>非常重要。流媒体和大数据之间有一个区别。一些定义将主要考虑大数据(Hadoop/Spark)环境中的流，而其他定义则不考虑。</p>
+			<p>流解决方案通常具有大量数据，大数据解决方案可能是合适的选择。然而，其他技术与精心选择的硬件架构相结合，也可能能够实时进行分析，因此无需大数据技术即可构建流媒体解决方案。</p>
+			<h3>流式与实时推理</h3>
+			<p>模型的实时推理<a id="_idIndexMarker036"/>通常是通过API构建和访问的。由于我们将<a id="_idIndexMarker037"/>流定义为无批处理的实时数据分析，此类实时预测可视为流。在后面的章节中，你会看到更多关于实时架构的内容。</p>
+			<h1 id="_idParaDest-27"><a id="_idTextAnchor026"/>实时数据格式和在Python中导入示例数据集</h1>
+			<p>为了完成本章，让我们看一看<a id="_idIndexMarker038"/>如何在实践中表示流<a id="_idIndexMarker039"/>数据。毕竟，当构建分析时，我们将<a id="_idIndexMarker040"/>经常不得不实现测试案例和示例数据集。</p>
+			<p>用Python <a id="_idIndexMarker042"/>表示<a id="_idIndexMarker041"/>流数据的最简单方法是创建一个包含数据的iterable对象，并构建您的分析函数来使用iterable。</p>
+			<p>以下代码使用pandas创建了一个DataFrame。有两列，温度和pH:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-1</p>
+			<pre class="source-code">import pandas as pd</pre>
+			<pre class="source-code">data_batch = pd.DataFrame({</pre>
+			<pre class="source-code">'temperature': [10, 11, 10, 11, 12, 11, 10, 9, 10, 11, 12, 11, 9, 12, 11],</pre>
+			<pre class="source-code">    ‹pH›: [5, 5.5, 6, 5, 4.5, 5, 4.5, 5, 4.5, 5, 4, 4.5, 5, 4.5, 6]</pre>
+			<pre class="source-code">})</pre>
+			<pre class="source-code">print(data_batch)</pre>
+			<p>当显示数据帧时，它将如下所示。pH值约为4.5/5，但有时会更高。温度一般在10或11左右。</p>
+			<div><div><img src="img/B18335_01_05.jpg" alt="Figure 1.5 – The resulting DataFrame&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.5–产生的数据帧</p>
+			<p>该数据集是一个批处理<a id="_idIndexMarker043"/>数据集；毕竟，你同时拥有<a id="_idIndexMarker044"/>所有的行(观察)。现在，让我们看看如何通过使数据集可迭代来将数据集转换成流数据集。</p>
+			<p>您可以通过遍历数据行来实现这一点。在这样做的时候，您设置了一个代码结构，允许您一个接一个地向这个代码添加更多的构建块。当您的开发完成后，您将能够在实时流上使用您的代码，而不是在数据帧的迭代上。</p>
+			<p>下面的代码遍历DataFrame的行，并将这些行转换为JSON格式。这是不同系统间通信<a id="_idIndexMarker048"/>非常常见的<a id="_idIndexMarker047"/>格式。观察的JSON包含<a id="_idIndexMarker049"/>温度值<a id="_idIndexMarker050"/>和pH值。这些值打印如下:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-2</p>
+			<pre class="source-code">data_iterable = data_batch.iterrows()</pre>
+			<pre class="source-code">for i,new_datapoint in data_iterable:</pre>
+			<pre class="source-code">  print(new_datapoint.to_json())</pre>
+			<p>运行此代码后，您应该会获得如下所示的打印输出:</p>
+			<div><div><img src="img/B18335_01_06.jpg" alt="Figure 1.6 – The resulting print output&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.6–最终的打印输出</p>
+			<p>现在让我们定义一个超级简单的流数据分析示例<a id="_idIndexMarker051"/>。以下<a id="_idIndexMarker052"/>代码块<a id="_idIndexMarker053"/>中定义的函数将在<a id="_idIndexMarker054"/>温度低于10°时打印警报:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-3</p>
+			<pre class="source-code">def super_simple_alert(datapoint):</pre>
+			<pre class="source-code">  if datapoint[‹temperature›] &lt; 10:</pre>
+			<pre class="source-code">    print('this is a real time alert. temp too low')</pre>
+			<p>现在，您只需在每个数据点调用警报测试，就可以将此警报添加到模拟流过程中。您可以使用以下代码来实现这一点:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-4</p>
+			<pre class="source-code">data_iterable = data_batch.iterrows()</pre>
+			<pre class="source-code">for i,new_datapoint in data_iterable:</pre>
+			<pre class="source-code">  print(new_datapoint.to_json())</pre>
+			<pre class="source-code">  super_simple_alert(new_datapoint)</pre>
+			<p>当执行这段代码时，您会注意到一旦温度低于10:</p>
+			<div><div><img src="img/B18335_01_07.jpg" alt="Figure 1.7 – The resulting print output with alerts on temperature&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.7–带有温度警报的打印输出结果</p>
+			<p>这个警报<a id="_idIndexMarker055"/>只对温度起作用，但是你可以很容易地添加<a id="_idIndexMarker056"/>同样类型的对pH值的警报。下面的代码<a id="_idIndexMarker057"/>展示了如何做到这一点。警报功能<a id="_idIndexMarker058"/>可以被更新以包括如下的第二商业规则:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-5</p>
+			<pre class="source-code">def super_simple_alert(datapoint):</pre>
+			<pre class="source-code">  if datapoint[‹temperature›] &lt; 10:</pre>
+			<pre class="source-code">    print('this is a real time alert. temp too low')</pre>
+			<pre class="source-code">  if datapoint[‹pH›] &gt; 5.5:</pre>
+			<pre class="source-code">    print('this is a real time alert. pH too high')</pre>
+			<p>执行该功能仍将以完全相同的方式完成:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块1-6</p>
+			<pre class="source-code">data_iterable = data_batch.iterrows()</pre>
+			<pre class="source-code">for i,new_datapoint in data_iterable:</pre>
+			<pre class="source-code">  print(new_datapoint.to_json())</pre>
+			<pre class="source-code">  super_simple_alert(new_datapoint)</pre>
+			<p>在对示例<a id="_idIndexMarker062"/>流数据执行<a id="_idIndexMarker061"/>的整个过程中，您将<a id="_idIndexMarker059"/>看到几个警报被发出<a id="_idIndexMarker060"/>，如下所示:</p>
+			<div><div><img src="img/B18335_01_08.jpg" alt="Figure 1.8 – The resulting print output with alerts on temperature and pH&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.8–结果打印输出，带有温度和pH值警报</p>
+			<p>对于流数据，你必须在看不到<a id="_idIndexMarker063"/>完整数据<a id="_idIndexMarker064"/>的情况下做出决定，而仅仅是在过去接收到的那些数据<a id="_idIndexMarker065"/>点上做出决定。这意味着需要一种不同的方法来重新开发类似于批处理算法的算法。</p>
+			<p>在本书中，你会发现适用于流数据的方法。正如你可能理解的那样，困难在于统计方法通常是使用所有数据来计算事物的。</p>
+			<h1 id="_idParaDest-28"><a id="_idTextAnchor027"/>总结</h1>
+			<p>在这一关于流数据和流分析的介绍性章节中，您首先看到了什么是流数据的一些定义，以及它与批量数据处理有何不同。在流数据中，您需要处理连续的数据流，并且需要调整更传统的(批处理)数据科学解决方案，以便使用这种更新、要求更高的数据处理方法。</p>
+			<p>您已经看到了许多示例用例，现在您应该明白，对于业务和高级技术用例来说，即时计算数据科学和分析比等待固定时间会有更多的附加值。实时洞察可以改变游戏规则，自主机器学习解决方案通常需要实时决策能力。</p>
+			<p>您已经看到了一个例子，其中创建了一个数据流，并开发了一个简单的实时警报系统。在下一章中，你将会更深入地了解一些流媒体解决方案。在实践中，数据科学家和分析师通常不负责将流数据接收到位，但他们会受到这些系统的限制。因此，很好地理解流和实时架构是很重要的:这将是下一章的目标。</p>
+			<h1 id="_idParaDest-29"><a id="_idTextAnchor028"/>延伸阅读</h1>
+			<ul>
+				<li><em class="italic">什么是流数据？</em>(通过AWS):<a href="https://aws.amazon.com/streaming-data/">https://aws.amazon.com/streaming-data/</a></li>
+				<li><em class="italic">实时数据分析的8个最佳范例</em>，作者Bernard Marr:<a href="https://www.linkedin.com/pulse/8-best-examples-real-time-data-analytics-bernard-marr/">https://www . LinkedIn . com/pulse/8-Best-Examples-Real-Time-Data-Analytics-Bernard-Marr/</a></li>
+				<li><em class="italic">如何为流媒体分析建立强大的商业案例</em>，福布斯<a href="https://www.forbes.com/sites/forbestechcouncil/2021/10/26/how-to-build-a-strong-business-case-for-streaming-analytics/?sh=314e2b8a465d">https://www . Forbes . com/sites/Forbes tech Council/2021/10/26/How-to-Build-a-Strong-Business-Case-For-Streaming-Analytics/？sh=314e2b8a465d </a></li>
+				<li><em class="italic">实时流分析的7个企业用例</em>:<a href="https://searchbusinessanalytics.techtarget.com/feature/7-enterprise-use-cases-for-real-time-streaming-analytics">https://searchbusinessanalytics . techtarget . com/feature/7-实时流分析的企业用例</a></li>
+				<li><em class="italic">从批量到在线/流</em>，由river ml:<a href="https://riverml.xyz/dev/examples/batch-to-online/">https://riverml.xyz/dev/examples/batch-to-online/</a></li>
+				<li>蟒蛇:<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a></li>
+				<li>谷歌实验室:<a href="https://colab.research.google.com/">https://colab.research.google.com/</a></li>
+				<li>卡格尔笔记本:<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a></li>
+			</ul>
+		</div>
+	
+
+</body></html>

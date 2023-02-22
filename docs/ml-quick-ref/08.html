@@ -1,0 +1,1100 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Probabilistic Graphical Models</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">概率图形模型</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在我们进入<strong>贝叶斯网络</strong> ( <strong> BN </strong>)概念之前，我们应该了解概率论。因此，我们将努力触及这些问题，并为BNs奠定基础。</p>
+
+<p>我们已经知道概率是事件发生的确定/不确定程度。然而，它也可以被称为信任度，当我们谈论BN时，它更常用。</p>
+
+<p>当我们掷一枚公平硬币时，我们说围绕正面/反面事件发生的信任度是<em> 0.5 </em>。这意味着我们对正面发生的信念和反面一样坚定。概率可以看如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> p(正面)=p(反面)=0.5 </em></p>
+
+<p>在本章中，我们将讨论以下主题:</p>
+
+<ul>
+
+<li>贝叶斯规则</li>
+
+<li>贝叶斯网络</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Key concepts</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">关键概念</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在进入本章正文之前，我们将介绍几个关键概念:</p>
+
+<ul>
+
+<li>在离散分布的情况下，使用概率质量函数来找出概率，<em> p(X= x)，</em>其中<em> X </em>是离散随机变量，<em> x </em>是实数值。</li>
+
+<li>在连续分布的情况下，用概率密度函数求出概率<em> p(X &lt; = x) </em>。在这种情况下，绘制概率曲线，曲线下的面积(积分)有助于我们了解概率。</li>
+
+</ul>
+
+<ul>
+
+<li>条件概率就是理解这一点，一场板球比赛可以是完美的例子。假设有一场印度和澳大利亚之间的比赛，我们试图传递我们的信念，印度获胜。你认为概率会受到印度选的队的冲击吗？如果<em> Virat Kohli </em>和<em> Rohit Sharma </em>是团队的一员，印度赢得比赛的概率会受到影响吗？所以，<em> p(印度赢|Rohit和Virat在打)</em>表示印度赢的概率，给定<em> Rohit </em>和<em> Virat </em>在打。本质上，它意味着一个事件的概率依赖于另一个事件的概率。叫做<strong>条件概率</strong>。</li>
+
+</ul>
+
+<p style="padding-left: 60px">给定<em> y </em>，则<em> x </em>的概率可表示如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/d915c396-9cd1-4e99-a87b-87d09498b0a7.png" style="width:8.58em;height:2.83em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/2d7ed028-8228-43d2-9fa1-cc9eef4f53bf.png" style="width:11.83em;height:1.33em;"/></p>
+
+<ul>
+
+<li class="CDPAlignLeft CDPAlign">链式法则使用一组随机变量的条件概率来计算它们的联合分布。从条件概率我们知道<img class="fm-editor-equation" src="img/0d8baa2a-6492-4518-a44b-2a2b63b30ea9.png" style="width:9.83em;height:1.25em;"/>。</li>
+
+</ul>
+
+<p class="CDPAlignLeft CDPAlign" style="padding-left: 60px">它暗示如果有<img class="fm-editor-equation" src="img/0672cc86-ade2-4aaf-836a-b708c703e6a4.png" style="width:8.92em;height:1.42em;"/>事件。联合概率分布是这样的:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/46cd6ec1-a45e-40fa-8b9c-b1a4a9599281.png" style="width:30.25em;height:1.58em;"/></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Bayes rule</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">贝叶斯规则</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>贝叶斯规则是概率论的基石之一。它源于条件概率和联合概率，并扩展到更广的范围。</p>
+
+<p>我们将通过举一个板球的例子来简单地解释这一点。在板球运动中，场地条件随着你从一个地方到另一个地方而变化，这是决定球队的重要因素之一。结果也可能取决于它。</p>
+
+<p>假设印度队去澳大利亚比赛，我们要预测一个印度球员在比赛中得一百分(100分)的信念。如果那个球员有在那个国家踢球的经验，我们可以坚定地说，他可能会得一百分。但是，还有一个球员是这个国家的第一次。他的优先信念是什么？当然，许多人不太相信他能得一百分。</p>
+
+<p>然而，当我们看到球员的表现时，我们之前的想法会改变。也就是说，随着玩家玩的游戏越来越多，关于玩家的更多数据将由我们支配。基于此，后验信念将不断更新。它变化很大，很大程度上是由于观察或更多的数据(这被称为<strong>可能性</strong>)。贝叶斯法则就是基于这些概念。</p>
+
+<p>假设<em xmlns:epub="http://www.idpf.org/2007/ops">A<sub>I</sub>T9】与<em xmlns:epub="http://www.idpf.org/2007/ops"> B </em>形成一个互斥事件:</em></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/5c0b99e6-fbc9-4a8a-82a8-ed1d6c118885.png" style="width:7.50em;height:3.25em;"/></p>
+
+<p><em> B </em>的概率如下:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/dc060e81-1231-4d98-9a89-0ea9f32c00dc.png" style="width:11.75em;height:3.50em;"/></p>
+
+<p>我们从条件概率中得到B的概率，如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/47e9c056-9487-4eef-8f0a-4b9e52d70eee.png" style="width:14.50em;height:1.42em;"/></p>
+
+<p>因此:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/83f0e512-2d1b-41a9-ab86-40bab786697f.png" style="width:13.58em;height:2.92em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/49120dc1-9adc-4b5c-9077-4d270ce66994.png" style="width:12.75em;height:2.75em;"/></p>
+
+<p class="CDPAlignLeft CDPAlign">现在，从等式2中提取<img class="fm-editor-equation" src="img/263394a6-45d1-4214-aa22-754050d46121.png" style="width:5.42em;height:1.42em;"/> <strong> </strong>的值，并将其放入等式1，我们得到:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/c5f4ca75-60d9-4d37-9aed-e8230fa8d3a8.png" style="width:13.75em;height:2.42em;"/></p>
+
+<p>替换上式中的值<em> P(B) </em>后，我们得到:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/ea3cba87-2548-4ee7-a977-c03b76bd40c1.png" style="width:15.58em;height:2.75em;"/></p>
+
+<p>先看一下方程3。这叫做<strong>贝叶斯法则</strong>。</p>
+
+<p><em> P(A|B) </em>称为<strong>后验</strong>，需要估计。在前面的例子中，这将是一个世纪得分的概率，假设玩家已经有了早期在那里玩的经验。</p>
+
+<p><em> P(B|A) </em>称为<strong>似然</strong>，是在给定我们初始假设的情况下，观察到新证据的概率。例如，一个以前有过板球比赛经验的运动员得分100分的概率。</p>
+
+<p><em> P(A) </em>称为<strong>先验</strong>，是我们假设没有任何额外先验信息的概率。</p>
+
+<p><em> P(B) </em>称为<strong>边际似然</strong>，是观察到证据的总概率。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Bayes network</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">贝叶斯网络</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>贝叶斯网络是一种概率图形模型，可用于建立模型来解决业务问题。这方面的应用相当广泛。例如，它可以用于异常检测、预测建模、诊断、自动洞察和许多其他应用。</p>
+
+<p>这是完全可以理解的，这里使用的几个词对你来说是陌生的。例如，我们这里的图形化是什么意思？</p>
+
+<p>图是由一组节点和边组成的。节点用<em> N={N1，N2…..Nn} </em>，其中独立变量位于每个节点。边是节点之间的连接器。边可以用<em> E={E1，E2…..En} </em>又可以是两种类型:</p>
+
+<ul>
+
+<li>导演，代理<img class="fm-editor-equation" src="img/843f2b04-9067-42f3-8aac-5703ddad0bd4.png" style="width:5.92em;height:1.17em;"/></li>
+
+<li>无方向，由以下内容表示:</li>
+
+</ul>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/dc8df9c5-ea52-4fe6-a967-8a6cbe2d18fa.png" style="width:9.42em;height:2.83em;"/></p>
+
+<p>借助节点和边，展示变量之间的关系。可以是条件独立关系，也可以是条件依赖关系。BN是一种可以在变量之间引入因果关系的技术。虽然因果关系并不是其中必不可少的一部分，但是在网络中拥有这个(因果关系)可以让结构变得相当紧凑。</p>
+
+<p>我们通过一个例子来看。有许多可变因素，如醒来晚了，高速公路上的事故，下雨天，交通堵塞，他们上班会迟到，开会会迟到。如果一个人起床晚了，就意味着上班迟到。高速公路上的事故会造成交通堵塞，反过来，这会导致上班迟到。在雨天，道路更容易发生事故，此外，缓慢行驶的车辆会造成交通堵塞，从而导致上班迟到。下图解释了该示例:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-903 image-border" src="img/8b493814-db85-499c-adc3-b85469f6d528.png" style="width:33.50em;height:30.42em;"/></p>
+
+<p>这种网络被称为<strong>有向无环图</strong>。无环意味着网络中没有循环。我们在这里讨论的是变量之间的关系。例如，起床晚和开会迟到通常不是独立的。但考虑到上班迟到，他们是有条件独立的。</p>
+
+<p>此外，晚起似乎与高速公路上的事故没有联系和关系。也就是说，它们可能看起来相互独立。但是，如果你知道上班迟到的价值，那么这两个可以称为有条件独立。</p>
+
+<p>因此，BN允许节点之间的条件独立性。同时，它是联合概率分布的有效表示，这是由链式规则实现的。</p>
+
+<p>假设X代表n个独立变量或节点。弧线或有向箭头表示变量之间的概率相关性或独立性。没有弧线意味着概率上的独立性。网络是一个有向无环图，其中每个节点都保持着局部概率分布，也称为<strong>条件概率表</strong> ( <strong> CPT </strong>)。</p>
+
+<p>如果我们说的是之前的网络，那么我们需要寻址整个网络所需的概率分布。为了简单起见，我们将所有节点保持为布尔型。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Probabilities of nodes</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">节点概率</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们看看每个节点上的概率，并找出有多少概率会出现在那里。</p>
+
+<p>携带<strong>晚起</strong>和<strong>雨天</strong>的节点是父节点，因为没有节点通向这些节点。不同的节点可以从以下几点看出:</p>
+
+<ol>
+
+<li><strong>节点(晚起)</strong>:作为父节点之一，我们将寻找晚起的概率。因此，这里被发现的概率计数是1。</li>
+
+<li><strong>节点(雨天)</strong>:和晚起节点一样，这里概率的计数也是1。</li>
+
+<li><strong>节点(公路上的事故)</strong>:由于是雨天的子节点，所以讲的是雨天发生事故的概率和非雨天发生事故的概率。所以，这里的概率是2。</li>
+
+<li><strong>节点(堵车)</strong>:它有两个双亲(雨天和事故)。雨天有两个值，真和假，和事故一样。将两者结合将产生四种不同的组合。因此，概率计数将是4。</li>
+
+<li><strong>节点(上班迟到)和节点(开会迟到)</strong>:类似的解释也适用于这两个节点。这些事件发生的概率是4:</li>
+
+</ol>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-901 image-border" src="img/4ed44c12-fbe1-4882-b3c3-8e62ccabe38a.png" style="width:32.75em;height:31.08em;"/></p>
+
+<p>概率总数是1 + 2 + 1 + 4 + 4 + 4 = 16。</p>
+
+<p>如果它只是一个正常的联合概率分布而不是BN，我们将有2 <sup> 6 </sup> -1个概率。因此，BN使网络相当紧凑。此外，我们必须注意的另一个更基本的假设是，给定每个节点的直接父节点，每个节点都有条件地独立于非子节点。例如，在<strong>上班迟到</strong>也在的情况下，晚起和开会迟到是有条件独立的。一般来说，我们可以用下面的方式来表示BN，这显示了联合分布是如何被转化为紧凑结构的:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/422192d3-e973-47a9-a21d-db60c6679cf0.png" style="width:24.92em;height:2.75em;"/></p>
+
+<p>如果<em xmlns:epub="http://www.idpf.org/2007/ops"> G </em>是图，<em xmlns:epub="http://www.idpf.org/2007/ops">X<sub>I</sub>T10】是图<em xmlns:epub="http://www.idpf.org/2007/ops"> G </em>中的一个节点，<em xmlns:epub="http://www.idpf.org/2007/ops"> P </em>是<em xmlns:epub="http://www.idpf.org/2007/ops">X<sub>I</sub>T18】节点的父节点。</em></em></p>
+
+<p class="mce-root"/>
+
+<p>以下是关于这些等式的一些注释:</p>
+
+<ul>
+
+<li>等式的右边是链规则的应用，它展示了条件独立性关系。它是联合概率分布的图形结构近似。</li>
+
+<li>当然，图形必须是非循环的。</li>
+
+<li>它可以方便地显示各种事件之间的关系。</li>
+
+</ul>
+
+<p>现在，让我们用一个简单的场景来展示CPT。以下是三个事件的组合，如下所示:</p>
+
+<p>如果下雨，狗会开始叫，男人会翘班:</p>
+
+<ul>
+
+<li>下雨的可能性(是/否)</li>
+
+<li>狗会叫的概率(是/否)</li>
+
+<li>该男子不上班的可能性(是/否)</li>
+
+</ul>
+
+<p>让我们把网络准备成一个有向无环图。所有这些节点反映一个事件，有向箭头是条件概率。我们将在这里看到如何阅读这个图表:</p>
+
+<ul>
+
+<li>连接器1指示下雨时狗叫的可能性</li>
+
+<li>连接器2指示如果狗叫，该人跳过他的工作的概率</li>
+
+</ul>
+
+<p>下图显示了两种概率的流程图:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-902 image-border" src="img/db88ed17-07f6-443a-951d-a166d5bd2681.png" style="width:30.92em;height:20.58em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>CPT</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">运费付至·....（carriage paid to...的缩写）</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们为连接器1进行CPT:</p>
+
+<table border="1" style="border-collapse: collapse;width: 100%">
+
+<tbody>
+
+<tr>
+
+<td style="width: 113px">
+
+<p> </p>
+
+</td>
+
+<td style="width: 111px">
+
+<p><strong>狗叫</strong></p>
+
+</td>
+
+<td style="width: 166px">
+
+<p><strong>狗不叫</strong></p>
+
+</td>
+
+<td style="width: 218.355px">
+
+<p><strong>聚合</strong></p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="width: 113px">
+
+<p>下雨了</p>
+
+</td>
+
+<td style="width: 111px">
+
+<p>10</p>
+
+</td>
+
+<td style="width: 166px">
+
+<p>四</p>
+
+</td>
+
+<td style="width: 218.355px">
+
+<p>14</p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="width: 113px">
+
+<p>不下雨</p>
+
+</td>
+
+<td style="width: 111px">
+
+<p>8</p>
+
+</td>
+
+<td style="width: 166px">
+
+<p>5</p>
+
+</td>
+
+<td style="width: 218.355px">
+
+<p>13</p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="width: 113px">
+
+<p>总计</p>
+
+</td>
+
+<td style="width: 111px">
+
+<p>18</p>
+
+</td>
+
+<td style="width: 166px">
+
+<p>9</p>
+
+</td>
+
+<td style="width: 218.355px">
+
+<p>27</p>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<p> </p>
+
+<p>这里，我们讨论以下场景:</p>
+
+<ul>
+
+<li>概率<em>(狗叫|下雨)= 10/14 </em></li>
+
+<li>概率<em>(狗不叫|下雨)= 4/14 </em></li>
+
+<li>概率<em>(狗叫|不下雨)= 8/13 </em></li>
+
+<li>概率<em>(狗不叫|不下雨)= 5/13 </em></li>
+
+</ul>
+
+<table border="1" style="border-collapse: collapse;width: 100%">
+
+<tbody>
+
+<tr>
+
+<td style="width: 162.386px">
+
+<p> </p>
+
+</td>
+
+<td style="width: 181.477px">
+
+<p><strong>狗叫</strong></p>
+
+</td>
+
+<td style="width: 246.932px">
+
+<p><strong>狗不叫</strong></p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="width: 162.386px">
+
+<p>下雨了</p>
+
+</td>
+
+<td style="width: 181.477px">
+
+<p>10/14</p>
+
+</td>
+
+<td style="width: 246.932px">
+
+<p>4/14</p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="width: 162.386px">
+
+<p>不下雨</p>
+
+</td>
+
+<td style="width: 181.477px">
+
+<p>8/13</p>
+
+</td>
+
+<td style="width: 246.932px">
+
+<p>5/13</p>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<p> </p>
+
+<p>下图详细显示了概率:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-905 image-border" src="img/538aa2c0-2f3d-4f2a-8474-75084cc619ce.png" style="width:36.75em;height:21.92em;"/></p>
+
+<p>假设<em>下雨的概率= P(下雨)=0.6 </em>那么<em>不下雨的概率= P(不下雨)= 0.4 </em>。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p>让我们说，男子旷工的CPT如下:</p>
+
+<table border="1" style="border-collapse: collapse;width: 100%">
+
+<tbody>
+
+<tr>
+
+<td>
+
+<p> </p>
+
+</td>
+
+<td>
+
+<p>这个男人旷工了</p>
+
+</td>
+
+<td>
+
+<p><strong>男人不翘班</strong></p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<p>狗叫了</p>
+
+</td>
+
+<td>
+
+<p>0.8</p>
+
+</td>
+
+<td>
+
+<p>0.2</p>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<p>这条狗不叫</p>
+
+</td>
+
+<td>
+
+<p>0.3</p>
+
+</td>
+
+<td>
+
+<p>0.7</p>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<p>必须相对于父节点计算每个事件的概率。</p>
+
+<p>现在，我们应该找出<em>男人翘班，狗叫但不下雨的概率= P(男人翘班，狗叫，不下雨)</em>:</p>
+
+<p class="CDPAlignCenter CDPAlign"><em> = P(人逃工|狗叫)*P(狗叫|不下雨)*P(不下雨)</em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> =0.8 * (8/13) *0.4 </em></p>
+
+<p class="CDPAlignCenter CDPAlign"><em> =0.1969 </em></p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Example of the training and test set</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">训练和测试集的示例</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>让我们用Python来解决一个用例。我们将使用Kaggle的泰坦尼克号数据。<br/>数据被分成两组:</p>
+
+<ul>
+
+<li>训练集(<kbd>train.csv</kbd>)</li>
+
+<li>测试集(<kbd>test.csv</kbd>)</li>
+
+</ul>
+
+<p>这些数据是关于泰坦尼克号上的乘客的。它抓住了他们的特点:</p>
+
+<ul>
+
+<li><kbd>pclass</kbd>:机票等级1 =第一，2 =第二，3 =第三</li>
+
+<li><kbd>gender</kbd>:性别</li>
+
+<li><kbd>Age</kbd>:以年为单位的年龄</li>
+
+<li><kbd>sibsp</kbd>:泰坦尼克号上的兄弟姐妹/配偶数量</li>
+
+<li><kbd>parch</kbd>:泰坦尼克号上父母/孩子的数量</li>
+
+<li><kbd>ticket</kbd>:票号</li>
+
+<li><kbd>fare Passenger</kbd>:票价</li>
+
+</ul>
+
+<ul>
+
+<li><kbd>cabin</kbd>:客舱号</li>
+
+<li><kbd>embarked</kbd>:启运港<kbd>C = Cherbourg</kbd>、<kbd>Q = Queenstown</kbd>、<kbd>S = Southampton</kbd></li>
+
+</ul>
+
+<p>我们必须建立模型来预测他们是否能在泰坦尼克号沉没后幸存下来。最初，导入参数，如下所示:</p>
+
+<pre>import pandas as pd<br/>import numpy as np</pre>
+
+<p>我们正在这里加载数据集:</p>
+
+<pre>traindf= pd.read_csv("train.csv")<br/>testdf= pd.read_csv("test.csv")</pre>
+
+<p>我们必须寻找每个变量的唯一值的数量，因为bn是离散模型:</p>
+
+<pre>for k in traindf.keys():<br/> print('{0}: {1}'.format(k, len(traindf[k].unique())))</pre>
+
+<p>输出如下所示:</p>
+
+<p class="mce-root CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-644 image-border" src="img/369f0c2b-19d4-460a-b90e-1ccaef31c735.png" style="width:10.00em;height:15.00em;"/></p>
+
+<p>为了使我们的系统免于太多的计算并避免它的负荷，我们将减少变量的数量:</p>
+
+<pre>for k in traindf.keys():<br/> if len(traindf[k].unique())&lt;=10:<br/> print(k)</pre>
+
+<p>我们得到以下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-645 image-border" src="img/71bcddd7-91e1-4575-8709-56c819730aef.png" style="width:7.25em;height:9.33em;"/></p>
+
+<p>现在，我们只剩下六个变量。</p>
+
+<p>此外，我们必须离散化连续变量，以防它们需要成为模型的一部分:</p>
+
+<pre>import math<br/>def forAge(row):<br/> if row['Age'] &lt; 10:<br/>    return '&lt;10'<br/> elif math.isnan(row['Age']):<br/>    return "nan"<br/> else:<br/>    dec = str(int(row['Age']/10))<br/>    return "{0}0's".format(dec)<br/> decade=traindf.apply(forAge, axis=1)<br/> print("Decade: {1}".format(k, len(decade.unique())))</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img src="img/7ead451e-3999-4bf8-ae9b-fc81d5e89ff8.png" style="width:7.50em;height:1.83em;"/></p>
+
+<p>现在让我们做预处理:</p>
+
+<pre>def preprocess(df):<br/> # create a dataframe with discrete variables (len&lt;10)<br/> filt=[k for k in df.keys() if len(df[k].unique())&lt;=10]<br/> filtr2=df[filt].copy()<br/> forAge = lambda row: int(row['Age']/10) if not math.isnan(row['Age']) else np.nan<br/> filtr2['Decade']=df.apply(forAge, axis=1)<br/> filtr2=filtr2.dropna()<br/> filtr2['Decade']=filtr2['Decade'].astype('int32')<br/> return filtr2</pre>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p>对于<kbd>traindf</kbd>和<kbd>testdf</kbd>，我们使用以下公式:</p>
+
+<pre>ptraindf= preprocess(traindf)<br/>ptestdf=preprocess(testdf)</pre>
+
+<div><div><div><p>我们需要保存这些数据，因为<kbd>pyAgrum</kbd>库只接受文件作为输入:</p>
+
+</div>
+
+</div>
+
+</div>
+
+<pre class="mce-root">ptraindf.to_csv('post_train.csv', index=False)<br/>ptestdf.to_csv( 'post_test.csv', index=False)<br/><br/>df=pd.read_csv('post_train.csv')<br/>for k in df.keys():<br/>  print("{} : {}".format(k, df[k].unique()))</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-646 image-border" src="img/951fb491-5531-4d0a-96ff-1048878d600b.png" style="width:15.33em;height:8.75em;"/></p>
+
+<pre>import pyAgrum as gum<br/>import pyAgrum.lib.notebook as gnb</pre>
+
+<p>现在，是时候建立模型了。这里，您需要在选择<kbd>RangeVariable</kbd>和<kbd>LabelizedVariable</kbd>变量时保持警惕:</p>
+
+<pre>template=gum.BayesNet()<br/>template.add(gum.RangeVariable("Survived", "Survived",0,1))<br/>template.add(gum.RangeVariable("Pclass", "Pclass",1,3))<br/>template.add(gum.LabelizedVariable("Gender", "Gender",0).addLabel("female").addLabel("male"))<br/>template.add(gum.RangeVariable("SibSp", "SibSp",0,8))<br/>template.add(gum.RangeVariable("Parch", "Parch",0,9))<br/>template.add(gum.LabelizedVariable("Embarked", "Embarked",0).addLabel('').addLabel('C').addLabel('Q').addLabel('S'))<br/>template.add(gum.RangeVariable("Decade", "Calculated decade", 0,9))<br/>gnb.showBN(template)</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-669 image-border" src="img/bc93a989-6af8-416f-9bdb-bcee069b4e22.png" style="width:47.58em;height:4.83em;"/></p>
+
+<p>对于<kbd>learnBN()</kbd>，我们使用以下内容:</p>
+
+<pre>learner = gum.BNLearner('post_train.csv', template)<br/>bn = learner.learnBN()<br/>bn</pre>
+
+<p>以下是输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1024 image-border" src="img/025f896e-13c7-4d3e-b6e7-c642d2518f37.png" style="width:23.92em;height:26.75em;"/></p>
+
+<p>现在我们有了模型，让我们试着从中提取信息:</p>
+
+<pre>gnb.showInformation(bn,{},size="20")</pre>
+
+<p class="mce-root"/>
+
+<p>我们得到如下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-670 image-border" src="img/8cc11cf8-4fbc-4674-af45-8c6f08f34bdc.png" style="width:33.92em;height:34.58em;"/></p>
+
+<p>变量的熵意味着值越大，变量的边际概率分布越不确定。熵值越低，不确定性越低。<kbd>Decade</kbd>变量有最高的熵，这意味着它是均匀分布的。Parch具有低熵且分布不均匀。</p>
+
+<p>熵如何计算的一个结果是，如果随机变量有许多模态，熵往往会变得更大。</p>
+
+<p>找到这个推论让我们看到了这里的边际概率分布:</p>
+
+<pre>gnb.showInference(bn)</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-672 image-border" src="img/1187b06c-9572-4108-ad35-05dbd51037e7.png" style="width:35.08em;height:46.67em;"/></p>
+
+<p>现在，让我们看看如何进行分类:</p>
+
+<pre>gnb.showPosterior(bn,evs={},target='Survived')</pre>
+
+<p>我们得到如下输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-900 image-border" src="img/fb4a872f-7093-4004-b45e-6da27d41c44e.png" style="width:12.08em;height:6.50em;"/></p>
+
+<p>超过40%的乘客在这里幸存。但是，我们没有提出任何条件。</p>
+
+<p>假设我们想知道年轻男性存活的几率有多大:</p>
+
+<pre>gnb.showPosterior(bn,evs={"Gender": "male", "Decade": 3},target='Survived')</pre>
+
+<p>以下是输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-906 image-border" src="img/8485e3f0-faa9-4022-ac86-f8121bf48189.png" style="width:11.25em;height:6.08em;"/></p>
+
+<p>所以，几率是20.6%。</p>
+
+<p>如果我们必须找出一个老太太存活的机会，我们会这样做:</p>
+
+<pre>gnb.showPosterior(bn,evs={"Gender": "female", "Decade": 8},target='Survived')</pre>
+
+<p>输出如下所示:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-904 image-border" src="img/0ff5217b-890f-4ca3-aee7-e437280a3e31.png" style="width:13.50em;height:7.33em;"/></p>
+
+<p>现在，为了评估模型以发现它有多好，我们将绘制ROC曲线:</p>
+
+<pre>from pyAgrum.lib.bn2roc import showROC<br/> showROC(bn, 'post_train.csv','Survived',"1",True,True)</pre>
+
+<p>以下是输出:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-907 image-border" src="img/8c257983-9e0b-4b3d-bada-0acb872a5b45.png" style="width:26.08em;height:18.50em;"/></p>
+
+<p>在这里，<strong> AUC </strong>出来是<strong> 0.893508 </strong>相当体面。</p>
+
+<p>我们已经完成了建模部分。此外，我们还学习了概率论、贝叶斯网络、CPT的计算以及如何在Python中执行它。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:2bd7e082-5e99-4143-aee8-652fca011853" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">摘要</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>这一章让我们了解了概率论。还有，概率论的应用已经投入使用。我们了解了贝叶斯规则和贝叶斯网络以及它是如何形成的。我们被CPT的计算弄脏了手。最后，我们通过一个用例来理解如何在BNs的帮助下进行分类。读者现在将有技能有一个贝叶斯规则和BNs的深入知识。</p>
+
+<p>在下一章中，我们将研究深度学习中的选定主题。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

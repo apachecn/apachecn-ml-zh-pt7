@@ -1,0 +1,1936 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Machine Learning Libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">机器学习库</h1>
+                
+            
+            
+                
+<p>本章概述了现有的用于机器学习的iOS兼容库。我们将看看重要的通用机器学习库、框架和API，以及一些特定领域的库。</p>
+<p>在本章中，我们将讨论以下主题:</p>
+<ul>
+<li>iOS开发者可以使用哪些第三方ML库和API</li>
+<li>一些现有的Swift兼容ML库及其功能概述</li>
+<li>如何在Swift iOS项目中使用非Swift库</li>
+<li>iOS有哪些低级加速库</li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Machine learning and AI APIs</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">机器学习和人工智能应用编程接口</h1>
+                
+            
+            
+                
+<p>当将人工智能添加到您的应用程序中时，并不总是需要从头开始编写一些东西，甚至使用一个库。许多云提供商提供数据处理和分析服务。几乎所有的互联网巨头都以某种形式在云端提供机器学习。此外，市场上还有大量较小的参与者，他们通常以相似的成本提供质量相当的服务。这类小公司的最大缺点是它们往往会被大公司迅速收购。之后，他们的服务正在与大公司的服务合并(最好的情况)，或者只是被关闭(最坏的情况)。</p>
+<p>此类服务的范围在不断增长和变化，因此我认为在本书中详细考虑这些服务没有多大意义。我在这里提供了一个服务列表，这些服务在去年没有消失，在未来一年也不太可能消失:</p>
+<ul>
+<li><strong xmlns:epub="http://www.idpf.org/2007/ops">亚马逊机器学习</strong>提供通用机器学习。前往:【https://aws.amazon.com/documentation/machine-learning/】T2。</li>
+<li><strong>谷歌云平台</strong>提供通用机器学习、计算机视觉、NLP、语音识别、文本翻译等等。前往:<a href="https://cloud.google.com/products/machine-learning/" target="_blank">https://cloud.google.com/products/machine-learning/</a>。</li>
+<li>IBM Watson的服务包括自然语言处理、文本到语音、语音到文本、计算机视觉和数据分析。转到:<a href="http://www.ibm.com/watson/developercloud/" target="_blank">http://www.ibm.com/watson/developercloud/</a>。<a href="http://www.ibm.com/watson/developercloud/" target="_blank"/></li>
+<li><strong>微软认知服务</strong>包括计算机视觉、语音识别、自然语言处理、搜索、机器人框架等。前往:<a href="https://www.microsoft.com/cognitive-services/en-us/apis" target="_blank">https://www.microsoft.com/cognitive-services/en-us/apis</a>。<a href="https://www.microsoft.com/cognitive-services/en-us/apis" target="_blank"/></li>
+<li><strong>微软Azure机器学习</strong>是一个基于云的引擎，用于训练和部署你自己的模型。前往:<a href="https://azure.microsoft.com/en-us/services/machine-learning/" target="_blank">https://azure . Microsoft . com/en-us/services/machine-learning/</a>。<a href="https://azure.microsoft.com/en-us/services/machine-learning/" target="_blank"/></li>
+<li><strong> Wit.ai </strong>(被脸书收购)提供语音识别和意图理解。转到:<a href="https://wit.ai/" target="_blank">https://wit.ai/</a>。<a href="https://wit.ai/" target="_blank"/></li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">图书馆</h1>
+                
+            
+            
+                
+<p>作为iOS开发人员，我们主要对低内存占用的兼容高性能库感兴趣。Swift是一门相对年轻的编程语言，所以用它写的机器学习的库大多是业余爱好者的尝试。然而，已经存在几个更专业且正在积极发展的Swift机器学习包。</p>
+<p>尽管如此，忽视用其他兼容iOS的语言编写的库是不明智的，比如Objective-C、C、C ++、Lua和JavaScript，因为它们通常更加成熟，并且拥有广泛的社区。在这种情况下，有几个可靠的跨平台库值得一提。</p>
+<p>将C库导入到您的Swift代码中很简单:您可以在苹果的开发者门户网站上阅读关于C-Swift互操作性的内容。从技术上讲，C++库与Swift不兼容，但您可以通过Objective-C桥接它们，这样Swift就看不到任何C++或Objective-C++头文件。幸运的是，Objective C顺利地与C++集成。</p>
+<p>Lua可以编译成独立的C库，可以包含在项目中。你可以在iOS SDK的<kbd>CoreJavaScript</kbd>框架的帮助下使用JavaScript库。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>General-purpose machine learning libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">通用机器学习库</h1>
+                
+            
+            
+                
+<p>在下面的比较表中，我包括了大约二十个机器学习库。我考虑了一些特性，如实现语言和接口、加速的可用性和类型、许可类型、正在进行的开发状态以及与流行的包管理器的兼容性。在这一章的后面，我们将更详细地研究每个库的独特功能。</p>
+<p>表2.1:iOS通用机器学习库对比(第一部分):</p>
+<table class="MsoTableGrid">
+<tbody>
+<tr>
+<td>
+<p><strong>图书馆</strong></p>
+</td>
+<td>
+<p><strong>语言</strong></p>
+</td>
+<td>
+<p><strong>算法</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p>AIToolbox</p>
+</td>
+<td>
+<p>迅速发生的</p>
+</td>
+<td>
+<p>GMM，MDP，SVM，NN，PCA，k-means，遗传算法，DL: LSTM，CNN。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>智能芯片</p>
+</td>
+<td>
+<p>迅速发生的</p>
+</td>
+<td>
+<p>DL: FF，LSTM。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>咖啡，咖啡2，MXNet，张量流，tiny-dnn</p>
+</td>
+<td>
+<p>C++</p>
+</td>
+<td>
+<p>DL。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>dlib</p>
+</td>
+<td>
+<p>C++</p>
+</td>
+<td>
+<p>贝叶斯网络，支持向量机，回归，结构化预测，DL，聚类和其他无监督，半监督，强化学习，特征选择。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>范恩</p>
+</td>
+<td>
+<p>C</p>
+</td>
+<td>
+<p>NNs。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>LearnKit</p>
+</td>
+<td>
+<p>目标</p>
+</td>
+<td>
+<p>异常检测，协同过滤，决策树，随机森林，k均值，kNN，回归，朴素贝叶斯，神经网络，主成分分析，支持向量机。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MLKit</p>
+</td>
+<td>
+<p>迅速发生的</p>
+</td>
+<td>
+<p>回归，遗传算法，k-均值，神经网络。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>多重线性数学</p>
+</td>
+<td>
+<p>迅速发生的</p>
+</td>
+<td>
+<p>多线性PCA，多线性子空间学习，LinReg，LogReg，FF NN。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>OpenCV ( <kbd>ml</kbd>模块)</p>
+</td>
+<td>
+<p>C++</p>
+</td>
+<td>
+<p>正态贝叶斯，kNN，SVM，决策树，增强，梯度增强树，随机树，极度随机化树，期望最大化，神经网络，层次聚类。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>鲨鱼</p>
+</td>
+<td>
+<p>C++</p>
+</td>
+<td>
+<p>监督:线性判别分析，LinReg，支持向量机，FF和递归神经网络，径向基函数网络，正则化网络，高斯过程，kNN，决策树，随机森林。</p>
+<p>无监督:主成分分析，RBM，层次聚类，进化算法。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Swix</p>
+</td>
+<td>
+<p>迅速发生的</p>
+</td>
+<td>
+<p>SVM，kNN，PCA。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>火炬</p>
+</td>
+<td>
+<p>左上臂</p>
+</td>
+<td>
+<p>DL。</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>YCML</p>
+</td>
+<td>
+<p>目标</p>
+</td>
+<td>
+<p>SVM，极限学习机，前向选择，内核过程回归，二元RBM，特征学习，排名，等等。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>表2.2:iOS通用机器学习库对比(第二部分):</p>
+<table class="MsoTableGrid">
+<tbody>
+<tr>
+<td>
+<p><strong>库</strong></p>
+</td>
+<td>
+<p><strong>加速度</strong></p>
+</td>
+<td>
+<p><strong>执照</strong></p>
+</td>
+<td>
+<p><strong>发展</strong></p>
+</td>
+<td>
+<p><strong>包管理器</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p>AIToolbox</p>
+</td>
+<td>
+<p>金属加速</p>
+</td>
+<td>
+<p>阿帕奇-2.0</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>智能芯片</p>
+</td>
+<td>
+<p>金属</p>
+</td>
+<td>
+<p>麻省理工学院(Massachu-setts Institute of Technology)</p>
+</td>
+<td>
+<p>不活动的</p>
+</td>
+<td>
+<p>迦太基的椰子</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>咖啡</p>
+</td>
+<td>
+<p>-/CUDA</p>
+</td>
+<td>
+<p>BSD-2条款</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>猎人</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>咖啡2</p>
+</td>
+<td>
+<p>金属/NNPack</p>
+</td>
+<td>
+<p>自定义，类似BSD</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>椰子足类</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>dlib</p>
+</td>
+<td>
+<p>-</p>
+</td>
+<td>
+<p>促进</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>猎人</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>范恩</p>
+</td>
+<td>
+<p>-</p>
+</td>
+<td>
+<p>LGPL</p>
+</td>
+<td>
+<p>不活动的</p>
+</td>
+<td>
+<p>椰子足类</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>LearnKit</p>
+</td>
+<td>
+<p>加速</p>
+</td>
+<td>
+<p>麻省理工学院(Massachu-setts Institute of Technology)</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MLKit</p>
+</td>
+<td>
+<p>-</p>
+</td>
+<td>
+<p>麻省理工学院(Massachu-setts Institute of Technology)</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>迦太基</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>多重线性数学</p>
+</td>
+<td>
+<p>金属</p>
+</td>
+<td>
+<p>街头流氓</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>Swift软件包管理器</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MXNet</p>
+</td>
+<td>
+<p>-/ CUDA，OpenMP，</p>
+</td>
+<td>
+<p>阿帕奇-2.0</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>OpenCV ( <kbd>ml</kbd>模块)</p>
+</td>
+<td>
+<p>Accelerate/ CUDA、OpenCL和其他</p>
+</td>
+<td>
+<p>BSD-3条款</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>亨特，椰子</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>鲨鱼</p>
+</td>
+<td>
+<p>-</p>
+</td>
+<td>
+<p>GPL-3.0</p>
+</td>
+<td>
+<p>不活动的</p>
+</td>
+<td>
+<p>椰子足类</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Swix</p>
+</td>
+<td>
+<p>加速，OpenCV</p>
+</td>
+<td>
+<p>麻省理工学院(Massachu-setts Institute of Technology)</p>
+</td>
+<td>
+<p>不活动的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>张量流</p>
+</td>
+<td>
+<p>？/ CUDA</p>
+</td>
+<td>
+<p>阿帕奇-2.0</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>微型dnn</p>
+</td>
+<td>
+<p>-/CUDA、OpenCL、OpenMP等</p>
+</td>
+<td>
+<p>BSD-3条款</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>猎人</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>火炬</p>
+</td>
+<td>
+<p>-/ CUDA，OpenCL</p>
+</td>
+<td>
+<p>BSD-3条款</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>YCML</p>
+</td>
+<td>
+<p>加速</p>
+</td>
+<td>
+<p>GPL-3.0</p>
+</td>
+<td>
+<p>活跃的</p>
+</td>
+<td>
+<p>-</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>以下是缩写列表:</p>
+<ul>
+<li><strong>卷积神经网络</strong> ( <strong> CNN </strong>)</li>
+<li class="mce-root"><strong>深度学习</strong> ( <strong> DL </strong>)</li>
+<li class="mce-root"><strong>前馈</strong> ( <strong> FF </strong>)</li>
+<li class="mce-root"><strong>高斯混合模型</strong> ( <strong> GMM </strong>)</li>
+<li class="mce-root"><strong>K-最近邻</strong> ( <strong> KNN </strong>)</li>
+<li class="mce-root"><strong>线性回归</strong> ( <strong> LinReg </strong>)</li>
+<li class="mce-root"><strong>逻辑回归</strong></li>
+<li class="mce-root"><strong>长短期记忆</strong> ( <strong> LSTM </strong>)</li>
+<li class="mce-root"><strong>马氏决策过程</strong> ( <strong> MDP </strong>)</li>
+<li class="mce-root"><strong>神经网络</strong> ( <strong> NN </strong>)</li>
+<li class="mce-root"><strong>主成分分析</strong> ( <strong> PCA </strong>)</li>
+<li class="mce-root"><strong>支持向量机</strong> ( <strong> SVM </strong>)</li>
+</ul>
+<div><p>包管理器<br/></p>
+<ul>
+<li>迦太基:<a href="https://github.com/Carthage/Carthage" target="_blank">https://github.com/Carthage/Carthage</a></li>
+<li>椰子恐龙:<a href="https://cocoapods.org/" target="_blank">https://cocoapods.org/</a></li>
+<li>亨特:<a href="https://github.com/ruslo/hunter" target="_blank">https://github.com/ruslo/hunter</a></li>
+<li>Swift包经理:<a href="https://swift.org/package-manager/" target="_blank">https://swift.org/package-manager/</a></li>
+</ul>
+</div>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>AIToolbox</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">AIToolbox</h1>
+                
+            
+            
+                
+<p>Swift库包含多个机器学习模型。它们兼容iOS和macOS。所有的模型都是作为具有统一接口的独立类实现的，所以您可以用最少的努力在代码中用一个模型替换另一个模型。有些型号支持保存到<kbd>plist</kbd>文件并从这些文件中加载。Accelerate框架在整个库中用于提高计算速度。</p>
+<p>对于回归任务，您可以在线性、非线性和SVM回归之间进行选择。线性回归支持正则化。这里的SVM模型是最初用C编写的<kbd>libSVM</kbd>库的一个端口，也可以用于分类。其他分类算法包括逻辑回归和神经网络。存在几种类型的神经网络层非线性(包括卷积)。你的网络可以是一个简单的前馈或递归(包括LSTM)网络，也可以结合两种类型的层。金属框架用于加速神经网络。您可以在线或以批处理模式训练您的网络。</p>
+<p>在AIToolbox中实现的无监督学习算法有PCA、K-means和高斯混合模型。MDP可以用于强化学习。库中存在的其他AI原语和算法包括图形和树、alpha-beta算法、遗传算法和约束传播。</p>
+<p>该库还提供了方便的类，用于绘制UIView和NSView的后代。有几种绘图模式，例如表示函数、分类或回归数据以及分类区域的模式。还有用于模型验证或超参数调整的类，如k-fold验证。</p>
+<p>GitHub库:<a href="https://github.com/KevinCoble/AIToolbox" target="_blank">https://github.com/KevinCoble/AIToolbox</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>BrainCore</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">智能芯片</h1>
+                
+            
+            
+                
+<p>这个Swift库提供前馈和递归神经网络。存在几种类型的层，包括内部产品层、线性整流器(ReLU)层、s形层、RNN和LSTM层以及L2损耗层。BrainCore在训练和推理阶段都使用金属加速。新神经网络的定义看起来非常清楚，因为有一些令人愉快的语法:</p>
+<pre>let net = Net.build { 
+    [dataLayer1, dataLayer2] =&gt; lstmLayer  
+    lstmLayer =&gt;&gt; ipLayer1 =&gt; reluLayer1 =&gt; sinkLayer1 
+    lstmLayer =&gt;&gt; ipLayer2 =&gt; reluLayer2 =&gt; sinkLayer2  
+} </pre>
+<p>该库可以在iOS和macOS上使用。它使用高潮数学图书馆作为依赖。它可以通过CocoaPods或迦太基。</p>
+<p>GitHub库:<a href="https://github.com/aleph7/BrainCore" target="_blank">https://github.com/aleph7/BrainCore</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Caffe</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">咖啡</h1>
+                
+            
+            
+                
+<p>Caffe是最流行的深度学习框架之一。是用C++写的。</p>
+<p>从官方网站:</p>
+<p>“Caffe是一个深度学习框架，以表达、速度和模块化为理念。它是由伯克利视觉和学习中心(BVLC)和社区贡献者开发的</p>
+<p>该库主要针对Linux和macOS X，但非官方的Android、iOS和Windows端口也兼容。Caffe支持CUDA加速，但也可以单独在CPU上执行。在iOS上，它只使用CPU。接口包括C++、命令行、Python和MATLAB。Caffe提供递归和卷积神经网络。要定义一个网络，你需要在一个特殊格式的<kbd>config</kbd>文件中描述它的结构。</p>
+<p>ModelZoo包含许多预先训练好的Caffe模型。与MXNet、Torch和TensorFlow不同，它没有自动微分功能。</p>
+<p>官方网站:<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://caffe.berkeleyvision.org" target="_blank">http://caffe.berkeleyvision.org<br/>T5】来自脑核的iOS端口作者:</a><a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/aleph7/caffe" target="_blank">https://github.com/aleph7/caffe</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Caffe2</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">咖啡2</h1>
+                
+            
+            
+                
+<p>Caffe2是一个来自脸书的移动优先深度学习库，最初是为了重构最初的Caffe框架。它在iOS上使用Metal进行计算加速，比Caffe提供了更多的灵活性。例如，它包括递归神经网络。</p>
+<p>官方网站:<a href="https://caffe2.ai/" target="_blank">https://caffe2.ai/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>dlib</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">dlib</h1>
+                
+            
+            
+                
+<p><kbd>dlib</kbd>是一个成熟的C++机器学习库，有一个很大的社区。它包括许多高级的ML算法，这些算法在其他任何iOS兼容库中都不存在。它还包含不同的有用的附加功能，如元编程、压缩算法以及数字信号和图像处理功能。将<kbd>dlib</kbd>移植到iOS相对简单——你需要删除UI和HTTP相关的文件，然后你就可以为iOS编译它了。</p>
+<p>官方网站:<a href="http://dlib.net/" target="_blank">http://dlib.net/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>FANN</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">范恩</h1>
+                
+            
+            
+                
+<p>FANN(快速人工神经网络)库是多层神经网络的C实现。它包括不同类型的训练(反向传播，进化拓扑)和不同的激活函数。经过训练的网络可以从文件中保存和加载。它有很好的文档记录，并且绑定到许多编程语言。要将其连接到您的iOS项目，请使用CocoaPods。</p>
+<p>官方网站:<a href="http://leenissen.dk/fann/wp/" target="_blank">http://leenissen.dk/fann/wp/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>LearnKit</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">LearnKit</h1>
+                
+            
+            
+                
+<p>LearnKit是一个用Objective-C编写的用于机器学习的Cocoa框架。它目前运行在iOS和OS X上的Accelerate框架之上，支持各种各样的算法。</p>
+<p>GitHub库:【https://github.com/mattrajca/LearnKit T2】</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>MLKit</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">MLKit</h1>
+                
+            
+            
+                
+<p>MLKit提供了几种回归算法:线性，多项式和岭回归(+ L2正则化)，套索回归，k-均值，遗传算法和简单的神经网络。它还包括用于数据分割和k-fold模型验证的类。MLKit使用高潮数学库作为依赖项。</p>
+<p>GitHub资源库:【https://github.com/Somnibyte/MLKit T4】</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Multilinear-math</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">多重线性数学</h1>
+                
+            
+            
+                
+<p>这个名字指的是这个库提供的张量运算。它还包含一组机器学习和AI原语。其算法包括主成分分析、用于降维的多线性子空间学习算法、线性和逻辑回归、随机梯度下降、前馈神经网络、sigmoid、ReLU、Softplus激活函数和正则化。</p>
+<p>它还提供了到Accelerate框架和LAPACK的Swift接口，包括向量和矩阵运算、特征分解和SVD。最重要的是，它实现了<kbd>MultidimensionData</kbd>协议来处理多维数据。</p>
+<p>GitHub库:<a href="https://github.com/vincentherrmann/multilinear-math" target="_blank">https://github.com/vincentherrmann/multilinear-math</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>MXNet</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">MXNet</h1>
+                
+            
+            
+                
+<p>引用自官方网站:</p>
+<p>" MXNet是一个深度学习框架，旨在提高效率和灵活性."</p>
+<p>MXNet兼容Linux、macOS、Windows、Android、iOS和JavaScript。它的接口包括C++、Python、Julia、Matlab、JavaScript、Go、R、Scala。MXNet使用OpenMP和CUDA支持自动微分和加速。MXNet有很好的文档，在其官方网站上有一长串教程和例子。官方网站拥有自己的模型动物园，带有预先训练好的神经网络。您也可以使用<kbd>caffe_converter</kbd>工具转换预先训练的Caffe模型。</p>
+<p>官方网站:<a href="http://mxnet.readthedocs.org/en/latest/" target="_blank">http://mxnet.readthedocs.org/en/latest/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Shark</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">鲨鱼</h1>
+                
+            
+            
+                
+<p>Shark是用C++写的。它提供了线性和非线性优化(进化和基于梯度的算法)、支持向量机和神经网络、回归算法、决策树、随机森林和各种无监督学习算法的方法。CocoaPod上有一个老版本的Shark。</p>
+<p>官方网站:<a href="http://image.diku.dk/shark/sphinx_pages/build/html/index.html" target="_blank">http://image . diku . dk/shark/sphinx _ pages/build/html/index . html<br/></a>cocoa pods:<a href="https://cocoapods.org/pods/Shark-SDK" target="_blank">https://cocoapods.org/pods/Shark-SDK</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>TensorFlow</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">张量流</h1>
+                
+            
+            
+                
+<p>TensorFlow是Google提供的一个数值计算库。它被广泛用于深度学习和更传统的统计学习。库架构是围绕数据流图构建的。TensorFlow网站指出:</p>
+<p>图中的节点表示数学运算，而图的边表示它们之间通信的多维数据阵列(张量)。灵活的架构允许您使用单个API将计算部署到台式机、服务器或移动设备中的一个或多个CPU或GPU。”</p>
+<p>这个库的文档非常丰富，你可以只使用TensorFlow从头开始学习ML。官方网站包括大量教程、视频课程、不同平台(包括iOS)的示例应用程序和预先训练的模型。两个官方支持的API是Python和C++(有限)。支持CUDA GPUs上的加速和自动微分。您可以使用<kbd>caffe-tensorflow</kbd>工具转换预训练的Caffe模型。</p>
+<p>官方网站:<a href="http://www.tensorflow.org/" target="_blank">http://www.tensorflow.org/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>tiny-dnn</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">微型dnn</h1>
+                
+            
+            
+                
+<p>tiny-dnn是一个只用头的卷积神经网络框架，用C++编写。</p>
+<p>以下是根据官方文档创建神经网络的示例:</p>
+<pre>network&lt;sequential&gt; net; 
+// add layers 
+net &lt;&lt; conv&lt;tan_h&gt;(32, 32, 5, 1, 6)  // in:32x32x1, 5x5conv, 6fmaps 
+    &lt;&lt; ave_pool&lt;tan_h&gt;(28, 28, 6, 2) // in:28x28x6, 2x2pooling 
+    &lt;&lt; fc&lt;tan_h&gt;(14 * 14 * 6, 120)   // in:14x14x6, out:120 
+    &lt;&lt; fc&lt;identity&gt;(120, 10);        // in:120,     out:10 </pre>
+<p>您可以训练您的模型，也可以使用<kbd>caffe_converter</kbd>工具转换预训练的Caffe模型。它支持一些加速类型。OpenCV是iOS的依赖项。你可以在tiny-dnn的GitHub库上找到一个iOS的例子。</p>
+<p>GitHub库:<a href="https://github.com/tiny-dnn/tiny-dnn" target="_blank">https://github.com/tiny-dnn/tiny-dnn</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Torch</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">火炬</h1>
+                
+            
+            
+                
+<p>Torch是一个科学计算框架，广泛支持用Lua编写的机器学习。它是最流行的深度学习框架之一。它支持的平台有Linux、macOS、Windows、Android、iOS，还支持CUDA和OpenCL加速(部分)。有许多第三方软件包为Torch引入了额外的功能。Autograd引入了自动微分，<kbd>nn</kbd>包允许从简单的构建块构建神经网络，<kbd>rnn</kbd>包提供了递归神经网络，iTorch提供了与IPython Notebook的互操作性。可以使用<kbd>loadcaffe</kbd>包加载Caffe模型。它的库有很好的文档记录，并且易于安装。</p>
+<p>Swift开发者的主要问题将是Lua语言本身，因为它的范式与Swift的截然不同；然而，有一些库为Lua引入了强大的类型和函数功能，让生活变得不那么痛苦。</p>
+<p>官方站点:<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://torch.ch/" target="_blank">http://torch.ch/<br/>T5】非官方iOS端口:</a><a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/clementfarabet/torch-ios" target="_blank">https://github.com/clementfarabet/torch-ios</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>YCML</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">YCML</h1>
+                
+            
+            
+                
+<p>YCML是Objective-C和Swift (macOS和iOS)的机器学习框架。</p>
+<p>来自官方网站的文档:<a href="http://yconst.com/software/ycml/" target="_blank">http://yconst.com/software/ycml/</a>:</p>
+<p>“以下算法目前是可用的:梯度下降反向传播、弹性反向传播(RProp)、极限学习机(ELM)、使用正交最小二乘法的正向选择(对于RBF网络)、也使用PRESS统计、二进制受限玻尔兹曼机(CD &amp; PCD，未经测试！).YCML还包含一些优化算法作为导出预测模型的支持，尽管它们可以用于任何类型的问题:梯度下降(单目标，无约束)，RProp梯度下降(单目标，无约束)，NSGA-II(多目标，有约束)。”</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Inference-only libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">仅限推理的库</h1>
+                
+            
+            
+                
+<p>随着iOS 11的发布，几个流行的机器学习框架在模型层面上与它兼容。您可以使用这些框架构建和训练您的模型，然后以特定于框架的格式导出它们，并将其转换为CoreML格式，以便将来与您的应用程序集成。这种模型有固定的参数，只能用于推断。由于Xcode为每个模型生成一个单独的Swift类，因此无法在运行时替换或更新它们。这种模型的主要使用领域是不同的模式识别应用程序，如通过拍照计算卡路里。在写这本书的时候(iOS 11 Beta)，CoreML兼容以下库和模型:</p>
+<ul>
+<li><strong> Caffe 1.0 </strong>:神经网络</li>
+<li><strong> Keras 1.2.2 </strong>:神经网络</li>
+<li>libSVM 3.22版 : SVM</li>
+<li><strong> scikit-learn 0.18.1 </strong>:树集合、广义线性模型、SVM、特征工程和管道</li>
+<li><strong> XGBoost 0.6 </strong>:渐变增强树</li>
+</ul>
+<p>所有这些库都是由来已久的工业标准。</p>
+<p>查看官方软件包文档了解最新信息:<a href="http://pythonhosted.org/coremltools/" target="_blank">http://pythonhosted.org/coremltools/</a></p>
+<p>在Core ML发布之前，也有几次在Metal框架之上实现深度推理的尝试:</p>
+<ul>
+<li>深度学习工具包</li>
+<li>浓咖啡</li>
+<li>伪造</li>
+<li>弯曲物体的人</li>
+</ul>
+<p>Forge和Bender依然活跃，因为它们提供了比MPS CNN Graph更灵活、更干净的API。随着苹果不断向金属性能着色器添加越来越多的功能，它们可能会在不久的将来过时。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Keras</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">克拉斯</h1>
+                
+            
+            
+                
+<p>Keras是一个流行的Python包，用于构建深度学习神经网络。它有一个用户友好的语法。在中原型化和构建深度模型既简单又快速。它最初是作为Theano符号计算库的门面，但随着时间的推移，它也获得了TensorFlow后端，并最终成为TensorFlow的一部分。所以现在，TensorFlow是一个默认的后端，但你仍然可以选择切换回Theano。MXNet和CNTK后端上也有正在进行的项目。</p>
+<p>Keras包含预处理最常见数据类型的函数，这些数据类型包括图像、文本和时间序列。</p>
+<p>CoreML支持Keras内置的卷积和递归神经网络。</p>
+<p>网址:<a href="https://keras.io/" target="_blank">https://keras.io/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>LibSVM</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">LibSVM</h1>
+                
+            
+            
+                
+<p>分类、回归、分布估计和异常检测，更多信息请参考:<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/" target="_blank">https://www.csie.ntu.edu.tw/~cjlin/libsvm/</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Scikit-learn</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">sci kit-学习</h1>
+                
+            
+            
+                
+<p>如果你读过前面的章节，你就会熟悉这个库。它包含了大量的通用学习器和数据预处理方法。它的文档非常棒。</p>
+<p>CoreML支持随机森林、广义线性模型和scikit-learn中内置的数据。更多信息请参考:http://scikit-learn.org/<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://scikit-learn.org/" target="_blank">。</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>XGBoost</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">XGBoost</h1>
+                
+            
+            
+                
+<p>当我开始写这本书的时候，我并没有想到会写这个工具。为什么？因为这是一场机器学习竞赛的重炮。XGBoost是许多领域的产品标准，但是在培训阶段它是非常消耗资源的:你所有的千兆字节将在眨眼之间被消耗掉。这就是为什么它主要用于服务器和服务器集群的网页排名和其他繁重的任务。这也是一个被认为是赢得Kaggle机器学习比赛(如果不是关于计算机视觉)的银弹的工具。CoreML支持在XGBoost中训练的梯度推进决策树。更多信息请参考https://xgboost.readthedocs.io/en/latest/<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://xgboost.readthedocs.io/en/latest/" target="_blank">。</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>NLP libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">NLP库</h1>
+                
+            
+            
+                
+<p>在本节中，我们将讨论各种NLP库:</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Word2Vec</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">Word2Vec</h1>
+                
+            
+            
+                
+<p>这是Word2Vec算法的原始C实现。它可以在iOS上运行，但会消耗大量内存。它是在Apache 2.0许可下发布的。</p>
+<p>谷歌知识库:<a href="https://code.google.com/p/word2vec/" target="_blank">https://code.google.com/p/word2vec/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Twitter text</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">Twitter文本</h1>
+                
+            
+            
+                
+<p>在NLP中，解析tweets是一项常见的任务。Tweets通常包含一些不寻常的语言(比如用户名)，它们提到了标题、标签、现金标签等等。Twitter为tweet处理提供了一个Objective-C API。这与机器学习本身无关，但它仍然是数据预处理的有用工具。</p>
+<p>GitHub库:<a href="https://github.com/twitter/twitter-text" target="_blank">https://github.com/twitter/twitter-text</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Speech recognition</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">语音识别</h1>
+                
+            
+            
+                
+<p>在这一部分，我们将讨论常用的语音识别库。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>TLSphinx</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">TLSphinx</h1>
+                
+            
+            
+                
+<p>从文档中:</p>
+<p>“TLSphinx是一个围绕Pocketsphinx的快速包装器，这是一个可移植的库，允许应用程序执行语音识别，而音频不会离开设备。”</p>
+<p>它是在麻省理工学院许可下发布的。</p>
+<p>GitHub库:<a href="https://github.com/tryolabs/TLSphinx" target="_blank">https://github.com/tryolabs/TLSphinx</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>OpenEars</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">张开耳朵</h1>
+                
+            
+            
+                
+<p>这个免费的iOS库为中文、法语、西班牙语、英语、荷兰语、意大利语和德语提供语音识别和文本到语音转换。这些模型是在不同的许可下发布的，其中一些是商业友好的。它有一个Objective-C和Swift APIs。付费插件可用。</p>
+<p>官方网站:<a href="http://www.politepix.com/openears/" target="_blank">http://www.politepix.com/openears/</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Computer vision</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">计算机视觉</h1>
+                
+            
+            
+                
+<p>在本节中，让我们详细了解几个计算机视觉库:</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>OpenCV</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">OpenCV</h1>
+                
+            
+            
+                
+<p>OpenCV是一个计算机视觉算法、图像处理和通用数值算法的库。它是用C/C++实现的，但是有Python、Java、Ruby、Matlab、Lua和其他语言的接口。它可以免费用于学术和商业目的，因为它是在BSD许可下分发的。</p>
+<p>从OpenCV 3.1开始，有一个DNN模块，在OpenCV 3.3中，该模块被提升为<kbd>opencv_contrib</kbd>。</p>
+<p>官方网站:<a href="http://opencv.org" target="_blank">http://opencv.org</a>T5】附加OpenCV模块:<a href="https://github.com/opencv/opencv_contrib" target="_blank">https://github.com/opencv/opencv_contrib</a>T8】使用OpenCV的Swift app演示:<a href="https://github.com/foundry/OpenCVSwiftStitch" target="_blank">https://github.com/foundry/OpenCVSwiftStitch</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>ccv</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">犬冠状病毒</h1>
+                
+            
+            
+                
+<p>ccv是另一个用于iOS、macOS、Android、Linux FreeBSD和Windows的C++计算机视觉库。它是在BSD三条款许可下发布的。</p>
+<p>从官方网站:</p>
+<p>“ccv开发的一个核心概念是应用驱动。因此，ccv最终实现了一些最先进的算法。它包括一个接近最先进的图像分类器，一个最先进的正面人脸检测器，合理收集行人和汽车的对象检测器，一个有用的文本检测算法，一个长期的通用对象跟踪算法，以及长期存在的特征点提取算法。”</p>
+<div><p>官方网站:<a href="http://libccv.org/" target="_blank">http://libccv.org/</a></p>
+</div>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>OpenFace</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">OpenFace</h1>
+                
+            
+            
+                
+<p>OpenFace是一个最先进的处理人脸的开源库。它包括面部标志检测、眼睛凝视估计、头部姿态估计和面部动作单元识别的算法。</p>
+<p>GitHub库:<a href="https://github.com/TadasBaltrusaitis/OpenFace" target="_blank">https://github.com/TadasBaltrusaitis/OpenFace<br/></a>非官方iOS端口:<a href="https://github.com/FaceAR/OpenFaceIOS" target="_blank">https://github.com/FaceAR/OpenFaceIOS</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Tesseract</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">宇宙魔方</h1>
+                
+            
+            
+                
+<p>Tesseract是用C++编写的<strong>光学字符识别</strong> ( <strong> OCR </strong>)的开源工具。它绑定了许多编程语言，包括两种Objective-C语言。您可以使用它来训练自己的模型，也可以使用社区训练的模型之一(包括古希腊语、拉丁语、希伯来语、波斯语和波兰语)。最新版本的宇宙魔方使用LSTM神经网络进行字符识别。该库在Apache-2.0许可下可用。</p>
+<p>GitHub库:<a href="https://github.com/tesseract-ocr/tesseract" target="_blank">https://github.com/tesseract-ocr/tesseract</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Low-level subroutine libraries</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">低级子程序库</h1>
+                
+            
+            
+                
+<p>有些库不是自己在做机器学习，而是为它提供重要的底层原语。这种库的一个例子是Apple BNNS。它是Accelerate框架的一部分，为卷积神经网络提供高度优化的子例程。我们将在第十章、<em xmlns:epub="http://www.idpf.org/2007/ops">自然语言处理</em>中详细讨论。在下一节中，我们将列出一些同类的第三方库。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Eigen</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">人名</h1>
+                
+            
+            
+                
+<p>Eigen是一个实现线性代数原语和相关算法的C++模板库。它受LGPL3+许可。许多流行的计算量大的项目(例如TensorFlow)依赖它进行矩阵和向量运算。</p>
+<p>官方网站:<a href="http://eigen.tuxfamily.org" target="_blank">eigen.tuxfamily.org</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>fmincg-c</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">fmincg-c</h1>
+                
+            
+            
+                
+<p>fmincg-c共轭c中的梯度实现，它使用OpenCL处理算法更快。有一些用Python写的例子。</p>
+<p>GitHub库:<a href="https://github.com/gautambhatrcb/fmincg-c" target="_blank">https://github.com/gautambhatrcb/fmincg-c</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>IntuneFeatures</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">IntuneFeatures</h1>
+                
+            
+            
+                
+<p>音频特征提取。IntuneFeatures框架包含从音频文件生成特征和从相应的MIDI文件生成特征标签的代码。它目前支持这些功能:按频段的对数标度频谱功率估计、频谱功率通量、峰值功率、峰值功率通量和峰值位置。</p>
+<p><kbd>CompileFeatures</kbd>命令行应用程序将音频和MIDI文件作为输入，并使用特性和标签生成HDF5数据库。然后，这些HDF5文件可用于训练神经网络进行转录或相关任务。</p>
+<p>GitHub库:<a href="https://github.com/venturemedia/intune-features" target="_blank">https://github.com/venturemedia/intune-features</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>SigmaSwiftStatistics</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">SigmaSwiftStatistics</h1>
+                
+            
+            
+                
+<p>该库是在Swift中执行统计计算的功能集合。它可以用于苹果设备的Swift应用程序和其他平台的开源Swift程序。</p>
+<p>GitHub库:<a href="https://github.com/evgenyneu/SigmaSwiftStatistics" target="_blank">https://github.com/evgenyneu/SigmaSwiftStatistics</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>STEM</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">阻止</h1>
+                
+            
+            
+                
+<p>STEM是一个用于机器学习的Swift张量库，在某种程度上类似于Torch。它提供了张量、张量运算、随机张量生成、计算图形和最优化。</p>
+<p>GitHub库:<a href="https://github.com/abeschneider/stem" target="_blank">https://github.com/abeschneider/stem</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Swix</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">Swix</h1>
+                
+            
+            
+                
+<p>Swix是在Swift中实现NumPy数学库的一次尝试。它为一些机器学习算法包装了OpenCV，并为Swift API提供了Accelerate框架。</p>
+<p>GitHub库:<a href="https://github.com/scottsievert/swix" target="_blank">https://github.com/scottsievert/swix</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>LibXtract</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">LibXtract</h1>
+                
+            
+            
+                
+<p>LibXtract是一个简单、可移植、轻量级的音频特征提取函数库。该库的目的是提供一组相对详尽的特征提取原语，这些原语被设计为“级联”以创建提取层次。</p>
+<p>比如<kbd>variance</kbd>、<kbd>average deviation</kbd>、<kbd>skewness</kbd>、<kbd>kurtosis</kbd>都需要预计算输入向量的<kbd>mean</kbd>。然而，不是计算每个函数的<kbd>mean</kbd>和<kbd>inside</kbd>，而是期望将<kbd>mean</kbd>作为参数传入。这意味着，如果用户希望使用所有这些特性，平均值只计算一次，然后传递给任何需要它的函数。</p>
+<p>这种<strong>层叠</strong>特性的哲学贯穿于整个库；例如，对信号向量的幅度谱进行操作的特征(例如，不规则性)。震级谱不计算<kbd>inside</kbd>各自的函数；相反，指向包含震级谱的数组中第一个元素的指针作为参数传入。</p>
+<p>希望这不仅使库在计算大量特征时更有效，而且使其更灵活，因为提取函数可以任意组合(例如，可以采用Mel频率倒谱系数的不规则性)。</p>
+<p>通过查看头文件或阅读doxygen文档，可以找到完整的特性列表。</p>
+<p>GitHub库:<a href="https://github.com/jamiebullock/LibXtract" target="_blank">https://github.com/jamiebullock/LibXtract</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>libLBFGS</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">libLBFGS</h1>
+                
+            
+            
+                
+<p>GitHub库:【https://github.com/chokkan/liblbfgs T2】</p>
+<p>数值优化的L-BFGS方法。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>NNPACK</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">NNPACK</h1>
+                
+            
+            
+                
+<p>NNPACK是多核CPU上的神经网络加速包。Caffe2、tiny-dnn和MXNet支持NNPACK加速。Prisma在移动应用程序中使用这个库来提高性能。</p>
+<p>GitHub库:【https://github.com/Maratyszcza/NNPACK】T4。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Upsurge</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">高潮</h1>
+                
+            
+            
+                
+<p>high是SIMD加速的Swift库。这是一个数学工具，用于Accelerate框架中的矩阵、张量、运算符和函数，很像卷积。矩阵运算是它的强项。</p>
+<p>GitHub库:<a href="https://github.com/aleph7/Upsurge" target="_blank">https://github.com/aleph7/Upsurge</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>YCMatrix</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">YCMatrix</h1>
+                
+            
+            
+                
+<p>YCMatrix是一个矩阵运算的目标C库。它本质上是Accelerate框架的包装器。YCML将它用于所有的计算加速。</p>
+<p>GitHub库:<a href="https://github.com/yconst/YCMatrix" target="_blank">https://github.com/yconst/YCMatrix</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Choosing a deep learning framework</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">选择深度学习框架</h1>
+                
+            
+            
+                
+<p>选择正确的深度学习框架对于获得您想要的最佳速度和模型大小非常重要。需要考虑几个方面——开销，库添加，GPU加速，只需要训练还是推理？，在该框架中实施了现有的解决方案。</p>
+<p>你要明白，你并不总是需要GPU加速。有时，SIMD/Accelerate足以实现实时进行推理的神经网络。</p>
+<p>有时，您必须考虑计算是在客户端还是在服务器端进行，或者在两者之间进行平衡。尝试使用极端数量的记录进行基准测试，并使用不同的设备进行测试。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>在本章中，我们了解了iOS兼容的机器学习库及其功能。我们讨论了五个主要的深度学习框架:Caffe、TensorFlow、MXNet和Torch等等。我们还提到了几个较小的深度学习库和工具，用于将深度学习模型从一种格式转换为另一种格式。在通用机器学习库中，功能最丰富、最成熟的是AIToolbox、dlib、Shark和YCML。iOS的NLP库很少，而且功能有限。</p>
+<p>除了原生iOS语音识别和文本到语音转换之外，还有几个免费和商业库提供相同的功能。</p>
+<p>如果有一些常见的计算机视觉任务，可以在OpenCV或者ccv库中找到合适的算法。OCR和各种与人脸相关的任务也可以使用开源工具链来执行。还有几个低级的线性代数运算、张量和优化库，可以用来加速ML算法。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html></body></html>

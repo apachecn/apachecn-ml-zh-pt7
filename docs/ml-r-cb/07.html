@@ -1,0 +1,829 @@
+<html><head/><body>
+<html>
+  <head>
+    <title>Chapter 7. Model Evaluation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07" class="calibre1"/>第七章。模型评估</h1></div></div></div><p class="calibre7">在本章中，我们将讨论以下主题:</p><div><ul class="itemizedlist"><li class="listitem">用k-fold交叉验证估计模型性能</li><li class="listitem">使用e1071包进行交叉验证</li><li class="listitem">使用插入符号包执行交叉验证</li><li class="listitem">用插入符号包对变量重要性进行排序</li><li class="listitem">用rminer包对变量重要性进行排序</li><li class="listitem">寻找与脱字符号包高度相关的特征</li><li class="listitem">使用脱字符号包选择特征</li><li class="listitem">测量回归模型的性能</li><li class="listitem">用混淆矩阵衡量预测性能</li><li class="listitem">使用ROCR测量预测性能</li><li class="listitem">使用caret软件包比较ROC曲线</li><li class="listitem">使用caret包测量模型之间的性能差异</li></ul></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Chapter 7. Model Evaluation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h1 class="title" id="calibre_pb_1"><a id="ch07lvl1sec77" class="calibre1"/>简介</h1></div></div></div><p class="calibre7">进行模型评估，以确保拟合的模型能够准确预测未来或未知受试者的反应<a id="id593" class="calibre1"/>。如果没有模型评估，我们可能会训练过度适合训练数据的模型。为了防止过度拟合，我们可以使用软件包，如<code class="email">caret</code>、<code class="email">rminer</code>和<code class="email">rocr</code>来评估拟合模型的性能。此外，模型评估可以帮助选择最佳模型，该模型更稳健并且可以准确预测未来受试者的反应。</p><p class="calibre7">在下一章，我们将讨论如何实现一个简单的R脚本或使用其中一个包(例如，<code class="email">caret</code>或<code class="email">rminer</code>)来评估一个拟合模型的性能。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating model performance with k-fold cross-validation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec78" class="calibre1"/>使用k倍交叉验证评估模型性能</h1></div></div></div><p class="calibre7">k倍交叉验证技术是一种用于评估分类器性能<a id="id594" class="calibre1"/>的常用技术，因为它克服了过度拟合的问题。对于k-fold交叉验证，该方法不使用整个数据集来构建模型，而是将数据分成训练数据集和测试数据集。因此，使用训练数据集构建的模型可以用于评估模型在测试数据集上的性能。通过执行n次重复的k-fold验证，我们可以使用<em class="calibre8"> n </em>精度的平均值来真实地评估所构建模型的性能。在这个配方中，我们将说明如何进行k重交叉验证。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating model performance with k-fold cross-validation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch07lvl2sec261" class="calibre1"/>准备就绪</h2></div></div></div><p class="calibre7">在这个食谱中，我们将继续使用电信<code class="email">churn</code>数据集作为输入数据源来训练支持向量机。对于没有准备数据集的人，请参考<a class="calibre1" title="Chapter 5. Classification (I) – Tree, Lazy, and Probabilistic" href="part0060_split_000.html#page">第五章</a>、<em class="calibre8">分类(一)——树、懒、概率</em>，了解详细信息。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating model performance with k-fold cross-validation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec262" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤交叉验证电信<code class="email">churn</code>数据集:</p><div><ol class="orderedlist"><li class="listitem" value="1">使用剪切功能将索引拆分为<code class="email">10</code>折叠:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ind = cut(1:nrow(churnTrain), breaks=10, labels=F)</strong> </pre> </div></li><li class="listitem" value="2">接下来，使用<code class="email">for</code>循环执行10次交叉验证，重复<code class="email">10</code>次:<div> <pre class="programlisting"> <strong class="calibre2">&gt; accuracies = c()</strong> <strong class="calibre2">&gt; for (i in 1:10) {</strong> <strong class="calibre2">+   fit = svm(churn ~., churnTrain[ind != i,])</strong> <strong class="calibre2">+   predictions = predict(fit, churnTrain[ind == i, ! names(churnTrain) %in% c("churn")])</strong> <strong class="calibre2">+   correct_count = sum(predictions == churnTrain[ind == i,c("churn")])</strong> <strong class="calibre2">+   accuracies = append(correct_count / nrow(churnTrain[ind == i,]), accuracies)</strong> <strong class="calibre2">+ }</strong> </pre> </div></li><li class="listitem" value="3">然后可以打印精度:<div> <pre class="programlisting"> <strong class="calibre2">&gt; accuracies</strong> <strong class="calibre2"> [1] 0.9341317 0.8948949 0.8978979 0.9459459 0.9219219 0.9281437 0.9219219 0.9249249 0.9189189 0.9251497</strong> </pre> </div></li><li class="listitem" value="4">最后，您可以使用<code class="email">mean</code>功能生成平均精度:<div> <pre class="programlisting"> <strong class="calibre2">&gt; mean(accuracies)</strong> <strong class="calibre2">[1] 0.9213852</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating model performance with k-fold cross-validation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">在这个<a id="id595" class="calibre1"/>配方中，我们实现了一个简单的脚本，执行10重交叉验证。我们首先用<code class="email">cut</code>函数生成一个10倍的指数。然后，我们实现一个<code class="email">for</code>循环来执行10次10重交叉验证。在循环中，我们首先对数据的<code class="email">9</code>折叠应用<code class="email">svm</code>作为训练集。然后，我们使用拟合的模型来预测其余数据(测试数据集)的标签。接下来，我们使用正确预测的标签的总和来生成准确度。因此，循环存储10个生成的精度。最后，我们使用<code class="email">mean</code>函数来检索精确度的平均值。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating model performance with k-fold cross-validation</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">如果您希望使用其他模型执行k-fold验证，只需替换该行以生成适合您喜欢的任何分类器的变量。例如，如果您想评估带有10重交叉验证的朴素贝叶斯模型，您只需将调用函数从<code class="email">svm</code>替换为<code class="email">naiveBayes</code>:</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; for (i in 1:10) {</strong>
+<strong class="calibre2">+   fit = naiveBayes(churn ~., churnTrain[ind != i,])</strong>
+<strong class="calibre2">+   predictions = predict(fit, churnTrain[ind == i, ! names(churnTrain) %in% c("churn")])</strong>
+<strong class="calibre2">+   correct_count = sum(predictions == churnTrain[ind == i,c("churn")])</strong>
+<strong class="calibre2">+   accuracies = append(correct_count / nrow(churnTrain[ind == i,]), accuracies)</strong>
+<strong class="calibre2">+ }</strong>
+</pre></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the e1071 package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec79" class="calibre1"/>使用e1071包进行交叉验证</h1></div></div></div><p class="calibre7">除了<a id="id596" class="calibre1"/>实现一个<code class="email">loop</code>函数<a id="id597" class="calibre1"/>进行k重交叉验证，还可以使用<code class="email">tuning</code>函数(例如<code class="email">tune.nnet</code>、<code class="email"> tune.randomForest</code>、<code class="email"> tune.rpart</code>、<code class="email"> tune.svm</code>、<code class="email">tune.knn</code>)。)以获得最小误差值。在这个配方中，我们将说明如何使用<code class="email">tune.svm</code>来执行10重交叉验证，并获得最佳分类模型。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the e1071 package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch07lvl2sec265" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">在这个方法中，我们继续使用telecom <code class="email">churn</code>数据集作为输入数据源来执行10重交叉验证。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the e1071 package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec266" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行<a id="id598" class="calibre1"/>以下步骤，以便<a id="id599" class="calibre1"/>使用交叉验证检索最小估计误差:</p><div><ol class="orderedlist"><li class="listitem" value="1">将<code class="email">tune.svm</code>应用于训练数据集<code class="email">trainset</code>，将10重交叉验证作为调整控制。(如果发现错误信息，如<code class="email">could not find function predict.func</code>，请清空工作区，重启R会话，重新加载<code class="email">e1071</code>库):<div> <pre class="programlisting"> <strong class="calibre2">&gt; tuned = tune.svm(churn~., data = trainset, gamma = 10^-2, cost = 10^2, tunecontrol=tune.control(cross=10))</strong> </pre> </div></li><li class="listitem" value="2">接下来，您可以获取该型号的汇总信息，调好:<div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(tuned)</strong>  <strong class="calibre2">Error estimation of 'svm' using 10-fold cross validation: 0.08164651</strong> </pre> </div></li><li class="listitem" value="3">然后，您可以访问调优型号的性能详情:<div> <pre class="programlisting"> <strong class="calibre2">&gt; tuned$performances</strong> <strong class="calibre2">  gamma cost      error dispersion</strong> <strong class="calibre2">1  0.01  100 0.08164651 0.02437228</strong> </pre> </div></li><li class="listitem" value="4">最后，您可以使用最佳模型生成一个分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svmfit = tuned$best.model</strong> <strong class="calibre2">&gt; table(trainset[,c("churn")], predict(svmfit))</strong> <strong class="calibre2">     </strong> <strong class="calibre2">       yes   no</strong> <strong class="calibre2">  yes  234  108</strong> <strong class="calibre2">  no    13 1960</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the e1071 package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch07lvl2sec267" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><code class="email">e1071</code>包提供了构建和评估模型的各种函数，因此，您不需要重新发明轮子来评估一个合适的模型。在这个方法中，我们使用<code class="email">tune.svm</code>函数，通过给定的公式、数据集、gamma、成本和控制函数来调整svm模型。在<code class="email">tune.control</code>选项中，我们将选项配置为<code class="email">cross=10</code>，它在调优过程中执行10重交叉验证。在调整过程中，调整过程将最终返回最小估计误差、性能细节和最佳模型。因此，我们可以获得调优的性能度量，并进一步使用最佳模型来生成分类表。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the e1071 package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec268" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">在<code class="email">e1071</code>封装中，<code class="email">tune</code>功能使用网格搜索来调整参数。对其他调谐功能感兴趣的，使用帮助功能查看<code class="email">tune</code>文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?e1071::tune</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec80" class="calibre1"/>使用插入符号包执行交叉验证</h1></div></div></div><p class="calibre7"><code class="email">Caret</code>(分类和回归训练)包包含许多关于<a id="id602" class="calibre1"/>回归和分类问题的训练过程的功能。与<code class="email">e1071</code>包类似，它也包含一个执行k-fold交叉验证的函数。在这个配方中，我们将演示如何使用<code class="email">caret</code>包执行k-fold交叉验证。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">在这个方法中，我们将继续使用telecom <code class="email">churn</code>数据集作为输入数据源来执行k-fold交叉验证。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec270" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">caret</code>包进行k重交叉验证:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，在<code class="email">3</code>重复:<div> <pre class="programlisting"> <strong class="calibre2">&gt; control = trainControl(method="repeatedcv", number=10, repeats=3)</strong> </pre> </div>中设置控制参数进行十重交叉验证训练</li><li class="listitem" value="2">然后，您可以使用<code class="email">rpart</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; model = train(churn~., data=trainset, method="rpart", preProcess="scale", trControl=control)</strong> </pre> </div>对电信客户流失数据训练分类模型</li><li class="listitem" value="3">最后，您可以检查生成的模型的输出:<div> <pre class="programlisting"> <strong class="calibre2">&gt; model</strong> <strong class="calibre2">CART </strong>  <strong class="calibre2">2315 samples</strong> <strong class="calibre2">  16 predictor</strong> <strong class="calibre2">   2 classes: 'yes', 'no' </strong>  <strong class="calibre2">Pre-processing: scaled </strong> <strong class="calibre2">Resampling: Cross-Validated (10 fold, repeated 3 times) </strong>  <strong class="calibre2">Summary of sample sizes: 2084, 2083, 2082, 2084, 2083, 2084, ... </strong>  <strong class="calibre2">Resampling results across tuning parameters:</strong>  <strong class="calibre2">  cp      Accuracy  Kappa  Accuracy SD  Kappa SD</strong> <strong class="calibre2">  0.0556  0.904     0.531  0.0236       0.155   </strong> <strong class="calibre2">  0.0746  0.867     0.269  0.0153       0.153   </strong> <strong class="calibre2">  0.0760  0.860     0.212  0.0107       0.141   </strong>  <strong class="calibre2">Accuracy was used to select the optimal model using the largest value.</strong> <strong class="calibre2">The final value used for the model was cp = 0.05555556.</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch07lvl2sec271" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个<a id="id604" class="calibre1"/>配方中，我们展示了使用<code class="email">caret</code>包进行k重交叉验证是多么的<a id="id605" class="calibre1"/>方便。在第一步中，我们设置训练对照，并选择在三次重复中执行10重交叉验证的选项。重复k倍验证的过程称为重复k倍验证，用于检验模型的稳定性。如果模型是稳定的，人们应该得到类似的测试结果。然后，我们对训练数据集应用<code class="email">rpart</code>,选择缩放数据，并使用上一步配置的选项训练模型。</p><p class="calibre7">训练过程完成后，模型输出三个重采样结果。在这些结果中，<code class="email">cp=0.05555556</code>的模型具有最大的精度值(<code class="email">0.904</code>，因此被选为分类的最佳模型。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec272" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">您<a id="id606" class="calibre1"/>可以在<code class="email">trainControl</code>中配置<code class="email">resampling</code>功能，您可以在其中指定<code class="email">boot</code>、<code class="email">boot632</code>、<code class="email">cv</code>、<code class="email">repeatedcv</code>、<code class="email">LOOCV</code>、<code class="email">LGOCV</code>、<code class="email">none</code>、<code class="email">oob</code>、<code class="email">adaptive</code> _ <code class="email">cv</code>、<code class="email">adaptive_boot</code>或<code class="email">adaptive_LGOCV</code>。要查看更多关于<a id="id607" class="calibre1"/>如何选择重采样方法的详细信息，请查看<code class="email">trainControl</code>文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?trainControl</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec81" class="calibre1"/>用脱字包对变量重要性进行排序</h1></div></div></div><p class="calibre7">建立监督学习模型后，我们可以估计特征的重要性。该<a id="id608" class="calibre1"/>估算采用灵敏度分析来测量输入变化时对给定模型输出的影响。在本食谱中，我们将向您展示如何用<code class="email">caret</code>包对变量重要性进行排序。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">您需要通过将合适的<code class="email">rpart</code>对象存储在<code class="email">model</code>变量中来完成之前的配方。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec274" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">caret</code>包对变量重要性进行排序:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先可以用<code class="email">varImp</code>函数估算变量重要性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; importance = varImp(model, scale=FALSE)</strong> <strong class="calibre2">&gt; importance</strong> <strong class="calibre2">rpart variable importance</strong>  <strong class="calibre2">                              Overall</strong> <strong class="calibre2">number_customer_service_calls 116.015</strong> <strong class="calibre2">total_day_minutes             106.988</strong> <strong class="calibre2">total_day_charge              100.648</strong> <strong class="calibre2">international_planyes          86.789</strong> <strong class="calibre2">voice_mail_planyes             25.974</strong> <strong class="calibre2">total_eve_charge               23.097</strong> <strong class="calibre2">total_eve_minutes              23.097</strong> <strong class="calibre2">number_vmail_messages          19.885</strong> <strong class="calibre2">total_intl_minutes              6.347</strong> <strong class="calibre2">total_eve_calls                 0.000</strong> <strong class="calibre2">total_day_calls                 0.000</strong> <strong class="calibre2">total_night_charge              0.000</strong> <strong class="calibre2">total_intl_calls                0.000</strong> <strong class="calibre2">total_intl_charge               0.000</strong> <strong class="calibre2">total_night_minutes             0.000</strong> <strong class="calibre2">total_night_calls               0.000</strong> </pre> </div></li><li class="listitem" value="2">Then, you<a id="id609" class="calibre1"/> can generate the variable importance plot with the <code class="email">plot</code> function:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(importance)</strong>
+</pre></div><div><img src="img/00123.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图1:使用caret包可视化变量的重要性</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch07lvl2sec275" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">在这个菜谱中，我们首先使用<code class="email">varImp</code>函数来检索变量importance并获得摘要。总体结果显示了每个属性的敏感度度量。接下来，我们根据等级绘制变量重要性，这表明<code class="email">number_customer_service_calls</code>属性是敏感度度量中最重要的变量。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec276" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">在一些分类包中，如<code class="email">rpart</code>，从训练模型<a id="id610" class="calibre1"/>生成的对象包含变量重要性。我们可以通过访问输出对象来检查变量重要性:</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; library(rpart)</strong>
+<strong class="calibre2">&gt; model.rp = rpart(churn~., data=trainset)</strong>
+<strong class="calibre2">&gt; model.rp$variable.importance</strong>
+<strong class="calibre2">            total_day_minutes              total_day_charge </strong>
+<strong class="calibre2">                   111.645286                    110.881583 </strong>
+<strong class="calibre2">number_customer_service_calls            total_intl_minutes </strong>
+<strong class="calibre2">                    58.486651                     48.283228 </strong>
+<strong class="calibre2">            total_intl_charge              total_eve_charge </strong>
+<strong class="calibre2">                    47.698379                     47.166646 </strong>
+<strong class="calibre2">            total_eve_minutes            international_plan </strong>
+<strong class="calibre2">                    47.166646                     42.194508 </strong>
+<strong class="calibre2">             total_intl_calls         number_vmail_messages </strong>
+<strong class="calibre2">                    36.730344                     19.884863 </strong>
+<strong class="calibre2">              voice_mail_plan             total_night_calls </strong>
+<strong class="calibre2">                    19.884863                      7.195828 </strong>
+<strong class="calibre2">              total_eve_calls            total_night_charge </strong>
+<strong class="calibre2">                     3.553423                      1.754547 </strong>
+<strong class="calibre2">          total_night_minutes               total_day_calls </strong>
+<strong class="calibre2">                     1.754547                      1.494986  </strong>
+</pre></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the rminer package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec82" class="calibre1"/>用rminer包对变量重要性进行排序</h1></div></div></div><p class="calibre7">除了使用<code class="email">caret</code>包生成变量重要性的<a id="id611" class="calibre1"/>之外，您还可以使用<code class="email">rminer</code>包生成分类模型的变量重要性。在下面的食谱中，我们将说明如何使用<code class="email">rminer</code>来获得拟合模型的变量重要性。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the rminer package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">在这个菜谱中，我们将继续使用telecom <code class="email">churn</code>数据集作为输入数据源来对变量重要性进行排序。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the rminer package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec278" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">rminer</code>对变量重要性进行排序:</p><div><ol class="orderedlist"><li class="listitem" value="1">安装并加载软件包，<code class="email">rminer</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("rminer")</strong> <strong class="calibre2">&gt; library(rminer)</strong> </pre> </div></li><li class="listitem" value="2">用训练集拟合svm模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; model=fit(churn~.,trainset,model="svm")</strong> </pre> </div></li><li class="listitem" value="3">使用<code class="email">Importance</code>函数获得变量重要性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; VariableImportance=Importance(model,trainset,method="sensv")</strong> </pre> </div></li><li class="listitem" value="4">Plot the <a id="id612" class="calibre1"/>variable importance ranked by the variance:<div><pre class="programlisting">
+<strong class="calibre2">&gt; L=list(runs=1,sen=t(VariableImportance$imp),sresponses=VariableImportance$sresponses)</strong>
+<strong class="calibre2">&gt; mgraph(L,graph="IMP",leg=names(trainset),col="gray",Grid=10)</strong>
+</pre></div><div><img src="img/00124.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图2:使用<code class="email">rminer</code>包的可变重要性的可视化</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the rminer package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">类似于<code class="email">caret</code>包，<code class="email">rminer</code>包也可以生成分类模型的可变重要性。在这个方法中，我们首先使用<code class="email">fit</code>函数在训练数据集<code class="email">trainset</code>上训练svm模型。然后，我们使用<code class="email">Importance</code>函数，用一个灵敏度度量对变量的重要性进行排序。最后，我们使用<code class="email">mgraph</code>来绘制变量重要性的等级。与使用<code class="email">caret</code>包获得的结果相似，<code class="email">number_customer_service_calls</code>是灵敏度测量中最重要的变量。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Ranking the variable importance with the rminer package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec280" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><code class="email">rminer</code>包提供多种分类模式供选择。如果您对使用svm以外的模型感兴趣，您可以使用以下命令查看这些选项:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ?rminer::fit</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Finding highly correlated features with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec83" class="calibre1"/>寻找与脱字符号包高度相关的特征</h1></div></div></div><p class="calibre7">当执行回归或分类时，如果移除高度相关的<a id="id614" class="calibre1"/>属性，某些模型会执行得更好。<code class="email">caret</code>包提供了<code class="email">findCorrelation</code>函数，可以用来查找彼此高度相关的属性。在这个菜谱中，我们将演示如何使用<code class="email">caret</code>包找到高度相关的特性。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Finding highly correlated features with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">正在准备中</h2></div></div></div><p class="calibre7">在这个菜谱中，我们将继续使用telecom <code class="email">churn</code>数据集作为输入数据源来查找高度相关的特性。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Finding highly correlated features with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec282" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来查找高度相关的属性:</p><div><ol class="orderedlist"><li class="listitem" value="1">删除不是用数字字符编码的特征:<div> <pre class="programlisting"> <strong class="calibre2">&gt; new_train = trainset[,! names(churnTrain) %in% c("churn", "international_plan", "voice_mail_plan")]</strong> </pre> </div></li><li class="listitem" value="2">然后，就可以获得各个属性的关联:<div> <pre class="programlisting"> <strong class="calibre2">&gt;cor_mat = cor(new_train)</strong> </pre> </div></li><li class="listitem" value="3">接下来，我们使用<code class="email">findCorrelation</code>来搜索截止值等于0.75的高度相关的属性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; highlyCorrelated = findCorrelation(cor_mat, cutoff=0.75)</strong> </pre> </div></li><li class="listitem" value="4">我们然后获得高度相关属性的名称:<div> <pre class="programlisting"> <strong class="calibre2">&gt; names(new_train)[highlyCorrelated]</strong> <strong class="calibre2">[1] "total_intl_minutes"  "total_day_charge"    "total_eve_minutes"   "total_night_minutes"</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Finding highly correlated features with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">在这个<a id="id615" class="calibre1"/>配方中，我们使用<code class="email">caret</code>包搜索高度相关的属性。为了检索每个属性的相关性，应该首先删除非数字属性。然后，我们执行相关以获得相关矩阵。接下来，我们使用<code class="email">findCorrelation</code>找到高度相关的属性，截止值设置为0.75。最终得到高度相关(相关系数大于0.75)的属性名称，分别为<code class="email">total_intl_minutes</code>、<code class="email">total_day_charge</code>、<code class="email">total_eve_minutes</code>、<code class="email">total_night_minutes</code>。可以考虑去掉一些高度相关的属性，保留一两个属性，以获得更好的准确性。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Finding highly correlated features with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec284" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">除了<code class="email">caret</code>包，您还可以使用<code class="email">subselect</code>包中的<code class="email">leaps</code>、<code class="email">genetic</code>和<code class="email">anneal</code>函数来实现相同的目标</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Selecting features using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch07lvl1sec84" class="calibre1"/>使用插入符号包选择特征</h1></div></div></div><p class="calibre7">特征<a id="id616" class="calibre1"/>选择方法搜索预测误差最小的特征子集。我们可以应用特征选择来识别构建精确模型所需的属性。<code class="email">caret</code>包提供了一个递归的特征消除函数<code class="email">rfe</code>，可以帮助自动选择需要的特征。在下面的菜谱中，我们将演示如何使用<code class="email">caret</code>包来执行特征选择。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Selecting features using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch07lvl2sec285" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">在这个方法中，我们将继续使用telecom <code class="email">churn</code>数据集作为特性选择的输入数据源。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Selecting features using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch07lvl2sec286" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来选择特征:</p><div><ol class="orderedlist"><li class="listitem" value="1">将训练数据集<code class="email">trainset</code>中名为<code class="email">international_plan</code>的特征转换为<code class="email">intl_yes</code>和<code class="email">intl_no</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; intl_plan = model.matrix(~ trainset.international_plan - 1, data=data.frame(trainset$international_plan))</strong> <strong class="calibre2">&gt; colnames(intl_plan) = c("trainset.international_planno"="intl_no", "trainset.international_planyes"= "intl_yes")</strong> </pre> </div></li><li class="listitem" value="2">将训练数据集<code class="email">trainset</code>中名为<code class="email">voice_mail_plan</code>的特征转换为<code class="email">voice_yes</code>和<code class="email">voice_no</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; voice_plan = model.matrix(~ trainset.voice_mail_plan - 1, data=data.frame(trainset$voice_mail_plan))</strong> <strong class="calibre2">&gt; colnames(voice_plan) = c("trainset.voice_mail_planno" ="voice_no", "trainset.voice_mail_planyes"="voidce_yes")</strong> </pre> </div></li><li class="listitem" value="3">移除<code class="email">international_plan</code>和<code class="email">voice_mail_plan</code>属性的<a id="id617" class="calibre1"/>并将训练数据集、<code class="email">trainset</code>与数据帧、<code class="email">intl_plan</code>和<code class="email">voice_plan</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; trainset$international_plan = NULL</strong> <strong class="calibre2">&gt; trainset$voice_mail_plan = NULL</strong> <strong class="calibre2">&gt; trainset = cbind(intl_plan,voice_plan, trainset)</strong> </pre> </div>合并</li><li class="listitem" value="4">将测试数据集<code class="email">testset</code>中名为<code class="email">international_plan</code>的特征转换为<code class="email">intl_yes</code>和<code class="email">intl_no</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; intl_plan = model.matrix(~ testset.international_plan - 1, data=data.frame(testset$international_plan))</strong> <strong class="calibre2">&gt; colnames(intl_plan) = c("testset.international_planno"="intl_no", "testset.international_planyes"= "intl_yes")</strong> </pre> </div></li><li class="listitem" value="5">将训练数据集<code class="email">trainset</code>中命名为<code class="email">voice_mail_plan</code>的特征转换为<code class="email">voice_yes</code>和<code class="email">voice_no</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; voice_plan = model.matrix(~ testset.voice_mail_plan - 1, data=data.frame(testset$voice_mail_plan))</strong> <strong class="calibre2">&gt; colnames(voice_plan) = c("testset.voice_mail_planno" ="voice_no", "testset.voice_mail_planyes"="voidce_yes")</strong> </pre> </div></li><li class="listitem" value="6">删除<code class="email">international_plan</code>和<code class="email">voice_mail_plan</code>属性，合并测试数据集，<code class="email">testset</code>和数据帧，<code class="email">intl_plan</code>和<code class="email">voice_plan</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; testset$international_plan = NULL</strong> <strong class="calibre2">&gt; testset$voice_mail_plan = NULL</strong> <strong class="calibre2">&gt; testset = cbind(intl_plan,voice_plan, testset)</strong> </pre> </div></li><li class="listitem" value="7">然后，我们使用线性判别分析创建一个特征选择算法:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ldaControl = rfeControl(functions = ldaFuncs, method = "cv")</strong> </pre> </div></li><li class="listitem" value="8">接下来，我们使用从1到18: <div> <pre class="programlisting"> <strong class="calibre2">&gt; ldaProfile = rfe(trainset[, !names(trainset) %in% c("churn")], trainset[,c("churn")],sizes = c(1:18), rfeControl = ldaControl)</strong> <strong class="calibre2">&gt; ldaProfile</strong>  <strong class="calibre2">Recursive feature selection</strong>  <strong class="calibre2">Outer resampling method: Cross-Validated (10 fold) </strong>  <strong class="calibre2">Resampling performance over subset size:</strong>  <strong class="calibre2"> Variables Accuracy  Kappa AccuracySD KappaSD Selected</strong> <strong class="calibre2">         1   0.8523 0.0000   0.001325 0.00000         </strong> <strong class="calibre2">         2   0.8523 0.0000   0.001325 0.00000         </strong> <strong class="calibre2">         3   0.8423 0.1877   0.015468 0.09787         </strong> <strong class="calibre2">         4   0.8462 0.2285   0.016593 0.09610         </strong> <strong class="calibre2">         5   0.8466 0.2384   0.020710 0.09970         </strong> <strong class="calibre2">         6   0.8466 0.2364   0.019612 0.09387         </strong> <strong class="calibre2">         7   0.8458 0.2315   0.017551 0.08670         </strong> <strong class="calibre2">         8   0.8458 0.2284   0.016608 0.09536         </strong> <strong class="calibre2">         9   0.8475 0.2430   0.016882 0.10147         </strong> <strong class="calibre2">        10   0.8514 0.2577   0.014281 0.08076         </strong> <strong class="calibre2">        11   0.8518 0.2587   0.014124 0.08075         </strong> <strong class="calibre2">        12   0.8544 0.2702   0.015078 0.09208        *</strong> <strong class="calibre2">        13   0.8544 0.2721   0.015352 0.09421         </strong> <strong class="calibre2">        14   0.8531 0.2663   0.018428 0.11022         </strong> <strong class="calibre2">        15   0.8527 0.2652   0.017958 0.10850         </strong> <strong class="calibre2">        16   0.8531 0.2684   0.017897 0.10884         </strong> <strong class="calibre2">        17   0.8531 0.2684   0.017897 0.10884         </strong> <strong class="calibre2">        18   0.8531 0.2684   0.017897 0.10884         </strong>  <strong class="calibre2">The top 5 variables (out of 12):</strong> <strong class="calibre2">   total_day_charge, total_day_minutes, intl_no, number_customer_service_calls, total_eve_charge</strong> </pre> </div>的子集对训练数据集<code class="email">trainset</code>执行后向特征选择</li><li class="listitem" value="9">Next, we <a id="id618" class="calibre1"/>can plot the selection result:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(ldaProfile, type = c("o", "g"))</strong>
+</pre></div><div><img src="img/00125.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图3:特性选择结果</p></div></div><p class="calibre13">我们<a id="id619" class="calibre1"/>然后可以检查变量的最佳子集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ldaProfile$optVariables</strong> <strong class="calibre2"> [1] "total_day_charge"             </strong> <strong class="calibre2"> [2] "total_day_minutes"            </strong> <strong class="calibre2"> [3] "intl_no"                      </strong> <strong class="calibre2"> [4] "number_customer_service_calls"</strong> <strong class="calibre2"> [5] "total_eve_charge"             </strong> <strong class="calibre2"> [6] "total_eve_minutes"            </strong> <strong class="calibre2"> [7] "voidce_yes"                   </strong> <strong class="calibre2"> [8] "total_intl_calls"             </strong> <strong class="calibre2"> [9] "number_vmail_messages"        </strong> <strong class="calibre2">[10] "total_intl_charge"            </strong> <strong class="calibre2">[11] "total_intl_minutes"           </strong> <strong class="calibre2">[12] "total_night_minutes"  </strong> </pre> </div></p></li><li class="listitem" value="10">现在，我们可以检查拟合的模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ldaProfile$fit</strong> <strong class="calibre2">Call:</strong> <strong class="calibre2">lda(x, y)</strong>  <strong class="calibre2">Prior probabilities of groups:</strong> <strong class="calibre2">      yes        no </strong> <strong class="calibre2">0.1477322 0.8522678 </strong>  <strong class="calibre2">Group means:</strong> <strong class="calibre2">    total_day_charge total_day_minutes   intl_no</strong> <strong class="calibre2">yes         35.00143          205.8877 0.7046784</strong> <strong class="calibre2">no          29.62402          174.2555 0.9351242</strong> <strong class="calibre2">    number_customer_service_calls total_eve_charge</strong> <strong class="calibre2">yes                      2.204678         18.16702</strong> <strong class="calibre2">no                       1.441460         16.96789</strong> <strong class="calibre2">    total_eve_minutes voidce_yes total_intl_calls</strong> <strong class="calibre2">yes          213.7269  0.1666667         4.134503</strong> <strong class="calibre2">no           199.6197  0.2954891         4.514445</strong> <strong class="calibre2">    number_vmail_messages total_intl_charge</strong> <strong class="calibre2">yes              5.099415          2.899386</strong> <strong class="calibre2">no               8.674607          2.741343</strong> <strong class="calibre2">    total_intl_minutes total_night_minutes</strong> <strong class="calibre2">yes           10.73684            205.4640</strong> <strong class="calibre2">no            10.15119            201.4184</strong>  <strong class="calibre2">Coefficients of linear discriminants:</strong> <strong class="calibre2">                                       LD1</strong> <strong class="calibre2">total_day_charge               0.715025524</strong> <strong class="calibre2">total_day_minutes             -0.130486470</strong> <strong class="calibre2">intl_no                        2.259889324</strong> <strong class="calibre2">number_customer_service_calls -0.421997335</strong> <strong class="calibre2">total_eve_charge              -2.390372793</strong> <strong class="calibre2">total_eve_minutes              0.198406977</strong> <strong class="calibre2">voidce_yes                     0.660927935</strong> <strong class="calibre2">total_intl_calls               0.066240268</strong> <strong class="calibre2">number_vmail_messages         -0.003529233</strong> <strong class="calibre2">total_intl_charge              2.315069869</strong> <strong class="calibre2">total_intl_minutes            -0.693504606</strong> <strong class="calibre2">total_night_minutes           -0.002127471</strong> </pre> </div></li><li class="listitem" value="11">最后，我们可以计算跨重采样的性能:<div> <pre class="programlisting"> <strong class="calibre2">&gt; postResample(predict(ldaProfile, testset[, !names(testset) %in% c("churn")]), testset[,c("churn")])</strong> <strong class="calibre2">Accuracy     Kappa</strong> <strong class="calibre2">0.8605108 0.2672027</strong> </pre> </div></li><li class="listitem" value="12"><a id="ch07lvl2sec287" class="calibre1"/>工作原理...</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Selecting features using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在这个<a id="id620" class="calibre1"/>配方中，我们使用<code class="email">caret</code>包进行特征选择。由于数据集中有因子编码的属性，我们首先使用一个名为<code class="email">model.matrix</code>的函数将因子编码的属性转换成多个二进制属性。因此，我们将<code class="email">international_plan</code>属性转换为<code class="email">intl_yes</code>和<code class="email">intl_no</code>。此外，我们将<code class="email">voice_mail_plan</code>属性转换为<code class="email">voice_yes</code>和<code class="email">voice_no</code>。</h2></div></div></div><p class="calibre7">接下来，我们使用交叉验证方法<code class="email">cv</code>和线性判别函数<code class="email">ldaFuncs</code>设置用于训练的控制参数。然后，我们使用递归特征消除，<code class="email">rfe</code>，通过使用<code class="email">control</code>函数，<code class="email">ldaFuncs</code>来执行特征选择。<code class="email">rfe</code>函数生成特征选择摘要，其中包含对子集大小和顶部变量的性能进行重采样。</p><p class="calibre7">然后，我们可以使用获得的模型信息来绘制变量数量与精确度的关系。从图3可以明显看出，使用12个特征可以获得最佳精度。除此之外，我们可以检索拟合模型中变量的最佳子集(总共12个变量)。最后，我们可以计算所有重采样的性能，其精度为0.86，kappa为0.27。</p><p class="calibre7"><a id="ch07lvl2sec288" class="calibre1"/>亦见</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Selecting features using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">为了指定用于控制特征选择的算法，可以改变<code class="email">rfeControl</code>中指定的控制功能。这里有一些你可以使用的选项:<div> <pre class="programlisting"> <strong class="calibre2">caretFuncs      SVM (caret) lmFuncs     lm (base) rfFuncs         RF(randomForest) treebagFuncs     DT (ipred) ldaFuncs       lda(base) nbFuncs       NB(klaR) gamFuncs      gam(gam)</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch07lvl1sec85" class="calibre1"/>测量回归模型的性能</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring the performance of the regression model</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">为了<a id="id621" class="calibre1"/>衡量回归模型的性能，我们可以计算预测输出和实际输出的距离<a id="id622" class="calibre1"/>作为模型性能的量化指标。这里我们经常用<strong class="calibre2">均方根误差</strong> ( <strong class="calibre2"> RMSE </strong>)、<strong class="calibre2">相对平方误差</strong> ( <strong class="calibre2"> RSE </strong>)和<a id="id623" class="calibre1"/> R平方作为常用的度量。在下面的食谱中，我们将说明如何从构建的回归模型中计算这些度量。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring the performance of the regression model</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">在这个<a id="id624" class="calibre1"/>配方中，我们将使用包含四个回归数据集的<code class="email">Quartet</code>数据集作为输入数据源。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec290" class="calibre1"/>怎么做...</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring the performance of the regression model</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤来衡量回归模型的性能:</h2></div></div></div><p class="calibre7">从<code class="email">car</code>包中加载<code class="email">Quartet</code>数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(car)</strong> <strong class="calibre2">&gt; data(Quartet)</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">图4:线性回归图</li><li class="listitem" value="2">Plot the attribute, <code class="email">y3</code>, against x using the <code class="email">lm</code> function:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(Quartet$x, Quartet$y3)</strong>
+<strong class="calibre2">&gt; lmfit = lm(Quartet$y3~Quartet$x)</strong>
+<strong class="calibre2">&gt; abline(lmfit, col="red")</strong>
+</pre></div><div><img src="img/00126.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Figure 4: The linear regression plot</p></div></div><p class="calibre13">您可以使用<code class="email">predict</code>功能:<div> <pre class="programlisting"> <strong class="calibre2">&gt; predicted= predict(lmfit, newdata=Quartet[c("x")])</strong> </pre> </div>检索预测值</p></li><li class="listitem" value="3">现在，可以计算均方根误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; actual = Quartet$y3</strong> <strong class="calibre2">&gt; rmse = (mean((predicted - actual)^2))^0.5</strong> <strong class="calibre2">&gt; rmse</strong> <strong class="calibre2">[1] 1.118286</strong> </pre> </div></li><li class="listitem" value="4">你<a id="id625" class="calibre1"/>可以计算相对平方误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; mu = mean(actual)</strong> <strong class="calibre2">&gt; rse = mean((predicted - actual)^2) / mean((mu - actual)^2) </strong> <strong class="calibre2">&gt; rse</strong> <strong class="calibre2">[1] 0.333676</strong> </pre> </div></li><li class="listitem" value="5">也可以用R平方作为度量:<div> <pre class="programlisting"> <strong class="calibre2">&gt; rsquare = 1 - rse</strong> <strong class="calibre2">&gt; rsquare</strong> <strong class="calibre2">[1] 0.666324</strong> </pre> </div></li><li class="listitem" value="6">图5:四方数据集上的稳健线性回归图</li><li class="listitem" value="7">Then, you can plot attribute, y3, against x using the <code class="email">rlm</code> function from the MASS package:<div><pre class="programlisting">
+<strong class="calibre2">&gt; library(MASS)</strong>
+<strong class="calibre2">&gt; plot(Quartet$x, Quartet$y3)</strong>
+<strong class="calibre2">&gt; rlmfit = rlm(Quartet$y3~Quartet$x)</strong>
+<strong class="calibre2">&gt; abline(rlmfit, col="red")</strong>
+</pre></div><div><img src="img/00127.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Figure 5: The robust linear regression plot on the Quartet dataset</p></div></div><p class="calibre13">然后<a id="id626" class="calibre1"/>可以使用<code class="email">predict</code>函数检索预测值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; predicted = predict(rlmfit, newdata=Quartet[c("x")])</strong> </pre> </div></p></li><li class="listitem" value="8">接下来，您可以使用预测值和实际值的距离来计算均方根误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; actual = Quartet$y3</strong> <strong class="calibre2">&gt; rmse = (mean((predicted - actual)^2))^0.5</strong> <strong class="calibre2">&gt; rmse</strong> <strong class="calibre2">[1] 1.279045</strong> </pre> </div></li><li class="listitem" value="9">计算预测和实际标签之间的相对平方误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; mu = mean(actual)</strong> <strong class="calibre2">&gt; rse =mean((predicted - actual)^2) / mean((mu - actual)^2) </strong> <strong class="calibre2">&gt; rse</strong> <strong class="calibre2">[1] 0.4365067</strong> </pre> </div></li><li class="listitem" value="10">现在，你可以计算R平方值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; rsquare = 1 - rse</strong> <strong class="calibre2">&gt; rsquare</strong> <strong class="calibre2">[1] 0.5634933</strong> </pre> </div></li><li class="listitem" value="11"><a id="ch07lvl2sec291" class="calibre1"/>工作原理...</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring the performance of the regression model</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="id627" class="calibre1"/>回归模型性能的测量采用预测值和实际值之间的距离。我们经常使用这三个度量，均方根误差、相对平方误差和R平方，作为回归模型性能的量化指标。在这个方法中，我们首先从<code class="email">car</code>包中加载<code class="email">Quartet</code>数据。然后，我们使用<code class="email">lm</code>函数来拟合线性模型，并在x变量与<code class="email">y3</code>变量的散点图上添加回归线。接下来，我们使用predict函数计算预测值，<a id="id628" class="calibre1"/>开始计算所建模型的<strong class="calibre2">均方根误差</strong> ( <strong class="calibre2"> RMSE </strong>)、<strong class="calibre2">相对平方误差</strong> ( <strong class="calibre2"> RSE </strong>)和R平方。</h2></div></div></div><p class="calibre7">由于这个<a id="id629" class="calibre1"/>数据集在<code class="email">x=13</code>有一个异常值，我们想量化异常值如何影响性能测量。为了实现这一点，我们首先使用来自<code class="email">MASS</code>包的<code class="email">rlm</code>函数训练一个回归模型。与上一步类似，我们然后生成均方根误差、相对误差和R平方的性能测量。从输出测量来看，<code class="email">lm</code>模型的均方误差和相对均方误差明显小于<code class="email">rlm</code>建立的模型，R-Square的得分表明<code class="email">lm</code>建立的模型具有更大的预测能力。然而，对于实际场景，我们应该在<code class="email">x=13</code>移除异常值。这种比较表明，异常值可能偏向于性能度量，并可能导致我们选择错误的模型。</p><p class="calibre7">还有更多…</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring the performance of the regression model</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">如果您想在线性回归模型上执行交叉验证，您可以使用<code class="email">e1071</code>包中的<code class="email">tune</code>函数:</h2></div></div></div><p class="calibre7">除了<code class="email">e1071</code>包，您可以使用<code class="email">caret</code>包中的<code class="email">train</code>函数来执行交叉验证。除此之外，您还可以使用<code class="email">DAAG</code>包中的<code class="email">cv.lm</code>来达到同样的目的。</p><div><pre class="programlisting">
+<strong class="calibre2">&gt; tune(lm, y3~x, data = Quartet)</strong>
+<strong class="calibre2">Error estimation of 'lm' using 10-fold cross validation: 2.33754</strong>
+</pre></div><p class="calibre7"><a id="ch07lvl1sec86" class="calibre1"/>用混淆矩阵衡量预测性能</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">为了测量分类模型的性能，我们可以首先根据我们的预测标签和实际标签生成一个分类表。然后，我们可以使用混淆矩阵来获得性能度量，如精确度、召回率、特异性和准确性。在这个菜谱中，我们将演示如何使用<code class="email">caret</code>包检索混淆矩阵。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">在这个<a id="id631" class="calibre1"/>方案中，我们将继续使用电信<code class="email">churn</code>数据集作为我们的示例数据集。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec294" class="calibre1"/>怎么做...</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤来生成分类测量:</h2></div></div></div><p class="calibre7">使用训练数据集训练svm模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.model= train(churn ~ .,</strong> <strong class="calibre2">+                   data = trainset,</strong> <strong class="calibre2">+                   method = "svmRadial")</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">然后，您可以使用拟合的模型预测标签，<code class="email">svm.model</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.pred = predict(svm.model, testset[,! names(testset) %in% c("churn")])</strong> </pre> </div></li><li class="listitem" value="2">接下来，可以生成一个分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; table(svm.pred, testset[,c("churn")])</strong> <strong class="calibre2">        </strong> <strong class="calibre2">svm.pred yes  no</strong> <strong class="calibre2">     yes  73  16</strong> <strong class="calibre2">     no   68 861</strong> </pre> </div></li><li class="listitem" value="3">最后，您可以使用预测结果和来自测试数据集的实际标签来生成混淆矩阵:<div> <pre class="programlisting"> <strong class="calibre2">&gt; confusionMatrix(svm.pred, testset[,c("churn")])</strong> <strong class="calibre2">Confusion Matrix and Statistics</strong>  <strong class="calibre2">          Reference</strong> <strong class="calibre2">Prediction yes  no</strong> <strong class="calibre2">       yes  73  16</strong> <strong class="calibre2">       no   68 861</strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">               Accuracy : 0.9175          </strong> <strong class="calibre2">                 95% CI : (0.8989, 0.9337)</strong> <strong class="calibre2">    No Information Rate : 0.8615          </strong> <strong class="calibre2">    P-Value [Acc &gt; NIR] : 2.273e-08       </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">                  Kappa : 0.5909          </strong> <strong class="calibre2"> Mcnemar's Test P-Value : 2.628e-08       </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">            Sensitivity : 0.51773         </strong> <strong class="calibre2">            Specificity : 0.98176         </strong> <strong class="calibre2">         Pos Pred Value : 0.82022         </strong> <strong class="calibre2">         Neg Pred Value : 0.92680         </strong> <strong class="calibre2">             Prevalence : 0.13851         </strong> <strong class="calibre2">         Detection Rate : 0.07171         </strong> <strong class="calibre2">   Detection Prevalence : 0.08743         </strong> <strong class="calibre2">      Balanced Accuracy : 0.74974         </strong> <strong class="calibre2">                                          </strong> <strong class="calibre2">       'Positive' Class : yes              </strong> </pre> </div></li><li class="listitem" value="4"><a id="ch07lvl2sec295" class="calibre1"/>工作原理...</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在这个<a id="id632" class="calibre1"/>配方中，我们演示了如何获得混淆矩阵来衡量分类模型的性能。首先，我们使用<code class="email">caret</code>包中的<code class="email">train</code>函数来训练svm模型。接下来，我们使用<code class="email">predict</code>函数来提取使用测试数据集的svm模型的预测标签。然后，我们执行<code class="email">table</code>函数来获得基于预测和实际标签的分类表。最后，我们使用<code class="email">caret</code>包中的<code class="email">confusionMatrix</code>函数来生成混淆矩阵，以测量分类模型的性能。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec296" class="calibre1"/>参见</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance with a confusion matrix</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">如果你对<code class="email">train</code>功能可用的方法感兴趣，可以参考这个网站:<a class="calibre1" href="http://topepo.github.io/caret/modelList.html">http://topepo.github.io/caret/modelList.html</a></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch07lvl1sec87" class="calibre1"/>使用ROCR测量预测性能</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance using ROCR</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><strong class="calibre2">接收器工作特性</strong> ( <strong class="calibre2"> ROC </strong>)曲线是说明二进制分类器系统的性能<a id="id633" class="calibre1"/>的曲线图，并且<a id="id634" class="calibre1"/>绘出了不同切割点的真阳性率对假阳性率。我们最常用此图来计算曲线 ( <strong class="calibre2"> AUC </strong>)至<a id="id635" class="calibre1"/>下的<strong class="calibre2">面积，以衡量分类模型的性能。在本食谱中，我们将演示如何绘制ROC曲线并计算AUC来衡量分类模型的性能。</strong></h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance using ROCR</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">在这个<a id="id636" class="calibre1"/>配方中，我们将继续使用电信<code class="email">churn</code>数据集作为我们的示例数据集。</h2></div></div></div><p class="calibre7">如何去做...</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance using ROCR</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤，以生成两个具有不同成本的不同分类实例:</h2></div></div></div><p class="calibre7">首先，你<a id="id637" class="calibre1"/>应该安装并加载<code class="email">ROCR</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("ROCR")</strong> <strong class="calibre2">&gt; library(ROCR)</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">使用概率等于<code class="email">TRUE</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; svmfit=svm(churn~ ., data=trainset, prob=TRUE)</strong> </pre> </div>的训练数据集训练svm模型</li><li class="listitem" value="2">基于训练好的模型在测试数据集上进行预测，概率设置为<code class="email">TRUE</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt;pred=predict(svmfit,testset[, !names(testset) %in% c("churn")], probability=TRUE)</strong> </pre> </div></li><li class="listitem" value="3">用<code class="email">yes</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; pred.prob = attr(pred, "probabilities") </strong> <strong class="calibre2">&gt; pred.to.roc = pred.prob[, 2] </strong> </pre> </div>获得标签的概率</li><li class="listitem" value="4">使用<code class="email">prediction</code>功能生成预测结果:<div> <pre class="programlisting"> <strong class="calibre2">&gt; pred.rocr = prediction(pred.to.roc, testset$churn)</strong> </pre> </div></li><li class="listitem" value="5">使用<code class="email">performance</code>功能获得性能测量:<div> <pre class="programlisting"> <strong class="calibre2">&gt; perf.rocr = performance(pred.rocr, measure = "auc", x.measure = "cutoff") </strong> <strong class="calibre2">&gt; perf.tpr.rocr = performance(pred.rocr, "tpr","fpr") </strong> </pre> </div></li><li class="listitem" value="6">图svm分类器性能的ROC曲线</li><li class="listitem" value="7">Visualize the ROC curve using the <code class="email">plot</code> function:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(perf.tpr.rocr, colorize=T,main=paste("AUC:",(perf.rocr@y.values)))</strong>
+</pre></div><div><img src="img/00128.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Figure 6: The ROC curve for the svm classifier performance</p></div></div><p class="calibre13">它是如何工作的...</p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance using ROCR</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在这个<a id="id638" class="calibre1"/>食谱中，我们演示了如何生成ROC曲线来说明二元分类器的性能。首先要安装并加载库，<code class="email">ROCR</code>。然后，我们使用来自<code class="email">e1071</code>包的svm来训练分类模型，然后使用该模型来预测测试数据集的标签。接下来，我们使用预测函数(来自包，<code class="email">ROCR</code>)来生成预测结果。然后，我们调整性能函数，以获得相对于假阳性率的真阳性率的性能测量。最后，我们使用<code class="email">plot</code>函数来可视化ROC图，并在标题上添加AUC的值。在这个例子中，AUC值是0.92，这表明svm分类器在分类电信用户流失数据集方面表现良好。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec300" class="calibre1"/>亦见</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring prediction performance using ROCR</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="id639" class="calibre1"/>对ROC的概念和术语感兴趣的，可以参考<a class="calibre1" href="http://en.wikipedia.org/wiki/Receiver_operating_characteristic">http://en . Wikipedia . org/wiki/Receiver _ operating _ character istic</a></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch07lvl1sec88" class="calibre1"/>使用caret软件包比较ROC曲线</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Comparing an ROC curve using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">在前几章中，我们介绍了许多分类方法；每种方法都有自己的优缺点。然而，当涉及到如何选择<a id="id640" class="calibre1"/>最佳拟合模型的问题时，您需要比较从不同预测模型生成的所有性能度量。为了便于比较，caret包允许我们生成和比较模型的性能。在这个菜谱中，我们将使用<code class="email">caret</code>包提供的函数来比较同一数据集上不同算法训练的模型。</h1></div></div></div><p class="calibre7">准备就绪</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Comparing an ROC curve using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">这里，我们将继续使用电信数据集作为输入数据源。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec302" class="calibre1"/>怎么做...</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Comparing an ROC curve using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤，生成每个拟合模型的ROC曲线:</h2></div></div></div><p class="calibre7">安装并加载库，<code class="email">pROC</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("pROC")</strong> <strong class="calibre2">&gt; library("pROC")</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">在3次重复中设置10倍交叉验证的训练控制:<div> <pre class="programlisting"> <strong class="calibre2">&gt; control = trainControl(method = "repeatedcv",</strong> <strong class="calibre2">+                            number = 10,</strong> <strong class="calibre2">+                            repeats = 3,</strong> <strong class="calibre2">+                            classProbs = TRUE,</strong> <strong class="calibre2">+                            summaryFunction = twoClassSummary)</strong> </pre> </div></li><li class="listitem" value="2">然后，您可以使用<code class="email">glm</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; glm.model= train(churn ~ .,</strong> <strong class="calibre2">+                     data = trainset,</strong> <strong class="calibre2">+                     method = "glm",</strong> <strong class="calibre2">+                     metric = "ROC",</strong> <strong class="calibre2">+                     trControl = control)</strong> </pre> </div>在训练数据集上训练一个分类器</li><li class="listitem" value="3">此外，您可以使用<code class="email">svm</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; svm.model= train(churn ~ .,</strong> <strong class="calibre2">+                   data = trainset,</strong> <strong class="calibre2">+                   method = "svmRadial",</strong> <strong class="calibre2">+                   metric = "ROC",</strong> <strong class="calibre2">+                   trControl = control)</strong> </pre> </div>在训练数据集上训练一个分类器</li><li class="listitem" value="4">为了查看<code class="email">rpart</code>如何处理训练数据，我们使用了<code class="email">rpart</code>函数:<div> <pre class="programlisting"> <strong class="calibre2">&gt; rpart.model= train(churn ~ .,</strong> <strong class="calibre2">+                   data = trainset,</strong> <strong class="calibre2">+                   method = "rpart",</strong> <strong class="calibre2">+                   metric = "ROC",</strong> <strong class="calibre2">+                   trControl = control)</strong> </pre> </div></li><li class="listitem" value="5">您<a id="id641" class="calibre1"/>可以根据不同的训练模型分别进行预测:<div> <pre class="programlisting"> <strong class="calibre2">&gt; glm.probs = predict(glm.model, testset[,! names(testset) %in% c("churn")], type = "prob")</strong> <strong class="calibre2">&gt; svm.probs = predict(svm.model, testset[,! names(testset) %in% c("churn")], type = "prob")</strong> <strong class="calibre2">&gt; rpart.probs = predict(rpart.model, testset[,! names(testset) %in% c("churn")], type = "prob")</strong> </pre> </div></li><li class="listitem" value="6">图7:三个分类器性能的ROC曲线</li><li class="listitem" value="7">You can generate the ROC curve of each model, and plot the curve on the same figure:<div><pre class="programlisting">
+<strong class="calibre2">&gt; glm.ROC = roc(response = testset[,c("churn")],</strong>
+<strong class="calibre2">+                predictor =glm.probs$yes,</strong>
+<strong class="calibre2">+                levels = levels(testset[,c("churn")]))</strong>
+<strong class="calibre2">&gt; plot(glm.ROC, type="S", col="red") </strong>
+
+<strong class="calibre2">Call:</strong>
+<strong class="calibre2">roc.default(response = testset[, c("churn")], predictor = glm.probs$yes,     levels = levels(testset[, c("churn")]))</strong>
+
+<strong class="calibre2">Data: glm.probs$yes in 141 controls (testset[, c("churn")] yes) &gt; 877 cases (testset[, c("churn")] no).</strong>
+<strong class="calibre2">Area under the curve: 0.82</strong>
+
+<strong class="calibre2">&gt; svm.ROC = roc(response = testset[,c("churn")],</strong>
+<strong class="calibre2">+                predictor =svm.probs$yes,</strong>
+<strong class="calibre2">+                levels = levels(testset[,c("churn")]))</strong>
+<strong class="calibre2">&gt; plot(svm.ROC, add=TRUE, col="green") </strong>
+
+<strong class="calibre2">Call:</strong>
+<strong class="calibre2">roc.default(response = testset[, c("churn")], predictor = svm.probs$yes,     levels = levels(testset[, c("churn")]))</strong>
+
+<strong class="calibre2">Data: svm.probs$yes in 141 controls (testset[, c("churn")] yes) &gt; 877 cases (testset[, c("churn")] no).</strong>
+<strong class="calibre2">Area under the curve: 0.9233</strong>
+
+<strong class="calibre2">&gt; rpart.ROC = roc(response = testset[,c("churn")],</strong>
+<strong class="calibre2">+                predictor =rpart.probs$yes,</strong>
+<strong class="calibre2">+                levels = levels(testset[,c("churn")]))</strong>
+<strong class="calibre2">&gt; plot(rpart.ROC, add=TRUE, col="blue")</strong>
+
+<strong class="calibre2">Call:</strong>
+<strong class="calibre2">roc.default(response = testset[, c("churn")], predictor = rpart.probs$yes,     levels = levels(testset[, c("churn")]))</strong>
+
+<strong class="calibre2">Data: rpart.probs$yes in 141 controls (testset[, c("churn")] yes) &gt; 877 cases (testset[, c("churn")] no).</strong>
+<strong class="calibre2">Area under the curve: 0.7581</strong>
+</pre></div><div><img src="img/00129.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Figure 7: The ROC curve for the performance of three classifiers</p></div></div><p class="calibre13"><a id="ch07lvl2sec303" class="calibre1"/>工作原理...</p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Comparing an ROC curve using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在这里，我们通过在一个<a id="id642" class="calibre1"/>图中展示拟合模型的ROC曲线来演示如何比较拟合模型。首先，我们在<code class="email">twoClassSummary</code>建立了培训过程的控制，10重交叉验证，3次重复，绩效评估。在建立了对训练过程的控制之后，我们然后对训练数据集应用<code class="email">glm</code>、<code class="email">svm</code>和<code class="email">rpart</code>算法来拟合分类模型。接下来，我们可以基于每个生成的模型进行预测，并分别绘制ROC曲线。在生成的图中，我们发现svm训练的模型具有最大的曲线下面积，为0.9233(以绿色绘制)，<code class="email">glm</code>模型(红色)的AUC为0.82，<code class="email">rpart</code>模型(蓝色)的AUC为0.7581。从<em class="calibre8">图7 </em>可以明显看出<code class="email">svm</code>在这个训练数据集上的所有拟合模型中表现最好(不需要调优)。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec304" class="calibre1"/>亦见</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Comparing an ROC curve using the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">我们使用另一个ROC可视化软件包<code class="email">pROC</code>，它可以用来显示和分析ROC曲线。如果您想了解更多关于套餐的信息，请使用<code class="email">help</code>功能:<div> <pre class="programlisting"> <strong class="calibre2">&gt; help(package="pROC")</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch07lvl1sec89" class="calibre1"/>使用caret软件包测量不同型号之间的性能差异</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring performance differences between models with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">在前一个配方中，我们介绍了如何为每个生成的模型生成ROC曲线，并将曲线绘制在同一个图上。除了使用ROC曲线，一个<a id="id643" class="calibre1"/>可以使用重采样方法生成ROC、灵敏度和特异性指标中每个拟合模型的统计数据。因此，我们可以使用这些统计数据来比较每个模型之间的性能差异。在下面的食谱中，我们将介绍如何测量装有<code class="email">caret</code>套件的模型之间的性能差异。</h1></div></div></div><p class="calibre7"><a id="ch07lvl2sec305" class="calibre1"/>做好准备</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring performance differences between models with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">用户需要通过将<code class="email">glm</code>拟合模型、<code class="email">svm</code>拟合模型和<code class="email">rpart</code>拟合模型分别存储到<code class="email">glm.model</code>、<code class="email">svm.model</code>和<code class="email">rpart.model</code>来完成之前的配方。</h2></div></div></div><p class="calibre7"><a id="ch07lvl2sec306" class="calibre1"/>怎么做...</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring performance differences between models with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤来测量每个装配模型之间的性能差异:</h2></div></div></div><p class="calibre7">对生成的三个模型进行重采样:<div> <pre class="programlisting"> <strong class="calibre2">&gt; cv.values = resamples(list(glm = glm.model, svm=svm.model, rpart = rpart.model))</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">然后，您<a id="id644" class="calibre1"/>可以获得重采样结果的汇总:<div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(cv.values)</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">summary.resamples(object = cv.values)</strong>  <strong class="calibre2">Models: glm, svm, rpart </strong> <strong class="calibre2">Number of resamples: 30 </strong>  <strong class="calibre2">ROC </strong> <strong class="calibre2">        Min. 1st Qu. Median   Mean 3rd Qu.   Max. NA's</strong> <strong class="calibre2">glm   0.7206  0.7847 0.8126 0.8116  0.8371 0.8877    0</strong> <strong class="calibre2">svm   0.8337  0.8673 0.8946 0.8929  0.9194 0.9458    0</strong> <strong class="calibre2">rpart 0.2802  0.7159 0.7413 0.6769  0.8105 0.8821    0</strong>  <strong class="calibre2">Sens </strong> <strong class="calibre2">         Min. 1st Qu. Median   Mean 3rd Qu.   Max. NA's</strong> <strong class="calibre2">glm   0.08824  0.2000 0.2286 0.2194  0.2517 0.3529    0</strong> <strong class="calibre2">svm   0.44120  0.5368 0.5714 0.5866  0.6424 0.7143    0</strong> <strong class="calibre2">rpart 0.20590  0.3742 0.4706 0.4745  0.5929 0.6471    0</strong>  <strong class="calibre2">Spec </strong> <strong class="calibre2">        Min. 1st Qu. Median   Mean 3rd Qu.   Max. NA's</strong> <strong class="calibre2">glm   0.9442  0.9608 0.9746 0.9701  0.9797 0.9949    0</strong> <strong class="calibre2">svm   0.9442  0.9646 0.9746 0.9740  0.9835 0.9949    0</strong> <strong class="calibre2">rpart 0.9492  0.9709 0.9797 0.9780  0.9848 0.9949    0</strong> </pre> </div></li><li class="listitem" value="2">图ROC指标中重采样结果的点状图</li><li class="listitem" value="3">Use <code class="email">dotplot</code> to plot the resampling result in the ROC metric:<div><pre class="programlisting">
+<strong class="calibre2">&gt; dotplot(cv.values, metric = "ROC")</strong>
+</pre></div><div><img src="img/00130.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">图9:重采样结果的盒须图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="4">Also, you <a id="id645" class="calibre1"/>can use a box-whisker plot to plot the resampling result:<div><pre class="programlisting">
+<strong class="calibre2">&gt; bwplot(cv.values, layout = c(3, 1))</strong>
+</pre></div><div><img src="img/00131.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12"><a id="ch07lvl2sec307" class="calibre1"/>工作原理...</p></div></div><p class="calibre13">在这个配方中，我们演示了如何使用重采样方法测量三个拟合模型之间的性能差异。首先，我们使用<code class="email">resample</code>函数来生成每个拟合模型的统计数据(<code class="email">svm.model</code>、<code class="email">glm.model</code>和<code class="email">rpart.model</code>)。然后，我们<a id="id646" class="calibre1"/>可以使用<code class="email">summary</code>函数来获得这三个模型在ROC、灵敏度和特异性指标中的统计数据。接下来，我们可以对重采样结果应用一个<code class="email">dotplot</code>,看看ROC在每个模型之间是如何变化的。最后，我们在重采样结果上使用盒须图来显示ROC中不同模型的盒须图，在单个图上显示灵敏度和特异性度量。</p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring performance differences between models with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch07lvl2sec308" class="calibre1"/>参见</h2></div></div></div><p class="calibre7">除了使用<code class="email">dotplot</code>和<code class="email">bwplot</code>来测量性能差异，还可以使用<code class="email">densityplot</code>、<code class="email">splom</code>和<code class="email">xyplot</code>来可视化每个拟合模型在ROC、灵敏度和特异性指标中的性能差异。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Measuring performance differences between models with the caret package</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch07lvl2sec308" class="calibre1"/>See also</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">Besides using <code class="email">dotplot</code> and <code class="email">bwplot</code> to measure performance differences, one can use <code class="email">densityplot</code>, <code class="email">splom</code>, and <code class="email">xyplot</code> to visualize the performance differences of each fitted model in the ROC, sensitivity, and specificity metrics.</li></ul></div></div></div></body></html>
+</body></html>

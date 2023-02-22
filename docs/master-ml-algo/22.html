@@ -1,0 +1,420 @@
+<html><head/><body>
+
+
+
+
+
+
+
+
+
+		<title>Chapter_22</title>
+
+		
+
+		
+
+	
+
+	
+
+		<div><h1 class="chapterNumber">22</h1>
+
+			<h1 id="_idParaDest-328" class="chapterTitle" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor342"/>生成性对抗网络简介</h1>
+
+			<p class="normal">在这一章中，我们将提供一个基于一些博弈论概念的生成模型家族的简要介绍。他们的主要特点是一个对抗性的训练程序，旨在学习区分真假样本，同时驱动另一个组件，生成与训练样本越来越相似的样本。</p>
+
+			<p class="normal">特别是，我们将讨论:</p>
+
+			<ul>
+
+				<li class="list"><strong class="bold">对抗训练和标准生成对抗网络</strong> ( <strong class="bold">甘斯</strong></li>
+
+				<li class="list"><strong class="bold">深度卷积gan</strong>(<strong class="bold">dcgan</strong>)</li>
+
+				<li class="list">瓦瑟斯坦·甘斯</li>
+
+			</ul>
+
+			<p class="normal">我们现在可以介绍神经模型的对抗性训练的概念，它与博弈论的联系及其在GANs中的应用。</p>
+
+			<h1 id="_idParaDest-329" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor343"/>对抗性训练</h1>
+
+			<p class="normal">对抗训练的绝妙想法，由<a id="_idIndexMarker1385"/>古德费勒等人提出(载于古德费勒I. J .、普热-阿巴迪j .、米尔扎m .、徐b .、沃德-法利d .、奥泽尔s .、本吉奥y .，<em class="italics">生成对抗网络，</em> arXiv:1406.2661【统计。ML]–虽然这个想法至少在理论上已经被其他作者讨论过，但它带来了新一代的生成模型，并立即超越了大多数现有算法。所有衍生的模型都基于相同的对抗性训练的基本概念，这是一种部分受博弈论启发的方法。</p>
+
+			<p class="normal">假设我们有一个数据生成过程，<img src="img/B14713_22_001.png" alt=""/>，它代表实际的数据分布和有限数量的数据点，我们假设这些数据点是从<em class="italics">p</em>T20】数据中提取的:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_002.png" alt=""/></figure>
+
+			<p class="normal">我们的目标是训练一个叫做生成器的模型，它的分布必须尽可能接近<em class="italics">p</em>T24】数据。这是算法中最棘手的部分，因为对抗训练不是标准方法(例如，变化的自动编码器)，而是基于两个玩家之间的极大极小游戏(我们可以简单地说，给定一个目标，两个玩家的目标是最小化最大可能的损失，但在这种情况下，他们每个人都在不同的参数上工作)。一个参与者是生成器，我们可以将其定义为噪声样本的参数化函数:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_003.png" alt=""/></figure>
+
+			<p class="normal">向发生器馈送噪声向量(在这种情况下，我们采用了均匀分布，但是没有特别的限制；所以我们就简单的说<img src="img/B14713_22_004.png" alt=""/>是从随机噪声分布<em class="italics">p</em>T30】noise中抽取的，输出一个与从<em class="italics">p</em>T34】data中抽取的样本具有相同维数的值。在没有任何进一步控制的情况下，生成器分布将与数据生成过程完全不同，但这是另一个玩家进入场景的时刻。第二个模型称为鉴别器(或评论家)，它负责评估从<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>中抽取的样本和生成器产生的样本:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_005.png" alt=""/></figure>
+
+			<p class="normal">该模型的作用是输出一个概率，该概率必须反映样本是从<em class="italics">p</em>T42【数据】中提取的，而不是由<img style="height: 1.5em! important;" src="img/B14713_22_006.png" alt=""/>生成的。发生的事情非常简单:第一个播放器(生成器)输出一个样本，<img src="img/B14713_12_036.png" alt=""/>。如果<em class="italics"> x </em>实际上属于<em class="italics">p</em>T50】数据，鉴别器将输出一个接近1的值，而如果它与其他真实样本非常不同，<img style="height: 1.3em! important;" src="img/B14713_22_008.png" alt=""/>将输出一个非常低的概率。这个游戏的真正结构是基于这样一个想法，即训练生成器通过产生可能从<em class="italics">p</em>T55】数据中提取的样本来欺骗鉴别器。当<em class="italics"> x </em>是真实样本(从<em class="italics">p</em>p<sub style="font-style: italic;">数据</sub>中提取)时，通过尝试最大化对数概率<img style="height: 1.3em! important;" src="img/B14713_22_009.png" alt=""/>，同时最小化对数概率<img style="height: 1.7em! important;" src="img/B14713_22_010.png" alt=""/>，从噪声分布中采样<img src="img/B14713_21_005.png" alt=""/>，可以实现该结果。</p>
+
+			<p class="normal">第一个操作迫使鉴别器越来越多地意识到真实样本(这个条件是必要的，以避免太容易被欺骗)。</p>
+
+			<p class="normal">第二个目标稍微复杂一点，因为鉴别器必须评估一个样品是否可以接受。我们假设生成器不够智能，输出了一个不可能属于<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>的样本。由于鉴别器正在学习如何构造<em class="italics">p</em>T6】数据，它将很快区分错误的样本，输出低概率。因此，通过最小化<img style="height: 1.7em! important;" src="img/B14713_22_012.png" alt=""/>，当样本与从<em class="italics"/><sub style="font-style: italic;">数据</sub>中提取的样本非常不同时，我们迫使鉴别器变得越来越重要，并且<a id="_idIndexMarker1387"/>发生器变得越来越能够产生可接受的样本。另一方面，如果生成器输出属于数据生成过程的样本，则鉴别器将输出高概率，并且最小化退回到先前的情况。</p>
+
+			<p class="normal">作者使用共享值函数<em class="italics"> V </em> ( <em class="italics"> G </em>，<em class="italics"> D </em>)来表示这个极大极小游戏，该函数必须由生成器最小化，由鉴别器最大化:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_013.png" alt=""/></figure>
+
+			<p class="normal">这个公式代表了两个参与者之间的非合作博弈的动力学(要了解更多信息，请参考塔德利斯s .，<em class="italics">博弈论，</em>普林斯顿大学出版社，2013)，理论上承认一种特殊的配置，称为纳什均衡，可以描述为如果两个参与者知道彼此的策略，如果另一个参与者不知道，他们没有理由改变自己的策略。</p>
+
+			<p class="normal">在这种情况下，鉴别者和生成者都将继续他们的策略，直到不需要改变，达到最终的稳定配置，这可能是一个纳什均衡(即使有许多因素可以阻止达到这一目标)。一个常见的问题是鉴别器的过早收敛，这迫使梯度消失，因为损失函数在接近0的区域变得平坦。由于这是一个游戏，一个基本的条件是提供信息的可能性，以允许玩家进行更正。如果鉴别器太快地学会了如何从假样本中分离出真样本，发生器的收敛速度就会变慢，玩家可能会被困在次优配置中。</p>
+
+			<p class="normal">一般来说，当<a id="_idIndexMarker1388"/>分布相当复杂时，鉴别器比发生器慢；但在某些情况下，在每次更新鉴别器后，有必要更新生成器更多次。不幸的是，没有经验法则；但是，例如，当处理图像时，有可能观察到在足够多的迭代之后生成的样本。如果鉴频器损耗变得非常小，样本出现损坏或不一致，这意味着发生器没有足够的时间来学习分布，因此有必要降低鉴频器的速度。</p>
+
+			<p class="normal">作者(在上述论文中)表明，给定一个以分布<img src="img/B14713_22_014.png" alt=""/>为特征的生成器，最佳鉴别器为:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_015.png" alt=""/></figure>
+
+			<p class="normal">此时，考虑到先前的值函数<em class="italics"> V </em> ( <em class="italics"> G </em>，<em class="italics"> D </em>)并使用最佳鉴别器，我们可以在生成器必须最小化的单个目标(作为<em class="italics"> G </em>的函数)中重写它:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_016.png" alt=""/></figure>
+
+			<p class="normal">为了更好地理解GAN的工作原理，我们需要扩展前面的表达式:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_017.png" alt=""/></figure>
+
+			<p class="normal">应用一些简单的操作，我们得到以下结果:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_018.png" alt=""/></figure>
+
+			<p class="normal">最后一项表示<em class="italics">p</em>T34】数据和<em class="italics">p</em>T38】g之间的詹森-香农散度。这种度量类似于Kullback-Leibler散度，但它是对称的，并且限制在0和log 2之间。当两个分布相同时，<em class="italics"> D </em> <sub style="font-style: italic;"> JS </sub> = 0，但如果它们的支集(<img src="img/B14713_22_019.png" alt=""/>所在的值集)不相交，<em class="italics"> D </em> <sub style="font-style: italic;"> JS </sub> = log 2(而<img src="img/B14713_22_020.png" alt=""/>)。因此，价值函数可以表示为:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_021.png" alt=""/></figure>
+
+			<p class="normal">现在，应该更清楚的是<a id="_idIndexMarker1389"/>GAN试图最小化数据生成过程和生成器分布之间的Jensen-Shannon分歧。总的来说，这个程序相当有效；然而，当支撑不相交时，GAN没有关于真实距离的信息。</p>
+
+			<p class="normal">这种考虑(在Salimans T .、Goodfellow I .、Zaremba W .、Cheung V .、a .、Chen X .、的《训练GANs的改进技术》中进行了更精确的数学分析)arXiv:1606.03498【cs .LG])解释了为什么训练GAN会变得非常困难，以及为什么在许多情况下无法找到纳什均衡。出于这些原因，我们将在下一节分析一种替代方法。</p>
+
+			<p class="normal">完整的GAN算法(由作者提出)为:</p>
+
+			<ol>
+
+				<li class="list">设置历元数，<em class="italics"> N </em> <sub style="font-style: italic;">历元</sub>。</li>
+
+				<li class="list">设置鉴别器迭代次数，<em class="italics"> N </em> <sub style="font-style: italic;"> iter </sub>(大多数情况下，<em class="italics"> N </em> <sub style="font-style: italic;"> iter </sub> = 1)。</li>
+
+				<li class="list">设置批量大小，<em class="italics"> k </em>。</li>
+
+				<li class="list">定义一个产生噪声的进程，<em class="italics"> N </em>(例如，<em class="italics"> N </em> = <em class="italics"> U </em> (-1，1))。</li>
+
+
+
+				<li class="list" value="5">For <em class="italics">e</em> = 1 to <em class="italics">N</em><sub style="font-style: italic;">epochs</sub>:<ol><li class="Numbered-Bullet-Within-Bullet--PACKT-" value="1">从<em class="italics"> X </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">从<em class="italics"> N </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em> <sub style="font-style: italic;"> iter </sub>:<ol>
+
+		
+
+				<li class="normal" value="1">计算梯度，<img src="img/B14713_22_022.png" alt=""/>(仅针对鉴别器变量)。期望值是样本平均值的近似值。</li>
+
+				<li class="normal">通过随机梯度上升更新鉴别器参数(因为我们使用对数，所以可以最小化负损失)。</li>
+
+</ol></li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">从<em class="italics"> N </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">计算梯度，<img src="img/B14713_22_023.png" alt=""/>(仅关于发电机变量)。</li>
+
+<li class="Numbered-Bullet-Within-Bullet-End--PACKT-">通过随机梯度下降更新发电机参数。<div> <p class="Information-Box--PACKT-">由于这些<a id="_idIndexMarker1390"/>模型需要对噪声向量进行采样，以保证再现性，我建议在NumPy ( <code class="Code-In-Text--PACKT-">np.random.seed(...)</code>)和TensorFlow ( <code class="Code-In-Text--PACKT-">tf..random.set_seed(...)</code>)中设置随机种子。所有这些实验选择的默认值是1，000。</p>T50】</div></li>
+
+</ol><h1 id="_idParaDest-330" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor344"/>深度卷积GANs</h1><pre>import tensorflow as tf
+import numpy as np
+nb_samples = 5000
+(X_train, _), (_, _) = \
+        tf.keras.datasets.fashion_mnist.load_data()
+X_train = X_train.astype(np.float32)[0:nb_samples]/255.0
+X_train = (2.0 * X_train) - 1.0
+width = X_train.shape[1]
+height = X_train.shape[2]
+code_length = 100
+generator = tf.keras.models.Sequential([
+    tf.keras.layers.Conv2DTranspose(
+        input_shape=(1, 1, code_length),
+        filters=1024,
+        kernel_size=(4, 4),
+        padding='valid'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2DTranspose(
+        filters=512,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2DTranspose(
+        filters=256,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2DTranspose(
+        filters=128,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2DTranspose(
+        filters=1,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same',
+        activation='tanh')
+])
+discriminator = tf.keras.models.Sequential([
+    tf.keras.layers.Conv2D(
+        input_shape=(64, 64, 1),
+        filters=128,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2D(
+        filters=256,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2D(
+        filters=512,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2D(
+        filters=1024,
+        kernel_size=(4, 4),
+        strides=(2, 2),
+        padding='same'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Conv2D(
+        filters=1,
+        kernel_size=(4, 4),
+        padding='valid')
+])
+p = tf.math.sigmoid(discriminator(x, training=False))
+def run_generator(z, training=False):
+    zg = tf.reshape(z, (-1, 1, 1, code_length))
+    return generator(zg, training=training)
+def run_discriminator(x, training=False):
+    xd = tf.image.resize(x, (64, 64))
+    return discriminator(xd, training=training)
+optimizer_generator = \
+    tf.keras.optimizers.Adam(0.0002, beta_1=0.5)
+optimizer_discriminator = \
+    tf.keras.optimizers.Adam(0.0002, beta_1=0.5)
+train_loss_generator = \
+    tf.keras.metrics.Mean(name='train_loss')
+train_loss_discriminator = \
+    tf.keras.metrics.Mean(name='train_loss')
+@tf.function
+def train(xi):
+    zn = tf.random.uniform(
+        (batch_size, code_length), -1.0, 1.0)
+    with tf.GradientTape() as tape_generator, \
+            tf.GradientTape() as tape_discriminator:
+        xg = run_generator(zn, training=True)
+        zd1 = run_discriminator(xi, training=True)
+        zd2 = run_discriminator(xg, training=True)
+        loss_d1 = tf.keras.losses.\
+            BinaryCrossentropy(from_logits=True)\
+            (tf.ones_like(zd1), zd1)
+        loss_d2 = tf.keras.losses.\
+            BinaryCrossentropy(from_logits=True)\
+            (tf.zeros_like(zd2), zd2)
+        loss_discriminator = loss_d1 + loss_d2
+        loss_generator = tf.keras.losses.\
+            BinaryCrossentropy(from_logits=True)\
+            (tf.ones_like(zd2), zd2)
+    gradients_generator = \
+        tape_generator.gradient(
+        loss_generator,
+        generator.trainable_variables)
+    gradients_discriminator = \
+        tape_discriminator.gradient(
+        loss_discriminator,
+        discriminator.trainable_variables)
+    optimizer_discriminator.apply_gradients(
+        zip(gradients_discriminator,
+            discriminator.trainable_variables))
+    optimizer_generator.apply_gradients(
+        zip(gradients_generator,
+            generator.trainable_variables))
+    train_loss_discriminator(loss_discriminator)
+    train_loss_generator(loss_generator)
+nb_epochs = 100
+batch_size = 128
+x_train_g = tf.data.Dataset.from_tensor_slices(
+        np.expand_dims(X_train, axis=3)).\
+        shuffle(1000).batch(batch_size)
+for e in range(nb_epochs):
+for xi in x_train_g:
+      		train(xi)
+        	print("Epoch {}: "
+                "Discriminator Loss: {:.3f}, "
+                "Generator Loss: {:.3f}".
+                 format(e + 1,
+                     train_loss_discriminator.result(),
+                     train_loss_generator.result()))
+train_loss_discriminator.reset_states()
+train_loss_generator.reset_states()
+Z = np.random.uniform(-1.0, 1.0, 
+                      size=(50, code_length)).\
+        astype(np.float32)
+Ys = run_generator(Z, training=False)
+Ys = np.squeeze((Ys + 1.0) * 0.5 * 255.0).\
+        astype(np.uint8)</pre><p class="normal">结果(取决于随机种子)如下图所示:</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_01.png" alt=""/></figure><p class="packt_figref">由用时尚-MNIST数据集训练的DCGAN生成的样本</p><p class="normal">作为一个练习，我邀请<a id="_idIndexMarker1399"/>读者采用更复杂的卷积架构和一个RGB数据集，如CIFAR-10(<a href="https://www.cs.toronto.edu/~kriz/cifar.html">https://www.cs.toronto.edu/~kriz/cifar.html</a>)。</p><h2 id="_idParaDest-332" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor346"/>模式崩溃</h2><p class="normal">我们已经看到，GAN是一个生成模型，它学习复制数据生成过程<em class="italics">p</em>T59】数据。在最好的情况下，根据预定义的<a id="_idIndexMarker1400"/>度量(例如，Kullback-Leibler散度)，人工分布<img src="img/B14713_22_027.png" alt=""/>足够接近<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>。然而，不幸的是，这种情况通常是不可能实现的，并且GAN学习到的分布仅部分重叠到数据生成过程上。从一般的观点来看，差异可能有两个不同的方面:</p><ul><li class="list">这两种分布在许多地区有所不同；因此，GAN不能输出任何正确的例子。</li>
+
+<li class="list">这两种分布在单个区域内有很强的重叠。</li>
+
+</ul><p class="normal">在第一种情况下，模型明显不足，有必要增加其容量并调整学习算法以实现更好的性能。在第二种情况下，GAN反而停留在高概率区域，并丢弃所有剩余的区域。这种特殊的现象被称为模式崩溃，这是影响这些模型的常见问题。给定一个分配<img src="img/B14713_22_028.png" alt=""/>，模式为<img src="img/B14713_22_029.png" alt=""/>对应<img style="height: 1.2em! important;" src="img/B14713_22_030.png" alt=""/>。例如，正态分布是单峰的，众数显然是<em class="italics"> x </em> = 0。相反，高斯混合是一种多模态分布，其中所有局部最大值都与不同模态相关联<a id="_idIndexMarker1401"/>，如下图所示:</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_02.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\F32CC0B5.tmp"/></figure><p class="packt_figref">单峰分布(左)。多模态分布(右)</p><p class="normal">从统计学的角度来看，一个模式很可能是一个数据点，因此GAN学会以很高的概率输出它(及其所有邻居)就不足为奇了。然而，真实世界的数据分布是多模态的，并且知道模态在哪里也是极其困难的(或者不可能的)。因此，只学会复制<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>的一个区域的GAN在小的子空间中崩溃，失去了输出其他样本的能力。不幸的是，即使已经发现并研究了模式坍缩，也没有显式的解决方案。具有更灵活的距离函数的模型(例如我们将在下一节中研究的模型)可以缓解这个问题并降低其概率。然而，GANs的使用应该总是包括一个大规模的测试阶段，以检查数据生成过程中是否有任何区域完全缺失。</p><p class="normal">测试并不简单，但在某些情况下(例如图像)，可以从GAN中采样许多值，测量它们的频率，并与预期值进行比较。例如，如果我们知道时尚-MNIST数据集有10个不同的类。在训练GAN并对1，000幅图像进行采样之后，我们应该预计每个类大约有100幅图像。例如，如果所有图像都是鞋子或鞋子完全丢失，则意味着GAN已经崩溃。在第一种情况下，效果是戏剧性的，这可能是由于糟糕的洗牌，阶级不平衡，或非常低的能力。因此，最简单的解决方案是检查数据集，如果它完全平衡，就增加模型的容量。在第二个<a id="_idIndexMarker1402"/>案例中，问题更加棘手，因为一个特定的类完全缺失了。如果所有其他图像都被正确再现，则问题可能取决于单元的过度专门化。</p><p class="normal">例如，卷积生成器可以变得越来越专业化，只输出衬衫和其他类似的形状。这是一种过拟合(即使相对于训练集的精度没有饱和)，并且一种潜在的缓解策略是基于丢弃层或其他正则化技术的使用。特别是，即使容量非常大，辍学也能够限制过度专业化，应作为首选。层正则化也是一种合理的方法，但是它增加了计算的复杂性，并且可能只产生次优的结果。</p><p class="normal">另一方面，当发生器在一个模式附近崩溃时，提供给鉴别器的信息将变得非常有限，并且它将因此失去能够在噪声和其他有效类别之间进行鉴别的机会。压差的使用(也在鉴别器中)可能有助于留下一些自由容量，可用于限制过拟合。这样，梯度被迫更慢地消失，双反馈发生器→鉴别器(反之亦然)可以在更长时间内有效。这显然不是一个通用的解决方案(问题非常复杂)，但这是一个在与GANs合作时应该记住的策略，因为与其他模型相反，它们可能会以不容易立即验证的方式失败。</p><h1 id="_idParaDest-333" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor347"/>甘</h1><p class="normal">如前<a id="_idIndexMarker1403"/>部分所述，标准GANs最困难的问题之一是由基于Jensen-Shannon散度的损失函数引起的，当两个分布具有不连续的支持时，损失函数的值变成常数。对于高维、语义结构化的数据集，这种情况很常见。例如，图像被限制为具有特定的特征，以表示特定的主题(这是第3章、<em class="italics">半监督学习介绍</em>中讨论的多种假设的结果)。初始生成器分布不太可能与真实数据集重叠，而且在许多情况下，它们彼此之间也相距甚远。这种情况增加了学习错误表示的风险(称为模式崩溃的问题)，即使鉴别器能够区分真实和生成的样本(当鉴别器相对于生成器学习太快时，这种情况出现)。此外，纳什均衡变得更难实现，GAN很容易在次优配置中保持阻塞。</p><p class="normal">为了缓解这个问题，Arjovsky、Chintala和Bottou(在Arjovsky M .、Chintala S .、Bottou L .、<em class="italics"> Wasserstein GAN </em>、arXiv:1701.07875【统计。ML])建议采用一种不同的散度，称为Wasserstein距离(或推土机距离)，其正式定义如下:</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_031.png" alt=""/></figure><p class="normal">术语<img src="img/B14713_22_032.png" alt=""/>表示<em class="italics">p</em>T3】数据和<em class="italics">p</em>g之间所有可能的联合概率分布的集合。因此，Wasserstein距离是<img src="img/B14713_22_033.png" alt=""/>的期望值集合的下确界(考虑所有联合分布)，其中<em class="italics"> x </em>和<em class="italics"> y </em>是从联合分布<img src="img/B14713_22_034.png" alt=""/>中采样的。</p><p class="normal">当对<img src="img/B14713_22_035.png" alt=""/>表示例如从像Word2Vec/Doc2Vec这样的算法获得的单词嵌入时，也可以直接使用Wasserstein距离<a id="_idIndexMarker1404"/>(关于进一步的细节，参见Mikolov T .、Sutskever I .、Chen K .、Corrado G. S .、Dean J .、<em class="italics">单词和短语的分布式表示及其组成性。神经信息处理系统的进展，</em> arXiv:1310.4546)或fastText (Bojanowski P .，Grave E .，Joulin A .，Mikolov T .，<em class="italics">用子词信息丰富词向量，</em>arXiv:1607.04606【cs .CL])。使用这些算法，文本的单词(或者还有<em class="italics"> n-grams </em>)被转换成高维向量，其距离与单词/句子的实际语义距离成比例。因此，GAN可以被训练来生成从语义上可接受的分布中采样的单词序列(例如，“苹果是水果”和“汽车是水果”应该被认为是从不同的分布中提取的，即使它们的组成非常相似)。</p><p class="normal">这个话题很有趣，同时也很复杂。事实上，如果一个轻微损坏的图像不能被人眼检测到(或者仅仅被认为是一个正常的图像)，一个有语义错误的句子几乎总是立即被识别为有缺陷的。因此，为了保证可靠的结果，这些模型必须用非常大的语料库进行训练(即使使用预先训练的向量，如基于维基百科的fastText)。</p><p class="normal">Wasserstein距离的主要性质是，即使两个分布具有不连续的支持，其值也与实际分布距离成比例。形式证明不是很复杂，但是更容易直观理解概念。事实上，给定两个支持度不连续的分布，下确界算子强制在每对可能的样本之间取最短的距离。显然，这种方法比詹森-香农散度更稳健，但是有一个实际的缺点:它非常难以计算。由于我们<a id="_idIndexMarker1405"/>无法处理所有可能的联合分布(也无法处理近似值)，因此有必要采取进一步措施来使用这个损失函数。在上述论文中，作者证明了应用变换是可能的，这归功于Kantorovich-Rubinstein定理(该主题相当复杂，但读者可以在 Edwards D. A .、<em class="italics">关于Kantorovich-Rubinstein定理、</em> Expositiones Mathematicae，2011)中找到更多信息<em class="italics">:</em></p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_036.png" alt=""/></figure><p class="normal">首先要考虑的是<img src="img/B14713_22_037.png" alt=""/>的性质。该定理要求只考虑L-Lipschitz函数，这意味着<img src="img/B14713_22_038.png" alt=""/>(假设定义在集合<em class="italics"> D </em>上的单变量的实值函数)必须遵守:</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_039.png" alt=""/></figure><p class="normal">此时，Wasserstein距离与两个期望值之差的上确界(关于所有L-Lipschitz函数)成比例，这非常容易计算。在WGAN中，<img src="img/B14713_22_040.png" alt=""/>函数由神经网络表示；因此，我们对Lipschitz条件没有任何保证。为了解决这个问题，作者建议了一个非常简单的程序:裁剪鉴别器(通常称为critic)，其职责是在应用校正后表示参数化函数<img src="img/B14713_22_041.png" alt=""/>变量。如果输入是有界的，所有的变换将产生有界的输出；然而，削波因子必须足够小(0.01，甚至更小)，以避免多次运算的叠加效应导致Lipschitz条件的反转。</p><p class="normal">这不是一个有效的解决方案(因为它在不必要的时候减慢了训练过程)，但是它允许利用Kantorovich-Rubinstein定理，即使没有对函数族施加正式的约束。</p><p class="normal">使用参数化函数(如深度卷积网络)，Wasserstein距离变为如下(省略项<em class="italics"> L </em>，它是常数):</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_042.png" alt=""/></figure><p class="normal">在前面的<a id="_idIndexMarker1406"/>表达式中，我们显式提取了生成器输出，在最后一步中，分离出将要单独优化的项。读者可能已经注意到计算比标准GAN简单，因为在这种情况下，我们只需对一批的<img src="img/B14713_22_043.png" alt=""/>值求平均值(不再需要对数)。然而，由于Critic变量被剪裁，所需的迭代次数通常会更大，为了补偿Critic和generator的训练速度之间的差异，通常需要设置<em class="italics"> N </em> <sub style="font-style: italic;"> critic </sub> &gt; 1(作者建议值等于5，但这是一个必须在每个特定上下文中调整的超参数)。</p><p class="normal">完整的WGAN算法是:</p><ol><li class="list" value="1">设置历元数，<em class="italics"> N </em> <sub style="font-style: italic;">历元</sub>。</li>
+
+<li class="list">设置批评家迭代次数，<em class="italics"> N </em> <sub style="font-style: italic;">批评家</sub>(大多数情况下，<em class="italics"> N </em> <sub style="font-style: italic;">批评家</sub> = 5)。</li>
+
+<li class="list">设置批量大小，<em class="italics"> k </em>。</li>
+
+<li class="list">设置一个限幅常数<em class="italics"> c </em>(例如<em class="italics"> c </em> = 0.01)。</li>
+
+<li class="list">定义一个产生噪声的进程<em class="italics"> N </em>(例如<em class="italics"> N </em> = <em class="italics"> U </em> (-1，1))。</li>
+
+</ol><ol><li class="list" value="6">对于<em class="italics"> e </em> = 1到<em class="italics"> N </em> <sub style="font-style: italic;">历元</sub>:<ol><li class="Numbered-Bullet-Within-Bullet--PACKT-" value="1">从<em class="italics"> X </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">从<em class="italics"> N </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em> <sub style="font-style: italic;">评论家</sub>:<ol>
+
+				<li class="normal" value="1">计算梯度，<img src="img/B14713_22_044.png" alt=""/>(仅针对Critic变量)。期望值是样本平均值的近似值。</li>
+
+				<li class="normal">通过随机梯度上升更新Critic参数。</li>
+
+				<li class="normal">在范围(<em class="italics"> -c </em>、<em class="italics"> c </em>)内裁剪Critic参数。</li>
+
+</ol></li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-" value="4">从<em class="italics"> N </em>中采样<em class="italics"> k </em>值。</li>
+
+<li class="Numbered-Bullet-Within-Bullet--PACKT-">计算梯度，<img src="img/B14713_22_045.png" alt=""/>(仅关于发电机变量)。</li>
+
+<li class="Numbered-Bullet-Within-Bullet-End--PACKT-">通过随机梯度下降更新发电机参数。</li>
+
+</ol></li>
+
+</ol><pre>def run_model(xi, zn, training=True):
+    xg = run_generator(zn, training=training)
+    zc1 = run_critic(xi, training=training)
+    zc2 = run_critic(xg, training=training)
+    loss_critic = tf.reduce_mean(zc2 - zc1)
+    loss_generator = tf.reduce_mean(-zc2)
+    return loss_critic, loss_generator
+import tensorflow as tf
+optimizer_generator = \
+    tf.keras.optimizers.Adam(
+        0.00005, beta_1=0.5, beta_2=0.9)
+optimizer_critic = \
+    tf.keras.optimizers.Adam(
+        0.00005, beta_1=0.5, beta_2=0.9)
+train_loss_generator = \
+    tf.keras.metrics.Mean(name='train_loss')
+train_loss_critic = \
+    tf.keras.metrics.Mean(name='train_loss')
+@tf.function
+def train_critic(xi):
+    zn = tf.random.uniform(
+        (batch_size, code_length), -1.0, 1.0)
+    with tf.GradientTape() as tape:
+        loss_critic, _ = run_model(xi, zn,
+                                   training=True)
+    gradients_critic = tape.gradient(
+        loss_critic,
+        critic.trainable_variables)
+    optimizer_critic.apply_gradients(
+        zip(gradients_critic,
+            critic.trainable_variables))
+    for v in critic.trainable_variables:
+        v.assign(tf.clip_by_value(v, -0.01, 0.01))
+    train_loss_critic(loss_critic)
+@tf.function
+def train_generator():
+    zn = tf.random.uniform(
+        (batch_size, code_length), -1.0, 1.0)
+    xg = tf.zeros((batch_size, width, height, 1))
+    with tf.GradientTape() as tape:
+        _, loss_generator = run_model(xg, zn,
+                                      training=True)
+    gradients_generator = tape.gradient(
+        loss_generator,
+        generator.trainable_variables)
+    optimizer_generator.apply_gradients(
+        zip(gradients_generator,
+            generator.trainable_variables))
+    train_loss_generator(loss_generator)
+nb_samples = 10240
+nb_epochs = 100
+nb_critic = 5
+batch_size = 64
+code_length = 256
+x_train = tf.data.Dataset.from_tensor_slices(
+        np.expand_dims(X_train, axis=3)).\
+        shuffle(1000).batch(nb_critic * batch_size)
+for e in range(nb_epochs):
+    for xi in x_train:
+            for i in range(nb_critic):
+                train_critic(xi[i * batch_size:
+                                (i + 1) * batch_size])
+            train_generator()
+        print("Epoch {}: "
+              "Critic Loss: {:.3f}, "
+              "Generator Loss: {:.3f}".
+              format(e + 1, 
+                     train_loss_critic.result(), 
+                     train_loss_generator.result()))
+        train_loss_critic.reset_states()
+        train_loss_generator.reset_states()</pre><p class="normal">在本例中，我们决定采用更大的训练集(10，240张图像)，批量大小等于64，每次迭代有5个评价步骤。我邀请读者采用一个更大的训练集(当然，计算成本将成比例增长)，并且测试不同数量的critical<a id="_idIndexMarker1411"/>步骤。在这种情况下，最佳选择基于原始论文。然而，找到合适值的简单方法是在训练期间监控两个损失。如果发生器的收敛速度比批判器快得多(即非常快地稳定到一个稳定值)，则<em class="italics"> n </em> <sub style="font-style: italic;">批判器</sub>必须增加。</p><p class="normal">理想情况下，两个组件应该具有相同的训练速度，以便保证从评论家到生成器的恒定信息流(取决于梯度的大小),反之亦然。如果后者过早停止修改变量，发生器将停止接收信息以提高<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>的再现质量，GAN将可能达到模式崩溃。另一方面，一个非常大的<em class="italics"> n </em> <sub style="font-style: italic;"> critic </sub>值可能会迫使模型在发生器达到令人满意的精度之前对critic进行过度专门化，从而导致GAN性能非常差。</p><p class="normal">生成50个随机样本的结果显示在下面的屏幕截图中:</p><figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_22_03.png" alt=""/></figure><p class="packt_figref">由用时尚-MNIST数据集训练的WGAN生成的样本</p><p class="normal">正如我们所看到的，质量略高于DCGAN，样品更光滑，清晰度更好<a id="_idIndexMarker1412"/>。我邀请读者也用RGB数据集来测试这个模型，因为最终的质量通常是非常好的(训练时间相应地更长)。</p><div><p class="Information-Box--PACKT-">使用这些模型时，训练时间可能会很长。为了避免等待看到初始结果(并执行所需的调优)，我建议使用Jupyter。通过这种方式，可以停止学习过程，检查发电机能力，并在没有任何问题的情况下重新启动它。当然，图表必须保持不变，变量初始化(在TensorFlow 2中，在定义模型时发生)必须只在开始时执行。</p>
+
+</div><h1 id="_idParaDest-335" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor349"/>总结</h1><p class="normal">在这一章中，我们讨论了对抗性训练的主要原则，并解释了两个参与者的角色:生成者和鉴别者。我们描述了如何使用minimax方法对它们进行建模和训练，该方法的双重目标是迫使生成器学习真实数据分布<em class="italics">p</em>T2数据，并让鉴别器完美地区分真实样本(属于<em class="italics">p</em>T6】数据)和不可接受的样本。在同一部分中，我们分析了GAN的内部动态以及一些常见问题，这些问题可能会减慢训练过程并导致次优的最终配置。</p><p class="normal">标准GANs遇到的最困难的问题之一是，当数据生成过程和发电机分布支持脱节时。在这种情况下，Jensen-Shannon散度变得恒定，并且不提供关于距离的精确信息。Wasserstein方法提供了一个很好的选择，它被用于一个更有效的模型，称为WGAN。这种方法可以有效地处理不连续的分布，但需要在critical上施加L-Lipschitz条件。标准方法是基于在每次梯度上升更新之后剪裁参数。这种简单的技术保证了L-Lipschitz条件，但必须使用非常小的削波系数，这会导致转换速度变慢。由于这个原因，在每个单独的生成器训练步骤之前，通常有必要重复训练批评家固定的次数(比如五次)。</p><p class="normal">在下一章中，我们将介绍另一种概率生成神经模型，它基于一种特殊的神经网络，称为受限玻尔兹曼机。</p><h1 id="_idParaDest-336" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor350"/>延伸阅读</h1><ul><li class="list">Goodfellow I. J .、Pouget-Abadie J .、Mirza M .、Xu B .、Warde-Farley D .、Ozair S .、Bengio Y .、<em class="italics">生成性对抗性网络</em>、arXiv:1406.2661【stat .ML]</li>
+
+<li class="list">塔德利斯s .，<em class="italics">博弈论</em>，普林斯顿大学出版社，2013</li>
+
+<li class="list">拉德福德a .，梅斯l .，钦塔拉s .，<em class="italics">深度卷积生成对抗网络的无监督表示学习</em>，arXiv:1511.06434【cs .LG]</li>
+
+<li class="list">Salimans T .、Goodfellow I .、Zaremba W .、Cheung V .、a .和Chen X .，<em class="italics">训练GANs的改进技术</em>，arXiv:1606.03498 [cs .LG]</li>
+
+<li class="list">Arjovsky M .、Chintala S .、Bottou L .、<em class="italics"> Wasserstein GAN </em>、arXiv:1701.07875【统计。ML]</li>
+
+<li class="list">Edwards D. A .，<em class="italics">关于Kantorovich-Rubinstein定理，数学阐述</em>，2011</li>
+
+<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版社，2019</li>
+
+<li class="list">Goodfellow I .，Bengio Y .，库维尔a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2016</li>
+
+<li class="list">Mikolov T .、Sutskever I .、Chen K .、Corrado G. S .、Dean J .，<em class="italics">词和短语的分布式表征及其组合性。神经信息处理系统的进展</em>，arXiv:1310.4546</li>
+
+<li class="list">Bojanowski P .，Grave E .，Joulin A .，Mikolov T .，<em class="italics">用子词信息丰富词向量</em>，arXiv:1607.04606【cs .CL]</li>
+
+<li class="list">Bonaccorso G .，<em class="italics">用Python进行动手无监督学习</em>，Packt出版社，2019</li>
+
+</ul></li>
+
+			</ol>
+
+		</div>
+
+
+
+</body></html>

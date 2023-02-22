@@ -1,0 +1,453 @@
+<html><head/><body>
+
+
+	
+		<title>B16060_03_Final_SMP_ePub</title>
+		
+	
+	
+		<div><div/>
+		</div>
+		<div><h1 id="_idParaDest-96">3.<a id="_idTextAnchor109"/>分类介绍</h1>
+		</div>
+		<div><p class="callout-heading">概观</p>
+			<p class="callout">本章向您介绍分类。您将实现各种技术，例如k-最近邻和支持向量机。您将使用欧氏距离和曼哈顿距离来处理k近邻。您将应用这些概念来解决有趣的问题，例如预测信用卡申请人是否有违约风险，以及确定员工是否会在一家公司工作两年以上。到本章结束时，你将有足够的信心使用分类处理任何数据，并得出一定的结论。</p>
+			<h1 id="_idParaDest-97"><a id="_idTextAnchor110"/>简介</h1>
+			<p>在上一章中，我们向您介绍了回归模型，并学习了如何用单变量或多变量以及高次多项式拟合线性回归模型。</p>
+			<p>与回归模型不同，回归模型侧重于学习如何预测连续数值(可以有无限个值)，分类(本章将介绍)是将数据分成单独的组，也称为类。</p>
+			<p>例如，可以训练一个模型来分析电子邮件，并预测它们是否是垃圾邮件。在这种情况下，数据被分为两个可能的组(或类)。这种分类也被称为<strong class="bold">二元分类</strong>，我们将在本章中看到几个这样的例子。然而，如果有两个以上的组(或类)，你将会处理一个<strong class="bold">多类分类</strong>(你会在<em class="italic">第4章</em>、<em class="italic">决策树介绍</em>中遇到一些这样的例子)。</p>
+			<p>但是什么是真实世界的分类问题呢？考虑一个试图预测给定用户对电影的评级的模型，其中该评分只能取值:<em class="italic">喜欢</em>、<em class="italic">中立</em>或<em class="italic">不喜欢</em>。这是一个分类问题。</p>
+			<p>在本章中，我们将学习如何使用k-最近邻分类器和SVM算法对数据进行分类。正如我们在前一章中对回归所做的那样，我们将基于清理和准备好的训练数据构建一个分类器，并使用测试数据测试我们的分类器的性能。</p>
+			<p>我们将从看分类的基础开始。</p>
+			<h1 id="_idParaDest-98"><a id="_idTextAnchor111"/>分类的基础</h1>
+			<p>如前所述，任何分类问题的目标都是使用训练集将数据准确地分成相关的组。这种项目在不同的行业有很多应用，例如教育，模型可以预测学生是否会通过考试，或者医疗保健，模型可以评估每个病人特定疾病的严重程度。</p>
+			<p>分类器是确定其所属的任何数据点的标签(输出)或值(类)的模型。例如，假设您有一组包含信用良好的个人的观察值，还有一组包含信用偿还倾向有风险的个人的观察值。</p>
+			<p>让我们称第一组为P，第二组为q。以下是此类数据的示例:</p>
+			<div><div><img src="img/B16060_03_01.jpg" alt="Figure 3.1: Sample dataset&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.1:样本数据集</p>
+			<p>使用这些数据，您将训练一个分类模型，该模型将能够正确地将新的观察结果分类到这两组中的一组(这是二元分类)。该模型可以发现一些模式，如工资高于6万美元的人风险较小，或者抵押贷款/收入比高于10的人不偿还债务的风险更大。这将是一次<strong class="bold">多级分类</strong>演习。</p>
+			<p>分类模型可以分为不同的算法家族。最著名的如下:</p>
+			<ul>
+				<li>基于距离的，比如<strong class="bold"> k近邻</strong></li>
+				<li>线性模型，如<strong class="bold">逻辑回归</strong>或<strong class="bold">支持向量机</strong></li>
+				<li>基于树，如<strong class="bold">随机森林</strong></li>
+			</ul>
+			<p>在本章中，将向您介绍来自前两种类型家族的两种算法:k-最近邻(基于距离)和支持向量机(线性模型)。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">我们将在第四章、<em class="italic">决策树介绍</em>中带您浏览基于树的算法，如随机森林。</p>
+			<p>但是在进入模型之前，我们需要清理和准备我们将在本章中使用的数据集。</p>
+			<p>在下一节中，我们将使用德国信用审批数据集，并执行建模阶段所需的所有数据准备。让我们从加载数据开始。</p>
+			<h2 id="_idParaDest-99"><a id="_idTextAnchor112"/>练习3.01:预测信用卡违约风险(加载数据集)</h2>
+			<p>在本练习中，我们将把一个数据集加载到一个pandas数据帧中，并探索其内容。我们将使用德国信用批准的数据集来确定个人是否存在违约风险。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这个数据集的CSV版本可以在我们的GitHub资源库中找到:</p>
+			<p class="callout"><a href="https://packt.live/3eriWTr">https://packt.live/3eriWTr</a>。</p>
+			<p class="callout">原始数据集和关于数据集的信息可以在<a href="https://archive.ics.uci.edu/ml/datasets/Statlog+%28German+Credit+Data%29">https://archive . ics . UCI . edu/ml/datasets/Statlog+% 28 german+Credit+Data % 29</a>找到。</p>
+			<p class="callout">数据文件位于<a href="https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/">https://archive . ics . UCI . edu/ml/machine-learning-databases/statlog/german/</a>。</p>
+			<p class="callout">引文- <em class="italic">杜瓦，d .，&amp;格拉夫，C..(2017).UCI机器学习知识库</em>。</p>
+			<ol>
+				<li>打开新的Jupyter笔记本文件。</li>
+				<li>将<code>pandas</code>包导入为<code>pd</code> : <pre>import pandas as pd</pre></li>
+				<li>创建一个名为<code>file_url</code>的新变量，它将包含原始数据集文件的URL，如下面的代码片段所示:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/german_credit.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>方法导入数据:<pre>df = pd.read_csv(file_url)</pre></li>
+				<li>Use <code>df.head()</code> to print the first five rows of the DataFrame:<pre>df.head()</pre><p>预期输出如下:</p><div><img src="img/B16060_03_02.jpg" alt="Figure 3.2: The first five rows of the dataset"/></div><p class="figure-caption">图3.2:数据集的前五行</p><p>正如您所看到的，前面的屏幕截图中的输出向我们展示了数据集的特征，可以是数字的，也可以是分类的(文本)。</p></li>
+				<li>Now, use <code>df.tail()</code> to print the last five rows of the DataFrame:<pre>df.tail()</pre><p>预期输出如下:</p><div><img src="img/B16060_03_03.jpg" alt="Figure 3.3: The last five rows of the dataset"/></div><p class="figure-caption">图3.3:数据集的最后五行</p><p>数据帧的最后几行与我们之前看到的第一行非常相似，因此我们可以假设各行之间的结构是一致的。</p></li>
+				<li>No<a id="_idTextAnchor113"/>w, use <code>df.dtypes</code> to print the list of columns and their data types:<pre>df.dtypes</pre><p>预期输出如下:</p><div><img src="img/B16060_03_04.jpg" alt="Figure 3.4: The list of columns and their data types&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图3.4:列及其数据类型的列表</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3hQXJEs">https://packt.live/3hQXJEs</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/3fN0DrT">https://packt.live/3fN0DrT</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>从前面的输出中，我们可以看到这个数据帧有一些数字特征(<code>int64</code>)和文本特征(<code>object</code>)。我们还可以看到，这些特征中的大多数要么是个人的个人信息，如年龄，要么是财务信息，如信用历史或信用额。</p>
+			<p>通过完成这个练习，我们已经成功地将数据加载到数据帧中，并初步了解了它包含的功能和信息。</p>
+			<p>在前面的主题中，我们将研究如何预处理这些数据。</p>
+			<h1 id="_idParaDest-100">数据预处理</h1>
+			<p>在构建分类器之前，我们需要格式化我们的数据，以便我们能够以最适合分类的格式保留相关数据，并删除所有我们不感兴趣的数据。</p>
+			<p>以下几点是实现这一目标的最佳方法:</p>
+			<ul>
+				<li><code>N/A</code> (or <code>NA</code>) values in the dataset, we may be better off substituting these values with a numeric value we can handle. Recall from the previous chapter that <code>NA</code> stands for <code>NA</code> values or replace them with an outlier value. <pre>df.fillna(-1000000, inplace=True)</pre><p><code>fillna()</code>方法将所有的<code>NA</code>值变为数值。</p><p>这个数值应该远离数据帧中的任何合理值。负一百万被分类器识别为异常，假设只有正值，如前所述。</p></li>
+				<li><code>0</code>) specifies that we drop rows, not columns. The second argument (<code>inplace=True</code>) specifies that we perform the drop operation without cloning the DataFrame, and will save the result in the same DataFrame. This DataFrame doesn't have any missing values, so the <code>dropna()</code> method didn't alter the DataFrame. <pre>df.drop(['telephone'], 1, inplace=True)</pre><p>第二个参数(值<code>1</code>)表示我们正在删除列，而不是行。第一个参数是我们想要删除的列的枚举(这里是<code>['telephone']</code>)。使用<code>inplace</code>参数，以便调用修改原始数据帧。</p></li>
+				<li><code>MinMaxScaler</code> method of the scikit-learn <code>preprocessing</code> utility, as shown in the following code snippet:<pre>from sklearn import preprocessing
+import numpy as np
+data = np.array([[19, 65], \
+                 [4, 52], \
+                 [2, 33]])
+preprocessing.MinMaxScaler(feature_range=(0,1)).fit_transform(data)</pre><p>预期输出如下:</p><pre>array([[1.        , 1.        ],
+       [0.11764706, 0.59375   ],
+       [0.        , 0.        ]])</pre><p>二进制化根据条件将数据转换为1和0，如以下代码片段所示:</p><pre>preprocessing.Binarizer(threshold=10).transform(data)</pre><p>预期输出如下:</p><pre>array([[1, 1],
+       [0, 1],
+       [0, 1]])</pre></li>
+			</ul>
+			<p>在前面的例子中，我们根据每个值是否大于<code>10</code>(由<code>threshold=10</code>参数定义)的条件，将原始数据<code>([19, 65],[4, 52],[2, 33])</code>转换成二进制形式。例如，第一个值<code>19</code>高于<code>10</code>，因此在结果中被替换为<code>1</code>。</p>
+			<p>标注编码对于为建模阶段准备要素(输入)非常重要。虽然您的一些要素是字符串标签，但scikit-learn算法希望将这些数据转换为数字。</p>
+			<p>这就是scikit-learn的<code>preprocessing</code>库发挥作用的地方。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">您可能已经注意到，在信用评分示例中，有两个数据文件。一个包含字符串形式的标签，而另一个包含整数形式的标签。我们加载了带有字符串标签的数据，这样您就有了一些如何使用标签编码器正确预处理数据的经验。</p>
+			<p>标签编码不是火箭科学。它创建了字符串标签和数值之间的映射，以便我们可以向scikit-learn提供数字，如下例所示:</p>
+			<pre>from sklearn import preprocessing
+labels = ['Monday', 'Tuesday', 'Wednesday', \
+          'Thursday', 'Friday']
+label_encoder = preprocessing.LabelEncoder()
+label_encoder.fit(labels)</pre>
+			<p>让我们列举编码:</p>
+			<pre>[x for x in enumerate(label_encoder.classes_)]</pre>
+			<p>预期输出如下:</p>
+			<pre>[(0, 'Friday'),
+ (1, 'Monday'),
+ (2, 'Thursday'),
+ (3, 'Tuesday'),
+ (4, 'Wednesday')]</pre>
+			<p>前面的结果向我们展示了scikit-learn已经为一周中的每一天创建了到相应数字的映射；比如<code>Friday</code>会是<code>0</code>，<code>Tuesday</code>会是<code>3</code>。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">默认情况下，scikit-learn通过按字母顺序对原始值进行排序来分配映射编号。这就是<code>Friday</code>映射到<code>0</code>的原因。</p>
+			<p>现在，我们可以使用这种映射(也称为编码器)来转换数据。</p>
+			<p>让我们用<code>transform()</code>方法在两个例子<code>Wednesday</code>和<code>Friday</code>上尝试一下:</p>
+			<pre>label_encoder.transform(['Wednesday', 'Friday'])</pre>
+			<p>预期输出如下:</p>
+			<pre>array([4, 0], dtype=int64)</pre>
+			<p>正如所料，我们得到了结果<code>4</code>和<code>0</code>，它们分别是<code>Wednesday</code>和<code>Friday</code>的映射值。</p>
+			<p>我们也可以使用这个编码器通过<code>inverse_transform</code>函数执行逆变换。让我们用值<code>0</code>和<code>4</code>来试试:</p>
+			<pre>label_encoder.inverse_transform([0, 4])</pre>
+			<p>预期输出如下:</p>
+			<pre>array(['Friday', 'Wednesday'], dtype='&lt;U9')</pre>
+			<p>正如所料，我们得到了值<code>Friday</code>和<code>Wednesday</code>。现在，让我们在德国数据集上练习我们所学的内容。</p>
+			<h2 id="_idParaDest-101"><a id="_idTextAnchor115"/>练习3.02:应用标签编码将分类变量转换为数值变量</h2>
+			<p>在本练习中，我们将使用我们刚刚学习的预处理技术之一，标签编码，将所有分类变量转换为数字变量。在训练任何机器学习模型之前，这一步都是必要的。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">我们将使用与上一练习中相同的数据集:德国信贷审批数据集:<a href="https://packt.live/3eriWTr">https://packt.live/3eriWTr</a>。</p>
+			<p>以下步骤将帮助您完成本练习:</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>将<code>pandas</code>包导入为<code>pd</code> : <pre>import pandas as pd</pre></li>
+				<li>创建一个名为<code>file_url</code>的新变量，它将包含原始数据集的URL:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/german_credit.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>方法加载数据:<pre>df = pd.read_csv(file_url)</pre></li>
+				<li>从<code>scikit-learn</code>导入<code>preprocessing</code>:<pre>from sklearn import preprocessing</pre></li>
+				<li>定义一个名为<code>fit_encoder()</code>的函数，该函数将数据帧和列名作为参数，并将在列的值上安装一个标签编码器。您将使用来自<code>preprocessing</code>的<code>.LabelEncoder()</code>和<code>.fit()</code>以及来自<code>pandas</code>的<code>.unique()</code>(这将提取DataFrame列的所有可能值):<pre>def fit_encoder(dataframe, column):     encoder = preprocessing.LabelEncoder()     encoder.fit(dataframe[column].unique())     return encoder</pre></li>
+				<li>定义一个名为<code>encode()</code>的函数，它将数据帧、列名和标签编码器作为参数，并将使用标签编码器转换列的值。您将使用<code>.transform()</code>方法来做到这一点:<pre>def encode(dataframe, column, encoder):     return encoder.transform(dataframe[column])</pre></li>
+				<li>Create a new DataFrame called <code>cat_df</code> that contains only non-numeric columns and print its first five rows. You will use the <code>.select_dtypes()</code> method from pandas and specify <code>exclude='number'</code>:<pre>cat_df = df.select_dtypes(exclude='number')
+cat_df.head()</pre><p>预期输出(未显示所有列)如下:</p><div><img src="img/B16060_03_05.jpg" alt="Figure 3.5: First five rows of the DataFrame containing only non-numeric columns&#13;&#10;"/></div><p class="figure-caption">图3.5:仅包含非数字列的数据帧的前五行</p></li>
+				<li>Create a list called <code>cat_cols</code> that contains the column name of <code>cat_df</code> and print its content. You will use <code>.columns</code> from pandas to do this:<pre>cat_cols = cat_df.columns
+cat_cols</pre><p>预期输出如下:</p><pre>Index(['account_check_status', 'credit_history', 'purpose', 
+       'savings', 'present_emp_since', 'other_debtors', 
+       'property', 'other_installment_plans', 'housing', 
+       'job', 'telephone', 'foreign_worker'], dtype='object')</pre></li>
+				<li>创建一个<code>for</code>循环，它将遍历来自<code>cat_cols</code>的每一列，使用<code>fit_encoder()</code>安装一个标签编码器，并使用<code>encode()</code>函数:<pre>for col in cat_cols:     label_encoder = fit_encoder(df, col)     df[col] = encode(df, col, label_encoder)</pre>转换该列</li>
+				<li>Print the first five rows of <code>df</code>:<pre>df.head()</pre><p>预期输出如下:</p><div><img src="img/B16060_03_06.jpg" alt="Figure 3.6: First five rows of the encoded DataFrame&#13;&#10;"/></div></li>
+			</ol>
+			<p class="figure-caption">图3.6:编码数据帧的前五行</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Njh57h">https://packt.live/2Njh57h</a>。</p>
+			<p class="callout">你也可以在<a href="https://packt.live/2YZhtx5">https://packt.live/2YZhtx5</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>我们已经成功地编码了非数字列。现在，我们的数据帧只包含数值。</p>
+			<h2 id="_idParaDest-102"><a id="_idTextAnchor116"/>识别特征和标签</h2>
+			<p>在训练我们的模型之前，我们还必须执行最后两个步骤。第一个是将我们的特征从标签中分离出来(也称为响应变量或因变量)。<code>label</code>列是我们希望模型预测的列。对于德国信用数据集，在我们的例子中，它将是名为<code>default</code>的列，它告诉我们个人是否会存在违约风险。</p>
+			<p>要素是数据集中存在的所有其他列。该模型将使用这些列中包含的信息，并找到相关的模式，以便准确地预测相应的标签。</p>
+			<p>scikit-learn包要求将标签和特征存储在两个不同的变量中。幸运的是，pandas包提供了从名为<code>.pop()</code>的数据帧中提取列的方法。</p>
+			<p>我们将提取<code>default</code>列，并将其存储在一个名为<code>label</code>的变量中:</p>
+			<pre>label = df.pop('default')
+label</pre>
+			<p>预期输出如下:</p>
+			<pre>0      0
+1      1
+2      0
+3      0
+4      1
+      ..
+995    0
+996    0
+997    0
+998    1
+999    0
+Name: default, Length: 1000, dtype: int64</pre>
+			<p>现在，如果我们查看<code>df</code>的内容，我们会看到<code>default</code>列已经不存在了:</p>
+			<pre>df.columns</pre>
+			<p>预期输出如下:</p>
+			<pre>Index(['account_check_status', 'duration_in_month',
+       'credit_history', 'purpose', 'credit_amount',
+       'savings', 'present_emp_since',
+       'installment_as_income_perc', 'other_debtors',
+       'present_res_since', 'property', 'age',
+       'other_installment_plans', 'housing', 
+       'credits_this_bank', 'job', 'people_under_maintenance',
+       'telephone', 'foreign_worker'],
+      dtype='object')</pre>
+			<p>现在我们已经准备好了我们的特征和标签，我们需要将数据集分成训练集和测试集。</p>
+			<h2 id="_idParaDest-103"><a id="_idTextAnchor117"/>使用Scikit-Learn将数据分为训练和测试</h2>
+			<p>训练分类器之前需要的最后一步是将我们的数据分成训练集和测试集。我们已经在<em class="italic">第2章</em>、<em class="italic">回归介绍</em>中看到了如何做到这一点:</p>
+			<pre>from sklearn import model_selection
+features_train, features_test, \
+label_train, label_test = \
+model_selection.train_test_split(df, label, test_size=0.1, \
+                                 random_state=8)</pre>
+			<p><code>train_test_split</code>方法将我们的特征和标签打乱，然后分成一个训练数据集和一个测试数据集。</p>
+			<p>我们可以将测试数据集的大小指定为一个介于<code>0</code>和<code>1</code>之间的数字。<code>0.1</code>的<code>test_size</code>意味着数据的<code>10%</code>将进入测试数据集。您还可以指定一个<code>random_state</code>,这样，如果您再次运行这个代码，就会得到完全相同的分割。</p>
+			<p>我们将使用训练集来训练我们的分类器，并使用测试集来评估其预测性能。通过这样做，我们可以评估我们的模型是否过度拟合，并且已经学习了只与训练集相关的模式。</p>
+			<p>在下一节中，我们将向您介绍著名的k近邻分类器。</p>
+			<h1 id="_idParaDest-104"><a id="_idTextAnchor118"/>K-最近邻分类器</h1>
+			<p>现在我们已经有了训练和测试数据，是时候准备我们的分类器来执行k-最近邻分类了。在介绍了k近邻算法之后，我们将使用scikit-learn来执行分类。</p>
+			<h2 id="_idParaDest-105"><a id="_idTextAnchor119"/>介绍K-最近邻算法(KNN)</h2>
+			<p>分类算法的目标是划分数据，以便我们可以确定哪些数据点属于哪个组。</p>
+			<p>假设给我们一组分类点。我们的任务是确定一个新的数据点属于哪一类。</p>
+			<p>为了训练一个k近邻分类器(也称为KNN)，我们需要为训练集上的每个观察值提供对应的类，即它属于哪个组。该算法的目标是找到将导致该类别的特征之间的相关关系或模式。k-最近邻算法基于计算数据点之间距离的邻近测量。</p>
+			<p>两个最著名的邻近(或距离)度量是欧几里德距离和曼哈顿距离。我们将在下一节讨论更多的细节。</p>
+			<p>对于任何一个新的给定点，KNN将找到它的k个最近的邻居，看看在这k个邻居中哪个类是最频繁的，并将其分配给这个新的观察值。但是你可能会问，k是什么？确定k的值完全是任意的。您必须预先设置这个值。这不是算法可以学习的参数；需要由数据科学家来设定。这种参数称为<strong class="bold">超参数</strong>。理论上，可以将k的值设置在1到正无穷大之间。</p>
+			<p>有两个主要的最佳实践需要考虑:</p>
+			<ul>
+				<li>k应该总是一个奇数。这背后的原因是我们希望避免以平局告终的情况。例如，如果你设置k=4，碰巧一个点的两个邻居来自A类，另外两个来自B类，那么KNN不知道选择哪个类。为了避免这种情况，最好选择<em class="italic"> k=3 </em>或者<em class="italic"> k=5 </em>。</li>
+				<li>k越大，KNN就越精确。例如，如果我们比较<em class="italic"> k=1 </em>和<em class="italic"> k=15 </em>的情况，第二种情况会让您更有信心KNN会选择正确的类，因为它需要在做出决定之前查看更多的邻居。另一方面，在<em class="italic"> k=1 </em>的情况下，它只查看最近的邻居，并将相同的类分配给一个观察。但是我们怎么能确定它不是一个异常值或特例呢？多问问邻居会降低做出错误决定的风险。但这有一个缺点:k值越高，KNN做出预测的时间就越长。这是因为它将不得不执行更多的计算来获得一个观测的所有邻居之间的距离。由于这一点，你必须找到一个甜蜜点，这将给出正确的预测，而不牺牲太多的时间来作出预测。</li>
+			</ul>
+			<h2 id="_idParaDest-106"><a id="_idTextAnchor120"/>在Scikit-Learn中使用K-最近邻分类器的距离度量</h2>
+			<p>许多距离度量可以与k-最近邻算法一起工作。我们将介绍两种最常用的距离:两个数据点的欧几里德距离和曼哈顿距离。</p>
+			<h3 id="_idParaDest-107"><a id="_idTextAnchor121"/>欧几里德距离</h3>
+			<p>坐标分别为<code>A=(a1, a2, …, an)</code>和<code>B=(b1, b2, …, bn)</code>的两点<code>A</code>和<code>B</code>之间的距离，就是连接这两点的直线的长度。例如，如果A和B是二维数据点，欧几里德距离<code>d</code>将如下:</p>
+			<div><div><img src="img/B16060_03_07.jpg" alt="Figure 3.7: Visual representation of the Euclidean distance between A and B&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.7:A和B之间欧几里得距离的可视化表示</p>
+			<p>计算欧几里德距离的公式如下:</p>
+			<div><div><img src="img/B16060_03_08.jpg" alt="Figure 3.8: Distance between points A and B&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.8:A点和B点之间的距离</p>
+			<p>由于我们将在本书中使用欧几里德距离，让我们看看如何使用scikit-learn来计算多个点的距离。</p>
+			<p>我们必须从<code>sklearn.metrics.pairwise</code>导入<code>euclidean_distances</code>。该函数接受两组点，并返回一个矩阵，该矩阵包含每个点到第一组和第二组点的成对距离。</p>
+			<p>让我们以一个观察值Z为例，用坐标(<code>4, 4</code>)。在这里，我们想分别用坐标(<code>2, 3</code>)、(<code>3, 7</code>)和(<code>1, 6</code>)计算与其他三个点A、B和C的欧几里德距离:</p>
+			<pre>from sklearn.metrics.pairwise import euclidean_distances
+observation = [4,4]
+neighbors = [[2,3], [3,7], [1,6]]
+euclidean_distances([observation], neighbors)</pre>
+			<p>预期输出如下:</p>
+			<pre>array([[2.23606798, 3.16227766, 3.60555128]])</pre>
+			<p>这里Z=( <code>4,4</code>)和B=( <code>3,7</code>)的距离近似为<code>3.162</code>，这是我们在输出中得到的。</p>
+			<p>我们还可以计算同一集合中各点之间的欧几里德距离:</p>
+			<pre>euclidean_distances(neighbors)</pre>
+			<p>预期输出如下:</p>
+			<pre>array([[0.        , 4.12310563, 3.16227766],
+       [4.12310563, 0.        , 2.23606798],
+       [3.16227766, 2.23606798, 0.        ]])</pre>
+			<p>包含值<code>0</code>的对角线对应于每个数据点与其自身之间的欧几里德距离。这个矩阵相对于这条对角线是对称的，因为它计算两点的距离及其倒数。例如，第一行上的值<code>4.12310563</code>是A和B之间的距离，而第二行上的相同值对应于B和A之间的距离。</p>
+			<h2 id="_idParaDest-108"><a id="_idTextAnchor122"/>曼哈顿/海明距离</h2>
+			<p>曼哈顿(或汉明)距离的公式与欧几里德距离非常相似，但它不是使用平方根，而是依赖于计算数据点坐标差的绝对值:</p>
+			<div><div><img src="img/B16060_03_09.jpg" alt="Figure 3.9: The Manhattan and Hamming distance&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.9:曼哈顿和海明距离</p>
+			<p>你可以把曼哈顿的距离想象成我们在用网格而不是直线来计算距离:</p>
+			<div><div><img src="img/B16060_03_10.jpg" alt="Figure 3.10: Visual representation of the Manhattan distance between A and B&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.10:A和B之间曼哈顿距离的可视化表示</p>
+			<p>如上图所示，曼哈顿距离将沿着格网定义的路径从a到B点。</p>
+			<p>另一个有趣的特性是，在A和B之间可以有多条最短路径，但是它们的曼哈顿距离都相等。在前面的示例中，如果格网的每个像元都等于单位1，则高亮显示的所有三条最短路径的曼哈顿距离都将为9。</p>
+			<p>欧几里德距离是距离的更精确的概括，而曼哈顿距离稍微容易计算，因为您只需要找到绝对值之间的差，而不是计算平方之间的差，然后求根。</p>
+			<h2 id="_idParaDest-109"><a id="_idTextAnchor123"/>练习3.03:演示Matplotlib中的K-最近邻分类器算法</h2>
+			<p>假设我们有一个雇员数据列表。我们的特色是每周工作小时数和年薪。我们的标签表明员工是否在我们公司工作了2年以上。停留时间不足2年用0表示，大于等于2年用1表示。</p>
+			<p>我们想创建一个三近邻分类器，用于确定一名员工是否会在我们公司工作至少2年。</p>
+			<p>然后，我们将使用这个分类器来预测一个要求每周工作32小时、年收入52，000美元的员工是否会在该公司工作2年。</p>
+			<p>按照以下步骤完成本练习:</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">上述数据集可在位于https://packt.live/2V5VaV9<a href="https://packt.live/2V5VaV9">的GitHub</a>获得。</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li>将<code>pandas</code>包导入为<code>pd</code> : <pre>import pandas as pd</pre></li>
+				<li>创建一个名为<code>file_url()</code>的新变量，它将包含原始数据集的URL:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/employees_churned.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>方法加载数据:<pre>df = pd.read_csv(file_url)</pre></li>
+				<li>Print the rows of the DataFrame:<pre>df</pre><p>预期输出如下:</p><div><img src="img/B16060_03_11.jpg" alt="Figure 3.11: DataFrame of the employees dataset&#13;&#10;"/></div><p class="figure-caption">图3.11:雇员数据集的数据框架</p></li>
+				<li>从<code>scikit-learn</code>导入<code>preprocessing</code>:<pre>from sklearn import preprocessing</pre></li>
+				<li>用<code>feature_range=(0,1)</code>实例化一个<code>MinMaxScaler</code>并保存到一个名为<code>scaler</code> : <pre>scaler = preprocessing.MinMaxScaler(feature_range=(0,1))</pre>的变量中</li>
+				<li>Scale the DataFrame using <code>.fit_transform()</code>, save the results in a new variable called <code>scaled_employees</code>, and print its content:<pre>scaled_employees = scaler.fit_transform(df)
+scaled_employees</pre><p>预期输出如下:</p><pre>array([[0.        , 0.18518519, 0.        ],
+       [0.2       , 0.        , 0.        ],
+       [0.6       , 0.11111111, 0.        ],
+       [0.2       , 0.37037037, 0.        ],
+       [1.        , 0.18518519, 0.        ],
+       [1.        , 0.62962963, 1.        ],
+       [1.        , 0.11111111, 1.        ],
+       [0.6       , 0.37037037, 1.        ],
+       [1.        , 1.        , 1.        ],
+       [0.6       , 0.55555556, 1.        ]])</pre><p>在前面的代码片段中，我们缩放了原始数据集，使所有值的范围都在0和1之间。</p></li>
+				<li>从缩放后的数据中，提取三列中的每一列，并将它们保存到名为<code>hours_worked</code>、<code>salary</code>和<code>over_two_years</code>的三个变量中，如下面的代码片段所示:<pre>hours_worked = scaled_employees[:, 0] salary = scaled_employees[:, 1] over_two_years = scaled_employees[:, 2]</pre></li>
+				<li>将<code>matplotlib.pyplot</code>包作为<code>plt</code> : <pre>import matplotlib.pyplot as plt</pre>导入</li>
+				<li>Create two scatter plots with <code>plt.scatter</code> using <code>hours_worked</code> as the <em class="italic">x</em>-axis and <code>salary</code> as the <em class="italic">y</em>-axis, and then create different markers according to the value of <code>over_two_years</code>. You can add the labels for the <em class="italic">x</em> and <em class="italic">y</em> axes with <code>plt.xlabel</code> and <code>plt.ylabel</code>. Display the scatter plots with <code>plt.show()</code>:<pre>plt.scatter(hours_worked[:5], salary[:5], marker='+')
+plt.scatter(hours_worked[5:], salary[5:], marker='o')
+plt.xlabel("hours_worked")
+plt.ylabel("salary")
+plt.show()</pre><p>预期输出如下:</p><div><img src="img/B16060_03_12.jpg" alt="Figure 3.12: Scatter plot of the scaled data&#13;&#10;"/></div><pre>+ points represent the employees that stayed less than 2 years, while the <code>o</code> ones are for the employees who stayed for more than 2 years. </pre><p>现在，假设我们获得了一个新的观察值，并且我们想要使用缩放数据集的数据来计算欧几里德距离。</p></li>
+				<li>用坐标<code>[0.5, 0.26]</code> : <pre>observation = [0.5, 0.26]</pre>创建一个名为<code>observation</code>的新变量</li>
+				<li>从<code>sklearn.metrics.pairwise</code> : <pre>from sklearn.metrics.pairwise import euclidean_distances</pre>导入<code>euclidean_distances</code>功能</li>
+				<li>创建一个名为<code>features</code>的新变量，它将提取缩放数据集的前两列:<pre>features = scaled_employees[:,:2]</pre></li>
+				<li>Calculate the Euclidean distance between <code>observation</code> and <code>features</code> using <code>euclidean_distances</code>, save it into a variable called <code>dist</code>, and print its value, as shown in the following code snippet:<pre>dist = euclidean_distances([observation], features)
+dist</pre><p>预期输出如下:</p><pre>array([[0.50556627, 0.39698866, 0.17935412, 0.3196586 ,
+        0.50556627, 0.62179262, 0.52169714, 0.14893495,
+        0.89308454, 0.31201456]])</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3djY1jO">https://packt.live/3djY1jO</a>。</p><p class="callout">你也可以在https://packt.live/3esx7HF的<a href="https://packt.live/3esx7HF">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p></li>
+			</ol>
+			<p>从前面的输出中，我们可以看到三个最近的邻居如下:</p>
+			<ul>
+				<li><code>0.1564897</code>为点<code>[0.6, 0.37037037, 1.]</code></li>
+				<li><code>0.17114358</code>为点<code>[0.6, 0.11111111, 0.]</code></li>
+				<li><code>0.32150303</code>为点<code>[0.6, 0.55555556, 1.]</code></li>
+			</ul>
+			<p>如果我们选择<code>k=3</code>，KNN将查看这三个最近邻的类，由于其中两个的标签为<code>1</code>，它会将该类分配给我们的新观察值<code>[0.5, 0.26]</code>。这意味着我们的三近邻分类器会将这位新员工归类为更有可能呆上至少两年。</p>
+			<p>通过完成这个练习，我们看到了KNN分类器如何通过使用欧几里德距离找到一个新观察值的三个最近邻居来对其进行分类，然后将最频繁的类分配给它。</p>
+			<h2 id="_idParaDest-110"><a id="_idTextAnchor124"/>sci kit-learn中K-最近邻分类器的参数化</h2>
+			<p>分类器的参数化是您微调分类器准确性的地方。由于我们尚未了解k-最近邻的所有可能变化，因此我们将重点关注您将基于此主题理解的参数:</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">可以在这里访问k-nearest neighbors分类器的文档:<a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">http://sci kit-learn . org/stable/modules/generated/sk learn . neighbors . kneighborsclassifier . html</a>。</p>
+			<ul>
+				<li><code>n_neighbors</code>:这是k近邻算法的k值。默认值为<code>5</code>。</li>
+				<li><code>metric</code>:创建分类器时，您会看到一个名称——<code>Minkowski</code>。不要担心这个名字，你已经了解了一阶和二阶闵可夫斯基度规。该指标有一个<code>power</code>参数。对于<code>p=1</code>，闵可夫斯基度规与曼哈顿度规相同。对于<code>p=2</code>，闵可夫斯基度规与欧几里德度规相同。</li>
+				<li>这就是闵可夫斯基度规的力量。默认值为<code>2</code>。</li>
+			</ul>
+			<p>创建分类器后，必须指定这些参数:</p>
+			<pre>classifier = neighbors.KNeighborsClassifier(n_neighbors=50, p=2)</pre>
+			<p>然后，您必须用您的训练数据来拟合KNN分类器:</p>
+			<pre>classifier.fit(features, label)</pre>
+			<p><code>predict()</code>方法可用于预测任何新数据点的标签:</p>
+			<pre>classifier.predict(new_data_point)</pre>
+			<p>在下一个练习中，我们将使用scikit-learn中的KNN实现来自动查找最近邻并分配相应的类。</p>
+			<h2 id="_idParaDest-111"><a id="_idTextAnchor125"/>练习3.04:sci kit-learn中的K-最近邻分类</h2>
+			<p>在本练习中，我们将使用scikit-learn在德国信贷审批数据集上自动训练一个KNN分类器，并为<code>n_neighbors</code>和<code>p</code>超参数尝试不同的值，以获得最佳输出值。在拟合KNN之前，我们需要对数据进行缩放。</p>
+			<p>按照以下步骤完成本练习:</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">本练习是<em class="italic">练习3.02 </em>、<em class="italic">的后续，应用标签编码将分类变量转换为数值</em>。我们已经将来自<em class="italic">练习3.02 </em>、<em class="italic">的结果数据集保存在位于<a href="https://packt.live/2Yqdb2Q">https://packt.live/2Yqdb2Q</a>的GitHub存储库中，该练习应用标签编码将分类变量转换为数值</em>。</p>
+			<ol>
+				<li value="1">打开新的Jupyter笔记本。</li>
+				<li>导入<code>pandas</code>包为<code>pd</code> : <pre>import pandas as pd</pre></li>
+				<li>创建一个名为<code>file_url</code>的新变量，它将包含原始数据集的URL:<pre>file_url = 'https://raw.githubusercontent.com/'\            'PacktWorkshops/'\            'The-Applied-Artificial-Intelligence-Workshop/'\            'master/Datasets/german_prepared.csv'</pre></li>
+				<li>使用<code>pd.read_csv()</code>方法加载数据:<pre>df = pd.read_csv(file_url)</pre></li>
+				<li>从<code>scikit-learn</code>导入<code>preprocessing</code>:<pre>from sklearn import preprocessing</pre></li>
+				<li>用<code>feature_range=(0,1)</code>实例化<code>MinMaxScaler</code>并保存到一个名为<code>scaler</code> : <pre>scaler = preprocessing.MinMaxScaler(feature_range=(0,1))</pre>的变量中</li>
+				<li>安装缩放器，使用<code>.fit_transform()</code>将相应的变换应用于数据帧，并将结果保存到名为<code>scaled_credit</code> : <pre>scaled_credit = scaler.fit_transform(df)</pre>的变量中</li>
+				<li>将<code>response</code>变量(第一列)提取到名为<code>label</code> : <pre>label = scaled_credit[:, 0]</pre>的新变量中</li>
+				<li>将特性(除第一列之外的所有列)提取到一个名为<code>features</code> : <pre>features = scaled_credit[:, 1:]</pre>的新变量中</li>
+				<li>从<code>sklearn</code>导入<code>model_selection.train_test_split</code>:<pre>from sklearn.model_selection import train_test_split</pre></li>
+				<li>使用<code>train_test_split</code> : <pre>features_train, features_test, \ label_train, label_test = \ train_test_split(features, label, test_size=0.2, \                  random_state=7)</pre>用<code>test_size=0.2</code>和<code>random_state=7</code>将缩放数据集分割成训练集和测试集</li>
+				<li>从<code>sklearn</code>导入<code>neighbors</code>:<pre>from sklearn import neighbors</pre></li>
+				<li>实例化<code>KNeighborsClassifier</code>并保存到一个名为<code>classifier</code> : <pre>classifier = neighbors.KNeighborsClassifier()</pre>的变量中</li>
+				<li>Fit the k-nearest neighbors classifier on the training set:<pre>classifier.fit(features_train, label_train)</pre><p>由于我们没有提到k的值，所以默认为<code>5</code>。</p></li>
+				<li>Print the accuracy score for the training set with <code>.score()</code>:<pre>acc_train = classifier.score(features_train, label_train)
+acc_train</pre><p>您应该得到以下输出:</p><pre>0.78625</pre><p>这样，我们在使用默认超参数值:<em class="italic"> k=5 </em>和欧几里德距离的训练集上获得了<code>0.78625</code>的准确度分数。</p><p>让我们来看看测试集的分数。</p></li>
+				<li>Print the accuracy score for the testing set with <code>.score()</code>:<pre>acc_test = classifier.score(features_test, label_test)
+acc_test</pre><p>您应该得到以下输出:</p><pre>0.75</pre><p>测试集上的准确度分数下降到了<code>0.75</code>。这意味着我们的模型过度拟合，不能很好地概括看不见的数据。在下一个活动中，我们将尝试不同的超参数值，看看我们是否可以改进这一点。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2ATeluO">https://packt.live/2ATeluO</a>。</p><p class="callout">你也可以在https://packt.live/2VbDTKx<a href="https://packt.live/2VbDTKx">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p></li>
+			</ol>
+			<p>在本练习中，我们学习了如何将数据集分为训练集和测试集，并拟合KNN算法。我们的最终模型可以在75%的情况下准确预测个人是否更有可能违约。</p>
+			<h2 id="_idParaDest-112"><a id="_idTextAnchor126"/>活动3.01:提高信用评分的准确性</h2>
+			<p>在本活动中，您将实现k-最近邻分类器的参数化并观察最终结果。信用评分的准确率目前是75%。你需要想办法提高几个百分点。</p>
+			<p>您可以使用欧几里德距离和曼哈顿距离尝试不同的k值(<code>5</code>、<code>10</code>、<code>15</code>、<code>25</code>和<code>50</code>)。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">本活动要求您首先完成scikit-learn中的<em class="italic">练习3.04 </em>、<em class="italic">K-最近邻分类</em>，因为我们将在此使用之前准备的数据。</p>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">从<code>sklearn</code>导入<code>neighbors</code>。</li>
+				<li>创建一个函数，用指定的超参数实例化<code>KNeighborsClassifier</code>，用训练数据拟合它，并返回训练集和测试集的准确度分数。</li>
+				<li>使用您创建的函数，评估欧几里德距离和曼哈顿距离的k = ( <code>5</code>、<code>10</code>、<code>15</code>、<code>25</code>、<code>50</code>)的准确度分数。</li>
+				<li>找出超参数的最佳组合。</li>
+			</ol>
+			<p>预期输出如下:</p>
+			<pre>(0.775, 0.785)</pre>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这项活动的解决方案可以在第343页找到。</p>
+			<p>在下一节中，我们将向您介绍另一个机器学习分类器:一个<strong class="bold">支持向量机</strong> ( <strong class="bold"> SVM </strong>)。</p>
+			<h1 id="_idParaDest-113"><a id="_idTextAnchor127"/>用支持向量机分类</h1>
+			<p>我们在第二章、<em class="italic">回归介绍</em>中首次使用支持向量机进行回归。在本主题中，您将了解如何使用支持向量机进行分类。和往常一样，我们将使用scikit-learn在实践中运行我们的示例。</p>
+			<h2 id="_idParaDest-114"><a id="_idTextAnchor128"/>什么是支持向量机分类器？</h2>
+			<p>SVM的目标是在n维空间中找到一个表面，将该空间中的数据点分成多个类。</p>
+			<p>在二维空间中，这个曲面通常是一条直线。然而，在三维空间中，SVM经常发现一个平面。这些曲面在某种意义上是最佳的，因为它们基于机器可用的信息，因此它可以优化n维空间的分离。</p>
+			<p>由SVM找到的最佳分离子称为最佳分离超平面。</p>
+			<p>SVM用于找到分隔两组数据点的一个表面。换句话说，支持向量机是<strong class="bold">二元分类器</strong>。这并不意味着支持向量机只能用于二元分类。虽然我们只讨论了一个平面，但是通过概括任务本身，支持向量机可以用于将空间划分为任意数量的类。</p>
+			<p>分离器表面在最大化每个数据点到分离器表面的距离的意义上是最佳的。</p>
+			<p>向量是定义在n维空间上的数学结构，具有大小(长度)和方向。在二维空间中，绘制从原点到点(x，y)的向量(<em class="italic"> x，y </em>)。基于几何学，你可以利用勾股定理计算矢量的长度，通过计算横轴与矢量的夹角计算矢量的方向。</p>
+			<p>例如，在二维中，向量(3，-4)具有以下大小:</p>
+			<pre>np.sqrt( 3 * 3 + 4 * 4 )</pre>
+			<p>预期输出如下:</p>
+			<pre>5.0</pre>
+			<p>它有以下方向(以度为单位):</p>
+			<pre>np.arctan(-4/3) / 2 / np.pi * 360</pre>
+			<p>预期输出如下:</p>
+			<pre>-53.13010235415597</pre>
+			<h2 id="_idParaDest-115"><a id="_idTextAnchor129"/>了解支持向量机</h2>
+			<p>假设给定两组具有0和1两个不同类的点。为了简单起见，我们可以想象一个二维平面，它有两个特征:一个映射在横轴上，一个映射在纵轴上。</p>
+			<p>SVM的目的是找到将属于0类的点<code>A</code>、<code>D</code>、<code>C</code>、<code>B</code>和<code>H</code>与属于1类的点<code>E</code>、<code>F</code>和<code>G</code>分开的最佳分隔线:</p>
+			<p> </p>
+			<div><div><img src="img/B16060_03_13.jpg" alt="Figure 3.13: Line separating red and blue members&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.13:红色和蓝色成员的分隔线</p>
+			<p>但是分离并不总是那么明显。例如，如果在<code>E</code>、<code>F</code>和<code>G</code>之间有一个0类的新点，则没有一条线可以在不导致错误的情况下分隔所有点。如果来自类0的点围绕类1的点形成一个完整的圆，则没有直线可以将这两个集合分开:</p>
+			<div><div><img src="img/B16060_03_14.jpg" alt="Figure 3.14: Graph with two outlier points&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.14:带有两个异常点的图表</p>
+			<p>例如，在上图中，我们容许两个异常点，<code>O</code>和<code>P</code>。</p>
+			<p>在下面的解决方案中，我们不容许异常值，我们创建了由两条半直线组成的最佳分离路径，而不是直线:</p>
+			<p> </p>
+			<div><div><img src="img/B16060_03_15.jpg" alt="Figure 3.15: Graph removing the separation of the two outliers&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图3.15:去除两个异常值分离的图形</p>
+			<p>所有数据点的完美分离很少值得投入资源。因此，可以对SVM进行正则化，以简化和限制最佳分离形状的定义，并允许异常值。</p>
+			<p>SVM的正则化参数决定了允许或禁止错误分类的错误率。</p>
+			<p>SVM有一个核参数。线性核严格使用线性方程来描述最佳分离超平面。多项式核使用多项式，而指数核使用指数表达式来描述超平面。</p>
+			<p>页边距是以分隔符为中心的区域，以最靠近分隔符的点为边界。平衡边距包含每个类中与直线等距的点。</p>
+			<p>当定义最佳分离超平面的允许误差率时，伽马参数决定在确定分隔符的位置时是否只有靠近分隔符的点才算数，或者是否离线最远的点也算数。灰度系数越高，影响分隔符位置的点数越少。</p>
+			<h2 id="_idParaDest-116"><a id="_idTextAnchor130"/>sci kit-learn中的支持向量机</h2>
+			<p>我们的切入点是<em class="italic">活动3.02 </em>，<em class="italic">sci kit-learn</em>中的支持向量机优化的最终结果。一旦我们分割了训练和测试数据，我们就可以设置分类器了:</p>
+			<pre>features_train, features_test, \
+label_train, label_test = \
+model_selection.train_test_split(scaled_features, label,\
+                                 test_size=0.2)</pre>
+			<p>我们将使用<code>svm.SVC()</code>分类器，而不是使用k-最近邻分类器:</p>
+			<pre>from sklearn import svm
+classifier = svm.SVC()
+classifier.fit(features_train, label_train)
+classifier.score(features_test, label_test)</pre>
+			<p>预期输出如下:</p>
+			<pre>0.745</pre>
+			<p>似乎scikit-learn的默认SVM分类器比k-最近邻分类器做得稍好。</p>
+			<h2 id="_idParaDest-117"><a id="_idTextAnchor131"/>sci kit-learn SVM的参数</h2>
+			<p>以下是scikit-learn SVM的参数:</p>
+			<ul>
+				<li><code>kernel</code>:这是一个字符串或可调用参数，指定算法中使用的内核。预定义的内核有<code>linear</code>、<code>poly</code>、<code>rbf</code>、<code>sigmoid</code>和<code>precomputed</code>。默认值为<code>rbf</code>。</li>
+				<li><code>degree</code>:使用多项式时，可以指定多项式的次数。默认值为<code>3</code>。</li>
+				<li><code>gamma</code>:这是<code>rbf</code>、<code>poly</code>和<code>sigmoid</code>的核系数。默认值为<code>auto</code>，计算方式为<em class="italic">1/特征数量</em>。</li>
+				<li><code>C</code>: This is a floating-point number with a default of <code>1.0</code> that describes the penalty parameter of the error term.<p class="callout-heading">注意</p><p class="callout">你可以在<a href="http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">http://sci kit-learn . org/stable/modules/generated/sk learn . SVM . SVC . html</a>上的参考文档中了解这些参数。</p></li>
+			</ul>
+			<p>这是一个SVM的例子:</p>
+			<pre>classifier = svm.SVC(kernel="poly", C=2, degree=4, gamma=0.05)</pre>
+			<h2 id="_idParaDest-118"><a id="_idTextAnchor132"/>活动3.02:sci kit-learn中的支持向量机优化</h2>
+			<p>在本练习中，您将使用、比较和对比不同的支持向量机分类器参数。这样，您将发现一组参数，这些参数导致我们在<em class="italic">活动3.01、</em> <em class="italic">中加载和准备的训练和测试数据的最高分类数据，从而提高信用评分的准确性</em>。</p>
+			<p>您必须为SVM设定不同的超参数组合:</p>
+			<ul>
+				<li><code>kernel="linear"</code></li>
+				<li><code>kernel="poly", C=1, degree=4, gamma=0.05</code></li>
+				<li><code>kernel="poly", C=1, degree=4, gamma=0.05</code></li>
+				<li><code>kernel="poly", C=1, degree=4, gamma=0.25</code></li>
+				<li><code>kernel="poly", C=1, degree=4, gamma=0.5</code></li>
+				<li><code>kernel="poly", C=1, degree=4, gamma=0.16</code></li>
+				<li><code>kernel="sigmoid"</code></li>
+				<li><code>kernel="rbf", gamma=0.15</code></li>
+				<li><code>kernel="rbf", gamma=0.25</code></li>
+				<li><code>kernel="rbf", gamma=0.5</code></li>
+				<li><code>kernel="rbf", gamma=0.35</code></li>
+			</ul>
+			<p>以下步骤将帮助您完成此活动:</p>
+			<ol>
+				<li value="1">打开一个新的Jupyter笔记本文件，执行前面提到的所有步骤，<em class="italic">练习3.04 </em>，<em class="italic">sci kit中的K-最近邻分类-学习</em>。</li>
+				<li>从<code>sklearn</code>导入<code>svm</code>。</li>
+				<li>创建一个函数，用指定的超参数实例化SVC，拟合训练数据，并返回训练集和测试集的准确度分数。</li>
+				<li>使用您创建的函数，评估不同超参数组合的准确度分数。</li>
+				<li>找出超参数的最佳组合。</li>
+			</ol>
+			<p>预期输出如下:</p>
+			<pre>(0.78125, 0.775)</pre>
+			<p class="callout-heading">注意</p>
+			<p class="callout">这项活动的解决方案可在第347页找到。</p>
+			<h1 id="_idParaDest-119"><a id="_idTextAnchor134"/>总结</h1>
+			<p>在这一章中，我们学习了分类的基础知识和回归问题之间的区别。分类是用有限的可能值预测一个响应变量。对于任何数据科学项目，数据科学家都需要在训练模型之前准备数据。在本章中，我们学习了如何标准化数值和替换缺失值。然后，向您介绍了著名的k-nearest neighbors算法，并了解了它如何使用距离度量来查找数据点的最近邻，然后在它们之间分配最频繁的类。我们还学习了如何将SVM应用于分类问题，并调整其一些超参数，以提高模型的性能并减少过度拟合。</p>
+			<p>在下一章，我们将带你了解一种不同类型的算法，叫做决策树。</p>
+		</div>
+	
+
+</body></html>

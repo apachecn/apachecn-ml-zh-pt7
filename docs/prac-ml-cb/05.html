@@ -1,0 +1,343 @@
+<html><head/><body>
+
+
+
+<title>Chapter 5. Nonlinearity</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05"/>第五章。非线性</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">广义加法模型——测量新西兰的家庭收入</li><li class="listitem" style="list-style-type: disc">平滑样条-理解汽车和速度</li><li class="listitem" style="list-style-type: disc">局部回归-了解干旱预警和影响</li></ul></div><div><div><div><div><h1 class="title"><a id="ch05lvl1sec26"/>广义加法模型——衡量新西兰家庭收入</h1></div></div></div><p>收入调查提供了个人和家庭收入水平的概况。它给出了大多数来源的中值和平均周收入。有不同人群的收入比较。收入只是断断续续地收到，而消费随着时间的推移是平稳的。因此，有理由预期消费与当前生活水平的关系比与当前收入的关系更直接，至少在短期内是如此。</p><div><div><div><div><h2 class="title">准备就绪</h2></div></div></div><p>为了执行收缩方法，我们将使用2013年新西兰人口普查收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch05lvl3sec68"/>步骤1 -收集和描述数据</h3></div></div></div><p><code class="literal">nzcensus</code>包包含新西兰超过60个的人口统计值。这些值是在网格块、区域单位、地区当局和区域委员会的级别上累积的。</p></div></div><div><div><div><div><h2 class="title"><a id="ch05lvl2sec28"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch05lvl3sec69"/>步骤2 -探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">
+<strong>
+&gt; devtools::install_github("ellisp/nzelect/pkg2")</strong>
+<strong>&gt; library(leaflet)</strong>
+<strong>&gt; library(nzcensus)</strong>
+<strong>&gt; library(Metrics)</strong>
+<strong>&gt; library(ggplot2)</strong>
+<strong>&gt; library(scales)</strong>
+<strong>&gt; library(boot)</strong>
+<strong>&gt; library(dplyr)</strong>
+<strong>&gt; library(Hmisc)</strong>
+<strong>&gt; library(mgcv)</strong>
+<strong>&gt; library(caret)</strong>
+<strong>&gt; library(grid)</strong>
+<strong>&gt; library(stringr)</strong>
+<strong>&gt; library(ggrepel)</strong>
+<strong>&gt; library(glmnet)</strong>
+<strong>&gt; library(maps)</strong>
+</pre><p>从数据集中移除查塔姆群岛。<code class="literal">AreaUnits2013</code>是一个esriGeometryPolygon几何类型对象。它定义了2013年人口普查模式中的面积单位:</p><pre class="programlisting">
+<strong>    &gt; tmp &lt;- AreaUnits2013[AreaUnits2013$WGS84Longitude&gt; 0 &amp; !is.na(AreaUnits2013$MedianIncome2013), ]</strong>
+</pre><p>创建调色板功能:</p><pre class="programlisting">
+<strong>    &gt; palette &lt;- colorQuantile("RdBu", NULL, n = 10)</strong>
+</pre><p>为弹出窗口创建标签。<code class="literal">paste0()</code>函数在转换成字符后连接向量:</p><pre class="programlisting">
+<strong>    &gt; labels &lt;- paste0(tmp$AU_NAM, " $", format(tmp$MedianIncome2013, big.mark = ","))</strong>
+</pre><p>绘制地图:</p><pre class="programlisting">
+<strong>&gt; leaflet() %&gt;%</strong>
+<strong>+ addProviderTiles("CartoDB.Positron") %&gt;%</strong>
+<strong>+ addCircles(lng = tmp$WGS84Longitude, lat = tmp$WGS84Latitude,</strong>
+<strong>+ color = pal(-tmp$MedianIncome2013),</strong>
+<strong>+ popup = labs,</strong>
+<strong>+ radius = 500) %&gt;%</strong>
+<strong>+ addLegend(</strong>
+<strong>+ pal = pal,</strong>
+<strong>+ values = -tmp$MedianIncome2013,</strong>
+<strong>+ title = "Quantile of median&lt;br&gt;household income",</strong>
+<strong>+ position = "topleft",</strong>
+<strong>+ bins = 5)
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_001.jpg" alt="Step 2 - exploring data"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec70"/>步骤3 -为模型设置数据</h3></div></div></div><p>将数据整理成方便的形状。消除区域的代码和名称，以及多余的坐标系:</p><pre class="programlisting">
+<strong>    &gt; au &lt;- AreaUnits2013 %&gt;%     +  select(-AU2014, -AU_NAM, -NZTM2000Easting, -NZTM2000Northing) %&gt;%     +  select(-PropWorked40_49hours2013, -Prop35to39_2013, -PropFemale2013)     &gt; row.names(au) &lt;- AreaUnits2013$AU_NAM</strong>
+</pre><p>替换重复模式的所有出现。<code class="literal">gsub()</code>功能搜索图案<code class="literal">"_2013"</code>、<code class="literal">"2013"</code>和<code class="literal">"Prop"</code>，然后用<code class="literal">names(au)</code>替换它们:</p><pre class="programlisting">
+<strong> names(au) &lt;- gsub("_2013", "", names(au))
+&gt; names(au) &lt;- gsub("2013", "", names(au))
+&gt; names(au) &lt;- gsub("Prop", "", names(au))</strong>
+</pre><p>获取指示一组案例已完成的逻辑向量:</p><pre class="programlisting">
+<strong>    &gt; au &lt;- au[complete.cases(au), ]</strong>
+</pre><p>提供通用名称:</p><pre class="programlisting">
+<strong>    &gt; data_use &lt;- au</strong>
+</pre><p>探索<code class="literal">data_use</code>数据帧的维度。<code class="literal">dim()</code>函数返回<code class="literal">data_use</code>框架的尺寸。<code class="literal">data_use</code> <code class="literal">data</code>帧作为输入参数传递。结果清楚地表明有<code class="literal">1785</code>行数据和<code class="literal">69</code>列数据:</p><pre class="programlisting">
+<strong>    &gt; dim(data_use)</strong>
+</pre><p>结果如下:</p><p>从字符向量中创建语法上有效的名称并设置它们。<code class="literal">names()</code>函数设置<code class="literal">data_use</code>对象的名称，同时从返回的字符向量中创建语法上有效的名称:</p><div><img src="img/image_05_002.jpg" alt="Step 3 - setting up the data for the model"/></div><p>显示从<code class="literal">data_use</code>数据框创建的名称:</p><pre class="programlisting">
+<strong>    &gt; data_use &lt;- data_use[the_data$WGS84Longitude &gt; 100, ]</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; names(data_use) &lt;- make.names(names(data_use))</strong>
+</pre><p>Displaying the names created from the <code class="literal">data_use</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; names(data_use)</strong>
+</pre><p>The result is as follows:</p><p><a id="ch05lvl3sec71"/>步骤4 -建立模型</p><div><img src="img/image_05_003.jpg" alt="Step 3 - setting up the data for the model"/></div><p>估计非参数模型的强度。<code class="literal">spearman2()</code>计算Spearman的rho秩相关的平方及其推广，其中<em> x </em>可以与<em> y </em>非单调相关。这是通过计算<em>(排名(x)，rank(x)^2) </em>和<em> y </em>之间的Spearman倍数ρ平方来实现的:</p></div><div><div><div><div><h3 class="title">按降序排列数据:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; reg_data &lt;- spearman2(MedianIncome ~ ., data = data_use)</strong>
+</pre><p>Ordering data in descending order:</p><pre class="programlisting">
+<strong>    &gt; reg_data[order(-reg_data[ ,6])[1:15], ]</strong>
+</pre><p>The result is as follows:</p><p>将柔性样条分配给前15个变量。<code class="literal">terms()</code>函数从多个R数据对象中提取<code class="literal">terms</code>对象:</p><div><img src="img/image_05_004.jpg" alt="Step 4 - building the model"/></div><p>拟合广义可加模型。<code class="literal">reg_formula</code>是公式，而<code class="literal">data_use</code>是数据集。</p><p>绘图<code class="literal">gam_model</code>。</p><pre class="programlisting">
+<strong>&gt; reg_formula &lt;- terms(MedianIncome ~
+s(FullTimeEmployed, k = 6) +
+s(InternetHH, k = 6) +
+s(NoQualification, k = 5) +
+s(UnemploymentBenefit, k = 5) +
+s(Smoker, k = 5) +
+s(Partnered, k = 5) +
+s(Managers, k = 4) +
+s(Bachelor, k = 4) +
+s(SelfEmployed, k = 4) +
+s(NoMotorVehicle, k = 4) +
+s(Unemployed, k = 3) +
+s(Labourers, k = 3) +
+s(Worked50_59hours, k = 3) +
+s(Separated, k = 3) +
+s(Maori, k = 3) +
+s(WGS84Longitude, WGS84Latitude) +
+.,
+data = data_use)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; gam_model &lt;- gam(reg_formula, data = data_use) </strong>
+</pre><p>Plotting <code class="literal">gam_model</code>.</p><pre class="programlisting">
+<strong>    &gt; par(bty = "l", mar = c(5,4, 2, 1))     &gt; par(mar = rep(2, 4))     &gt; plot(gam_model, residuals = TRUE, pages = 1, shade = TRUE, seWithMean = TRUE, ylab = "")</strong>
+</pre><p>The result is as follows:</p><p>打印<code class="literal">rmses_gam_boot</code>数据帧:</p><div><img src="img/image_05_005.jpg" alt="Step 4 - building the model"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; rmses_gam_boot &lt;- boot(data = data_use, statistic = fit_gam, R = 99)</strong>
+</pre><p>Printing the <code class="literal">rmses_gam_boot</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; rmses_gam_boot</strong>
+</pre><p>The result is as follows:</p><p>计算<code class="literal">rmses_gam_boot$t</code>的平均值:</p><div><img src="img/image_05_006.jpg" alt="Step 4 - building the model"/></div><p>打印<code class="literal">gam_rmse</code>数据帧:</p><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; gam_rmse &lt;- mean(rmses_gam_boot$t)</strong>
+</pre><p>Printing the <code class="literal">gam_rmse</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; gam_rmse</strong>
+</pre><p>The result is as follows:</p><p><a id="ch05lvl1sec27"/>平滑样条-了解汽车和速度</p><div><img src="img/image_05_007.jpg" alt="Step 4 - building the model"/></div><p>为了确定统计学中拟合模型所需的参数，可以使用多种方法。在每种情况下，拟合都包括从数据中估计少量参数。除了估计参数之外，两个重要的阶段是识别合适的模型和验证模型。这些平滑方法可以以多种方式使用:帮助理解和生成平滑图，从平滑数据的形状中识别合适的参数模型，或者关注感兴趣的效果以消除无用的复杂效果。</p></div></div></div></div>
+
+
+
+
+
+<title>Smoothing splines - understanding cars and speed</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl2sec29"/>怎么做...</h1></div></div></div><p>让我们进入细节。</p><div><div><div><div><h2 class="title"><a id="ch05lvl3sec72"/>步骤1 -探索数据</h2></div></div></div><p>第一步是加载以下包:</p><div><div><div><div><h3 class="title">创建一个矩阵。<code class="literal">cbind()</code>函数获取数字序列并创建一个矩阵。然后将结果传递给<code class="literal">matrix()</code>函数，该函数创建两行矩阵。然后将结果存储在矩阵中:</h3></div></div></div><p><a id="ch05lvl3sec73"/>步骤2 -创建模型</p><pre class="programlisting">
+<strong>&gt; install.packages("graphics")
+&gt; install.packages("splines")
+&gt; library(graphics)
+&gt; library(splines)</strong>
+</pre><p>乔莱斯基因式分解创建正定矩阵<em> A </em>，可分解为<em>A = LL<sup>T</sup>T35】，其中<em> L </em>是具有正对角元素的下三角。函数计算一个实的、对称的、正定的方阵的Cholesky分解。然后将结果存储在<code class="literal">cholsky</code>中:</em></p><pre class="programlisting">
+<strong>    &gt; matrx = matrix(cbind(1,.99, .99,1),nrow=2)</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec73"/>Step 2 - creating the model</h3></div></div></div><p>Cholesky factorization creates positive-definite matrix <em>A</em>, which can be factored as <em>A=LL<sup>T</sup></em>, where <em>L</em> is lower triangular with positive diagonal elements. The <code class="literal">chol()</code> function computes Cholesky factorization of a real, symmetrical, positive-definite square matrix. The result is then stored in <code class="literal">cholsky</code>:</p><pre class="programlisting">
+<strong>&gt; cholsky = t(chol(matrx))
+&gt; nvars = dim(cholsky)[1]</strong>
+</pre><p>密度分布的观察次数:</p><div><img src="img/image_05_008.jpg" alt="Step 2 - creating the model"/></div><p>使用正态分布计算矩阵。<code class="literal">rnorm()</code>计算正态分布，用<code class="literal">numobs</code>作为要使用的观察值的数量。然后，<code class="literal">matrix()</code>函数将结果用于计算矩阵，其中<code class="literal">nrow=nvars</code>为两行，<code class="literal">ncol=numobs</code>为1000列。结果存储在<code class="literal">random_normal</code>中:</p><p>执行矩阵乘法。<code class="literal">cholsky</code>乘以矩阵<code class="literal">random_normal</code>:</p><pre class="programlisting">
+<strong>    &gt; numobs = 1000     
+&gt; set.seed(1)</strong>
+</pre><p>转置矩阵<code class="literal">X</code>:</p><pre class="programlisting">
+<strong>    &gt; random_normal = matrix(rnorm(nvars*numobs,10,1), nrow=nvars, ncol=numobs)</strong>
+</pre><p>创建矩阵的数据框。<code class="literal">as.data.frame()</code>函数创建数据框原始的、紧密耦合的变量集合，这些变量共享矩阵<code class="literal">newX</code>的许多属性:</p><pre class="programlisting">
+<strong>    &gt; X = cholsky %*% random_normal</strong>
+</pre><p>打印原始数据帧。<code class="literal">head()</code>函数返回原始数据帧的第一部分。原始数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>    &gt; newX = t(X)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; raw = as.data.frame(newX)</strong>
+</pre><p>Printing the raw data frame. The <code class="literal">head()</code> function returns the first part of the raw data frame. The raw data frame is passed as an input parameter:</p><pre class="programlisting">
+<strong>    &gt; head(raw)</strong>
+</pre><p>The result is as follows:</p><p>创建<code class="literal">random_normal</code>的转置数据帧。<code class="literal">t()</code>函数创建<code class="literal">random_normal</code>矩阵的转置矩阵，然后将其转换为紧密耦合的变量集合。这些共享矩阵的许多属性:</p><div><img src="img/image_05_009.jpg" alt="Step 2 - creating the model"/></div><p>将名称响应和<code class="literal">predictor1</code>结合起来。<code class="literal">c()</code>函数将参数response和<code class="literal">predictor1</code>组合成一个向量:</p><p><code class="literal">raw$predictor1</code>的3次方指数增长:</p><pre class="programlisting">
+<strong>    &gt; raw_original = as.data.frame(t(random_normal))</strong>
+</pre><p>打印<code class="literal">raw$predictor1_3</code>数据框。<code class="literal">head()</code>函数返回<code class="literal">raw$predictor1_3</code>数据帧的第一部分。<code class="literal">raw$predictor1_3data</code>帧作为输入参数传递:</p><pre class="programlisting">
+<strong>    &gt; names(raw) = c("response","predictor1")</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; raw$predictor1_3 = raw$predictor1^3</strong>
+</pre><p>Printing the <code class="literal">raw$predictor1_3</code> data frame. The <code class="literal">head()</code> function returns the first part of the <code class="literal">raw$predictor1_3</code> data frame. The <code class="literal">raw$predictor1_3data</code> frame is passed as an input parameter:</p><pre class="programlisting">
+<strong>    &gt; head(raw$predictor1_3)</strong>
+</pre><p>The result is as follows:</p><p><code class="literal">raw$predictor1</code>的2次方指数增长:</p><div><img src="img/image_05_010.jpg" alt="Step 2 - creating the model"/></div><p>打印<code class="literal">raw$predictor1_2</code>数据帧。<code class="literal">head()</code>函数返回<code class="literal">raw$predictor1_2</code>数据帧的第一部分。<code class="literal">raw$predictor1_2</code>数据帧作为输入参数传递:</p><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; raw$predictor1_2 = raw$predictor1^2</strong>
+</pre><p>以<code class="literal">raw$response ~ raw$predictor1_3</code>为公式建立普通最小二乘估计。<code class="literal">lm()</code>函数用于拟合线性模型。<code class="literal">raw$response ~ raw$predictor1_3</code>是公式。然后将结果存储在拟合数据框中:</p><pre class="programlisting">
+<strong>    &gt; head(raw$predictor1_2)</strong>
+</pre><p>打印拟合数据框:</p><p>结果如下:</p><div><img src="img/image_05_011.jpg" alt="Step 2 - creating the model"/></div><p>
+</p><p>Building an ordinary least squares estimation with <code class="literal">raw$response ~ raw$predictor1_3</code> as the formula. The <code class="literal">lm()</code> function is used to fit linear models. <code class="literal">raw$response ~ raw$predictor1_3</code> is the formula. The result is then stored in the fit data frame:</p><pre class="programlisting">
+<strong>    &gt; fit = lm(raw$response ~ raw$predictor1_3)</strong>
+</pre><p>普通最小二乘估计公式的绘制。<code class="literal">plot()</code>功能是用于绘制R对象的通用功能。<code class="literal">raw$response ~ raw$predictor1_3</code>公式作为函数值传递:</p><pre class="programlisting">
+<strong>    &gt; fit</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_012.jpg" alt="Step 2 - creating the model"/></div><p>
+</p><p>通过当前图添加直线函数:</p><pre class="programlisting">
+<strong>    &gt; plot(raw$response ~ raw$predictor1_3, pch=16, cex=.4, xlab="Predictor", ylab="Response", col ="red", main="Simulated Data with Slight Curve")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_013.jpg" alt="Step 2 - creating the model"/></div><p>
+</p><p>在<em> x </em>轴上拟合汽车和速度值:</p><pre class="programlisting">
+<strong>    &gt; abline(fit)</strong>
+</pre><p>拟合y轴上的汽车和速度值:</p><p>设置平滑曲线评估的点数:</p><div><img src="img/image_05_014.jpg" alt="Step 2 - creating the model"/></div><p><a id="ch05lvl3sec74"/>步骤3 -拟合平滑曲线模型</p><p>拟合两个变量之间的平滑曲线是一种非参数方法，因为传统回归方法的线性假设已经放宽。它被称为<strong>局部回归</strong>，因为在例如点<em> x </em>处的拟合被加权到最接近<em> x </em>的数据。</p><pre class="programlisting">
+<strong>    &gt; x_axis &lt;- with(cars, speed)</strong>
+</pre><p><code class="literal">loess.smooth()</code>函数绘制并添加一条计算出的平滑曲线到散点图。<code class="literal">x_axis</code>、<code class="literal">y_axis</code>是提供给绘图的x和y坐标的参数。<code class="literal">evaluation = eval.length</code>例如<code class="literal">eval_length = 50</code>，代表平滑曲线评估的点。<code class="literal">span=.75</code>是平滑度参数。<code class="literal">degree=1</code>是局部多项式的次数:</p><pre class="programlisting">
+<strong>    &gt; y_axis &lt;- with(cars, dist)</strong>
+</pre><p>打印<code class="literal">fit_loess</code>数据帧:</p><pre class="programlisting">
+<strong>    &gt; eval_length = 50</strong>
+</pre></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>Fitting a smooth curve between two variables is a non-parametric method, because the linearity assumptions of conventional regression methods have been relaxed. It is called <strong>local regression</strong>, because the fitting at, say, point <em>x</em>, is weighted toward the data nearest to <em>x</em>.</p><p>The <code class="literal">loess.smooth()</code> function plots and adds a smooth curve computed to a scatter plot. <code class="literal">x_axis</code>, <code class="literal">y_axis</code> are the arguments provided to the x and y coordinates of the plot. <code class="literal">evaluation = eval.length</code> for example <code class="literal">eval_length = 50</code>, represents the points for smooth curve evaluation. <code class="literal">span=.75</code> is the smoothness parameter. <code class="literal">degree=1</code> is the degree of the local polynomial:</p><pre class="programlisting">
+<strong>    &gt; fit_loess &lt;- loess.smooth(x_axis, y_axis, evaluation = eval_length, family="gaussian", span=.75, degree=1) </strong>
+</pre><p>使用局部拟合，根据一个或多个数值预测值来拟合多项式曲面。<code class="literal">loess()</code>函数拟合多项式曲面。<code class="literal">y_axis ~ x_axis</code>代表公式。<code class="literal">span=.75</code>是平滑度参数。<code class="literal">degree=1</code>是局部多项式的次数:</p><pre class="programlisting">
+<strong>    &gt; fit_loess</strong>
+</pre><p>打印<code class="literal">fit_loess_2</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_05_015.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p><p>Fitting a polynomial surface on the basis of one or more numerical predictors, using local fitting. The <code class="literal">loess()</code> function fits the polynomial surface. <code class="literal">y_axis ~ x_axis</code> represents the formula. <code class="literal">span=.75</code> is the smoothness parameter. <code class="literal">degree=1</code> is the degree of the local polynomial:</p><pre class="programlisting">
+<strong>    &gt; fit_loess_2 &lt;- loess(y_axis ~ x_axis, family="gaussian", span=.75, degree=1)</strong>
+</pre><p>生成<em> y </em>轴的最小和最大值的规则序列。<code class="literal">Seq()</code>函数以<code class="literal">length.out=eval_length</code>为例<code class="literal">eval_length = 50</code>，表示从<em> x </em>轴的最小和最大值生成的序列的期望长度:</p><pre class="programlisting">
+<strong>    &gt; fit_loess_2</strong>
+</pre><p>打印<code class="literal">new_x_axis</code>数据框:</p><p>结果如下:</p><div><img src="img/image_05_016.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p><p>Generating regular sequences of minimum and maximum values of the <em>y</em> axis. The <code class="literal">Seq()</code> function takes in <code class="literal">length.out=eval_length</code> for example <code class="literal">eval_length = 50</code>, which indicates the desired length of the sequence to be generated from the minimum and maximum values of the <em>x</em> axis:</p><pre class="programlisting">
+<strong>    &gt; new_x_axis = seq(min(x_axis),max(x_axis), length.out=eval_length)</strong>
+</pre><p>在<code class="literal">fit.loess</code>模型上设置95%的置信水平:</p><pre class="programlisting">
+<strong>    &gt; new_x_axis</strong>
+</pre><p>以<code class="literal">y_axis ~ x_axis</code>为公式建立普通最小二乘估计。<code class="literal">lm()</code>函数用于拟合线性模型。<code class="literal">y_axis ~ x_axis</code>是公式。然后将结果存储在<code class="literal">fit_lm</code>数据帧中:</p><p>打印<code class="literal">fit_lm</code>数据框:</p><div><img src="img/image_05_017.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>结果如下:</p><p>Setting a confidence level of 95% on the <code class="literal">fit.loess</code> model:</p><pre class="programlisting">
+<strong>    &gt; conf_int = cbind( </strong>
+<strong>     + predict(fit_loess_2, data.frame(x=new_x_axis)), </strong>
+<strong>     + predict(fit_loess_2, data.frame(x=new_x_axis))+ </strong>
+<strong>     + predict(fit_loess_2, data.frame(x=new_x_axis), se=TRUE)$se.fit*qnorm(1-.05/2), </strong>
+<strong>     + predict(fit_loess_2, data.frame(x=new_x_axis))- </strong>
+<strong>     + predict(fit_loess_2, data.frame(x=new_x_axis), se=TRUE)$se.fit*qnorm(1-.05/2) </strong>
+<strong>     + )</strong>
+</pre><p>Building an ordinary least squares estimation with <code class="literal">y_axis ~ x_axis</code> as the formula. The <code class="literal">lm()</code> function is used to fit linear models. <code class="literal">y_axis ~ x_axis</code> is the formula. The result is then stored in the <code class="literal">fit_lm</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; fit_lm = lm(y_axis ~ x_axis)</strong>
+</pre><p>构建多项式函数。<code class="literal">y_axis ~ poly(x_axis,3)</code>是三个自由度的多项式函数。<code class="literal">lm()</code>功能用于拟合线性模型。<code class="literal">y_axis ~ poly(x_axis,3)</code>是公式。然后将结果存储在<code class="literal">fit_poly</code>数据帧中:</p><pre class="programlisting">
+<strong>    &gt; fit_lm</strong>
+</pre><p>打印<code class="literal">fit_poly</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_05_018.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p><p>Building a polynomial function. <code class="literal">y_axis ~ poly(x_axis,3)</code> is a polynomial function with three degrees of freedom. The <code class="literal">lm()</code> function is used to fit linear models. <code class="literal">y_axis ~ poly(x_axis,3)</code> is the formula. The result is then stored in the <code class="literal">fit_poly</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; fit_poly = lm(y_axis ~ poly(x_axis,3) )</strong>
+</pre><p>构建自然样条函数。<code class="literal">y_axis ~ ns(x_axis, 3)</code>是自由度为3的自然样条函数。<code class="literal">lm()</code>功能用于拟合线性模型。<code class="literal">y_axis ~ ns(x_axis, 3)</code>是公式。然后将结果存储在<code class="literal">fit_nat_spline</code>数据帧中:</p><pre class="programlisting">
+<strong>    &gt; fit_poly</strong>
+</pre><p>打印<code class="literal">fit_nat_spline</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_05_019.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p><p>Building a natural spline function. <code class="literal">y_axis ~ ns(x_axis, 3)</code> is the natural spline function with degree 3 of freedom. The <code class="literal">lm()</code> function is used to fit linear models. <code class="literal">y_axis ~ ns(x_axis, 3)</code> is the formula. The result is then stored in the <code class="literal">fit_nat_spline</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; fit_nat_spline = lm(y_axis ~ ns(x_axis, 3) )</strong>
+</pre><p>样条曲线的平滑:</p><pre class="programlisting">
+<strong>    &gt; fit_nat_spline</strong>
+</pre><p>打印<code class="literal">fit_smth_spline</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_05_020.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p><p>Smoothing of the spline:</p><pre class="programlisting">
+<strong>    &gt; fit_smth_spline &lt;- smooth.spline(y_axis ~ x_axis, nknots=15)</strong>
+</pre><p><a id="ch05lvl3sec75"/>第4步-绘制结果</p><pre class="programlisting">
+<strong>    &gt; fit_smth_spline</strong>
+</pre><p>绘制模型:</p><p>结果如下:</p><div><img src="img/image_05_021.jpg" alt="Step 3 - fitting the smooth curve model"/></div><p>
+</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec75"/>Step 4 - plotting the results</h3></div></div></div><p>向图表中添加其他模型。用置信区间绘制黄土；</p><pre class="programlisting">
+<strong>    &gt; plot(x_axis, y_axis, xlim=c(min(x_axis),max(x_axis)), ylim=c(min(y_axis),max(y_axis)), pch=16, cex=.5, ylab = "Stopping Distance (feet)", xlab= "Speed (MPH)", main="Comparison of Models", sub="Splines")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_022.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p>绘制普通最小二乘估计。<code class="literal">predict()</code>函数根据线性模型预测值。<code class="literal">fit_lm</code>是类<code class="literal">lm</code>的对象:</p><pre class="programlisting">
+<strong>    &gt; matplot(new_x_axis, conf_int, lty = c(1,2,2), col=c(1,2,2), type = "l", add=T)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_023.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p>绘制多项式函数估计:</p><pre class="programlisting">
+<strong>    &gt; lines(new_x_axis, predict(fit_lm, data.frame(x=new_x_axis)), col="red", lty=3)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_024.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p>绘制自然样条函数:</p><pre class="programlisting">
+<strong>    &gt; lines(new_x_axis, predict(fit_poly, data.frame(x=new_x_axis)), col="blue", lty=4)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/B04714_05_38.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p>绘制平滑样条曲线:</p><pre class="programlisting">
+<strong>    &gt; lines(new_x_axis, predict(fit_nat_spline, data.frame(x=new_x_axis)), col="green", lty=5)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_025.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p>绘制内核曲线。<code class="literal">ksmooth()</code>功能:</p><pre class="programlisting">
+<strong>    &gt; lines(fit_smth_spline, col="dark grey", lty=6)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_026.jpg" alt="Step 4 - plotting the results"/></div><p>
+</p><p><a id="ch05lvl1sec28"/>局部回归——了解干旱预警和影响</p><pre class="programlisting">
+<strong>    &gt; lines(ksmooth(x_axis, y_axis, "normal", bandwidth = 5), col = 'purple', lty=7)</strong>
+</pre><p>干旱是一种自然灾害，其特点是降雨量低于预期或低于正常水平。这种情况如果持续时间超过正常时间，就不足以满足人类活动的需求，并且对环境有害。干旱是一种暂时现象。干旱的三个主要特征是强度、持续时间和空间覆盖范围。干旱预警系统可以帮助识别气候变化，了解供水趋势，并为即将到来的紧急情况做好准备。干旱预警可以帮助决策者采取适当的措施来面对即将到来的挑战。然后，他们可以衡量影响的严重性，并了解脆弱性的根本原因，以降低特定位置、特定人群或经济部门的风险。</p><p>准备就绪</p><div><img src="img/image_05_027.jpg" alt="Step 4 - plotting the results"/></div><p>让我们从食谱开始吧。</p></div></div></div>
+
+
+
+
+
+<title>Local regression - understanding drought warnings and impact</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch05lvl3sec76"/>步骤1 -收集和描述数据</h1></div></div></div><p><code class="literal">dataRetrieval</code>包是帮助检索<strong>美国地质调查局</strong> ( <strong>美国地质调查局</strong>)和<strong>美国环境保护署</strong> ( <strong>美国环保局</strong>)的函数集合。</p><div><div><div><div><h2 class="title"><a id="ch05lvl2sec31"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch05lvl3sec77"/>步骤2 -收集和探索数据</h3></div></div></div><p>第一步是加载以下包:</p></div></div><div><div><div><div><h2 class="title">正在检索站点号。站点号通常是一个八位数，用字符串或向量表示:</h2></div></div></div><p>正在检索参数代码:</p><div><div><div><div><h3 class="title">使用站点号和参数代码从NWIS web服务导入数据。然后将结果存储在<code class="literal">Q_daily</code>数据帧中:</h3></div></div></div><p>打印<code class="literal">Q_daily</code>数据框。<code class="literal">tail()</code>函数返回<code class="literal">Q_daily</code>数据帧的最后一部分。<code class="literal">Q_daily</code>数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>&gt; library(dataRetrieval)
+&gt; library(dplyr)</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; siteNumber &lt;- c("01538000") </strong>
+</pre><p>Retrieving parameter codes:</p><pre class="programlisting">
+<strong>    &gt; parameterCd &lt;- "00060"</strong>
+</pre><p>Using site number and parameter codes importing data from NWIS web service. The result is then stored in the <code class="literal">Q_daily</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; Q_daily &lt;- readNWISdv(siteNumber, parameterCd)</strong>
+</pre><p>探索<code class="literal">Q_daily</code>数据帧的内部结构。<code class="literal">str()</code>功能显示数据帧的内部结构。<code class="literal">Q_daily</code>作为R对象传递给<code class="literal">str()</code>函数:</p><pre class="programlisting">
+<strong>    &gt; tail(Q_daily)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_028.jpg" alt="Step 2 - collecting and exploring data"/></div><p>
+</p><p>重命名列—<code class="literal">renameNWISColumns()</code>函数重命名从NWIS检索到的列。<code class="literal">Q_daily</code>是从NWIS网站检索的每日或单位值数据集:</p><pre class="programlisting">
+<strong>    &gt; str(Q_daily)</strong>
+</pre><p>打印重命名的<code class="literal">Q_daily</code>数据框。<code class="literal">tail()</code>函数返回<code class="literal">Q_daily</code>数据帧的最后一部分。<code class="literal">Q_daily</code>数据帧作为输入参数传递:</p><p>结果如下:</p><div><img src="img/image_05_029.jpg" alt="Step 2 - collecting and exploring data"/></div><p>从USGS文件站点导入数据。<code class="literal">readNWISsite()</code>功能使用代表USGS站点号的8位数字<code class="literal">siteNumber</code>。结果存储在<code class="literal">stationInfo</code>数据框中:</p><p><a id="ch05lvl3sec78"/>步骤3 -计算移动平均值</p><pre class="programlisting">
+<strong>    &gt; Q_daily &lt;- renameNWISColumns(Q_daily)</strong>
+</pre><p>检查缺少的天数:</p><pre class="programlisting">
+<strong>    &gt; tail(Q_daily)</strong>
+</pre><p>计算30天的移动平均值。<code class="literal">filter()</code>函数对时间序列进行线性过滤。<code class="literal">sides=1</code>，过滤系数仅适用于过去的值:</p><p>打印<code class="literal">Q_daily</code>数据帧。<code class="literal">tail()</code>函数返回<code class="literal">Q_daily</code>数据帧的最后一部分。<code class="literal">Q_daily</code>数据帧作为输入参数传递:</p><div><img src="img/image_05_030.jpg" alt="Step 2 - collecting and exploring data"/></div><p>结果如下:</p><p>Importing data from the USGS file site. The <code class="literal">readNWISsite()</code> function uses <code class="literal">siteNumber</code> 8 digit number which represents the USGS site number. The result is then stored in the <code class="literal">stationInfo</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; stationInfo &lt;- readNWISsite(siteNumber)</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec78"/>Step 3 - calculating the moving average</h3></div></div></div><p><a id="ch05lvl3sec79"/>步骤4 -计算百分位数</p><pre class="programlisting">
+<strong>&gt; if(as.numeric(diff(range(Q_daily$Date))) != (nrow(Q_daily)+1)){
++ fullDates &lt;- seq(from=min(Q_daily$Date),
++ to = max(Q_daily$Date), by="1 day")
++ fullDates &lt;- data.frame(Date = fullDates,
++ agency_cd = Q_daily$agency_cd[1],
++ site_no = Q_daily$site_no[1],
++ stringsAsFactors = FALSE)
++ Q_daily &lt;- full_join(Q_daily, fullDates,
++ by=c("Date","agency_cd","site_no")) %&gt;%
++ arrange(Date)
++ }</strong>
+</pre><p>计算历史百分位数。使用各自的概率计算各个分位数。然后，使用<code class="literal">summarize()</code>功能将数据框折叠成一行。最后，使用函数<code class="literal">group_by()</code>，表格形式的结果被转换并分组到一个表格中:</p><pre class="programlisting">
+<strong>    &gt; moving_avg &lt;- function(x,n=30){stats::filter(x,rep(1/n,n), sides=1)}     &gt;
+</strong>
+<strong>Q_daily &lt;- Q_daily %&gt;% mutate(rollMean = as.numeric(moving_avg(Flow)), day.of.year = as.numeric(strftime(Date, format = "%j")))</strong>
+</pre><p>从系统中获取当前年份:</p><pre class="programlisting">
+<strong>    &gt; tail(Q_daily)</strong>
+</pre><p>组合每个数据帧:</p><p>打印<code class="literal">Q_summary</code>数据帧:</p><div><img src="img/image_05_031.jpg" alt="Step 3 - calculating the moving average"/></div><p>结果如下:</p></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec79"/>Step 4 - calculating percentiles</h3></div></div></div><p>Calculating historical percentiles. The various quantiles are calculated using respective probabilities. Then, the data frame is collapsed into a single row, using the <code class="literal">summarize()</code> function. Finally, using the function <code class="literal">group_by()</code>, the results, which are in table form, are converted and grouped into a table:</p><pre class="programlisting">
+<strong>&gt; Q_summary &gt;- Q_daily %&gt;%
++ group_by(day.of.year) %&gt;%
++ summarize(p75 = quantile(rollMean, probs = .75, na.rm = TRUE),
++ p25 = quantile(rollMean, probs = .25, na.rm = TRUE),
++ p10 = quantile(rollMean, probs = 0.1, na.rm = TRUE),
++ p05 = quantile(rollMean, probs = 0.05, na.rm = TRUE),
++ p00 = quantile(rollMean, probs = 0, na.rm = TRUE))</strong>
+</pre><p>基于线性模型预测值并拟合多项式曲面。<code class="literal">loess()</code>函数适合多项式曲面。<code class="literal">p75~day.of.year</code>代表公式，而<code class="literal">span = smooth.span</code>例如<code class="literal">smooth.span= 0.3</code>控制平滑度:</p><pre class="programlisting">
+<strong>&gt; current_year &lt;- as.numeric(strftime(Sys.Date(), format = "%Y"))
+&gt; summary.0 &lt;- Q_summary %&gt;% mutate(Date = as.Date(day.of.year - 1,
+origin = paste0(current_year-2,"-01-01")), day.of.year = day.of.year - 365)
+&gt; summary.1 &lt;- Q_summary %&gt;% mutate(Date = as.Date(day.of.year - 1,
+origin = paste0(current_year-1,"-01-01")))
+&gt; summary.2 &lt;- Q_summary %&gt;% mutate(Date = as.Date(day.of.year - 1,
+origin = paste0(current_year,"-01-01")), day.of.year = day.of.year + 365)</strong>
+</pre><p>打印<code class="literal">Q_summary$sm.75</code>数据帧:</p><pre class="programlisting">    &gt; <strong>Q_summary &lt;- bind_rows(summary.0, summary.1, summary.2) </strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_05_032.jpg" alt="Step 4 - calculating percentiles"/></div><p>打印<code class="literal">Q_summary$sm.25</code>数据帧:</p><pre class="programlisting">
+<strong>    &gt; smooth.span &lt;- 0.3</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary$sm.75 &lt;- predict(loess(p75~day.of.year, data = Q_summary, span = smooth.span))</strong>
+</pre><p>Printing the <code class="literal">Q_summary$sm.75</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; head(Q_summary$sm.75)</strong>
+</pre><p>The result is as follows:</p><p>打印<code class="literal">Q_summary$sm.10</code>数据帧:</p><div><img src="img/image_05_033.jpg" alt="Step 4 - calculating percentiles"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary$sm.25 &lt;- predict(loess(p25~day.of.year, data = Q_summary, span = smooth.span))</strong>
+</pre><p>Printing the <code class="literal">Q_summary$sm.25</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; head(summaryQ$sm.25)</strong>
+</pre><p>The result is as follows:</p><p>打印<code class="literal">Q_summary$sm.05</code>数据帧:</p><div><img src="img/image_05_034.jpg" alt="Step 4 - calculating percentiles"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary$sm.10 &lt;- predict(loess(p10~day.of.year, data = Q_summary, span = smooth.span))</strong>
+</pre><p>Printing the <code class="literal">Q_summary$sm.10</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; head(summaryQ$sm.10)</strong>
+</pre><p>The result is as follows:</p><p>打印<code class="literal">Q_summary$sm.05</code>数据帧:</p><div><img src="img/image_05_035.jpg" alt="Step 4 - calculating percentiles"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary$sm.05 &lt;- predict(loess(p05~day.of.year, data = Q_summary, span = smooth.span))</strong>
+</pre><p>Printing the <code class="literal">Q_summary$sm.05</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; head(summaryQ$sm.05)</strong>
+</pre><p>The result is as follows:</p><p>打印<code class="literal">Q_summary</code>数据框:</p><div><img src="img/image_05_036.jpg" alt="Step 4 - calculating percentiles"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary$sm.00 &lt;- predict(loess(p00~day.of.year, data = Q_summary, span = smooth.span))</strong>
+</pre><p>Printing the <code class="literal">Q_summary$sm.05</code> data frame:</p><pre class="programlisting">
+<strong>    &gt; head(summaryQ$sm.00)</strong>
+</pre><p>The result is as follows:</p><p><a id="ch05lvl3sec80"/>步骤5 -绘制结果</p><div><img src="img/image_05_037.jpg" alt="Step 4 - calculating percentiles"/></div><p>绘制数据:</p><pre class="programlisting">
+<strong>    &gt; Q_summary &lt;- select(Q_summary, Date, day.of.year, sm.75, sm.25, sm.10, sm.05, sm.00) %&gt;% filter(Date &gt;= as.Date(paste0(current_year-1,"-01-01")))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; Q_summary</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_05_038.jpg" alt="Step 4 - calculating percentiles"/></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; latest.years &lt;- Q_daily %&gt;% filter(Date &gt;= as.Date(paste0(current_year-1,"-01-01"))) %&gt;% mutate(day.of.year = 1:nrow(.))</strong>
+</pre></div><div><div><div><div><h3 class="title"><a id="ch05lvl3sec80"/>Step 5 - plotting results</h3></div></div></div><p>Plotting the data:</p><pre class="programlisting">
+<strong>    &gt; title.text &lt;- paste0(stationInfo$station_nm,"n", "Provisional Data - Subject to changen", "Record Start = ", min(Q_daily$Date), "  Number of years = ", as.integer (as.numeric(difftime(time1 = max(Q_daily$Date), time2 = min(Q_daily$Date), units = "weeks"))/52.25), "nDate of plot = ",Sys.Date(), "  Drainage Area = ",stationInfo$drain_area_va, "mi^2")     &gt; mid.month.days &lt;- c(15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349)     &gt; month.letters &lt;- c("J","F","M","A","M","J","J","A","S","O","N","D")     &gt; start.month.days &lt;- c(1, 32, 61, 92, 121, 152, 182, 214, 245, 274, 305, 335)     &gt; label.text &lt;- c("Normal","DroughtWatch","DroughtWarning","Drought Emergency")     &gt; year1_summary &lt;- data.frame(Q_summary[2:366,])     &gt; head(year1_summary) </strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_05_039.jpg" alt="Step 5 - plotting results"/></div><p>
+</p><pre class="programlisting">
+<strong>    &gt; year2_summary &lt;- data.frame(Q_summary[367:733,])     
+&gt; head(year2_summary)</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_05_040.jpg" alt="Step 5 - plotting results"/></div><p>
+</p><pre class="programlisting">
+<strong>    &gt; simple.plot &lt;- ggplot(data = Q_summary, aes(x = day.of.year)) + </strong>
+<strong>    + geom_ribbon(aes(ymin = sm.25, ymax = sm.75, fill = "Normal")) + </strong>
+<strong>    + geom_ribbon(aes(ymin = sm.10, ymax = sm.25, fill =       "Drought Watch")) +</strong>
+<strong>    + geom_ribbon(aes(ymin = sm.05, ymax = sm.10, fill = "Drought Warning")) +</strong>
+<strong>    + geom_ribbon(aes(ymin = sm.00, ymax = sm.05, fill = "Drought Emergency")) + </strong>
+<strong>    + scale_y_log10(limits = c(1,1000)) + </strong>
+<strong>    + geom_line(data = latest.years, aes(x=day.of.year, y=rollMean, color = "30-Day Mean"),size=2) + </strong>
+<strong>    + geom_vline(xintercept = 365) </strong>
+<strong>    &gt; simple.plot</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_05_041.jpg" alt="Step 5 - plotting results"/></div><p>
+</p></div></div></div>
+</body></html>

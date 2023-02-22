@@ -1,0 +1,463 @@
+<html><head/><body>
+
+
+	
+		<title>B16721_08_Final_SK_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-136"><em class="italic"> <a id="_idTextAnchor137"/>第八章</em>:把所有的东西放在一起</h1>
+			<p>在本章中，我们将重温我们在第三章<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"><em class="italic"/></a>、<em class="italic">基本工作流程<a id="_idTextAnchor138"/>-数据到可部署模型</em>中首次介绍的<em class="italic"> Lending Club贷款申请</em>数据。这一次，我们按照大多数数据科学项目的方式开始，也就是说，从一个原始数据文件和一个总体目标或问题开始。在此过程中，我们将细化数据和问题陈述，以便它们与业务相关，并且可以通过可用数据来回答。数据科学家很少从建模就绪的数据开始；因此，本章中的待遇更准确地反映了企业中数据科学家的工作。然后，我们将对数据建模，并评估各种候选模型，根据需要更新它们，直到我们得到最终模型。我们将评估最终模型，并说明模型部署所需的准备步骤。这加强了我们在第5章 到第7章 中介绍的内容。</p>
+			<p>本章结束时，你将能够用原始数据源解决一个非结构化问题，并创建一个可部署的模型来回答一个精确的预测性问题。为了完整起见，我们将包括进行数据准备、特征工程、模型构建和评估的每个步骤所需的所有代码。一般来说，任何已经在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第5章</em> </a>到<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第7章</em> </a>中涉及到的代码都将被保留不加注释。</p>
+			<p>本章分为四节，每一节都有单独的步骤。这些部分列出如下:</p>
+			<ul>
+				<li>数据争论</li>
+				<li>特征工程</li>
+				<li>模型建立和评估</li>
+				<li>准备模型管道部署</li>
+			</ul>
+			<h1 id="_idParaDest-137"><a id="_idTextAnchor139"/>技术要求</h1>
+			<p>如果您在此阶段仍未设置您的H2O环境，请参见附录  <em class="italic">中的<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"><em class="italic">-启动H2O集群</em>的替代</a></em> <em class="italic">方法。</em></p>
+			<h1 id="_idParaDest-138"><a id="_idTextAnchor140"/>数据角力</h1>
+			<p>人们常说，数据科学家80–90%的工作都是处理数据。至少，您应该了解数据粒度(即，行代表什么)，并知道数据集中每一列的含义。对于原始数据源，需要多个步骤来清理、组织数据并将其转换为建模就绪的数据集格式。</p>
+			<p>用于第3章、<em class="italic"> 5 </em>和<em class="italic"> 7 </em>中<em class="italic"> Lending Club </em>示例的数据集是从我们这里开始的一个原始数据<a id="_idIndexMarker574"/>文件中导出的。在本节中，我们将说明以下步骤:</p>
+			<ol>
+				<li>导入原始数据并确定要保留哪些列。</li>
+				<li>定义问题，并创建一个响应变量。</li>
+				<li>将隐含的数字数据从字符串转换为数值。</li>
+				<li>清理任何杂乱的分类列。</li>
+			</ol>
+			<p>让我们从第一步开始:导入数据。</p>
+			<h2 id="_idParaDest-139"><a id="_idTextAnchor141"/>导入原始数据</h2>
+			<p>我们使用以下代码导入原始数据<a id="_idIndexMarker575"/>文件:</p>
+			<pre class="source-code">input_csv = "rawloans.csv"</pre>
+			<pre class="source-code">loans = h2o.import_file(input_csv,</pre>
+			<pre class="source-code">             col_types = {"int_rate": "string",</pre>
+			<pre class="source-code">                          "revol_util": "string",</pre>
+			<pre class="source-code">                          "emp_length": "string",</pre>
+			<pre class="source-code">                          "verification_status": "string"})</pre>
+			<p><code>h2o.import_file</code>代码中的字典为四个输入变量指定了<code>string</code>的输入列类型:<code>int_rate</code>、<code>revol_util</code>、<code>emp_length</code>和<code>verification_status</code>。显式指定列类型可以确保按照建模者的意图读入列。如果没有这段代码，这些字符串变量可能会被读取为具有多个级别的分类列。</p>
+			<p>数据集维度通过以下命令获得:</p>
+			<pre class="source-code">loans.dim</pre>
+			<p>这将返回42，536行(对应于42，536个客户信用申请)和52列。接下来，我们指定我们希望为分析保留的22列:</p>
+			<pre class="source-code">keep = ['addr_state', 'annual_inc', 'delinq_2yrs',</pre>
+			<pre class="source-code">        'dti', 'earliest_cr_line', 'emp_length', 'grade',</pre>
+			<pre class="source-code">        'home_ownership', 'inq_last_6mths', 'installment',</pre>
+			<pre class="source-code">        'issue_d', 'loan_amnt', 'loan_status',</pre>
+			<pre class="source-code">        'mths_since_last_delinq', 'open_acc', 'pub_rec',</pre>
+			<pre class="source-code">        'purpose', 'revol_bal', 'revol_util', 'term',</pre>
+			<pre class="source-code">        'total_acc', 'verification_status']</pre>
+			<p>我们希望使用<code>drop</code>方法移除剩余的列:</p>
+			<pre class="source-code">remove = list(set(loans.columns) - set(keep))</pre>
+			<pre class="source-code">loans = loans.drop(remove)</pre>
+			<p>但是我们删除的30列呢？它们包含诸如贷款目的的文本描述、地址或邮政编码等附加客户信息、几乎完全缺失信息或其他数据质量问题的列等内容。从原始数据源中选择适当的列是一项重要的任务，需要数据科学家花费大量的时间和精力。</p>
+			<p>我们保留的列是我们认为最有可能具有预测性的列。每列的说明如下:</p>
+			<ul>
+				<li><code>addr_state</code>:这是借款人居住的美国州。</li>
+				<li><code>annual_inc</code>:这是借款人自报的年收入。</li>
+				<li><code>delinq_2yrs</code>:这是借款人在过去2年中逾期付款超过30天的次数。</li>
+				<li><code>dti</code>:这是债务收入比(流动债务除以收入)。</li>
+				<li><code>earliest_cr_line</code>:这是最早的信用额度日期(一般来说，信用历史越长，信用风险越大)。</li>
+				<li><code>emp_length</code>:这是就业年限。</li>
+				<li><code>grade</code>:贷款人对该笔贷款的风险评级为A至G。</li>
+				<li><code>home_ownership</code>:借款人是否拥有住房或租房？</li>
+				<li><code>inq_last_6mths</code>:这是最近6个月的信用查询次数。</li>
+				<li><code>installment</code>:借款人每月所欠金额。</li>
+				<li><code>issue_d</code>:这是贷款发放的日期。</li>
+				<li><code>loan_amnt</code>:这是借给借款人的总金额<a id="_idIndexMarker577"/>。</li>
+				<li><code>loan_status</code>:这是一个类别。</li>
+				<li><code>mths_since_last_delinq</code>:这是自上次拖欠以来的月数。</li>
+				<li><code>open_acc</code>:这是未结信用额度的数量。</li>
+				<li><code>pub_rec</code>:这是贬损公共记录的数量(破产、税收留置权和判决)。</li>
+				<li><code>purpose</code>:借款人声明的贷款用途。</li>
+				<li><code>revol_bal</code>:这是循环余额(即账单周期结束时信用卡上所欠的金额)。</li>
+				<li><code>revol_util</code>:这是循环利用率(即使用的信贷额除以借款人可用的信贷总额)。</li>
+				<li><code>term</code>:这是贷款的月还款额(36或60)。</li>
+				<li><code>total_acct</code>:这是借款人的信用额度总数。</li>
+				<li><code>verification_status</code>:这告诉我们收入是否被核实。</li>
+			</ul>
+			<p>假设已经正确选择了我们的数据列<a id="_idIndexMarker578"/>，我们可以继续下一步:创建响应变量。</p>
+			<h2 id="_idParaDest-140"><a id="_idTextAnchor142"/>定义问题并创建响应变量</h2>
+			<p><a id="_idIndexMarker579"/>响应变量的创建取决于问题的定义。这个用例的目标是预测哪些客户会拖欠贷款。一个预测贷款违约的模型需要一个区分好贷款和坏贷款的响应变量。让我们从使用以下代码研究<code>loan_status</code>变量开始:</p>
+			<pre class="source-code">loans["loan_status"].table().head(20)</pre>
+			<p>这将生成一个表，其中包含我们的数据中存储的贷款状态的所有可能值:</p>
+			<div><div><img src="img/B16721_08_001.jpg" alt="Figure 8.1 – Loan status categories from the raw Lending Club loan default dataset&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.1-原始借贷俱乐部贷款违约数据集中的贷款状态类别</p>
+			<p>在<em class="italic">图8.1 </em>中可以看到，<code>loan_status</code>变量相对复杂，包含11个有些冗余或重叠的类别。例如，<code>Charged Off</code>表示有5，435笔贷款是坏账。<code>Default</code>包含另一个7。<code>Fully Paid</code>显示30，843笔贷款为良好贷款。一些贷款，例如由<code>Current</code>或<code>Late</code>类别表示的贷款，仍在进行中，因此还没有好坏之分。</p>
+			<p>提供了多笔不符合信贷政策的贷款。为什么允许这样做还不清楚，值得向数据源核实一下。信贷政策是否发生了变化，因此这些贷款是早期贷款？这些是正式的覆盖还是偶然的？不管是什么情况，这些类别暗示了可能需要我们关注的不同潜在人群。我们是应该完全移除这些贷款，通过将其归入相应的类别来忽略这个问题，还是创建一个<code>Meets Credit Policy</code>指标变量并直接对其建模？更好地理解数据可以让数据科学家做出明智的决策。</p>
+			<p>最后，我们需要一个二元响应变量，它基于已经还清或违约的贷款总量。首先，过滤掉任何正在进行的贷款。</p>
+			<h3>移除正在进行的贷款</h3>
+			<p>我们需要建立我们的模型<a id="_idIndexMarker585"/>,只使用那些已经违约或者已经完全还清的贷款。正在进行的贷款有<code>loan_status</code>如<code>Current</code>或<code>In Grace Period</code>。以下代码捕获状态指示正在进行贷款的行:</p>
+			<pre class="source-code">ongoing_status = [</pre>
+			<pre class="source-code">    "Current",</pre>
+			<pre class="source-code">    "In Grace Period",</pre>
+			<pre class="source-code">    "Late (16-30 days)",</pre>
+			<pre class="source-code">    "Late (31-120 days)",</pre>
+			<pre class="source-code">    "Does not meet the credit policy.  Status:Current",</pre>
+			<pre class="source-code">    "Does not meet the credit policy.  Status:In Grace Period"</pre>
+			<pre class="source-code">]</pre>
+			<p>我们使用以下代码删除那些正在进行的贷款，并显示剩余贷款的状态:</p>
+			<pre class="source-code">loans = loans[~loans["loan_status"].isin(ongoing_status)]</pre>
+			<pre class="source-code">loans["loan_status"].table()</pre>
+			<p>产生的状态类别如<em class="italic">图8.2 </em>所示:</p>
+			<div><div><img src="img/B16721_08_002.jpg" alt="Figure 8.2 – Loan status categories after filtering the ongoing loans&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.2-过滤持续贷款后的贷款状态类别</p>
+			<p>请注意，在<em class="italic">图8.2 </em>中，贷款状态的五个<a id="_idIndexMarker586"/>类别现在需要在一个二元响应变量中进行总结。这将在下一步中详细介绍。</p>
+			<h3>定义二进制响应变量</h3>
+			<p>我们从<a id="_idIndexMarker587"/>开始，形成一个<code>fully_paid</code>列表来总结<a id="_idIndexMarker588"/>贷款状态类别:</p>
+			<pre class="source-code">fully_paid = [</pre>
+			<pre class="source-code">    "Fully Paid",</pre>
+			<pre class="source-code">    "Does not meet the credit policy.  Status:Fully Paid"</pre>
+			<pre class="source-code">]</pre>
+			<p>接下来，让我们创建一个二进制响应列<code>bad_loan</code>，作为未完全还清的贷款的指示器:</p>
+			<pre class="source-code">response = "bad_loan"</pre>
+			<pre class="source-code">loans[response] = ~(loans["loan_status"].isin(fully_paid))</pre>
+			<pre class="source-code">loans[response] = loans[response].asfactor()</pre>
+			<p>最后，删除原来的贷款状态列:</p>
+			<pre class="source-code">loans = loans.drop("loan_status")</pre>
+			<p>我们删除了原始的loan <a id="_idIndexMarker589"/> status列，因为我们构建预测模型所需的信息现在包含在<code>bad_loan</code>响应变量中。</p>
+			<p>接下来，我们将把字符串<a id="_idIndexMarker590"/>数据转换成数值。</p>
+			<h2 id="_idParaDest-141"><a id="_idTextAnchor143"/>将隐含的数字数据从字符串转换成数值</h2>
+			<p><a id="_idIndexMarker591"/>数据有各种各样的方式会变得混乱。在前面的步骤中，我们看到了变量有时会包含冗余的类别，这些类别可能会从汇总中受益。显示和存储数据值的格式也会导致问题。因此，我们自然理解为数字的28%通常是由计算机作为字符串输入的。将隐含的数字数据转换成实际的数字数据是一项非常典型的数据质量任务。</p>
+			<p>考虑<code>revol_util</code>和<code>emp_length</code>列:</p>
+			<pre class="source-code">loans[["revol_util", "emp_length"]].head()</pre>
+			<p>输出如下面的屏幕截图所示:</p>
+			<div><div><img src="img/B16721_08_003.jpg" alt="Figure 8.3 – Variables stored as strings to be converted into numeric values&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.3–存储为字符串的变量将被转换为数值</p>
+			<p><code>revol_util</code>变量，如图<em class="italic">图8.3 </em>所示，是固有的数字，但有一个尾随的百分号。在这种情况下，解决方案很简单:去掉<strong class="bold"> % </strong>符号，将字符串转换成数值。这个<a id="_idIndexMarker592"/>可以用下面的代码来完成:</p>
+			<pre class="source-code">x = "revol_util"</pre>
+			<pre class="source-code">loans[x] = loans[x].gsub(pattern="%", replacement="")</pre>
+			<pre class="source-code">loans[x] = loans[x].trim()</pre>
+			<pre class="source-code">loans[x] = loans[x].asnumeric()</pre>
+			<p><code>gsub</code>方法用空格替换<code>%</code>。<code>trim</code>方法删除字符串中的任何空白。<code>asnumeric</code>方法将字符串值转换成一个数字。</p>
+			<p><code>emp_length</code>列只是稍微复杂一点。首先，我们需要去掉<code>year</code>或<code>years</code>术语。此外，我们必须处理<code>&lt;</code>和<code>+</code>符号。如果我们将<code>&lt; 1</code>定义为<code>0</code>，将<code>10+</code>定义为<code>10</code>，那么<code>emp_length</code>也可以被强制转换为数值。这可以使用以下代码来完成:</p>
+			<pre class="source-code">x = "emp_length"</pre>
+			<pre class="source-code">loans[x] = loans[x].gsub(pattern="([ ]*+[a-zA-Z].*)|(n/a)", </pre>
+			<pre class="source-code">                         replacement="") </pre>
+			<pre class="source-code">loans[x] = loans[x].trim()</pre>
+			<pre class="source-code">loans[x] = loans[x].gsub(pattern="&lt; 1", replacement="0")</pre>
+			<pre class="source-code">loans[x] = loans[x].gsub(pattern="10\\+", replacement="10") </pre>
+			<pre class="source-code">loans[x] = loans[x].asnumeric()</pre>
+			<p>接下来，我们将通过清理任何混乱的分类列来完成我们的数据争论步骤。</p>
+			<h2 id="_idParaDest-142"><a id="_idTextAnchor144"/>清理杂乱的分类列</h2>
+			<p>为特征工程和建模做准备的最后一步<a id="_idIndexMarker594"/>是在通常混乱的分类列中澄清选项或级别。该标准化任务由<code>verification_status</code>变量说明。使用以下代码查找<code>verification_status</code>的级别:</p>
+			<pre class="source-code">loans["verification_status"].head()</pre>
+			<p>结果显示在<em class="italic">图8.4 </em>中:</p>
+			<div><div><img src="img/B16721_08_004.jpg" alt="Figure 8.4 – The categories of the verification status from the raw data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.4-原始数据中验证状态的类别</p>
+			<p>因为<em class="italic">图8.4 </em>中有多个值表示已验证(<code>VERIFIED - income</code>和<code>VERIFIED - income source</code>)，我们简单地用<code>verified</code>代替。下面的<a id="_idIndexMarker595"/>代码使用了<code>sub</code>方法以方便替换:</p>
+			<pre class="source-code">x = "verification_status"</pre>
+			<pre class="source-code">loans[x] = loans[x].sub(pattern = "VERIFIED - income source",</pre>
+			<pre class="source-code">                        replacement = "verified")</pre>
+			<pre class="source-code">loans[x] = loans[x].sub(pattern = "VERIFIED - income",</pre>
+			<pre class="source-code">                        replacement = "verified")</pre>
+			<pre class="source-code">loans[x] = loans[x].asfactor()</pre>
+			<p>在完成所有的数据争论步骤后，我们将继续特征工程。</p>
+			<h1 id="_idParaDest-143"><a id="_idTextAnchor145"/>特色工程</h1>
+			<p>在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型建立-第一部分</em>中，我们介绍了一些特征工程的概念，并详细讨论了<a id="_idIndexMarker596"/>目标编码。在这一节中，我们将更深入地研究特性工程。我们可以按如下方式组织特征工程:</p>
+			<ul>
+				<li>代数变换</li>
+				<li>根据日期设计的功能</li>
+				<li>通过组合类别简化分类变量</li>
+				<li>缺少值指示器功能</li>
+				<li>目标编码分类列</li>
+			</ul>
+			<p>除了最后一个，这些转换的顺序并不重要。目标编码是唯一需要将数据分成训练集和测试集的转换。通过将它保存到最后，我们可以立即将其他转换应用于整个数据集，而不是分别应用于训练和测试拆分。此外，我们介绍了分层抽样分裂数据在H2O-3。这对我们当前的用例影响很小，但当数据高度不平衡时，例如在欺诈建模中，这一点很重要。</p>
+			<p>在下面的章节中，为了完整起见，我们<a id="_idIndexMarker597"/>包括了我们所有的特征工程代码。早期引入的代码将仅仅被引用，而新的特性工程任务将值得讨论。让我们从代数变换开始。</p>
+			<h2 id="_idParaDest-144"><a id="_idTextAnchor146"/>代数变换</h2>
+			<p>特征工程最直接的形式<a id="_idIndexMarker598"/>需要对原始数据列进行简单的转换:对数、平方、平方根、列差、列比等等。通常，这些转变的灵感来自于一个潜在的理论或基于主题的专业知识。</p>
+			<p>第五章<em class="italic">高级模型构建-第一部分</em>中定义的<code>credit_length</code>变量就是这样一种转换。回想一下，这是用以下代码创建的:</p>
+			<pre class="source-code">loans["credit_length"] = loans["issue_d"].year() - \</pre>
+			<pre class="source-code">    loans["earliest_cr_line"].year()</pre>
+			<p>这一变量的合理性基于一项商业观察:信用历史较长的客户违约风险较低。此外，我们删除了不再需要的<code>earliest_cr_line</code>变量:</p>
+			<pre class="source-code">loans = loans.drop(["earliest_cr_line"])</pre>
+			<p>我们可以尝试的另一个简单特性是<em class="italic">(年收入)/(信用额度数量)</em>，取分布和数值稳定性的日志。让我们把它命名为<code>log_inc_per_acct</code>。这一比例有着直观的意义:更高的收入应该能够支持更多的信贷额度。这在意图上类似于债务收入比，但捕捉到的信息略有不同。我们可以将它编码如下:</p>
+			<pre class="source-code">x = "log_inc_per_acct"</pre>
+			<pre class="source-code">loans[x] = loans['annual_inc'].log() - \</pre>
+			<pre class="source-code">    loans['total_acc'].log()</pre>
+			<p>接下来，我们将考虑第二个特征工程任务:对日期信息进行编码。</p>
+			<h2 id="_idParaDest-145"><a id="_idTextAnchor147"/>从日期开始设计的特征</h2>
+			<p>如<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第5章</em> </a>、<em class="italic">高级模型构建-第一部分</em>中所述，<a id="_idIndexMarker599"/>日期值中包含大量具有潜在预测性的信息。对于我们之前创建的<code>issue_d_year</code>和<code>issue_d_month</code>特性，我们添加了<code>issue_d_dayOfWeek</code>和<code>issue_d_weekend</code>作为新的因素。执行此操作的代码如下:</p>
+			<pre class="source-code">x = "issue_d"</pre>
+			<pre class="source-code">loans[x + "_year"] = loans[x].year()</pre>
+			<pre class="source-code">loans[x + "_month"] = loans[x].month().asfactor()</pre>
+			<pre class="source-code">loans[x + "_dayOfWeek"] = loans[x].dayOfWeek().asfactor()</pre>
+			<pre class="source-code">weekend = ["Sat", "Sun"]</pre>
+			<pre class="source-code">loans[x + "_weekend"] = loans[x + "_dayOfWeek"].isin(weekend)</pre>
+			<pre class="source-code">loans[x + "_weekend"] = loans[x + "_weekend"].asfactor()</pre>
+			<p>最后，我们删除原始的日期变量:</p>
+			<pre class="source-code">loans = loans.drop(x)</pre>
+			<p>接下来，我们将讨论如何在特征工程阶段简化分类变量。</p>
+			<h2 id="_idParaDest-146"><a id="_idTextAnchor148"/>通过组合类别简化分类变量</h2>
+			<p>在数据争论阶段，我们清理了<code>verification_status</code>列杂乱的分类级别，删除了冗余或重叠的级别定义，并使<a id="_idIndexMarker600"/>类别相互排斥。另一方面，在这个特征工程阶段，类别级别已经是不重叠的并且被仔细定义。数据值本身，例如，某些类别的小计数，可能暗示一些工程方法来改进预测建模。</p>
+			<p>使用以下代码总结<code>home_ownership</code>分类变量:</p>
+			<pre class="source-code">x = "home_ownership"</pre>
+			<pre class="source-code">loans[x].table()</pre>
+			<p>表格中的结果显示在下面的截图中:</p>
+			<div><div><img src="img/B16721_08_005.jpg" alt="Figure 8.5 – Levels of the raw home ownership variable&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图8.5-原始房屋所有权变量的等级</p>
+			<p>在<em class="italic">图8.5 </em>中，虽然在房屋所有权中有<a id="_idIndexMarker601"/>五个记录的类别，但最大的三个有数千个观察值:<code>MORTGAGE</code>、<code>OWN</code>和<code>RENT</code>。剩下的两个<code>NONE</code>和<code>OTHER</code>非常少见(分别为8和135)，我们将把它们与<code>OWN</code>结合起来，创建一个扩展的<code>OTHER</code>类别。</p>
+			<p class="callout-heading">折叠数据类别</p>
+			<p class="callout">根据我们想要做出的推论，或者我们对问题的理解，将<code>NONE</code>和<code>OTHER</code>归入<code>RENT</code>或<code>MORTGAGE</code>类别可能更有意义。</p>
+			<p>以下命令显示了组合分类级别的过程:</p>
+			<pre class="source-code">loans[x].levels()</pre>
+			<p>这是通过用<code>OTHER</code>替换<code>NONE</code>和<code>OWN</code>级别描述并将其赋给一个新变量<code>home_3cat</code>来实现的，如以下代码所示:</p>
+			<pre class="source-code">lvls = ["MORTGAGE", "OTHER", "OTHER", "OTHER", "RENT"]</pre>
+			<pre class="source-code">loans["home_3cat"] = \</pre>
+			<pre class="source-code">    loans[x].set_levels(lvls).ascharacter().asfactor()</pre>
+			<p>然后，我们删除原来的<code>home_ownership</code>列:</p>
+			<pre class="source-code">loans = loans.drop(x)</pre>
+			<p>接下来，我们将访问如何<a id="_idIndexMarker602"/>为缺失数据创建有用的指标函数。</p>
+			<h2 id="_idParaDest-147"><a id="_idTextAnchor149"/>缺少数值指示器功能</h2>
+			<p>当数据不是随机丢失时，丢失的模式可能是预测信息的来源。换句话说，有时候，一个值丢失的事实和实际值本身一样重要，甚至更重要。特别是在缺少大量值的情况下，创建一个缺少值指示器函数会很有帮助。</p>
+			<p>雇佣长度<code>emp_length</code>最有趣的特征是客户的值是否缺失。简单的数据透视表显示，缺失<code>emp_length</code>值的客户不良贷款比例为26.3%，非缺失值的客户不良贷款比例为18.0%。违约率的差异表明，使用缺失值指标函数作为预测指标。</p>
+			<p>为<code>emp_length</code>变量创建缺失指示器函数的代码很简单:</p>
+			<pre class="source-code">loans["emp_length_missing"] = loans["emp_length"] == None</pre>
+			<p>这里，新的<code>emp_length_missing</code>列包含指示器功能。与我们之前设计的其他特性不同，原始的<code>emp_length</code>列不需要作为一个可能的预测器被删除。</p>
+			<p>接下来，我们将转向目标编码分类列。</p>
+			<h2 id="_idParaDest-148"><a id="_idTextAnchor150"/>目标编码分类列</h2>
+			<p>在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型建立-第一部分</em>中，我们详细介绍了H2O-3中的<a id="_idIndexMarker604"/>目标编码。作为目标编码的先决条件，回想一下训练和测试集是必需的。我们使用<code>split_frame</code>方法分割数据，代码如下:</p>
+			<pre class="source-code">train, test = loans.split_frame(ratios = [0.8], seed = 12345)</pre>
+			<p><code>split_frame</code>方法<a id="_idIndexMarker605"/>创建完全随机的样本分割。所有回归模型都需要这种方法，这种方法对于相对平衡的分类问题非常有效。但当二元分类高度不平衡时，应改用分层抽样。</p>
+			<h3>二元分类数据分割的分层抽样</h3>
+			<p>二元分类的分层抽样是通过对好的和坏的贷款分别进行抽样。换句话说，回想一下我们Lending Club数据集中16%的贷款是坏账。我们希望将数据分成80%的训练数据集和20%的测试数据集。如果我们分别抽取20%的不良贷款和20%的良好贷款，然后将它们结合起来，我们就有了一个保留16%不良贷款百分比的测试数据集。综合其余数据，我们的培训数据中的不良贷款比例为16%。因此，分层抽样保留了原始的类别比率。</p>
+			<p>我们使用response列上的<code>stratified_split</code>方法创建一个名为<code>split</code>的新变量，它包含<code>train</code>和<code>test</code>值，如下面的代码所示:</p>
+			<pre class="source-code">loans["split"] = loans[response].stratified_split(\</pre>
+			<pre class="source-code">    test_frac = 0.2, seed = 12345)</pre>
+			<pre class="source-code">loans[[response,"split"]].table()</pre>
+			<p>分层拆分的结果如下图所示:</p>
+			<div><div><img src="img/B16721_08_006.jpg" alt="Figure 8.6 – The stratified split of loan data into train and test&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.6–贷款数据分层分为训练和测试</p>
+			<p>我们使用<code>split</code>列为<a id="_idIndexMarker607"/>创建一个布尔掩码，用于派生<code>train</code>和<code>test</code>数据集，如以下代码所示:</p>
+			<pre class="source-code">mask = loans["split"] == "train"</pre>
+			<pre class="source-code">train = loans[mask, :].drop("split")</pre>
+			<pre class="source-code">test = loans[~mask, :].drop("split")</pre>
+			<p>注意，在创建之后，我们从两个数据集中删除了<code>split</code>列。现在，我们准备好使用这些训练和测试分割进行目标编码。</p>
+			<h3>对贷款俱乐部数据进行编码的目标</h3>
+			<p>以下<a id="_idIndexMarker608"/>代码用于对<code>purpose</code>和<code>addr_state</code>变量进行目标编码，类似于<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型构建-第一部分</em>中的代码，我们在此不做讨论:</p>
+			<pre class="source-code">from h2o.estimators import H2OTargetEncoderEstimator</pre>
+			<pre class="source-code">encoded_columns = ["purpose", "addr_state"]</pre>
+			<pre class="source-code">train["fold"] = train.kfold_column(n_folds = 5, seed = 25)</pre>
+			<pre class="source-code">te = H2OTargetEncoderEstimator(</pre>
+			<pre class="source-code">    data_leakage_handling = "k_fold",</pre>
+			<pre class="source-code">    fold_column = "fold",</pre>
+			<pre class="source-code">    noise = 0.05,</pre>
+			<pre class="source-code">    blending = True,</pre>
+			<pre class="source-code">    inflection_point = 10,</pre>
+			<pre class="source-code">    smoothing = 20)</pre>
+			<pre class="source-code">te.train(x = encoded_columns,</pre>
+			<pre class="source-code">         y = response,</pre>
+			<pre class="source-code">         training_frame = train)</pre>
+			<pre class="source-code">train_te = te.transform(frame = train)</pre>
+			<pre class="source-code">test_te = te.transform(frame = test, noise = 0.0)</pre>
+			<p>接下来，我们重新定义<code>train</code>和<code>test</code>数据集，从目标编码的<code>train_te</code>和<code>test_te</code>分割中删除<a id="_idIndexMarker609"/>编码列。此外，我们还从<code>train_te</code>数据集中删除了<code>fold</code>列(注意，它不存在于<code>test_te</code>数据集中)。代码如下:</p>
+			<pre class="source-code">train = train_te.drop(encoded_columns).drop("fold")</pre>
+			<pre class="source-code">test = test_te.drop(encoded_columns)</pre>
+			<p>有了更新的<code>train</code>和<code>test</code>数据集，我们已经准备好处理模型构建和评估流程。</p>
+			<h1 id="_idParaDest-149"><a id="_idTextAnchor151"/>模型建立和评估</h1>
+			<p>我们构建模型的方法从AutoML开始。应用于AutoML排行榜的全局可解释性要么导致挑选候选模型，要么产生我们反馈到新一轮修改的AutoML模型中的见解。如果建模或可解释性的改进是明显的，这个过程可以重复。如果选择单个模型而不是堆叠集合，我们可以展示额外的随机网格搜索如何产生更好的模型。然后，评估最终候选模型。</p>
+			<p>这种方法在H2O-3中的美妙之处在于，AutoML为我们自动完成了建模的繁重工作。迭代这个过程是简单的，并且可以根据需要重复改进周期，直到我们得到一个令人满意的最终模型。</p>
+			<p>我们将建模步骤组织如下:</p>
+			<ol>
+				<li value="1">用AutoML进行模型搜索和优化。</li>
+				<li>使用AutoML排行榜模型调查全球可解释性。</li>
+				<li>使用可选的额外网格搜索，从AutoML候选中选择一个模型。</li>
+				<li>最终模型评估。</li>
+			</ol>
+			<h2 id="_idParaDest-150"><a id="_idTextAnchor152"/>使用AutoML进行模型搜索和优化</h2>
+			<p>使用H2O-3 AutoML <a id="_idIndexMarker611"/>的模型建立过程在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型建立-第一部分</em>中有广泛介绍。在这里，我们将遵循几乎相同的流程来创建AutoML车型排行榜。为了清楚起见，在从<code>predictors</code>集合中移除<code>bad_loan</code>响应之前，我们重新定义了<code>response</code>列和<code>predictors</code>:</p>
+			<pre class="source-code">response = "bad_loan"</pre>
+			<pre class="source-code">predictors = train.columns</pre>
+			<pre class="source-code">predictors.remove(response)</pre>
+			<p>我们的AutoML参数仅排除深度学习模型，允许该过程运行长达30分钟，如以下代码片段所示:</p>
+			<pre class="source-code">from h2o.automl import H2OAutoML</pre>
+			<pre class="source-code">aml = H2OAutoML(max_runtime_secs = 1800,</pre>
+			<pre class="source-code">                exclude_algos = ['DeepLearning'],</pre>
+			<pre class="source-code">                seed = 12345)</pre>
+			<pre class="source-code">aml.train(x = predictors, </pre>
+			<pre class="source-code">          y = response, </pre>
+			<pre class="source-code">          training_frame = train)</pre>
+			<p>如<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型建立-第一部分</em>所示，我们可以访问H2O流程来更详细地监控模型建立过程。一旦对<code>aml</code>对象的训练完成，我们<a id="_idIndexMarker612"/>继续研究具有全局可解释性的结果模型。</p>
+			<h2 id="_idParaDest-151"><a id="_idTextAnchor153"/>用AutoML模型研究全局可解释性</h2>
+			<p>在<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第7章</em> </a>，<em class="italic">理解ML模型</em>中，我们概述了<a id="_idIndexMarker613"/>对AutoML产生的一系列模型的全局可解释性的使用。这里，我们将遵循相同的过程，调用带有<code>test</code>数据分割的<code>explain</code>方法:</p>
+			<pre class="source-code">aml.explain(test)</pre>
+			<p>由此产生的AutoML排行榜如以下屏幕截图所示:</p>
+			<div><div><img src="img/B16721_08_007.jpg" alt="Figure 8.7 – The top 10 models of the AutoML leaderboard&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.7–AutoML排行榜的前10款车型</p>
+			<p>在<em class="italic">图8.7 </em>中，堆叠套装<code>AllModels</code>和<code>BestOfFamily</code>型号占据排行榜的前两位。最佳单个模型由绿色方框包围，并从<code>XGBoost_grid__1</code>开始标记为<code>model_6</code>。我们将进一步研究这个模型，作为一个可能的候选模型。</p>
+			<p><strong class="bold">模型关联</strong>图见<em class="italic">图8.8 </em>。绿色方框表示我们的<a id="_idIndexMarker614"/>候选XGBoost模型和两个堆叠系综之间的相关性。它确认候选模型具有与集成最高的相关性:</p>
+			<div><div><img src="img/B16721_08_008.jpg" alt=" Figure 8.8 – Model Correlation plot for the AutoML leaderboard models&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.8–AutoML排行榜模型的模型关联图</p>
+			<p><em class="italic">图8.9 </em>中的<strong class="bold">可变重要性热图</strong>图告诉我们的更多是单个特征的稳定性，而不是模型之间的关系。1、2、3和7 <a id="_idIndexMarker615"/>的GBM网格模型聚集在一起，而6、7和9的XGBoost网格模型在变量在这些模型中的重要性方面非常相似:</p>
+			<div><div><img src="img/B16721_08_009.jpg" alt="Figure 8.9 – Variable Importance Heatmap for AutoML models&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.9-汽车模型的可变重要性热图</p>
+			<p>多重模型<code>grade</code>，具有从A到G的值<a id="_idIndexMarker617"/>的特征，其违约风险似乎在增加。换句话说，A的平均响应小于B，B本身小于C，依此类推。该诊断似乎证实了一项业务评级实践:</p>
+			<div><div><img src="img/B16721_08_010.jpg" alt=" Figure 8.10 – The multiple model PDP for grade&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.10–等级的多模型PDP</p>
+			<p>在<em class="italic">图8.11 </em>中，年收入的PDP起到了诊断作用。直觉上，年收入增加应该对应不良贷款率下降。我们可以通过向我们的模型构建代码添加单调性约束，正式强制(而不仅仅是希望)年收入和违约率之间的单调递减关系:</p>
+			<div><div><img src="img/B16721_08_011.jpg" alt="Figure 8.11 – The multiple model PDP for annual income&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.11–年收入的多模型PDP</p>
+			<p>单调性约束可以<a id="_idIndexMarker618"/>应用于H2O协议3中的GBM、XGBoost和AutoML模型中的一个或多个数值变量。为此，提供一个带有变量名字典和单调性方向的<code>monotone_constraints</code>参数:<code>1</code>表示单调递增关系，<code>-1</code>表示单调递减关系。以下代码显示了我们如何添加单调递减<code>annual_inc</code>约束:</p>
+			<pre class="source-code">maml = H2OAutoML(</pre>
+			<pre class="source-code">         max_runtime_secs = 1800,</pre>
+			<pre class="source-code">         exclude_algos = ['DeepLearning'],</pre>
+			<pre class="source-code">         monotone_constraints = {"annual_inc": -1}, </pre>
+			<pre class="source-code">         seed = 12345)</pre>
+			<p class="callout-heading">单调递增和递减约束</p>
+			<p class="callout">形式上，单调递增约束是单调非递减约束，意味着函数必须是递增的或平坦的。同样，单调递减约束更准确地称为单调非递增约束。</p>
+			<p>拟合约束模型<a id="_idIndexMarker619"/>照常进行:</p>
+			<pre class="source-code">maml.train(x = predictors, </pre>
+			<pre class="source-code">           y = response, </pre>
+			<pre class="source-code">           training_frame = train)</pre>
+			<p>下面是<code>explain</code>的方法:</p>
+			<pre class="source-code">maml.explain(test)</pre>
+			<p>这将生成排行榜，如下面的屏幕截图所示:</p>
+			<div><div><img src="img/B16721_08_012.jpg" alt="Figure 8.12 – The leaderboard for AutoML with monotonic constraints&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图8.12–单调约束下的AutoML排行榜</p>
+			<p>更新后的AutoML排行榜前10款车型如图<em class="italic">图8.12 </em>所示。请注意，添加了一个新模型，单调堆叠系综(红色方框)。这种堆叠集合只使用单调的模型作为组成模型。在我们的例子中，这意味着任何符合AutoML的DRF和XRT随机森林模型都将被排除。另请注意，XGBoost model 6的单调版本再次成为领先的单一型号，用绿色方框标出。</p>
+			<p><em class="italic">图8.13 </em>显示了年收入的<a id="_idIndexMarker620"/>单调多模型PDP:</p>
+			<div><div><img src="img/B16721_08_013.jpg" alt="Figure 8.13 – The multiple model PDP for annual income&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.13–年收入的多模型PDP</p>
+			<p>请注意，图8.13 的<em class="italic">PDP中包含的模型中只有两个不是单调的:DRF和XRT模型。它们都是没有单调选项的随机森林版本。该图证实了对年收入的单调约束起到了预期的作用。(注意<em class="italic">图8.11 </em>中的PDP非常相似。那里的模型可能表现出单调性，但它没有被强制。)</em></p>
+			<p>接下来，我们将考虑如何从AutoML排行榜中选择车型。</p>
+			<h2 id="_idParaDest-152"><a id="_idTextAnchor154"/>从AutoML候选中选择一个模型</h2>
+			<p>一旦AutoML创建了一个<a id="_idIndexMarker621"/>类模型，就由<a id="_idIndexMarker622"/>数据科学家来决定将哪个模型投入生产。如果纯粹的预测准确性是唯一的要求，那么选择相当简单:选择排行榜中的顶级模型(通常，这是<strong class="bold">所有模型</strong>堆叠集合)。在需要单调约束的情况下，单调堆叠系综通常是最具预测性的。</p>
+			<p>如果业务或法规限制只允许部署一个模型，那么我们可以根据<a id="_idIndexMarker623"/>预测性能和其他考虑因素(如建模类型)的组合来选择一个模型。让我们选择XGBoost模型6作为我们的候选模型:</p>
+			<pre class="source-code">candidate = h2o.get_model(maml.leaderboard[3, 'model_id'])</pre>
+			<p>H2O-3 AutoML在跨多种建模类型构建和调整模型方面做了大量的工作。对于<a id="_idIndexMarker624"/>单个模型，有时可以通过额外的随机网格搜索来提高性能。我们将在下一节探讨这一点。</p>
+			<h3>随机网格搜索以改进所选模型(可选)</h3>
+			<p>我们使用候选模型<a id="_idIndexMarker625"/>的参数作为我们随机网格搜索的起点。这个想法是在候选模型的邻域内搜索性能稍好的模型，注意发现的任何改进都可能是微小的。堆叠的集合模型为我们提供了单个模型表现的上限。数据科学家必须判断候选模型性能和叠加系综性能之间的差异是否值得付出额外的努力来搜索可能更好的模型。</p>
+			<p>我们可以使用以下代码列出模型参数:</p>
+			<pre class="source-code">candidate.actual_params</pre>
+			<p>通过导入<code>H2OGridSearch</code>和候选模型估算器开始；在我们的例子中，那就是<code>H2OXGBoostEstimator</code>:</p>
+			<pre class="source-code">from h2o.grid.grid_search import H2OGridSearch</pre>
+			<pre class="source-code">from h2o.estimators import H2OXGBoostEstimator</pre>
+			<p>通过查看候选模型的实际参数并在这些值的邻域内搜索来选择超参数。例如，候选模型的采样率被报告为80%，在我们的超参数调整中，我们选择60%到100%之间的范围。同样，60%的列采样率使我们为网格搜索实现了40%到80%之间的<a id="_idIndexMarker626"/>范围。超参数调整代码如下:</p>
+			<pre class="source-code">hyperparams_tune = {</pre>
+			<pre class="source-code">    'max_depth' : list(range(2, 6, 1)),</pre>
+			<pre class="source-code">    'sample_rate' : [x/100. for x in range(60,101)],</pre>
+			<pre class="source-code">    'col_sample_rate' : [x/100. for x in range(40,80)],</pre>
+			<pre class="source-code">    'col_sample_rate_per_tree': [x/100. for x in</pre>
+			<pre class="source-code">         range(80,101)],</pre>
+			<pre class="source-code">    'learn_rate' : [x/100. for x in range(5,31)]</pre>
+			<pre class="source-code">}</pre>
+			<p>我们将随机网格搜索的总运行时间限制为30分钟，如下所示:</p>
+			<pre class="source-code">search_criteria_tune = {</pre>
+			<pre class="source-code">    'strategy' : "RandomDiscrete",</pre>
+			<pre class="source-code">    'max_runtime_secs' : 1800,</pre>
+			<pre class="source-code">    'stopping_rounds' : 5,</pre>
+			<pre class="source-code">    'stopping_metric' : "AUC",</pre>
+			<pre class="source-code">    'stopping_tolerance': 5e-4</pre>
+			<pre class="source-code">}</pre>
+			<p>我们将单调约束添加到模型中，并定义我们的网格搜索:</p>
+			<pre class="source-code">monotone_xgb_grid = H2OXGBoostEstimator(</pre>
+			<pre class="source-code">    ntrees = 90,</pre>
+			<pre class="source-code">    nfolds = 5,</pre>
+			<pre class="source-code">    score_tree_interval = 10,</pre>
+			<pre class="source-code">    monotone_constraints = {"annual_inc": -1},</pre>
+			<pre class="source-code">    seed = 25)</pre>
+			<pre class="source-code">monotone_grid = H2OGridSearch(</pre>
+			<pre class="source-code">    monotone_xgb_grid,</pre>
+			<pre class="source-code">    hyper_params = hyperparams_tune,</pre>
+			<pre class="source-code">    grid_id = 'monotone_grid',</pre>
+			<pre class="source-code">    search_criteria = search_criteria_tune)</pre>
+			<p>然后，我们训练模型:</p>
+			<pre class="source-code">monotone_grid.train(</pre>
+			<pre class="source-code">    x = predictors,</pre>
+			<pre class="source-code">    y = response,</pre>
+			<pre class="source-code">    training_frame = train)</pre>
+			<p>回到<a id="_idIndexMarker627"/>在这个长时间的训练后我们的结果，我们提取了前两个模型来与我们的初始候选模型进行比较。注意，我们按<code>logloss</code>排序:</p>
+			<pre class="source-code">monotone_sorted = monotone_grid.get_grid(sort_by = 'logloss',</pre>
+			<pre class="source-code">                                         decreasing = False)</pre>
+			<pre class="source-code">best1 = monotone_sorted.models[0]</pre>
+			<pre class="source-code">best2 = monotone_sorted.models[1]</pre>
+			<p>确定每个模型在测试数据分割方面的性能:</p>
+			<pre class="source-code">candidate.model_performance(test).logloss()</pre>
+			<pre class="source-code">best1.model_performance(test).logloss()</pre>
+			<pre class="source-code">best2.model_performance(test).logloss()</pre>
+			<p>在测试样本上，<code>candidate</code>模型的对数损失为0.3951，<code>best1</code>为0.3945，<code>best2</code>为0.3937。仅根据这一标准，<code>best2</code>型号就是我们更新的候选型号。下一步是对最终模型的评估。</p>
+			<h2 id="_idParaDest-153"><a id="_idTextAnchor155"/>最终模型评估</h2>
+			<p>选择了<code>best2</code>作为我们的最终候选，接下来，我们使用<code>explain</code>方法来评估这个单独的模型:</p>
+			<pre class="source-code">final = best2</pre>
+			<pre class="source-code">final.explain(test)</pre>
+			<p>我们将使用<em class="italic">图8.14 </em>中的变量<a id="_idIndexMarker629"/>重要性图结合单个PDP来理解输入变量对该模型的影响:</p>
+			<div><div><img src="img/B16721_08_014.jpg" alt="Figure 8.14 – Variable importance for the final model&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption"> </p>
+			<p class="figure-caption">图8.14-最终模型的可变重要性</p>
+			<p><code>term</code>变量是最终模型中最重要的变量。在图8.15 的<em class="italic">中检查PDP的“期限”解释了原因。</em></p>
+			<div><div><img src="img/B16721_08_015.jpg" alt="Figure 8.15 – PDP for term&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.15–术语的PDP</p>
+			<p>期限为36个月的贷款违约率约为12%，而期限为60个月的贷款违约率跃升至25%以上。注意，因为这是一个XGBoost模型，<code>term</code>被参数化为<code>term 36 months</code>。</p>
+			<p>重要性的下一个变量是<code>grade A</code>。这是分类<code>grade</code>变量的一个级别的指标函数。查看<em class="italic">图8.16 </em>中<code>grade</code>的PDP，A级的贷款只有10%的违约率，下一个最低风险等级B级的违约率约为5%；</p>
+			<div><div><img src="img/B16721_08_016.jpg" alt=" Figure 8.16 – PDP for grade&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.16–等级的PDP</p>
+			<p>接下来的两个变量<a id="_idIndexMarker631"/>是数字，重要性大致相当:最近6个月的信用查询(<code>inq_last_6mths</code>)和年收入。它们的PDP分别显示在<em class="italic">图8.17 </em>和<em class="italic">图8.18 </em>中。除了右边的尾部，信用查询PDP看起来很单调。这可能是因为在这个高数量查询的上部区域中的数据很少。像我们在图8.18 中对年收入所做的那样，给这个变量添加一个单调约束可能是有意义的:</p>
+			<div><div><img src="img/B16721_08_017.jpg" alt="Figure 8.17 – PDP for the number of inquiries in the last 6 months&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.17-过去6个月中查询次数的PDP</p>
+			<div><div><img src="img/B16721_08_018.jpg" alt="Figure 8.18 – PDP for monotonic annual income&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.18–单调年收入的PDP</p>
+			<p><em class="italic">图8.19 </em>显示了循环信用使用的PDP。与早期的数值图不同，<code>revol_util</code>变量不是明显的单调。一般来说，利用率越高，违约率越大。然而，在利用率为零的情况下，违约率相对较高。有时，诸如此类的影响是由不同人群的混合造成的。例如，这可能是拥有信用额度但没有余额的客户(通常是良好风险)和根本没有信用额度的客户(通常是较差风险)的组合。在没有重新参数化的情况下，<code>revol_util</code>不应被约束为单调的:</p>
+			<div><div><img src="img/B16721_08_019.jpg" alt="Figure 8.19 – PDP for revolving utilization&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.19-循环利用的PDP</p>
+			<p>最后，图8.20显示了最终模型的SHAP概要。SHAP值的相对重要性与我们的特性重要性和PDP视图略有不同:</p>
+			<div><div><img src="img/B16721_08_020.jpg" alt="Figure 8.20 – The SHAP Summary plot for the final model&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图8.20–最终模型的SHAP汇总图</p>
+			<p>这是最终模型评估或白皮书将展示的一个尝试。其中一些长达数页。</p>
+			<h1 id="_idParaDest-154"><a id="_idTextAnchor156"/>模型管线部署准备</h1>
+			<p>将模型导出为最终模型部署的MOJO是微不足道的，例如，考虑以下内容:</p>
+			<pre class="source-code">final.download_MOJO("final_MOJO.zip")</pre>
+			<p>在<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第9章</em> </a>、<em class="italic">制作评分和H2O MOJO </em>中详细介绍了通过多种配方在各种架构中部署MOJO。一般来说，有大量的工作必须分配给生产数据的模型评分。关键是生产中使用的数据必须具有与建模中使用的定型数据相同的架构。在我们的例子中，这意味着所有的数据争论和特征工程任务必须在生产中得分之前生产化。换句话说，该过程简单如下:</p>
+			<ol>
+				<li value="1">将原始数据转换为训练数据格式。</li>
+				<li>使用MOJO对转换后的数据进行评分。</li>
+			</ol>
+			<p>最佳<a id="_idIndexMarker635"/>实践是在模型交付之前与您的开发运维团队或同等的生产团队合作，以了解部署的数据需求。这包括指定角色和职责，例如谁负责产生数据转换代码，如何测试代码，谁负责实现，等等。通常，MOJO的交付并不是数据科学领导者努力的终点。我们将在<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第9章</em> </a>、<em class="italic">制作评分和H2O MOJO </em>中更详细地讨论这种合作关系的重要性。</p>
+			<h1 id="_idParaDest-155"><a id="_idTextAnchor157"/>总结</h1>
+			<p>在本章中，我们回顾了整个数据科学建模过程。我们从原始数据和定义有点模糊的用例开始。对数据的进一步检查使我们能够将问题陈述提炼为与业务相关的问题，并且可以用手头的数据来解决。我们进行了广泛的特征工程，希望某些特征可能是我们模型中的重要预测因素。我们介绍了一种高效而强大的模型构建方法，使用H2O AutoML通过多种算法构建一系列不同的模型。选择其中一个模型，我们演示了如何使用网格搜索通过额外的超参数调整来进一步优化模型。在整个建模过程中，我们使用了<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第7章</em> </a>、<em class="italic">了解ML模型</em>中介绍的诊断和模型解释来评估我们的ML模型。在获得合适的模型之后，我们展示了为在H2O构建的模型管道的企业部署做准备所需的简单步骤。</p>
+			<p>下一章将向我们介绍使用H2O评分MOJO将这些模型部署到生产中的过程。</p>
+		</div>
+	
+
+</body></html>

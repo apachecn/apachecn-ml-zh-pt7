@@ -1,0 +1,680 @@
+<html><head/><body>
+
+
+
+
+
+
+
+
+
+		<title>Chapter_21</title>
+
+		
+
+		
+
+	
+
+	
+
+		<div><h1 class="chapterNumber">21</h1>
+
+			<h1 id="_idParaDest-317" class="chapterTitle" lang="en-GB" xml:lang="en-GB">自动编码器</h1>
+
+			<p class="normal">在这一章中，我们将看看一个无人监管的模型家族，它的性能已经通过现代深度学习技术得到了提高。自动编码器提供了一种不同的方法来解决经典问题，如维数减少或字典学习；然而，与许多其他算法不同，它们没有影响许多著名模型的容量限制。此外，它们可以利用特定的神经层(如卷积)根据专门的标准提取信息。这样，内部表示可以对不同种类的失真更加鲁棒，并且在它们可以处理的信息量方面更加有效。</p>
+
+			<p class="normal">特别是，我们将讨论以下内容:</p>
+
+			<ul>
+
+				<li class="list">标准自动编码器</li>
+
+				<li class="list">降噪自动编码器</li>
+
+				<li class="list">稀疏自动编码器</li>
+
+				<li class="list">可变自动编码器</li>
+
+			</ul>
+
+			<p class="normal">我们现在可以开始讨论自动编码器的主要概念，重点是结构组件及其特性。在接下来的部分中，我们将进一步扩展这些概念，以解决更复杂的问题。</p>
+
+			<h1 id="_idParaDest-318" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor332"/>自动编码器</h1>
+
+			<p class="normal">在之前的章节中(特别是，<em class="italics">第3章</em>、<em class="italics">半监督学习简介</em>和<em class="italics">第4章</em>、<em class="italics">高级半监督分类</em>关于半监督学习)，我们讨论了<a id="_idIndexMarker1340"/>真实数据集如何经常是位于低维流形上的样本的高维表示(这是半监督模式的假设之一，但通常是正确的)。</p>
+
+			<p class="normal">由于模型的复杂性与输入数据的维度成正比，因此已经对许多技术进行了分析和优化，以减少有效组件的实际数量。例如，PCA根据它们的相对解释方差来选择特征，而ICA和通用字典学习技术寻找可以组合以重建原始样本的基本原子。在这一章中，我们将基于一种略有不同的方法来分析一系列模型，但其能力因深度学习方法的采用而显著增强。通用自动编码器是一个模型<a id="_idIndexMarker1341"/>，它被分成两个独立的(但不是完全自主的)组件，称为编码器和解码器。编码器的任务是将输入样本转换为编码的特征向量，而解码器的任务则相反:使用特征向量作为输入来重建原始样本。下图显示了通用模型的示意图:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_01.png" alt=""/></figure>
+
+			<p class="packt_figref">通用自动编码器的模式</p>
+
+			<p class="normal">更正式地说，我们可以将编码器描述为一个参数化的函数:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_001.png" alt=""/></figure>
+
+			<p class="normal">输出<img src="img/B14713_21_002.png" alt=""/>是一个向量代码，其维数通常比输入维数低很多。类似地，解码器描述如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_003.png" alt=""/></figure>
+
+			<p class="normal">标准算法的目标是最小化与重建误差成比例的成本函数。一个经典的方法是基于<strong class="bold">均方误差</strong> ( <strong class="bold"> MSE </strong>)的<a id="_idIndexMarker1342"/>(在样本大小等于M的数据集上工作):</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_004.png" alt=""/></figure>
+
+			<p class="normal">该函数仅依赖于输入样本(恒定的)和参数向量；因此，这是一个事实上的无监督方法，我们可以控制内部结构和对<img src="img/B14713_21_005.png" alt=""/>代码的约束。从概率的角度来看，如果输入样本<img src="img/B14713_21_006.png" alt=""/>是从<em class="italics"> p </em> ( <em class="italics"> X </em>)数据生成过程中抽取的<a id="_idIndexMarker1343"/>，我们的目标是找到一个<em class="italics"> q </em> ( <em class="italics"> X </em>)参数分布，该分布使kull back-lei bler散度与<em class="italics"> p </em> ( <em class="italics"> X </em>最小化。考虑到前面的定义，我们可以定义一个条件分布<img style="height: 1.4em! important;" src="img/B14713_21_007.png" alt=""/>如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_008.png" alt=""/></figure>
+
+			<p class="normal">因此，库尔贝克-莱布勒散度变成如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_009.png" alt=""/></figure>
+
+			<p class="normal">第一项表示原始分布的负熵，它是常数，不涉及优化过程。第二项是<em class="italics"> p </em>和<em class="italics"> q </em>之间的交叉熵。如果我们假设<em class="italics"> p </em>和<em class="italics"> q </em>为高斯分布，则MSE与交叉熵成比例(出于优化的目的，它与交叉熵是等价的)，因此这个成本函数在概率方法下仍然有效。或者，可以考虑<em class="italics"> p </em>和<em class="italics"> q </em>的伯努利分布，交叉熵变成如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_010.png" alt=""/></figure>
+
+			<p class="normal">这两种方法的主要区别在于，虽然MSE可以应用于<img src="img/B14713_21_011.png" alt=""/>(或多维矩阵)，但伯努利分布需要<img src="img/B14713_21_012.png" alt=""/>(形式上，这个条件应该是<img src="img/B14713_21_013.png" alt=""/>；然而，当值<a id="_idIndexMarker1344"/>不是二进制时，也可以成功地执行优化)。相同的约束对于重建是必要的；因此，当使用神经网络时，最常见的选择是采用sigmoid层。准确地说，如果假设数据生成过程是高斯的，交叉熵就变成了MSE。我邀请您检查这一点，但是计算非常简单，因为我们有:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_014.png" alt=""/></figure>
+
+			<p class="normal">排除未经过优化的项，很容易理解原始分布和自动编码器分布之间的实际交叉熵实际上等价于MSE成本函数。</p>
+
+			<h2 id="_idParaDest-319" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor333"/>采用TensorFlow的深度卷积自动编码器示例</h2>
+
+			<p class="normal">这个例子(像本章和后续章节中的所有其他<a id="_idIndexMarker1345"/>一样)基于TensorFlow 2.0(关于TensorFlow的安装<a id="_idIndexMarker1346"/>的信息，请参考官方页面上提供的信息:<a href="https://www.tensorflow.org/">https://www.tensorflow.org/</a>)。如前几章所述，TensorFlow已经发展到包含Keras，并在创建和训练深度模型方面提供了非凡的灵活性。我们将务实地对待这个例子，这意味着我们不会探究所有的特性；它们超出了本书的范围。不过有兴趣的读者可以参考《Holdroyd T .》，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版社，2019年。</p>
+
+			<p class="normal">在本例中，我们将创建一个深度卷积自动编码器，并使用时尚MNIST数据集对其进行训练。第一步是加载数据(使用Keras helper函数)，规范化数据，为了加快计算速度，将训练集限制为1，000个数据点:</p>
+
+			<pre>import tensorflow as tf
+import numpy as np
+nb_samples = 1000
+nb_epochs = 400
+batch_size = 200
+code_length = 256
+(X_train, _), (_, _) = \
+        tf.keras.datasets.fashion_mnist.load_data()
+X_train = X_train.astype(np.float32)[0:nb_samples] \
+              / 255.0
+width = X_train.shape[1]
+height = X_train.shape[2]
+X_train_g = tf.data.Dataset.\
+   from_tensor_slices(np.expand_dims(X_train, axis=3)).\
+   shuffle(1000).batch(batch_size)</pre>
+
+			<p class="normal">生成器<code class="Code-In-Text--PACKT-">X_train_g</code>基于TensorFlow 2.0提供的实用程序类<code class="Code-In-Text--PACKT-">Dataset</code>。它允许您选择用于训练和测试目的所需的数据块(在我们的例子中，没有测试<a id="_idIndexMarker1347"/>生成器)，自动<a id="_idIndexMarker1348"/>洗牌(去除潜在的共线性)，并在每次调用时返回批次。</p>
+
+			<p class="normal">在这一点上，我们可以创建一个从<code class="Code-In-Text--PACKT-">tf.keras.Model</code>继承的类，建立整个架构，它由以下内容组成:</p>
+
+			<p class="normal">编码器(所有层都有填充“相同”并重新激活):</p>
+
+			<ul>
+
+				<li class="list">32个滤波器的卷积，内核大小等于(3 × 3)，步长为(2 × 2)</li>
+
+				<li class="list">与64个滤波器卷积，内核大小等于(3 × 3)，步长为(1× 1)</li>
+
+				<li class="list">与128个滤波器卷积，内核大小等于(3 × 3)，步长为(1 × 1)</li>
+
+			</ul>
+
+			<p class="normal">解码器:</p>
+
+			<ul>
+
+				<li class="list">使用128个滤波器进行转置卷积，内核大小等于(3 × 3)，步长为(2 × 2)</li>
+
+				<li class="list">使用64个滤波器进行转置卷积，内核大小等于(3 × 3)，步长为(1× 1)</li>
+
+				<li class="list">32个滤波器的转置卷积，内核大小等于(3 × 3)，步长为(1 × 1)</li>
+
+				<li class="list">使用1个滤波器、内核大小等于(3 × 3)、步长为(1 × 1)和sigmoid激活的转置卷积</li>
+
+			</ul>
+
+			<p class="normal">由于图像是(28 x 28)的，如果我们将每个批次的大小调整为(32 x 32)的尺寸，这将使我们更容易管理基于2的幂的大小的所有后续操作。</p>
+
+			<p class="normal">编码器执行一系列卷积，从较大的步距(2×2)开始以捕获高级特征，并以(1×1)步距进行64和128次卷积以学习更多和更详细的特征。如<em class="italics">第19章</em>、<em class="italics">深度卷积网络</em>中所述，卷积以顺序方式工作，因此，标准架构通常遵循<a id="_idIndexMarker1349"/>分层序列，有一些顶层卷积和更多的底层卷积。在这种情况下，图像的大小非常小，因此通过编码器网络保存(3 x 3)个内核是个好主意。相反，在较大图像的情况下，第一个卷积也应该涉及较大的核，而最后一个卷积必须关注较小的细节，并且大小应该更小(T21正常的最小值是(2×2))。</p>
+
+			<p class="normal">解码器有一个<a id="_idIndexMarker1350"/>对称架构，因为它是基于转置卷积(即去卷积)。因此，一旦代码被改造，第一个过滤器必须处理细节特征，而最后一个过滤器通常必须关注高级元素(例如，边框)。最后一个转置卷积负责构建输出，它必须与输入大小相匹配。由于我们在示例中使用的是灰度图像，所以我们使用了一个滤镜，而RGB图像需要三个滤镜。可以对步幅进行实际的讨论。当网络具有非常大的容量时，可以使用步长来调整转置卷积层的输出(将每个维度乘以相应的步长值)以匹配最终所需的维度。在不改变输出的情况下，添加更多的卷积(或删除它们)可能是一个聪明的技巧。相反，如果重建的质量不符合预期的要求，有时最好使用专门的高阶函数来调整图像的大小(就像我们在输入阶段所做的那样)。您的选择必须通过评估MSE来做出，如果可能的话，还要通过对结果的目视检查来做出。</p>
+
+			<p class="normal">TensorFlow 2.0在处理从<code class="Code-In-Text--PACKT-">tf.keras.Model</code>派生的类时，需要在构造函数中定义变量，而方法可以自由操纵它们以获得特定的结果。在我们的案例中，我们有:</p>
+
+			<ul>
+
+				<li class="list">构造函数，包含编码器和解码器所需的所有层</li>
+
+				<li class="list">该编码器方法</li>
+
+				<li class="list">解码器方法</li>
+
+				<li class="list">作为实用函数的调整大小方法</li>
+
+				<li class="list">使用模型实例直接调用主操作的<code class="Code-In-Text--PACKT-">call()</code>方法的重载:<pre>class DAC(tf.keras.Model):     def __init__(self):         super(DAC, self).__init__()         # Encoder layers         self.c1 = tf.keras.layers.Conv2D(             filters=32,             kernel_size=(3, 3),             strides=(2, 2),             activation=tf.keras.activations.relu,             padding='same')         self.c2 = tf.keras.layers.Conv2D(             filters=64,             kernel_size=(3, 3),             activation=tf.keras.activations.relu,             padding='same')         self.c3 = tf.keras.layers.Conv2D(             filters=128,             kernel_size=(3, 3),             activation=tf.keras.activations.relu,             padding='same')         self.flatten = tf.keras.layers.Flatten()         self.dense = tf.keras.layers.Dense(             units=code_length,             activation=tf.keras.activations.sigmoid)         # Decoder layers         self.dc0 = tf.keras.layers.Conv2DTranspose(             filters=128,             kernel_size=(3, 3),             strides=(2, 2),             activation=tf.keras.activations.relu,             padding='same')         self.dc1 = tf.keras.layers.Conv2DTranspose(             filters=64,             kernel_size=(3, 3),             activation=tf.keras.activations.relu,             padding='same')         self.dc2 = tf.keras.layers.Conv2DTranspose(             filters=32,             kernel_size=(3, 3),             activation=tf.keras.activations.relu,             padding='same')         self.dc3 = tf.keras.layers.Conv2DTranspose(             filters=1,             kernel_size=(3, 3),             activation=tf.keras.activations.sigmoid,             padding='same')     def r_images(self, x):         return tf.image.resize(x, (32, 32))     def encoder(self, x):         c1 = self.c1(self.r_images(x))         c2 = self.c2(c1)         c3 = self.c3(c2)         code_input = self.flatten(c3)         z = self.dense(code_input)         return z     def decoder(self, z):         decoder_input = tf.reshape(z, (-1, 16, 16, 1))         dc0 = self.dc0(decoder_input)         dc1 = self.dc1(dc0)         dc2 = self.dc2(dc1)         dc3 = self.dc3(dc2)         return dc3     def call(self, x):         code = self.encoder(x)         xhat = self.decoder(code)         return xhat model = DAC()</pre></li>
+
+			</ul>
+
+			<p class="normal">一旦我们也定义了<a id="_idIndexMarker1351"/>我们类的一个实例(为简单起见称为<em class="italics">模型</em>，我们就可以定义优化器，它是带有<img style="height: 1.2em! important;" src="img/B14713_21_015.png" alt=""/>的Adam:</p>
+
+			<pre>optimizer = tf.keras.optimizers.Adam(0.001)</pre>
+
+			<p class="normal">下一步是定义一个助手函数来收集关于训练损失的信息。在我们的例子中，计算每批损失函数的平均值就足够了:</p>
+
+			<pre>train_loss = tf.keras.metrics.Mean(name='train_loss')</pre>
+
+			<p class="normal">现在我们需要创建训练函数，这是TensorFlow 2.0中引入的创新之一。我们先来定义一下:</p>
+
+			<pre>@tf.function
+def train(images):
+    with tf.GradientTape() as tape:
+        reconstructions = model(images)
+        loss = tf.keras.losses.MSE(
+            model.r_images(images), reconstructions)
+    gradients = tape.gradient(
+        loss, model.trainable_variables)
+    optimizer.apply_gradients(
+        zip(gradients, model.trainable_variables))
+    train_loss(loss)</pre>
+
+			<p class="normal">这个函数用decorator标记，通知TensorFlow它将使用模型中定义的变量。为了<a id="_idIndexMarker1354"/>应用反向传播算法，我们需要执行以下步骤:</p>
+
+			<ul>
+
+				<li class="list">激活一个<code class="Code-In-Text--PACKT-">GradientTape</code>上下文，它将负责计算所有可训练变量的梯度。</li>
+
+				<li class="list">运行模型(前馈阶段)。</li>
+
+				<li class="list">评估损失函数(在我们的例子中，它是一个标准的均方误差)。</li>
+
+				<li class="list">计算梯度。</li>
+
+				<li class="list">要求优化器将梯度应用于所有可训练变量(当然，每个算法执行所有必要的额外操作)。</li>
+
+				<li class="list">累积训练损失。</li>
+
+			</ul>
+
+			<p class="normal">相应的Python命令很简单，与以前的TensorFlow版本只有一点不同。一旦声明了这个函数，就可以开始训练过程了:</p>
+
+			<pre>for e in range(nb_epochs):
+    for xi in X_train_g:
+        train(xi)
+    print("Epoch {}: Loss: {:.3f}".
+          format(e+1, train_loss.result()))
+    train_loss.reset_states()</pre>
+
+			<p class="normal">前面代码片段的输出是:</p>
+
+			<pre><strong class="screen-text">Epoch 1: Loss: 0.136</strong>
+<strong class="screen-text">Epoch 2: Loss: 0.090</strong>
+<strong class="screen-text">…</strong>
+<strong class="screen-text">Epoch 399: Loss: 0.001</strong>
+<strong class="screen-text">Epoch 400: Loss: 0.001</strong></pre>
+
+			<p class="normal">因此，在训练过程结束时，平均均方误差为0.001。考虑到图像尺寸调整为32 x 32，并且值在范围(0，1)内，<strong class="bold">平均绝对误差</strong> ( <strong class="bold"> MAE </strong>)范围<a id="_idIndexMarker1355"/>在0到1024之间。因此，等于0.001的误差保证了大约97%的高重建质量(它相当于大约等于0.03或最大误差的3%的MAE)。每当MSE被认为是可靠的重建度量时，该方法也可以推广到不同于图像的数据点。</p>
+
+			<p class="normal">分析代码的长度也很有趣(例如，编码器输出)。因为它在范围(0，1)中是标准化的，所以接近0.5的总平均值表示大约50%的值是活动的，而其余的值接近0(不考虑标准偏差)。稍大于0.5的值<a id="_idIndexMarker1357"/>表示代码非常密集，而稍小于0.5的值是稀疏的标志，因为超过50%的单元具有非常低的激活度:</p>
+
+			<pre>codes = model.encoder(np.expand_dims(X_train, axis=3))
+print("Code mean: {:.3f}".format(np.mean(codes)))
+print("Code STD: {:.3f}".format(np.std(codes)))</pre>
+
+			<p class="normal">前一个块的输出是:</p>
+
+			<pre><strong class="screen-text">Code mean: 0.554</strong>
+<strong class="screen-text">Code STD: 0.241</strong></pre>
+
+			<p class="normal">正如所料(考虑到我们没有施加任何约束)，我们的代码是适度密集的。这也意味着通常不可能在不显著丢失信息的情况下大幅减少代码长度(在本例中，它被设置为等于256)。其原因与代码的熵直接相关。例如，在两个图像的情况下，我们知道最佳编码需要单个二进制单元；然而，对于复杂的图像，我们应该考虑全联合概率分布来估计最佳长度，而这通常是难以处理的。因此，一个好的策略是从大约维度的长度<img src="img/B14713_21_016.png" alt=""/>开始，并通过减少它来继续，直到均方误差保持在固定阈值以下。不言而喻，由自动编码器管理的一部分信息存储在模型的权重中；因此，较深的架构通常能够管理较短的代码，而非常浅的网络需要代码中包含更多的信息。</p>
+
+			<p class="normal">我们现在可以看到一些原始图像及其重建图像:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_02.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\F6047862.tmp"/></figure>
+
+			<p class="packt_figref">原始图像(第一行)及其重建图像(第二行)</p>
+
+			<p class="normal">我们可以看到信息的丢失如何局限于次要细节，并且自动编码器已经成功地学会了如何减少输入样本的维数。</p>
+
+			<p class="normal">作为练习，我邀请<a id="_idIndexMarker1358"/>读者将代码分成两个<a id="_idIndexMarker1359"/>独立的部分(编码器和解码器)并优化架构，以便在整个时尚MNIST数据集上实现更好的准确性。</p>
+
+			<h1 id="_idParaDest-320" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor334"/>去噪自动编码器</h1>
+
+			<p class="normal">自动编码器可用于<a id="_idIndexMarker1360"/>确定数据集的不完整表示。然而，Bengio等人(在Vincent P .，Larochelle H .，Lajoie I .，Bengio Y .，Manzagol P .，<em class="italics">Stacked noise auto encoders:Learning used presentations in a Deep Network with a Local noise Criterion</em>，来自《机器学习研究杂志》，2010年11月)提出使用自动编码器对输入样本进行去噪，而不是学习样本的精确表示，以便从低维代码中重建它。</p>
+
+			<p class="normal">这并不是一个全新的想法，因为，例如，Hopfield网络(几十年前提出)也有同样的目的，但它们在容量方面的限制导致研究人员寻找不同的方法。如今，深度自动编码器可以轻松管理高维数据(如图像)，从而满足空间需求。这就是为什么许多人现在重新考虑教网络如何从损坏的图像重建样本图像的想法。形式上，去噪自动编码器和标准自动编码器之间没有太多区别。然而，在这种情况下，编码器必须处理噪声样本:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_017.png" alt=""/></figure>
+
+			<p class="normal">解码器的成本函数保持不变。如果对每一批次的噪声进行采样，则重复该过程足够多的迭代次数允许自动编码器学习当一些片段丢失或损坏时如何重建原始图像。为了达到这个目标，作者提出了不同种类的噪音。最常见的选择是采样高斯噪声，它具有一些有用的特性，并且与许多真实世界的噪声过程一致:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_018.png" alt=""/></figure>
+
+			<p class="normal">另一种可能是采用输入漏失层，将一些随机元素置零:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_019.png" alt=""/></figure>
+
+			<p class="normal">这种选择显然更为激烈，而且利率必须适当调整。大量丢弃的像素会不可逆转地删除许多信息，重建会变得更加困难和严格(我们的目的是将自动编码器的能力扩展到从相同分布中抽取的其他<a id="_idIndexMarker1361"/>样本)。或者，也可以混合高斯噪声和压差噪声，以固定的概率在它们之间切换。显然，这些模型肯定比标准的自动编码器更复杂，因为现在它们必须处理缺失的信息。</p>
+
+			<p class="normal">同样的概念也适用于代码长度:非常不完整的代码将无法以最准确的方式提供重建原始图像所需的所有元素。我建议测试所有的可能性，特别是当噪声受到外部条件限制时(例如，旧照片或通过受精确噪声过程影响的通道传输的消息)。如果该模型还必须用于从未见过的样本，那么选择代表真实分布的样本是极其重要的，只要元素的数量不足以达到所需的准确性水平，就使用数据扩充技术(仅限于与特定问题兼容的操作)。</p>
+
+			<h2 id="_idParaDest-321" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor335"/>使用TensorFlow的去噪自动编码器示例</h2>
+
+			<p class="normal">这个例子不需要<a id="_idIndexMarker1362"/>对之前定义的模型做任何戏剧性的<a id="_idIndexMarker1363"/>修改。事实上，去噪能力是每个自动编码器的固有属性。为了测试它，我们只需要考虑训练函数现在需要噪声图像和原始图像:</p>
+
+			<pre>model = DAC()
+@tf.function
+def train(noisy_images, images):
+    with tf.GradientTape() as tape:
+        reconstructions = model(noisy_images)
+        loss = tf.keras.losses.MSE(
+            model.r_images(images), reconstructions)
+    gradients = tape.gradient(
+        loss, model.trainable_variables)
+    optimizer.apply_gradients(
+        zip(gradients, model.trainable_variables))
+    train_loss(loss)</pre>
+
+			<p class="normal">正如可能看到的，现在计算重建和原始图像(不再是模型的输入)之间的均方误差，而模型被输入有噪声的图像。如果在每个训练步骤随机采样噪声，自动编码器学习数据所在的流形的结构，同时，它对输入的<a id="_idIndexMarker1364"/>小变化变得鲁棒。这个结果是平滑度假设的结果(参见<em class="italics">第3章</em>、<em class="italics">半监督学习介绍</em>)以及一组损坏数据点的平均值定义了一个吸引子盆地的事实。因此，噪声输入产生的<a id="_idIndexMarker1365"/>码略有不同，被解码为最接近的均值。当然，如果变化过大，考虑到模型的高度非线性，恢复原始图像的概率越来越小。出于我们的目的，我们将考虑削波高斯噪声:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_020.png" alt=""/></figure>
+
+			<p class="normal">以这种方式，噪声图像总是被隐式归一化，假设值在范围(0，1)内:</p>
+
+			<pre>for e in range(nb_epochs):
+        for xi in X_train_g:
+            xn = np.clip(xi +
+                  np.random.normal(
+                   0.0, 0.2,
+                   size=(batch_size, width, height, 1)),
+                  0.0, 1.0)
+            train(xn, xi)
+        print("Epoch {}: Loss: {:.3f}".
+              format(e + 1, train_loss.result()))
+        train_loss.reset_states()</pre>
+
+			<p class="normal">前面代码片段的输出是:</p>
+
+			<pre><strong class="screen-text">Epoch 1: Loss: 0.146</strong>
+<strong class="screen-text">Epoch 2: Loss: 0.100</strong>
+<strong class="screen-text">…</strong>
+<strong class="screen-text">Epoch 399: Loss: 0.002</strong>
+<strong class="screen-text">Epoch 400: Loss: 0.002</strong></pre>
+
+			<p class="normal">考虑到这些模型的容量，看到最终损失几乎与标准自动编码器相同也就不足为奇了。因此，我们可以确定任何噪声图像(基于具有单位方差/单位协方差矩阵的限幅高斯噪声)将被正确恢复。</p>
+
+			<p class="normal">下图中我们可以看到一些例子:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_03.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\C691A7C1.tmp"/></figure>
+
+			<p class="packt_figref">噪声图像(第一行)及其重建(第二行)</p>
+
+			<p class="normal">去噪自动编码器<a id="_idIndexMarker1366"/>已经成功地学会在高斯噪声存在的情况下<a id="_idIndexMarker1367"/>重建原始图像(MAE约等于0.04，因此准确度约为96%)。我邀请您测试其他方法(例如使用初始压降)并提高噪声水平，以了解这种模型可以有效消除的最大破坏是什么。</p>
+
+			<h1 id="_idParaDest-322" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor336"/>稀疏自动编码器</h1>
+
+			<p class="normal">一般来说，标准的<a id="_idIndexMarker1368"/>自动编码器产生密集的内部表示。这意味着大多数值不为零。然而，在某些情况下，拥有能够更好地表示属于字典的原子的稀疏代码更有用。在这种情况下，如果<img style="height: 1.7em! important;" src="img/B14713_21_021.png" alt=""/>、<img style="height: 1.6em! important;" src="img/B14713_21_022.png" alt=""/>，我们可以把每一个样品看作是特定原子的重叠，相应地进行加权。为了实现这个目标，我们可以简单地对代码层应用一个<em class="italics">L</em>T5】1罚值，如<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>中所述。因此，单个样本的损失函数如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_023.png" alt=""/></figure>
+
+			<p class="normal">在这种情况下，我们需要考虑额外的超参数α，必须对其进行调整以增加稀疏度，而不会对精度产生负面影响。作为一般的经验法则，我建议从等于0.01的值开始，然后减小它，直到达到期望的结果。在大多数情况下，较高的值会产生很差的性能，因此通常避免使用。吴恩达提出了一种不同的方法(在2011年斯坦福机器学习讲义Ng。一、<em class="italics">稀疏自动编码器</em>，CS294A，斯坦福大学)。如果我们将代码层视为一组独立的伯努利随机变量，我们可以通过考虑具有非常低均值的通用参考伯努利变量(例如，<img src="img/B14713_21_024.png" alt=""/>)并将通用元素<img src="img/B14713_21_025.png" alt=""/>和<em class="italics"> p </em> <sub> r </sub>之间的kull back–lei bler散度添加到成本函数来加强稀疏性。对于单个样本，额外项如下(其中<em class="italics"> p </em>为码长):</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_026.png" alt=""/></figure>
+
+			<p class="normal">由此产生的损失函数如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_027.png" alt=""/></figure>
+
+			<p class="normal">这种损失的效果类似于<em class="italics"> L </em> <sub> 1 </sub>(对于<img src="img/B14713_04_005.png" alt=""/>超参数具有相同的考虑)，但是许多实验已经证实，所得到的成本函数更容易优化，并且有可能实现达到更高重建精度的相同水平的稀疏度。当使用稀疏自动编码器时，代码长度通常会更长，因为假设单个元素由少量原子组成(与字典大小相比)。因此，我建议您评估不同代码长度的稀疏程度，并选择最大化前者和最小化后者的组合。</p>
+
+			<h2 id="_idParaDest-323" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor337"/>为时尚的MNIST深度卷积自动编码器添加稀疏性</h2>
+
+			<p class="normal">在这个例子中，我们<a id="_idIndexMarker1370"/>将把一个<em class="italics">L</em>T31】1正则化项添加到第一个练习中定义的成本函数中。由于我们仅使用1，000幅图像，我们更喜欢使用相当于24 x 24 = 576个值的更大的潜在代码。假设由于类别而部分重叠，我们期望最终的稀疏度比第一个例子中的稀疏度大得多，但是不低于最大长度的10%(这对应于完美的聚类)。较小的值是不太可能的，并且需要更长、更完整的字典。事实上，考虑到特征的性质，许多不同的图像共享相同的细节(例如，衬衫和t恤或外套)，这导致最小密度可以通过仅利用一些深度模型的极限容量来降低，最终，在数据点之间获得几乎一对一的关联(例如，几乎没有任何泛化能力的训练集的完全过度拟合)。当然，这既不是我们的目标，也不是任何真正的深度学习任务的目的。</p>
+
+			<p class="normal">让我们从定义参数开始:</p>
+
+			<pre>nb_samples = 1000
+nb_epochs = 400
+batch_size = 200
+code_length = 576
+alpha = 0.1</pre>
+
+			<p class="normal">此时，我们可以重新定义类，其中代码密集层多了一个系数为<img style="height: 0.9em! important;" src="img/B14713_21_029.png" alt=""/>的<em class="italics">L</em>T35】1正则化约束。这个值可以增加以引起更多的稀疏，但是由于解的次优性，结果将遭受质量损失。然而，由于该约束仅施加于有限数量的激活，因此其他权重有部分补偿误差并产生非常小的最终损失的空间:</p>
+
+			<pre>class SparseDAC(tf.keras.Model):
+    def __init__(self):
+        super(DAC, self).__init__()
+        self.c1 = tf.keras.layers.Conv2D(
+            filters=32,
+            kernel_size=(3, 3),
+            strides=(2, 2),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.c2 = tf.keras.layers.Conv2D(
+            filters=64,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.c3 = tf.keras.layers.Conv2D(
+            filters=128,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.flatten = tf.keras.layers.Flatten()
+        self.dense = tf.keras.layers.Dense(
+            units=code_length,
+            activation=tf.keras.activations.sigmoid,
+            activity_regularizer=
+            tf.keras.regularizers.l1(alpha))
+        self.dc0 = tf.keras.layers.Conv2DTranspose(
+            filters=128,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.dc1 = tf.keras.layers.Conv2DTranspose(
+            filters=64,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.dc2 = tf.keras.layers.Conv2DTranspose(
+            filters=32,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.dc3 = tf.keras.layers.Conv2DTranspose(
+            filters=1,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+    def r_images(self, x):
+        return tf.image.resize(x, (24, 24))
+    def encoder(self, x):
+        c1 = self.c1(self.r_images(x))
+        c2 = self.c2(c1)
+        c3 = self.c3(c2)
+        code_input = self.flatten(c3)
+        z = self.dense(code_input)
+        return z
+    def decoder(self, z):
+        decoder_input = tf.reshape(z, (-1, 24, 24, 1))
+        dc0 = self.dc0(decoder_input)
+        dc1 = self.dc1(dc0)
+        dc2 = self.dc2(dc1)
+        dc3 = self.dc3(dc2)
+        return dc3
+    def call(self, x):
+        code = self.encoder(x)
+        xhat = self.decoder(code)
+        return code, xhat
+model = SparseDAC()</pre>
+
+			<p class="normal">训练函数<a id="_idIndexMarker1371"/>略有不同，因为模型输出代码和重构:</p>
+
+			<pre>@tf.function
+def train(images):
+    with tf.GradientTape() as tape:
+        _, reconstructions = model(images)
+        loss = tf.keras.losses.MSE(
+            model.r_images(images), reconstructions)
+    gradients = tape.gradient(
+        loss, model.trainable_variables)
+    optimizer.apply_gradients(
+        zip(gradients, model.trainable_variables))
+    train_loss(loss)</pre>
+
+			<p class="normal">在训练过程(与第一个例子相同)之后，我们可以重新计算代码的平均值和标准偏差:</p>
+
+			<pre>codes = model.encoder(np.expand_dims(X_train, axis=3))
+print("Code mean: {:.3f}".format(np.mean(codes)))
+print("Code STD: {:.3f}".format(np.std(codes)))</pre>
+
+			<p class="normal">前面代码片段的输出是:</p>
+
+			<pre><strong class="screen-text">Code mean: 0.284</strong>
+<strong class="screen-text">Code STD: 0.249</strong></pre>
+
+			<p class="normal">正如您所看到的，平均值现在更低了(具有几乎相同的标准偏差和最小的随机变化)，表明更多的代码值更接近于0。我邀请您实现另一个<a id="_idIndexMarker1372"/>策略，因为创建一个填充了小值(例如，0.01)的常量向量并利用TensorFlow提供的矢量化属性更容易。我还建议简化库尔巴克-莱布勒散度，把它分成一个熵项<img style="height: 1.2em! important;" src="img/B14713_21_030.png" alt=""/>(它是常数)和一个交叉熵项<img src="img/B14713_21_031.png" alt=""/>。</p>
+
+			<h1 id="_idParaDest-324" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor338"/>变型自动编码器</h1>
+
+			<p class="normal">一个<strong class="bold">变分自动编码器(VAE) </strong>是由金玛和韦林(在他们的工作金玛D. P .，韦林m .，<em class="italics">自动编码变分贝叶斯</em>，arXiv:1312.6114 [stat .ML])，它部分类似于标准的自动编码器，但有一些基本的内部差异。事实上，目标不是找到数据集的编码表示，而是确定生成过程的参数，该过程能够在给定输入数据生成过程的情况下产生所有可能的输出。</p>
+
+			<p class="normal">让我们以基于可学习的参数向量<img src="img/B14713_05_075.png" alt=""/>和一组具有概率密度函数<img src="img/B14713_21_034.png" alt=""/>的潜在变量<img src="img/B14713_21_033.png" alt=""/>的模型为例。因此，我们的目标可以定义为研究最大化边缘化分布<img src="img/B14713_21_036.png" alt=""/>可能性的<img src="img/B14713_12_009.png" alt=""/>参数(通过联合概率<img src="img/B14713_21_037.png" alt=""/>的积分获得):</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_038.png" alt=""/></figure>
+
+			<p class="normal">如果这个问题可以很容易地以封闭形式解决，那么从<img src="img/B14713_21_039.png" alt=""/>数据生成过程中抽取的大量样本将足以为<img src="img/B14713_21_040.png" alt=""/>找到一个很好的近似值。不幸的是，前面的表达式在大多数情况下是难以处理的，因为真实的先验<img src="img/B14713_21_041.png" alt=""/>是未知的(这是一个次要问题，因为我们可以很容易地做出一些有用的假设),并且后验分布<img src="img/B14713_21_042.png" alt=""/>几乎总是接近于零。第一个问题可以通过选择一个简单的先验来解决(最常见的选择是<img src="img/B14713_21_043.png" alt=""/>)，但是<a id="_idIndexMarker1374"/>第二个问题仍然非常困难，因为只有几个<img src="img/B14713_21_044.png" alt=""/>值可以产生可接受的样本。当数据集非常高维和复杂时(例如，图像)，尤其如此。即使有数以百万计的组合，其中只有一小部分可以产生真实的样本(如果图像是汽车的照片，我们预计四个车轮在下部，但仍然有可能生成车轮在顶部的样本)。</p>
+
+			<p class="normal">为此，我们需要开发一种方法来减少样本空间。变分贝叶斯方法基于采用代理分布的思想，代理分布易于采样，并且在这种情况下，其密度非常高(即，产生合理输出的概率远高于真实后验概率)。在这种情况下，考虑到标准自动编码器的架构，我们定义了近似后验概率。特别是，我们可以引入一个分布<img src="img/B14713_21_045.png" alt=""/>作为编码器(它不再表现出确定性)，可以很容易地用神经网络建模。当然，我们的目标是找到最佳的<img src="img/B14713_21_046.png" alt=""/>参数集，以最大化<em class="italics"> q </em>和真实后验分布<img src="img/B14713_21_047.png" alt=""/>之间的相似性。这个结果可以通过最小化kull back-lei bler散度来实现:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_048.png" alt=""/></figure>
+
+			<p class="normal">在最后一个公式中，术语<img src="img/B14713_21_049.png" alt=""/>不依赖于<img src="img/B14713_21_050.png" alt=""/>，因此它可以从期望值运算符中提取，并且可以对表达式进行操作以简化它:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_051.png" alt=""/></figure>
+
+			<p class="normal">该等式也可以改写如下:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_052.png" alt=""/></figure>
+
+			<p class="normal">在右边，我们现在有了术语<strong class="bold">ELBO</strong>(<strong class="bold">证据下限</strong>的缩写)和概率编码器<img src="img/B14713_21_053.png" alt=""/>与真实后验分布<img src="img/B14713_21_054.png" alt=""/>之间的库尔贝克-莱布勒<a id="_idIndexMarker1375"/>分歧。ELBO是<a id="_idIndexMarker1376"/>变分法中唯一需要的量(关于这种技术的更多细节，这超出了本书的范围，请参见Bishop C. M .，<em class="italics">模式识别和机器学习，Springer </em>，2011)。由于我们希望在<img src="img/B14713_05_075.png" alt=""/>参数化下最大化样本的对数概率，并考虑到KL散度总是非负的，我们只能使用ELBO(这比其他术语更容易管理)。事实上，我们要优化的损失函数是负ELBO。为了实现这一目标，我们需要两个更重要的步骤。</p>
+
+			<p class="normal">第一个是为<img src="img/B14713_21_056.png" alt=""/>选择合适的结构。由于假定<img src="img/B14713_21_057.png" alt=""/>是正态的，我们可以假定将<img src="img/B14713_21_058.png" alt=""/>建模为多元高斯分布，将概率编码器分成两个块，这两个块被馈送相同的较低层:</p>
+
+			<ul>
+
+				<li class="list">输出向量<img src="img/B14713_21_060.png" alt=""/>的均值生成器<img src="img/B14713_21_059.png" alt=""/></li>
+
+				<li class="list">协方差<a id="_idIndexMarker1377"/>发生器(假设对角矩阵)<img src="img/B14713_21_061.png" alt=""/>，其输出向量<img src="img/B14713_21_062.png" alt=""/>，使得<img src="img/B14713_21_063.png" alt=""/></li>
+
+			</ul>
+
+			<p class="normal">以这种方式，<img src="img/B14713_21_064.png" alt=""/>，因此右手边的第二项是两个高斯分布之间的Kullback-Leibler散度，它可以很容易地表示如下(<em class="italics"> p </em>是均值和协方差向量的维数):</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_065.png" alt=""/></figure>
+
+			<p class="normal">这个操作比预期的简单，因为<img src="img/B14713_21_066.png" alt=""/>是对角线，轨迹对应于元素<img src="img/B14713_21_067.png" alt=""/>和<img src="img/B14713_21_068.png" alt=""/>的和。</p>
+
+			<p class="normal">此时，最大化前一表达式的右侧相当于最大化对数概率的期望值以生成可接受的样本，并最小化正态先验和编码器合成的高斯分布之间的差异。现在一切似乎都简单多了，但还有一个问题需要解决。我们想要使用神经网络和随机梯度下降算法，因此我们需要可微分的函数。</p>
+
+			<p class="normal">由于Kullback-Leibler散度只能使用具有<em class="italics"> n </em>个元素的小批量来计算(经过足够次数的迭代后，近似值变得更接近真实值)，因此有必要从分布<img style="height: 1.9em! important;" src="img/B14713_21_069.png" alt=""/>中采样n个值，不幸的是，该操作是不可微的。为了解决这个问题，作者提出了一个重新参数化的技巧:我们可以从正态分布<img style="height: 1.5em! important;" src="img/B14713_21_071.png" alt=""/>中采样，而不是从<img style="height: 1.5em! important;" src="img/B14713_21_070.png" alt=""/>中采样，并将实际样本构建为<img src="img/B14713_21_072.png" alt=""/>。考虑到<img style="height: 0.9em! important;" src="img/B14713_21_073.png" alt=""/>在批处理期间(正向和反向阶段)是一个恒定向量，很容易计算相对于前一表达式的梯度，并优化解码器和编码器。要考虑的最后一个元素是我们要最大化的表达式右侧的第一项:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_074.png" alt=""/></figure>
+
+			<p class="normal">这一项表示实际分布和重建分布之间的负交叉熵。正如第一节所讨论的，有两种可行的选择:高斯分布或伯努利分布。一般来说，VAEs采用伯努利分布，输入样本和重建值限制在0和1之间。然而，许多实验已经<a id="_idIndexMarker1379"/>证实MSE可以加快训练过程，因此我建议您测试这两种方法，并选择一种保证最佳性能的方法(在准确性和训练速度方面)。</p>
+
+			<h2 id="_idParaDest-325" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor339"/>带张量流的VAE示例</h2>
+
+			<p class="normal">让我们继续使用时尚MNIST数据集来构建一个VAE。第一步需要加载并规范化它:</p>
+
+			<pre>import tensorflow as tf
+(X_train, _), (_, _) = \
+    tf.keras.datasets.fashion_mnist.load_data()
+X_train = X_train.astype(np.float32)[0:nb_samples] \
+/ 255.0
+width = X_train.shape[1]
+height = X_train.shape[2]</pre>
+
+			<p class="normal">如所解释的，编码器的输出现在被分成两个分量:均值和协方差向量(两者的维数都等于(宽度×高度))，并且解码器输入是通过从正态分布采样并投影代码分量而获得的。完整的模型类如下(所有参数与第一个示例相同，是所有其他示例的参考):</p>
+
+			<pre>class DAC(tf.keras.Model):
+    def __init__(self, width, height):
+        super(DAC, self).__init__()
+	  self.width = width
+        self.height = height
+        self.c1 = tf.keras.layers.Conv2D(
+            filters=32,
+            kernel_size=(3, 3),
+            strides=(2, 2),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.c2 = tf.keras.layers.Conv2D(
+            filters=64,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.c3 = tf.keras.layers.Conv2D(
+            filters=128,
+            kernel_size=(3, 3),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.flatten = tf.keras.layers.Flatten()
+        self.code_mean = tf.keras.layers.Dense(
+            units=width * height)
+        self.code_log_variance = tf.keras.layers.Dense(
+            units=width * height)
+        self.dc0 = tf.keras.layers.Conv2DTranspose(
+            filters=63,
+            kernel_size=(3, 3),
+            strides=(2, 2),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.dc1 = tf.keras.layers.Conv2DTranspose(
+            filters=32,
+            kernel_size=(3, 3),
+            strides=(2, 2),
+            activation=tf.keras.activations.relu,
+            padding='same')
+        self.dc2 = tf.keras.layers.Conv2DTranspose(
+            filters=1,
+            kernel_size=(3, 3),
+            padding='same')
+    def r_images(self, x):
+        return tf.image.resize(x, (32, 32))
+    def encoder(self, x):
+        c1 = self.c1(self.r_images(x))
+        c2 = self.c2(c1)
+        c3 = self.c3(c2)
+        code_input = self.flatten(c3)
+        mu = self.code_mean(code_input)
+        sigma = self.code_log_variance(code_input)
+        code_std = tf.sqrt(tf.exp(sigma))
+        normal_samples = tf.random.normal(
+            mean=0.0, stddev=1.0, 
+            shape=(batch_size, width * height))
+        z = (normal_samples * code_std) + mu
+        return z, mu, code_std
+    def decoder(self, z):
+        decoder_input = tf.reshape(z, (-1, 7, 7, 16))
+        dc0 = self.dc0(decoder_input)
+        dc1 = self.dc1(dc0)
+        dc2 = self.dc2(dc1)
+        return dc2, tf.keras.activations.sigmoid(dc2)
+    def call(self, x):
+        code, cm, cs = self.encoder(x)
+        logits, xhat = self.decoder(code)
+        return logits, cm, cs, xhat</pre>
+
+			<p class="normal">该结构<a id="_idIndexMarker1381"/>非常类似于标准深度自动编码器，但是，在这种情况下，编码器执行两个额外的步骤:</p>
+
+			<ol>
+
+				<li class="list">来自正态分布的样本<img style="height: 1.2em! important;" src="img/B14713_21_075.png" alt=""/></li>
+
+			
+
+				<li class="list" value="2">执行转换<img style="height: 1.2em! important;" src="img/B14713_21_076.png" alt=""/>(在代码中，使用标准偏差，而不是方差；因此，没有必要平方第二项)</li>
+
+			</ol>
+
+			<p class="normal">解码器输出重构(经a <code class="Code-In-Text--PACKT-">sigmoid</code>滤波)和<code class="Code-In-Text--PACKT-">logits</code>(即应用<code class="Code-In-Text--PACKT-">sigmoid</code>之前的值)。这有助于定义损失函数:</p>
+
+			<pre>optimizer = tf.keras.optimizers.Adam(0.001)
+train_loss = tf.keras.metrics.Mean(name='train_loss')
+@tf.function
+def train(images):
+    with tf.GradientTape() as tape:
+        logits, cm, cs, _ = model(images)
+        loss_r = \
+            tf.nn.sigmoid_cross_entropy_with_logits(
+            logits=logits, labels=images)
+        kl_divergence = 0.5 * tf.reduce_sum(
+            tf.math.square(cm) + tf.math.square(cs) -
+            tf.math.log(1e-8 + tf.math.square(cs)) - 1, 
+            axis=1)
+        loss = tf.reduce_sum(loss_r) + kl_divergence
+    gradients = tape.gradient(
+        loss, model.trainable_variables)
+    optimizer.apply_gradients(
+        zip(gradients, model.trainable_variables))
+    train_loss(loss)</pre>
+
+			<p class="normal">如您所见，培训功能的唯一区别是:</p>
+
+			<ul>
+
+				<li class="list">使用sigmoid交叉熵作为重建损失(这在数值上比直接计算更稳定)</li>
+
+				<li class="list">作为正则项的Kullback-Leibler散度的存在</li>
+
+			</ul>
+
+			<p class="normal">训练过程<a id="_idIndexMarker1382"/>与本章第一个例子非常相似，因为采样操作是由TensorFlow直接执行的。为简单起见，整个训练块在下面的代码片段中报告:</p>
+
+			<pre>model = DAC(width, height)
+X_train_g = tf.data.Dataset.\
+        from_tensor_slices(
+        np.expand_dims(X_train, axis=3)).\
+        shuffle(1000).batch(batch_size)
+for e in range(nb_epochs):
+for xi in X_train_g:
+            train(xi)
+        print("Epoch {}: Loss: {:.3f}".
+              format(e + 1, train_loss.result()))
+        train_loss.reset_states()</pre>
+
+			<p class="normal">前面代码片段的输出是:</p>
+
+			<pre><strong class="screen-text">Epoch 1: Loss: 102563.508</strong>
+<strong class="screen-text">Epoch 2: Loss: 82810.648</strong>
+<strong class="screen-text">…</strong>
+<strong class="screen-text">Epoch 399: Loss: 38469.824</strong>
+<strong class="screen-text">Epoch 400: Loss: 38474.977</strong></pre>
+
+			<p class="normal">400个历元后的结果如下图所示:</p>
+
+			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_21_04.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\77C28077.tmp"/></figure>
+
+			<p class="packt_figref">原始图像(第一行)及其重建图像(第二行)</p>
+
+			<p class="normal"><a id="_idIndexMarker1383"/>重建的质量在视觉上优于标准深度自动编码器，与后者相反，许多次要细节也已成功重建。</p>
+
+			<div><div><p class="Information-Box--PACKT-">在本示例和前面的示例中，由于TensorFlow随机种子(默认值为1000)，结果可能略有不同。即使没有显式采样，神经网络的初始化也需要许多采样步骤，从而导致适度不同的初始配置。</p>
+
+				</div>
+
+			</div>
+
+			<p class="normal">作为练习，我邀请读者<a id="_idIndexMarker1384"/>使用RGB数据集(如Cifar-10，可在<a href="https://www.cs.toronto.edu/~kriz/cifar.html">https://www.cs.toronto.edu/~kriz/cifar.html</a>找到)通过将输出样本与从原始分布中抽取的样本进行比较来测试VAE的生成能力。</p>
+
+			<h1 id="_idParaDest-326" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor340"/>摘要</h1>
+
+			<p class="normal">在这一章中，我们介绍了作为无监督模型的自动编码器，它可以学习用低维代码表示高维数据集。它们被构造成两个独立的块(然而，它们被一起训练):编码器，负责将输入样本映射到内部表示；以及解码器，必须执行相反的操作，从代码开始重建原始图像。</p>
+
+			<p class="normal">我们还讨论了如何使用自动编码器对样本进行降噪，以及如何对代码层施加稀疏性约束，以类似于标准字典学习的概念。最后一个话题是关于一个稍微不同的模式，叫做VAE。这个想法是建立一个生成模型，能够重现属于一个训练分布的所有可能的样本。</p>
+
+			<p class="normal">在下一章中，我们将简要介绍一个非常重要的模型家族，称为<strong class="bold">生成对抗网络</strong> ( <strong class="bold"> GANs </strong>)，它与VAE的目的没有太大的不同，但是它有一个更加灵活的方法。</p>
+
+			<h1 id="_idParaDest-327" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor341"/>延伸阅读</h1>
+
+			<ul>
+
+				<li class="list">Vincent P .、Larochelle H .、Lajoie I .、Bengio Y .、Manzagol P .、<em class="italics">堆叠去噪自动编码器:利用局部去噪标准学习深度网络中的有用表示</em>，《机器学习研究杂志》，2010年11月</li>
+
+				<li class="list">Ng。一、稀疏自动编码器，CS294A，<em class="italics">机器学习讲义，斯坦福大学</em>，2011</li>
+
+				<li class="list">金玛D. P .，韦林m .，<em class="italics">自动编码变分贝叶斯</em>，arXiv:1312.6114【统计。ML]</li>
+
+				<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版，2019</li>
+
+				<li class="list">Bishop C. M .，<em class="italics">模式识别和机器学习</em>，斯普林格，2011</li>
+
+				<li class="list">Goodfellow I .，Bengio Y .，<em class="italics">库维尔a .，</em>深度学习，麻省理工学院出版社，2016</li>
+
+				<li class="list">Bonaccorso G .，<em class="italics">机器学习算法第二版</em>，Packt出版，2018</li>
+
+			</ul>
+
+		</div>
+
+
+
+</body></html>

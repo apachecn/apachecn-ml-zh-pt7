@@ -1,0 +1,1168 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Optimizing Neural Networks for Mobile Devices</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">为移动设备优化神经网络</h1>
+                
+            
+            
+                
+<p>现代卷积神经网络可能非常庞大。例如，预训练的ResNet家庭网络可以是100到1，000层深，并且以Torch数据格式占用138 MB到0.5 GB。将它们部署到移动或嵌入式设备可能会有问题，特别是如果您的应用程序需要多个模型来完成不同的任务。此外，CNN的计算量很大，并且在某些设置中(例如，实时视频分析)会很快耗尽设备电池。实际上，比写这一章的介绍要快得多。但是它们为什么这么大，为什么消耗这么多能量？我们如何在不牺牲准确性的情况下修复它？</p>
+<p>因为我们已经在前一章讨论了速度优化，所以我们在这一章集中讨论内存消耗。我们特别关注深度学习神经网络，但我们也给出了适用于其他类型的机器学习模型的几个通用建议。</p>
+<p>在本章中，我们将讨论以下主题:</p>
+<ul>
+<li>为什么要压缩模型？</li>
+<li>机器学习模型压缩的一般建议</li>
+<li>为什么深度神经网络很大</li>
+<li>什么因素影响神经网络的大小？</li>
+<li>神经网络的哪些部分最重？</li>
+<li>模型规模缩减的方法——参数数量缩减、剪枝、训练量化和霍夫曼编码</li>
+<li>紧凑型CNN架构</li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Delivering perfect user experience</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">提供完美的用户体验</h1>
+                
+            
+            
+                
+<p>根据iTunes Connect开发者指南，app未压缩的总大小应小于4 GB(截至2017年12月15日)；然而，这仅适用于二进制文件本身，而资产文件可以占用磁盘容量允许的尽可能多的空间。苹果开发者网站(<a href="https://developer.apple.com/news/?id=09192017b" target="_blank">https://developer.apple.com/news/?id=09192017b</a>)声明，手机下载的应用程序大小也有限制:</p>
+<p>“我们已经将手机网络下载限制从100 MB提高到150 MB，让客户可以通过手机网络从App Store下载更多应用。”</p>
+<p>简单的结论是，你最好将你的模型参数存储为按需资源，或者在应用程序已经安装后从你的服务器下载它们；但这只是问题的一半。另一半是你真的不希望你的app占用很多空间，消耗成吨的流量，因为这是很差的用户体验。</p>
+<p>我们可以从几个方向着手解决这个问题(从最简单到最复杂):</p>
+<ul>
+<li>使用标准无损压缩算法</li>
+<li>选择紧凑的架构</li>
+<li>防止模型变得过大</li>
+<li>使用有损压缩技术—删除不重要的模型部分</li>
+</ul>
+<p>第一种方法只是权宜之计，因为您仍然需要在运行时解压缩您的模型。在最后一种情况下，我们通常谈论减少模型参数的数量，有效地减少它的容量，以及随之而来的准确性。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Calculating the size of a convolutional neural network</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">计算卷积神经网络的大小</h1>
+                
+            
+            
+                
+<p>让我们拿一些知名的CNN，比如说VGG16，来详细看看内存到底是怎么被消耗的。您可以使用Keras打印它的摘要:</p>
+<pre>from keras.applications import VGG16<br/>model = VGG16()<br/>print(model.summary())</pre>
+<p>该网络由13个2D卷积层(具有3×3个滤波器、跨距1和pad 1)和3个全连接层(“密集层”)组成。此外，还有一个输入层，5个最大池层和一个展平层，它们不包含参数。</p>
+<table style="width: 634px;height: 1928px">
+<tbody>
+<tr>
+<td>
+<p><strong>层</strong></p>
+</td>
+<td>
+<p><strong>输出形状</strong></p>
+</td>
+<td>
+<p><strong>数据存储器</strong></p>
+</td>
+<td>
+<p><strong>参数</strong></p>
+</td>
+<td>
+<p><strong>p</strong>参数的数量</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>输入层</p>
+</td>
+<td>
+<p>224×224×3</p>
+</td>
+<td>
+<p>150528</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>224×224×64</p>
+</td>
+<td>
+<p>3211264</p>
+</td>
+<td>
+<p>3×3×3×64+64</p>
+</td>
+<td>
+<p>1792</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>224×224×64</p>
+</td>
+<td>
+<p>3211264</p>
+</td>
+<td>
+<p>3×3×64×64+64</p>
+</td>
+<td>
+<p>36928</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MaxPool2D</p>
+</td>
+<td>
+<p>112×112×64</p>
+</td>
+<td>
+<p>802816</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>112×112×128</p>
+</td>
+<td>
+<p>1605632</p>
+</td>
+<td>
+<p>3×3×64×128+128</p>
+</td>
+<td>
+<p>73856</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>112×112×128</p>
+</td>
+<td>
+<p>1605632</p>
+</td>
+<td>
+<p>3×3×128×128+128</p>
+</td>
+<td>
+<p>147584</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MaxPool2D</p>
+</td>
+<td>
+<p>56×56×128</p>
+</td>
+<td>
+<p>401408</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>56×56×256</p>
+</td>
+<td>
+<p>802816</p>
+</td>
+<td>
+<p>3×3×128×256+256</p>
+</td>
+<td>
+<p>295168</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>56×56×256</p>
+</td>
+<td>
+<p>802816</p>
+</td>
+<td>
+<p>3×3×256×256+256</p>
+</td>
+<td>
+<p>590080</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>56×56×256</p>
+</td>
+<td>
+<p>802816</p>
+</td>
+<td>
+<p>3×3×256×256+256</p>
+</td>
+<td>
+<p>590080</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MaxPool2D</p>
+</td>
+<td>
+<p>28×28×256</p>
+</td>
+<td>
+<p>200704</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>28×28×512</p>
+</td>
+<td>
+<p>401408</p>
+</td>
+<td>
+<p>3×3×256×512+512</p>
+</td>
+<td>
+<p>1180160</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>28×28×512</p>
+</td>
+<td>
+<p>401408</p>
+</td>
+<td>
+<p>3×3×512×512+512</p>
+</td>
+<td>
+<p>2359808</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>28×28×512</p>
+</td>
+<td>
+<p>401408</p>
+</td>
+<td>
+<p>3×3×512×512+512</p>
+</td>
+<td>
+<p>2359808</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MaxPool2D</p>
+</td>
+<td>
+<p>14×14×512</p>
+</td>
+<td>
+<p>100352</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>14×14×512</p>
+</td>
+<td>
+<p>100352</p>
+</td>
+<td>
+<p>3×3×512×512+512</p>
+</td>
+<td>
+<p>2359808</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>14×14×512</p>
+</td>
+<td>
+<p>100352</p>
+</td>
+<td>
+<p>3×3×512×512+512</p>
+</td>
+<td>
+<p>2359808</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Conv2D</p>
+</td>
+<td>
+<p>14×14×512</p>
+</td>
+<td>
+<p>100352</p>
+</td>
+<td>
+<p>3×3×512×512+512</p>
+</td>
+<td>
+<p>2359808</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>MaxPool2D</p>
+</td>
+<td>
+<p>7×7×512</p>
+</td>
+<td>
+<p>25088</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>变平</p>
+</td>
+<td>
+<p>25088</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+<td>
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>稠密的</p>
+</td>
+<td>
+<p>4096</p>
+</td>
+<td>
+<p>4096</p>
+</td>
+<td>
+<p>7×7×512×4096+4096</p>
+</td>
+<td>
+<p>102764544</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>稠密的</p>
+</td>
+<td>
+<p>4096</p>
+</td>
+<td>
+<p>4096</p>
+</td>
+<td>
+<p>4097×4096</p>
+</td>
+<td>
+<p>16781312</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>稠密的</p>
+</td>
+<td>
+<p>1000</p>
+</td>
+<td>
+<p>1000</p>
+</td>
+<td>
+<p>4097×1000</p>
+</td>
+<td>
+<p>4097000</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>数据的总内存:Batch_size × 15，237，608 ≈ 15 M</p>
+<p>？？？总内存:Batch _ size×24M 5；4字节≈ 93 MB</p>
+<p>参考:</p>
+<p><a href="http://cs231n.github.io/convolutional-networks/#case" target="_blank">http://cs231n.github.io/convolutional-networks/#case</a><br/><a href="https://datascience.stackexchange.com/questions/17286/cnn-memory-consumption" target="_blank">https://data science . stack exchange . com/questions/17286/CNN-memory-consumption</a></p>
+<p>总参数:138357544≈138米</p>
+<div><img class="aligncenter size-full wp-image-756 image-border" height="426" src="img/9c88e46e-f1c8-4780-8e0e-1a85e5c2a53f.png" width="623"/></div>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Lossless compression</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">无损压缩</h1>
+                
+            
+            
+                
+<p>典型的神经网络包含大量冗余信息。这使我们能够对它们应用无损和有损压缩，并且经常获得相当好的结果。</p>
+<p>霍夫曼编码是一种压缩类型，在关于CNN压缩的研究论文中经常被提及。你也可以使用Apple compression或脸书<kbd>zstd</kbd>库，它们提供最先进的压缩技术。Apple compression包含四种压缩算法(三种通用算法和一种Apple专用算法):</p>
+<ul>
+<li>LZ4是四个中最快的。</li>
+<li>ZLIB是标准的zip存档。</li>
+<li>LZMA速度较慢，但压缩效果最好。</li>
+<li>LZFSE比ZLIB快一点，压缩性能也略好。它针对苹果硬件进行了节能优化。</li>
+</ul>
+<p>下面是一个代码片段，您可以使用LZFSE算法从压缩库中压缩数据，并将其解压缩回来。您可以在<kbd>Compression.playground</kbd>中找到完整的代码:</p>
+<pre>import Compression 
+let data = ... </pre>
+<p><kbd>sourceSize</kbd>保存压缩前的数据大小:</p>
+<pre>let sourceSize = data.count </pre>
+<p>为压缩结果分配缓冲区...我们以原始(非压缩)大小分配它:</p>
+<pre>let compressedBuffer = UnsafeMutablePointer&lt;UInt8&gt;.allocate(capacity: sourceSize) </pre>
+<p><kbd>compression_encode_buffer()</kbd>是用来压缩你的数据的函数。它获取输入和输出缓冲区、它们的大小以及压缩算法的类型(<kbd>COMPRESSION_LZFSE</kbd>)，并返回压缩数据的大小:</p>
+<pre>var compressedSize: Int = 0 
+data.withUnsafeBytes { (sourceBuffer: UnsafePointer&lt;UInt8&gt;) in 
+compressedSize = compression_encode_buffer(compressedBuffer, sourceSize, sourceBuffer, sourceSize, nil, COMPRESSION_LZFSE) 
+} </pre>
+<p><kbd>compressedSize</kbd>变量保存压缩后的大小。</p>
+<p>现在，为了减压。以下是如何为未压缩数据分配适当大小的缓冲区:</p>
+<pre>var uncompressedBuffer = UnsafeMutablePointer&lt;UInt8&gt;.allocate(capacity: sourceSize) </pre>
+<p>同样，<kbd>compression_decode_buffer()</kbd>函数返回未压缩数据的真实大小:</p>
+<pre>let uncompressedSize = compression_decode_buffer(uncompressedBuffer, sourceSize, compressedBuffer, compressedSize, nil, COMPRESSION_LZFSE) </pre>
+<p>将缓冲区转换为普通数据对象:</p>
+<pre>let uncompressedData = Data(bytes: uncompressedBuffer, count: uncompressedSize) </pre>
+<p><kbd>uncompressedData.count</kbd>应该等于初始的<kbd>sourceSize</kbd>。</p>
+<p>为了使无损压缩有效，您的网络结构中需要有许多重复的元素。这可以通过使用权重量化的精度降低来实现(见下一节)。</p>
+<p>苹果lzfse压缩库:脸书zstd压缩库:<ul>
+<li><a href="https://github.com/lzfse/lzfse" target="_blank">https://github.com/lzfse/lzfse</a></li>
+<li><a href="https://developer.apple.com/reference/compression/data_compression" target="_blank">https://开发者. apple . com/reference/compression/data _ compression</a></li>
+</ul>
+Facebook zstd compression library:
+<ul>
+<li><a href="https://github.com/facebook/zstd" target="_blank">https://github.com/facebook/zstd</a></li>
+<li><a href="https://github.com/omniprog/SwiftZSTD" target="_blank">https://github.com/omniprog/SwiftZSTD</a></li>
+</ul>
+</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Compact CNN architectures</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">紧凑型CNN架构</h1>
+                
+            
+            
+                
+<p>在推理过程中，整个神经网络应该被加载到内存中，因此作为移动开发人员，我们对占用尽可能少的内存的小型架构特别感兴趣。小型神经网络也允许减少从网络下载时的带宽消耗。</p>
+<p>最近已经提出了几种设计用于减小卷积神经网络大小的体系结构。我们将简要讨论其中几个最著名的例子。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>SqueezeNet</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">挤压网</h1>
+                
+            
+            
+                
+<p>该架构由Iandola等人在2017年提出，用于自动驾驶汽车。作为基线，研究人员采用了AlexNet架构。这个网络需要240 MB的内存，相当于移动设备。SqueezeNet的参数减少了50倍，并在ImageNet数据集上实现了相同的精度。使用额外的压缩，它的大小可以减少到大约0.5 MB。</p>
+<p>挤压网是由火模块建造的。目标是创建一个具有少量参数的神经网络，但保持有竞争力的精度水平。这是通过以下方法实现的:</p>
+<ul>
+<li>通过用1 x 1过滤器替换3 x 3过滤器来减小网络大小。<br/>在这里，通过用1×1滤波器替换3×3滤波器，我们可以将参数数量瞬间减少9倍。</li>
+<li>减少其余3 x 3滤波器的输入数量。这里，仅通过减少滤波器的数量来减少参数的数量。</li>
+<li>在架构后期进行下采样，使卷积层具有更大的激活图。为了提高分类精度，SqueezeNet的作者减小了后面卷积层的步幅，因此创建了更大的激活/特征图。</li>
+</ul>
+<p>原文可以在这里找到:<a href="https://arxiv.org/abs/1602.07360" target="_blank">https://arxiv.org/abs/1602.07360</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>MobileNets</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">移动网络</h1>
+                
+            
+            
+                
+<p><strong> MobileNets </strong>是一类针对移动和嵌入式应用的高效CNN。它是由谷歌研究团队在2017年<em> MobileNets:面向移动视觉应用的高效卷积神经网络</em>中提出的。与传统的CNN相比，它具有更少的参数，并且需要更少的学习和预测过程的计算。这使得它更快更轻，同时保持了预测的准确性。主要的创新是引入了深度可分卷积:<a href="http://machinethink.net/blog/googles-mobile-net-architecture-on-iphone/" target="_blank">http://machine think . net/blog/Google-mobile-net-architecture-on-iphone/</a>。</p>
+<p>原文可以在这里找到:<a href="https://arxiv.org/abs/1704.04861" target="_blank">https://arxiv.org/abs/1704.04861</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>ShuffleNet</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">沙狐球网</h1>
+                
+            
+            
+                
+<p>ShuffleNet架构是由Face++的研究团队(旷视科技公司)在2017年提出的。它面向计算能力有限(例如，10 - 150 MFLOPs)的移动设备。与经典的CNN相比，ShuffleNet具有更少的参数和执行更少的计算，因为它使用逐点群卷积和信道混洗；例如，它比AlexNet快13倍。准确性保持不变:在ImageNet上，它甚至比MobileNet表现得稍好(头号误差指标)。</p>
+<p>原文可以在这里找到:<a href="https://arxiv.org/abs/1707.01083" target="_blank">https://arxiv.org/abs/1707.01083</a>。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>CondenseNet</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">冷凝网</h1>
+                
+            
+            
+                
+<p>冷凝网是由、刘、劳伦斯范德马腾和基利安q温伯格提出的。通过将各层之间的密集连接与删除未使用连接的机制相结合，它达到了前所未有的效率水平，因此支持在网络内重用功能。CondenseNet被认为比最先进的压缩卷积网络(如MobileNets和ShuffleNets)更有效。</p>
+<p>参考这个:<em xmlns:epub="http://www.idpf.org/2007/ops"> CondenseNet:一个利用学习型群卷积的高效DenseNet】，，，刘，劳伦斯·范·德·马滕，基利安·q·温伯格，2017年11月25日:<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://arxiv.org/abs/1711.09224" target="_blank">，</a>。</em></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Preventing a neural network from growing big</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">防止神经网络变大</h1>
+                
+            
+            
+                
+<p>为了在移动平台上利用尖端的深度学习网络，有效地调整网络的学习变得极其重要，以便我们可以用最少的资源做最多的事情。Google Translate团队为OCR实现的神经网络非常有趣，有助于理解一些防止网络变得过大的经验法则。</p>
+<p>以下是谷歌新闻稿的摘录，可在以下网址找到:<a href="https://translate.googleblog.com/2015/07/how-google-translate-squeezes-deep.html" target="_blank">https://translate . Google blog . com/2015/07/how-Google-translate-squeezes-deep . html</a>:</p>
+<p>“我们需要开发一个非常小的神经网络，并对我们试图教给它的东西施加严格的限制——本质上，对它处理的信息密度设定一个上限。这里的挑战是创建最有效的训练数据。因为我们正在生成自己的训练数据，所以我们尽了很大努力只包含正确的数据，仅此而已。例如，我们希望能够通过少量旋转来识别字母，但不要旋转太多。如果我们过度旋转，神经网络会在不重要的事情上使用过多的信息密度。因此，我们努力开发能够给我们带来快速迭代时间和良好可视化效果的工具。在几分钟之内，我们可以改变生成训练数据的算法，生成数据，重新训练数据，并将其可视化。从那里，我们可以看到什么样的信件是失败的，为什么。在某一点上，我们过度扭曲了我们的训练数据，并且' $ '开始被认为是' S '。我们能够快速识别出这一点，并调整扭曲参数来解决问题。(好，2015)”</p>
+<p>以下是上述笔记的要点:</p>
+<ul>
+<li>通过限制训练数据内的变化来限制学习能力。</li>
+<li>有效的训练数据可以通过仅增加图像中的小旋转来创建。更大的旋转会导致学习的增加，从而增加体型。</li>
+<li>广泛利用可视化快速修复来自网络的错误结果。</li>
+</ul>
+<p>我们能从这些启示中得出什么一般规律？</p>
+<ul>
+<li>为模型尺寸设定一个上限。这将限制您的模型的容量。</li>
+<li>创建最有效的培训数据，并尽可能简化您的网络任务。例如，如果神经网络正在识别照片中的字符，向数据集添加旋转一点的字母，但不要让它学习颠倒或镜像的字符。如果您通过数据扩充来创建数据集，请努力保持数据集的整洁，这样网络除了需要了解的内容之外，不会了解任何其他内容。</li>
+<li>哪些角色可以忽略？比如你可以让网络把“5”和“S”识别为同一个字符，在字典的层面上处理问题。</li>
+<li>一定要想象一下，你的网络内部发生了什么，在哪些地方出现了问题。它最常混淆哪些字符？</li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Lossy compression</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">有损压缩</h1>
+                
+            
+            
+                
+<p>所有有损压缩方法都涉及一个潜在的问题:当您丢失了模型中的部分信息时，您应该检查它在此之后的表现。对压缩模型的再训练将有助于网络适应新的约束。</p>
+<p>网络优化技术包括:</p>
+<ul>
+<li><strong>权重量化</strong>:改变计算精度。比如模型可以全精度(float32)训练，然后压缩到int8。这显著提高了性能。</li>
+<li>权重修剪</li>
+<li>重量分解</li>
+<li>低秩近似。CPU的好方法。</li>
+<li><strong>知识提炼</strong>:训练一个较小的模型来预测较大模型的输出。</li>
+<li>动态存储分配</li>
+<li>层和张量融合。这个想法是将连续的层合并成一层。这减少了存储中间结果所需的内存。</li>
+</ul>
+<p>目前，他们每个人都有自己的优点和缺点，但毫无疑问，更完美的技术将在不久的将来被提出。</p>
+<ul>
+<li><strong>内核自动调优</strong>:通过为目标Jetson、Tesla或DrivePX GPU平台选择最佳数据层和最佳并行算法来优化执行时间</li>
+<li><strong>动态张量内存</strong>:通过仅在每个张量使用期间为其分配内存，减少内存占用并提高内存重用</li>
+<li><strong>多流执行</strong>:通过使用相同的模型和权重并行处理多个输入流，扩展到多个输入流</li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Optimizing for inference</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">推理优化</h1>
+                
+            
+            
+                
+<p>去掉图中只用于反向传播，对推理无用的元素。</p>
+<p>例如，批量归一化图层可以与前面的卷积图层合并为一个图层，因为卷积和批量归一化都是线性操作。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Network pruning</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">网络修剪</h1>
+                
+            
+            
+                
+<p>这种方法背后的一般思想是，不是神经网络中的所有权重都同等重要。因此，我们可以通过去掉不重要的权重来减小网络的规模。从技术上讲，这可以通过以下方式实现:</p>
+<ol>
+<li>训练大型网络:<ul>
+<li>利用任何以前训练过的网络，比如VGG16，并且只重新训练完全连接的层</li>
+</ul>
+</li>
+<li>对过滤器进行分级，或根据标准创建稀疏网络:<ul>
+<li>我们可以通过使用任何可行的标准(比如泰勒标准)对每个过滤器进行排序，并删除排序最低的过滤器，或者用零替换所有小于某个阈值的值，从而形成稀疏网络</li>
+</ul>
+</li>
+<li>微调并重复:<ul>
+<li>在稀疏网络上执行几次迭代训练</li>
+</ul>
+</li>
+</ol>
+<p>这里棘手的问题是如何决定哪些网络不够重要。这可以用我们通常选择超参数的相同方式来解决:检查几个阈值，并比较结果网络的质量度量。</p>
+<p>一定要在修剪过的模型上进行几轮训练，让它修复你造成的伤害。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Weights quantization</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">权重量化</h1>
+                
+            
+            
+                
+<p>8位或更少。</p>
+<p class="mce-root">权重量化允许减小模型的大小，但是以预测精度为代价。在任何情况下，它在运行时都需要相同数量的内存。对于量化，可以使用任何通用聚类算法，例如k-means。</p>
+<p class="mce-root">应用于权重的标准聚类算法。这样，我们用几个比特来代替所有的浮点数，代表它的簇。每个集群1个浮点。重新训练。</p>
+<p class="mce-root"><a href="https://petewarden.com/2016/05/03/how-to-quantize-neural-networks-with-tensorflow/" target="_blank">https://Pete warden . com/2016/05/03/how-to-quantize-neural-networks-with-tensor flow/</a></p>
+<p class="mce-root"><a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/quantization" target="_blank">https://github . com/tensor flow/tensor flow/tree/master/tensor flow/contrib/quantization</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Reducing precision</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">降低精度</h1>
+                
+            
+            
+                
+<p>另一种减小网络规模的简单方法是直接将权重从双精度/浮点数据类型转换为另一种具有较低内存大小的数据类型，或者转换为固定精度。这(几乎)不会影响预测的质量，但允许将模型的规模缩小到原来的四分之一。</p>
+<div><p>仅在训练完成后才专门关注网络精度的降低。以前，曾尝试用较低精度的数据类型训练网络，结果表明难以处理反向传播和梯度。</p>
+</div>
+<p>一旦训练好了网络，我们可以马上用浮点数代替double，或者用固定精度代替double。例如，在经过训练的神经网络中，您有这样的双重权重:</p>
+<pre>0.954929658551372</pre>
+<p>在这一点之后，神经网络不太可能在所有这些数字中编码出有意义的东西。所以，如果你把它们中的大部分去掉，转换成float，什么都不会改变:0.9549297。神经网络足够稳定，可以处理那种微不足道的变化。但即使是现在，看起来精度也太大了。所以，我们可以把它变得更圆。例如到0.9550000。这不会减少内存中模型的大小，因为权重仍然是浮点数；但是它确实减小了IPA二进制文件的大小，因为归档会更有效。此外，压缩模型将占用更少的磁盘空间。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Other approaches</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">其他方法</h1>
+                
+            
+            
+                
+<p>另一种减小神经网络规模的流行方法是通过SVD。SVD应用于预调整的神经网络，因此减少了网络中的参数数量。在减少参数数量后，采用非常规的<strong>反向传播</strong>算法训练SVD重构的模型，比常规BP算法具有更低的时间复杂度。实验结果表明，速度提高了近2倍，而准确度没有损失，准确度提高了约4倍，但损失很小。</p>
+<p>补充阅读:你可以探索科技巨头为移动平台采用的其他几种方法:</p>
+<ul>
+<li><a href="https://handong1587.github.io/deep_learning/2015/10/09/acceleration-model-compression.html" target="_blank">https://handong 1587 . github . io/deep _ learning/2015/10/09/acceleration-model-compression . html</a></li>
+<li><a href="https://research.googleblog.com/2017/02/on-device-machine-intelligence.html" target="_blank">https://research . Google blog . com/2017/02/on-device-machine-intelligence . html</a></li>
+<li><a href="https://www.slideshare.net/embeddedvision/tensorflow-enabling-mobile-and-embedded-machine-intelligence-a-presentation-from-google" target="_blank">https://www . slide share . net/embedded vision/tensor flow-enabled-mobile-and-embedded-machine-intelligence-a-presentation-from-Google</a></li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Facebook's approach in Caffe2</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">脸书在咖啡馆的做法2</h1>
+                
+            
+            
+                
+<p>在开发者大会期间，脸书最近宣布了他们在手机上渲染图像和视频的尖端艺术作品的方法，同时通过高度移动优化的深度神经网络有效地利用计算资源。可以使用以下视觉(<a href="https://developers.facebook.com/videos/f8-2017/delivering-real-time-ai-in-the-palm-of-your-hand/" target="_blank">https://developers . Facebook . com/videos/F8-2017/delivering-real-time-ai-in-the-palm-of-hand/</a>)来研究整体方法:</p>
+<div><img src="img/aca17adc-9458-49a2-b777-183f6db7d6c7.png"/></div>
+<p>图12.1:压缩神经网络的脸书管道</p>
+<p>脸书在他们的应用中使用了以下流水线来实现50倍的尺寸缩减，同时保持精度:</p>
+<ul>
+<li>修剪</li>
+<li>量化</li>
+<li>赫夫曼编码，或标准通用压缩算法</li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Knowledge distillation</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">知识的升华</h1>
+                
+            
+            
+                
+<p> </p>
+<p>知识提炼——您训练您的模型来预测更复杂模型的逻辑。使用大模型的输出作为基础事实来训练小模型。</p>
+<p>附加阅读:</p>
+<p class="mce-root"/>
+<ul>
+<li><a href="https://arxiv.org/abs/1503.02531" target="_blank">https://arxiv.org/abs/1503.02531</a></li>
+<li><a href="https://www.slideshare.net/AlexanderKorbonits/distilling-dark-knowledge-from-neural-networks" target="_blank">https://www . slide share . net/Alexander korbonits/distillating-dark-knowledge-from-neural-networks</a></li>
+<li><a href="https://github.com/chengshengchan/model_compression/blob/master/teacher-student.py" target="_blank">https://github . com/cheng shengchan/model _ compression/blob/master/teacher-student . py</a></li>
+</ul>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Tools</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">工具</h1>
+                
+            
+            
+                
+<p>以下是用于有损压缩的工具:</p>
+<p>TensorFlow压缩工具</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>An example of the network compression</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">网络压缩的一个例子</h1>
+                
+            
+            
+                
+<p>您可以在以下地址找到合适的网络压缩示例:</p>
+<p><a href="https://github.com/caffe2/caffe2/issues/472" target="_blank">https://github.com/caffe2/caffe2/issues/472</a></p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>有几种方法可以使深度神经网络部署在移动平台上达到合适的规模。到目前为止，最流行的是选择紧凑的架构，和有损压缩:量化，剪枝，等等。确保在应用压缩后网络的精度没有下降。</p>
+
+
+            
+
+            
+        
+    </body>
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <title>Bibliography</title>
+        
+        <meta charset="utf-8"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000005314597" name="Adept.expected.resource"/>
+    </head>
+
+    <body>
+        
+
+                            
+                    <h1 class="header-title">文献学</h1>
+                
+            
+            
+                
+<ol>
+<li>O.好，<em>Google Translate如何将深度学习挤到手机上</em>，2015年7月29日:<a href="https://research.googleblog.com/2015/07/how-google-translate-squeezes-deep.html" target="_blank">https://research . Google blog . com/2015/07/How-Google-Translate-squeezes-deep . html</a></li>
+<li class="mce-root">Y.LeCun、J. S. Denker、S. A. Solla、R. E. Howard和L. D. Jackel。<em>优脑残</em>。NIPS，第2卷，第598-605页，1989年</li>
+</ol>
+
+
+            
+
+            
+        
+    </body>
+
+</html></body></html>

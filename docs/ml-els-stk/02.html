@@ -1,0 +1,1220 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Installing the Elastic Stack with Machine Learning</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">使用机器学习安装弹性堆栈</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>在<a href="07120c76-7474-476f-af36-e1b3e3d8688f.xhtml" target="_blank">第1章</a>、<em>IT机器学习、</em>中，我们通过查看理论背后的基本步骤，了解了什么是IT异常检测。最重要的是，我们了解到，由于弹性堆栈，弹性<strong>机器学习</strong> ( <strong> ML </strong>)允许我们操作异常检测，从分析到可视化。现在，在这一章中，我们将卷起袖子，开始安装整个弹性堆栈。通过这样做，我们将对弹性ML的解剖有更好的理解。在本章中，我们将讨论以下主题:</p>
+
+<ul>
+
+<li>安装弹性搜索</li>
+
+<li>安装Kibana</li>
+
+<li>启用ML功能</li>
+
+<li>弹性ML特征</li>
+
+</ul>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Installing the Elastic Stack</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">安装弹性堆叠</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>安装弹性堆栈是一个非常简单的过程。我们首先需要下载并安装Elasticsearch和Kibana。安装后，有一些配置是完全启用弹性ML所必需的。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Downloading the software</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">下载软件</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>弹性软件可以从<a href="https://elastic.co/guide" target="_blank">https://elastic.co/guide</a>下载。在本书中，我们将使用6.5版，这是撰写本文时的最新版本。显然，在你读这本书的时候，有可能存在一个更新的版本——记住这一点。软件可以变化很快！</p>
+
+<p>要下载Elasticsearch，请浏览<a href="https://www.elastic.co/downloads/elasticsearch" target="_blank">https://www.elastic.co/downloads/elasticsearch</a>，并选择合适的下载发行版。对https://www.elastic.co/downloads/kibana的基巴纳做同样的事情。</p>
+
+<p>下载完成后，我们就可以开始安装过程了。</p>
+
+<p>除了下载软件，你还可以在http://cloud.elastic.co申请免费试用。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Installing Elasticsearch</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">安装弹性搜索</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>如果您像我们一样下载了TAR文件，那么从提取文件系统上的内容开始(其中<kbd>x</kbd>、<kbd>y</kbd>和<kbd>z</kbd>是当前的版本号):</p>
+
+<pre><strong>tar -xvf elasticsearch-x.y.z.tar.gz</strong></pre>
+
+<p>否则，如果您喜欢使用其他类型的安装，您可以参考安装文档，网址为<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html" target="_blank">https://www . elastic . co/guide/en/elastic search/reference/current/_ installation . html</a>。</p>
+
+<p>解压后，使用您最喜欢的终端工具进入解压文件夹，运行以下命令启动Elasticsearch:</p>
+
+<pre><strong>cd elasticsearch-x.y.z/bin</strong>
+
+<strong>./elasticsearch</strong></pre>
+
+<p>Elasticsearch将启动一个空集群，默认配置位于安装目录的<kbd>config</kbd>文件夹中，如下例所示:</p>
+
+<pre><strong>%&gt; pwd</strong><br/><strong>/Users/yourusername/elasticsearch-6.5.1</strong><br/><strong>%&gt; ls -lF</strong><br/><strong>total 848</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 13675 Nov 15 21:20 LICENSE.txt</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 403816 Nov 15 21:26 NOTICE.txt</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 8519 Nov 15 21:19 README.textile</strong><br/><strong>drwxr-xr-x@ 45 yourusername staff 1440 Nov 15 21:26 bin/</strong><br/><strong>drwxr-xr-x@ 9  yourusername staff 288 Nov 15 21:26 config/</strong><br/><strong>drwxr-xr-x@ 42 yourusername staff 1344 Nov 15 21:26 lib/</strong><br/><strong>drwxr-xr-x@ 2  yourusername staff 64 Nov 15 21:26 logs/</strong><br/><strong>drwxr-xr-x@ 28 yourusername staff 896 Nov 15 21:26 modules/</strong><br/><strong>drwxr-xr-x@ 2  yourusername staff 64 Nov 15 21:26 plugins/</strong></pre>
+
+<p class="mce-root"/>
+
+<p>为了简单起见，我们不会对Elasticsearch的配置做任何改变，我们将只使用单节点集群安装。</p>
+
+<p>当Elasticsearch启动时，您应该会在控制台中看到类似下面的日志:</p>
+
+<pre><strong>%&gt; bin/elasticsearch</strong><br/><strong>[2018-11-25T09:12:51,181][INFO ][o.e.e.NodeEnvironment ] [1RGCSTv] using [1] data paths, mounts [[/ (/dev/disk1s1)]], net usable_space [47.1gb], net total_space [233.4gb], types [apfs]</strong><br/><strong>[2018-11-25T09:12:51,183][INFO ][o.e.e.NodeEnvironment ] [1RGCSTv] heap size [990.7mb], compressed ordinary object pointers [true]</strong><br/><strong>[2018-11-25T09:12:51,187][INFO ][o.e.n.Node ] [1RGCSTv] node name derived from node ID [1RGCSTvXQZODVPq8gp2LUw]; set [node.name] to override</strong><br/><strong>[2018-11-25T09:12:51,187][INFO ][o.e.n.Node ] [1RGCSTv] version[6.5.1], pid[22781], build[default/tar/8c58350/2018-11-16T02:22:42.182257Z], OS[Mac OS X/10.14.1/x86_64], JVM[Oracle Corporation/Java HotSpot(TM) 64-Bit Server VM/1.8.0_171/25.171-b11]</strong><br/><strong>[2018-11-25T09:12:51,188][INFO ][o.e.n.Node ] [1RGCSTv] JVM arguments [-Xms1g, -Xmx1g, -XX:+UseConcMarkSweepGC, -XX:CMSInitiatingOccupancyFraction=75, -XX:+UseCMSInitiatingOccupancyOnly, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Djava.io.tmpdir=/var/folders/df/g2gdg5r509d49mv0t7mnft8h0000gn/T/elasticsearch.yNPajKl3, -XX:+HeapDumpOnOutOfMemoryError, -XX:HeapDumpPath=data, -XX:ErrorFile=logs/hs_err_pid%p.log, -XX:+PrintGCDetails, -XX:+PrintGCDateStamps, -XX:+PrintTenuringDistribution, -XX:+PrintGCApplicationStoppedTime, -Xloggc:logs/gc.log, -XX:+UseGCLogFileRotation, -XX:NumberOfGCLogFiles=32, -XX:GCLogFileSize=64m, -Des.path.home=/Users/yourusername/elastic/v6.5/elasticsearch-6.5.1, -Des.path.conf=/Users/yourusername/elastic/v6.5/elasticsearch-6.5.1/config, -Des.distribution.flavor=default, -Des.distribution.type=tar]</strong><br/><strong>...</strong><br/><strong>[2018-11-25T09:13:04,168][INFO ][o.e.l.LicenseService ] [1RGCSTv] license [f33e8be3-7742-4390-80dd-35275611de75] mode [basic] - valid</strong></pre>
+
+<p>我们可以看到，该节点已经正确启动，绑定到了<kbd>9200</kbd>端口，并且已经申请了一个<kbd>basic</kbd>类型的许可证，该许可证是有效的。从这里开始，检查Elasticsearch是否正常运行的最简单的方法就是通过API进行检查。在Linux/macOS X命令行上，您可以调用以下命令:</p>
+
+<pre><strong>%&gt; curl -X GET "localhost:9200/"</strong><br/><strong>{</strong><br/><strong> "name" : "1RGCSTv",</strong><br/><strong> "cluster_name" : "elasticsearch",</strong><br/><strong> "cluster_uuid" : "xV8D0pBdSUS-lLU2OLYmlg",</strong><br/><strong> "version" : {</strong><br/><strong> "number" : "6.5.1",</strong><br/><strong> "build_flavor" : "default",</strong><br/><strong> "build_type" : "tar",</strong><br/><strong> "build_hash" : "8c58350",</strong><br/><strong> "build_date" : "2018-11-16T02:22:42.182257Z",</strong><br/><strong> "build_snapshot" : false,</strong><br/><strong> "lucene_version" : "7.5.0",</strong><br/><strong> "minimum_wire_compatibility_version" : "5.6.0",</strong><br/><strong> "minimum_index_compatibility_version" : "5.0.0"</strong><br/><strong> },</strong><br/><strong> "tagline" : "You Know, for Search"</strong><br/><strong>}</strong></pre>
+
+<p>或者，您可以直接在您最喜欢的浏览器中加载URL，或者如果您使用的是Windows，也可以使用PowerShell。不管平台如何，Elasticsearch都给出相同的基本信息——为请求提供服务的节点的名称(这里称为<kbd>1RGCSTv</kbd>)，以及正在运行的Elasticsearch的版本(这里称为<kbd>6.5.1</kbd>)。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Installing Kibana</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">安装Kibana</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>Kibana的安装过程和Elasticsearch一样简单，如果您使用的是macOS的TAR，解压如下所示的档案:</p>
+
+<pre><strong>tar -xvf kibana-x.y.z-darwin-x86_64.tar.gz</strong></pre>
+
+<p>也可以在这里参考安装过程文档:<a href="https://www.elastic.co/guide/en/kibana/current/install.html">https://www . elastic . co/guide/en/ki Bana/current/install . html .</a></p>
+
+<p>由于我们之前安装的Elasticsearch集群使用默认配置，我们不需要更改Kibana配置，所以我们只需要进入安装文件夹并运行以下命令:</p>
+
+<pre><strong>cd kibana-x.y.z-darwin-x86_64/</strong>
+
+<strong>bin/kibana</strong></pre>
+
+<p>这将产生如下所示的输出:</p>
+
+<pre><strong>%&gt; bin/kibana</strong><br/><strong> log [14:27:00.947] [info][status][plugin:kibana@6.5.1] Status changed from uninitialized to green - Ready</strong><br/><strong> log [14:27:01.026] [info][status][plugin:elasticsearch@6.5.1] Status changed from uninitialized to yellow - Waiting for Elasticsearch</strong><br/><strong> ...</strong><br/><strong> log [14:27:08.057] [info][migrations] Finished in 1027ms.</strong><br/><strong> log [14:27:08.059] [info][listening] Server running at http://localhost:5601</strong><br/><strong> log [14:27:08.300] [info][status][plugin:spaces@6.5.1] Status changed from yellow to green - Ready</strong></pre>
+
+<p>重要的是最后两行——您可以看到Kibana服务器在<kbd>5601</kbd>端口上正常运行(状态为<kbd>green</kbd>)。为了直观地检查Kibana是否正常运行，连接到<kbd>http://localhost:5601/status</kbd>并查看是否出现以下状态屏幕:</p>
+
+<div><img class="alignnone size-full wp-image-508 image-border" src="img/eb3cc377-efae-4ebf-9517-cf0f3d15d430.png" style="width:76.75em;height:54.58em;"/></div>
+
+<p class="packt_figure">这显示了Kibana的状态(这里是绿色的)和每个核心插件的状态——包括连接到Elasticsearch的插件和ML需要的插件。</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Enabling Platinum features</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">启用白金功能</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>现在，我们已经有了一个正在运行的Elasticsearch和Kibana安装，它还启用了基本的特性集。这些基本功能(在此描述:【https://elastic.co/subscriptions<a href="https://elastic.co/subscriptions" target="_blank">】)是增值功能，在开源版本或第三方服务(如亚马逊Elasticsearch服务)版本的基础上增强了Elastic Stack的操作和功能。</a></p>
+
+<p>然而，白金级功能提供了更多的企业级功能，例如:</p>
+
+<ul>
+
+<li><strong>安全性</strong>:允许您保护集群中索引的数据，在传输层加密数据，并审计对集群的所有访问</li>
+
+<li><strong>警报</strong>:基于Elasticsearch集群及其他集群中的数据或事件的条件集触发操作</li>
+
+<li><strong>监控</strong>:提供对Elasticsearch、Kibana和Logstash的运行状况的全面了解</li>
+
+<li><strong> Canvas </strong>:允许由动态数据驱动的像素级完美信息图</li>
+
+<li>ML:当然是这本书的主题</li>
+
+</ul>
+
+<p class="packt_figure">白金功能可以通过启用试用许可证进行开箱评估。在Kibana中，点击管理，然后点击Elasticsearch部分中的许可证管理，以显示可以启用试用许可证的位置:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-509 image-border" src="img/12e9040c-0cf9-4031-867d-8bafa25b447c.png" style="width:96.42em;height:45.25em;"/></p>
+
+<p>只需单击开始试用按钮即可启用ML和其他白金功能，并同意许可条款和条件:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-510 image-border" src="img/e7fcd9a6-d4ef-44de-bc5b-771ec93894d7.png" style="width:41.67em;height:23.17em;"/></p>
+
+<p>完成后，许可屏幕将显示您正在试用白金功能:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-511 image-border" src="img/eab3a777-f664-42f3-8e11-df4786b5eca0.png" style="width:48.33em;height:23.67em;"/></p>
+
+<p class="mce-root"/>
+
+<p class="mce-root"/>
+
+<p>一个敏锐的观察者会注意到，在启用<kbd>trial</kbd>许可时，Elasticsearch日志文件中会打印出以下几行:</p>
+
+<pre><strong>[2018-11-25T10:12:13,175][INFO ][o.e.l.LicenseService     ] [1RGCSTv] license [c1300014-2522-41cb-a0f3-7c5a2bd17f36] mode [trial] - valid</strong></pre>
+
+<p>Kibana日志中也有类似的消息:</p>
+
+<pre><strong>  log [15:12:13.230] [info][license][xpack] Imported changed license information from Elasticsearch for the [data] cluster: mode: trial | status: active | expiry date: 2018-12-25T10:12:13-05:00</strong><br/><strong>  log [15:12:13.231] [info][kibana-monitoring][monitoring-ui] Starting monitoring stats collection</strong><br/><strong>  log [15:12:38.937] [info][license][xpack] Imported changed license information from Elasticsearch for the [monitoring] cluster: mode: trial | status: active | expiry date: 2018-12-25T10:12:13-05:00</strong></pre>
+
+<p>一旦这样做了，你就可以马上开始使用弹性ML了。要利用其他白金功能(如安全性和监控)，还需要额外的配置步骤，但这些步骤超出了本书的范围。有关配置这些特性的更多帮助，请参考Elastic文档。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>A guided tour of Elastic ML features</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">弹性ML功能指南</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>既然我们已经启用了Elastic ML，我们将利用本章的剩余部分，通过使用Metricbeat(它收集系统性能指标并将其发送到Elasticsearch)收集的数据，作为一种帮助我们展示一些用例的机制，来粗略地概述ML功能。我们将通过用于ML的Kibana插件创建各种ML分析作业，还将学习如何通过其API与ML交互。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Getting data for analysis</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">获取数据进行分析</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>如果没有Elasticsearch中的数据来分析，ML并不是很令人兴奋。所以，让我们用Metricbeat得到一些！Metricbeat易于安装和配置。它是原始遥测数据的重要来源，非常适合ML。继续——我们假设您尚未安装Metricbeat，因此我们现在可以一起安装。</p>
+
+<p class="mce-root">从这个页面下载Metricbeat开始:<a href="https://www.elastic.co/downloads/beats/metricbeat" target="_blank">https://www.elastic.co/downloads/beats/metricbeat</a>。我们将在macOS X上运行安装，但如果您想在不同的平台上安装，请参考安装文档，网址为<a href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation.html" target="_blank">https://www . elastic . co/guide/en/beats/metric beat/current/metric beat-installation . html</a>。<a href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation.html" target="_blank"/></p>
+
+<p>将Metricbeat提取到您选择的目录后，您会注意到以下文件夹结构:</p>
+
+<p>Metricbeat使用模块收集指标。每个模块都定义了从特定服务(如Redis或MySQL)收集数据的基本逻辑。模块由读取和构造数据的矩阵集组成。这些模块的定义在<kbd>modules.d</kbd>子目录中。默认情况下，只有<kbd>system</kbd>模块被启用——这足以让我们用作ML的示例数据。但是Metricbeat收集的各种数据都可以用ML进行分析。</p>
+
+<pre><strong>%&gt; ls -lF</strong><br/><strong>total 102296</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 13675 Nov 15 20:24 LICENSE.txt</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 163067 Nov 15 20:24 NOTICE.txt</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 808 Nov 15 20:39 README.md</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 373373 Nov 15 20:35 fields.yml</strong><br/><strong>drwxr-xr-x@ 4  yourusername staff 128 Nov 15 20:35 kibana/</strong><br/><strong>-rwxr-xr-x@ 1  yourusername staff 51739288 Nov 15 20:39 metricbeat*</strong><br/><strong>-rw-r--r--@ 1  yourusername staff 61538 Nov 15 20:35 metricbeat.reference.yml</strong><br/><strong>-rw-------@ 1  yourusername staff 5549 Nov 15 20:35 metricbeat.yml</strong><br/><strong>drwxr-xr-x@ 37 yourusername staff 1184 Nov 15 20:35 modules.d/</strong></pre>
+
+<p>因为Metricbeat的默认配置是我们开始所需的一切(并且因为我们还没有完全启用其他白金功能，如安全性，这需要Metricbeat知道如何通过Elasticsearch进行身份验证，我们可以简单地使用此默认配置启动Metricbeat:</p>
+
+<p>启动Metricbeat后，转到Kibana DevTools控制台(<kbd>http://localhost:5601/app/kibana#/d ev_tools/console</kbd>)以检查是否可以在预期的<kbd>metricbeat</kbd>索引中找到新索引的数据。在控制台中，执行以下命令:</p>
+
+<pre><strong>%&gt; ./metricbeat</strong></pre>
+
+<p>After starting Metricbeat, go to the Kibana DevTools console (<kbd>http://localhost:5601/app/kibana#/d ev_tools/console</kbd>) in order to check whether newly indexed data can be found in the expected <kbd>metricbeat</kbd> index. In the console, execute the following command:</p>
+
+<pre>GET _cat/indices/metricbeat*</pre>
+
+<p class="mce-root"/>
+
+<p class="mce-root">这利用了<kbd>_cat/indices</kbd> API来显示可能存在于您的Elasticsearch集群中的任何<kbd>metricbeat</kbd>索引的摘要信息。如果像我一样，在启动Metricbeat后不久执行了这个命令，那么在一个索引中只会有少量的文档，这些文档的名称会附加上索引的创建日期。在我们的示例设置中，前面调用的返回如下:</p>
+
+<p>我们可以看到，我们新创建的<kbd>metricbeat</kbd>索引包含了<kbd>930</kbd>文档。</p>
+
+<pre>yellow open metricbeat-6.5.1-2018.11.25 k4tKS42hSJCER9kV8wkP4g 1 1 930 0 532.9kb 532.9kb</pre>
+
+<p class="packt_figure">在我们继续之前，最后一件事是，我们需要创建一个Kibana索引模式，以便在Kibana中可视化和使用Metricbeat数据。在Kibana的管理部分，单击索引模式链接。</p>
+
+<p>同样，如果您按照我们记录的安装顺序，完全从零开始，您还不会有任何Kibana索引模式。因此，您将立即获得以下屏幕截图:</p>
+
+<p><img class="alignnone size-full wp-image-512 image-border" src="img/6803b320-65c5-4ac8-8281-20989cc2a19a.png" style="width:86.00em;height:47.67em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">通过定义一个对索引名的可变部分使用通配符的模式，为当前的<kbd>metricbeat-*</kbd>索引(以及将来创建的索引)创建一个索引模式:</p>
+
+<p><img class="alignnone size-full wp-image-513 image-border" src="img/c8810212-a461-479e-9c17-813381d71e0a.png" style="width:76.50em;height:36.58em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">点击下一步后，输入<kbd>@timestamp</kbd>作为时间过滤器字段名称:</p>
+
+<p><img class="alignnone size-full wp-image-514 image-border" src="img/9deb0621-2c0b-4e10-a4a2-a473ed1d665c.png" style="width:81.92em;height:38.58em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">然后单击创建索引模式查看完整的索引模式定义:</p>
+
+<p><img class="alignnone size-full wp-image-515 image-border" src="img/5f6d106f-f3c0-4254-a592-29294d9eccf1.png" style="width:102.50em;height:53.42em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">注意，索引模式的创建包括1，800多个字段的定义——其中大部分没有被收集，因为我们只启用了系统模块。然而，这个事实不会影响ML分析填充在某些字段中的数据的能力。</p>
+
+<p>由于Metricbeat在后台运行，我们现在有了一个不断将数据推送到集群的流程。这为我们本章的ML演练打下了基础。应该注意的是，在继续之前，您应该让Metricbeat运行至少几个小时，如果不是更长的话，以便有大量的数据供ML处理。</p>
+
+<p>With Metricbeat running in the background, we now have a process that continuously pushes data to our cluster. This lays the groundwork on which we will rely for the ML walk-through in this chapter. It should be noted that you should let Metricbeat run for at least a few hours, if not longer, before proceeding so that there’s a good amount of data for ML to work with.</p>
+
+<p class="mce-root">基巴纳的ML工作类型</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>ML job types in Kibana</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">如前所述，使用Elastic ML从创建和启动一个作业开始，这个作业是执行基于其配置的给定分析的基本工作单元。</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>创建作业有不同的方法，可以通过UI或API。后者将在本章后面讨论，我们将在这里集中讨论UI方法。在Kibana中，在左侧菜单中，您会看到一个用于访问机器学习的按钮。点击它会将您带到作业管理页面(您应该还没有任何作业):</p>
+
+<p>UI中还有其他选项卡(即异常浏览器和单一指标查看器选项卡)，但我们将在创建一些作业后讨论这些选项卡。如果您单击+创建新职务按钮，您将获得以下选择:</p>
+
+<div><img class="alignnone size-full wp-image-516 image-border" src="img/f8d6ff28-a5b8-40f6-bdc4-4104350cef58.png" style="width:90.33em;height:34.17em;"/></div>
+
+<p><img class="alignnone size-full wp-image-517 image-border" src="img/e72ae400-9bf6-41ee-ba5f-36170360535b.png" style="width:69.33em;height:26.92em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-517 image-border" src="img/e72ae400-9bf6-41ee-ba5f-36170360535b.png" style="width:69.33em;height:26.92em;"/></p>
+
+<p class="mce-root">这是在问应该考虑哪些数据进行分析。在左侧，我们可以选择ML作业应该分析的原始数据的索引。目前，这假定不需要对数据进行特殊的搜索或过滤。如果我们已经在Kibana中创建了一个保存的搜索，它使用特定的标准过滤索引中的数据，那么这些保存的搜索的名称将显示在右侧。因为我们还没有创建任何模式，所以让我们点击并选择<kbd>metricbeat-*</kbd>索引模式。</p>
+
+<p>以下屏幕截图显示了可用的选项:</p>
+
+<p><img class="alignnone size-full wp-image-518 image-border" src="img/d4ce52f4-3fb5-40bd-afe4-a49f7d0aeb76.png" style="width:85.67em;height:51.83em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">让我们花点时间来逐一了解一下。</p>
+
+<p>数据可视化工具</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Data Visualizer</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">如果您不熟悉数据集，Data Visualizer是一个方便的工具，可以用来探索数据集包含的内容。因为这可能是您第一次安装Metricbeat，所以Data Visualizer可能是一个首先访问的好地方，以查看该索引的内容:</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p><img class="alignnone size-full wp-image-519 image-border" src="img/ec131733-bcdd-4578-83ed-3d3b8b828d82.png" style="width:83.67em;height:68.58em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">我们可以看到，使用Data Visualizer的直接好处是，它自动识别索引的哪些字段实际上是<em>填充的(不是空的)，并且还让用户能够查看每个字段的最高值(或值的分布)。当决定使用弹性ML分析哪些字段以及哪些字段可能要避免时，这些将会派上用场。例如，# system.cpu.cores字段不太可能对使用ML进行分析有用，因为它始终只有一个不同的值。相反，# system.cpu.idle.pct字段可能有助于使用ML进行分析。</em></p>
+
+<p>We can see that the immediate benefits of using Data Visualizer is that it automatically identifies which fields of the index are <em>actually</em> populated (not empty) and also gives the user the ability to see the top values (or a distribution of values) of each field. These will come in handy when deciding which fields to analyze with Elastic ML and which ones to potentially avoid. For example, it is unlikely that the # system.cpu.cores field is useful to analyze with ML because it only has 1 distinct value for all time. Conversely, the # system.cpu.idle.pct field may be useful to analyze with ML.</p>
+
+<p class="mce-root"/>
+
+<p class="mce-root">单一度量作业</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>The Single metric job</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">单一指标作业允许一次分析一个时间序列指标。Metricbeat在后台运行，在我的笔记本电脑上获取所有与资源利用率相关的数据，应该很容易找到一个很好的单一指标候选进行分析。事实上，如前所述，system.cpu.idle.pct字段可能是一个很好的起点。</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p class="NormalPACKT">在单击单个指标图标后，让我们返回并再次开始创建ML作业:</p>
+
+<p><img class="alignnone size-full wp-image-520 image-border" src="img/d39fe0b8-56f8-4761-a543-daeaa4eb2b75.png" style="width:18.67em;height:8.75em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">我们现在看到了一个如下所示的屏幕:</p>
+
+<p><img class="alignnone size-full wp-image-521 image-border" src="img/eeec3a0b-7ddc-477c-87bf-3f3f74cf7380.png" style="width:72.92em;height:22.92em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">基本上，用户必须就如何配置分析做出一些选择:</p>
+
+<p>选择一个聚合函数</p>
+
+<ul>
+
+<li>选择要对其执行聚合函数的字段</li>
+
+<li>为分析选择时段跨度或时间分辨率</li>
+
+<li>选择ML作业应该运行的历史持续时间</li>
+
+<li>由于我们希望对system.cpu.idle.pct字段进行操作，我们将选择该字段，并选择Min聚合函数来发现数据低端可能存在的异常(因为cpu空闲的时间越长，情况就越“糟糕”)。因为数据每分钟采样一次，所以<kbd>1m</kbd>的时段跨度可能是合适的，但是单击估计时段跨度按钮可能会产生更保守的建议。最后，选择一个时段跨度，在足够频繁地运行分析(以发现您关心的时间范围内的异常)和不太频繁地运行它们之间取得平衡。有关更多信息，请参考第1章、<em>IT的机器学习、</em>对分桶化讨论的回顾。最后，由于我们可能还没有运行Metricbeat太长时间，所以利用这个指标的所有历史数据作为ML工作的一部分将是有用的。选择右上角的Use full metricbeat-* data按钮将修改Kibana的时间/数据选择器，以显示存储在Elasticsearch中的指标的全部历史记录。经过这些修改后，生成的屏幕可能如下所示:</li>
+
+</ul>
+
+<p><img class="alignnone size-full wp-image-522 image-border" src="img/4170b27a-9f93-4a12-a950-bf9d5385c809.png" style="width:111.08em;height:66.92em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">在命名作业并可选地为其提供纯文本描述并将其放入作业组(这在以后会很有用)之后，单击Create Job按钮将显示ML的运行视图:</p>
+
+<p><img class="alignnone size-full wp-image-523 image-border" src="img/dc90bf07-5c3a-41f3-b23f-98a4a84bf225.png" style="width:111.00em;height:61.42em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">注意，您将开始在图表中看到一个蓝色区域，围绕着实际的数据值:这是这个数据集的ML模型的可视化表示。在这个具体的例子中，模型直到数据集的最后一部分才开始着色，这是因为，实际上，这个数据集上还没有足够的历史记录(我们可以让Metricbeat先收集更多的数据)。但是尽管如此，ML确实正确地识别出了CPU空闲百分比下降的时刻(用一个垂直的黄色条)。</p>
+
+<p>作为本章的补充说明，在运行作业后，系统会询问您是要继续实时运行作业，还是要为实时作业创建一个观察器(警报)，如以下屏幕所示:</p>
+
+<p><img class="alignnone size-full wp-image-524 image-border" src="img/c4b6932c-d856-44ce-ae20-bc91ef2eca1d.png" style="width:26.50em;height:20.33em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">您可以启用这两个选项。第一个选项让我们的ML分析在后台运行，以便实时检测CPU利用率的异常。第二个选项与带警报的ML集成有关——我们将在本书后面回到这个主题。</p>
+
+<p>单击查看结果按钮，进入单一指标查看器。</p>
+
+<p>正如您将在图表中看到的，模型在看到数据的同时也在学习。如果您还没有太多要学习的数据，模型可能只会对实际数据集进行保守的粗略拟合:</p>
+
+<p>As you will see on the chart, the model is learning as it sees data. If you don’t have much data to learn yet, the model may only make a conservative, rough fit around the actual dataset:</p>
+
+<div><img class="alignnone size-full wp-image-525 image-border" src="img/e108a22f-dd8d-4c12-af29-e1512c71e4e3.png" style="width:100.67em;height:27.33em;"/></div>
+
+<p class="mce-root">这是典型的。随着Metricbeat收集的数据越来越多，ML看到的数据越来越多，模型将变得更加成熟，并将更准确地识别数据中的动态行为模式，如下图所示:</p>
+
+<p>ML模型将自动检测数据中的任何周期性。一个指标在白天和晚上的表现可能不同，或者在一周和周末的表现可能不同。因此，您提供给弹性ML的数据越多，模型就越稳定和准确。拥有大量历史数据有助于您快速构建一个可用于实时数据的模型，而无需长时间的等待。</p>
+
+<div><img class="alignnone size-full wp-image-527 image-border" src="img/19858369-4191-4b79-a043-64bd1540aaf0.png" style="width:100.67em;height:31.25em;"/></div>
+
+<p>尽管您的模型还不太成熟，但您可能会在分析中看到异常开始以不同颜色的点的形式出现在数据源上:</p>
+
+<p><strong>警告(蓝色)</strong>:分数低于25</p>
+
+<ul>
+
+<li><strong>次要(黄色)</strong>:分数在25到50之间</li>
+
+<li><strong>主要(橙色)</strong>:分数在50到75之间</li>
+
+<li><strong>临界(红色)</strong>:75-100分</li>
+
+<li>在我的例子中，我有一个小异常，如下图所示:</li>
+
+</ul>
+
+<p>根据过去对此指标的观察，此异常显示CPU的利用率高于正常水平(因为空闲时间较低)。我可以从位于单一指标查看器底部的表格中获得更多详细信息，如下面的屏幕截图所示:</p>
+
+<div><img class="alignnone size-full wp-image-528 image-border" src="img/5649b342-00c1-4ae7-a3c0-9b4dd3bfa2fd.png" style="width:81.92em;height:49.83em;"/></div>
+
+<p>请注意，这种异常情况的得分为47，这是CPU测量的实际值与发生时的ML模型预期值的概率评估的标准化版本，得分范围为0到100。概率计算本身略低:0.001235；标准化异常分数成反比，评估为47，轻微异常。请记住，异常评分是动态的，取决于数据及其历史。换句话说，没有规则说某个值的概率计算必须等于某个异常分数。</p>
+
+<div><img class="alignnone size-full wp-image-529 image-border" src="img/77ab5b7b-d68b-4bbe-8188-277a3d54a179.png" style="width:86.67em;height:31.75em;"/></div>
+
+<p class="mce-root">注意，这个分析没有显示此时哪个进程正在使用CPU的任何细节；我们选择将所有CPU测量值汇总成一个数字的方式，在设计上已经失去了这种详细程度。如果我们想得到这个细节，我们需要在每个进程的基础上分离或拆分CPU测量。这正是多度量作业派上用场的确切情况。</p>
+
+<p class="mce-root">多度量作业</p>
+
+<p>如前所述，多指标作业非常有助于同时将分析拆分为多个单独的指标。在我们的示例中，我们希望了解每个进程的CPU利用率。这将引导我们更准确地分析我们的机器出了什么问题，并立即了解哪个进程是问题的原因。</p>
+
+<p>为此，创建一个新的多指标作业，其中首先要选择要包含在分析中的数据的字段或数字要素，如以下屏幕截图所示:</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Multi-metric job</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">在这种情况下，我们选择了一个新的度量来建模system.process.cpu.total.pct，并通过tsystem.process.name字段来分割分析，以便为每个唯一的流程名称获得一个单独的分析基线。</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p class="NormalPACKT">您应该只使用相对较低基数的分类字段来分割分析。</p>
+
+<p class="NormalPACKT">您还可以选择您认为可能有用的关键字段(影响因素),以了解它们是否会影响异常的创建。默认情况下，至少会自动选择用于分割数据的字段，但您也可以选择其他字段。</p>
+
+<div><img class="alignnone size-full wp-image-530 image-border" src="img/07ab4c89-e340-4179-8008-8a8fa32e113c.png" style="width:108.50em;height:51.17em;"/></div>
+
+<p>这里我没有使用任何其他影响因素，我们将按原样运行分析。如果您单击查看结果按钮，您将被重定向到异常浏览器页面。这与之前的可视化不同，因为现在我们能够一次查看多个实体的异常情况:</p>
+
+<p><img class="alignnone size-full wp-image-531 image-border" src="img/2568295c-7b29-4a27-baa7-ae12974378aa.png" style="width:95.25em;height:55.00em;"/></p>
+
+<p>You can also pick Key Fields (Influencers) that you think might be useful to know whether they impact on the creation of an anomaly. By default, at least the field used to split the data is automatically selected, but you can also choose other fields.</p>
+
+<p>异常浏览器页面由前面屏幕截图右中的热图、左侧的影响者列表和详细信息表组成，就像在单个指标查看器中一样。</p>
+
+<p class="CDPAlignCenter CDPAlign">我的示例中的热图包含源数据中每个分区的一行；有一个选择器来限制热图中的行数——这里的每一行都代表所查看的时间段内最异常的过程(异常分数最高的过程)。</p>
+
+<p class="mce-root">如果我单击热图中的给定方块以获得异常的详细信息，我将获得与在单一指标查看器中几乎相同的体验，只是不会绘制模型边界，如下面的屏幕截图所示:</p>
+
+<p>在我的例子中，Java进程显然比过去使用了更多的CPU(五倍多)。“异常浏览器”页面非常方便地让您先睹为快地了解顶级<em> n </em>实体中的异常情况，但是如果我想查看给定流程的分析，我可以单击“操作”齿轮下的“查看系列”菜单项:</p>
+
+<p><img class="alignnone size-full wp-image-533 image-border" src="img/9277fec9-ab07-40ce-a99a-46347c782ea8.png" style="width:78.75em;height:14.33em;"/></p>
+
+<p>这将把我们带回感兴趣的流程的单个指标查看器(在本例中为<kbd>java</kbd>):</p>
+
+<div><img class="alignnone size-full wp-image-532 image-border" src="img/c7e12bcb-d38e-4aed-a36a-a3fd8294e119.png" style="width:94.17em;height:57.08em;"/></div>
+
+<p><img class="alignnone size-full wp-image-534 image-border" src="img/68839d10-60b6-493f-a394-c9a39ad1f245.png" style="width:97.33em;height:55.17em;"/></p>
+
+<p class="CDPAlignCenter CDPAlign">多指标作业允许我们将分析分成多个并行分析。但是，如果我们想通过相互比较来分析实体，而不是通过它们自己的历史来分析，那该怎么办呢？为此，我们将利用人口工作类型。</p>
+
+<p>This will bring us back to the Single Metric Viewer for the process of interest (in this case, <kbd>java</kbd>):</p>
+
+<p class="CDPAlignCenter CDPAlign">人口工作</p>
+
+<p>选择填充作业向导将使我们能够相互比较实体。如果我们期望大多数实体行为相似，并且我们想要找到异常行为的情况，这可能特别有用。当在所有时间内单独为每个实体建模不切实际时，它也很方便，因为要么实体的行为很稀疏(来来去去)，要么实体的总数太大，以至于在给定有限的计算空间的情况下单独为它们建模是不切实际的。</p>
+
+<p class="mce-root">因此，我们可以想象一个用例，在这个用例中，我们希望找到比我们系统上的<em>典型</em>进程使用更多CPU的进程。要创建此作业，请选择填充作业向导，并选择如下屏幕截图所示的内容:</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Population job</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title"><img class="alignnone size-full wp-image-535 image-border" src="img/bb4776d0-7bad-464e-9cef-60a75dc0d8f7.png" style="width:91.83em;height:66.00em;"/></h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>Selecting the Population job wizard will enable us to compare entities against each other. This can be especially useful if we expect most entities to behave similarly, and we want to find cases of outlier behavior. It is also handy when it is impractical to individually model every entity over all time, because either the entity's behavior is sparse (comes and goes) or the total number of entities is so large that modeling them individually is impractical given a finite amount of compute space.</p>
+
+<p>这里，我们已经指定tsystem.process.name是定义填充的字段；系统上运行的所有进程将根据它们的行为相互竞争——具体来说，根据所利用的CPU数量(这里，我们选择system.process.cpu.total.pct字段的较高平均值。请注意，tbeat.hostname也被选为候选影响者。我们会看到结果是怎样的。</p>
+
+<p class="CDPAlignCenter CDPAlign">运行此作业会产生以下示例结果:</p>
+
+<p class="mce-root"><img class="alignnone size-full wp-image-536 image-border" src="img/80448510-52c3-4d40-8dda-4518377063ed.png" style="width:92.25em;height:66.67em;"/></p>
+
+<p>我们可以看到，进程压力异乎寻常地占据了CPU(比典型进程高11倍)。此外，我们看到poipu主机名对这种异常有影响。换句话说，这是运行名为stress的进程的机器名——尽管它不是实际异常检测本身的一部分，但还是很容易被发现！</p>
+
+<p>Running this job gives the following example results:</p>
+
+<p class="CDPAlignCenter CDPAlign">压力进程是一个免费的实用程序，可用于对系统施加压力。在本例中，它被手动用于制造数据中的异常。</p>
+
+<p>如果我们单击热图中与我们的异常过程相关的方块，我们可以看到详细信息:</p>
+
+<p class="mce-root"><img class="alignnone size-full wp-image-537 image-border" src="img/e585b736-f2cd-4cc1-ba6e-d963533bc0cc.png" style="width:90.00em;height:68.08em;"/></p>
+
+<p>请注意，这种可视化与多指标作业略有不同。它在其他实体的行为样本的上下文中显示该实体的样本，以便我们可以更直观地判断一个实体与其同行相比不寻常的原因。</p>
+
+<p>If we click on the square in the heat map associated with our anomalous process, we can see the details:</p>
+
+<p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-537 image-border" src="img/e585b736-f2cd-4cc1-ba6e-d963533bc0cc.png" style="width:90.00em;height:68.08em;"/></p>
+
+<p>高级作业</p>
+
+<p class="mce-root">高级作业允许我们对他们如何运行分析有更多的控制。然而，它们并不是一种新的工作。所有ML作业，无论使用哪个向导创建它们，都会产生一个通用的作业配置定义。只是有些向导针对特定的工作应用进行了优化。然而，使用高级作业向导配置作业确实使您能够控制几乎每一个方面(使用下一节中讨论的API，可以访问每一个可能的方面)。</p>
+
+<p class="mce-root">因此，我们现在不会过多讨论高级作业向导，但我们将在本书后面的其他示例中利用它。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Advanced job</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">通过API控制ML</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p class="NormalPACKT">就像弹性堆栈中的几乎所有东西一样，ML也可以通过API调用完全自动化——包括作业配置、执行和结果收集。实际上，您在Kibana UI中的所有交互都在幕后利用ML API。例如，如果有您想要的特定工作流或可视化，您可以完全编写自己的UI。</p>
+
+<p>有关API的更多深入信息，请参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-apis.html" target="_blank">https://www . elastic . co/guide/en/elastic search/reference/current/ml-APIs . html</a>。在这一部分中，我们不会详细讨论每一个问题，但是我们想强调一些值得绕道的部分。</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Controlling ML via the API</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">第一个API是作业创建API，它允许创建ML作业配置。例如，如果您想要重新创建上一个示例中显示的人口分析作业，以下JSON描述了创建名为<kbd>my_cpu_job</kbd>的作业的配置:</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>前面的JSON包含了我们通过click experience传递给Kibana的所有配置，因此它完全等同于我们在UI中创建的内容。如果将此消息发送到端点，您将获得以下JSON响应:</p>
+
+<p>For more in-depth information about the APIs, please refer to <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-apis.html" target="_blank">https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-apis.html</a>. We won't go into each one of them in this part, but we would like to highlight some parts that are worth a detour.</p>
+
+<p>请注意，在创建作业时,<kbd>job_id</kbd>字段需要是唯一的。</p>
+
+<pre>PUT _xpack/ml/anomaly_detectors/my_cpu_job<br/>{ <br/>"description":"Processes that use more CPU than others", <br/>"analysis_config":{ <br/>      "bucket_span":"15m", <br/>      "detectors":[ <br/>         { <br/>            "detector_description":"high mean CPU", <br/>            "function":"high_mean", <br/>            "field_name":"system.process.cpu.total.pct", <br/>            "over_field_name":"system.process.name" <br/>  } <br/>      ], <br/>      "influencers":[ <br/>         "system.process.name",<br/>         "beat.hostname" <br/>      ] <br/>   }, <br/>   "data_description":{ <br/>      "time_field":"@timestamp", <br/>      "time_format":"epoch_ms" <br/>   } <br/>}</pre>
+
+<p>值得注意的是，作业还需要配置为知道要分析原始数据的哪个索引，以及需要针对该索引执行哪个查询。这是<kbd>datafeed</kbd>配置的一部分，通过位于<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-datafeed.html" target="_blank">https://www . elastic . co/guide/en/elastic search/reference/current/ml-put-data feed . html</a>的文档进行设置。</p>
+
+<pre>{<br/>  "job_id" : "my_cpu_job",<br/>  "job_type" : "anomaly_detector",<br/>  "job_version" : "6.5.1",<br/>  "description" : "Processes that use more CPU than others",<br/>  "create_time" : 1543197011209,<br/>  "analysis_config" : {<br/>    "bucket_span" : "15m",<br/>    "detectors" : [<br/>      {<br/>        "detector_description" : "high mean CPU",<br/>        "function" : "high_mean",<br/>        "field_name" : "system.process.cpu.total.pct",<br/>        "over_field_name" : "system.process.name",<br/>        "detector_index" : 0<br/>      }<br/>    ],<br/>    "influencers" : [<br/>      "system.process.name",<br/>      "beat.hostname"<br/>    ]<br/>  },<br/>  "analysis_limits" : {<br/>    "model_memory_limit" : "1024mb",<br/>    "categorization_examples_limit" : 4<br/>  },<br/>  "data_description" : {<br/>    "time_field" : "@timestamp",<br/>    "time_format" : "epoch_ms"<br/>  },<br/>  "model_snapshot_retention_days" : 1,<br/>  "results_index_name" : "shared"<br/>}</pre>
+
+<p class="mce-root">为名为<kbd>my_cpu_job</kbd>的作业配置<kbd>datafeed</kbd>的请求示例如下:</p>
+
+<p>回应如下:</p>
+
+<p>注意，默认的索引查询是<kbd>match_all</kbd>，这意味着不会进行过滤。当然，我们可以在查询块中插入任何有效的Elasticsearch DSL来执行定制的过滤或聚合。这一概念将在本书的后面介绍。</p>
+
+<p>还有其他API可用于提取结果或修改ML作业的其他操作方面。有关更多信息，请参考在线文档。</p>
+
+<pre>PUT _xpack/ml/datafeeds/datafeed-my_cpu_job<br/>{<br/>      "job_id" : "my_cpu_job",<br/>      "indexes" : [<br/>        "metricbeat-*"<br/>      ]<br/>}</pre>
+
+<p>The response would be as follows:</p>
+
+<pre>{<br/> "datafeed_id" : "datafeed-my_cpu_job",<br/> "job_id" : "my_cpu_job",<br/> "query_delay" : "106392ms",<br/> "indices" : [<br/> "metricbeat-*"<br/> ],<br/> "types" : [ ],<br/> "query" : {<br/> "match_all" : {<br/> "boost" : 1.0<br/> }<br/> },<br/> "scroll_size" : 1000,<br/> "chunking_config" : {<br/> "mode" : "auto"<br/> }<br/>}</pre>
+
+<p>Notice that the default query to the index is <kbd>match_all</kbd>, which means that no filtering will take place. We could, of course, insert any valid Elasticsearch DSL in the query block to perform custom filters or aggregations. This concept will be covered later in the book.</p>
+
+<p>摘要</p>
+
+<p class="mce-root">此时，您应该已经安装了Elastic ML，并对如何使用它在Elasticsearch中实时分析数据有了相当的了解。在下一章，<a href="16a1d55a-08d3-47a7-afec-b433d9beecc6.xhtml" target="_blank"/> <a href="16a1d55a-08d3-47a7-afec-b433d9beecc6.xhtml" target="_blank">第3章</a>，<em>事件变化检测</em>你将开始学习有效使用ML解决各种新用例的额外方法。</p>
+
+<p class="mce-root"/>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html>
+<html xmlns:epub="http://www.idpf.org/2007/ops">
+
+    <head>
+
+        <title>Summary</title>
+
+        
+
+        <meta charset="utf-8"/>
+
+<meta content="urn:uuid:22bd88bd-4f8b-4591-ab24-da8ea46d9011" name="Adept.expected.resource"/>
+
+    </head>
+
+
+
+    <body>
+
+        
+
+
+
+                            
+
+                    <h1 class="header-title">Summary</h1>
+
+                
+
+            
+
+            
+
+                
+
+<p>At this point, you should have installed Elastic ML and have a decent understanding of how to use it to analyze data in real time in Elasticsearch. In the next chapter, <a href="16a1d55a-08d3-47a7-afec-b433d9beecc6.xhtml" target="_blank"/><a href="16a1d55a-08d3-47a7-afec-b433d9beecc6.xhtml" target="_blank">Chapter 3</a>, <em>Event Change Detection</em> you will start learning additional ways to effectively use ML to solve a variety of new use cases.</p>
+
+
+
+
+
+            
+
+
+
+            
+
+        
+
+    </body>
+
+
+
+</html></body></html>

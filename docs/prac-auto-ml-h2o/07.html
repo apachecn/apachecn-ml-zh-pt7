@@ -1,0 +1,595 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Chapter 5: Understanding AutoML Algorithms</title>
+
+</head>
+<body>
+<div><div><h1 class="chapter-number" id="_idParaDest-81"><a id="_idTextAnchor109"/> 5</h1>
+<h1 id="_idParaDest-82"><a id="_idTextAnchor110"/>了解AutoML算法</h1>
+<p>所有的ML算法都有一个<strong class="bold">计算统计学</strong>的基础。计算统计学是统计学和计算机科学的结合<a id="_idIndexMarker438"/>，计算机被用来计算复杂的数学。这个计算是最大似然算法，我们从中得到的结果是预测。作为在ML领域工作的工程师和科学家，我们经常被期望知道ML算法的基本逻辑。人工智能领域有大量的最大似然算法。它们都旨在解决不同类型的预测问题。他们也都有自己的一套利弊。因此，工程师和科学家的工作就是寻找最佳的最大似然算法，在要求的约束条件下解决给定的预测问题。然而，随着汽车的发明，这项工作变得容易了。</p>
+<p>尽管AutoML承担了寻找最佳ML算法的巨大责任，但作为工程师和科学家，验证和证明这些算法的选择仍然是我们的工作。要做到这一点，对ML算法的基本理解是必须的。</p>
+<p>在本章中，我们将探索和理解H2O汽车公司用来训练模型的各种最大似然算法。如前所述，所有的最大似然算法都有很强的统计学基础。统计学本身是数学的一个巨大分支，它太大了，无法在一章中涵盖。因此，为了对最大似然算法如何工作有一个基本的理解，我们将从基本的统计学概念上探索它们的内部工作，而不是深入数学。</p>
+<p class="callout-heading">小费</p>
+<p class="callout">如果你有兴趣获取更多统计学领域的知识，那么下面这个链接应该是个不错的起点:<a href="https://online.stanford.edu/courses/xfds110-introduction-statistics">https://online . Stanford . edu/courses/xfds 110-简介-统计学</a>。</p>
+<p>首先，我们将理解不同类型的最大似然算法，然后学习这些算法的工作原理。为此，我们将把它们分解成单个的概念，理解它们，然后构建算法来理解全局。</p>
+<p>在这一章中，我们将讨论以下主题:<a id="_idTextAnchor111"/></p>
+<ul>
+<li>了解不同类型的ML算法<a id="_idTextAnchor112"/></li>
+<li>理解广义线性模型算法<a id="_idTextAnchor113"/></li>
+<li>了解分布式随机森林算法</li>
+<li>理解梯度推进机器算法</li>
+<li>理解什么是深度学习</li>
+</ul>
+<p>因此，让我们从理解不同类型的ML算法开始我们的旅程。</p>
+<h1 id="_idParaDest-83"><a id="_idTextAnchor114"/>了解不同类型的ML算法</h1>
+<p>最大似然算法旨在解决特定的预测问题。这些预测问题<a id="_idIndexMarker439"/>如果预测准确，可以是任何能够提供价值的东西。各种预测问题之间的区别因素是要预测什么值。它是一个简单的是或否值，一个数字范围，还是一个潜在值、概率或文本语义列表中的特定值？ML的领域非常广阔，足以以各种各样的方式涵盖大多数(如果不是全部)这样的问题。</p>
+<p>所以，让我们从了解预测问题的不同类别开始。它们如下:</p>
+<ul>
+<li><strong class="bold">回归</strong>:回归分析是一个统计过程<a id="_idIndexMarker440"/>，旨在发现自变量(也称为特征)和因变量(也称为标签或响应变量<a id="_idIndexMarker442"/>)之间的<a id="_idIndexMarker441"/>关系，并使用该<a id="_idIndexMarker444"/>关系<a id="_idIndexMarker445"/>来预测未来值。</li>
+</ul>
+<p>回归问题<a id="_idIndexMarker446"/>是旨在预测<a id="_idIndexMarker447"/>某些连续数值的问题——例如，根据汽车的品牌名称、发动机尺寸、经济性和电子特性预测汽车的价格。在这种情况下，汽车的品牌名称、发动机尺寸、经济性和电子特征是独立变量，因为它们的存在独立于其他值，而汽车价格是因变量，其值取决于其他特征。此外，汽车的价格是一个连续的值，因为它可以在0到1亿美元或任何其他货币的数字范围内。</p>
+<ul>
+<li><strong class="bold">分类</strong>:分类是一个统计<a id="_idIndexMarker448"/>过程，其目的是根据标签值与特征的关系将标签值分类<a id="_idIndexMarker449"/>到特定的类或类别中。</li>
+</ul>
+<p>分类问题是旨在预测某一组值的问题——例如，根据一个人的胆固醇水平、体重、运动水平、心率和家族史来预测他是否可能面临心脏病。另一个例子是预测一家餐馆在谷歌评论上的评级，根据位置、食物、氛围和价格从1-5颗星不等。</p>
+<p>正如您从这些示例中看到的，分类问题可以是一个<em class="italic">是</em>或<em class="italic">否</em>、<em class="italic">真</em>或<em class="italic">假</em>，或者是<em class="italic"> 1 </em>或<em class="italic"> 0 </em>类型的分类，或者是一组特定的分类值，例如Google Review示例中的分类值，其中的值可以是1、2、3、4或5。因此，分类问题可以进一步划分如下:</p>
+<ul>
+<li><strong class="bold">二元分类</strong>:在这类分类<a id="_idIndexMarker450"/>问题中，预测的<a id="_idIndexMarker451"/>值是二元的，也就是说它们只有两个值——即<em class="italic">是</em>或<em class="italic">否</em>、<em class="italic">真</em>或<em class="italic">假</em>、<em class="italic"> 1 </em>或<em class="italic"> 0 </em>。</li>
+<li><strong class="bold">多类/多项式分类</strong>:在这类分类问题中，预测的<a id="_idIndexMarker452"/>值是非二进制的，也称为多项式<a id="_idIndexMarker453"/>，本质上意味着它们<a id="_idIndexMarker454"/>有两组以上的值。例如，按年龄分类，涉及从1到100的整数，或按原色分类，原色可以是红色、黄色或蓝色。</li>
+</ul>
+<ul>
+<li><strong class="bold">聚类</strong>:聚类是一个统计过程<a id="_idIndexMarker455"/>，其目的是将某些数据点分组或划分<a id="_idIndexMarker456"/>，使得同一组中的数据点具有与其他组中的数据点不同的相似特征。</li>
+</ul>
+<p>聚类问题是旨在理解一组值之间的相似性的问题。</p>
+<p>例如，给定一组玩视频游戏的人的某些细节，如他们使用的硬件、他们玩的不同游戏以及玩这些视频游戏所花的时间，您可以根据他们最喜欢的游戏类型对他们进行分类。聚类可以进一步划分如下:</p>
+<ul>
+<li><strong class="bold">硬聚类</strong>:在这种类型的聚类中，所有<a id="_idIndexMarker457"/>数据点或者<a id="_idIndexMarker458"/>属于一个或者另一个聚类；它们是互斥的。</li>
+<li><strong class="bold">软聚类</strong>:在这种类型的聚类中，计算一个数据点可能属于某个聚类的概率<a id="_idIndexMarker460"/>，而不是<a id="_idIndexMarker459"/>而不是将一个数据点分配给一个聚类。这增加了一个数据点可能同时属于多个聚类的可能性。</li>
+</ul>
+<ul>
+<li><strong class="bold">关联</strong>:关联是一个统计过程<a id="_idIndexMarker461"/>，目的是找出如果事件A发生的概率<a id="_idIndexMarker462"/>，事件B发生的可能性有多大？关联问题基于关联规则，关联规则是if-then语句，显示不同数据点之间关系的概率。</li>
+</ul>
+<p>关联问题最常见的例子<a id="_idIndexMarker463"/>是<strong class="bold">购物篮分析</strong>。市场购物篮分析是一个预测问题，假设用户从市场上购买了某种产品A，那么用户购买与产品A相关的产品B的概率是多少？</p>
+<ul>
+<li><strong class="bold">优化/控制</strong> : <strong class="bold">控制理论</strong>，<strong class="bold">最优控制理论</strong>或<strong class="bold">优化问题</strong>是数学<a id="_idIndexMarker464"/>的一个分支，处理寻找<a id="_idIndexMarker465"/>某个组合<a id="_idIndexMarker466"/>的值，这些值共同<a id="_idIndexMarker467"/>优化一个动态系统。<strong class="bold">机器学习控制</strong> ( <strong class="bold"> MLC </strong>)是ML中的一个子领域，旨在使用ML解决优化问题<a id="_idIndexMarker468"/>。MLC的一个很好的例子是使用自动汽车实施ML来优化道路上的交通。</li>
+</ul>
+<p>现在我们已经了解了不同类型的预测问题，让我们深入了解不同类型的ML算法。不同类型的ML算法分类如下:</p>
+<ul>
+<li><strong class="bold">监督学习</strong>:监督学习是一种ML任务<a id="_idIndexMarker469"/>，它基于先前存在的已标记值，映射自变量<a id="_idIndexMarker470"/>和因变量之间的关系。标记数据是包含关于哪些特征是从属的以及哪些特征是独立的信息的数据。在监督学习中，我们知道我们想要预测哪个特征，并将该特征标记为标签。ML算法将使用该信息来映射关系。使用这种映射，我们可以预测新输入值的输出。理解这个问题的另一种方式是先前存在的值监督ML算法的学习任务。</li>
+</ul>
+<p>监督学习<a id="_idIndexMarker471"/>算法通常用于解决回归和分类问题。</p>
+<p>监督学习<a id="_idIndexMarker474"/>算法的一些<a id="_idIndexMarker472"/>例子<a id="_idIndexMarker473"/>是<strong class="bold">决策树</strong>、<strong class="bold">线性回归</strong>和<strong class="bold">神经网络</strong>。</p>
+<ul>
+<li><strong class="bold">无监督学习</strong>:如前所述，监督学习是从未标记的数据中发现模式<a id="_idIndexMarker475"/>和行为的ML任务。在这种情况下，我们不知道<a id="_idIndexMarker476"/>我们想要预测哪个特征，或者我们想要预测的特征甚至可能不是数据集的一部分。无监督学习帮助我们预测潜在的重复模式，并使用这些模式对数据集进行分类。理解这个问题的另一种方式是，没有标记值来监督ML算法学习任务；该算法自行学习模式和行为。</li>
+</ul>
+<p>无监督学习<a id="_idIndexMarker477"/>算法经常被用来解决聚类和关联问题。</p>
+<p>无监督<a id="_idIndexMarker479"/>学习算法的一些例子<a id="_idIndexMarker478"/>是<strong class="bold"> K均值聚类</strong>和<strong class="bold">关联规则学习</strong>。</p>
+<ul>
+<li><strong class="bold">半监督学习</strong>:半监督学习介于监督学习<a id="_idIndexMarker480"/>和非监督学习之间。在部分标记的数据集上执行学习是ML <a id="_idIndexMarker481"/>任务。它用于有一个已标记的小数据集和一个未标记的大数据集的情况。在现实世界的<a id="_idIndexMarker482"/>场景中，标记大量数据是一项昂贵的任务，因为它需要大量的实验和手动解释的上下文信息，而未标记的数据相对便宜。在这种情况下，半监督学习通常被证明是有效的，因为它善于从未标记的数据集假设期望的标签值，同时与任何监督学习算法一样有效。</li>
+</ul>
+<p>无监督学习算法通常用于解决聚类和分类问题。</p>
+<p>半监督<a id="_idIndexMarker484"/>学习算法的一些例子<a id="_idIndexMarker483"/>是<strong class="bold">生成模型</strong>和<strong class="bold">拉普拉斯正则化</strong>。</p>
+<ul>
+<li><strong class="bold">强化学习</strong>:强化学习是一项ML任务<a id="_idIndexMarker485"/>，旨在确定<a id="_idIndexMarker486"/>在给定环境下采取的下一个正确的逻辑行动，以最大化累积回报。在这种类型的学习中，在使用正和/或负强化进行预测之后，计算预测的准确度，该准确度再次被馈送到算法。这种对环境的不断学习最终有助于算法找到最佳的步骤序列，以实现回报最大化，从而做出最准确的决策。</li>
+</ul>
+<p>强化学习<a id="_idIndexMarker487"/>通常用于解决回归、分类和优化问题的混合<a id="_idIndexMarker488"/>。</p>
+<p>强化<a id="_idIndexMarker491"/>学习算法的一些<a id="_idIndexMarker489"/>例子<a id="_idIndexMarker490"/>有<strong class="bold">蒙特卡罗方法</strong>、<strong class="bold"> Q学习</strong>、<strong class="bold">深度Q网络</strong>。</p>
+<p>尽管AutoML技术已经足够成熟，可以在商业上使用，但与ML领域的巨大发展相比，它仍处于起步阶段。AutoML可能能够在最短的时间内使用很少或不使用人工干预来训练最佳预测模型，但其潜力目前仅限于监督学习。下图总结了根据不同的ML任务分类的各种类型的ML算法:</p>
+<div><div><img alt="Figure 5.1 – Types of ML problems and algorithms  " height="925" src="img/B17298_05_001.jpg" width="1650"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.1–最大似然问题的类型和算法</p>
+<p>同样，H2O的AutoML也专注于监督学习，因此，人们通常希望你有可以输入的带标签的数据。</p>
+<p>与监督学习算法相比，执行无监督学习的ML算法<a id="_idIndexMarker492"/>通常非常复杂，因为没有衡量模型性能的基本事实。这违背了AutoML的本质，它非常依赖于模型性能测量来自动化训练和超参数调整。</p>
+<p>因此，相应地，H2O AutoML属于监督ML算法的领域，它训练几个监督ML算法来解决回归和分类问题，并根据它们的性能对它们进行排名。在这一章中，我们将集中讨论这些最大似然算法并理解它们的功能，这样我们就能很好地理解、选择和证明H2O汽车公司为给定预测问题训练的不同模型。</p>
+<p>有了这个认识，我们就从第一个ML算法开始:广义线性模型。</p>
+<h1 id="_idParaDest-84"><a id="_idTextAnchor115"/>了解广义线性模型算法</h1>
+<p><strong class="bold">广义线性模型</strong> ( <strong class="bold"> GLM </strong>)，顾名思义，是广义线性模型的一种灵活的<a id="_idIndexMarker493"/>方式。它是由约翰·内尔德和罗伯特·威德伯恩制定的，作为一种将各种回归模型结合成一个单一分析的方法，并考虑到不同的概率分布。你可以找到他们的详细论文(内尔德，J.A .和威德伯恩，R.W .，1972。<em class="italic">广义线性模型。皇家统计学会杂志:A辑(总论)，135(3)，第370-384页</em>。)在<a href="https://rss.onlinelibrary.wiley.com/doi/abs/10.2307/2344614">https://rss.onlinelibrary.wiley.com/doi/abs/10.2307/2344614</a>。</p>
+<p>现在，你可能想知道什么是线性模型。为什么我们需要概括它们？它提供了什么好处？这些确实是相关的问题，不需要深究数学就很容易理解。一旦我们打破逻辑，你会发现GLM的概念非常容易理解。</p>
+<p>所以，让我们从了解线性回归的基础开始。</p>
+<h2 id="_idParaDest-85"><a id="_idTextAnchor116"/>线性回归简介</h2>
+<p><strong class="bold">线性回归</strong>可能是最古老的<a id="_idIndexMarker494"/>统计模型之一，可以追溯到200年前。这是一种将因变量和自变量之间的关系线性映射到图上的方法。这意味着两个变量之间的关系可以完全用一条直线来解释。</p>
+<p>考虑下面的例子:</p>
+<div><div><img alt="Figure 5.2 – Linear regression  " height="577" src="img/B17298_05_002.jpg" width="1160"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.2–线性回归</p>
+<p>这个例子演示了两个变量之间的关系。人的身高H是自变量，人的体重W是因变量。这两个变量之间的关系很容易用一条红色直线来解释。一个人越高，他或她就越可能重。很容易理解。</p>
+<p>统计上，任何直线的一般方程<a id="_idIndexMarker496"/>，也称为<strong class="bold">线性方程</strong>，如下:</p>
+<p class="IMG---Figure"><img alt="" height="106" src="img/Formula_B17298__05_001.png" width="334"/></p>
+<p>在这里，我们有以下内容:</p>
+<ul>
+<li><em class="italic"> y </em>是<em class="italic"> Y </em>轴上的一点，表示因变量。</li>
+<li><em class="italic"> x </em>是<em class="italic"> X </em>轴上的一点，表示自变量。</li>
+<li><em class="italic">b</em>T34】1是直线的斜率，也叫梯度，表示直线有多陡。坡度越大，线就越陡。</li>
+<li><em class="italic"> b </em> <em class="italic"> 0 </em>是一个常数，表示直线与<em class="italic"> Y </em>轴的交点。</li>
+</ul>
+<p>在线性回归过程中，机器<a id="_idIndexMarker498"/>会将两个变量的所有数据点映射到图上，并在图上随机放置直线。然后，它将通过将图中数据点的<em class="italic"> x </em>的值插入线性方程，并将结果与数据点的相应<em class="italic"> y </em>值进行比较，来计算<em class="italic"> y </em>的值。之后，它将计算其计算的<em class="italic"> y </em>值与实际的<em class="italic"> y </em>值之间的误差大小。这个差值<a id="_idIndexMarker499"/>就是我们所说的<strong class="bold">残差</strong>。</p>
+<p>下图应该有助于您理解什么是残差:</p>
+<div><div><img alt="Figure 5.3 – Residuals in linear regression  " height="523" src="img/B17298_05_003.jpg" width="962"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.3–线性回归中的残差</p>
+<p>机器将对所有的数据点都这样做，并记录所有的错误。然后，它将尝试通过改变b1和b0的值来调整该线，这意味着改变该线在图上的角度和位置，并重复该过程。它会一直这样做，直到误差最小。</p>
+<p>产生最小误差的b1和b0值是两个变量之间最精确的线性关系。具有b1和b0这些值的方程是线性模型。</p>
+<p>现在，假设你想预测一个身高180厘米的人的体重。然后，您使用带有b1和b0值的相同线性模型方程，将<em class="italic"> x </em>设置为180，并计算<em class="italic"> y </em>，这将是预期的重量。</p>
+<p>恭喜你，你刚刚在没有任何计算机的情况下在你的头脑中执行了ML，并且也做出了预测！实际的ML以同样的方式工作，尽管复杂的算法增加了复杂性。线性回归不需要仅限于两个变量——它也可以应用于多个变量，其中有一个以上的独立变量。这种线性回归被称为多元或曲线回归。这种线性回归的方程展开如下:</p>
+<p class="IMG---Figure"><img alt="" height="83" src="img/Formula_B17298__05_002.png" width="679"/></p>
+<p>在这个等式中，附加变量x1、x2、x3等分别加上它们自己的系数b1、b2和b3。</p>
+<p>如果您对线性回归的内部工作方式感兴趣，请随意探索这些算法及其背后的数学。</p>
+<h2 id="_idParaDest-86"><a id="_idTextAnchor117"/>理解线性回归的假设</h2>
+<p>当在给定的数据集上训练模型时，线性回归是基于对数据的某些假设。其中一个假设是<strong class="bold">误差的正态性</strong>。</p>
+<p>在我们理解什么是误差的正态性<a id="_idIndexMarker504"/>之前，让我们快速理解<strong class="bold">概率密度函数</strong>的概念。这是一个定义离散值概率分布的数学表达式，换句话说，它是一个显示给定样本空间中样本值出现的概率的数学表达式。要理解这一点，请参考下图:</p>
+<div><div><img alt="Figure 5.4 – Probability distribution of values for two dice  " height="597" src="img/B17298_05_004.jpg" width="1367"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.4-两个骰子数值的概率分布</p>
+<p>上图<a id="_idIndexMarker505"/>显示了公平独立地掷出一对六面骰子时可能出现的所有值的概率分布。有不同种类的分布。常见分布的一些示例如下:</p>
+<div><div><img alt="Figure 5.5 – Different types of distribution  " height="930" src="img/B17298_05_005.jpg" width="1210"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.5–不同类型的分布</p>
+<p>误差的正态性<a id="_idIndexMarker506"/>表明数据的残差<a id="_idIndexMarker507"/>必须是正态分布的。<strong class="bold">正态分布</strong>，也称为<strong class="bold">高斯分布</strong>，是一种关于平均值对称的概率密度函数，其中最接近平均值的值经常出现，而远离平均值的值很少出现。下图显示了正态分布:</p>
+<div><div><img alt="Figure 5.6 – Normal distribution   " height="756" src="img/B17298_05_006.jpg" width="1531"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.6-正态分布</p>
+<p>线性回归预计<a id="_idIndexMarker509"/>计算出的残差属于正态分布。在我们前面的身高预期体重的例子中，对于一个有一定身高的人来说，预测体重和实际体重之间肯定会有一些误差。然而，来自预测的残差或误差将最有可能落在正态分布内，因为不会有太多的人出现预期体重和预测体重之间的极端差异。</p>
+<p>考虑一个人们要求健康保险赔偿的场景。下图显示了该数据集的线性回归图示例:</p>
+<div><div><img alt="Figure 5.7 – Health insurance payout  " height="547" src="img/B17298_05_007.jpg" width="1424"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.7-健康保险支出</p>
+<p>在上图中，你可以看到不同年龄段的大多数人都没有申请健康保险。他们中的一些人这样做了，索赔的费用相差很大。一些人有小问题，花费很少，而一些人受了重伤，不得不接受昂贵的手术。</p>
+<p>如果您绘制一条穿过该数据集的线性回归线，它将如下所示:</p>
+<div><div><img alt="Figure 5.8 – Linear regression on health insurance payouts  " height="546" src="img/B17298_05_008.jpg" width="1257"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.8-健康保险支出的线性回归</p>
+<p>但是现在，如果你从所有数据点的期望值和预测值计算出<a id="_idIndexMarker511"/>残差，那么这些残差的概率分布将不会落入正态分布。它将如下所示:</p>
+<div><div><img alt="Figure 5.9 – Residual distribution of health insurance payouts  " height="526" src="img/B17298_05_009.jpg" width="1155"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.9-健康保险支出的剩余分布</p>
+<p>这是一个不准确的模型，因为预期值和预测值甚至不够接近，无法进行舍入或校正。那么，在数据集的误差正态性假设失效的情况下，你该怎么办呢？如果残差的分布是，比如说，泊松分布而不是正态分布呢？机器将如何纠正这一点？</p>
+<p>这个问题的答案是<a id="_idIndexMarker512"/>残差的分布取决于数据集本身的分布。如果因变量的值是正态分布的，那么残差的分布也将是正态的。因此，一旦我们确定了哪个概率密度函数符合数据集，我们就可以使用该函数来训练我们的线性模型。</p>
+<p>根据该函数，每个<a id="_idIndexMarker513"/>概率<a id="_idIndexMarker514"/>密度函数都有专门的线性回归方法。如果你的分布是<strong class="bold">泊松</strong>，那么你可以用<strong class="bold">泊松回归</strong>。如果你的数据<a id="_idIndexMarker515"/>分布是负<strong class="bold">二项式</strong>，那么你可以用<strong class="bold">负二项式回归</strong>。</p>
+<h2 id="_idParaDest-87"><a id="_idTextAnchor118"/>使用广义线性模型</h2>
+<p>既然我们已经介绍了基础知识，让我们集中精力理解GLM是什么。GLM是一种指向特定于数据概率分布类型的所有回归方法的方式。从技术上讲，所有的回归模型都是GLM，包括我们普通的简单线性模型。GLM只是将它们封装在一起，并根据概率分布函数训练适当的回归模型。</p>
+<p>GLM的工作方式是通过使用一种叫做连接函数的东西，结合一个系统组件和随机变量。</p>
+<p>这是GLM的三个组成部分:</p>
+<ul>
+<li><strong class="bold">系统成分</strong>:回到多变量<a id="_idIndexMarker517"/>线性方程，我们有<a id="_idIndexMarker518"/>如下:</li>
+</ul>
+<p class="IMG---Figure"><img alt="" height="127" src="img/Formula_B17298__05_003.png" width="889"/></p>
+<p>这里b1x1+ b2x2 + b3x3 + ……。+ b0是系统<a id="_idIndexMarker519"/>元件。这是将我们的数据(也称为预测值)与我们的<a id="_idIndexMarker521"/>预测联系起来的函数<a id="_idIndexMarker520"/>。</p>
+<ul>
+<li><strong class="bold">随机分量</strong>:该分量是指响应变量的<a id="_idIndexMarker522"/>概率分布<a id="_idIndexMarker523"/>。这将是响应变量是正态分布还是二项式分布或任何其他形式的分布。</li>
+<li><strong class="bold">链接函数</strong>:链接函数<a id="_idIndexMarker524"/>是将数据<a id="_idIndexMarker525"/>的非线性关系映射为线性关系的函数。换句话说，它弯曲了线性回归的直线，以更准确地表示非线性数据的关系。它是随机成分和系统成分之间的联系。我们可以用一个链接函数在数学上解释方程为<em class="italic">Y = f</em>n<em class="italic">(b</em>1<em class="italic">x</em>1<em class="italic">+b</em>2<em class="italic">x</em>2<em class="italic">+b</em>3<em class="italic">x</em>3<em class="italic">+……。+ b </em> 0 <em class="italic"> ) </em>，其中<em class="italic"> f </em> n是根据响应变量的分布而变化的链接函数。</li>
+</ul>
+<p>不同分布的链接功能不同<a id="_idIndexMarker526"/>。下表显示了不同发行版的不同链接功能:</p>
+<table class="No-Table-Style" id="table001-1">
+<colgroup>
+<col/>
+<col/>
+<col/>
+</colgroup>
+<tbody>
+<tr class="No-Table-Style">
+<td class="No-Table-Style">
+<p><strong class="bold">分配类型</strong></p>
+</td>
+<td class="No-Table-Style">
+<p><strong class="bold">链接功能</strong></p>
+</td>
+<td class="No-Table-Style">
+<p><strong class="bold">算法名称</strong></p>
+</td>
+</tr>
+<tr class="No-Table-Style">
+<td class="No-Table-Style">
+<p>常态</p>
+</td>
+<td class="No-Table-Style">
+<p><img alt="" height="88" src="img/Formula_B17298__05_004.png" width="217"/></p>
+</td>
+<td class="No-Table-Style">
+<p>线性模型</p>
+</td>
+</tr>
+<tr class="No-Table-Style">
+<td class="No-Table-Style">
+<p>二项式</p>
+</td>
+<td class="No-Table-Style">
+<p><img alt="" height="138" src="img/Formula_B17298__05_005.png" width="335"/></p>
+</td>
+<td class="No-Table-Style">
+<p>逻辑回归</p>
+</td>
+</tr>
+<tr class="No-Table-Style">
+<td class="No-Table-Style">
+<p>泊松</p>
+</td>
+<td class="No-Table-Style">
+<p><img alt="" height="63" src="img/Formula_B17298__05_006.png" width="198"/></p>
+</td>
+<td class="No-Table-Style">
+<p>泊松回归</p>
+</td>
+</tr>
+<tr class="No-Table-Style">
+<td class="No-Table-Style">
+<p>微克</p>
+</td>
+<td class="No-Table-Style">
+<p><img alt="" height="111" src="img/Formula_B17298__05_007.png" width="253"/></p>
+</td>
+<td class="No-Table-Style">
+<p>伽马回归</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.10-不同分布类型的链接功能</p>
+<p>训练GLM模型时，您可以选择族超参数的值。“系列”选项指定响应列的概率分布，GLM训练算法在训练过程中使用适当的链接函数。</p>
+<p>系列超参数<a id="_idIndexMarker527"/>的值如下:</p>
+<ul>
+<li><strong class="bold">高斯</strong>:如果响应是一个实数，您应该选择此选项。</li>
+<li><strong class="bold">二项式</strong>:如果响应是分类的，有两个类或二进制文件，可以是枚举或整数，您应该选择这个<a id="_idIndexMarker528"/>选项。</li>
+<li><strong class="bold">分数二项式</strong>:如果响应是介于0和1之间的数字，您应该选择此选项。</li>
+<li><strong class="bold">顺序</strong>:如果响应是具有三个或更多类别的分类响应，则应选择此选项。</li>
+<li><strong class="bold">准二项式</strong>:如果答案是数字，您应该选择此选项。</li>
+<li><strong class="bold">多项式</strong>:如果响应是具有三个或更多枚举类型的类别的分类响应，则应选择此选项。</li>
+<li><strong class="bold">泊松</strong>:如果响应是数字并且包含非负整数，您应该选择此选项。</li>
+<li><strong class="bold"> gamma </strong>:如果响应是数字且连续的，且包含正实数，则应选择此选项。</li>
+<li><strong class="bold"> tweedie </strong>:如果响应是数字，并且包含连续的实数值和非负值，您应该选择此选项。</li>
+<li><strong class="bold"> negativebinomial </strong>:如果响应为数字且包含非负整数，则应选择此选项。</li>
+<li><strong class="bold">自动</strong>:自动为用户确定系列<a id="_idIndexMarker529"/>。</li>
+</ul>
+<p>您可能已经猜到，H2O的AutoML在训练GLM车型时选择AUTO作为家族类型。AutoML过程通过了解数据集中响应变量的分布并应用正确的链接函数来训练GLM模型，从而处理选择正确分布族的情况。</p>
+<p>恭喜你，我们刚刚<a id="_idIndexMarker530"/>了解了GLM算法是如何工作的！GLM是一种非常强大和灵活的算法，H2O AutoML专业地配置其训练，以便它训练最准确和高性能的GLM模型。</p>
+<p>现在，让我们继续下一个H2O训练的ML算法:<strong class="bold">分布式随机森林</strong> ( <strong class="bold"> DRF </strong>)。</p>
+<h1 id="_idParaDest-88"><a id="_idTextAnchor119"/>了解分布式随机森林算法</h1>
+<p><strong class="bold"> DRF </strong>，简称<strong class="bold">随机森林</strong>，是一种非常强大的监督<a id="_idIndexMarker531"/>学习技术，经常<a id="_idIndexMarker532"/>用于分类和回归。DRF学习技术的基础<a id="_idIndexMarker533"/>基于<strong class="bold">决策树</strong>，其中大量的决策树被随机创建并用于预测，它们的结果被组合以获得最终输出。这种随机性用于最小化所有个体决策树的偏差和方差。所有的决策树被组合在一起称为一个森林，因此命名为随机森林。</p>
+<p>为了从概念上更深入地理解DRF，我们需要理解DRF的基本构建模块——即决策树。</p>
+<h2 id="_idParaDest-89"><a id="_idTextAnchor120"/>决策树简介</h2>
+<p>简单来说，决策树<a id="_idIndexMarker534"/>就是一组<em class="italic">，如果</em>的条件是<a id="_idIndexMarker535"/>根据传递给它的数据返回是或否的答案。下图显示了决策树的一个简单示例:</p>
+<div><div><img alt="Figure 5.11 – Simple decision tree  " height="339" src="img/B17298_05_010.jpg" width="928"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.11-简单决策树</p>
+<p>上图<a id="_idIndexMarker536"/>显示了一个基本的决策树<a id="_idIndexMarker537"/>。决策树由以下组件组成:</p>
+<ul>
+<li><strong class="bold">节点</strong>:如果条件根据条件是否满足来分割<a id="_idIndexMarker538"/>决策树，那么节点基本上就是<em class="italic">。</em></li>
+<li><strong class="bold">根节点</strong>:决策树<a id="_idIndexMarker539"/>顶端的节点称为根节点。</li>
+<li><strong class="bold">叶节点</strong>:决策树中不再分支的节点称为叶节点，或简称为叶子。在这种情况下，<a id="_idIndexMarker540"/>条件是，如果传递给它的数据的值是数字，那么答案是数据是一个数字；如果传递给它的数据不是数值型的，那么答案就是数据不是数值型的。这很容易理解。</li>
+</ul>
+<p>如图<em class="italic">图5.11 </em>所示，决策树基于一个简单的对或错问题。决策树<a id="_idIndexMarker541"/>也可以基于<a id="_idIndexMarker542"/>数字数据的数学条件。以下示例显示了基于数字条件的决策树:</p>
+<div><div><img alt="Figure 5.12 – Numerical decision tree  " height="336" src="img/B17298_05_011.jpg" width="1032"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.12–数字决策树</p>
+<p>在这个例子中，根节点计算智商值是否大于300，并决定它是人工智能还是人类智能。</p>
+<p>决策树也可以合并。它们可以形成一组复杂的决策条件，这些条件依赖于先前决策的结果。请参考下面的复杂决策树示例:</p>
+<div><div><img alt="Figure 5.13 – Complex decision tree  " height="687" src="img/B17298_05_012.jpg" width="1270"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.13-复杂决策树</p>
+<p>在前面的例子中，我们<a id="_idIndexMarker543"/>试图计算<em class="italic">你是否可以去外面玩</em>或者<em class="italic">完成你的ML学习</em>。该决策树<a id="_idIndexMarker544"/>结合了数字数据和数据分类。在进行预测时，决策树将从顶部开始，一路向下，决定数据是否满足条件。叶节点是决策树的最终潜在结果。</p>
+<p>了解这些知识后，让我们在一个样本数据集上创建一个决策树。有关样本数据集，请参考下表:</p>
+<div><div><img alt="Figure 5.14 – Sample dataset for creating a decision tree  " height="262" src="img/B17298_05_013.jpg" width="762"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.14–创建决策树的样本数据集</p>
+<p>前述<a id="_idIndexMarker546"/>数据集的内容<a id="_idIndexMarker545"/>如下:</p>
+<ul>
+<li><strong class="bold">胸痛</strong>:此栏显示患者是否有胸痛。</li>
+<li><strong class="bold">血液循环良好</strong>:此栏表示患者血液循环是否良好。</li>
+<li><strong class="bold">动脉阻塞</strong>:此栏显示患者是否有动脉阻塞。</li>
+<li><strong class="bold">心脏病</strong>:此栏表示患者是否患有心脏病。</li>
+</ul>
+<p>对于这个场景，我们希望创建一个决策树，使用胸痛、良好的血液循环和阻塞的动脉特征来预测患者是否患有心脏病。现在，当形成决策树时，我们需要做的第一件事是找到根节点。那么，我们应该将什么特性放在决策树的顶部呢？</p>
+<p>我们首先来看看胸痛在预测心脏病时是如何单独表现出来的。我们将遍历数据集中的所有值，并将它们映射到该决策树，同时将胸痛列中的值与心脏病列中的值进行比较。我们将在决策树中跟踪这些关系。以胸痛为根节点的决策树如下所示:</p>
+<div><div><img alt="Figure 5.15 – Decision tree for the Chest Pain feature  " height="475" src="img/B17298_05_014.jpg" width="927"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.15–胸痛特征的决策树</p>
+<p>现在，我们对数据集中的所有其他<a id="_idIndexMarker548"/>特征都这样做。我们为良好的血液循环创建了一个决策树，看看它在预测心脏病时是如何表现的，并跟踪比较结果，对阻塞的动脉状况也重复同样的过程。如果数据集中有任何丢失的值，那么我们跳过它们。理想情况下，您不应该使用缺少值的数据集。我们可以使用我们在第3章 、<em class="italic">了解数据处理</em>中学到的技术，在这里我们估算并处理缺失的数据集值。</p>
+<p>参考下图，其中显示了创建的两个决策树——一个用于<strong class="bold">患者动脉阻塞</strong>,另一个用于<strong class="bold">患者血液循环良好</strong>:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.16 – Decision tree for the Blocked Arteries and Good Blood Circulation features  " height="619" src="img/B17298_05_015.jpg" width="1650"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.16–阻塞动脉和良好血液循环特征的决策树</p>
+<p>现在我们已经为数据集中的所有特征<a id="_idIndexMarker551"/>创建了<a id="_idIndexMarker550"/>决策树，我们可以比较它们的结果来找到纯粹的特征。在决策树的上下文中，当一个节点被平均分割时，一个特征被认为是100%不纯的，当它的所有数据都属于一个类时，被认为是100%纯的。在我们的场景中，我们没有任何100%纯净的特性。我们所有的特征在某种程度上都是不纯洁的。所以，我们需要找到一些方法来找到最纯粹的特征。为此，我们需要一个度量标准来衡量决策树的纯度。</p>
+<p>数据科学家和工程师有很多方法来衡量纯度。衡量决策树中杂质最常见的<a id="_idIndexMarker552"/>指标是<strong class="bold">基尼杂质</strong>。基尼系数衡量的是在分类过程中，一个新的随机数据实例被错误分类的可能性。</p>
+<p>基尼系数的计算如下:</p>
+<p class="IMG---Figure"><img alt="" height="91" src="img/Formula_B17298__05_008.png" width="1181"/></p>
+<p>这里，p1，p2，p3，p4 …是心脏病各种分类的概率。在我们的方案中，我们只有两种分类——是或否。因此，在我们的方案中，杂质的度量如下:</p>
+<p class="IMG---Figure"><img alt="" height="88" src="img/Formula_B17298__05_009.png" width="1550"/></p>
+<p>因此，让我们计算一下我们刚刚创建的所有决策树的基尼系数<a id="_idIndexMarker553"/>和<a id="_idIndexMarker554"/>，这样我们就可以找到最纯粹的特征。具有多个叶节点的决策树的基尼系数是通过计算各个叶节点的基尼系数，然后计算所有系数值的加权平均值，从而得到整个决策树的基尼系数来计算的。因此，让我们从计算胸痛决策树的左叶节点的基尼不纯度开始，并对右叶节点重复这一过程:</p>
+<p class="IMG---Figure"><img alt="" height="132" src="img/Formula_B17298__05_010.png" width="1650"/></p>
+<p class="IMG---Figure"><img alt="" height="132" src="img/Formula_B17298__05_011.png" width="1650"/></p>
+<p>我们之所以计算基尼系数杂质的加权平均值，是因为数据的表示在决策树的两个分支之间不是平均分配的。加权平均值有助于我们抵消数据值的这种不均衡分布。因此，我们可以如下计算整个胸痛决策树的基尼系数:</p>
+<p><em class="italic">基尼系数(胸痛)=叶节点基尼系数的加权平均值</em></p>
+<p><em class="italic">基尼不洁(胸痛)= </em></p>
+<p><em class="italic">(左叶节点的数据输入总数/总行数)x左叶节点的Gini杂质</em></p>
+<p><em class="italic"> + </em></p>
+<p><em class="italic">(右叶节点的数据输入总数/总行数)x右叶节点的Gini杂质</em></p>
+<p><em class="italic">=(144/(144+159))x 0.395+(159/(144+159))x 0.364</em></p>
+<p><em class="italic"> = 0.364 </em></p>
+<p>胸痛决策树的基尼杂质<a id="_idIndexMarker556"/>为0.364。</p>
+<p>我们对所有其他特征决策树也重复这个过程。我们应该得到以下结果:</p>
+<ul>
+<li>胸痛决策树的基尼不纯度为0.364</li>
+<li>良好血液循环树的基尼不纯度为0.360</li>
+<li>阻塞动脉树的基尼系数为0.381</li>
+</ul>
+<p>对比这些值，我们可以推断出<a id="_idIndexMarker557"/>血液循环良好特征的基尼杂质<a id="_idIndexMarker558"/>基尼杂质最低，是数据集中最纯净的特征。所以，我们将把它作为我们决策树的根。</p>
+<p>参照<em class="italic">图5.12 </em>和<em class="italic">图5.13 </em>，当我们利用良好的血液循环特征对患者进行划分时，结果在左右叶节点上的分布不纯。因此，每一个叶节点都有显示有无心脏病的混合结果。现在，我们需要找出一种方法，使用其余的特征(胸痛和动脉阻塞)将混合结果与良好的血液循环特征分开。</p>
+<p>因此，正如我们之前所做的那样，我们将使用这些混合结果，并使用其他特征将它们分开，并计算这些特征的基尼不纯度值。我们将选择最纯粹的特征，并在给定的节点替换它，用于进一步的分类。</p>
+<p>我们将对右分支重复这一过程。因此，为了简化决策树节点的选择，我们必须执行以下操作:</p>
+<ul>
+<li>使用混合结果计算该节点所有剩余特征的基尼系数。</li>
+<li>选择杂质最低的一个，用节点代替。</li>
+<li>对决策树的其余功能重复相同的过程。</li>
+<li>只要分类降低了基尼系数，就继续替换节点；否则，将其保留为叶节点。</li>
+</ul>
+<p>因此，您最终的<a id="_idIndexMarker559"/>决策树<a id="_idIndexMarker560"/>将如下所示:</p>
+<div><div><img alt="Figure 5.17 – The final decision tree  " height="723" src="img/B17298_05_016.jpg" width="1300"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.17–最终的决策树</p>
+<p>这种决策树适用于值为真或假的分类。如果你有数字数据呢？</p>
+<p>用数字数据创建决策树非常容易，其步骤与我们处理真/假数据的步骤几乎相同。将重量视为一个新特征；<strong class="bold">重量</strong>栏的数据如下:</p>
+<div><div><img alt="Figure 5.18 – Dataset with a new feature, Weight, in kilograms  " height="266" src="img/B17298_05_017.jpg" width="761"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.18–具有新功能的数据集，重量，以千克为单位</p>
+<p>对于这个场景，我们必须<a id="_idIndexMarker561"/>遵循这些<a id="_idIndexMarker562"/>步骤:</p>
+<ol>
+<li>按升序对数据进行排序。在我们的场景中，我们将使用Weight列从最高到最低对数据集的行进行排序。</li>
+<li>计算所有相邻行的平均权重:</li>
+</ol>
+<div><div><img alt="Figure 5.19 – Calculating the average of the subsequent row values  " height="336" src="img/B17298_05_018.jpg" width="809"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.19–计算后续行值的平均值</p>
+<ol>
+<li value="3">计算我们计算的所有平均值的基尼系数:</li>
+</ol>
+<div><div><img alt="Figure 5.20 – Calculating the Gini Impurity of all the averages  " height="612" src="img/B17298_05_019.jpg" width="1248"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.20-计算所有平均值的基尼系数</p>
+<ol>
+<li value="4">确定并选择平均特征值，使我们的基尼系数杂质值最小。</li>
+<li>将选定的特征值用作决策树中的决策节点。</li>
+</ol>
+<p>使用决策树<a id="_idIndexMarker563"/>进行预测非常容易。您将拥有包含胸痛、动脉阻塞、良好循环和体重值的数据<a id="_idIndexMarker564"/>,并将其输入决策树模型。该模型将在计算节点条件时沿决策树向下筛选值，并最终使用预测值到达叶节点。</p>
+<p>祝贺您——您已经理解了决策树的概念！尽管决策树易于理解和实现，但它们并不擅长解决现实生活中的ML问题。</p>
+<p>使用决策树有一些缺点:</p>
+<ul>
+<li>决策树非常不稳定。数据集中的任何微小变化都会极大地改变模型的性能和预测结果。</li>
+<li>它们不准确。</li>
+<li>对于包含大量要素的大型数据集，它们可能会变得非常复杂。想象一个有1000个特征的数据集，这个数据集的决策树将有一个深度非常大的树，并且它的计算将是非常资源密集型的。</li>
+</ul>
+<p>为了减轻所有这些<a id="_idIndexMarker565"/>缺点，随机森林<a id="_idIndexMarker566"/>算法被开发出来，它建立在决策树之上。有了这些知识，让我们继续下一个概念:随机森林。</p>
+<h2 id="_idParaDest-90"><a id="_idTextAnchor122"/>随机森林简介</h2>
+<p><strong class="bold">随机森林</strong>，也叫<strong class="bold">随机决策森林</strong>，是一种ML方法，在学习<a id="_idIndexMarker568"/>的过程中建立大量的决策<a id="_idIndexMarker567"/>树，并对个体决策树的结果<a id="_idIndexMarker569"/>进行分组或集成，进行预测。随机森林用于解决分类和回归问题。对于分类问题，大多数决策树预测的类值就是预测值。对于回归问题，计算单个树的平均值或平均预测，并将其作为预测值返回。</p>
+<p>随机森林算法在训练期间遵循以下学习步骤:</p>
+<ol>
+<li value="1">从原始数据集创建一个引导数据集。</li>
+<li>随机选择数据特征的子集。</li>
+<li>使用所选的特征子集开始创建决策树，其中最能分割数据的特征被选为根节点。</li>
+<li>选择其他剩余特征的随机子集来进一步分割决策树。</li>
+</ol>
+<p>让我们通过创建一个来理解随机森林的概念。</p>
+<p>我们将使用与我们在图5.17 中制作复杂决策<a id="_idIndexMarker571"/>树时使用的数据集<a id="_idIndexMarker570"/>。这个数据集就是我们用来做决策树的那个。要创建随机森林，我们需要创建数据集的引导版本。</p>
+<p>引导数据集是通过从数据集中随机选择行从原始数据集创建的数据集。引导数据集与原始数据集大小相同，并且还可以包含原始数据集中的重复行。有许多用于创建引导数据集的内置函数，您可以使用其中任何一个来创建一个。</p>
+<p>考虑以下引导数据集:</p>
+<div><div><img alt="Figure 5.21 – Bootstrapping dataset  " height="367" src="img/B17298_05_020.jpg" width="1097"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.21–引导数据集</p>
+<p>下一步是从引导数据集创建决策树，但在每一步中只使用要素列的子集。因此，选择所有要在决策树中考虑的特征只会让你将良好的血液循环和阻塞的动脉作为决策树的特征。</p>
+<p>我们将遵循相同的纯度识别标准来确定节点的根。让我们假设对于<a id="_idIndexMarker572"/>我们的实验，良好的血液循环<a id="_idIndexMarker573"/>是最纯净的。将它设置为根节点，我们现在将考虑剩余的特性来填充下一层决策节点。就像我们之前做的一样，我们将从剩余的特性中随机选择两个特性，并决定哪个特性应该适合下一个决策节点。我们将照常构建树，同时在每一步考虑剩余变量的随机子集。</p>
+<p>这是我们刚刚做的树:</p>
+<div><div><img alt="Figure 5.22 – First decision tree from the bootstrapped dataset  " height="707" src="img/B17298_05_021.jpg" width="1263"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.22-来自引导数据集的第一个决策树</p>
+<p>现在，我们重复相同的过程，同时创建多个决策树，引导并从随机树中选择特征。理想的随机森林将创建数百个决策树，如下所示:</p>
+<div><div><img alt="Figure 5.23 – Multiple decision trees from different bootstrapped datasets  " height="680" src="img/B17298_05_022.jpg" width="1262"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.23–来自不同引导数据集的多个决策树</p>
+<p>这种用随机实现<a id="_idIndexMarker575"/>创建的大量决策树<a id="_idIndexMarker574"/>使得随机森林比单个决策树更有效。</p>
+<p>现在我们已经创建了随机森林，让我们看看如何使用它来进行预测。为了进行预测，您将拥有一个包含不同特征的数据值的行，并且您希望预测该人是否患有心脏病。</p>
+<p>您将沿着随机林中的单个决策树传递这些数据:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.24 – Predictions from the first decision tree in the Random Forest  " height="729" src="img/B17298_05_023.jpg" width="1309"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.24–随机森林中第一棵决策树的预测</p>
+<p>决策树将根据其结构预测<a id="_idIndexMarker576"/>结果。我们将保持<a id="_idIndexMarker577"/>该树所做预测的轨迹，并继续将数据传递给其他树，同时记录它们的预测:</p>
+<div><div><img alt="Figure 5.25 – Predictions from the other individual trees in the Random Forest  " height="670" src="img/B17298_05_024.jpg" width="1420"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.25-随机森林中其他单棵树的预测</p>
+<p>一旦我们从所有的单个树中得到预测<a id="_idIndexMarker578"/>，我们就可以找出哪个<a id="_idIndexMarker579"/>值从所有的决策树中得到了最多的投票。投票数最多的预测值将结束对随机森林的预测。</p>
+<p>对数据集进行自举，聚合所有决策树<a id="_idIndexMarker580"/>的预测值来做出决策，称为<strong class="bold">装袋</strong>。</p>
+<p>恭喜你——你已经理解了随机森林的概念！尽管随机森林是一种具有低偏差和方差的非常好的最大似然算法，但是仍然遭受高计算要求的困扰。因此，H2O汽车公司没有训练随机森林，而是训练了随机森林的另一个版本，叫做<strong class="bold">极度随机化树</strong> ( <strong class="bold"> XRT </strong>)。</p>
+<h2 id="_idParaDest-91"><a id="_idTextAnchor123"/>理解极度随机化的树</h2>
+<p><strong class="bold"> XRT </strong>算法，也称为<strong class="bold">树</strong>，就像普通的<a id="_idIndexMarker581"/>随机森林算法。然而，随机森林和XRT有两个主要区别，如下所示:</p>
+<ul>
+<li>在随机森林中，我们使用自举数据集来训练个体决策树。在XRT，我们使用整个数据集来训练单个决策树。</li>
+<li>在随机森林中，在构建单个决策树时，根据某些选择标准(如杂质度量或错误率)来分割决策节点。在XRT，这个过程是完全随机的，结果最好的会被选中。</li>
+</ul>
+<p>让我们用理解随机森林的同一个例子来理解XRT。我们有一个数据集，如图<em class="italic">图5.17 </em>所示。我们将按原样使用数据集，而不是像在图5.20 中那样引导数据。</p>
+<p>然后，我们开始通过随机<a id="_idIndexMarker584"/>选择特征子集来创建<a id="_idIndexMarker583"/>我们的决策树。在随机森林中，我们使用纯度标准来决定哪个特征应该被设置为决策树的根节点。然而，对于XRT，我们将随机设置决策树的根节点和决策节点。类似地，我们将创建多个这样的决策树，所有的特征都是随机选择的。这种增加的随机性允许算法进一步减少模型的方差，代价是偏差略有增加。</p>
+<p>恭喜你！我们刚刚研究了XRT算法如何使用极度随机化的决策树来进行精确的回归和分类预测。现在，让我们了解GBM算法如何训练一个分类模型来对数据进行分类。</p>
+<h1 id="_idParaDest-92"><a id="_idTextAnchor124"/>理解梯度推进机算法</h1>
+<p><strong class="bold">梯度推进机</strong> ( <strong class="bold"> GBM </strong>)是一种前向学习集成ML算法，既能处理分类<a id="_idIndexMarker585"/>也能处理回归。GBM模型是一个集成模型，就像DRF算法一样，从某种意义上说，GBM模型作为一个整体，是多个弱学习者模型的组合，其结果被聚集并呈现为GBM预测。GBM的工作方式类似于DRF，因为它由多个决策树组成，这些决策树按顺序构建，以最小化错误。</p>
+<p>GBM可用于预测连续数值，以及对数据进行分类。如果用GBM来预测连续的数值，我们说我们是在用GBM进行回归。如果我们正在使用GBM对数据进行分类，那么我们说我们正在使用GBM进行分类。</p>
+<p>GBM算法的基础是决策树，就像DRF一样。然而，与DRF相比，决策树的构建方式是不同的。</p>
+<p>让我们试着理解GBM算法是如何进行回归的。</p>
+<h2 id="_idParaDest-93"><a id="_idTextAnchor125"/>建造梯度推进机</h2>
+<p>我们将使用下面的示例<a id="_idIndexMarker586"/>数据集，并在概念上构建模型时理解GBM是如何工作的。下表包含数据集的一个示例:</p>
+<div><div><img alt="Figure 5.26 – Sample dataset for GBM  " height="390" src="img/B17298_05_025.jpg" width="561"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.26–GBM的样本数据集</p>
+<p>这是一个任意的数据集<a id="_idIndexMarker587"/>,我们使用它只是为了理解GBM将如何构建它的ML模型。数据集的内容如下:</p>
+<ul>
+<li><strong class="bold">身高</strong>:此栏显示人的身高，单位为厘米。</li>
+<li><strong class="bold">性别</strong>:此栏表示人的性别。</li>
+<li><strong class="bold">年龄</strong>:此栏表示人的年龄。</li>
+<li><strong class="bold">体重</strong>:此栏表示人的体重。</li>
+</ul>
+<p>与DRF不同，GBM从叶节点而不是根节点开始创建弱学习决策树。它将创建的第一个叶节点将是响应变量的所有值的平均值。因此，相应地，GBM算法将创建叶节点，如下图所示:</p>
+<div><div><img alt="Figure 5.27 – Calculating the leaf node using the column average  " height="320" src="img/B17298_05_026.jpg" width="877"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.27–使用列平均值计算叶节点</p>
+<p>单独的这个叶节点也可以被认为是一个决策树。它就像一个预测模型，只预测任何类型的输入数据的常数值。在这种情况下，它是我们从响应列中得到的平均值。正如我们所料，这是一种不正确的预测方式，但这只是GBM的第一步。</p>
+<p>GBM要做的下一件事是根据它从数据集的初始叶节点预测中观察到的错误创建另一个决策树。正如我们之前所讨论的，误差只不过是观察到的重量和预测的<a id="_idIndexMarker589"/>重量之间的差异，也称为残差。然而，这些残差不同于我们将从完整的GBM模型中得到的实际残差。我们从GBM的弱学习器决策树中得到的残差<a id="_idIndexMarker590"/>称为<strong class="bold">伪残差</strong>，而GBM模型的残差是实际残差。</p>
+<p>因此，如前所述，GBM算法将为数据集中的所有数据值计算第一个叶节点的伪残差，并创建一个特殊的列来跟踪这些伪残差值。</p>
+<p>为了更好地理解，请参考下图:</p>
+<div><div><img alt="Figure 5.28 – Dataset with pseudo-residuals  " height="416" src="img/B17298_05_027.jpg" width="701"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.28–带有伪残差的数据集</p>
+<p>使用这些伪残差<a id="_idIndexMarker591"/>值，GBM算法然后使用所有剩余特征(即身高、最喜欢的颜色和性别)构建决策树。决策树将如下所示:</p>
+<div><div><img alt="Figure 5.29 – Decision tree using pseudo-residual values  " height="483" src="img/B17298_05_028.jpg" width="1116"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.29-使用伪残值的决策树</p>
+<p>如您所见，该决策树只有四个叶节点，而从第一棵树生成的算法中的伪残差值远不止四个。这是因为GBM <a id="_idIndexMarker592"/>算法限制了它生成的决策树的大小。对于这个场景，我们只使用了四个叶节点。在配置GBM算法时，数据科学家可以通过传递正确的超参数来控制树的大小。理想情况下，对于大型数据集，通常使用8到32个叶节点。</p>
+<p>由于决策树中的叶节点的限制，决策树最终在相同的叶节点中具有多个伪残差值。因此，GBM算法用它们的平均值替换它们，以获得单个叶节点的一个具体数字。因此，在计算平均值后，我们将得到一个如下所示的决策树:</p>
+<div><div><img alt="Figure 5.30 – Decision tree using averaged pseudo-residual values  " height="480" src="img/B17298_05_029.jpg" width="1173"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.30–使用平均伪残差值的决策树</p>
+<p>现在，该算法将原始叶节点与这个新的决策树结合起来，对其进行预测。因此，现在，我们从初始叶节点预测中得到值71.2。然后，在沿着决策树运行数据之后，我们得到16.8。因此，预测的重量是两个预测的总和，即88。这也是观察到的重量。</p>
+<p>这是不正确的<a id="_idIndexMarker593"/>，因为这是过度配合的情况。<strong class="bold">过度拟合</strong>是一种建模错误，其中模型函数过于精细，无法仅预测数据集<a id="_idIndexMarker594"/>中可用的数据值，而无法预测数据集之外的任何其他值。因此，该模型对于预测数据集之外的任何值变得毫无用处。</p>
+<p>因此，为了纠正这一点，GBM算法为它训练的所有弱学习者<a id="_idIndexMarker595"/>决策树分配一个学习率。<strong class="bold">学习速率</strong>是一个超参数，它调整模型学习新信息的速率，新信息可以覆盖旧信息。学习率的值范围是从0到1。通过将该学习率添加到来自决策树的预测中，该算法控制决策树预测的影响，并逐步缓慢地向最小化误差移动。对于我们的例子，让我们假设学习率是0.1。因此，相应地，预测重量可以计算如下:</p>
+<div><div><img alt="Figure 5.31 – Calculating the predicted weight  " height="417" src="img/B17298_05_030.jpg" width="1232"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.31–计算预测重量</p>
+<p>因此，该算法将插入决策树所做预测的学习率，然后计算预测的权重。现在预测的体重会是<em class="italic"> 62.1 + (0.1 x -14.2) = 60.68 </em>。</p>
+<p>60.68不是一个非常好的预测，但它仍然是比62.68更好的预测，62.68是初始叶节点所预测的。最小化误差的增量步骤是保持预测中低方差的正确方法。学习率的正确平衡也很重要，因为太高的学习率会使校正偏离相反的方向，而太低的学习率会导致长的计算时间，因为算法将采取非常小的校正步骤来达到最小误差。</p>
+<p>为了进一步校正预测值<a id="_idIndexMarker596"/>并最小化误差，GBM算法将创建另一个决策树。为此，它将根据用叶节点和第一决策树做出的预测来计算新的伪残差值，并使用这些值来构建第二决策树。</p>
+<p>下图显示了如何计算新的伪残值:</p>
+<div><div><img alt="Figure 5.32 – Calculating new pseudo-residual values  " height="345" src="img/B17298_05_031.jpg" width="1252"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.32–计算新的伪残值</p>
+<p>您会注意到，与第一个伪残差值相比，生成的新伪残差值更接近实际值。这表明GBM模型正在慢慢地最小化误差并提高其准确性。</p>
+<p>继续第二决策树，该算法使用新的伪残差值来创建第二决策树。一旦创建，它就将树连同学习率一起聚集到已经存在的叶节点和第一个决策树。</p>
+<p>每次GBM算法创建决策树时，决策树可能会有所不同。然而，所有树的学习率都是一样的。因此，现在，预测值将是三个部分的总和——初始叶节点预测值、第一个决策树预测的调整值和第二个决策树预测的调整值。因此，预测值如下:</p>
+<div><div><img alt="Figure 5.33 – GBM model with a second boosted decision tree  " height="405" src="img/B17298_05_032.jpg" width="1057"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.33–带有第二个提升决策树的GBM模型</p>
+<p>GBM算法<a id="_idIndexMarker597"/>将重复相同的过程，创建指定数量的决策树，或者直到增加决策树不再改善预测。因此，最终，GBM模型将如下所示:</p>
+<div><div><img alt="Figure 5.34 – Complete GBM model  " height="615" src="img/B17298_05_033.jpg" width="1408"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.34-完整的GBM模型</p>
+<p>恭喜你！我们刚刚探讨了GBM算法如何使用弱决策树学习器的集合来进行准确的回归预测。</p>
+<p>H2O汽车公司使用的另一种算法是XGBoost算法，它建立在GBM之上。XGBoost <a id="_idIndexMarker599"/>代表极端梯度提升，并实现了<a id="_idIndexMarker600"/>一种称为提升的过程，有时有助于训练性能更好的模型。它是Kaggle竞赛中使用最广泛的ML算法之一，并已被证明是一种惊人的ML算法，可用于分类和回归。对于不精通统计学的用户来说，XGBoost工作原理背后的数学原理可能有点困难。但是，强烈建议您花时间了解更多关于该算法的知识。你可以在<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/xgboost.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/XGBoost . XHTML</a>找到更多关于H2O <a id="_idIndexMarker601"/>如何进行XGBoost训练的信息。</p>
+<p class="callout-heading">小费</p>
+<p class="callout">集成ML <a id="_idIndexMarker602"/>是一种结合多个ML模型的方法，与单个模型的性能相比，可以获得更好的预测结果——就像决策树的组合如何使用bagging创建随机森林算法，以及GBM算法如何使用弱学习器的组合来最小化错误。集成模型通过找到预测算法的最佳组合并使用它们的组合性能来训练元学习器<a id="_idIndexMarker603"/>来提供改进的性能，从而更进一步。这是通过一个叫做堆叠的过程来完成的。你可以在https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/stacked-ensembles . XHTML # stacked-ensembles找到更多关于H2O如何训练这些stacked ensemble模型的信息。</p>
+<p>现在，让我们学习深度学习是如何工作的，并了解神经网络。</p>
+<h1 id="_idParaDest-94"><a id="_idTextAnchor126"/>理解什么是深度学习</h1>
+<p><strong class="bold">深度学习</strong> ( <strong class="bold"> DL </strong>)是ML的一个分支，利用<strong class="bold">人工神经网络</strong> ( <strong class="bold"> ANNs </strong>)开发<a id="_idIndexMarker605"/>预测模型。ann，简称为<strong class="bold">神经网络</strong> ( <strong class="bold"> NNs </strong>)，是基于带有神经元的人脑如何处理信息的松散<a id="_idIndexMarker606"/>计算。人工神经网络由神经元组成，神经元是与其他神经元相互连接的节点类型。这些神经元相互传递信息；这通过神经网络得到处理，最终得到一个结果。</p>
+<p>DL是最强大的ML技术之一，用于训练高度可配置的模型，并且可以支持对大型复杂数据集的预测。DL模型可以是监督的、半监督的或无监督的，这取决于它们的配置。</p>
+<p>人工神经网络有多种类型:</p>
+<ul>
+<li><strong class="bold">递归神经网络</strong> ( <strong class="bold"> RNN </strong> ): RNN是一种NN <a id="_idIndexMarker608"/>，其中NN的各个神经元之间的连接<a id="_idIndexMarker609"/>可以形成一个有向或无向图。这种类型的网络是循环的，因为网络的输出被反馈到网络的起点，并有助于下一个预测周期。下图显示了一个RNN的示例:</li>
+</ul>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.35 – RNN  " height="1013" src="img/B17298_05_034.jpg" width="1650"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.35–RNN</p>
+<p>如您所见，神经网络中最后一个节点的值作为输入被提供给网络的起始节点。</p>
+<ul>
+<li><strong class="bold">前馈NN </strong>:前馈神经网络类似于RNN，<a id="_idIndexMarker610"/>唯一的区别是节点网络不形成循环。下图显示了前馈神经网络的一个示例:</li>
+</ul>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.36 – Feedforward neural network  " height="992" src="img/B17298_05_035.jpg" width="1617"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.36-前馈神经网络</p>
+<p>如你所见，这种NN <a id="_idIndexMarker611"/>是单向的。这是最简单的人工神经网络。一个前馈<a id="_idIndexMarker612"/>神经网络也叫<strong class="bold">深度神经网络</strong> ( <strong class="bold"> DNN </strong>)。</p>
+<p>H2O的DL是基于一个多层的<a id="_idIndexMarker613"/>自由前锋安。使用<strong class="bold">反向传播</strong>对其进行<strong class="bold">随机梯度下降</strong>训练。H2O可以训练许多不同类型的dnn。它们如下:</p>
+<ul>
+<li><strong class="bold">多层感知器</strong> ( <strong class="bold"> MLP </strong>):这些类型的DNNs <a id="_idIndexMarker615"/>最适合表格数据。</li>
+<li><strong class="bold">卷积神经网络</strong>(<strong class="bold">CNN</strong>):这些类型的dnn<a id="_idIndexMarker616"/>最适合图像数据。</li>
+<li><strong class="bold">递归神经网络</strong> ( <strong class="bold"> RNNs </strong>):这些类型的DNNs <a id="_idIndexMarker617"/>最适合语音数据或时间序列数据等顺序数据。</li>
+</ul>
+<p>建议使用H2O提供的默认DNNs，因为配置DNN对于非专业人士来说非常困难。H2O已经预先配置了DL的实施，以便在给定的情况下使用最佳类型的dnn。</p>
+<p>记住这些基础知识，让我们更深入地理解DL是如何工作的。</p>
+<h2 id="_idParaDest-95"><a id="_idTextAnchor127"/>了解神经网络</h2>
+<p><strong class="bold"> NNs </strong>形成DL的基础。神经网络的工作原理很容易理解:</p>
+<ol>
+<li value="1">你把数据输入神经网络的输入层。</li>
+<li>神经网络中的节点训练自己从输入数据中识别模式和行为。</li>
+<li>然后，神经网络根据它在训练中学习到的模式和行为进行预测。</li>
+</ol>
+<p>神经网络的结构如下所示:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.37 – Structure of an NN  " height="1013" src="img/B17298_05_036.jpg" width="1650"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.37-神经网络的结构</p>
+<p>NN有三个基本组成部分<a id="_idIndexMarker619"/>:</p>
+<ul>
+<li><strong class="bold">输入层</strong>:输入层由多组神经元组成。这些神经元连接到位于隐藏层的下一层神经元。</li>
+<li><strong class="bold">隐藏层</strong>:在隐藏层内部，可以有多层神经元，它们之间都是逐层互连的。</li>
+<li><strong class="bold">输出层</strong>:输出层是神经网络的最后一层，它进行最后的计算，根据概率计算出最终的预测值。</li>
+</ul>
+<p>神经网络的学习过程可以分为两个部分:</p>
+<ul>
+<li><strong class="bold">前向传播</strong>:顾名思义，前向传播<a id="_idIndexMarker620"/>就是信息通过中间层从输入层流向输出层的地方<a id="_idIndexMarker621"/>。下图显示了正向传播的作用:</li>
+</ul>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.38 – Forward propagation in an NN  " height="981" src="img/B17298_05_037.jpg" width="1599"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.38-神经网络中的正向传播</p>
+<p>中间层的神经元通过<strong class="bold">通道</strong>连接。这些通道被赋予称为<strong class="bold">权重</strong>的数值。权重决定了<a id="_idIndexMarker622"/>就其对整体预测的贡献值而言，神经元的重要性。权重值越高，该节点在进行预测时就越重要。</p>
+<p>来自输入层的输入值在通过通道时乘以这些权重，它们的和作为输入发送到隐藏层中的神经元。隐藏层中的每个神经元都与一个称为<strong class="bold">偏差</strong>的数值相关联，该数值被添加到输入和的<a id="_idIndexMarker623"/>中。</p>
+<p>这个加权值然后被传递给一个被称为激活函数的非线性函数。激活函数<a id="_idIndexMarker624"/>是根据非线性函数的方程来决定特定神经元是否可以将其计算的权重值传递到该神经元的下一层的函数。偏差是一个标量值，它将激活函数移至图表的左侧或右侧进行校正。</p>
+<p>这种信息流继续到隐藏层中的下一层神经元，遵循将通道的权重相乘并将输入传递到节点的下一个激活函数的相同过程。</p>
+<p>最后，在输出<a id="_idIndexMarker625"/>层，值最高的神经元决定预测值是什么，这是概率的一种形式。</p>
+<ul>
+<li><strong class="bold">反向传播</strong>:反向传播的工作方式<a id="_idIndexMarker626"/>与正向传播相同，除了<a id="_idIndexMarker627"/>反向传播。信息以相反的方式通过隐藏层从输出层传递到输入层。下图将让您对此有更好的理解:</li>
+</ul>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 5.39 – Backpropagation in NN  " height="992" src="img/B17298_05_038.jpg" width="1617"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图5.39–神经网络中的反向传播</p>
+<p>理解反向传播<a id="_idIndexMarker629"/>如何工作可能是违反直觉的，因为它从输出到输入以相反的方式工作，但这是一个使DL对ML如此强大的概念。通过反向传播，神经网络可以自我学习。</p>
+<p>它的工作方式非常简单。在反向传播学习中，神经网络将计算期望值和预测值之间的误差大小，并通过将其映射到<strong class="bold">损失函数</strong>来评估其性能。损失函数<a id="_idIndexMarker630"/>是计算预测值和期望值之间偏差的函数。该偏差值是帮助神经网络调整其在隐藏层中的偏差和权重的信息，以提高其性能<a id="_idIndexMarker631"/>并做出更好的预测。</p>
+<p>祝贺你——我们刚刚对DL如何训练ML模型有了一个基本的了解！</p>
+<p class="callout-heading">小费</p>
+<p class="callout">DL是ML中最复杂的<a id="_idIndexMarker632"/>字段之一，AI整体也是如此。这是ML专业化的一个广阔领域，数据科学家花大量时间研究和理解问题陈述和他们正在处理的数据，以便他们可以正确地调整他们的DL NN。它背后的数学也非常复杂，因此值得专门写一本书。因此，如果你对数学感兴趣，并想在数字逻辑艺术中出类拔萃，请随意深入探索ML算法，因为理解它的每一步都会让你成为一名更专业的ML工程师。你可以在<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/deep-learning.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/deep-learning . XHTML</a>找到更多关于<a id="_idIndexMarker633"/> H2O如何进行DL训练的信息。</p>
+<h1 id="_idParaDest-96"><a id="_idTextAnchor128"/>总结</h1>
+<p>在本章中，我们了解了不同类型的预测问题以及各种算法如何解决这些问题。然后，我们理解了不同的最大似然算法是如何根据它们从数据中学习的方法被分类为监督的、非监督的、半监督的和强化的。一旦我们对最大似然法的整个问题领域有了了解，我们就知道H2O自动最大似然法只训练监督学习的最大似然算法，并且可以专门解决这个领域的预测问题。</p>
+<p>然后，我们了解了H2O汽车公司从GLM开始训练哪些算法。为了理解GLM，我们了解了什么是线性回归，它是如何工作的，以及它必须对数据的正态分布做出什么样的假设才是有效的。有了这些基础知识，我们理解了GLM是如何被推广为有效的，即使这些线性回归的假设得到满足，这在现实生活中是一个常见的情况。</p>
+<p>然后，我们了解了DRF。为了理解DRF，我们理解了什么是决策树——也就是DRF的基本构件。然后，我们了解到多决策树及其集成学习是比普通决策树更好的ML模型——这就是随机森林的工作方式。在此基础上，我们了解了DRF如何以XRT的形式添加更多的随机化，以使算法在低方差和低偏差的情况下更加有效。</p>
+<p>之后，我们了解了GBM。我们了解了GBM与DRFs的相似之处，但它的学习方式略有不同。我们了解了GBM如何通过学习以前决策树预测集合的残差来顺序构建决策树并缓慢地最小化错误。</p>
+<p>最后，我们了解了什么是DL。我们了解了nn是如何构建DL的，以及它们的不同类型。我们还了解了神经网络如何从其结果中执行反向传播学习，并通过调整中间层神经元的权重和偏差来自我学习和改进模型。</p>
+<p>这一章给了你一个简单的概念性的理解，让你了解H2O汽车公司是如何训练各种各样的最大似然算法的，而不用太深入数学。然而，强烈鼓励想要成为ML领域专家并希望解决复杂ML问题的ML爱好者理解ML算法奇妙世界背后的数学。这是像你们这样的科学家和爱好者多年研究和努力的结果，我们今天有能力在机器的帮助下预测未来。</p>
+<p>在下一章中，我们将深入理解如何使用不同的统计测量和解释更多关于ML模型性能的其他度量来理解ML模型是否表现最佳。</p>
+</div>
+</div></body>
+</html></body></html>

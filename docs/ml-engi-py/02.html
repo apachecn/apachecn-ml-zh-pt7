@@ -1,0 +1,239 @@
+<html><head/><body>
+
+
+	
+		<title>B17343_01_Final_JC_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-15"><em class="italic"> <a id="_idTextAnchor014"/>第一章</em>:ML工程概论</h1>
+			<p>欢迎来到使用Python 的<em class="italic">机器学习工程，这本书旨在向您介绍让<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)系统生产就绪的激动人心的世界。</em></p>
+			<p>这本书将带你通过一系列章节，涵盖培训系统，扩大解决方案，系统设计，模型跟踪，以及其他主题，为你自己在ML工程中的工作或在这一领域与其他人合作做好准备。没有一本书能详尽地讲述这个主题，所以这本书将集中在我认为涵盖这个日益重要的学科的基本原则的概念和例子上。</p>
+			<p>即使您没有运行技术示例，或者即使您尝试用其他编程语言或不同的工具来应用要点，您也会从本书中获益匪浅。在涵盖关键原则的过程中，我们的目标是让你在阅读完这本书后，更加自信地应对你自己的ML工程挑战，无论你选择什么样的工具集。</p>
+			<p>在第一章中，你将了解与ML工程相关的不同类型的数据角色，以及如何区分它们；如何利用这些知识建立合适的团队并在其中工作；在现实世界中构建可工作的ML产品时需要记住的一些要点；如何开始为ML工程解决方案隔离适当的问题；以及如何为各种典型的业务问题创建自己的高级ML系统设计。</p>
+			<p>我们将在以下章节中涵盖所有这些方面:</p>
+			<ul>
+				<li>定义数据规程的分类</li>
+				<li>组建你的团队</li>
+				<li>现实世界中的ML工程</li>
+				<li>ML解决方案是什么样的？</li>
+				<li>高层ML系统设计</li>
+			</ul>
+			<p>既然我们已经在第一章解释了我们要追求的东西，那就让我们开始吧！</p>
+			<h1 id="_idParaDest-16"><a id="_idTextAnchor015"/>技术要求</h1>
+			<p>在整本书中，我们将假设Python 3已经安装并运行。本章使用了以下Python包:</p>
+			<ul>
+				<li>sci kit-学习0.23.2</li>
+				<li>NumPy</li>
+				<li>熊猫</li>
+				<li>imblearn</li>
+				<li>先知0.7.1</li>
+			</ul>
+			<h1 id="_idParaDest-17"><a id="_idTextAnchor016"/>定义数据学科的分类</h1>
+			<p>过去几年中数据的<a id="_idIndexMarker000"/>爆炸和数据的潜在应用<a id="_idIndexMarker001"/>导致了工作角色和职责的激增。关于T2的数据科学家T3和T4的统计学家T5有何不同的争论现在变得异常复杂。然而，我认为事情不必如此复杂。无论您处于哪个垂直业务领域，从数据中获取价值所必须采取的活动都是相当一致的，因此有理由期待您执行这些步骤所需的技能和角色也将是相对一致的。在这一章中，我们将探索一些我认为你在任何数据项目中都会用到的主要数据原则。正如你所猜测的，鉴于这本书的名字，我将特别热衷于探索<em class="italic"> ML工程</em>的概念，以及它如何融入其中。</p>
+			<p>现在让我们看看在现代环境中使用数据所涉及的一些角色。</p>
+			<h2 id="_idParaDest-18"><a id="_idTextAnchor017"/>数据科学家</h2>
+			<p>自从《哈佛商业评论》宣布数据科学家是21世纪最性感的工作以来，这个头衔已经成为最受追捧的职业之一，但也被大肆宣传。数据科学家可以涵盖所有的职责、技能和责任，这取决于业务垂直领域、组织，甚至只是个人偏好。然而，无论如何定义这个角色，都有一些关键领域应该始终是数据科学家工作概况的一部分<a id="_idIndexMarker004"/>:</p>
+			<ul>
+				<li><strong class="bold">分析</strong>:在对帮助我们理解数据的数据进行计算之前，数据科学家应该能够争论、分析、操作和整合数据集。分析是一个宽泛的术语，但很明显，最终结果是您在开始之前不具备的数据集知识，无论多么基础或复杂。</li>
+				<li><strong class="bold">建模</strong>:让每个人(可能包括你，亲爱的读者)兴奋的事情<a id="_idIndexMarker005"/>是建模数据的想法。数据科学家通常必须能够将统计、数学和机器学习模型应用于数据，以便解释数据或执行某种预测。</li>
+				<li><strong class="bold">与客户或用户合作</strong>:数据科学角色通常有一些更多的业务导向元素，以便步骤1和2的结果可以支持组织中的决策制定。这可以通过在PowerPoints或Jupyter笔记本中展示分析结果，甚至发送一封包含关键结果摘要的电子邮件来实现。它涉及沟通和商业智慧，超越了传统的技术角色。</li>
+			</ul>
+			<h2 id="_idParaDest-19"><a id="_idTextAnchor018"/> ML工程师</h2>
+			<p>在<a id="_idIndexMarker006"/>板块上的一个新成员，也是本书的主题，是ML工程师。这个角色已经上升到填补数据科学的分析和建模与软件产品和健壮的系统工程世界之间的差距。</p>
+			<p>通过考虑一个经典的语音助手，你可以很好地表达对这种角色的需求。在这种情况下，数据科学家通常会专注于将业务需求转化为一个<a id="_idIndexMarker007"/>工作<strong class="bold">语音到文本</strong>模型，这可能是一个非常复杂的神经网络，并表明它可以在原则上执行所需的语音转录任务<em class="italic">。然后，ML工程就是如何将语音到文本的模型构建成产品、服务或工具，并在生产中使用。在这里，这可能意味着构建一些软件来训练、再训练、部署和跟踪模型的性能，因为积累了更多的转录数据，或者理解了用户的偏好。它还可能涉及理解如何与其他系统交互，以及如何以适当的格式提供来自模型的结果，例如，与在线商店交互。</em></p>
+			<p>数据科学家和<a id="_idIndexMarker008"/> ML工程师有许多重叠的技能和能力，但有不同的关注领域和优势(稍后会详细介绍)，所以他们通常是同一个项目团队的一部分，可能有任何头衔，但从他们在该项目中所做的事情可以清楚地看出他们戴着什么帽子。</p>
+			<p>与数据科学家类似，我们可以为ML工程师定义重点关注的领域:</p>
+			<ul>
+				<li><strong class="bold">翻译</strong>:采用<a id="_idIndexMarker009"/>各种格式的模型和研究代码，并将其翻译成更光滑、更健壮的代码。这可以使用面向对象编程、函数式编程、混合编程或其他方式来完成，但基本上有助于将数据科学家的概念验证工作转化为在生产环境中更可信的工作。</li>
+				<li>架构:任何软件的部署都不会发生在真空中，并且总是会涉及到许多集成的部分。机器学习解决方案也是如此。ML工程师必须了解适当的工具和流程是如何联系在一起的，以便数据科学家构建的模型可以完成他们的工作，并进行规模化。</li>
+				<li><strong class="bold">生产化</strong>:ML工程师专注于交付解决方案，因此应该从里到外了解客户的需求，并且能够理解这对项目开发意味着什么。ML工程师的最终目标不是提供一个好的模型(尽管这是它的一部分)，也不是提供一些<em class="italic">基本上有效的东西</em>。他们的工作是确保数据科学方面的艰苦工作在现实世界中产生最大的潜在价值。</li>
+			</ul>
+			<h2 id="_idParaDest-20"><a id="_idTextAnchor019"/>数据工程师</h2>
+			<p>任何数据团队中最重要的人物(在我看来)都是负责从A到B获得商品的人，这些商品是前面章节中所有内容的基础，具有高保真度、适当的延迟，并且尽可能地减少其他团队成员的工作量。没有数据，你无法创建任何类型的软件产品，更不用说机器学习产品了。</p>
+			<p><a id="_idIndexMarker013"/>数据工程师的主要关注领域如下:</p>
+			<ul>
+				<li><strong class="bold">质量</strong>:如果数据是乱码，字段丢失，或者id搞砸了，那么从A到B获取数据是没有意义的。数据工程师关心如何避免这种情况，并使用各种技术和工具，通常是为了确保离开源系统的数据是到达数据存储层的数据。</li>
+				<li><strong class="bold">稳定性</strong>:类似于上一个关于质量的观点，如果数据来自A到B但是如果不是下雨天的话每隔一个星期三才做一次，那还有什么意义呢？数据工程师花费大量的时间和精力，并利用他们的大量技能来确保数据管道是健壮的、可靠的，并且可以在承诺时交付。</li>
+				<li><strong class="bold">访问</strong>:最后，从A到B获取数据的目的是供应用程序、分析和机器学习模型使用，因此<em class="italic"> B </em>的性质很重要。数据工程师将掌握各种技术来呈现数据，并应与数据消费者(我们的数据科学家和机器学习工程师等)合作，在这些解决方案中定义和创建适当的数据模型:</li>
+			</ul>
+			<div><div><img src="img/B17343_01_001.jpg" alt="Figure 1.1 – A diagram showing the relationships between data science, ML engineering, and data engineering&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.1-显示数据科学、ML工程和数据工程之间关系的图表</p>
+			<p>如前所述，这本书关注的是ML工程师的工作，以及你如何学习一些对这个角色有用的技能，但是记住你不会在真空中工作是很重要的。永远记住其他角色的概况(还有更多这里没有提到的，将会存在于你的项目团队中)，这样你们就能最有效地合作。数据毕竟是团队运动！</p>
+			<h1 id="_idParaDest-21">召集你的团队</h1>
+			<p>关于你应该如何为你的机器学习项目组建一个团队，没有固定的规则，但是有一些好的通用原则可以遵循，并且有一些陷阱可以避免。</p>
+			<p>首先，永远记住<em class="italic">独角兽不存在</em>。你可以在外面找到一些非常有才华的人，但是永远不要认为一个人可以做你需要的所有事情，达到你所要求的水平。这不仅仅是有点不现实；这是不好的做法，会对你的产品质量产生负面影响。即使当你受到严重的资源限制，关键是你的团队成员要有一个激光般的焦点来取得成功。</p>
+			<p>其次，<em class="italic">勾兑最好的是</em>。我们都知道多元化对组织和团队的好处，当然，这也应该适用于你的机器学习团队。在一个项目中，你需要数学、代码、工程、项目管理、沟通和各种其他技能来取得成功。因此，考虑到前面的观点，请确保您在团队中至少在某种意义上涵盖了这一点。</p>
+			<p>第三，<em class="italic">以一种动态的方式将你的团队结构与你的项目联系起来</em>。如果你正在做一个项目，主要是在正确的地方获取数据，而实际的机器学习模型非常简单，那么把你的团队档案集中在工程和数据建模方面。如果项目需要对模型有一个详细的理解，并且它是相当复杂的，那么重新定位你的团队以确保这一点被覆盖。这是明智的，并解放了团队成员，否则他们将无法被充分利用来从事其他项目。</p>
+			<p>例如，假设您的任务是构建一个系统，在客户数据进入您闪亮的新数据湖时对其进行分类，并且已经决定应该在通过流应用程序接收时完成这项工作。已经为另一个项目建立了分类。已经很清楚，这个解决方案将大量涉及数据工程师和ML工程师的技能，但不是那么多的数据科学家，因为这部分工作已经在另一个项目中完成。</p>
+			<p>在下一节中，我们将看看在现实世界的业务问题上部署您的团队时需要考虑的一些要点。</p>
+			<h1 id="_idParaDest-22"><a id="_idTextAnchor022"/>现实世界中的ML工程</h1>
+			<p>我们大多数在机器学习、分析和相关学科工作的人都是为盈利性公司工作的。因此，重要的是我们要考虑在<em class="italic">真实世界</em>中做这类工作的一些重要方面。</p>
+			<p>首先，你工作的最终目的是产生<strong class="bold">价值</strong>。这可以通过多种方式来计算和定义，但从根本上来说，你的工作必须为公司或他们的客户改善一些东西，以证明投入的投资是合理的。这就是为什么大多数公司不会乐意让你花一年的时间来玩新工具，然后没有任何具体的东西来展示它(不是说你会这样做，这可能很无聊)，或者花时间阅读最新的论文，而且只阅读最新的论文。是的，这些事情是技术领域任何工作的一部分，尤其是机器学习领域的任何工作，但你必须对如何度过时间具有战略性，并始终意识到你的价值主张。</p>
+			<p>其次，要成为现实世界中成功的ML工程师，不能只懂技术；你<em class="italic">必须懂业务</em>。你必须了解公司每天是如何运作的，你必须了解公司的不同部分是如何结合在一起的，你必须了解公司的员工和他们的角色。最重要的是，你必须了解客户，包括你的业务和工作。如果你不知道你为之建造的人的动机、痛苦和需求，那么你怎么能期望建造正确的东西呢？</p>
+			<p>最后，这可能是有争议的，在现实世界中，作为一名成功的ML工程师，最重要的技能是这本书不会教你的，那就是有效沟通的能力。如上所述，你必须在团队中工作，与经理一起工作，与更广泛的社区和企业一起工作，当然，还要与你的客户一起工作。如果你能做到这一点，并且你知道技术和技巧(本书中讨论了许多)，那么什么能阻止你呢？</p>
+			<p>但是在现实世界中工作，用机器学习能解决什么样的问题呢？好吧，让我们从另一个可能有争议的说法开始:<em class="italic">很多时候，机器学习不是答案</em>。鉴于这本书的标题，这可能看起来很奇怪，但知道什么时候<em class="italic">而不是</em>应用机器学习和什么时候应用它一样重要。这将为您节省大量昂贵的开发时间和资源。</p>
+			<p>当你想更快、更准确地完成一项半例行任务时，或者在比其他解决方案更大的范围内，机器学习是理想的选择。下表给出了一些典型的例子，以及一些关于<a id="_idIndexMarker016"/> ML是否是解决问题的合适工具的讨论:</p>
+			<div><div><img src="img/B17343_01_002.jpg" alt="Figure 1.2 – Potential use cases for ML&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.2–ML的潜在用例</p>
+			<p>正如这个简单例子的<a id="_idIndexMarker017"/>表有望开始阐明的那样，机器学习<em class="italic">是</em>答案的情况通常可以很好地作为数学或统计问题来阐述。毕竟，这才是机器学习的真谛；一系列植根于数学的算法，可以根据数据迭代一些内部参数。现代世界中界限开始变得模糊的地方是通过深度学习或强化学习等领域的进步，在这些领域中，我们以前认为很难用标准ML算法来表达的问题现在可以得到解决。</p>
+			<p>在现实世界中需要注意的另一个趋势(与<em class="italic">一样，让我们对所有事情都使用ML</em>)是人们担心ML会来抢他们的工作，不应该被信任。这是可以理解的:普华永道2018年的一份报告提出，到21世纪30年代，英国30%的工作将受到自动化的冲击(<em class="italic">机器人真的会抢走我们的工作吗？</em>:<a href="https://www.pwc.co.uk/economic-services/assets/international-impact-of-automation-feb-2018.pdf">https://www . PwC . co . uk/economic-services/assets/international-impact-of-automation-Fe B- 2018 . pdf</a>。在与你的同事和客户一起工作时，你必须努力弄清楚的是，你正在构建的东西是为了补充和增强他们的能力，而不是取代他们。</p>
+			<p>让我们通过重温重要的一点来结束这一部分:你为一家公司工作的事实当然意味着游戏的目的是创造适合投资的价值。换句话说，你<a id="_idIndexMarker018"/>需要展示一个良好的<strong class="bold">投资回报</strong> ( <strong class="bold"> ROI </strong>)。这对你来说实际上意味着几件事:</p>
+			<ul>
+				<li>你必须明白不同的设计需要不同程度的投资。如果你可以用一个月24/7运行的GPU在一百万张图像上训练一个深度神经网络来解决你的问题，或者你知道你可以在几个小时内在一些标准硬件上用一些基本的聚类和一点统计来解决同样的问题，你应该选择哪个？</li>
+				<li>你必须清楚你将产生的<em class="italic">值</em>。这意味着你需要与专家合作，并尝试将你的算法结果转化为实际的货币价值。这比听起来要困难得多，所以你应该花时间把它做好。永远不要承诺太多。<em class="italic">你应该总是少承诺多兑现</em>。</li>
+			</ul>
+			<p>收养没有保障。即使在为公司内的同事构建产品时，了解您的解决方案在部署后每次有人使用时都将被测试也是很重要的。如果你构建了粗制滥造的解决方案，那么人们将不会使用它们，你所做的价值主张将开始消失。</p>
+			<p>现在您已经理解了使用ML解决业务问题时的一些要点，让我们探索一下这些解决方案是什么样子的。</p>
+			<h1 id="_idParaDest-23"><a id="_idTextAnchor023"/>ML解决方案是什么样的？</h1>
+			<p>当你想到ML <a id="_idIndexMarker019"/>工程时，你会被原谅默认为从事语音辅助和视觉识别应用程序的工作(我在前几页掉进了这个陷阱，你注意到了吗？).然而，ML的力量在于这样一个事实，即只要有数据和适当的问题，它就能提供帮助，并成为解决方案的一部分。</p>
+			<p>一些例子可能有助于使这一点更清楚。当你输入一条短信，你的手机会提示下一个单词，这通常是在使用自然语言模型。当你滚动任何社交媒体源或观看流媒体服务时，推荐算法都在加倍工作。如果你开车旅行，一个应用程序预测你可能到达目的地的时间，就会有某种回归在起作用。您的贷款申请通常会导致您的特征和申请细节通过一个分类器。这些应用程序并不是新闻中大肆宣扬的那些(也许除了当它们出现可怕的错误时)，但它们都是出色地组合在一起的ML工程的例子。</p>
+			<p>在本书中，我们将会看到更多这样的例子；每天在产品和业务中遇到的机器学习的典型场景。这些解决方案，如果你能自信地构建它们，将使你成为任何组织的资产。</p>
+			<p>我们应该首先考虑构成任何ML解决方案的主要元素，如下图所示:</p>
+			<div><div><img src="img/B17343_01_003.jpg" alt="Figure 1.3 – Schematic of the general components or layers of any ML solution and what they are responsible for&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.3–任何ML解决方案的一般组件或层及其职责的示意图</p>
+			<p>您的<strong class="bold">存储层</strong>构成了<a id="_idIndexMarker020"/>数据工程过程的终点和ML过程的起点。它包括用于训练的数据、运行模型的结果、工件和重要的元数据。我们也可以认为这包括您存储的代码。</p>
+			<p><strong class="bold">计算层</strong>是<em class="italic">魔法</em>发生的地方<a id="_idIndexMarker021"/>也是本书的大部分重点。这是培训、测试、预测和转换全部(大部分)发生的地方。这本书是关于尽可能好地设计这一层，并与其他层接口。您可以放大该层以合并这些部分，如以下工作流所示:</p>
+			<div><div><img src="img/B17343_01_004.jpg" alt="Figure 1.4 – The key elements of the compute layer&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.4—计算层的关键元素</p>
+			<p class="callout-heading">重要说明</p>
+			<p class="callout">细节将在本书的后面讨论，但这强调了一个事实，即在基本层面上，任何ML解决方案的计算过程实际上都只是获取一些数据和推出一些数据。</p>
+			<p><strong class="bold">表层</strong>是<a id="_idIndexMarker023"/>，在这里你可以与其他系统共享你的ML解决方案的结果。这可以通过从应用程序数据库插入到API端点、到消息队列、到可视化工具的任何东西来实现。这是您的客户最终使用结果的一层，因此您必须设计您的系统来提供清晰易懂的输出，这一点我们将在后面讨论。</p>
+			<p>简而言之就是这样。我们稍后将详细介绍所有这些层和点，但现在，只要记住这些宽泛的概念，您就会开始理解所有详细的技术部分是如何结合在一起的。</p>
+			<h2 id="_idParaDest-24"><a id="_idTextAnchor024"/>为什么选择Python？</h2>
+			<p>在进入更详细的主题之前，讨论一下为什么Python被选为本书的编程语言是很重要的。接下来涉及到更高层次主题的所有内容，比如架构和系统设计，都可以应用到使用任何或多种语言的解决方案中，但是Python在这里被单独列出来有几个原因。</p>
+			<p>Python <a id="_idIndexMarker024"/>俗称数据的<em class="italic">通用语</em>。它是一种非编译、非强类型、多范例编程语言，具有清晰简单的语法。它的工具生态系统也很广泛，尤其是在分析和机器学习领域。像<code>scikit-learn</code>、<code>numpy</code>、<code>scipy</code>这样的软件包，以及其他许多软件包，构成了全世界大量技术和科学发展的支柱。几乎每个用于数据世界的主要新软件库都有Python API。根据撰写本文时(2021年1月)的TIOBE指数，它是世界上第三大流行的编程语言。</p>
+			<p>鉴于此，能够使用Python构建您的系统意味着您将能够利用该生态系统中可用的所有优秀的机器学习和数据科学工具，同时还确保您构建的应用程序能够与其他软件很好地配合。</p>
+			<h1 id="_idParaDest-25"><a id="_idTextAnchor025"/>高层ML系统设计</h1>
+			<p>当你开始着手<a id="_idIndexMarker026"/>构建你的解决方案的具体细节时，工具、技术和方法的选择是如此之多，以至于很容易让人不知所措。然而，正如前面提到的，这种复杂性可以通过一些<em class="italic">幕后</em>架构和设计进行抽象，以理解更大的图景。一旦你知道你要尝试和解决什么问题，这总是一个有用的练习，这也是我建议你在做任何关于实现的详细选择之前做的事情。</p>
+			<p>为了让您了解这在实践中是如何工作的，下面是一些已经完成的例子，其中一个团队必须为一些典型的业务问题创建一个高级的ML系统设计。这些问题类似于我以前遇到的问题，也可能类似于你在自己的工作中遇到的问题。</p>
+			<h2 id="_idParaDest-26"><a id="_idTextAnchor026"/>例1:批量异常检测服务</h2>
+			<p>你为一家拥有数千辆汽车的精通技术的出租车公司工作。该组织希望开始使乘车时间更加一致，并理解更长的旅程，以改善客户体验，从而增加保留率和回头客业务。您的ML团队被雇佣来创建异常检测服务，以发现具有异常乘坐时间或乘坐长度行为的乘坐装置。大家都开始工作，数据科学家发现，如果使用乘坐距离和时间的特征对乘坐集合进行聚类，就可以清楚地识别出值得运营团队调查的异常值。数据科学家将研究结果提交给首席技术官和其他利益相关方，然后批准将其开发为一项服务，该服务将在公司内部分析工具的一个主表中提供一个异常值标志作为一个新字段。</p>
+			<p>在本例中，我们将模拟一些数据，以显示出租车公司的数据科学家可以如何进行。所有代码都包含在本书的资源库中的<code>Chapter1/batch-anomaly</code>文件夹中:<a href="https://github.com/PacktPublishing/Machine-Learning-Engineering-with-Python/tree/main/Chapter01">https://github . com/packt publishing/Machine-Learning-Engineering-with-Python/tree/main/chapter 01</a>。本书中展示的所有代码片段都是如此:</p>
+			<ol>
+				<li value="1">首先，让我们定义一个函数，它将基于<code>numpy</code>中给出的随机分布模拟一些行驶距离，并返回一个包含结果的<code>numpy</code>数组。重复线路的原因是为了让我们可以在数据中创建一些基本行为和异常，您可以清楚地与下一步我们将为每组出租车生成的速度进行比较:<pre>def simulate_ride_distances():     ride_dists = np.concatenate(         (             10 * np.random.random(size=370),             30 * np.random.random(size=10),               10 * np.random.random(size=10),              10 * np.random.random(size=10)         )     )     return ride_dists</pre></li>
+				<li>我们现在可以对速度做完全相同的事情，我们再次将出租车分成370、10、10和10组，以便我们可以创建一些具有“典型”行为的数据<a id="_idIndexMarker029"/>和一些异常集合，而<a id="_idIndexMarker030"/>允许值与<code>distances</code>函数:<pre>def simulate_ride_speeds():     ride_speeds = np.concatenate(         (             np.random.normal(loc=30, scale=5, size=370),             np.random.normal(loc=30, scale=5, size=10),             np.random.normal(loc=50, scale=10, size=10),             np.random.normal(loc=15, scale=4, size=10)          )     )     return ride_speeds</pre>明确匹配</li>
+				<li>We can now use both of these helper functions inside a function that will call these and bring them together to create a simulated dataset containing ride IDs, speeds, distances, and times. The result is returned as a <code>pandas</code> DataFrame for use in modeling:<pre>def simulate_ride_data():
+    ride_dists = simulate_ride_distances()
+    ride_speeds = simulate_ride_speeds()
+    ride_times = ride_dists/ride_speeds
+ 
+    # Assemble into Data Frame
+    df = pd.DataFrame(
+        {
+            'ride_dist': ride_dists,
+            'ride_time': ride_times,
+            'ride_speed': ride_speeds
+        }
+    )
+    ride_ids = datetime.datetime.now().strftime("%Y%m%d")+df.index.astype(str)
+    df['ride_id'] = ride_ids
+    return df</pre><p>然后，我们可以运行模拟来代替从出租车公司的系统中获取数据:</p><pre>df = simulate_ride_data()</pre></li>
+				<li>Now, we get to the core of what data scientists produce in their projects, which is a<a id="_idIndexMarker031"/> simple function that wraps<a id="_idIndexMarker032"/> some <code>sklearn</code> code for returning a dictionary with the clustering run metadata and results. We include the relevant imports here for ease:<pre>from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+from sklearn import metrics
+def cluster_and_label(data, create_and_show_plot=True):
+    data = StandardScaler().fit_transform(data)
+    db = DBSCAN(eps=0.3, min_samples=10).fit(data)
+ 
+    core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+    core_samples_mask[db.core_sample_indices_] = True
+    labels = db.labels_
+ 
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise_ = list(labels).count(-1)
+ 
+    run_metadata = {
+        'nClusters': n_clusters_,
+        'nNoise': n_noise_,
+        'silhouetteCoefficient': metrics.silhouette_score(data, labels),
+        'labels': labels,
+    }
+    return run_metadata</pre><p>最后，如果<a id="_idIndexMarker033"/>我们使用来自<em class="italic">步骤4 </em>的模拟结果<a id="_idIndexMarker034"/>并应用机器学习代码，我们可以获得原始的出租车数据集，该数据集带有一组标签，告诉我们出租车乘坐是否异常('-1 ')或是否异常(' 0 '):</p><pre>    X = df[['ride_dist', 'ride_time']]
+    results = cluster_and_label(X, create_and_show_plot=False)
+    df['label'] = results['labels']</pre><p>然后，如果您<a id="_idIndexMarker035"/>绘制结果，异常值标记为<a id="_idIndexMarker036"/>黑色三角形，那么您会得到类似于<em class="italic">图1.5 </em>的结果:</p></li>
+			</ol>
+			<p class="figure-caption"> </p>
+			<div><div><img src="img/B17343_01_005.jpg" alt="Figure 1.5 – An example set of results from performing clustering on some taxi ride data&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.5-对一些出租车乘坐数据进行聚类的一组结果示例</p>
+			<p>现在你已经有了一个可以工作的基本模型，你必须开始考虑如何将它整合到一个工程化的解决方案中——你怎么做呢？</p>
+			<p>因为这里的解决方案将支持另一个团队的长期调查，所以不需要非常低延迟的解决方案。利益相关者同意来自集群的洞察力<a id="_idIndexMarker037"/>可以在每天结束时交付。与团队的<a id="_idIndexMarker038"/>数据科学部分合作，ML工程师(由您领导)明白，如果每天运行聚类，这将提供足够的数据来给出适当的聚类，但是更频繁地运行可能会由于数据量较少而导致较差的结果。因此，每天的批处理过程是一致的。</p>
+			<p>接下来你会做什么？您知道运行的频率是每天一次，但是数据量仍然非常大，所以利用分布式计算模式是有意义的。因此，您决定使用Apache Spark。您知道数据的最终消费者是SQL数据库中的一个表，因此您需要与数据库团队一起设计一个适当的结果移交。出于安全性和可靠性的考虑，直接写入生产数据库并不是一个好主意。因此，您同意云中的另一个数据库将被用作数据的中间暂存区，主数据库可以在其日常构建中对其进行查询。</p>
+			<p>看起来我们似乎没有做任何技术上的事情，但是实际上，您已经为您的项目执行了高层次的系统设计。这本书的其余部分告诉你如何填补下图中的空白！</p>
+			<div><div><img src="img/B17343_01_006.jpg" alt="Figure 1.6 – Example 1 workflow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.6–示例1工作流程</p>
+			<p>现在让我们继续下一个例子！</p>
+			<h2 id="_idParaDest-27"><a id="_idTextAnchor027"/>示例2:预测API</h2>
+			<p>在这个例子中，你<a id="_idIndexMarker039"/>在一家大型零售连锁店的物流<a id="_idIndexMarker040"/>部门工作。为了最大限度地提高货物的流动，该公司希望帮助区域物流规划者提前应对特别繁忙的时期，并避免产品销售一空。在与整个企业的利益相关者和主题专家进行讨论后，一致认为计划员通过web托管的仪表板动态请求和探索特定仓库项目预测的能力是最佳的。这使得计划员在下订单之前能够了解未来可能的需求情况。</p>
+			<p>数据科学家再次发现，在任何单个商店的级别上，数据都具有非常可预测的行为。他们决定使用脸书先知图书馆为他们的建模，以帮助加快许多不同的模型训练过程。</p>
+			<p>这个例子将使用来自Kaggle的开放罗斯曼商店数据集，可以在这里找到:<a href="https://www.kaggle.com/pratyushakar/rossmann-store-sales">https://www.kaggle.com/pratyushakar/rossmann-store-sales</a>:</p>
+			<ol>
+				<li value="1">首先，我们从提取数据的文件夹中读入数据。我们将对下载中提供的<code>train</code>数据集执行以下所有步骤，但是将它视为一个完整的数据集，我们无论如何都希望将其分成训练集和测试集:<pre>df = pd.read_csv('./data/rossman/train.csv')</pre></li>
+				<li>其次，<a id="_idIndexMarker041"/>数据科学家为<a id="_idIndexMarker042"/>准备了首先要处理的数据的初始子集，所以我们也将这样做。我们做了一些基本的整理，但关键是我们为数据集中的第四个商店选择数据，并且只在它打开时选择:<pre>df['Date'] = pd.to_datetime(df['Date']) df.rename(columns= {'Date': 'ds', 'Sales': 'y'}, inplace=True) df_store = df[     (df['Store']==4) &amp;\     (df['Open']==1) ].reset_index(drop=True) df_store = df_store.sort_values('ds', ascending=True)</pre></li>
+				<li>然后，数据科学家开发了一个小函数，它将接受一些提供的数据、一个描述训练集大小的指数和一些季节性参数，然后返回一个在训练集上训练的Prophet模型:<pre>from fbprophet import Prophet def train_predict(df, train_index, seasonality=seasonality):     # grab split data     df_train = df.copy().iloc[0:train_index]     df_test = df.copy().iloc[train_index:]          model=Prophet(         yearly_seasonality=seasonality['yearly'],         weekly_seasonality=seasonality['weekly'],         daily_seasonality=seasonality['daily'],         interval_width = 0.95     )       # train and predict     model.fit(df_train)     predicted = model.predict(df_test)     return predicted, df_train, df_test</pre></li>
+				<li>在<a id="_idIndexMarker043"/>应用该功能之前，我们<a id="_idIndexMarker044"/>可以在字典中定义相关的季节性设置:<pre>seasonality = {     'yearly': True,     'weekly': True,     'daily': False }</pre></li>
+				<li>Finally, we can apply the function as the data scientists envisaged:<pre>train_index = int(0.8*df_store1.shape[0])
+predicted, df_train, df_test = train_predict(
+    df = df_store,
+    train_index = train_index,
+    Seasonality = seasonality
+)</pre><p>运行该模型并绘制预测值与实际情况的对比图，得出类似于图1.7 中的图:</p></li>
+			</ol>
+			<div><div><img src="img/B17343_01_007.jpg" alt="Figure 1.7 – Forecasting store sales&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.7-预测商店销售额</p>
+			<p>这里的一个问题<a id="_idIndexMarker045"/>是，如果连锁店收集了足够的数据，为每家商店实施如上的<a id="_idIndexMarker046"/>预测模型可以迅速产生数百甚至数千个模型。另一个问题是，并非所有商店都在该公司使用的资源规划系统上，因此一些规划人员希望检索他们知道的与他们自己的商店相似的其他商店的预测。人们一致认为，如果像这样的用户可以探索他们认为与自己的数据相似的地区概况，那么他们仍然可以做出最佳决策。</p>
+			<p>考虑到这一点以及客户对动态、特别请求的要求，您很快就排除了整个批处理过程。这不包括不在核心系统上的地区的用例，也不允许通过网站动态检索最新的预测，这将允许您部署预测未来各种时间范围的模型。这还意味着您可以节省计算成本，因为您不需要每天管理数千个预测的存储和更新，并且您的资源可以专注于模型培训。</p>
+			<p>因此，您<a id="_idIndexMarker047"/>决定，实际上，一个带有端点的web托管API最有意义，该端点可以根据用户的需要返回预测。为了给出有效的响应，您必须考虑在典型的用户会话中会发生什么。通过与仪表板的潜在用户一起工作，您很快意识到，尽管请求是动态的，但大多数计划者在任何一次会议中都将重点放在感兴趣的特定项目上。他们也不会关注很多地区。这有助于您设计数据、预测和模型缓存策略，这意味着在用户做出第一次选择后，可以更快地返回结果，从而获得更好的用户体验。这就产生了<em class="italic">图1.8 </em>中的粗略系统示意图:</p>
+			<div><div><img src="img/B17343_01_008.jpg" alt="Figure 1.8 – Example 2 workflow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.8–示例2工作流程</p>
+			<p>接下来，我们来看最后一个例子。</p>
+			<h2 id="_idParaDest-28"><a id="_idTextAnchor028"/>示例3:流式分类</h2>
+			<p>在这个<a id="_idIndexMarker048"/>最后的例子中，你在<a id="_idIndexMarker049"/>一家基于网络的公司工作，该公司希望根据用户的使用模式将他们分类为不同类型广告的目标，以便更有效地确定营销支出。例如，如果用户不经常使用网站，我们可能希望用更积极的折扣来吸引他们。业务的一个关键需求是，最终结果成为数据存储中的数据的一部分，供其他应用程序使用。</p>
+			<p>根据这些要求，您的团队确定流式应用程序是最简单的解决方案，符合所有条件。数据工程师专注于构建流和数据存储基础设施，而ML工程师致力于完成数据科学团队根据历史数据训练的分类模型。数据科学家确定的基本算法在<code>sklearn</code>中实现，我们将在下面通过将其应用于营销数据集来完成，该数据集将类似于本用例中生成的数据集。</p>
+			<p>这个假设的例子<a id="_idIndexMarker050"/>与许多经典数据集一致，包括来自https://archive.ics.uci.edu/ml/datasets/Bank+Marketing#<a href="https://archive.ics.uci.edu/ml/datasets/Bank+Marketing#">UCI机器学习知识库</a>的银行营销数据集。下面的示例代码<a id="_idIndexMarker051"/>使用了这个数据集。请记住，与其他示例一样，本书的GitHub资源库中提供了以下所有代码:</p>
+			<ol>
+				<li value="1">首先，我们将读入数据，这些数据存储在标签为<code>data</code>的文件夹中，与我们正在构建的脚本位于同一个目录下:<pre>import pandas as pd df = pd.read_csv('./data/bank/bank.csv', delimiter=';', decimal=',')</pre></li>
+				<li>接下来，我们定义我们希望在模型中使用的特征，并定义我们的特征矩阵<code>X</code>和目标变量向量<code>y</code>。如果客户接受建议的产品，目标变量将被转换为数值<code>1</code>，如果不接受，则被转换为<code>0</code>。请注意，我们假设在这种情况下，已经通过稳健的探索性数据分析选择了这些特性，这里不涉及:<pre>cat_feature_cols = ["marital", "education", "contact", "default", "housing", "loan", "poutcome"] num_feature_cols = ["age", "pdays", "previous", "emp.var.rate", "euribor3m", "nr.employed"] feature_cols = cat_feature_cols + num_feature_cols X = df[feature_cols].copy() y = df['y'].apply(lambda x: 1 if x == 'yes' else 0).copy()</pre></li>
+				<li>在继续建模之前，我们将数据分成80/20的训练和测试部分:<pre>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)</pre></li>
+				<li>然后，我们执行<a id="_idIndexMarker052"/>一些非常基本的特征工程和<a id="_idIndexMarker053"/>准备，对所有分类变量进行一次性编码，小心地只在训练集上训练转换器:<pre>from sklearn.preprocessing import OneHotEncoder enc = OneHotEncoder(handle_unknown='ignore') X_train_cat_encoded = enc.fit_transform(X_train[cat_feature_cols]) X_test_cat_encoded = enc.transform(X_test[cat_feature_cols])</pre></li>
+				<li>然后我们以类似的方式标准化数值变量:<pre>from sklearn.preprocessing import StandardScaler scaler = StandardScaler() X_train_num_scaled = scaler.fit_transform(X_train[num_feature_cols]) X_test_num_scaled = scaler.transform(X_test[num_feature_cols])</pre></li>
+				<li>然后，我们必须将数字和分类数据放在一个集合中:<pre>X_train = np.concatenate((X_train_cat_encoded.toarray(), X_train_num_scaled), axis=1) X_test = np.concatenate((X_test_cat_encoded.toarray(), X_test_num_scaled), axis=1)</pre></li>
+				<li>现在我们已经准备好建模了。数据集具有不平衡的类，因此数据科学家建议我们使用SMOTE算法，该算法包含在<code>imblearn</code>包中，用于对少数类执行过采样。这创建了一个平衡的分类数据集:<pre>from imblearn.over_sampling import SMOTE  sm = SMOTE() X_balanced, y_balanced = sm.fit_sample(X_train, y_train)</pre></li>
+				<li>The core code that the <a id="_idIndexMarker054"/>data scientists created can now be <a id="_idIndexMarker055"/>applied. They come up with a series of different variants of code based around a simple random forest classification model:<pre>from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import f1_score
+# Define classifier
+rfc = RandomForestClassifier(n_estimators=1000)
+rfc.fit(X_balanced, y_balanced)</pre><p>当您运行这段代码时，您会发现模型性能可以得到改善。这一点，以及简化前面的代码、提高模型可伸缩性和构建可以与流式管道交互的解决方案的需要，将是ML工程师在这个项目中的工作重点。还有一些微妙的地方，比如你希望多长时间重新训练一次你的算法，以确保分类器不会过时。我们将在本书的后面讨论所有这些主题。综上所述，<a id="_idIndexMarker056"/>解决方案中所需处理步骤的概要给出了类似于<em class="italic">图1.9 </em>中的高级<a id="_idIndexMarker057"/>系统设计:</p></li>
+			</ol>
+			<div><div><img src="img/B17343_01_009.jpg" alt="Figure 1.9 – Example 3 workflow&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图1.9–示例3工作流程</p>
+			<p>我们现在已经探索了三种高级ML系统设计，并讨论了我们工作流选择背后的基本原理。我们还详细探讨了数据科学家在建模工作中经常产生的代码类型，这些代码将作为未来ML工程工作的输入。因此，本节应该让我们了解我们的工程工作在典型项目中从哪里开始，以及我们将致力于解决什么类型的问题。给你。你已经在成为ML工程师的路上了！</p>
+			<h1 id="_idParaDest-29"><a id="_idTextAnchor029"/>总结</h1>
+			<p>在这一章中，我们介绍了ML工程的概念，以及它是如何在一个现代团队中构建基于数据的有价值的解决方案的。有一个关于ML工程的焦点如何与数据科学和数据工程的优势互补以及这些学科在哪里重叠的讨论。一些评论是关于如何使用这些信息来为你的项目组织一个资源充足的团队。</p>
+			<p>然后讨论了在现代现实世界的组织中构建机器学习产品的挑战，以及帮助您克服其中一些挑战的要点。特别强调了合理估计价值和与利益相关者有效沟通的概念。</p>
+			<p>本章最后介绍了后面章节中的技术内容，特别是讨论了典型的ML解决方案是什么样的，以及对于一些常见的用例应该如何设计(在高层次上)。</p>
+			<p>下一章将关注如何建立和实现你的开发过程来构建你想要的ML解决方案，并提供一些关于这与标准软件开发过程有何不同的见解。然后将讨论一些工具，您可以使用这些工具来开始管理项目中的任务和工件，而不会产生大的麻烦。这将使你在后面的章节中了解如何构建ML解决方案的关键要素的技术细节。</p>
+		</div>
+	
+
+</body></html>

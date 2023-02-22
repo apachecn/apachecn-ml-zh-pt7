@@ -1,0 +1,575 @@
+<html><head/><body><html xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Chapter 3: Understanding Data Processing</title>
+
+</head>
+<body>
+<div><div><h1 class="chapter-number" id="_idParaDest-52"><a id="_idTextAnchor066"/> 3</h1>
+<h1 id="_idParaDest-53"><a id="_idTextAnchor067"/>了解数据处理</h1>
+<p>一个<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型是一旦数据适合ML算法，我们得到的输出<a id="_idIndexMarker210"/>。它表示各种特征之间的潜在关系，以及这种关系如何影响目标变量。这种关系完全取决于数据集的内容。尽管使用相同的ML算法，但使每个ML模型唯一的是用于训练所述模型的数据集。数据可以从各种来源收集，并且可以具有不同的模式和结构，这些模式和结构之间不需要在结构上兼容，但实际上可能彼此相关。这种关系可能是非常有价值的，也可能是好模型和坏模型之间的区别。因此，重要的是转换这些数据以满足ML算法的要求，从而最终训练出好的模型。</p>
+<p><strong class="bold">数据处理</strong>、数据准备和数据预处理都是ML管道中的步骤，这些步骤通过转换数据的结构来最大限度地揭示特征之间的潜在关系。数据处理<a id="_idIndexMarker211"/>可能是ML管道中最具挑战性的步骤，因为转换过程没有固定的步骤。数据处理完全取决于你希望解决的问题；然而，所有数据集之间有一些相似之处，可以帮助我们定义某些过程，我们可以执行这些过程来优化我们的ML管道。</p>
+<p>在本章中，我们将了解数据处理中经常使用的一些常用功能，以及H2O的内置操作如何帮助我们轻松执行这些功能。我们将理解一些可以重构数据帧结构的H2O操作。我们将理解如何处理缺失值和价值估算的重要性。然后，我们将研究如何操作数据帧中的各种特性列，以及如何根据不同的需要分割数据帧。我们还将研究什么是编码以及编码的不同类型。</p>
+<p>在本章中，我们将讨论以下主要话题<a id="_idTextAnchor068"/>:</p>
+<ul>
+<li>重构您的数据框架</li>
+<li>处理数据帧中的缺失值</li>
+<li>数据帧特征列的操作</li>
+<li>文本数据的标记化</li>
+<li>使用目标编码对数据进行编码</li>
+</ul>
+<h1 id="_idParaDest-54"><a id="_idTextAnchor069"/>技术要求</h1>
+<p>本章中的所有代码示例都在<strong class="bold"> Jupyter笔记本</strong>上运行，以便于理解代码块中每一行的作用。您可以通过Python或R script executor运行整个代码块并观察输出结果，或者您可以安装Jupyter Notebook并观察代码块中每一行的执行结果。</p>
+<p>要安装Jupyter Notebook，请确保您的系统上安装了最新版本的Python和<code>pip</code>,并执行以下命令:</p>
+<pre>pip install jupyterlab</pre>
+<p>成功安装JupyterLab后，您可以在终端中执行以下命令，在本地启动Jupyter笔记本:</p>
+<pre>jupyter notebook</pre>
+<p>这将在您的默认浏览器上打开<strong class="bold"> Jupyter笔记本</strong>页面。然后，您可以选择想要使用的语言，并开始逐步执行代码中的行。</p>
+<p>本章的所有代码示例都可以在GitHub上的<a href="https://github.com/PacktPublishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter%203">https://GitHub . com/packt publishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter % 203</a>找到。</p>
+<p>现在，让我们开始处理我们的数据，首先创建一个数据框架并重新构建它，使其符合我们的模型训练要求。</p>
+<h1 id="_idParaDest-55"><a id="_idTextAnchor070"/>重构您的数据框架</h1>
+<p>从各种来源收集的数据通常被称为原始数据。之所以称之为原始数据，是因为可能有许多不必要的或陈旧的数据，这些数据可能不一定有益于我们的模型训练。收集的数据结构也可能在所有来源之间不一致。因此，首先将来自不同来源的数据重新组织成一致的格式变得非常重要。</p>
+<p>您可能已经注意到，一旦我们将数据集导入H2O，H2O就会将数据集转换成一个<code>.hex</code>文件，也称为dataframe。您还可以选择导入多个数据集。假设您从各种来源导入多个数据集，每个数据集都有自己的格式和结构，那么您将需要某种功能来帮助您重新构建数据集的内容，并将它们合并成一个数据帧，您可以将它提供给ML管道。</p>
+<p>H2O提供了几个功能，您可以用来执行所需的操作。</p>
+<p>以下是一些数据框操作功能，可帮助您重新构建数据框:</p>
+<ul>
+<li>组合来自两个数据的列</li>
+<li>组合来自两个数据对象的行</li>
+<li>合并两个数据帧</li>
+</ul>
+<p>让我们看看如何在H2O组合来自不同数据框架的列。</p>
+<h2 id="_idParaDest-56"><a id="_idTextAnchor074"/>合并两个数据框架中的列</h2>
+<p>最常见的数据帧<a id="_idIndexMarker215"/>操作功能之一是组合来自不同数据帧的不同<a id="_idIndexMarker216"/>列。有时，一个数据帧的列可能与另一个数据帧的列相关。这在模型训练中可能证明是有益的。因此，有一个功能可以帮助我们操作这些列并将它们组合在一起以形成用于模型训练的单个数据框架是非常有用的。</p>
+<p>H2O有一个名为<code>cbind()</code>的函数，它将一个数据集中的列<a id="_idIndexMarker217"/>合并到另一个数据集中。</p>
+<p>让我们用Python在我们的Jupyter笔记本<a id="_idIndexMarker218"/>上试试这个函数。依次执行<a id="_idIndexMarker219"/>以下步骤:</p>
+<ol>
+<li>导入<code>h2o</code>库:<pre>import h2o</pre></li>
+<li>导入<code>numpy</code>库；我们将使用它为我们的研究创建一个样本数据框架:<pre>import numpy as np</pre></li>
+<li>初始化<code>h2o</code>服务器:<pre>h2o.init()</pre></li>
+<li>现在，让我们创建一个名为<code>important_dataframe_1</code>的数据帧；这是一个列很重要的数据帧。为了确保在数据集中生成与本例中相同的值，将<code>numpy</code>的随机种子值设置为<code>123</code>。我们将行数设置为<code>15</code>，列数设置为<code>5</code>。您可以随意命名这些列:<pre>np.random.seed(123) important_dataframe_1 = h2o.H2OFrame.from_python(np.random.randn(15,5).tolist(), column_names=list([" important_column_1" , " important_column_2" , " important_column_3" , " important_column_4" , " important_column_5" ]))</pre></li>
+<li>让我们通过执行下面的代码来检查数据集的内容:<pre>important_dataframe_1.describe</pre></li>
+</ol>
+<p>以下屏幕截图显示了数据集的内容:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.1 – important_dataframe_1 data content  " height="382" src="img/B17298_03_001.jpg" width="900"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.1-重要数据帧1数据内容</p>
+<ol>
+<li value="6">让我们创建另一个名为<code>important_dataframe_2</code>的<a id="_idIndexMarker220"/>数据帧，和以前一样，但是有不同的<a id="_idIndexMarker221"/>列名，但是行数相同，并且只有<code>2</code>列:<pre>important_dataframe_2 = h2o.H2OFrame.from_python(np.random.randn(15,2).tolist(), column_names=list([" important_column_6" , " important_column_7" ]))</pre></li>
+<li>让我们也来看看这个数据框架的内容:</li>
+</ol>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.2 – important_dataframe_2 data content  " height="383" src="img/B17298_03_002.jpg" width="375"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.2–重要数据帧2数据内容</p>
+<ol>
+<li value="8">现在，让我们合并两个数据帧的列<a id="_idIndexMarker222"/>，并使用<code>cbind()</code>函数<pre>final_dataframe = important_dataframe_1.cbind(important_dataframe_2)</pre>将它们<a id="_idIndexMarker223"/>存储在另一个名为<code>final_dataframe</code>的变量中<a id="_idIndexMarker224"/></li>
+<li>现在我们来观察<code>final_dataframe</code> : <pre>final_dataframe.describe</pre></li>
+</ol>
+<p>您应该看到<strong class="bold"> final_dataframe </strong>的内容如下:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.3 – final_dataframe data content after cbind()  " height="325" src="img/B17298_03_003.jpg" width="1040"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.3–cbind()后的final_dataframe数据内容</p>
+<p>在这里，您会注意到我们已经成功地将来自<code>important_dataframe_2</code>的列与<strong class="bold"> important_dataframe_1 </strong>的列组合在一起。</p>
+<p>这就是如何使用<code>cbind()</code>函数<a id="_idIndexMarker225"/>将两个不同的<a id="_idIndexMarker227"/>数据集的列组合成一个数据帧。使用<code>cbind()</code>函数时要记住的唯一一件事是，有必要确保要合并的两个数据集具有相同的行数。此外，如果数据帧具有相同的列名，那么H2O将在数据帧的列前面追加一个<strong class="bold"> 0 </strong>。</p>
+<p>现在我们知道了如何组合不同数据帧的列，让我们看看如何组合具有相同列结构的多个数据帧的列值。</p>
+<h2 id="_idParaDest-57"><a id="_idTextAnchor075"/>合并两个数据帧中的行</h2>
+<p>大多数大公司经常处理大量的数据。这些数据通常被分割成多个块，以便更快、更有效地存储和读取。然而，在模型训练期间，我们经常需要访问所有这些分区数据集。这些数据集具有相同的结构，但数据内容是分布式的。换句话说，数据帧具有相同的列；但是，数据值或数据行会在它们之间拆分。我们通常需要一个函数将所有这些数据帧组合在一起，这样我们就有了所有可用于模型训练的数据值。</p>
+<p>H2O有一个名为<code>rbind()</code>的函数，它将一个数据集<a id="_idIndexMarker232"/>中的行组合成另一个数据集<a id="_idIndexMarker231"/>。</p>
+<p>让我们在下面的例子中试试这个函数:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库:<pre>import h2o</pre></li>
+<li>导入<code>numpy</code>库；我们将使用它为我们的研究创建一个随机数据框架:<pre>import numpy as np</pre></li>
+<li>初始化<code>h2o</code>服务器:<pre>h2o.init()</pre></li>
+<li>现在，让我们创建一个名为<code>important_dataframe_1</code>的随机数据帧。为了确保在数据集中生成与本例中相同的值，将<code>numpy</code>的随机种子值设置为<code>123</code>。我们将行数设置为<code>15</code>，列数设置为<code>5</code>。您可以随意命名这些列:<pre>np.random.seed(123) important_dataframe_1 = h2o.H2OFrame.from_python(np.random.randn(15,5).tolist(), column_names=list([" important_column_1" , " important_column_2" ," important_column_3" ," important_column_4" ," important_column_5" ]))</pre></li>
+<li>让我们检查一下数据帧的行数，应该是<code>15</code> : <pre>important_dataframe_1.nrows</pre></li>
+<li>让我们创建另一个名为<code>important_dataframe_2</code>的数据帧，和前一个一样，使用相同的列名和任意数量的行。在这个例子中，我使用了<code>10</code>行:<pre>important_dataframe_2 = h2o.H2OFrame.from_python(np.random.randn(10,5).tolist(), column_names=list([" important_column_1" , " important_column_2" ," important_column_3" ," important_column_4" ," important_column_5" ]))</pre></li>
+<li>让我们检查一下<code>important_dataframe_2</code>的行数<a id="_idIndexMarker233"/>，其中<a id="_idIndexMarker234"/>应为<code>10</code> : <pre>important_dataframe_2.nrows</pre></li>
+<li>现在，让我们合并两个数据帧的行，并使用<code>rbind()</code>函数<pre>final_dataframe = important_dataframe_1.rbind(important_dataframe_2)</pre>将<a id="_idIndexMarker235"/>存储在另一个名为<code>final_dataframe</code>的变量中</li>
+<li>现在我们来观察<code>final_dataframe</code> : <pre>final_dataframe.describe</pre></li>
+</ol>
+<p>您应该看到<strong class="bold"> final_dataframe </strong>的内容如下:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.4 – final_dataframe data contents after rbind()  " height="300" src="img/B17298_03_004.jpg" width="713"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.4–r bind()后的final_dataframe数据内容</p>
+<ol>
+<li value="10">让我们检查一下<strong class="bold"> final_dataframe </strong> : <pre>final_dataframe.nrows</pre>中的行数</li>
+</ol>
+<p>最后一个操作<a id="_idIndexMarker236"/>的输出应该显示最终数据集中行数<a id="_idIndexMarker237"/>的值。您将看到值是<strong class="bold"> 25 </strong>，数据帧的内容是前面两个数据集的组合行值。</p>
+<p>既然我们已经了解了如何使用<code>rbind()</code>函数在H2O组合两个数据帧的行，那么让我们看看如何完全组合两个数据集。</p>
+<h2 id="_idParaDest-58"><a id="_idTextAnchor076"/>合并两个数据帧</h2>
+<p>您可以直接合并两个数据帧，将<a id="_idIndexMarker238"/>它们的行和列合并成一个<a id="_idIndexMarker239"/>数据帧。H2O提供了一个<code>merge()</code>函数，该函数将共享一个或多个公共列的两个数据集组合在一起。在合并过程中，两个数据集<a id="_idIndexMarker240"/>共有的列被用作<strong class="bold">合并关键字</strong>。如果它们只有一个共同的列，则该列构成合并的单个主键。如果有多个公共列，那么H2O将基于它们的数据值形成所有这些列的复合键，并将其用作合并键。如果两个数据集之间有多个公共列，而您只想合并其中的一个特定子集，那么您需要重命名其他公共列，以删除相应的公共性。</p>
+<p>让我们在下面的Python示例中尝试一下这个函数:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库:<pre>import h2o</pre></li>
+<li>导入<code>numpy</code>库；我们将使用它为我们的研究创建一个随机数据帧:<pre>import numpy as np</pre></li>
+<li>初始化<code>h2o</code>服务器:<pre>h2o.init()</pre></li>
+<li>现在，让我们创建一个名为<code>dataframe_1</code>的数据帧。数据框<a id="_idTextAnchor077"/>有<code>3</code>栏:<code>words</code>、<code>numerical_representation</code>和<code>letters</code>。现在，我们将数据内容<a id="_idIndexMarker241"/>填写如下:<pre>dataframe_1 = h2o.H2OFrame.from_python({'words':['Hello', 'World', 'Welcome', 'To', 'Machine', 'Learning'], 'numerical_representation': [0,1,2,3,4,5],'letters':['a','b','c','d']})</pre></li>
+<li>让我们来看看数据集的内容:<pre>dataframe_1.describe</pre></li>
+<li>您会注意到数据集的内容如下:<div> <img alt="Figure 3.5 – dataframe_1 data content  " height="240" src="img/B17298_03_005.jpg" width="368"/> </div></li>
+</ol>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.5–data frame _ 1数据内容</p>
+<ol>
+<li value="7">让我们创建另一个名为<code>dataframe_2</code>的数据帧。该数据帧还包含<code>3</code>列:<code>numerical_representation</code>列、<code>letters</code>列(这两个列都与<code>dataframe_1</code>相同)和一个不常见的列。姑且称之为<code>other_words</code> : <pre>dataframe_2 = h2o.H2OFrame.from_python({'other_words':['How', 'Are', 'You', 'Doing', 'Today', 'My', 'Friend', 'Learning', 'H2O', 'Artificial', 'Intelligence'], 'numerical_representation': [0,1,2,3,4,5,6,7,8,9],'letters':['a','b','c','d','e']})</pre></li>
+<li>让我们看看这个数据帧的内容:<pre>dataframe_2.head(11)</pre></li>
+</ol>
+<p>执行代码时，您应该<a id="_idIndexMarker242"/>在笔记本上看到以下输出:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.6 – dataframe_2 data contents  " height="393" src="img/B17298_03_006.jpg" width="374"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.6–data frame _ 2数据内容</p>
+<ol>
+<li value="9">现在，让我们使用<code>merge()</code>操作:<pre>final_dataframe = dataframe_2.merge(dataframe_1)</pre>将<code>dataframe_1</code>合并到<code>dataframe_2</code></li>
+<li>现在我们来观察<a id="_idIndexMarker243"/> <code>final_dataframe</code> : <pre>final_dataframe.describe</pre></li>
+<li>您应该会看到<strong class="bold"> final_dataframe </strong>的内容如下:</li>
+</ol>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.7 – final_dataframe contents after merge()  " height="217" src="img/B17298_03_007.jpg" width="508"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.7–合并后的final_dataframe内容()</p>
+<p>您会注意到，H2O使用了<code>numerical_representation</code>列的组合<a id="_idIndexMarker244"/>和其他列中的适当值。</p>
+<p>现在，你可能会奇怪为什么<strong class="bold"> 4 </strong>没有排。这是因为在合并时，我们有两个公共列:<strong class="bold">数字表示</strong>和<strong class="bold">字母</strong>。因此，H2O使用了一个c <a id="_idTextAnchor078"/>复合合并键，它使用了这两个列:<strong class="bold"> (0，a) </strong>，<strong class="bold"> (1，b) </strong>，<strong class="bold"> (2，c) </strong>，等等。</p>
+<p>现在你可能会问的下一个问题是<em class="italic">值为5的那一行呢？它在字母列中没有值。</em>这是因为在ML中，即使是空值也被视为唯一值。因此，在合并期间，生成的复合键将<strong class="bold"> (5，)</strong>视为有效的合并键。</p>
+<p>由于<strong class="bold"> dataframe_1 </strong>不再有任何数值表示值，H2O丢弃所有剩余值。</p>
+<ol>
+<li value="12">通过将参数<code>all_x</code>设置为<code>True</code>，可以强制H2O不删除合并键列中的任何值，如下所示:<pre>final_dataframe = dataframe_2.merge(dataframe_1, all_x = True)</pre></li>
+<li>现在，让我们观察一下<code>describe</code>属性的内容:</li>
+</ol>
+<div><div><img alt="Figure 3.8 – final_dataframe data content after enforcing merge()  " height="442" src="img/B17298_03_008.jpg" width="563"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.8–强制合并后的final_dataframe数据内容()</p>
+<p>您会注意到，我们现在将两个数据帧中的所有值合并到一个数据帧中。我们有上一步中丢失的从<strong class="bold"> 0到9 </strong>的所有数字表示和从<strong class="bold"> dataframe_2 </strong>的<strong class="bold"> a到e </strong>的所有字母，以及来自<strong class="bold"> other_words </strong>列和<strong class="bold"> words </strong>列的正确值。</p>
+<p>概括地说，我们学习了如何组合数据帧的列和行。我们还学习了如何使用<code>merge()</code>函数将整个数据帧组合在一起。但是，我们注意到，如果我们强制合并数据帧，尽管它们的键列中没有公共数据值，我们最终会丢失数据帧中的值。</p>
+<p>现在，让我们看看使用H2O处理缺失值的不同方法。</p>
+<h1 id="_idParaDest-59"><a id="_idTextAnchor079"/>处理数据帧中的缺失值</h1>
+<p>数据集<a id="_idIndexMarker247"/>中的缺失值是现实世界中最常见的问题<a id="_idIndexMarker248"/>。通常期望从各种来源收集的大块数据集中至少有几个缺失数据的实例。数据丢失可能有多种原因，从数据源没有生成数据，一直到数据收集器停机。处理缺失数据对于模型训练非常重要，因为许多ML算法不支持缺失数据。那些这样做的人可能最终会更重视在丢失的数据中寻找模式，而不是现有的实际数据，这会分散机器的学习注意力。</p>
+<p>缺失数据通常被称为<strong class="bold">不可用</strong> ( <strong class="bold"> NA </strong>)或<strong class="bold"> nan </strong>。在我们发送数据帧<a id="_idIndexMarker249"/>用于模型训练之前，我们需要首先处理这些类型的值。您可以删除包含任何缺失值的整行，也可以用该数据列的任何默认值(默认值或公共值)来填充它们。如何处理缺少的值完全取决于缺少哪些数据以及这些数据对整个模型定型的重要性。</p>
+<p>H2O提供了一些功能，可用于处理数据帧中的缺失值。这些是其中的一些:</p>
+<ul>
+<li><code>fillna()</code>功能</li>
+<li>替换框架中的值</li>
+<li>归罪</li>
+</ul>
+<p>接下来，让我们看看如何使用H2O填充数据帧中缺失的值。</p>
+<h2 id="_idParaDest-60"><a id="_idTextAnchor080"/>填充NA值</h2>
+<p><code>fillna()</code>是H2O <a id="_idIndexMarker250"/>中的一个函数，您可以使用<a id="_idIndexMarker251"/>按顺序<a id="_idIndexMarker252"/>填充缺失的数据值。如果列中的某些数据值本质上是连续的，例如，时间序列或任何按顺序增减并可以排序的指标，这将非常方便。序列中的值之间的差异越小，该函数就越适用。</p>
+<p><code>fillna()</code>功能<a id="_idIndexMarker253"/>有以下参数:</p>
+<ul>
+<li><code>method</code>:既可以是<em class="italic">前进</em>也可以是<em class="italic">后退</em>。它指示了H2O应该开始在数据帧中填充NA值的方向。</li>
+<li><code>axis</code> : <code>0</code>按列填充或<code>1</code>按行填充。</li>
+<li><code>maxlen</code>:要填充的连续NAs的最大数量<a id="_idTextAnchor081"/>。</li>
+</ul>
+<p>让我们看一个Python <a id="_idIndexMarker254"/>中的例子，看看我们如何使用这个函数<a id="_idIndexMarker255"/>来填充缺失值:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库:<pre>import h2o</pre></li>
+<li>导入<code>numpy</code>库；我们将使用它为我们的研究创建一个随机数据帧:<pre>import numpy as np</pre></li>
+<li>初始化<code>h2o</code>服务器:<pre>h2o.init()</pre></li>
+<li>用<code>1000</code>行、<code>3</code>列和一些NA值:<pre>dataframe = h2o.create_frame(rows=1000, cols=3, integer_fraction=1.0, integer_range=100, missing_fraction=0.2, seed=123)</pre>创建一个随机数据帧</li>
+<li>让我们观察这个数据帧的内容。执行以下代码，您将看到数据帧中某些缺失的值:<pre>dataframe.describe</pre></li>
+</ol>
+<p>您应该会看到数据帧的内容如下:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.9 – Dataframe contents  " height="457" src="img/B17298_03_009.jpg" width="174"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.9–数据帧内容</p>
+<ol>
+<li value="6">现在让我们使用<code>fillna()</code>函数<a id="_idIndexMarker256"/>向前填充<a id="_idIndexMarker257"/>NA值。执行<a id="_idIndexMarker258"/>下面的代码:<pre>filled_dataframe = dataframe.fillna(method=" forward" , axis=0, maxlen=1)</pre></li>
+<li>让我们观察数据帧的填充内容。执行下面的代码:<pre>filled_dataframe.describe</pre></li>
+<li>您应该会看到数据帧的内容如下:</li>
+</ol>
+<div><div><img alt="Figure 3.10 – filled_dataframe contents  " height="443" src="img/B17298_03_010.jpg" width="166"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.10–填充的_数据帧内容</p>
+<p><code>fillna()</code>函数<a id="_idIndexMarker259"/>已经顺序填充了数据帧中的大部分NA值。</p>
+<p>然而，你会注意到我们还有一些T21。因为这是第一列，H2O在记录中没有任何先前的值来填充它，因此它跳过了它。</p>
+<p>现在我们已经了解了如何在H2O中使用<code>fillna()</code>函数顺序填充数据帧中的数据，让我们看看如何替换数据帧中的某些值。</p>
+<h2 id="_idParaDest-61"><a id="_idTextAnchor082"/>替换帧中的值</h2>
+<p>数据处理经常需要的另一个常见功能<a id="_idIndexMarker262"/>是替换数据帧中的某些值<a id="_idIndexMarker263"/>。你可能有很多理由想这么做。这对于数字数据尤其常见，其中一些最常见的转换包括舍入值、正常化数值范围或只是更正数据值。在本节中，我们将探索一些在H2O中可以用来替换数据帧中的值的函数。</p>
+<p>让我们首先创建一个可以用来测试这些函数的数据框架。执行下面的代码，这样我们就有了一个可以操作的数据帧:</p>
+<pre class="source-code">
+
+import h2o
+
+h2o.init()
+
+dataframe = h2o.create_frame(rows=10, cols=3, real_range=100, integer_fraction=1, missing_fraction=0.1, seed=5)
+
+dataframe.describe</pre>
+<p>数据帧应如下所示:</p>
+<div><div><img alt="Figure 3.11 – Dataframe data contents  " height="460" src="img/B17298_03_011.jpg" width="176"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.11–数据框数据内容</p>
+<p>因此，我们有一个包含三列的数据框架<a id="_idIndexMarker264"/>:<strong class="bold">C1</strong>、<strong class="bold"> C2 </strong>和<strong class="bold"> C3 </strong>。每一列都有一些负数和一些南值。让我们看看如何利用这个数据框架。</p>
+<p>先说简单的。让我们更新单个数据值的值<a id="_idIndexMarker266"/>，也称为<code>99</code>。您可以根据数据帧中的位置更新单个数据值的值，如下所示:</p>
+<pre class="source-code">
+
+dataframe[3,1] = 99</pre>
+<p>注意，数据帧中的列和行都以<code>0</code>开始。因此，我们将数据帧中行号为<code>3</code>列号为<code>1</code>的值设置为<code>99</code>。通过执行<code>dataframe.describe</code>，您应该可以在数据帧中看到结果，如下所示:</p>
+<pre class="source-code">
+
+dataframe.describe</pre>
+<p>数据帧应如下所示:</p>
+<div><div><img alt="Figure 3.12 – Dataframe contents after the datum update  " height="482" src="img/B17298_03_012.jpg" width="184"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.12-基准更新后的数据框内容</p>
+<p>正如您在数据帧中看到的，我们用<strong class="bold"> 99 </strong>替换了之前位于<strong class="bold"> C2 </strong>列第三行的<strong class="bold"> nan </strong>值。</p>
+<p>这是对一个数据<a id="_idIndexMarker268"/>值的操作<a id="_idIndexMarker267"/>。让我们看看如何替换整个列的值。让我们将<strong class="bold"> C3 </strong>列中的数据值增加到其原始值的三倍。您可以通过执行以下代码来实现这一点:</p>
+<pre class="source-code">
+
+dataframe[2] = 3*dataframe[2]</pre>
+<p>通过执行<code>dataframe.describe</code>，您应该可以在数据帧中看到结果，如下所示:</p>
+<pre class="source-code">
+
+dataframe.describe</pre>
+<p>数据帧应如下所示:</p>
+<div><div><img alt="Figure 3.13 – Dataframe contents after column value updates  " height="483" src="img/B17298_03_013.jpg" width="191"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.13–列值更新后的数据帧内容</p>
+<p>我们可以在输出中看到，<strong class="bold"> C3 </strong>列中的值现在已经增加到该列中原始值的三倍。</p>
+<p>到目前为止，我们执行的所有这些替换都很简单。让我们在数据帧上尝试一些<a id="_idIndexMarker270"/>条件更新。让我们将数据帧中的所有负数四舍五入到<code>0</code>。所以，条件是我们只更新负数到<code>0</code>，不改变任何正数。您可以按如下方式进行条件更新:</p>
+<pre class="source-code">
+
+dataframe[dataframe['C1'] &lt; 0, " C1" ] = 0
+
+dataframe[dataframe['C2'] &lt; 0, " C2" ] = 0
+
+dataframe[dataframe['C2'] &lt; 0, " C3" ] = 0</pre>
+<p>通过执行<code>dataframe.describe</code>，您应该可以在数据帧中看到结果，如下所示:</p>
+<pre class="source-code">
+
+dataframe.describe</pre>
+<p>数据帧应如下所示:</p>
+<div><div><img alt="Figure 3.14 – Dataframe contents after conditional updates  " height="483" src="img/B17298_03_014.jpg" width="192"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.14–条件更新后的数据帧内容</p>
+<p>正如你在数据帧中看到的，所有的负值都被四舍五入/替换为<strong class="bold"> 0 </strong>。</p>
+<p>现在，如果我们不是将负数四舍五入到0，而是求负数的倒数，会怎么样呢？我们可以通过将条件更新与算术更新相结合来做到这一点。参考下面的例子:</p>
+<pre class="source-code">
+
+dataframe[" C1" ] = (dataframe[" C1" ] &lt; 0).ifelse(-1*dataframe[" C1" ], dataframe[" C1" ])
+
+dataframe[" C2" ] = (dataframe[" C2" ] &lt; 0).ifelse(-1*dataframe[" C2" ], dataframe[" C2" ])
+
+dataframe[" C3" ] = (dataframe[" C3" ] &lt; 0).ifelse(-1*dataframe[" C3" ], dataframe[" C3" ])</pre>
+<p>现在，让我们尝试看看是否可以替换剩余的<code>fillna()</code>函数，但是如果<strong class="bold"> nan </strong>值只是一些不属于任何递增或递减模式的缺失值，并且我们只想将其设置为0，该怎么办？让我们现在做那件事。运行以下代码:</p>
+<pre class="source-code">
+
+dataframe[dataframe[" C1" ].isna(), " C1" ] = 0
+
+dataframe[dataframe[" C2" ].isna(), " C2" ] = 0
+
+dataframe[dataframe[" C3" ].isna(), " C3" ] = 0</pre>
+<p>通过执行<code>dataframe.describe</code>，您应该可以在数据框<a id="_idIndexMarker274"/>中看到<a id="_idIndexMarker273"/>的结果，如下所示:</p>
+<pre class="source-code">
+
+dataframe.describe</pre>
+<p>数据帧应如下所示:</p>
+<div><div><img alt="Figure 3.15 – Dataframe contents after replacing nan values with 0  " height="486" src="img/B17298_03_015.jpg" width="169"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.15–用0替换nan值后的数据帧内容</p>
+<p><code>isna()</code>函数是检查数据中的值是否为<strong class="bold"> nan </strong>并返回<strong class="bold">真</strong>或<strong class="bold">假</strong>的函数。我们使用这个条件来替换数据帧中的值。</p>
+<p class="callout-heading">小费</p>
+<p class="callout">有很多方法可以操作和替换数据帧中的值，H2O提供了很多功能来简化实现。您可以随意探索和试验如何操作数据框中的值。更多详情可以在这里找到:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-py/docs/frame.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-py/docs/frame . XHTML</a>。</p>
+<p>既然我们已经学习了在数据框架中替换值的各种方法，让我们来看看数据科学家和工程师经常采用的更高级的方法。</p>
+<h2 id="_idParaDest-62"><a id="_idTextAnchor083"/>插补</h2>
+<p>之前，我们已经看到了如何使用<code>fillna()</code>用<a id="_idIndexMarker278"/>替换数据集中的nan值，从而替换<a id="_idIndexMarker279"/>数据帧中的nan数据。<code>fillna()</code>函数按顺序填充数据；然而，数据本质上不需要总是连续的。例如，考虑购买游戏笔记本电脑的人的数据集。该数据集将主要包含13-28岁年龄段人群的数据，但也有一些异常值。在这种情况下，如果在<code>fillna()</code>函数中有任何nan值来填充nan值，因为任何异常值之后的任何nan值都会在数据帧中引入偏差。我们需要将nan值替换为该产品年龄组的标准分布中常见的值，即介于13和28之间的值，而不是可能性较小的59。</p>
+<p>插补是用适当的替代值替换数据框架中的某些值的过程，该替代值不会引入任何可能影响模型训练的偏差或异常值。用于计算替代值的方法或公式<a id="_idIndexMarker280"/>被称为<strong class="bold">插补策略</strong>。插补是最重要的数据处理方法之一，它处理缺失值和nan值，并尝试用一个可能将最小偏差引入模型训练过程的值来替换它们。</p>
+<p>H2O有一个名为<code>impute()</code>的函数专门提供这个功能。它具有以下参数:</p>
+<ul>
+<li><code>column</code>:该参数接受将<a id="_idIndexMarker281"/>列设置为<code>impute()</code>的列号。值<code>1</code>估算整个数据帧。</li>
+<li><code>method</code>:该参数设置使用哪种插补方法。方法可以是<code>mean</code>、<code>median</code>或<code>mode</code>。</li>
+<li><code>combine_method</code>:当选择的插补方法为<code>median</code>时，该参数决定如何组合偶数样本的分位数。组合方式可以是<code>interpolate</code>、<code>average</code>、<code>low</code>或<code>high</code>。</li>
+<li><code>group_by_frame</code>:该参数估算所选预计算分组帧的值。</li>
+<li><code>by</code>:该参数根据所选列对插补结果进行分组。</li>
+<li><code>values</code>:该参数接受<a id="_idIndexMarker282"/>每列估算的值列表。列表中有<code>None</code>值会跳过该列。</li>
+</ul>
+<p>让我们看一个Python中的例子，看看我们如何使用<a id="_idIndexMarker283"/>这个函数来填充缺失的值。</p>
+<p>为此，我们将使用<strong class="bold">高中生冲刺</strong>数据集。高中生短跑数据集是由高中生的年龄、体重、记录的最大速度以及他们在100米短跑中的表现的记录组成的数据集。该数据集用于预测年龄、体重和短跑速度如何影响学生在100米短跑比赛中的表现。</p>
+<p>数据集如下所示:</p>
+<div><div><img alt="Figure 3.16 – A high school student sprint dataset  " height="526" src="img/B17298_03_016.jpg" width="465"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.16-一个高中生短跑数据集</p>
+<p>数据集的特征<a id="_idIndexMarker284"/>如下:</p>
+<ul>
+<li><strong class="bold">年龄</strong>:学生的年龄</li>
+<li><strong class="bold">体重</strong>:学生的体重，单位为千克</li>
+<li><strong class="bold"> max_speed </strong>:学生的最大冲刺速度，单位为千米/小时</li>
+<li><strong class="bold"> 100米时间</strong>:学生以秒为单位完成100米冲刺所用的时间</li>
+</ul>
+<p>正如您所看到的，在<strong class="bold"> 100_meter_time </strong>列中有很多缺失的值。</p>
+<p>我们不能简单地使用<code>fillna()</code>函数，因为如果丢失的值恰好在最快或最慢的时间之后，这将在数据中引入偏差。我们也不能简单地用一个常数来代替这些值。</p>
+<p>真正有意义的是，用一个普通青少年参加100米短跑的正常数值来代替这些缺失的数值。我们已经有了大多数学生的值，所以我们可以使用他们的结果来计算一般的平均100米冲刺时间，并以此作为基线来替换所有缺失的值，而不会引入任何偏差。</p>
+<p>这正是插补的用途。让我们使用插补功能<a id="_idIndexMarker285"/>来填充这些缺失值:</p>
+<ol>
+<li value="1">导入<code>h20</code>模块，启动<code>h20</code>服务器:<pre>import h2o h2o.init()</pre></li>
+<li>然后我们通过使用<code>h2o.import_file()</code> : <pre>dataframe = h2o.import_file(" Dataset/high_school_student_sprint.csv" )</pre>导入<code>high school student sprint</code>数据集</li>
+<li>使用<code>impute()</code>函数，让我们通过<code>mean</code>估算<code>100_meter_time</code>列中缺失的值，并显示数据:<pre>dataframe.impute(" 100_meter_time" , method = " mean" ) dataframe.describe</pre></li>
+</ol>
+<p>您将看到估算数据帧的输出如下:</p>
+<div><div><img alt="Figure 3.17 – 100_meter_time column imputed by its mean  " height="386" src="img/B17298_03_017.jpg" width="382"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.17–按平均值估算的100米时间列</p>
+<ol>
+<li value="4">H2O计算出<strong class="bold">100 _米_时间</strong>栏中所有值<a id="_idIndexMarker286"/>的<code>mean</code>值为<strong class="bold"> 23.5558 </strong>，并用其替换缺失的值。</li>
+</ol>
+<p>类似地，代替<code>mean</code>，你也可以使用<code>median</code>值。但是，请注意，如果一个列有分类值，那么方法必须是<code>mode</code>。您可以根据替换缺失值时最有用的数据集来做出决定:</p>
+<pre>dataframe.impute(" 100_meter_time" , method = " median" )
+dataframe.impute(" 100_meter_time" , method = " mode" )</pre>
+<ol>
+<li value="5">让我们增加一点复杂性。如果所有学生之间的平均100米冲刺时间没有真正的可比性怎么办？如果表演在年龄上更有可比性呢？例如，16岁的学生比13岁的学生跑得快，因为他们身体发育得更好。在这种情况下，在估算一个16岁孩子的缺失值时，考虑一个13岁孩子的冲刺时间是没有意义的。这里我们可以使用<code>impute()</code>函数的<code>group</code>参数:<pre>dataframe = h2o.import_file(" Dataset/high_school_student_sprint.csv" ) dataframe.impute(" 100_meter_time" , method = " mean" , by=[" age" ]) dataframe.describe</pre></li>
+</ol>
+<p>您将看到如下所示的<a id="_idIndexMarker287"/>输出:</p>
+<div><div><img alt="Figure 3.18 – 100_meter_sprint imputed by its mean and grouped by age  " height="441" src="img/B17298_03_018.jpg" width="425"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.18–100米短跑按平均值估算并按年龄分组</p>
+<p>你会注意到，现在H2O已经按年龄计算了<code>mean</code>值，并替换了所有<code>impute()</code>函数的<code>mean</code>值中相应年龄的缺失值，从而灵活地估算出正确的值。</p>
+<p><code>impute()</code>功能非常强大，可以在数据帧中输入正确的值。通过列和框架进行分组的附加参数使其在处理各种缺失值时非常灵活。</p>
+<p>在不同的数据集上随意使用和探索<a id="_idIndexMarker288"/>所有这些函数。归根结底，所有这些功能都只是数据科学家和工程师用来提高数据质量的工具；真正的技能是理解何时以及如何使用这些工具来充分利用您的数据，这需要实验和实践。</p>
+<p>现在我们已经了解了处理缺失数据的不同方法，让我们进入数据处理的下一部分，即如何操作数据帧的特征列。</p>
+<h1 id="_idParaDest-63"><a id="_idTextAnchor084"/>操纵数据帧的特征列</h1>
+<p>大多数时候，你的数据处理<a id="_idIndexMarker289"/>活动将主要涉及操作<a id="_idIndexMarker290"/>数据帧的列。最重要的是，列中值的类型和列中值的顺序将在模型定型中发挥主要作用。</p>
+<p>H2O提供了一些功能来帮助你做到这一点。以下是帮助您处理数据框架中缺失值的一些功能:</p>
+<ul>
+<li>列的排序</li>
+<li>更改列的类型</li>
+</ul>
+<p>让我们首先了解如何使用H2O对列进行排序。</p>
+<h2 id="_idParaDest-64"><a id="_idTextAnchor085"/>排序列</h2>
+<p>理想情况下，您希望数据帧中的数据<a id="_idIndexMarker291"/>在传递给模型训练之前被打乱。但是，在某些情况下，您可能希望根据列中的值对数据帧进行重新排序。</p>
+<p>H2O有一个名为<code>sort()</code>的功能，可以根据列中的值<a id="_idIndexMarker292"/>对数据帧进行排序。它具有以下参数:</p>
+<ul>
+<li><code>by</code>:排序依据的列。您也可以将多个列名作为一个列表传递。</li>
+<li><code>ascending</code>:一个<code>boolean</code>数组，表示H2O应该对列进行排序的方向。如果选择<code>True</code>，H2O将对该列进行升序排序。如果<code>False</code>，那么H2O将按降序排序。如果两个标志都没有传递，那么H2O默认为升序排序。</li>
+</ul>
+<p>H2O对数据帧<a id="_idIndexMarker293"/>排序的方式取决于传递给<code>sort()</code>函数的是一个列名还是多个列名。如果只传递了一个列名，那么H2O将返回一个按该列排序的帧。</p>
+<p>但是，如果传递了多个列，那么H2O将返回一个数据帧，其排序如下:</p>
+<ul>
+<li>H2O将首先对参数中传递的第一列上的数据帧进行排序。</li>
+<li>然后，H2O将对参数中传递的下一列上的数据帧进行排序，但只会对那些与第一个排序列中的值相同的行进行排序。如果前面的列中没有重复值，则不会对后面的列进行排序。</li>
+</ul>
+<p>让我们看一个Python中的例子，看看如何使用这个函数对列进行排序:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库并初始化:<pre>import h2o h2o.init()</pre></li>
+<li>通过执行以下代码创建一个dataframe，并观察数据集:<pre>dataframe = h2o.H2OFrame.from_python({'C1': [3,3,3,0,12,13,1,8,8,14,15,2,3,8,8],'C2':[1,5,3,6,8,6,8,7,6,5,1,2,3,6,6],'C3':[15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]}) dataframe.describe</pre></li>
+</ol>
+<p>数据集的内容应该如下:</p>
+<div><div><img alt="Figure 3.19 – dataframe_1 data contents  " height="425" src="img/B17298_03_019.jpg" width="139"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.19–data frame _ 1数据内容</p>
+<ol>
+<li value="3">因此，此时，列<code>sort()</code>中的值<a id="_idIndexMarker295"/>的作用是通过列<code>0</code>将数据帧排序到<code>by</code>参数中，指示数据帧的第一列，或者通过传递<strong class="bold"> ['C1'] </strong>，这是一个包含列名的列表，用于顺序排序数据集:<pre>sorted_dataframe_1 = dataframe.sort(0) sorted_dataframe_1.describe</pre></li>
+</ol>
+<p>您应该得到如下代码输出:</p>
+<div><div><img alt="Figure 3.20 – dataframe_1 sorted by the C1 column  " height="425" src="img/B17298_03_020.jpg" width="138"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.20–按C1列排序的dataframe_1</p>
+<p>您将看到数据帧现在按照<strong class="bold"> C1 </strong>列的升序排序。</p>
+<ol>
+<li value="4">让我们看看如果我们在<code>by</code>参数中传递多列来对多列进行排序，我们会得到什么。运行下面的代码行:<pre>sorted_dataframe_2 = dataframe.sort(['C1','C2']) sorted_dataframe_2.describe</pre></li>
+</ol>
+<p>您应该得到如下输出:</p>
+<div><div><img alt="Figure 3.21 – dataframe_1 sorted by columns C1 and C2  " height="426" src="img/B17298_03_021.jpg" width="139"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.21–按C1和C2列排序的dataframe_1</p>
+<p>如您所见，H2O首先通过<code>sort</code>函数对列进行排序<a id="_idIndexMarker298"/>。</p>
+<ol>
+<li value="5">您也可以通过在<code>ascending</code>参数中传递<code>False</code>来反转排序顺序。让我们通过运行下面的代码行来测试这一点:<pre>sorted_dataframe_3 = dataframe.sort(by=['C1','C2'], ascending=[True,False]) sorted_dataframe_3.describe</pre></li>
+</ol>
+<p>您应该会看到如下输出:</p>
+<div><div><img alt="" height="425" src="img/B17298_03_022.jpg" width="139"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.22–data frame _ 1按C1列升序排序，C2列降序排序</p>
+<p>在这种情况下，H2O首先按照C1列对列进行排序。然后，它按照<strong class="bold"> C2 </strong>列<a id="_idIndexMarker299"/>对那些在<strong class="bold"> C1 </strong>列中具有相同值的行进行排序。但是，这一次它按降序对值进行了排序。</p>
+<p>既然您已经学习了如何通过单个列以及多个列对数据帧进行排序，那么让我们继续学习另一个列操作函数，它可以改变列的类型。</p>
+<h2 id="_idParaDest-65"><a id="_idTextAnchor086"/>更改列类型</h2>
+<p>正如我们在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第二章</em></a><em class="italic">使用H2O流(H2O的Web UI) </em>中看到的，我们将<code>Heart Disease</code>列的类型从<code>numerical</code>更改为<code>enum</code>。我们这样做的原因是，列的类型在模型训练中起着主要作用。在模型训练期间，列的类型决定了ML问题是分类问题还是回归问题。尽管这两种情况下的数据本质上都是数字，但是ML算法如何处理列完全取决于它的类型。因此，纠正在数据收集的初始阶段可能没有正确设置的列类型变得非常重要。</p>
+<p>H2O有几个函数<a id="_idIndexMarker301"/>不仅可以帮助你改变列的类型，还可以对列类型进行初始检查。</p>
+<p>一些功能如下:</p>
+<ul>
+<li><code>.isnumeric()</code>:检查数据框中的<a id="_idIndexMarker302"/>列是否为数字类型。相应地返回<code>True</code>或<code>False</code></li>
+<li><code>.asnumeric()</code>:创建一个新框架，将指定列的所有值<a id="_idIndexMarker303"/>转换为数字</li>
+<li><code>.isfactor()</code>:检查dataframe中的列<a id="_idIndexMarker304"/>是否属于分类类型。相应地返回<code>True</code>或<code>False</code></li>
+<li><code>.asfactor()</code>:创建一个新框架，将所有值<a id="_idIndexMarker305"/>转换为指定列的分类类型</li>
+<li><code>.isstring()</code>:检查数据帧中的<a id="_idIndexMarker306"/>列是否为字符串类型。相应地返回<code>True</code>或<code>False</code></li>
+<li><code>.ascharacter()</code>:创建一个新框架，将所有值<a id="_idIndexMarker307"/>转换为指定列的字符串类型</li>
+</ul>
+<p>让我们看一个Python中的例子，看看我们如何使用这些函数来更改列类型:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库并初始化H2O: <pre>import h2o h2o.init()</pre></li>
+<li>通过执行以下代码行创建一个dataframe，并观察数据集:<pre>dataframe = h2o.H2OFrame.from_python({'C1': [3,3,3,0,12,13,1,8,8,14,15,2,3,8,8],'C2':[1,5,3,6,8,6,8,7,6,5,1,2,3,6,6],'C3':[15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]}) dataframe.describe</pre></li>
+</ol>
+<p>数据集的内容应该如下:</p>
+<div><div><img alt="Figure 3.23 – Dataframe data contents  " height="365" src="img/B17298_03_023.jpg" width="122"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.23-数据框数据内容</p>
+<ol>
+<li value="3">使用<code>isnumeric()</code>功能确认<code>numerical</code>栏是否如下:<pre>dataframe['C1'].isnumeric()</pre></li>
+</ol>
+<p>您应该得到一个<code>True</code>的输出。</p>
+<ol>
+<li value="4">让我们看看，如果我们使用<code>asfactor()</code>函数检查<code>categorical</code>列，会得到如下结果:<pre>dataframe['C1'].isfactor()</pre></li>
+</ol>
+<p>您应该得到一个<code>False</code>的输出。</p>
+<ol>
+<li value="5">现在让我们使用<code>asfactor()</code>函数转换<code>categorical</code>列，然后检查<code>isfactor()</code>是否返回<code>True</code> : <pre>dataframe['C1'] = dataframe['C1'].asfactor() dataframe['C1'].isfactor()</pre></li>
+</ol>
+<p>您现在应该会得到<code>True</code>的输出。</p>
+<ol>
+<li value="6">您可以使用<code>asnumeric()</code>函数:<pre>dataframe['C1'] = dataframe['C1'].asnumeric() dataframe['C1'].isnumeric()</pre>转换<code>numerical</code>列</li>
+</ol>
+<p>您现在应该得到一个<code>True</code>的输出。</p>
+<p>既然您已经学习了如何对数据帧的列进行排序和更改列类型，那么让我们继续讨论数据处理中的另一个重要主题，即标记化和编码。</p>
+<h1 id="_idParaDest-66"><a id="_idTextAnchor087"/>文本数据的标记化</h1>
+<p>并非所有的<strong class="bold">机器学习算法</strong> ( <strong class="bold"> MLAs </strong>)都专注于数学问题解决。<strong class="bold">自然语言处理</strong> ( <strong class="bold"> NLP </strong>)是ML的一个分支，<a id="_idIndexMarker310"/>专门分析文本数据中的含义<a id="_idIndexMarker311"/>，尽管<a id="_idIndexMarker312"/>它会尝试推导含义并理解文档或任何文本的内容。训练NLP模型可能非常棘手，因为每种语言都有自己的语法规则，对某些单词的解释在很大程度上取决于上下文。然而，NLP算法经常尽力训练一个模型，该模型可以预测文本文档的含义和情感。</p>
+<p>训练NLP算法<a id="_idIndexMarker313"/>的方法是首先将文本数据块分解成更小的单元，称为<strong class="bold">记号</strong>。记号可以是单词、字符，甚至是字母。这取决于MLA的要求是什么，以及它如何使用这些令牌来训练模型。</p>
+<p>H2O有一个名为<code>tokenize()</code>的函数，它帮助将数据帧中的字符串数据分解成记号，并创建一个包含所有记号的单独的列以供进一步处理。</p>
+<p>它有以下参数:<code>split</code>:我们在这个参数中传递一个正则表达式，函数将使用这个表达式将文本数据分割成标记。</p>
+<p>让我们看一个如何使用这个函数来标记数据帧中的字符串数据的示例:</p>
+<ol>
+<li value="1">导入<code>h2o</code>库<a id="_idIndexMarker315"/>并初始化<a id="_idIndexMarker316"/>它:<pre>import h2o h2o.init()</pre></li>
+<li>通过执行以下代码行创建一个dataframe，并观察数据集:<pre>dataframe1 = h2o.H2OFrame.from_python({'C1':['Today we learn AI', 'Tomorrow AI learns us', 'Today and Tomorrow are same', 'Us and AI are same']}) dataframe1 = dataframe1.ascharacter() dataframe1.describe</pre></li>
+</ol>
+<p>数据集应该如下所示:</p>
+<div><div><img alt="Figure 3.24 – Dataframe data contents  " height="186" src="img/B17298_03_024.jpg" width="286"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.24-数据框数据内容</p>
+<p>这种类型的文本数据通常在生成大量日志文本或对话数据的系统中收集。为了解决这种NLP任务，我们需要将句子分解成单独的标记，以便我们最终可以建立这些文本的上下文和含义，这将有助于ML算法进行语义预测。然而，在深入NLP的复杂性之前，数据科学家和工程师将首先通过标记化来处理这些数据。</p>
+<ol>
+<li value="3">让我们使用<a id="_idIndexMarker317"/>这个函数对数据帧进行标记，用空格分割文本，并观察<a id="_idIndexMarker318"/>标记后的列:<pre>tokenized_dataframe = dataframe1.tokenize("  " ) tokenized_dataframe</pre></li>
+</ol>
+<p>您应该会看到如下数据帧:</p>
+<div><div><img alt="Figure 3.25 – Tokenized dataframe data contents  " height="376" src="img/B17298_03_025.jpg" width="111"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.25–令牌化数据帧数据内容</p>
+<p>您会注意到,<code>tokenize()</code>函数将文本数据分割成标记，并将标记作为行添加到一列中。您还会注意到，所有标记化的句子都由空行分隔。您可以通过使用<code>nrows</code>将数据帧中所有句子的字数，加上句子之间的空格，与标记化数据集中的行数进行比较来交叉检查。</p>
+<p>这些是一些最常用的数据处理方法，用于在将数据输入ML管道进行培训之前对其进行处理。仍然有很多方法和技术可以用来进一步清理和润色数据框。以至于你可以用一整本书来讨论它们。数据处理恰好是整个ML生命周期中最困难的部分。用于训练的数据的质量取决于问题陈述的上下文。它还依赖于数据科学家和工程师在处理数据时的创造力和独创性。数据处理的最终目标是从数据集中提取尽可能多的信息，并从数据中去除噪声和偏差<a id="_idIndexMarker319"/>，以便在训练期间更有效地分析数据<a id="_idIndexMarker320"/>。</p>
+<h1 id="_idParaDest-67"><a id="_idTextAnchor088"/>使用目标编码对数据进行编码</h1>
+<p>我们知道，机器<a id="_idIndexMarker321"/>只能理解<a id="_idIndexMarker322"/>的数字。然而，大量现实世界中的ML问题围绕着本质上不一定是数字的对象和信息。一般来说，诸如状态、名称和类之类的东西被表示为类别<a id="_idIndexMarker323"/>而不是数字。这种数据称为<strong class="bold">分类数据</strong>。分类数据通常会在分析和预测中发挥重要作用。因此，需要将这些分类值转换成数字格式，以便机器能够理解它们。转换的方式也应该是，我们不会失去这些类别的固有含义，也不会在数据中引入新的信息，例如数字的递增性质。</p>
+<p>这就是使用编码的地方。<strong class="bold">编码</strong>是将分类值<a id="_idIndexMarker324"/>转换为数值的过程，换句话说，<em class="italic">编码</em>。有许多编码方法可以执行这种转换。最常用的一种就是<strong class="bold">目标编码</strong>。</p>
+<p>目标编码是一种编码过程，通过计算给定类别的目标变量出现的平均概率，将类别值转换为数值。H2O也有帮助用户对他们的数据进行目标编码的方法。</p>
+<p>为了更好地理解这种方法，考虑下面的样本<code>Mythical creatures</code>数据集:</p>
+<div><div><img alt="Figure 3.26 – Our mythical creatures dataset  " height="600" src="img/B17298_03_026.jpg" width="278"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.26–我们的神话生物数据集</p>
+<p>该数据集<a id="_idIndexMarker326"/>具有以下<a id="_idIndexMarker327"/>内容:</p>
+<ul>
+<li><strong class="bold">动物</strong>:该列包含动物名称的分类值。</li>
+<li><strong class="bold">神话</strong>:该列包含<strong class="bold"> 0 </strong>二进制值和<strong class="bold"> 1 </strong>二进制值。<strong class="bold"> 1 </strong>表示生物是神话，而<strong class="bold"> 0 </strong>表示生物不是神话。</li>
+</ul>
+<p>现在，让我们使用目标编码对<code>categorical</code>列进行编码。目标编码将执行以下步骤:</p>
+<ol>
+<li value="1">对分类值进行分组，并记录给定类别的目标值<strong class="bold">神话</strong>为<strong class="bold"> 1 </strong>的次数以及为<strong class="bold"> 0 </strong>的时间，如下所示:</li>
+</ol>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<div><div><img alt="Figure 3.27 – The mythical creatures dataset with a target count  " height="315" src="img/B17298_03_027.jpg" width="618"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.27–带有目标计数的神话生物数据集</p>
+<ol>
+<li value="2">计算<strong class="bold"> 1 </strong>目标值出现的概率<a id="_idIndexMarker328"/>，与每个特定组内的<a id="_idIndexMarker329"/>和<strong class="bold"> 0 </strong>目标值进行比较。这将如下所示:</li>
+</ol>
+<div><div><img alt="Figure 3.28 – The mythical creatures dataset with a Probability of Target 1 Occurring column  " height="341" src="img/B17298_03_028.jpg" width="787"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.28–带有目标1出现概率栏的神话生物数据集</p>
+<ol>
+<li value="3">删除<strong class="bold">动物</strong>列，使用【目标1出现的T21概率】列作为<strong class="bold">动物</strong>列的编码表示。新的编码数据集将如下所示:</li>
+</ol>
+<div><div><img alt="Figure 3.29 – A target-encoded mythical creatures dataset  " height="554" src="img/B17298_03_029.jpg" width="258"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.29–目标编码的神话生物数据集</p>
+<p>在编码数据集中，使用目标编码对<strong class="bold">动物</strong>特征进行编码<a id="_idIndexMarker330"/>，我们有一个本质上完全是数字的数据集<a id="_idIndexMarker331"/>。该数据集将易于ML算法解释和学习，从而提供高质量的模型。</p>
+<p>现在让我们看看如何使用H2O来执行目标编码。我们将在本例中使用的数据集是<code>Automobile price prediction</code>数据集。你可以在<a href="https://archive.ics.uci.edu/ml/datasets/Automobile">https://archive.ics.uci.edu/ml/datasets/Automobile</a>(<em class="italic">Dua，d .和Graff，C. (2019)找到这个数据集的细节。http://archive.ics.uci.edu/ml机器学习库</em><a href="http://archive.ics.uci.edu/ml"/>。<em class="italic">加州尔湾:加州大学信息与计算机科学学院</em>)。</p>
+<p>数据集相当简单。它包含了关于汽车的各种细节，比如汽车的<strong class="bold">品牌</strong>、<strong class="bold">发动机尺寸</strong>、<strong class="bold">燃油系统</strong>、<strong class="bold">压缩比</strong>和<strong class="bold">价格</strong>。ML算法的目的是根据这些特征预测汽车的价格。</p>
+<p>对于我们的实验，我们将使用目标编码对<code>categorical</code>列<strong class="bold">制造</strong>、<strong class="bold">燃料类型</strong>和<strong class="bold">车身样式</strong>进行编码，其中<strong class="bold">价格</strong>列是目标。</p>
+<p>让我们按照这个例子来执行目标编码:</p>
+<ol>
+<li value="1">导入<code>h2o</code>和H2O的<code>H2OTargetEncoderEstimator</code>，初始化<a id="_idIndexMarker332"/>你的H2O服务器。执行<a id="_idIndexMarker333"/>下面的代码:<pre>import h2o from h2o.estimators import H2OTargetEncoderEstimator h2o.init()</pre></li>
+<li>导入<code>Automobile price prediction</code>数据集并打印数据集内容。执行下面的代码:<pre>automobile_dataframe = h2o.import_file(" Dataset\Automobile_data.csv" ) automobile_dataframe</pre></li>
+</ol>
+<p>让我们观察数据帧的内容；它应该如下所示:</p>
+<div><div><img alt="Figure 3.30 – An automobile price prediction dataframe  " height="460" src="img/B17298_03_030.jpg" width="1194"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.30-汽车价格预测数据框架</p>
+<p>正如您在前面的图中看到的，dataframe由大量包含汽车详细信息的列组成。为了理解目标编码，让我们过滤掉想要试验的列，而去掉其余的。因为我们计划将<a id="_idIndexMarker334"/>用于编码<code>make</code>列、<code>fuel-type</code>列、<a id="_idIndexMarker335"/>和<code>body-style</code>列，所以让我们只使用这些列和<code>price</code>响应列。执行以下代码:</p>
+<pre>automobile_dataframe = automobile_dataframe[:,[" make" , " fuel-type" , " body-style" , " price" ]]
+automobile_dataframe</pre>
+<p>过滤后的数据帧将如下所示:</p>
+<div><div><img alt="Figure 3.31 – The automobile price prediction dataframe with filtered columns  " height="434" src="img/B17298_03_031.jpg" width="411"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.31-带有过滤列的汽车价格预测数据框架</p>
+<ol>
+<li value="3">现在让我们将这个数据帧分成训练和测试数据帧。执行下面的代码:<pre>automobile_dataframe_for_training, automobile_dataframe_for_test = automobile_dataframe.split_frame(ratios = [.8], seed = 123)</pre></li>
+<li>现在让我们使用<code>H2OTargetEncoderEstimator</code>来训练我们的目标编码器模型。执行下面的代码:<pre>automobile_te = H2OTargetEncoderEstimator() automobile_te.train(x= [" make" , " fuel-type" , " body-style" ], y=" price" , training_frame=automobile_dataframe_for_training)</pre></li>
+</ol>
+<p>一旦目标编码器完成其训练，您将看到以下输出:</p>
+<div><div><img alt="Figure 3.32 – The result of target encoder training   " height="340" src="img/B17298_03_032.jpg" width="912"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.32–目标编码器训练的结果</p>
+<p>从前面的<a id="_idIndexMarker336"/>截图中，您可以看到H2O目标<a id="_idIndexMarker337"/>编码器将为<code>make</code>列、<code>fuel-type</code>列和<code>body-style</code>列生成目标编码值，并将它们分别存储在名为<code>make_te</code>、<code>fuel-type_te</code>和<code>body-style_te</code>的不同列中。这些新列将包含编码值。</p>
+<ol>
+<li value="5">现在，让我们使用这个经过训练的目标编码器对训练数据集进行编码，并打印编码后的数据帧:<pre>te_automobile_dataframe_for_training = automobile_te.transform(frame=automobile_dataframe_for_training, as_training=True) te_automobile_dataframe_for_training</pre></li>
+</ol>
+<p>编码的训练帧应该如下所示:</p>
+<div><div><img alt="Figure 3.33 – An encoded automobile price prediction training dataframe  " height="385" src="img/B17298_03_033.jpg" width="694"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.33-编码的汽车价格预测训练数据框架</p>
+<p>如图所示，我们的训练<a id="_idIndexMarker338"/>框架现在增加了三个<a id="_idIndexMarker339"/>列，<code>make_te</code>、<code>fuel-type_te</code>和<code>body-style_te</code>，并带有数值。这些是<code>make</code>列、<code>fuel-type</code>列和<code>body-style</code>列的目标编码列。</p>
+<ol>
+<li value="6">类似地，现在让我们使用经过训练的目标编码器来编码测试数据帧并打印编码的数据帧。执行下面的代码:<pre>te_automobile_dataframe_for_test = automobile_te.transform(frame=automobile_dataframe_for_test, noise=0) te_automobile_dataframe_for_test</pre></li>
+</ol>
+<p>编码的测试帧应该如下所示:</p>
+<div><div><img alt="Figure 3.34 – An encoded automobile price prediction test dataframe  " height="387" src="img/B17298_03_034.jpg" width="659"/>
+</div>
+</div>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US"> </p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图3.34-编码汽车价格预测测试数据框架</p>
+<p>从图中可以看出，我们的测试帧还有三个额外的列，它们是编码列。现在，您可以使用这些数据框架来训练您的ML模型。</p>
+<p>根据你下一步的行动，你可以使用<a id="_idIndexMarker340"/>你认为合适的编码数据帧。如果您想要使用数据帧来训练ML模型，那么您可以从数据帧中删除<code>categorical</code>列，并使用相应的编码列作为训练特征来训练您的模型。如果您希望对数据集执行任何进一步的分析，那么您可以保留这两种类型的列并执行任何比较研究。</p>
+<p class="callout-heading">小费</p>
+<p class="callout">H2O的目标编码器有几个参数，您可以设置这些参数来调整编码过程。为数据集的目标编码选择正确的设置可能会变得非常复杂，这取决于您正在处理的数据类型。因此，您可以随意试验该函数，因为您对该功能和目标编码的理解越好，您就可以更好地对数据帧进行编码，并进一步改进您的模型训练。你可以在这里找到更多关于H2O目标编码器的详情<a id="_idIndexMarker342"/>:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/target-encoding.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science/target-encoding . XHTML</a>。</p>
+<p>恭喜你！您已经<a id="_idIndexMarker343"/>理解了如何使用H2O的目标编码器对<a id="_idIndexMarker344"/>分类值进行编码。</p>
+<h1 id="_idParaDest-68"><a id="_idTextAnchor089"/>总结</h1>
+<p>在本章中，我们首先探讨了在将数据帧发送到模型训练之前用于预处理数据帧的各种技术和一些常用函数。我们研究了如何将我们的原始数据帧重新构造成合适的一致格式，以满足模型训练的要求。我们学习了如何通过将数据帧的不同列与不同数据帧的不同列相结合来操作数据帧的列。我们学习了如何组合分区数据帧中的行，以及如何将数据帧直接合并到单个数据帧中。</p>
+<p>一旦我们知道如何重构数据框架，我们就知道如何处理新收集的数据中经常出现的缺失值。我们学习了如何填充NA值、替换某些不正确的值，以及如何使用不同的插补策略来避免在填充缺失值时添加噪声和偏差。</p>
+<p>然后，我们研究了如何通过按列对数据帧进行排序以及更改列的类型来操作特性列。我们还学习了如何标记字符串来处理文本数据，以及如何使用H2O的目标编码器对分类值进行编码。</p>
+<p>在下一章，我们将打开AutoML的黑匣子，探索它的训练，以及在AutoML过程中内部发生了什么。这将有助于我们更好地理解H2O是如何变魔术的，并有效地自动化模型训练过程。</p>
+</div>
+<div><div/>
+</div>
+</div></body>
+</html></body></html>

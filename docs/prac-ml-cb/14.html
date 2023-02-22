@@ -1,0 +1,363 @@
+<html><head/><body>
+
+
+
+<title>Chapter 14. Case Study - Forecast of Electricity Consumption</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch14"/>第十四章。案例分析-用电量预测</h1></div></div></div><div><div><div><div><h1 class="title"><a id="ch14lvl1sec58"/>简介</h1></div></div></div><p>电力是唯一同时生产和消费的商品；因此，必须始终保持电力市场中供应和消费之间的完美平衡。由于电力是一种重要的能源，预测电力消费对任何国家来说都是国家利益所在。对能源消耗、生产和分配的可靠预测符合稳定和长期的政策。规模经济的存在、对环境问题的关注、法规要求和良好的公众形象，加上通货膨胀、快速上涨的能源价格、替代燃料和技术的出现、生活方式的改变等等，产生了使用建模技术的需求，这些建模技术捕捉诸如价格、收入、人口、技术以及其他经济、人口统计、政策和技术变量的影响。</p><p>低估可能导致容量利用不足，从而导致服务质量下降，包括局部限电，甚至停电。而另一方面，过高的估计可能导致批准一个可能几年都不需要的工厂。要求是确保投资的最佳阶段、长期考虑、合理化定价结构和设计需求方管理方案，以满足短期或中期需求的性质。该预测进一步推动了投资、建设和保护方面的各种计划和决策。</p><div><div><div><div><h2 class="title">准备就绪</h2></div></div></div><p>为了进行用电量预测，我们将使用智能电表数据收集的数据集，该数据集包含四个行业的时间序列。</p><div><div><div><div><h3 class="title"><a id="ch14lvl3sec176"/>步骤1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">DT_4_ind</code>的数据集。数值变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">value</code></li></ul></div><p>非数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">date_time</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">week</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">date</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">type</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch14lvl2sec73"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch14lvl3sec177"/>第2步-探索数据</h3></div></div></div><p>作为要执行的第一步，需要加载以下软件包:</p><pre class="programlisting">    
+<strong>&gt; install.packages("feather")</strong>
+<strong>&gt; install.packages("data.table")</strong>
+<strong>&gt; install.packages("ggplot2")</strong>
+<strong>&gt; install.packages("plotly")</strong>
+<strong>&gt; install.packages("animation")</strong>
+<strong>&gt; library(feather)</strong>
+<strong>&gt; library(data.table)</strong>
+<strong>&gt; library(ggplot2)</strong>
+<strong>&gt; library(plotly)</strong>
+<strong>&gt; library(animation)</strong>
+</pre><div><div><h3 class="title"><a id="note32"/>注意</h3><p>版本信息:这个页面的代码在R版本3.2.2中测试过</p></div></div><p>让我们探索数据，了解变量之间的关系。</p><p>检查对象是否为<code class="literal">as.data.table()</code>:使用<code class="literal">feather</code>对数据帧进行二进制列序列化。为了轻松地跨数据分析语言共享、读取和写入数据，使用了<code class="literal">feather</code>。<code class="literal">read_feather()</code>功能用于读取羽毛文件。</p><p>我们将从导入<code class="literal">DT_4_ind</code>数据集开始。我们将把数据保存到<code class="literal">AggData</code>数据框中:</p><pre class="programlisting">
+<strong>&gt; AggData &lt;- as.data.table(read_feather("d:/DT_4_ind"))</strong>
+</pre><p>探索<code class="literal">AggData</code>数据帧的内部结构:<code class="literal">str()</code>函数显示数据帧的内部结构。<code class="literal">AggData</code>作为R对象传递给<code class="literal">str()</code>函数:</p><pre class="programlisting">
+<strong>&gt; str(AggData)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_001.jpg" alt="Step 2 - exploring data"/></div><p>
+</p><p>打印<code class="literal">AggData</code>帧。<code class="literal">head()</code>函数返回基本数据帧的第一部分。<code class="literal">AggData</code>数据帧作为输入参数传递:</p><pre class="programlisting">
+<strong>&gt; head(AggData)</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_002.jpg" alt="Step 2 - exploring data"/></div><p>
+</p><p>绘制按行业划分的电力消费总时间序列数据。</p><p><code class="literal">ggplot()</code>函数声明图形的输入数据框，并指定整个图形的图形美学设置。<code class="literal">data = AggData</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述数据中的变量如何映射到可视属性。<code class="literal">geom_line()</code>生成试图连接所有观察值的单线:</p><pre class="programlisting">
+<strong>    &gt; ggplot(data = AggData, aes(x = date, y = value)) +</strong>
+<strong>    + geom_line() + </strong>
+<strong>    + facet_grid(type ~ ., scales = "free_y") +</strong>
+<strong>    + theme(panel.border = element_blank(),</strong>
+<strong>    + panel.background = element_blank(),</strong>
+<strong>    + panel.grid.minor = element_line(colour = "grey90"),</strong>
+<strong>    + panel.grid.major = element_line(colour = "green"),</strong>
+<strong>    + panel.grid.major.x = element_line(colour = "red"),</strong>
+<strong>    + axis.text = element_text(size = 10),</strong>
+<strong>    + axis.title = element_text(size = 12, face = "bold"),</strong>
+<strong>    + strip.text = element_text(size = 9, face = "bold")) +</strong>
+<strong>    + labs(title = "Electricity Consumption - Industry", x = "Date", y = "Load (kW)")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_003.jpg" alt="Step 2 - exploring data"/></div><p>
+</p><div><div><h3 class="title"><a id="note33"/>注</h3><p>值得注意的是，与其他行业相比，食品销售和储存行业的消费量在节假日期间变化不大。</p></div></div></div><div><div><div><div><h3 class="title"><a id="ch14lvl3sec178"/>第三步-时间序列-回归分析</h3></div></div></div><p>回归模型的公式如下:</p><p>
+</p><div><img src="img/image_14_004.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>变量(输入)有两种季节性虚拟变量——每日<img src="img/image_14_005.jpg" alt="Step 3 - time series - regression analysis"/>和每周<img src="img/image_14_006.jpg" alt="Step 3 - time series - regression analysis"/>。<img src="img/image_14_007.jpg" alt="Step 3 - time series - regression analysis"/>为<em> i </em>时刻的用电量，其中<img src="img/image_14_008.jpg" alt="Step 3 - time series - regression analysis"/>为待估计的回归系数。</p><p>打印<code class="literal">AggData</code>数据框的内容:</p><pre class="programlisting">
+<strong>&gt; AggData</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_009.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>将工作日的字符转换为整数:<code class="literal">as.factor()</code>函数用于将一个向量编码为一个因子。<code class="literal">as.integer()</code>函数创建整数类型的<code class="literal">AggData[, week]</code>对象:</p><pre class="programlisting">
+<strong>&gt; AggData[, week_num := as.integer(as.factor(AggData[, week]))]</strong>
+</pre><p>打印变更后<code class="literal">AggData</code>数据框的内容:</p><pre class="programlisting">
+<strong>&gt; AggData</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_010.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>使用以下方法从<code class="literal">AggData</code>数据框中提取唯一的行业类型:</p><pre class="programlisting">
+<strong>
+&gt; n_type &lt;- unique(AggData[, type])
+</strong>
+</pre><p>打印更改后数据框<code class="literal">n_type</code>的内容:</p><pre class="programlisting">
+<strong>
+&gt; n_type
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_011.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>使用以下方法从<code class="literal">AggData</code>数据帧中提取唯一日期:</p><pre class="programlisting">
+<strong>
+&gt; n_date &lt;- unique(AggData[, date])
+</strong>
+</pre><p>使用以下方法从<code class="literal">AggData</code>数据帧中提取唯一的工作日:</p><pre class="programlisting">
+<strong>
+&gt; n_weekdays &lt;- unique(AggData[, week])
+</strong>
+</pre><p>使用以下方法设置<code class="literal">period</code>值:</p><pre class="programlisting">
+<strong>
+&gt; period &lt;- 48
+</strong>
+</pre><p>对样本数据集执行回归分析。</p><p>我们在两周内提取了教育(学校)建筑。结果存储在<code class="literal">data_reg</code>数据框中。<code class="literal">n_type[2]</code>代表教育建筑，<code class="literal">n_date[57:70]</code>代表两周时间:</p><pre class="programlisting">
+<strong>
+&gt; data_reg &lt;- AggData[(type == n_type[2] &amp; date %in% n_date[57:70])]
+</strong>
+</pre><p>打印更改后的<code class="literal">data_reg</code>数据帧的内容:</p><pre class="programlisting">
+<strong>
+&gt; data_reg
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_012.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>绘制两周内(2月27日至3月12日)的教育样本数据集(学校建筑)</p><p><code class="literal">ggplot()</code>函数声明图形的输入数据框，并指定旨在贯穿始终的一组图形美学。<code class="literal">data_reg</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述了数据中的变量如何映射到可视属性。<code class="literal">geom_line()</code>产生试图连接所有观察值的单线:</p><pre class="programlisting">
+<strong>    &gt; ggplot(data_reg, aes(date_time, value)) +</strong>
+<strong>    + geom_line() +</strong>
+<strong>    + theme(panel.border = element_blank(),</strong>
+<strong>    + panel.background = element_blank(),</strong>
+<strong>    + panel.grid.minor = element_line(colour = "grey90"),</strong>
+<strong>    + panel.grid.major = element_line(colour = "green"),</strong>
+<strong>    + panel.grid.major.x = element_line(colour = "red"),</strong>
+<strong>    + axis.text = element_text(size = 10),</strong>
+<strong>    + axis.title = element_text(size = 12, face = "bold")) </strong>
+<strong>    + labs(title = "Regression Analysis - Education Buildings", x = "Date", y = "Load (kW)")</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_013.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>从<code class="literal">data_reg</code>数据帧中提取行数:</p><pre class="programlisting">
+<strong>
+&gt; N &lt;- nrow(data_reg)
+</strong>
+</pre><p>计算训练集中的天数:</p><pre class="programlisting">
+<strong>
+&gt; trainset_window &lt;- N / period
+</strong>
+</pre><p>创建独立的季节性虚拟变量-每日<img src="img/image_14_014.jpg" alt="Step 3 - time series - regression analysis"/>和每周<img src="img/image_14_015.jpg" alt="Step 3 - time series - regression analysis"/>。每日季节值提取自<em> 1，.....句号，1，.......周期</em>为每日变量的48个向量。从<code class="literal">week_num</code>中提取周值。然后将结果存储在一个向量中，<code class="literal">matrix_train</code>:</p><pre class="programlisting">
+<strong>
+&gt; matrix_train &lt;- data.table(Load = data_reg[, value], Daily = as.factor(rep(1:period, trainset_window)), Weekly = as.factor(data_reg[, week_num]))
+</strong>
+</pre><p>打印变更后<code class="literal">matrix_train</code>数据框的内容:</p><pre class="programlisting">
+<strong>
+&gt; matrix_train
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_016.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>创建线性模型。<code class="literal">lm()</code>函数适合线性模型:<code class="literal">Load ~ 0 + .</code>是公式。由于<code class="literal">lm()</code>自动添加到线性模型截距，我们现在将其定义为<code class="literal">0</code>。<code class="literal">data = matrix_train</code>定义包含数据的数据帧:</p><pre class="programlisting">
+<strong>
+&gt; linear_model_1 &lt;- lm(Load ~ 0 + ., data = matrix_train)
+</strong>
+</pre><p>打印变更后<code class="literal">linear_model_1</code>数据框的内容:</p><pre class="programlisting">
+<strong>
+&gt; linear_model_1
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_017.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>制作模型<code class="literal">linear_model_1</code>的结果汇总:</p><pre class="programlisting">
+<strong>&gt; summary_1 &lt;- summary(linear_model_1)</strong>
+</pre><p>打印更改后的<code class="literal">summary_1</code>数据框的内容:</p><pre class="programlisting">
+<strong>
+&gt; summary_1
+</strong>
+</pre><p>结果如下:</p><p>
+</p><div><img src="img/image_14_018.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>
+</p><div><img src="img/image_14_019.jpg" alt="Step 3 - time series - regression analysis"/></div><p>
+</p><p>使用<code class="literal">r.squared</code>属性从<code class="literal">summary_1</code>数据帧中提取确定系数:</p><pre class="programlisting">
+<strong>&gt; paste("R-squared: ", round(summary_1$r.squared, 3), ", p-value of F test: ", 1-pf(summary_1$fstatistic[1], summary_1$fstatistic[2], summary_1$fstatistic[3]))</strong>
+</pre><p>从<code class="literal">data_reg</code>和<code class="literal">linear_model_1</code>的列表中创建一个<code class="literal">data.table</code>:</p><div><img src="img/image_14_020.jpg" alt="Step 3 - time series - regression analysis"/></div><p>打印更改后的<code class="literal">datas</code>数据帧的内容:</p><p>结果如下:</p><pre class="programlisting">
+<strong>
+&gt; datas &lt;- rbindlist(list(data_reg[, .(value, date_time)], data.table(value = linear_model_1$fitted.values, data_time = data_reg[, date_time])))
+</strong>
+</pre><p>Printing the contents of the <code class="literal">datas</code> data frame after the change:</p><pre class="programlisting">
+<strong>
+&gt; datas
+</strong>
+</pre><p>The result is as follows:</p><p>绘制<code class="literal">linear_model_1</code>的拟合值。</p><div><img src="img/image_14_021.jpg" alt="Step 3 - time series - regression analysis"/></div><p><code class="literal">data = datas</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述了数据中的变量如何映射到可视属性。<code class="literal">geom_line()</code>生成试图连接所有观察值的单线:</p><p>结果如下:</p><p>
+<code class="literal">data = datas</code> is the dataset to be used for plotting while <code class="literal">aes()</code> describes how variables in the data are mapped to visual properties. <code class="literal">geom_line()</code> produces the single line that tries to connect all the observations:</p><pre class="programlisting">
+<strong>
+&gt; ggplot(data = datas, aes(date_time, value, group = type, colour = type)) + geom_line(size = 0.8) + theme_bw() +
+</strong>
+<strong>
++ labs(x = "Time", y = "Load (kW)", title = "Fit from Multiple Linear Regression")
+</strong>
+</pre><p>The result is as follows:</p><p>绘制拟合值对残值。</p><div><img src="img/image_14_022.jpg" alt="Step 3 - time series - regression analysis"/></div><p><code class="literal">data</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述了数据中的变量如何映射到可视属性:</p><p>结果如下:</p><p>
+<code class="literal">data</code> is the dataset to be used for plotting while <code class="literal">aes()</code> describes how variables in the data are mapped to visual properties:</p><pre class="programlisting">
+<strong>&gt; ggplot(data = data.table(Fitted_values =
+linear_model_2$fitted.values, Residuals = linear_model_2$residuals),
+aes(Fitted_values, Residuals)) + geom_point(size = 1.7)
++ geom_hline(yintercept = 0, color = "red", size = 1) +
++ labs(title = "Fitted values vs Residuals")</strong>
+</pre><p>The result is as follows:</p><p>该函数首先给出线性模型的标准化残差。然后计算<code class="literal">1Q</code>和<code class="literal">4Q</code>行。然后，分位数分布由正态分布生成。然后计算斜率和截距，并绘制成图:</p><div><img src="img/image_14_023.jpg" alt="Step 3 - time series - regression analysis"/></div><p>我们可以使用以下命令绘制Q-Q:</p><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; ggQQ &lt;- function(lm) {</strong>
+<strong>    # extracting residuals from the fit</strong>
+<strong>    + d &lt;- data.frame(std.resid = rstandard(lm))</strong>
+<strong>    # calculate 1Q, 4Q line</strong>
+<strong>    + y &lt;- quantile(d$std.resid[!is.na(d$std.resid)], c(0.25, 0.75))</strong>
+<strong>    # calculate 1Q, 4Q line</strong>
+<strong>    + x &lt;- qnorm(c(0.25, 0.75))</strong>
+<strong>    + slope &lt;- diff(y)/diff(x)</strong>
+<strong>    + int &lt;- y[1L] - slope * x[1L]</strong>
+<strong>    + </strong>
+<strong>    + p &lt;- ggplot(data = d, aes(sample = std.resid)) +</strong>
+<strong>    + stat_qq(shape = 1, size = 3) + </strong>
+<strong>    + labs(title = "Normal Q-Q", </strong>
+<strong>    + x = "Theoretical Quantiles", </strong>
+<strong>    + y = "Standardized Residuals") + </strong>
+<strong>    + geom_abline(slope = slope, intercept = int, linetype = "dashed",</strong>
+<strong>    + size = 1, col = "firebrick1") </strong>
+<strong>    + return(p)</strong>
+<strong>    + }</strong>
+</pre><p>
+We can plot Q-Q with the following command:
+</p><pre class="programlisting">
+<strong>
+&gt; ggQQ(linear_model_1)
+</strong>
+</pre><p>The result is as follows:</p><p>可以清楚地看到，这些点不正常，因为它们远离红线。一天中的测量值不断地被周变量的估计系数移动，但是一天中的行为没有被捕获。我们需要捕捉这种行为，因为尤其是周末，行为完全不同。</p><div><img src="img/image_14_024.jpg" alt="Step 3 - time series - regression analysis"/></div><p><a id="ch14lvl3sec179"/>步骤4 -时间序列-改进回归分析</p><p>创建线性模型:<code class="literal">lm()</code>函数适合线性模型。<code class="literal">Load ~ 0 + Daily + Weekly + Daily:Weekly</code>是新的公式。由于<code class="literal">lm()</code>自动添加到线性模型截距，我们现在将其定义为<code class="literal">0</code>。<code class="literal">data = matrix_train</code>定义包含数据的数据帧:</p></div><div><div><div><div><h3 class="title">打印变更后<code class="literal">linear_model_2</code>数据框的内容:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>&gt; linear_model_2 &lt;- lm(Load ~ 0 + Daily + Weekly + Daily:Weekly, data = matrix_train)</strong>
+</pre><p>Printing the contents of the <code class="literal">linear_model_2</code> data frame after the change:</p><pre class="programlisting">
+<strong>
+&gt; linear_model_2
+</strong>
+</pre><p>The result is as follows:</p><p>比较<code class="literal">linear_model_1</code>和<code class="literal">linear_model_2</code>模型汇总的R平方值:</p><div><img src="img/image_14_025.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>结果如下:</p><p>Comparing R-squared values from the summaries of the <code class="literal">linear_model_1</code> and <code class="literal">linear_model_2</code> models:</p><pre class="programlisting">
+<strong>&gt; c(Previous = summary(linear_model_1)$r.squared, New = summary(linear_model_2)$r.squared)</strong>
+</pre><p>The result is as follows:</p><p>第二个模型的R平方值有显著提高。</p><div><img src="img/image_14_026.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>以图形方式比较<code class="literal">linear_model_1</code>和<code class="literal">linear_model_2</code>模型的残差:</p><p>结果如下:</p><p>Comparing the residuals of the <code class="literal">linear_model_1</code> and <code class="literal">linear_model_2</code> models graphically:</p><pre class="programlisting">
+<strong>    &gt; ggplot(data.table(Residuals = c(linear_model_1$residuals, linear_model_2$residuals), Type = c(rep("Multiple Linear Reg - simple", nrow(data_reg)), rep("Multiple Linear Reg with interactions", nrow(data_reg)))), aes(Type, Residuals, fill = Type)) + geom_boxplot()</strong>
+<strong>    &gt; ggplotly()</strong>
+</pre><p>The result is as follows:</p><p><code class="literal">linear_model_1</code>的残差详情。</p><div><img src="img/image_14_027.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>结果如下:</p><p>Details of residuals of <code class="literal">linear_model_1</code>.</p><p>The result is as follows:</p><p><code class="literal">linear_model_2</code>残差详情。</p><div><img src="img/image_14_028.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>结果如下:</p><p>从<code class="literal">data_reg</code>和<code class="literal">linear_model_2</code>的列表中创建一个<code class="literal">data.table</code>:</p><p>打印更改后的<code class="literal">datas</code>数据帧的内容:</p><p>结果如下:</p><div><img src="img/image_14_029.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>
+</p><p>Creating one <code class="literal">data.table</code> from a list of <code class="literal">data_reg</code> and <code class="literal">linear_model_2</code>
+:
+</p><pre class="programlisting">
+<strong>
+&gt; datas &lt;- rbindlist(list(data_reg[, .(value, date_time)], data.table(value = linear_model_2$fitted.values, data_time = data_reg[, date_time])))
+</strong>
+</pre><p>将<code class="literal">Real</code>和<code class="literal">Fitted</code>列添加到<code class="literal">datas</code>:</p><pre class="programlisting">
+<strong>
+&gt; datas
+</strong>
+</pre><p>打印更改后的<code class="literal">datas</code>数据帧的内容:</p><p>结果如下:</p><div><img src="img/image_14_030.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>
+</p><p>
+Adding 
+<code class="literal">Real</code>
+ and 
+<code class="literal">Fitted</code>
+ columns to 
+<code class="literal">datas</code>:</p><pre class="programlisting">
+<strong>
+&gt; datas[, type := rep(c("Real", "Fitted"), each = nrow(data_reg))]
+</strong>
+</pre><p>绘制<code class="literal">linear_model_2</code>的拟合值。</p><pre class="programlisting">
+<strong>
+&gt; datas
+</strong>
+</pre><p><code class="literal">data = datas</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述了数据中的变量如何映射到可视属性。<code class="literal">geom_line()</code>生成试图连接所有观察值的单线:</p><p>结果如下:</p><div><img src="img/image_14_031.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>
+</p><p>Plotting fitted values for <code class="literal">linear_model_2</code>
+.
+</p><p>与之前的图<code class="literal">linear_model_1</code>相比，拟合值和真实值非常匹配。</p><pre class="programlisting">
+<strong>
+&gt; ggplot(data = datas, aes(date_time, value, group = type, colour =
+type)) + geom_line(size = 0.8) + theme_bw() +
++ labs(x = "Time", y = "Load (kW)", title = "Fit from Multiple Linear
+Regression")</strong>
+</pre><p>绘制拟合值对残值。<code class="literal">Data</code>是用于绘图的数据集，而<code class="literal">aes()</code>描述数据中的变量如何映射到可视属性:</p><p>结果如下:</p><div><img src="img/image_14_032.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>
+</p><p>The fitted and real values closely match compared to the earlier plot of <code class="literal">linear_model_1</code>.</p><p>与之前的图<code class="literal">linear_model_1</code>相比，这些图似乎更接近剩余线。</p><pre class="programlisting">
+<strong>
+&gt; ggplot(data = data.table(Fitted_values = linear_model_2$fitted.values, Residuals = linear_model_2$residuals), aes(Fitted_values, Residuals)) + geom_point(size = 1.7) 
+</strong>
+<strong>
++ geom_hline(yintercept = 0, color = "red", size = 1) +
+</strong>
+<strong>
++ labs(title = "Fitted values vs Residuals")
+</strong>
+</pre><p>我们可以使用以下公式绘制Q-Q曲线:</p><p>结果如下:</p><div><img src="img/image_14_033.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>
+</p><p>The plots appear to be closer to the residual line compared to the earlier plot of <code class="literal">linear_model_1</code>.</p><p><a id="ch14lvl3sec180"/>步骤5 -建立预测模型</p><pre class="programlisting">
+<strong>
+&gt; ggQQ(linear_model_2)
+</strong>
+</pre><p>我们可以定义一个函数来返回一周前的预测。输入参数为<code class="literal">data</code>和<code class="literal">set_of_date</code>:</p><p>定义用于评估预测的平均绝对百分比误差:</p><div><img src="img/image_14_034.jpg" alt="Step 4 - time series - improving regression analysis"/></div><p>设置长度为2周的训练集，因此扣除2。将制作50周的预报。使用滑动窗口方法进行训练预测适用于各种类型的行业:</p></div><div><div><div><div><h3 class="title">打印周数:</h3></div></div></div><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; predWeekReg &lt;- function(data, set_of_date){</strong>
+<strong>    + #creating the dataset by dates</strong>
+<strong>    + data_train &lt;- data[date %in% set_of_date] </strong>
+<strong>    + N &lt;- nrow(data_train)</strong>
+<strong>    +</strong>
+<strong>    + # number of days in the train set</strong>
+<strong>    + window &lt;- N / period # number of days in the train set</strong>
+<strong>    +</strong>
+<strong>    + #1, ..., period, 1, ..., period - daily season periods</strong>
+<strong>    + #feature "week_num"- weekly season</strong>
+<strong>    + matrix_train &lt;- data.table(Load = data_train[, value],</strong>
+<strong>    + Daily = as.factor(rep(1:period, window)),</strong>
+<strong>    + Weekly = as.factor(data_train[, week_num]))</strong>
+<strong>    +</strong>
+<strong>    + #creating linear model.</strong>
+<strong>    + # formula - Load ~ 0 + Daily + Weekly + Daily:Weekly</strong>
+<strong>    + # dataset - data = matrix_train</strong>
+<strong>    + lm_m &lt;- lm(Load ~ 0 + Daily + Weekly + Daily:Weekly, data = matrix_train)</strong>
+<strong>    + </strong>
+<strong>    + #forecast of one week ahead</strong>
+<strong>    + pred_week &lt;- predict(lm_m, matrix_train[1:(7*period), -1, with = FALSE])</strong>
+<strong>    + return(as.vector(pred_week))</strong>
+<strong>    + }</strong>
+</pre><p>Defining the mean absolute percentage error for evaluating the forecast:</p><pre class="programlisting">
+<strong>    &gt; mape &lt;- function(real, pred){</strong>
+<strong>    + return(100 * mean(abs((real - pred)/real)))</strong>
+<strong>    + }</strong>
+</pre><p>Setting the training set of the length for 2 weeks, therefore deducting 2. A forecast for 50 weeks will be produced. Using a sliding window approach for training forecasting is done for every type of industry:</p><pre class="programlisting">
+<strong>&gt; n_weeks &lt;- floor(length(n_date)/7) - 2</strong>
+</pre><p>计算未来1周各行业类型的预测。</p><pre class="programlisting">
+<strong>&gt; n_weeks</strong>
+</pre><p>调用函数以返回对<code class="literal">AggData</code>商业地产和数据集的1周预测:</p><p>调用该函数返回对<code class="literal">AggData</code> -教育和日期设置的1周预测:</p><div><img src="img/image_14_035.jpg" alt="Step 5 - building a forecasting model"/></div><p>调用该函数以返回对<code class="literal">AggData</code>食品和销售以及日期集的1周预测:</p><p>调用此函数返回<code class="literal">AggData</code>照明行业和日期集的1周预测:</p><p>计算每种行业的平均绝对百分比误差，以评估预测。调用函数返回平均绝对百分比。计算用于评估<code class="literal">AggData</code>照明行业预测的误差，并设定日期:</p><pre class="programlisting">
+<strong>    &gt; lm_pred_weeks_1 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + predWeekReg(AggData[type == n_type[1]], n_date[((i*7)+1):((i*7)+7*2)]))</strong>
+</pre><p>打印<code class="literal">lm_err_mape_1</code>数据帧:</p><pre class="programlisting">
+<strong>    &gt; lm_pred_weeks_2 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + predWeekReg(AggData[type == n_type[2]], n_date[((i*7)+1):((i*7)+7*2)]))</strong>
+</pre><p>结果如下:</p><pre class="programlisting">
+<strong>    &gt; lm_pred_weeks_3 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + predWeekReg(AggData[type == n_type[3]], n_date[((i*7)+1):((i*7)+7*2)]))</strong>
+</pre><p>Calling the function to return the forecast for a 1 week ahead prediction for the <code class="literal">AggData</code> lighting industry and date set:</p><pre class="programlisting">
+<strong>    &gt; lm_pred_weeks_4 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + predWeekReg(AggData[type == n_type[4]], n_date[((i*7)+1):((i*7)+7*2)]))</strong>
+</pre><p>Calculate the mean absolute percentage error for each type of industry for evaluating the forecasts. Call the function to return the mean absolute percentage. Calculate the error for evaluating the forecast for the <code class="literal">AggData</code> lighting industry and date set:</p><pre class="programlisting">
+<strong>    &gt; lm_err_mape_1 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + mape(AggData[(type == n_type[1] &amp; date %in% n_date[(15+(i*7)):(21+(i*7))]), value],</strong>
+<strong>    + lm_pred_weeks_1[, i+1]))</strong>
+</pre><p>调用此函数返回平均绝对百分比误差，用于评估<code class="literal">AggData</code>教育和日期集的预测:</p><pre class="programlisting">
+<strong>&gt; lm_err_mape_1</strong>
+</pre><p>打印<code class="literal">lm_err_mape_2</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_14_036.jpg" alt="Step 5 - building a forecasting model"/></div><p>
+</p><p>Calling the function to return the mean absolute percentage error for evaluating the forecast for the <code class="literal">AggData</code> education and date set:</p><pre class="programlisting">
+<strong>    &gt; lm_err_mape_2 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + mape(AggData[(type == n_type[2] &amp; date %in% n_date[(15+(i*7)):(21+(i*7))]), value],</strong>
+<strong>    + lm_pred_weeks_2[, i+1]))</strong>
+</pre><p>调用此函数返回平均绝对百分比误差，用于评估<code class="literal">AggData</code>食品和销售以及日期集的预测:</p><pre class="programlisting">
+<strong>&gt; lm_err_mape_2</strong>
+</pre><p>打印<code class="literal">lm_err_mape_3</code>数据帧:</p><p>结果如下:</p><div><img src="img/image_14_037.jpg" alt="Step 5 - building a forecasting model"/></div><p>
+</p><p>Calling the function to return the mean absolute percentage error for evaluating the forecast for the <code class="literal">AggData</code> food and sales and date set:</p><pre class="programlisting">
+<strong>    &gt; lm_err_mape_3 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + mape(AggData[(type == n_type[3] &amp; date %in% n_date[(15+(i*7)):(21+(i*7))]), value],</strong>
+<strong>    + lm_pred_weeks_3[, i+1]))</strong>
+</pre><p>调用此函数返回平均绝对百分比误差，用于评估<code class="literal">AggData</code>照明行业和日期集的预测:</p><pre class="programlisting">
+<strong>&gt; lm_err_mape_3</strong>
+</pre><p>打印<code class="literal">lm_err_mape_4data</code>帧:</p><p>结果如下:</p><div><img src="img/image_14_038.jpg" alt="Step 5 - building a forecasting model"/></div><p>
+</p><p>Calling the function to return the mean absolute percentage error for evaluating the forecast for the <code class="literal">AggData</code> lighting industry and date set:</p><pre class="programlisting">
+<strong>    &gt; lm_err_mape_4 &lt;- sapply(0:(n_weeks-1), function(i)</strong>
+<strong>    + mape(AggData[(type == n_type[4] &amp; date %in% n_date[(15+(i*7)):(21+(i*7))]), value],</strong>
+<strong>    + lm_pred_weeks_4[, i+1]))</strong>
+</pre><p><a id="ch14lvl3sec181"/>第6步-绘制一年的预测图</p><pre class="programlisting">
+<strong>&gt; lm_err_mape_4</strong>
+</pre><p>绘制结果:</p><p><a id="note34"/>注意</p><div><img src="img/image_14_039.jpg" alt="Step 5 - building a forecasting model"/></div><p>您需要安装ImageMagick-7.0.4-Q16才能使<code class="literal">saveGIF</code>工作。</p></div><div><div><div><div><h3 class="title">结果如下:</h3></div></div></div><p>Plotting the results:</p><div><div><h3 class="title"><a id="note34"/>Note</h3><p><strong>T12】</strong></p></div></div><pre class="programlisting">
+<strong>    &gt; datas &lt;- data.table(value = c(as.vector(lm_pred_weeks_1),</strong>
+<strong>    AggData[(type == n_type[1]) &amp; (date %in% n_date[-c(1:14,365)]), value]),</strong>
+<strong>    date_time = c(rep(AggData[-c(1:(14*48), (17473:nrow(AggData))), date_time], 2)),</strong>
+<strong>    type = c(rep("MLR", nrow(lm_pred_weeks_1)*ncol(lm_pred_weeks_1)),</strong>
+<strong>    rep("Real", nrow(lm_pred_weeks_1)*ncol(lm_pred_weeks_1))),</strong>
+<strong>    week = c(rep(1:50, each = 336), rep(1:50, each = 336)))</strong>
+
+
+<strong>    &gt; saveGIF({</strong>
+<strong>    oopt = ani.options(interval = 0.9, nmax = 50)</strong>
+<strong>    for(i in 1:ani.options("nmax")){</strong>
+<strong>    print(ggplot(data = datas[week == i], aes(date_time, value, group = type, colour = type)) +</strong>
+<strong>    geom_line(size = 0.8) +</strong>
+<strong>    scale_y_continuous(limits = c(min(datas[, value]), max(datas[, value]))) + </strong>
+<strong>    theme(panel.border = element_blank(), panel.background = element_blank(),</strong>
+<strong>    panel.grid.minor = element_line(colour = "grey90"),</strong>
+<strong>    panel.grid.major = element_line(colour = "grey90"),</strong>
+<strong>    panel.grid.major.x = element_line(colour = "grey90"),</strong>
+<strong>    title = element_text(size = 15),</strong>
+<strong>    axis.text = element_text(size = 10),</strong>
+<strong>    axis.title = element_text(size = 12, face = "bold")) +</strong>
+<strong>    labs(x = "Time", y = "Load (kW)",</strong>
+<strong>    title = paste("Forecast of MLR (", n_type[1], "); ", "week: ", i, "; MAPE: ",</strong>
+<strong>    round(lm_err_mape_1[i], 2), "%", sep = "")))</strong>
+<strong>    ani.pause()</strong>
+<strong>    }</strong>
+<strong>    }, movie.name = "industry_1.gif", ani.height = 450, ani.width = 750)</strong>
+</pre><p>The result is as follows:</p><p>
+</p><div><img src="img/image_14_040.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p><strong> </strong></p><div><img src="img/image_14_041.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>
+</p><div><img src="img/image_14_042.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>
+<strong>
+</strong>
+</p><div><img src="img/image_14_043.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>
+</p><div><img src="img/image_14_044.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>
+</p><div><img src="img/image_14_045.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>上述结果证明，电力模式的消耗取决于外部因素，如节假日、天气、财产性质等。消费模式在本质上是非常随机的。</p><div><img src="img/image_14_046.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p><a id="note35"/>注意</p><p>目的是向读者介绍多元线性回归在预测双季节时间序列中的应用。包含自变量的相互作用以确保模型的有效性是非常有效的。</p><div><img src="img/image_14_047.jpg" alt="Step 6 - plotting the forecast for a year"/></div><p>
+</p><p>The preceding results prove that the consumption of the electricity pattern is based on external factors such as holidays, weather, nature of property, and so on. The consumption pattern is very stochastic in nature.</p><div><div><h3 class="title"><a id="note35"/>Note</h3><p>The aim is to introduce to the reader the application of multiple linear regressions for forecasting double seasonal time series. It is very effective to include interactions of independent variables to ensure the effectiveness of the model.</p></div></div></div></div></div></div>
+</body></html>

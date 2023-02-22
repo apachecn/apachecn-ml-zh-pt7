@@ -1,0 +1,260 @@
+<html><head/><body>
+
+
+
+<title>Chapter 3. Lazy Learning – Classification Using Nearest Neighbors</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03"/>第三章。懒惰学习——使用最近邻进行分类</h1></div></div></div><p>一种有趣的新型用餐体验正在世界各地的城市出现。在一个完全黑暗的餐厅里，侍者为顾客服务，他们只用触觉和声音小心翼翼地绕着记忆的路线走。这些机构的诱惑是相信剥夺自己的视觉感官输入将增强味觉和嗅觉，食物将以新的方式被体验。每一口都让人惊叹，同时发现厨师准备的风味。</p><p>你能想象用餐者如何体验看不见的食物吗？第一口吃下去，感官会被淹没。占主导地位的风味有哪些？这食物尝起来是咸的还是甜的？它尝起来像以前吃过的东西吗？就我个人而言，我用一句稍加修改的格言来想象这一发现过程:如果它闻起来像鸭子，尝起来像鸭子，那么你可能正在吃鸭子。</p><p>这说明了一个可以用于机器学习的想法——正如另一个涉及家禽的格言一样:“物以类聚。”换句话说，相似的事物很可能有相似的属性。机器学习利用这一原理，通过将数据与相似或“最近”的邻居放在同一类别中来对数据进行分类。本章专门介绍使用这种方法的分类器。您将了解到:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">定义<strong>最近邻</strong>分类器的关键概念，以及为什么它们被认为是“懒惰”的学习者</li><li class="listitem" style="list-style-type: disc">用距离度量两个例子相似性的方法</li><li class="listitem" style="list-style-type: disc">应用一种流行的最近邻分类器k-NN</li></ul></div><p>如果所有这些关于食物的谈话让你感到饥饿，那就随便吃点零食吧。我们的第一个任务是通过解决一个长期的烹饪争论来理解k-NN方法。</p><div><div><div><div><h1 class="title"><a id="ch03lvl1sec18"/>了解最近邻分类</h1></div></div></div><p>在单个<a id="id199" class="indexterm"/>句子中，<strong>最近邻</strong>分类器通过给它们分配相似的已标记示例的类别，根据它们对未标记示例进行分类的特性来定义。尽管这个想法很简单，但是最近邻方法非常有效。它们已成功用于:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">计算机视觉应用，包括静态图像和视频中的光学字符识别和面部识别</li><li class="listitem" style="list-style-type: disc">预测一个人是否会喜欢推荐的电影或音乐</li><li class="listitem" style="list-style-type: disc">识别遗传数据中的模式，也许用它们来检测特定的蛋白质或疾病</li></ul></div><p>通常，最近邻分类器非常适合于分类任务，其中特征和目标类之间的关系是众多的、复杂的或极难理解的，然而相似类类型的项目往往是相当同质的。换句话说，如果一个概念很难定义，但是当你看到它的时候你知道它，那么最近邻可能是合适的。另一方面，如果数据有噪声，因此组之间没有明显的区别，最近邻算法可能难以识别类边界。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec31"/>k-NN算法</h2></div></div></div><p>最近的<a id="id200" class="indexterm"/>邻居分类方法以<strong>k-最近邻居算法</strong> ( <strong> k-NN </strong>)为例。虽然这可能是最简单的机器学习算法之一，但它仍然被广泛使用。</p><p>该算法的优点和缺点如下:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>强项</p>
+</th><th style="text-align: left" valign="bottom">
+<p>弱点</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top"><div> <ul class="itemizedlist"> <li class="listitem" style="list-style-type: disc">简单有效</li> <li class="listitem" style="list-style-type: disc">对底层数据分布不做任何假设</li> <li class="listitem" style="list-style-type: disc">快速训练阶段</li> </ul> </div></td><td style="text-align: left" valign="top"><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><a id="id201" class="indexterm"/>不产生模型，限制了理解特征如何与类别相关的能力</li> <li class="listitem" style="list-style-type: disc">需要选择适当的<em> k </em> </li> <li class="listitem" style="list-style-type: disc">慢分类阶段</li> <li class="listitem" style="list-style-type: disc">名义特征和缺失数据需要额外处理</li> </ul> </div></td></tr></tbody></table></div><p>k-NN算法得名于这样一个事实，即它使用关于一个例子的k-最近邻的信息来分类未标记的例子。字母<em> k </em>是一个可变项，意味着可以使用任意数量的最近邻。在选择了<em> k </em>之后，该算法需要一个训练数据集，该数据集由被分成几个类别的例子组成，并由一个名义变量标记。然后，对于测试数据集中每个未标记的记录，k-NN <a id="id202" class="indexterm"/>识别训练数据中相似性“最接近”的<em> k </em>记录。未标记的测试实例被分配k个最近邻居中的大多数的类。</p><p>为了说明这个过程，让我们<a id="id203" class="indexterm"/>重温一下引言中描述的盲品体验。假设在吃神秘食物之前，我们已经创建了一个数据集，其中记录了我们对之前品尝过的许多食材的印象。为了简单起见，我们仅对每种成分的两个特征进行评分。第一个是从1到10的配料松脆程度，第二个是从1到10的配料甜味程度。然后，我们将每种成分标记为三种食物中的一种:水果、蔬菜或蛋白质。这种数据集的前几行可能如下构造:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>原料</p>
+</th><th style="text-align: left" valign="bottom">
+<p>芳香</p>
+</th><th style="text-align: left" valign="bottom">
+<p>松脆</p>
+</th><th style="text-align: left" valign="bottom">
+<p>食物类型</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>苹果</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>9</p>
+</td><td style="text-align: left" valign="top">
+<p>水果</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>培根</p>
+</td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>四</p>
+</td><td style="text-align: left" valign="top">
+<p>蛋白质</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>香蕉</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>水果</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>胡萝卜</p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>蔬菜</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>芹菜</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>10</p>
+</td><td style="text-align: left" valign="top">
+<p>蔬菜</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>奶酪</p>
+</td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>蛋白质</p>
+</td></tr></tbody></table></div><p>k-NN算法将特征视为多维特征空间中的坐标。因为我们的数据集只包括两个特征，所以特征空间是二维的。我们可以在散点图上绘制二维数据，用<em> x </em>维度表示配料的甜度，用<em> y </em>维度表示松脆度。在口味数据集中添加了一些其他的成分后，散点图可能看起来像这样:</p><div><img src="img/3905_03_01.jpg" alt="The k-NN algorithm"/></div><p>你注意到模式了吗？相似类型的食物往往被紧密地组合在一起。如下一张<a id="id204" class="indexterm"/>图所示，蔬菜往往脆而不甜，水果往往甜且脆或不脆，而蛋白质则既不脆也不甜:</p><div><img src="img/3905_03_02.jpg" alt="The k-NN algorithm"/></div><p>假设在构建了这个数据集之后，我们决定用它来解决一个古老的问题:番茄是水果还是蔬菜？我们可以使用最近邻法来确定哪个类<a id="id205" class="indexterm"/>更适合，如下图所示:</p><div><img src="img/3905_03_03.jpg" alt="The k-NN algorithm"/></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec10"/>用距离度量相似性</h3></div></div></div><p>定位<a id="id206" class="indexterm"/>番茄的最近邻居需要一个<strong>距离函数</strong>，或者一个测量两个实例之间相似性的公式。</p><p>有许多不同的方法来计算距离。传统上，k-NN算法使用<strong>欧几里德距离</strong>，这是如果可以使用尺子连接两点时人们会测量的距离，在上图中由连接番茄与其邻居的虚线表示。</p><div><div><h3 class="title"><a id="tip34"/>提示</h3><p>欧几里得距离是“直线距离”，意味着最短的直接路径。另一种常见的距离度量是曼哈顿距离，它是基于行人走过城市街区的路径。如果您有兴趣了解更多关于其他距离度量的信息，您可以使用<code class="literal">?dist</code>命令阅读R的距离函数(一个非常有用的工具)的文档。</p></div></div><p>欧几里德<a id="id207" class="indexterm"/>距离由下面的公式指定，其中<em> p </em>和<em> q </em>是要比较的例子，各自具有<em> n </em>个特征。术语<em>p<sub>1</sub>T10】是指实例<em> p </em>的第一个特征的值，而<em>q<sub>1</sub>T16】是指实例<em> q </em>的第一个特征的值:</em></em></p><div><img src="img/3905_03_04.jpg" alt="Measuring similarity with distance"/></div><p>距离公式包括比较每个要素的值。例如，要计算番茄(<em>甜度= 6 </em>、<em>脆度= 4 </em>)和绿豆(<em>甜度= 3 </em>、<em>脆度= 7 </em>)之间的距离，我们可以使用以下公式:</p><div><img src="img/3905_03_05.jpg" alt="Measuring similarity with distance"/></div><p>同样，我们可以计算番茄和它的几个最近的邻居之间的距离如下:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>原料</p>
+</th><th style="text-align: left" valign="bottom">
+<p>芳香</p>
+</th><th style="text-align: left" valign="bottom">
+<p>松脆</p>
+</th><th style="text-align: left" valign="bottom">
+<p>食物类型</p>
+</th><th style="text-align: left" valign="bottom">
+<p>到番茄的距离</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>葡萄</p>
+</td><td style="text-align: left" valign="top">
+<p>8</p>
+</td><td style="text-align: left" valign="top">
+<p>5</p>
+</td><td style="text-align: left" valign="top">
+<p>水果</p>
+</td><td style="text-align: left" valign="top">
+<p><em>sqrt((6-8)^2+(4-5)^2)= 2.2</em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>青豆</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td><td style="text-align: left" valign="top">
+<p>蔬菜</p>
+</td><td style="text-align: left" valign="top">
+<p><em>sqrt((6-3)^2+(4-7)^2)= 4.2</em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>坚果</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>6</p>
+</td><td style="text-align: left" valign="top">
+<p>蛋白质</p>
+</td><td style="text-align: left" valign="top">
+<p><em>sqrt((6-3)^2+(4-6)^2)= 3.6</em></p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>橙色的</p>
+</td><td style="text-align: left" valign="top">
+<p>七</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>水果</p>
+</td><td style="text-align: left" valign="top">
+<p><em>sqrt((6-7)^2+(4-3)^2)= 1.4</em></p>
+</td></tr></tbody></table></div><p>为了将番茄分类为蔬菜、蛋白质或水果，我们将首先指定番茄，它的单一最近邻的食物类型。这叫做1-NN分类，因为<em> k = 1 </em>。橙子是番茄最近的邻居，距离为1.4。由于橙子是一种水果，1-NN算法会将番茄归类为一种水果。</p><p>如果我们使用k-NN算法，k = 3，它会在三个最近的邻居中进行投票:橙子、葡萄和坚果。由于这些邻居中的多数类是水果(三票中的两票)，番茄再次被归类为水果。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec11"/>选择合适的k</h3></div></div></div><p><a id="id209" class="indexterm"/>决定k-NN使用多少个邻居决定了模型对未来数据的泛化能力。训练数据过拟合和欠拟合之间的平衡是一个被称为<strong>偏差-方差权衡</strong>的问题。选择一个大的<em> k </em>可以减少由噪声数据引起的影响或变化，但是会使学习者产生偏见<a id="id210" class="indexterm"/>从而冒忽略小的但重要的模式的风险。</p><p>假设我们采取极端的立场，设置一个非常大的<em> k </em>，与训练数据中的观察总数一样大。随着每个训练实例在最终投票中被表示，最普通的类总是具有大多数投票者。因此，该模型将始终预测多数类，而不考虑最近邻。</p><p>在相反的极端情况下，使用单个最近邻允许有噪声的数据或异常值不适当地影响样本的分类。例如，假设一些训练示例意外地被错误标记。任何与错误标记的邻居最近的未标记的例子将被预测为具有不正确的类，即使其他九个最近的邻居投票不同。</p><p>显然，最佳的k值介于这两个极端值之间。</p><p>下图更一般地说明了更大或更小的<em> k </em>值如何影响决策边界(由虚线描绘)。较小的值允许更复杂的决策边界，从而更精确地拟合训练数据。问题是我们不知道是直线边界还是曲线边界更好地代表了要学习的真正的基本概念。</p><div><img src="img/3905_03_06.jpg" alt="Choosing an appropriate k"/></div><p>在实践中，选择<em> k </em>取决于要学习的概念的难度，以及训练数据中的记录数量。一种常见的做法是从等于训练样本数量的平方根的<em> k </em>开始。在我们之前开发的食物分类器中，我们可以设置<em> k = 4 </em>，因为在训练数据中有15种示例成分，15的平方根是3.87。</p><p>然而，这样的规则<a id="id211" class="indexterm"/>可能并不总是导致单一最佳<em> k </em>。另一种方法是在各种测试数据集上测试几个<em> k </em>值，并选择一个提供最佳分类性能的值。也就是说，除非数据非常嘈杂，否则大型训练数据集可以使<em> k </em>的选择变得不那么重要。这是因为即使是微妙的概念也有足够多的例子来作为最近邻。</p><div><div><h3 class="title"><a id="tip35"/>提示</h3><p>这个问题的一个不太常见但有趣的解决方案是选择一个更大的<em> k </em>，但是应用一个<strong>加权投票</strong>过程，其中较近邻居的投票被认为比较远邻居的投票更有权威。许多k-NN实现都提供了这个选项。</p></div></div></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec12"/>准备用于k-NN的数据</h3></div></div></div><p>在应用k-NN算法之前，特征通常被<a id="id212" class="indexterm"/>转换到标准范围。此步骤的基本原理是距离公式高度依赖于要素的测量方式。特别是，如果某些要素的值的范围比其他要素的值的范围大得多，则距离测量将主要由范围较大的要素决定。这对于品尝食物的例子来说不是问题，因为甜度和松脆度都是用1-10来衡量的。</p><p>然而，假设我们为食物的辣度数据集添加了一个额外的特征，这是使用<a id="id213" class="indexterm"/> Scoville标度测量的。如果你不熟悉这个标准，这是一个标准化的香料热量测量，范围从零(一点都不辣)到超过一百万(最辣的辣椒)。由于辛辣和非辛辣食物之间的差异可能超过一百万，而甜味和非甜味或松脆和非松脆食物之间的差异最多为10，因此比例的差异使得香料水平对距离函数的影响比其他两个因素大得多。如果不调整我们的数据，我们可能会发现我们的距离测量只根据食物的辣度来区分食物；松脆和甜味的影响与辣味的贡献相比相形见绌。</p><p>解决方案是通过缩小或扩大要素的范围来重新缩放要素，使每个要素对距离公式的贡献相对相等。例如，如果甜度和脆度都用1到10来衡量，我们也希望辣度用1到10来衡量。有几种常见的方法来实现这种缩放。</p><p>传统的对k-NN的特征进行<a id="id214" class="indexterm"/>重缩放的方法是<strong/><a id="id215" class="indexterm"/><strong>归一化</strong>。此过程会转换一个要素，使其所有值都在0到1之间。标准化特征的公式如下:</p><div><img src="img/3905_03_07.jpg" alt="Preparing data for use with k-NN"/></div><p>本质上，该公式从每个值中减去特征<em> X </em>的最小值，然后除以范围<em> X </em>。</p><p>归一化特征值可以解释为指示原始值在原始最小值和最大值之间的范围内从0%到100%下降了多远。</p><p>另一种常见的转换叫做<strong> z分数标准化</strong>。以下公式减去特征<em> X </em>的<a id="id216" class="indexterm"/>平均值，并将结果除以<em> X </em>的标准偏差:</p><div><img src="img/3905_03_08.jpg" alt="Preparing data for use with k-NN"/></div><p>该公式基于第2章、<em>管理和理解数据</em>中所述的正态分布的属性，根据高于或低于平均值的标准偏差来重新调整每个特性的值。得到的值称为一个<a id="id217" class="indexterm"/> <strong> z值</strong>。z分数落在负数和正数的无限范围内。与标准化值不同，它们没有预定义的最小值和最大值。</p><div><div><h3 class="title"><a id="tip36"/>提示</h3><p>在k-NN训练数据集上使用的相同的重新调整方法也必须应用于该算法稍后将分类的示例。这可能会导致最小值-最大值归一化出现棘手的情况，因为未来事例的最小值或最大值可能会超出训练数据中观察到的值的范围。如果你事先知道合理的最小值或最大值，你可以使用这些常数而不是观察值。或者，您可以在假设未来示例将具有与训练示例相似的均值和标准差的情况下使用z得分标准化。</p></div></div><p>欧几里德距离公式不是为名义数据定义的。因此，为了计算<a id="id218" class="indexterm"/>名义特征之间的距离，我们需要将它们转换成<a id="id219" class="indexterm"/>数字格式。典型的解决方案利用<strong>虚拟编码</strong>，其中值<em> 1 </em>表示一个类别，值<em> 0 </em>表示另一个类别。例如，性别变量的虚拟编码可以构造为:</p><div><img src="img/3905_03_09.jpg" alt="Preparing data for use with k-NN"/></div><p>请注意两个类别(二元)性别变量的虚拟编码是如何产生一个名为male的新特征的。没有必要为女性构建单独的特征；既然两性是互斥的，知道其中一个或者另一个就够了。</p><p>这在更普遍的情况下也是如此。通过为特性的(<em> n - 1 </em>)级创建二进制指示变量，可对<em> n </em>类标称特性进行虚拟编码。例如，三类温度变量(例如，热、中或冷)的虚拟编码可设置为<em> (3 - 1) = 2 </em>特征，如下所示:</p><div><img src="img/3905_03_10.jpg" alt="Preparing data for use with k-NN"/></div><p>知道热与中均为<em> 0 </em>就足以知道温度是冷的。因此，我们不需要冷类别的第三个特征。</p><p>虚拟编码的一个方便之处在于，虚拟编码特征之间的距离始终为1或<a id="id220" class="indexterm"/>0，因此，这些值与最小-最大标准化数值数据处于相同的范围内。不需要额外的转换。</p><div><div><h3 class="title"><a id="tip37"/>提示</h3><p>如果一个标称特征是有序的(可以对温度进行这样的论证)，虚拟编码的替代方法是对类别进行编号并应用归一化。例如，冷、暖、热可以编号为1、2和3，标准化为0、0.5和1。对这种方法的一个警告是，只有当类别之间的步骤相等时，才应该使用这种方法。例如，虽然穷人、中产阶级和富人的收入类别是有序的，但穷人和中产阶级之间的差异可能不同于中产阶级和富人之间的差异。因为组之间的步骤不相等，所以哑编码是更安全的方法。</p></div></div></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec32"/>k-NN算法为什么懒？</h2></div></div></div><p>基于最近邻方法的分类<a id="id221" class="indexterm"/>算法被认为是<strong>懒惰学习</strong>算法，因为从技术上讲，没有抽象发生。抽象和概括过程被完全跳过，这破坏了《T4》第一章、<em>介绍机器学习</em>中提出的学习的定义。</p><p>根据学习的严格定义，一个懒惰的学习者并没有真正学到任何东西。相反，它只是逐字存储训练数据。这使得实际上不训练任何东西的训练阶段能够非常迅速地进行。当然，缺点是与训练相比，做出<a id="id223" class="indexterm"/>预测的过程往往相对较慢。由于严重依赖训练实例而不是抽象的<a id="id224" class="indexterm"/>模型，懒惰学习也被称为<strong>基于实例的学习</strong>或<strong>死记硬背学习</strong>。</p><p>由于基于实例的学习者不构建模型，所以该方法被认为是在<strong>非参数</strong>学习方法的类别中——没有关于数据的参数被学习。没有生成关于底层数据的理论，非参数方法限制了我们理解分类器<a id="id225" class="indexterm"/>如何使用数据的能力。另一方面，这允许学习者找到自然的模式，而不是试图将数据放入先入为主和潜在有偏见的函数形式中。</p><div><img src="img/3905_03_11.jpg" alt="Why is the k-NN algorithm lazy?"/></div><p>虽然k-NN分类器可能被认为是懒惰的，但它们仍然是相当强大的。你很快就会看到，最近邻学习的简单原理可以用来自动化癌症筛查过程。</p></div></div></div>
+
+
+
+
+
+<title>Example – diagnosing breast cancer with the k-NN algorithm</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec19"/>示例–使用k-NN算法诊断乳腺癌</h1></div></div></div><p>常规乳腺癌筛查允许在<a id="id227" class="indexterm"/>疾病引起明显症状之前对其进行诊断和治疗。早期检测的过程包括检查乳腺组织是否有异常肿块或肿块。如果发现肿块，则进行细针抽吸活检，使用空心针从肿块中提取少量细胞样本。然后，临床医生在显微镜下检查细胞，以确定肿块是恶性还是良性。</p><p>如果机器学习可以自动识别癌细胞，它将为卫生系统提供相当大的好处。自动化过程可能会提高检测过程的效率，让医生花更少的时间诊断，花更多的时间治疗疾病。通过从过程中去除固有的主观人为因素，自动筛选系统还可以提供更高的检测准确性。</p><p>我们将通过将k-NN算法应用于测量来自患有异常乳腺肿块的妇女的活检细胞，来研究机器学习用于<a id="id229" class="indexterm"/>检测癌症的<a id="id228" class="indexterm"/>效用。</p><div><div><div><div><h2 class="title"><a id="ch03lvl2sec33"/>第一步——收集数据</h2></div></div></div><p>我们将利用http://archive.ics.uci.edu/ml<a class="ulink" href="http://archive.ics.uci.edu/ml">的UCI机器学习库中的威斯康星州乳腺癌诊断数据集。该数据由威斯康星大学的研究人员提供，包括乳腺肿块细针穿刺数字化图像的测量结果。这些值表示数字图像中存在的细胞核的特征。</a></p><div><div><h3 class="title"><a id="note02"/>注意</h3><p>要了解有关该数据集的更多信息，请参考:曼加萨里安OL、WN街、沃尔伯格WH。基于线性规划的乳腺癌诊断和预后。<em>运筹学</em>。1995;43:570-577.</p></div></div><p>乳腺癌数据包括569个癌症活检样本，每个样本有32个特征。一个特征是识别号，另一个是癌症诊断，30个是数值实验室测量。诊断编码为<code class="literal">"M"</code>表示恶性或<code class="literal">"B"</code>表示良性。</p><p>其他30个数值测量包括数字化细胞核的10个不同特征的平均值、标准误差和最差(即最大)值。其中包括:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">半径</li><li class="listitem" style="list-style-type: disc">纹理</li><li class="listitem" style="list-style-type: disc">周长</li><li class="listitem" style="list-style-type: disc">面积</li><li class="listitem" style="list-style-type: disc">平滑</li><li class="listitem" style="list-style-type: disc">紧凑</li><li class="listitem" style="list-style-type: disc">凹面</li><li class="listitem" style="list-style-type: disc">凹点</li><li class="listitem" style="list-style-type: disc">对称</li><li class="listitem" style="list-style-type: disc">分形维数</li></ul></div><p>根据这些名称，所有的特征似乎都与细胞核的形状和大小有关。除非你是一名<a id="id231" class="indexterm"/>肿瘤学家，否则你不太可能知道它们与良性或恶性肿块的关系。随着我们在机器学习过程中的继续，这些模式将被揭示出来。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec34"/>第2步——探索和准备数据</h2></div></div></div><p>让我们研究一下这些数据<a id="id232" class="indexterm"/>，看看我们是否能阐明这些关系。在这样做的时候，我们将准备用于k-NN学习方法的数据。</p><div><div><h3 class="title"><a id="tip38"/>提示</h3><p>如果您打算跟随，从Packt网站下载<code class="literal">wisc_bc_data.csv</code>文件并保存到您的R工作目录。这本书的数据集从最初的形式稍微修改了一下。特别是，添加了标题行，并且数据行是随机排序的。</p></div></div><p>我们将从导入CSV数据文件开始，正如我们在前面章节中所做的那样，将威斯康星州乳腺癌数据保存到<code class="literal">wbcd</code>数据框中:</p><div><pre class="programlisting">
+<strong>&gt; wbcd &lt;- read.csv("wisc_bc_data.csv", stringsAsFactors = FALSE)</strong>
+</pre></div><p>使用<code class="literal">str(wbcd)</code>命令，我们可以确认数据按照我们的预期由569个例子和32个特性构成。前几行输出如下:</p><div><pre class="programlisting">
+<strong>'data.frame':  569 obs. of  32 variables:</strong>
+<strong> $ id               : int  87139402 8910251 905520 ...</strong>
+<strong> $ diagnosis        : chr  "B" "B" "B" "B" ...</strong>
+<strong> $ radius_mean      : num  12.3 10.6 11 11.3 15.2 ...</strong>
+<strong> $ texture_mean     : num  12.4 18.9 16.8 13.4 13.2 ...</strong>
+<strong> $ perimeter_mean   : num  78.8 69.3 70.9 73 97.7 ...</strong>
+<strong> $ area_mean        : num  464 346 373 385 712 ...</strong>
+</pre></div><p>第一个变量是一个名为<code class="literal">id</code>的整型变量。由于这只是数据中每个患者的唯一标识符(ID ),它不能提供有用的信息，我们需要将其从模型中排除。</p><div><div><h3 class="title"><a id="tip39"/>提示</h3><p>不管机器学习的方法是什么，ID变量应该总是被排除在外。忽略这一点会导致错误的发现，因为ID可以用来唯一地“预测”每个示例。因此，包含标识符的模型将遭受过度拟合，并且不太可能很好地推广到其他数据。</p></div></div><p>让我们一起放弃<code class="literal">id</code>功能。由于它位于第一列，我们可以通过复制没有列<code class="literal">1</code>的<code class="literal">wbcd</code>数据帧来排除它:</p><div><pre class="programlisting">
+<strong>&gt; wbcd &lt;- wbcd[-1]</strong>
+</pre></div><p>下一个变量<code class="literal">diagnosis</code>，特别令人感兴趣，因为这是我们希望预测的结果。该特征表明样本是来自良性还是恶性肿块。<code class="literal">table()</code>输出显示357个肿块为良性，212个为恶性:</p><div><pre class="programlisting">
+<strong>&gt; table(wbcd$diagnosis)</strong>
+<strong>  B   M </strong>
+<strong>357 212</strong>
+</pre></div><p>许多R machine <a id="id234" class="indexterm"/>学习分类器要求目标<a id="id235" class="indexterm"/>特征编码为一个因子，所以我们将需要重新编码<code class="literal">diagnosis</code>变量。我们还将借此机会使用<code class="literal">labels</code>参数为<code class="literal">"B"</code>和<code class="literal">"M"</code>值提供更多信息:</p><div><pre class="programlisting">
+<strong>&gt; wbcd$diagnosis&lt;- factor(wbcd$diagnosis, levels = c("B", "M"),</strong>
+<strong>        labels = c("Benign", "Malignant"))</strong>
+</pre></div><p>现在，当我们查看<code class="literal">prop.table()</code>输出时，我们注意到这些值分别被标记为质量的62.7%和37.3%的<code class="literal">Benign</code>和<code class="literal">Malignant</code>:</p><div><pre class="programlisting">
+<strong>&gt; round(prop.table(table(wbcd$diagnosis)) * 100, digits = 1)</strong>
+<strong>   Benign Malignant </strong>
+<strong>     62.7      37.3</strong>
+</pre></div><p>剩下的30个特征都是数字，正如预期的那样，它们由十个特征的三个不同的度量组成。为了便于说明，我们将只仔细研究其中的三个特性:</p><div><pre class="programlisting">
+<strong>&gt; summary(wbcd[c("radius_mean", "area_mean", "smoothness_mean")])</strong>
+<strong>  radius_mean       area_mean      smoothness_mean  </strong>
+<strong> Min.   : 6.981   Min.   : 143.5   Min.   :0.05263  </strong>
+<strong> 1st Qu.:11.700   1st Qu.: 420.3   1st Qu.:0.08637  </strong>
+<strong> Median :13.370   Median : 551.1   Median :0.09587  </strong>
+<strong> Mean   :14.127   Mean   : 654.9   Mean   :0.09636  </strong>
+<strong> 3rd Qu.:15.780   3rd Qu.: 782.7   3rd Qu.:0.10530  </strong>
+<strong> Max.   :28.110   Max.   :2501.0   Max.   :0.16340</strong>
+</pre></div><p>并排查看特性<a id="id236" class="indexterm"/>时，您是否注意到任何关于值的问题<a id="id237" class="indexterm"/>？回想一下，k-NN的距离计算严重依赖于输入要素的测量比例。由于平滑度的范围从0.05到0.16，面积的范围从<code class="literal">143.5</code>到<code class="literal">2501.0</code>，在距离计算中，面积的影响将远大于平滑度。这可能会给我们的分类器带来问题，所以让我们应用归一化将特征重新缩放到标准范围的值。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec13"/>转换–规范化数字数据</h3></div></div></div><p>为了规范化这些<a id="id238" class="indexterm"/>特性，我们需要在r中创建一个<code class="literal">normalize()</code>函数。该函数采用一个数值向量<code class="literal">x</code>，对于<code class="literal">x</code>中的每个值，减去<code class="literal">x</code>中的最小值，然后除以<code class="literal">x</code>中的值范围。最后，返回结果向量。该函数的代码如下:</p><div><pre class="programlisting">
+<strong>&gt; normalize &lt;- function(x) {</strong>
+<strong>       return ((x - min(x)) / (max(x) - min(x)))</strong>
+<strong>}</strong>
+</pre></div><p>在执行了前面的代码之后，<code class="literal">normalize()</code>函数就可以在r中使用了。</p><div><pre class="programlisting">
+<strong>&gt; normalize(c(1, 2, 3, 4, 5))</strong>
+<strong>[1] 0.00 0.25 0.50 0.75 1.00</strong>
+<strong>&gt; normalize(c(10, 20, 30, 40, 50))</strong>
+<strong>[1] 0.00 0.25 0.50 0.75 1.00</strong>
+</pre></div><p>该功能似乎工作正常。尽管第二个向量中的值比第一个向量中的值大10倍，但在规范化后，它们看起来完全相同。</p><p>我们现在可以将<code class="literal">normalize()</code>函数应用于数据框中的数字要素。我们将使用R的一个函数来自动化这个过程，而不是分别对30个数值变量进行标准化。</p><p><code class="literal">lapply()</code>函数获取一个列表，并将指定的函数应用于每个列表元素。由于数据帧是等长向量的列表，我们可以使用<code class="literal">lapply()</code>将<code class="literal">normalize()</code>应用于数据帧中的每个特征。最后一步是使用<code class="literal">as.data.frame()</code>函数将<code class="literal">lapply()</code>返回的列表转换成数据帧。整个过程如下所示:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_n &lt;- as.data.frame(lapply(wbcd[2:31], normalize))</strong>
+</pre></div><p>简单地说，该命令将<code class="literal">normalize()</code>函数应用于<code class="literal">wbcd</code>数据帧中的第2到第31列，将结果列表转换为数据帧，并将其命名为<code class="literal">wbcd_n</code>。此处使用后缀<code class="literal">_n</code>是为了提醒<code class="literal">wbcd</code>中的值已经被规范化。</p><p>为了确认转换被正确应用，让我们来看看一个变量的汇总统计数据:</p><div><pre class="programlisting">
+<strong>&gt; summary(wbcd_n$area_mean)</strong>
+<strong>Min. 1st Qu.Median    Mean 3rd Qu.    Max. </strong>
+<strong>0.0000  0.1174  0.1729  0.2169  0.2711  1.0000  </strong>
+</pre></div><p>不出所料，<code class="literal">area_mean</code> <a id="id239" class="indexterm"/>变量，原来的范围是143.5到2501.0，现在的范围是0到1。</p></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec14"/>数据准备–创建训练和测试数据集</h3></div></div></div><p>尽管所有的<a id="id240" class="indexterm"/> 569个活检都被贴上了良性或恶性的标签，但预测我们已经知道的事情并不有趣。此外，我们在培训过程中获得的任何绩效指标都可能会产生误导，因为我们不知道案例被过度拟合的程度，也不知道学习者对未知案例的概括能力。一个更有趣的问题是，我们的学习者在未标记数据的数据集上表现如何。如果我们可以进入实验室，我们可以将我们的学习器应用于从下一个100个未知癌症状态的质量中获得的测量值，并查看机器学习器的预测与使用传统方法获得的诊断相比有多好。</p><p>在缺少此类数据的情况下，我们可以通过将数据分为两部分来模拟这种情况:将用于构建k-NN模型的训练数据集和将用于估计模型预测准确性的测试数据集。我们将使用前469条记录作为训练数据集，剩余的100条记录用于模拟新患者。</p><p>使用<a class="link" href="ch02.html" title="Chapter 2. Managing and Understanding Data">第2章</a>、<em>管理和理解数据</em>中给出的数据提取方法，我们将把<code class="literal">wbcd_n</code>数据帧拆分成<code class="literal">wbcd_train</code>和<code class="literal">wbcd_test</code>:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_train &lt;- wbcd_n[1:469, ]</strong>
+<strong>&gt; wbcd_test &lt;- wbcd_n[470:569, ]</strong>
+</pre></div><p>如果前面的命令令人困惑，请记住使用<code class="literal">[row, column]</code>语法从数据帧中提取数据。行或列值的空白值表示应包含所有行或列。因此，第一行代码获取第1行到第469行以及所有列，第二行获取第470行到第569行的100行以及所有列。</p><div><div><h3 class="title"><a id="tip40"/>提示</h3><p>当构造训练和测试数据集时，每个数据集都是完整数据集的代表性子集是很重要的。<code class="literal">wbcd</code>记录已经被随机排序，所以我们可以简单地提取100个连续的记录来创建一个测试数据集。如果数据是按时间顺序排序的或者是按相似值分组的，这就不合适了。在这些情况下，需要随机抽样方法。随机抽样将在第5章、<em>分而治之-使用决策树和规则分类</em>中讨论。</p></div></div><p>当我们构建标准化的训练和测试数据集时，我们排除了目标变量<code class="literal">diagnosis</code>。为了训练k-NN模型，我们需要将这些类别标签存储在因子<a id="id242" class="indexterm"/>向量中，在训练和测试数据集之间分开:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_train_labels &lt;- wbcd[1:469, 1]</strong>
+<strong>&gt; wbcd_test_labels &lt;- wbcd[470:569, 1]</strong>
+</pre></div><p>这段代码获取<code class="literal">wbcd</code>数据帧第一列中的<code class="literal">diagnosis</code>因子<a id="id243" class="indexterm"/>，并创建矢量<code class="literal">wbcd_train_labels</code>和<code class="literal">wbcd_test_labels</code>。我们将在训练和评估我们的分类器的下一步中使用这些。</p></div></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec35"/>步骤3–根据数据训练模型</h2></div></div></div><p>配备了<a id="id244" class="indexterm"/>我们的训练数据和标签向量，我们现在准备对未知记录进行分类。对于k-NN算法，训练阶段实际上不涉及建模；训练像k-NN这样懒惰的学习者的过程仅仅包括以结构化格式存储输入数据。</p><p>为了分类我们的测试实例，我们将使用来自<code class="literal">class</code>包的k-NN实现，它提供了一组用于分类的基本R函数。如果您的系统上尚未安装此软件包，您可以通过键入以下命令来安装它:</p><div><pre class="programlisting">
+<strong>&gt; install.packages("class")</strong>
+</pre></div><p>要在希望使用功能的任何会话中加载软件包，只需输入<code class="literal">library(class)</code>命令。</p><p><code class="literal">class</code>包中的<code class="literal">knn()</code>函数提供了k-NN算法的标准、经典实现。对于测试数据中的每个实例，该函数将使用欧几里德距离识别k个最近邻，其中<em> k </em>是用户指定的数字。通过在k个最近的邻居中进行“投票”来对测试实例进行分类——具体来说，这涉及分配大多数k个邻居的类别。平局投票被随机打破。</p><div><div><h3 class="title"><a id="tip41"/>提示</h3><p>在其他R包中有几个其他的k-NN函数，它们提供了更复杂或更有效的实现。如果用<code class="literal">knn()</code>遇到限制，在<strong>综合R档案网</strong> ( <strong> CRAN </strong>)搜索k-NN。</p></div></div><p>使用<code class="literal">knn()</code>功能的训练和分类在单个函数调用中执行，使用四个<a id="id245" class="indexterm"/>参数，如下表所示:</p><div><img src="img/3905_03_12.jpg" alt="Step 3 – training a model on the data"/></div><p>我们现在几乎拥有了将k-NN算法应用于这些数据所需的一切。我们将数据分为训练数据集和测试数据集，每个数据集都具有完全相同的数字特征。训练数据的标签存储在单独的因子向量中。唯一剩下的参数是<code class="literal">k</code>，它指定了要包含在投票中的邻居数量。</p><p>由于我们的训练数据包括469个实例，我们可能会尝试<code class="literal">k = 21</code>，这是一个奇数，大约等于469的平方根。对于两个类别的结果，使用奇数可以消除投票结果相同的可能性。</p><p>现在我们可以使用<code class="literal">knn()</code>函数对<code class="literal">test</code>数据进行分类:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_test_pred &lt;- knn(train = wbcd_train, test = wbcd_test,</strong>
+<strong>                        cl = wbcd_train_labels, k = 21)</strong>
+</pre></div><p><code class="literal">knn()</code>函数为<code class="literal">test</code>数据集中的每个示例返回预测标签的因子向量，我们已经将其分配给了<code class="literal">wbcd_test_pred</code>。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec36"/>步骤4–评估模型性能</h2></div></div></div><p>该过程的下一个<a id="id246" class="indexterm"/>步骤是评估<code class="literal">wbcd_test_pred</code>向量中的预测类与<code class="literal">wbcd_test_labels</code>向量中的已知值的匹配程度。为此，我们可以使用<code class="literal">gmodels</code>包中的<code class="literal">CrossTable()</code>函数，该函数在<a class="link" href="ch02.html" title="Chapter 2. Managing and Understanding Data">第2章</a>、<em>管理和理解数据</em>中有介绍。如果您还没有这样做，请使用<code class="literal">install.packages("gmodels")</code>命令安装这个包。</p><p>在用<code class="literal">library(gmodels)</code>命令加载包之后，我们可以创建一个交叉列表来表示两个向量之间的一致性。指定<code class="literal">prop.chisq = FALSE</code>将从输出中移除不必要的卡方值:</p><div><pre class="programlisting">
+<strong>&gt; CrossTable(x = wbcd_test_labels, y = wbcd_test_pred,</strong>
+<strong>                       prop.chisq=FALSE)</strong>
+</pre></div><p>生成的表格如下所示:</p><div><img src="img/3905_03_13.jpg" alt="Step 4 – evaluating model performance"/></div><p>表中的单元格百分比表示属于四个类别的值的比例。左上角的单元格表示<strong>真阴性</strong>结果。这100个值中的61个是肿块是良性的，并且k-NN算法正确地将其识别为良性。右下单元格表示<strong>真阳性</strong>结果，其中分类器和临床确定的标签一致认为肿块是恶性的。100个预测中总共有37个是真阳性。</p><p>落在另一条对角线上的单元格<a id="id247" class="indexterm"/>包含k-NN方法与真实标签不一致的例子的计数。左下角单元格中的两个例子是<strong>假阴性</strong>结果；在这种情况下，预测值是良性的，但肿瘤实际上是恶性的。在这个方向上的错误可能会付出极其高昂的代价，因为它们可能会导致患者认为她没有患癌症，但实际上，疾病可能会继续扩散。右上角的单元格将包含<strong>假阳性</strong>结果，如果有的话。当模型将肿块分类为恶性，但实际上是良性时，就会出现这些值。虽然这种错误没有假阴性结果危险，但是也应该避免，因为它们可能导致卫生保健系统的额外经济负担，或者由于可能必须提供额外的测试或治疗而给患者带来额外的压力。</p><div><div><h3 class="title"><a id="tip42"/>提示</h3><p>如果我们愿意，我们可以通过将每个肿块归类为恶性来完全消除假阴性。显然，这不是一个现实的策略。尽管如此，它说明了这样一个事实，即预测涉及到在假阳性率和假阴性率之间取得平衡。在<a class="link" href="ch10.html" title="Chapter 10. Evaluating Model Performance">第10章</a>、<em>评估模型性能</em>中，您将了解到测量预测准确性的更复杂的方法，这些方法可用于根据每种错误类型的成本来确定可以优化错误率的地方。</p></div></div><p>总共有2/100或2%的质量被k-NN方法错误地分类。虽然98%的准确率对于几行R代码来说似乎令人印象深刻，但我们可能会尝试该模型的另一次迭代，看看我们是否可以提高性能并减少错误分类的值的数量，特别是因为这些错误是危险的假阴性。</p></div><div><div><div><div><h2 class="title"><a id="ch03lvl2sec37"/>第5步——提高模型性能</h2></div></div></div><p>我们将在前面的分类器上尝试两个简单的变化。首先，我们将采用另一种方法来重新调整我们的数字特征。其次，我们将为<em> k </em>尝试几个不同的值。</p><div><div><div><div><h3 class="title"><a id="ch03lvl3sec15"/>转换–z分数标准化</h3></div></div></div><p>虽然<a id="id249" class="indexterm"/>归一化传统上用于k-NN分类，但它可能并不总是最适合<a id="id250" class="indexterm"/>重缩放特征的方式。由于z得分标准化值没有预定义的最小值和最大值，因此极值不会向中心压缩。人们可能会怀疑，对于恶性肿瘤，随着肿瘤不受控制地生长，我们可能会看到一些非常极端的异常值。因此，允许在距离计算中对异常值进行更重的加权可能是合理的。让我们看看z-score标准化是否能提高我们的预测准确性。</p><p>为了标准化向量，我们可以使用R的内置<code class="literal">scale()</code>函数，默认情况下，该函数使用z分数标准化来重新调整值。<code class="literal">scale()</code>函数提供了额外的好处，它可以直接应用于数据帧，因此我们可以避免使用<code class="literal">lapply()</code>函数。要创建一个z分数标准化版本的<code class="literal">wbcd</code>数据，我们可以使用以下命令:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_z &lt;- as.data.frame(scale(wbcd[-1]))</strong>
+</pre></div><p>该命令重新缩放除<code class="literal">diagnosis</code>之外的所有特征，并将结果存储为<code class="literal">wbcd_z</code>数据框。<code class="literal">_z</code>后缀提醒我们这些值已经过z值转换。</p><p>为了确认转换被正确应用，我们可以查看汇总统计数据:</p><div><pre class="programlisting">
+<strong>&gt; summary(wbcd_z$area_mean)</strong>
+<strong>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </strong>
+<strong>-1.4530 -0.6666 -0.2949  0.0000  0.3632  5.2460</strong>
+</pre></div><p>z得分标准化变量的平均值应始终为零，并且范围应相当紧凑。大于3或小于-3的z值表示极其罕见的值。考虑到这一点，转型似乎奏效了。</p><p>正如我们之前所做的，我们需要将数据分为训练集和测试集，然后使用<code class="literal">knn()</code>函数对测试实例进行分类。然后我们将使用<code class="literal">CrossTable()</code>比较预测标签和实际标签:</p><div><pre class="programlisting">
+<strong>&gt; wbcd_train &lt;- wbcd_z[1:469, ]</strong>
+<strong>&gt; wbcd_test &lt;- wbcd_z[470:569, ]</strong>
+<strong>&gt; wbcd_train_labels &lt;- wbcd[1:469, 1]</strong>
+<strong>&gt; wbcd_test_labels &lt;- wbcd[470:569, 1]</strong>
+<strong>&gt; wbcd_test_pred &lt;- knn(train = wbcd_train, test = wbcd_test,</strong>
+<strong>                        cl = wbcd_train_labels, k = 21)</strong>
+<strong>&gt; CrossTable(x = wbcd_test_labels, y = wbcd_test_pred,</strong>
+<strong>                       prop.chisq = FALSE)</strong>
+</pre></div><p>不幸的是，在下表中，我们新转换的结果显示准确性略有下降。以前我们正确分类了98%的例子<a id="id251" class="indexterm"/>，这次我们<a id="id252" class="indexterm"/>只正确分类了95%。更糟糕的是，我们在对危险的假阴性进行分类方面并没有做得更好:</p><div><img src="img/3905_03_14.jpg" alt="Transformation – z-score standardization"/></div></div><div><div><div><div><h3 class="title"><a id="ch03lvl3sec16"/>测试k的替代值</h3></div></div></div><p>通过检查不同k值的性能，我们可能会做得更好。使用标准化的训练和测试数据集，使用几个不同的<em> k </em>值对相同的100个记录进行分类。显示了每次迭代的假阴性和假阳性的数量:</p><div><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>k值</p>
+</th><th style="text-align: left" valign="bottom">
+<p>假阴性</p>
+</th><th style="text-align: left" valign="bottom">
+<p>假阳性</p>
+</th><th style="text-align: left" valign="bottom">
+<p>分类不正确的百分比</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>一</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>4%</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>5</p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>百分之二</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>11</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>百分之三</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>15</p>
+</td><td style="text-align: left" valign="top">
+<p>3</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>百分之三</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>21</p>
+</td><td style="text-align: left" valign="top">
+<p>2</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>百分之二</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>27</p>
+</td><td style="text-align: left" valign="top">
+<p>四</p>
+</td><td style="text-align: left" valign="top">
+<p>0</p>
+</td><td style="text-align: left" valign="top">
+<p>4%</p>
+</td></tr></tbody></table></div><p>尽管分类器从来不是完美的，1-NN方法能够以增加假阳性为代价避免一些假阴性。然而，重要的是要记住，让我们的方法过于接近我们的测试数据是不明智的；毕竟，一套不同的100份病历可能与那些用来衡量我们表现的病历有些不同。</p><div><div><h3 class="title"><a id="tip43"/>提示</h3><p>如果你需要确定一个学习者将对未来的数据进行归纳，你可以随机创建几组100个病人，并重复测试结果。仔细评估机器学习模型性能的方法将在第10章、<em>评估模型性能</em>中进一步讨论。</p></div></div></div></div></div>
+
+
+
+
+
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch03lvl1sec20"/>总结</h1></div></div></div><p>在本章中，我们学习了使用k-NN进行分类。与许多分类算法不同，k-NN不做任何学习。它只是逐字存储训练数据。然后，使用距离函数将未标记的测试示例与训练集中最相似的记录进行匹配，并且为未标记的示例分配其邻居的标签。</p><p>尽管k-NN是一种非常简单的算法，但它能够处理极其复杂的任务，例如识别癌块。在几行简单的R代码中，我们能够在98%的时间内正确识别肿块是恶性还是良性。</p><p>在下一章中，我们将研究一种分类方法，这种方法使用概率来估计一个观察值落入某些类别的可能性。比较这种方法与k-NN的不同之处将会很有趣。稍后，在<a class="link" href="ch09.html" title="Chapter 9. Finding Groups of Data – Clustering with k-means">第9章</a>、<em>寻找数据组——用k-means聚类</em>中，我们将了解k-NN的近亲，它使用距离度量来完成完全不同的学习任务。</p></div>
+</body></html>

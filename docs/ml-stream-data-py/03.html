@@ -1,0 +1,295 @@
+<html><head/><body>
+
+
+	
+		<title>B18335_02_ePub</title>
+		
+	
+	
+		<div><h1 id="_idParaDest-30"><em class="italic"> <a id="_idTextAnchor029"/>第二章</em>:流媒体和实时机器学习的架构</h1>
+			<p>流式架构是实时机器学习和流式分析解决方案的重要组成部分。即使您有一个模型或其他分析工具可以实时处理数据、更新数据并立即做出响应，如果没有架构来支持您的解决方案，这也是没有用的。</p>
+			<p>第一个重要的考虑是确保你的模型和分析能在每个数据点上起作用；需要有一个更新函数和/或预测函数，它可以根据系统接收到的每个新观察值来更新解。</p>
+			<p>实时和流架构的另一个重要考虑因素是数据入口:例如，如何确保可以在每次观察的基础上接收数据，而不是更传统的每天更新数据库的批处理方法。</p>
+			<p>除此之外，了解如何让不同的软件系统进行通信也很重要。例如，数据必须从您的数据生成流程中快速流出，可能会经过数据存储解决方案、数据质量工具或安全层，然后被您的分析程序接收。分析程序将完成其工作，并将结果发送回数据源，或者可能将处理后的数据点转发到可视化解决方案、警报系统或类似系统。</p>
+			<p>在这一章中，你将会了解到流和实时机器学习的架构。这本书的中心焦点仍然是管道中的分析和机器学习部分。本章的目标是给你足够的元素来想象和实现粗糙的工作架构，而一些关于性能、可用性和安全性的高度专门化的部分将被省略。</p>
+			<p>本章涵盖以下主题:</p>
+			<ol>
+				<li>将您的分析定义为一项功能</li>
+				<li>了解微服务架构</li>
+				<li>通过API在服务之间进行通信</li>
+				<li>揭秘HTTP协议</li>
+				<li>在AWS上构建简单的API</li>
+				<li>面向实时流的大数据工具</li>
+				<li>实时调用大数据环境</li>
+			</ol>
+			<h1 id="_idParaDest-31"><a id="_idTextAnchor030"/>技术要求</h1>
+			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<ol>
+				<li value="1">转到存储库的链接。</li>
+				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
+				<li>选择<strong class="bold">下载压缩文件</strong>。</li>
+			</ol>
+			<p>当您下载ZIP文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的Python编辑器访问代码。</p>
+			<h2 id="_idParaDest-32"><a id="_idTextAnchor031"/> Python环境</h2>
+			<p>为了阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器来执行它。</p>
+			<p>如果你还不熟悉Python环境，我建议你去看看Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)，它附带了Jupyter Notebook和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VSCode，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看Google Colab(<a href="https://colab.research.google.com/">https://colab.research.google.com/</a>)或Kaggle笔记本(<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a>)，它们都允许你在网上免费运行Python代码，不需要做任何设置。</p>
+			<p class="callout-heading">注意</p>
+			<p class="callout">书中的代码一般会使用Python 3 . 7 . 13版本的Colab和Kaggle笔记本，你可以<a id="_idIndexMarker068"/>设置自己的环境来模仿这个。</p>
+			<h1 id="_idParaDest-33"><a id="_idTextAnchor032"/>将您的分析定义为一项功能</h1>
+			<p>为了让<a id="_idIndexMarker069"/>从架构开始，让我们使用不同的构建模块从头开始构建一个想法，这是最小化工作产品所必需的。</p>
+			<p>为此，您首先需要了解您想要执行的实时分析的类型。</p>
+			<p>现在，让我们看一下上一章中的同一个例子:一个实时业务规则，当生产线的温度或酸度超出可接受的限度时，它会打印一个警报。</p>
+			<p>在前一章中，该警报编码如下:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-1</p>
+			<pre class="source-code">def super_simple_alert(datapoint):</pre>
+			<pre class="source-code">  if datapoint['temperature'] &lt; 10:</pre>
+			<pre class="source-code">    print('this is a real time alert. temp too low')</pre>
+			<pre class="source-code">  if datapoint['pH'] &gt; 5.5:</pre>
+			<pre class="source-code">    print('this is a real time alert. pH too high')</pre>
+			<p>在前一章中，您使用了数据帧上的迭代来测试这段代码。实际上，你总是需要一个架构的概念，这样你就可以让你的代码从数据生成过程中实时接收数据。本章将介绍这一构造块。</p>
+			<p>在下面的示意图中，您可以看到我们流式解决方案的高级架构模式:</p>
+			<div><div><img src="img/B18335_02_01.jpg" alt="Figure 2.1 – A high-level architectural schema for a streaming solution&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.1–流式解决方案的高级架构模式</p>
+			<p>在这个示意图中，您可以清楚地看到，编写代码将为您提供解决方案的一些关键组件。然而，您需要围绕这一点构建一个架构，以使解决方案变得真实。示例实现中仍然缺少较暗的部分。</p>
+			<p>虽然这本书的目标不是给出一个关于架构的全面深入的课程，但是你会在这里发现一些工具和构建块，它们将允许你交付一个MVP实时用例。为了让你的构建模块有条理，你需要为你的解决方案选择一个架构。微服务是一种架构模式，它将允许您构建干净、小的构建块，并让它们相互通信。</p>
+			<h1 id="_idParaDest-34"><a id="_idTextAnchor033"/>了解微服务架构</h1>
+			<p>在处理架构时，理解<strong class="bold">微服务</strong>的概念<a id="_idIndexMarker071"/>很重要。虽然有其他方法来构建软件项目，但是微服务很受欢迎是有原因的。它们帮助团队变得灵活和有效，并帮助保持软件的灵活性和清晰的结构。</p>
+			<p>微服务背后的思想体现在名称中:软件被表示为许多独立运行的小服务。当查看整体架构时，每个微服务都在一个小的<em class="italic">黑盒</em>中，有明确定义的输入和输出。在正确的时间调用正确的黑盒的过程已经就位。</p>
+			<p>微服务架构是松散耦合的。这意味着不同微服务之间没有固定的通信。相反，任何其他服务或代码都可以调用或不调用每个微服务。</p>
+			<p>如果需要对其中一个微服务进行更改，更改的范围是相当局部的，因此不会影响其他微服务。由于输入和输出是预定义的，这也有助于保持程序的基本结构有序，而不用以任何方式固定它。</p>
+			<p>为了允许不同的<a id="_idIndexMarker073"/>微服务进行通信，一个经常选择的解决方案是使用<strong class="bold">应用编程接口</strong>(<strong class="bold">API</strong>)。现在让我们深入探讨一下。</p>
+			<h1 id="_idParaDest-35"><a id="_idTextAnchor034"/>通过API在服务之间进行通信</h1>
+			<p>微服务架构中的一个核心组件是API的使用。API是允许您将两个微服务(或其他代码片段)连接在一起的部分。</p>
+			<p>API很像网站。就像网站一样，API是建立在类似网站的链接或IP地址之后的。当您访问一个网站时，该网站的服务器会向您发送代表该网站的代码。然后，您的互联网浏览器解释这些代码，并向您显示一个网页。</p>
+			<p>当你调用一个API时，API将接收你的请求。该请求触发您的代码在服务器上运行，并生成一个返回给您的响应。如果出现问题(可能您的请求不符合预期或者发生了错误)，您可能收不到任何响应，或者收到一个错误代码，如<code>request not authorized</code>或<code>internal server error</code>。</p>
+			<p>下图显示了涵盖这一点的流程图。计算机或用户发送一个HTTP请求，API服务器根据在API服务器上运行的代码发回响应:</p>
+			<div><div><img src="img/B18335_02_02.jpg" alt="Figure 2.2 – A high-level architectural schema for a streaming solution&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.2–流式解决方案的高级架构模式</p>
+			<p>你可以用很多不同的工具调用API。有时，你甚至可以使用你的网络浏览器，否则，像cURL这样的工具可以在命令行上完成这项工作。你可以使用像<a id="_idIndexMarker076"/>Postman或者失眠症这样的工具来调用带有用户界面的API。所有的通信都包含在固定的规则和实践中，这些规则和实践统称为HTTP协议，我们将在下一节中探讨。</p>
+			<h1 id="_idParaDest-36"><a id="_idTextAnchor035"/>解密HTTP协议</h1>
+			<p>服务(或网站)之间的交互<a id="_idIndexMarker078"/>使用HTTP协议。当使用API和构建通信微服务时，理解HTTP协议的基础很重要。</p>
+			<p>最重要的是知道如何发送和格式化请求和响应。</p>
+			<h2 id="_idParaDest-37"><a id="_idTextAnchor036"/>获取请求</h2>
+			<p>最简单的<a id="_idIndexMarker079"/> HTTP请求是<code>GET</code>请求。当你需要从服务器或服务中获取某些东西时，你可以使用这个。例如，当你访问一个网站时，你的浏览器向该网站的IP地址发送一个<code>GET</code>请求，以获取该网站的布局代码。</p>
+			<p>使用下面的代码可以简单地从Python发送一个<code>GET</code>请求:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-2</p>
+			<pre class="source-code">import requests</pre>
+			<pre class="source-code">import json</pre>
+			<pre class="source-code">response = requests.get('http://www.google.com')</pre>
+			<pre class="source-code">print(response.status_code)</pre>
+			<pre class="source-code">print(response.text)</pre>
+			<p>这段代码使用Python中的<code>requests</code>库向Google主页发送一个<code>GET</code>请求。从技术上来说，这与你通过互联网浏览器进入谷歌主页的过程是一样的。您将获得web浏览器显示Google主页所需的所有代码。虽然你们中的许多人非常熟悉浏览器中Google主页的外观，但在这个代码响应中却很难识别。重要的是要明白，它实际上是完全相同的东西，只是格式不同。</p>
+			<h2 id="_idParaDest-38"><a id="_idTextAnchor037"/>发布请求</h2>
+			<p><code>POST</code>请求<a id="_idIndexMarker081"/>是你会经常遇到的另一个<a id="_idIndexMarker082"/>请求。它允许你在请求时发送一些数据。这通常是必要的，尤其是在分析API中，因为分析很可能发生在这些数据上。通过在<code>POST</code>请求的主体中添加数据，您可以确保您的分析代码收到了您的数据。</p>
+			<p>Python中的语法类似于下面的代码块。目前，这段代码还不能工作，因为您还没有构建一个能够处理这些数据的服务器。但是，请记住,<code>POST</code>请求允许您将数据点发送给API，目的是获得响应:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-3</p>
+			<pre class="source-code">import requests</pre>
+			<pre class="source-code">import json</pre>
+			<pre class="source-code">data = {'temperature': 10, 'pH': 5.5}</pre>
+			<pre class="source-code">response = requests.post('http://www.example.com',data=data)</pre>
+			<pre class="source-code">print(response.status_code)</pre>
+			<pre class="source-code">print(response.text)</pre>
+			<h2 id="_idParaDest-39"><a id="_idTextAnchor038"/>系统间通信的JSON格式</h2>
+			<p>服务间交互最常见的<a id="_idIndexMarker083"/>格式<a id="_idIndexMarker084"/>是<strong class="bold"> JavaScript对象表示法</strong> ( <strong class="bold"> JSON </strong>)格式。这是一种非常类似于Python中的字典格式的数据类型。实际上，它是一个被荣誉包围的键值对象。</p>
+			<p>JSON有效负载的一个示例如下:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-4</p>
+			<pre class="source-code">{</pre>
+			<pre class="source-code">     'name': 'your name',</pre>
+			<pre class="source-code">     'address': 'your address',</pre>
+			<pre class="source-code">     'age': 'your age'</pre>
+			<pre class="source-code">}</pre>
+			<p>这种数据格式非常容易理解，也非常常用。因此，理解它是如何工作的是很重要的。在本章的后面你也会看到它的用法。</p>
+			<h2 id="_idParaDest-40"><a id="_idTextAnchor039"/>RESTful API</h2>
+			<p>虽然API <a id="_idIndexMarker085"/>开发超出了本书的范围，但是提供一些提示<a id="_idIndexMarker086"/>和最佳实践还是很有用的。使用最多的API结构是<strong class="bold">具象状态转移</strong> ( <strong class="bold"> REST </strong> ) API。</p>
+			<p>REST API的工作方式和其他API一样，但是它遵循一组特定的样式规则，这使得它可以被识别为REST API，也称为RESTful API。</p>
+			<p>REST APIs中有六个指导性约束:</p>
+			<ul>
+				<li>客户机-服务器体系结构</li>
+				<li>无国籍</li>
+				<li>可缓存性</li>
+				<li>分层系统</li>
+				<li>按需编码(可选)</li>
+				<li>统一界面</li>
+			</ul>
+			<p>如果你想在这方面更进一步，本章末尾提供了一些进一步的阅读资料。现在我们已经了解了HTTP协议，让我们在<strong class="bold">Amazon Web Services</strong>(<strong class="bold">AWS</strong>)上构建一个API。</p>
+			<h1 id="_idParaDest-41"><a id="_idTextAnchor040"/>在AWS上构建简单的API</h1>
+			<p>为了<a id="_idIndexMarker087"/>到<a id="_idIndexMarker088"/>做一些实际的事情，让我们在AWS上构建一个超级简单的API。这将允许您理解不同的服务如何一起通信。它还可以作为一个很好的测试环境，用来测试本书其余部分中的例子。</p>
+			<p>您将使用AWS框架的以下组件。</p>
+			<h2 id="_idParaDest-42"><a id="_idTextAnchor041"/>AWS中的API网关</h2>
+			<p>这是一个为您处理API请求的<a id="_idIndexMarker089"/> AWS服务<a id="_idIndexMarker090"/>。您可以指定希望收到的请求的类型，并指定在收到请求时应该采取的操作。当使用API Gateway构建API时，这将自动生成一个IP地址或链接，您可以向其发送API请求。</p>
+			<h2 id="_idParaDest-43"><a id="_idTextAnchor042"/>自动气象站中的λ</h2>
+			<p>Lambda是代码的一个<a id="_idIndexMarker091"/>无服务器执行环境<a id="_idIndexMarker092"/>。这意味着您可以编写Python代码，将其插入API网关，而不必考虑如何设置服务器、防火墙等。这对于解耦系统来说非常好，对于许多实时系统来说也足够快了。</p>
+			<h2 id="_idParaDest-44"><a id="_idTextAnchor043"/>本地机器上的数据生成过程</h2>
+			<p>作为最后一个<a id="_idIndexMarker093"/>组件，您<a id="_idIndexMarker094"/>将用Python构建一个独立的数据生成过程。你可以在笔记本上执行这段代码。每当生成一个新的数据点时，代码将使用分析服务调用API，并在需要时回复一个警报。</p>
+			<p>下图是该架构的示意图:</p>
+			<div><div><img src="img/B18335_02_03.jpg" alt="Figure 2.3 – Detailed architecture schema for AWS&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.3–AWS的详细架构模式</p>
+			<h2 id="_idParaDest-45"><a id="_idTextAnchor044"/>实现示例</h2>
+			<p>为了<a id="_idIndexMarker095"/>实现该示例，我们将使用以下分步说明。如果您有AWS帐户，您可以跳过<em class="italic">步骤0 </em>。</p>
+			<h3>步骤0–在AWS上创建帐户</h3>
+			<p>如果您还没有AWS帐户，创建一个很容易。您必须使用信用卡进行设置，但是我们在这里使用的服务都有一个免费层。只要您在测试结束时关闭资源，就不太可能产生任何费用。但是，一定要小心，因为错误是会发生的，如果你使用了AWS上的大量资源，最终你会付出代价。</p>
+			<p>要设置账户，您只需按照<a href="http://aws.amazon.com">aws.amazon.com</a>上的步骤操作即可。</p>
+			<h3>步骤1–设置Lambda函数</h3>
+			<p>在收到<a id="_idIndexMarker098"/>的<code>POST</code>请求后，必须调用一个Lambda函数来执行我们的警报并发回响应。</p>
+			<p>进入<strong class="bold">服务</strong>菜单中的<strong class="bold">λ</strong>，点击<strong class="bold">创建功能</strong>。您将看到以下屏幕:</p>
+			<div><div><img src="img/B18335_02_04.jpg" alt="Figure 2.4 – Creating a Lambda function&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.4–创建一个Lambda函数</p>
+			<p>确保<a id="_idIndexMarker099"/>选择<strong class="bold"> Python </strong>并<a id="_idIndexMarker100"/>给你的函数起一个合适的名字。</p>
+			<p>创建完函数后，就该编码了。为此，您可以使用以下代码:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-5</p>
+			<pre class="source-code">import json</pre>
+			<pre class="source-code">def super_simple_alert(datapoint):    </pre>
+			<pre class="source-code">    answer = ''</pre>
+			<pre class="source-code">    if datapoint['temperature'] &lt; 10:</pre>
+			<pre class="source-code">        answer += 'temp too low ' </pre>
+			<pre class="source-code">    if datapoint['pH'] &gt; 5.5:</pre>
+			<pre class="source-code">        answer += 'pH too high '</pre>
+			<pre class="source-code">    if answer == '':</pre>
+			<pre class="source-code">        answer = 'all good'</pre>
+			<pre class="source-code">    return answer</pre>
+			<pre class="source-code">def lambda_handler(event, context):</pre>
+			<pre class="source-code">    answer = super_simple_alert(event)</pre>
+			<pre class="source-code">    return {</pre>
+			<pre class="source-code">        'statusCode': 200,</pre>
+			<pre class="source-code">        'body': json.dumps({'status': answer}),</pre>
+			<pre class="source-code">    }</pre>
+			<p>该代码有<a id="_idIndexMarker101"/>两个<a id="_idIndexMarker102"/>功能。<code>super_simple_alert</code>函数接受一个<code>datapoint</code>并返回一个答案(字符串格式的警报)。<code>lambda_handler</code>函数是处理传入API调用的代码。该事件包含<code>datapoint</code>，因此该事件被传递给<code>super_simple_alert</code>函数，以便分析是否应该发出警报。这存储在<code>answer</code>变量中。最后，<code>lambda_handler</code>函数返回一个Python字典，其中包含状态代码<code>200</code>和包含答案的主体。</p>
+			<p>该窗口现在应该如下所示:</p>
+			<div><div><img src="img/B18335_02_05.jpg" alt="Figure 2.5 – The Lambda function window&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.5–λ函数窗口</p>
+			<h3>步骤2–设置API网关</h3>
+			<p>作为第一个<a id="_idIndexMarker103"/>步骤，让我们<a id="_idIndexMarker104"/>设置API网关来接收<code>POST</code>请求。<code>POST</code>请求将包含一个主体，其中包含一个具有温度和pH值的JSON，就像警报示例中一样。</p>
+			<p>要设置API网关，您必须进入<strong class="bold"> API网关</strong>菜单，该菜单可通过<strong class="bold">服务</strong>菜单访问。<strong class="bold">管理</strong>控制台外观如下:</p>
+			<div><div><img src="img/B18335_02_06.jpg" alt="Figure 2.6 – The AWS Management console&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.6–AWS管理控制台</p>
+			<p>你<a id="_idIndexMarker105"/>应该<a id="_idIndexMarker106"/>在<strong class="bold"> API Gateway </strong>菜单上结束，如下所示:</p>
+			<div><div><img src="img/B18335_02_07.jpg" alt="Figure 2.7 – The API Gateway menu&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.7–API网关菜单</p>
+			<p>当你<a id="_idIndexMarker107"/>进入<strong class="bold"> API网关</strong>菜单，你<a id="_idIndexMarker108"/>可以进入<strong class="bold">创建API </strong>来设置你的第一个API。</p>
+			<p>在<strong class="bold">中创建API </strong>，执行以下步骤:</p>
+			<ol>
+				<li value="1">选择<strong class="bold"> REST API </strong>。</li>
+				<li>选择<strong class="bold">休息</strong>协议。</li>
+				<li>将API构建为新的API。</li>
+				<li>创建一个API名称，例如<code>streamingAPI</code>。</li>
+			</ol>
+			<p>您将获得一个空的API配置菜单，如下所示:</p>
+			<div><div><img src="img/B18335_02_08.jpg" alt="Figure 2.8 – Adding a method in API Gateway&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.8–在API网关中添加方法</p>
+			<p>我们希望<a id="_idIndexMarker109"/>给<a id="_idIndexMarker110"/>增加一个<code>POST</code>方法，所以转到<code>POST</code>方法。将出现以下菜单用于设置<code>POST</code>方法:</p>
+			<div><div><img src="img/B18335_02_09.jpg" alt="Figure 2.9 – The POST setup&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.9–开机自检设置</p>
+			<h3>步骤3–部署API</h3>
+			<p>仍然在API <a id="_idIndexMarker111"/>网关<a id="_idIndexMarker112"/>菜单中，点击<code>test</code>进行部署。您可以在这个阶段使用默认设置，但是重要的是要使用顶部的URL，以便能够从数据生成过程中调用您的API。您需要设置如下图所示的设置:</p>
+			<div><div><img src="img/B18335_02_010.jpg" alt="Figure 2.10 – More details for the API&#13;&#10;"/>
+				</div>
+			</div>
+			<p class="figure-caption">图2.10–API的更多细节</p>
+			<h3>步骤4——从另一个Python环境调用API</h3>
+			<p>现在，你<a id="_idIndexMarker113"/>可以<a id="_idIndexMarker114"/>从另一个Python环境调用<a id="_idIndexMarker115"/>你的API，比如你自己电脑上的笔记本，或者从Google Colab笔记本。</p>
+			<p>您可以使用以下代码来实现这一点:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-6</p>
+			<pre class="source-code">import requests</pre>
+			<pre class="source-code">import json</pre>
+			<pre class="source-code">data = {'temperature': 8, 'pH': 4}</pre>
+			<pre class="source-code">response = requests.post('YOUR_URL', data = json.dumps(data))</pre>
+			<pre class="source-code">print(json.loads(response.text))</pre>
+			<p>您将获得以下答案:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-7</p>
+			<pre class="source-code">{'statusCode': 200, 'body': '{"status": "temp too low "}'}</pre>
+			<p>现在，你<a id="_idIndexMarker116"/>可以<a id="_idIndexMarker117"/>想象一下<a id="_idIndexMarker118"/>一个实时数据生成过程将如何在每个新数据点简单地调用API，警报将立即生成！</p>
+			<h2 id="_idParaDest-46"><a id="_idTextAnchor045"/>更多架构考虑</h2>
+			<p>尽管这是构建API的第一次伟大尝试，但你应该意识到，当你想以一种可靠和安全的方式构建它时，还有很多事情要考虑。数据科学和软件工程是不同的工作，从头到尾学习管理一个API所需的所有技能是需要时间的，这是有原因的。一般来说，数据科学家不会被要求这样做。</p>
+			<p>本例中未涉及的一些内容如下:</p>
+			<ul>
+				<li>性能:伸缩性、负载平衡和延迟</li>
+				<li>DDoS攻击</li>
+				<li>安全和黑客</li>
+				<li>API调用的财务方面</li>
+				<li>依赖云提供商与不依赖云提供商</li>
+			</ul>
+			<p>在本章的最后，有一些进一步阅读的资源，你可以去看看。</p>
+			<h2 id="_idParaDest-47"><a id="_idTextAnchor046"/>其他AWS服务和具有相同功能的其他服务</h2>
+			<p>当前的<a id="_idIndexMarker121"/>示例使用API Gateway和Lambda函数来构建API。这种方法的优点是易于访问和设置，这使得它成为本书中的一种很好的方法。但是，您应该知道还有许多其他工具和技术可以用来构建API。</p>
+			<p>AWS是使用最多的云提供商之一，大多数可以在AWS上完成的事情也可以在其他云提供商的平台上完成。其他大玩家的例子有谷歌的GCP和微软的Azure。即使在AWS上，也有很多替代方案。</p>
+			<p>您也可以在本地环境中构建API。当这样做时，您将再次拥有大量的工具和提供商选择。现在您已经看到了如何使用Python中的标准编程和微服务方法来构建API，接下来您将看到一些使用大数据环境的替代方案。大数据环境通常有一个更陡峭的学习曲线，并且可能经常针对特定的使用情形，但是当处理高容量和高速度时，它们可能非常强大并且绝对必要。</p>
+			<h1 id="_idParaDest-48"><a id="_idTextAnchor047"/>用于实时流媒体的大数据工具</h1>
+			<p>有许多<a id="_idIndexMarker122"/>大数据工具可以进行<a id="_idIndexMarker124"/>实时<a id="_idIndexMarker125"/>流分析。对于常规的实时系统来说，它们是很好的选择，尤其是当数据量很大并且需要高速的时候。</p>
+			<p>提醒一下，术语<strong class="bold">大数据</strong>通常用于重组工具，以解决过于复杂而不适合内存的问题。所解决的问题有三个核心特征:数量、多样性和速度。</p>
+			<p>大数据工具通常以在并行计算中完成大量工作而闻名。在编写非优化的常规Python代码时，代码通常会逐个传递数据点。大数据解决方案通过在多台服务器上并行处理数据点来解决这一问题。这种方法使得大数据工具在数据多的时候速度更快，但在数据少的时候速度更慢(由于管理不同工作人员的开销)。</p>
+			<p>大数据工具往往相对具体；它们应该只用于拥有大量数据的用例。开始为手头的每个问题开发大数据工具没有意义。</p>
+			<p>无数这样的<a id="_idIndexMarker126"/>解决方案<a id="_idIndexMarker127"/>是<a id="_idIndexMarker128"/>为处理流<a id="_idIndexMarker129"/>数据而制造的。让我们来看看一些常用的工具:</p>
+			<ul>
+				<li><strong class="bold">Spark Streaming</strong>:Spark Streaming<a id="_idIndexMarker130"/>是Spark的补充，是当今大数据的主要工具之一。Spark Streaming可以插入Kafka、Flume和Amazon Kinesis等源，从而使流数据可以在Spark环境中访问。</li>
+				<li><strong class="bold"> Apache Kafka </strong> : Kafka是由Apache管理的<a id="_idIndexMarker131"/>开源工具。这是一个为提供实时数据馈送而设计的框架。许多公司使用它来提供数据管道和流分析。甚至一些云提供商已经将Kafka集成到他们的解决方案中。</li>
+				<li><strong class="bold">Apache Flume</strong>:Apache<a id="_idIndexMarker132"/>Flume是Apache管理的另一个开源工具，同样专注于流数据。Flume专门用于处理大数据环境中的大量日志数据。</li>
+				<li><strong class="bold">Apache Beam</strong>:Apache streaming家族的另一个工具是Apache Beam。这个工具可以处理批处理和流数据。它以构建ETL和数据处理管道而闻名。</li>
+				<li><strong class="bold">Apache Storm</strong>:Apache Storm<a id="_idIndexMarker134"/>是一个流处理计算框架，允许进行分布式计算。它用于使用Hadoop实时处理数据流。</li>
+				<li>Apache NiFi  : Apache NiFi是<a id="_idIndexMarker135"/>一个专注于ETL的工具。它为用户提供了自动化和管理系统间数据流的可能性。它可以和卡夫卡一起工作。</li>
+				<li><strong class="bold">Google Cloud data flow</strong>:Google<a id="_idIndexMarker136"/>Cloud data flow是Google云平台提出的工具。它是专门为处理流用例而开发的。它允许用户在一个完全托管的服务中执行Apache Beam管道。</li>
+				<li><strong class="bold">亚马逊Kinesis </strong>:亚马逊Kinesis <a id="_idIndexMarker137"/>强烈基于之前讨论过的开源Apache Kafka。与Kafka相比，使用Kinesis的优势在于它附带了许多为您管理的东西，而如果您直接使用Kafka，您将花费更多的精力来管理服务。当然，作为回报，你必须使用AWS平台来访问它。</li>
+				<li><strong class="bold">Azure Stream Analytics</strong>:Azure<a id="_idIndexMarker138"/>Stream Analytics是微软云平台Azure上提出的主要流媒体分析服务。这是一个基于Trill的实时分析服务。</li>
+				<li><strong class="bold">IBM Streams</strong>:IBM Streams<a id="_idIndexMarker139"/>是一个流分析<a id="_idIndexMarker140"/>工具<a id="_idIndexMarker141"/>，是在IBM cloud上<a id="_idIndexMarker142"/>提出<a id="_idIndexMarker143"/>的。就像Kinesis一样，基于开源的Kafka项目。</li>
+			</ul>
+			<h2 id="_idParaDest-49"><a id="_idTextAnchor048"/>实时调用大数据环境</h2>
+			<p>如果您的实时<a id="_idIndexMarker144"/>分析服务是由大数据或特定流工具<a id="_idIndexMarker145"/>管理的，您不能总是遵循API方法将您的实时流程连接到您的分析流程。</p>
+			<p>在大多数情况下，您需要查看您选择的工具的文档，并确保您了解如何使连接工作。在这一点上，您通常需要一个专门的概要文件来与您一起工作，因为这个级别的架构和数据工程通常被认为超出了大多数数据科学家的范围。</p>
+			<p>微服务系统和大数据系统之间的一个普遍区别是，在微服务方法中，我们通常认为调用服务必须考虑来自API的响应。</p>
+			<p>在大数据环境中，网站等服务向大数据环境发送数据但不需要响应的情况更为常见。您可以想象这样一个网站，它将用户的每一次交互以JSON文件的形式写到一个固定的位置。然后将大数据流工具插入该数据存储位置，以流的方式读入数据，并将其转换为分析、可视化或其他内容。</p>
+			<p>让我们构建一个最小的示例来展示如何做到这一点:</p>
+			<ol>
+				<li value="1">首先，创建一个名为<code>example.json</code>的JSON文件，在该文件中只写入以下数据:</li>
+			</ol>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块2-8</p>
+			<pre>{'value':'hello'}</pre>
+			<ol>
+				<li value="2">你<a id="_idIndexMarker146"/>现在可以<a id="_idIndexMarker147"/>写一小段Spark流代码，以流的方式读取这些数据:<pre>from pyspark.sql import SparkSession from pyspark.sql.types import * spark = SparkSession \     .builder \     .appName("quickexample") \     .getOrCreate() schema = StructType([ StructField("value", StringType(), True) ]) streamingDF = (   spark     .readStream     .schema(schema)     .json('example.json') ) display(streamingDF)</pre></li>
+			</ol>
+			<p>简而言之，这段代码从创建一个<code>spark</code>会话开始。一旦创建了会话，就会为<code>example.json</code>文件定义一个模式。因为它只有一个键(称为<code>value</code>，所以模式非常短。该值的数据类型为<code>string</code>。</p>
+			<p>然后您会看到数据是使用<code>.readStream</code>方法导入的，这实际上为您做了很多繁重的流式处理工作。如果你想进一步了解这个例子，你可以使用<code>streamingDF</code>库和<a id="_idIndexMarker148"/>编写各种分析Spark函数，你将<a id="_idIndexMarker149"/>使用众所周知的大数据工具<strong class="bold"> PySpark </strong>进行<a id="_idIndexMarker150"/>流分析。</p>
+			<h1 id="_idParaDest-50"><a id="_idTextAnchor049"/>总结</h1>
+			<p>在这一章中，你已经开始发现建筑领域。您已经在AWS上构建了自己的API，并且已经看到了系统间通信的基本基础。您现在应该明白，数据是系统间通信的关键，系统间的良好通信对于通过分析交付价值至关重要。</p>
+			<p>在实时和流分析的情况下尤其如此。如果在项目中没有尽早发现架构瓶颈，高速且通常较大的数据很容易造成问题。</p>
+			<p>您还必须记住考虑其他主题，包括安全性、可用性和法规遵从性。这些话题最好留给那些全职负责处理这类数据架构问题的人。</p>
+			<p>在下一章，我们将回到本书的核心，因为你会发现如何在流数据上构建分析用例。</p>
+			<h1 id="_idParaDest-51"><a id="_idTextAnchor050"/>延伸阅读</h1>
+			<ul>
+				<li><em class="italic">微服务架构</em>:<a href="https://cloud.google.com/learn/what-is-microservices-architecture">https://cloud . Google . com/learn/what-is-microservice-Architecture</a></li>
+				<li>API:<a href="https://www.redhat.com/en/topics/api/what-are-application-programming-interfaces">https://www . red hat . com/en/topics/API/what-are-application-programming-interfaces</a></li>
+				<li>HTTP:<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">https://developer.mozilla.org/en-US/docs/Web/HTTP</a></li>
+				<li><em class="italic">十大实时数据流工具</em>:<a href="https://ipspecialist.net/top-10-real-time-data-streaming-tools/">https://ipspecialist . net/Top-10-real-time-data-streaming-tools/</a></li>
+				<li>spark Streaming:<a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html">https://spark . Apache . org/docs/latest/Streaming-programming-guide . html</a></li>
+				<li>卡夫卡:<a href="https://kafka.apache.org/">https://kafka.apache.org/</a></li>
+				<li>水槽:<a href="https://flume.apache.org/">https://flume.apache.org/</a></li>
+				<li>光束:<a href="https://beam.apache.org/">https://beam.apache.org/</a></li>
+				<li>风暴:<a href="https://storm.apache.org/">https://storm.apache.org/</a></li>
+				<li>尼菲:<a href="https://nifi.apache.org/">https://nifi.apache.org/</a></li>
+				<li>谷歌云数据流:<a href="https://cloud.google.com/dataflow">https://cloud.google.com/dataflow</a></li>
+				<li>亚马逊Kinesis:<a href="https://aws.amazon.com/kinesis/">https://aws.amazon.com/kinesis/</a></li>
+				<li>azure Stream Analytics:<a href="https://azure.microsoft.com/en-us/services/stream-analytics/">https://azure . Microsoft . com/en-us/services/Stream-Analytics/</a></li>
+				<li>IBM Streams:<a href="https://www.ibm.com/docs/en/streams">https://www.ibm.com/docs/en/streams</a></li>
+				<li><em class="italic">用亚马逊Kinesis </em>捕捉网页滚动进度，由AWS:<a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/kinesis-examples-capturing-page-scrolling.html">https://docs . AWS . Amazon . com/SDK-for-JavaScript/v2/developer-guide/kine sis-examples-capture-Page-scrolling . html</a></li>
+			</ul>
+		</div>
+	
+
+</body></html>

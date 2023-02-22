@@ -1,0 +1,1093 @@
+<html><head/><body>
+
+
+    
+        <title>ETL, Data Preparation, and Feature Extraction</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">ETL、数据准备和特征提取</h1>
+                
+            
+            
+                
+<p>在本章中，我们将探索Azure ML服务中的数据准备和<strong>提取、转换和加载</strong> ( <strong> ETL </strong>)技术。我们将从数据集和数据存储的幕后开始，这是物理数据存储系统的抽象。您将学习如何创建数据存储、将数据上传到存储、将数据注册和管理为Azure ML数据集，以及稍后探索存储在这些数据集中的数据。这将帮助您从消费者那里提取数据，并为数据工程师和数据科学家构建独立的并行工作流。</p>
+<p>在接下来的部分中，我们将使用Azure ML DataPrep查看Azure ML服务中的数据转换，尤其是提取、转换和加载数据。这使您能够构建企业级数据管道来处理异常值、过滤数据和填充缺失值。</p>
+<p>本章将涵盖以下主题:</p>
+<ul>
+<li>管理云中的数据和数据集管道</li>
+<li>使用Azure ML DataPrep进行预处理和特征工程</li>
+</ul>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Managing data and dataset pipelines in the cloud</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">管理云中的数据和数据集管道</h1>
+                
+            
+            
+                
+<p>当您在本地开发机器上运行ML实验或管道时，您通常不需要管理数据集，因为它们存储在本地。然而，一旦您开始在远程计算目标(例如云中的虚拟机)上训练ML模型，您就必须确保脚本可以访问训练数据。如果您部署的模型在评分过程中需要某个数据集，例如标签的查找数据等，那么这个环境也需要访问这些数据。正如您所看到的，从物理访问和访问权限的角度来看，对ML项目的数据集进行抽象是有意义的。</p>
+<p>首先，我们将展示如何创建一个数据存储对象来将Azure ML workspace连接到其他数据服务，如blob或文件存储、数据湖存储和关系数据存储，如SQL Server和PostgreSQL。一旦附加了数据存储，我们就可以将该数据存储中的数据(例如，blob存储中的blob、文件存储中的文件或关系数据库中的表)注册为Azure ML服务中的数据存储。通过这样做，可以从所有执行环境中访问数据集，比如在本地开发机器中，在作为远程计算目标的Azure ML计算上，或者在评分环境中。</p>
+<p>接下来，我们将研究一种快速探索数据集的方法。根据数据集的大小，您可以将数据作为内存中的pandas数据帧或弹性分布式Spark数据帧来访问。最后，我们将展示如何将数据集写回原始数据存储对象。</p>
+<p>让我们直接进入主题，了解如何有效地将数据迁移到云中。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Getting data into the cloud</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">将数据放入云中</h1>
+                
+            
+            
+                
+<p>在我们详细讨论如何在Azure ML服务中注册数据存储和数据集之前，我想强调的是，您可以从任何位置将任何数据加载到您的实验、数据准备或ML脚本中，因为您是在Python解释器中运行的。但是，您必须分发访问密钥和密码来登录数据源，并将数据转换为预期的格式。</p>
+<p>通过对数据存储(例如，文件存储、blob存储和关系数据库)和数据集(例如，文件、文件夹和表)进行抽象，您可以提供统一的数据抽象视图，以便从统一的界面使用来自不同来源的不同数据集。这有很多优点，包括统一的访问控制和统一的数据格式转换。在本节中，我们将了解如何注册数据存储和数据集，以便在多种环境中使用数据。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Organizing data in data stores and datasets</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">组织数据存储和数据集中的数据</h1>
+                
+            
+            
+                
+<p>创建ML服务工作区时，您会自动将blob存储部署到同一个资源组。该存储在内部用于存储代码快照、输出和实验运行的日志，但也用作数据集的默认数据存储。但是，在本节中，我们将创建一个新的blob存储帐户来存储所有数据集:</p>
+<ol>
+<li>让我们创建一个新的blob存储帐户，<kbd>mldemoblob</kbd>。请注意，每个存储帐户的名称必须是唯一的。出于本书的目的，我们将仅将其创建为本地冗余存储(<kbd>Standard_LRS</kbd>)。但是，您甚至可以将其部署为在副本上具有读访问权限的地理冗余存储。一旦创建了帐户，我们将提取<strong>共享访问签名</strong> ( <strong> SAS </strong>)并将其存储在<kbd>ACCOUNT_KEY</kbd>变量中:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az storage account create -n mldemoblob -g mldemo \</strong><br/><strong>    --sku Standard_LRS --encryption-services blob</strong><br/><br/><strong>$ ACCOUNT_KEY=$(az storage account keys list -n mldemoblob -g mldemo \</strong><br/><strong>    | jq '.[0].value')</strong></pre>
+<p style="padding-left: 60px">在前面的代码片段中，我们使用CLI命令<kbd>jq</kbd>。这是一个非常流行的解析JSON响应和应用查询的工具。如果您还没有安装它，请确保现在安装它，并使它在您的路径中可用。</p>
+<ol start="2">
+<li>接下来，我们在blob存储帐户中创建一个容器，稍后将保存我们所有的数据集。我们需要使用<kbd>ACCOUNT_KEY</kbd>变量来创建容器:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az storage container create -n data --account-name mldemoblob \</strong><br/><strong>    --account-key ${ACCOUNT_KEY}</strong></pre>
+<ol start="3">
+<li>最后，我们可以将blob存储容器附加到Azure ML服务工作区，作为名为<kbd>mldemodatastore</kbd>的数据存储。这允许我们在ML服务中使用抽象数据存储，而不用担心底层的存储技术。我们还需要一个SAS来授权ML服务与blob容器交互。我们可以使用特定于容器或特定于帐户的访问令牌——在我们的例子中，我们将使用存储在<kbd>ACCOUNT_KEY</kbd>变量中的相同帐户sa:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az ml datastore attach-blob -n mldemodatastore -a mldemoblob -c data \</strong><br/><strong>    --account-key ${ACCOUNT_KEY}</strong></pre>
+<p style="padding-left: 60px">现在，我们可以开始将数据上传到这个blob存储容器，并在ML服务中将这些数据注册为数据集。该解决方案的最大好处是，从现在开始，您可以从该数据存储中的任何ML服务环境访问您的数据——无论是您的本地机器、远程分布式计算集群，还是运行您的评分服务的容器实例。</p>
+<ol start="4">
+<li>让我们继续上传一些数据——在我们的例子中，我们想要上传一个本地培训文件夹到<kbd>blob</kbd>存储帐户。您可以使用命令行或跨平台Azure Storage Explorer应用程序来实现这一点:</li>
+</ol>
+<pre style="padding-left: 60px"><strong>$ az storage blob upload-batch \</strong><br/><strong>    --account-name mldemoblob --account-key ${ACCOUNT_KEY} \</strong><br/><strong>    --destination "data/training" --source "./training"</strong></pre>
+<ol start="5">
+<li>接下来，我们打开一个Python创作环境，并将数据注册为<kbd>dataset</kbd>。首先，我们需要检索对<kbd>datastore</kbd>实例的引用。接下来，我们可以定义这个数据存储上的数据路径，并使用<kbd>Dataset.auto_read_files()</kbd>方法加载数据。最后，我们可以在Azure ML中将数据注册为新的数据集。<kbd>definition</kbd>属性将向我们显示数据集的最新版本及其更新时间:</li>
+</ol>
+<pre style="padding-left: 60px">from azureml.core.datastore import Datastore<br/>from azureml.core.dataset import Dataset<br/><br/>datastore_name = 'mldemodatastore'<br/>dataset_name = 'training.data.raw'<br/><br/># Retrieve the datastore<br/>datastore = Datastore.get(ws, datastore_name)<br/>datapath = datastore.path('training/raw_data.csv')<br/>dataset = Dataset.auto_read_files(datapath)<br/><br/># Register the dataset<br/>def = dataset.register(workspace=ws, name=dataset_name,<br/>                       exist_ok=True, update_if_exist=True)<br/><br/>print(def.definition)</pre>
+<ol start="6">
+<li>最终，我们可以修改我们的pandas或Spark代码，使用Azure ML服务数据集而不是直接连接来加载数据，它将自动处理数据加载、身份验证和版本控制。以下是熊猫如何做到这一点的一个片段:</li>
+</ol>
+<pre style="padding-left: 60px"># Access your dataset<br/>dataset = Dataset.get(ws, dataset_name)<br/><br/># Load in-memory Dataset to your local machine as Pandas dataframe<br/>df = dataset.to_pandas_dataframe()<br/>print(df.head())<br/><br/>If you are using PySpark instead of Python you can use the following snippet.<br/># Access your dataset<br/>dataset = Dataset.get(ws, dataset_name)<br/><br/># Load in-memory Dataset to your local machine as pandas dataframe<br/>df = dataset.to_spark_dataframe()<br/>df.show()</pre>
+<p>正如您所看到的，通过抽象数据集和数据存储，您现在可以在任何环境中自动分析、准备和使用您的数据，无论是您的本地计算机、Azure ML计算集群、Databricks-distributed Spark环境还是任何计算目标。</p>
+<p>您现在已经了解了如何将数据加载到Azure Blob中，并将其注册为数据集，以便在所有其他环境中进一步使用。对于负责为业务分析师、ML工程师和数据科学家清理和提供数据的数据工程师来说，这是一项有用的技能。</p>
+<p>接下来，让我们从数据管理员的角度来看看如何管理这些数据集。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Managing data in Azure ML</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">在Azure ML中管理数据</h1>
+                
+            
+            
+                
+<p>尽管数据存储和数据集是抽象的，但Azure ML服务使用数据集有更多的优势。一旦您负责大量的数据，您就需要获得管理和组织云中的数据集和数据存储的技能。幸运的是，Azure ML提供了大量的功能，极大地方便了透明的端到端ML流程的数据处理和数据管理。</p>
+<p>对于端到端、完全可再现的ML工作流，您需要关注三个大的主题:</p>
+<ul>
+<li>计算基础设施</li>
+<li>密码</li>
+<li>数据</li>
+</ul>
+<p>虽然ML服务有助于管理所有这三个方面，但我们将在接下来的章节中关注数据管理的第三点。我们将具体了解如何使用版本和定义更新数据集，如何管理数据集的生命周期，以及如何管理可重复ML流程的快照。</p>
+<p>首先，我们将了解如何将数据集和数据存储抽象为数据集定义。这将帮助您从数据集定义中加载数据，而无需了解任何关于数据位置、存储格式、编码和访问控制的信息。您还可以对该数据集的定义进行版本控制，以使您的使用者了解最新的变化。</p>
+<p>然后，我们将发现一种使ML以可再现的方式运行的方法，即通过提供数据快照。通过访问大量廉价且可扩展的数据存储，为中小型数据集创建数据快照是一种很好的做法。数据集定义使这个过程变得非常容易。</p>
+<p>最后，我们将经历数据集定义的生命周期。当您为三个以上不同的数据消费者管理三个以上不同的数据集时，您应该使用这个概念。您的数据集定义可以很容易地与公共API进行比较，后者也需要记录、版本化、更新和废弃——我们将看到数据集完全相同。</p>
+<p>Azure提供了一种抽象和管理数据存储和数据集的奇妙方式。让我们来看看。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Versioning datasets and dataset definitions</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">版本化数据集和数据集定义</h1>
+                
+            
+            
+                
+<p>Azure ML服务中的数据集可以通过数据集定义来版本化。版本是一个单调递增的数字，每当使用<kbd>Dataset.register()</kbd>方法注册同一数据集的新数据并将<kbd>update_if_exist</kbd>参数设置为<kbd>True</kbd>时，版本就会递增。如果数据集与现有数据集同名，则该数据集的版本会递增。</p>
+<p>每个数据集的版本存储在其附带的数据集定义中:</p>
+<pre># Register the dataset once<br/>dataset_reg = dataset.register(workspace=ws, name=dataset_name,<br/>                       exist_ok=True, update_if_exist=True)<br/>print(dataset_reg.definition)<br/># &gt; VersionID: 1, State: active, Created: 2019-06-17 20:54:37.026860+00:00, Modified: 2019-06-17 20:54:37.026860+00:00, Notes: None<br/><br/># Register the dataset with the same name a second time<br/>dataset_reg = dataset.register(workspace=ws, name=dataset_name,<br/>                       exist_ok=True, update_if_exist=True)<br/>print(dataset_reg.definition)<br/># &gt; VersionID: 2, State: active, Created: 2019-06-17 21:56:39.026860+00:00, Modified: 2019-06-17 21:56:39.026860+00:00, Notes: None</pre>
+<p>如您所见，如果您重新注册一个同名的数据集，您将得到一个版本号递增的数据集。因此，一旦您的数据注册为数据集，它将自动进行版本化，您可以通过数据集定义从代码中访问数据的特定版本:</p>
+<pre># list all definitions for the dataset<br/>dataset.get_definitions()<br/># &gt; VersionID: 1, State: active, Created: 2019-06-17 ...<br/># &gt; VersionID: 2, State: active, Created: 2019-06-17 ...<br/><br/># get definition of version 1<br/>dataset.get_definition(version_id=1)<br/># &gt; VersionID: 1, State: active, Created: 2019-06-17 ...</pre>
+<p>您可能想问问自己这样的数据集定义到底代表什么，以及为什么不直接将版本号分配给数据集。数据集定义描述了对原始数据执行的一组转换。当通过这些接口访问数据时，这些转换被自动转换并应用于pandas或PySpark转换。</p>
+<p>一个很好的例子是，如果原始数据包含许多不应向数据消费者公开的字段。另一个常见的用例是将现有列重命名为常见的列名以及简单的转换和数据断言。下面是一个仅保留相关列的小示例:</p>
+<pre># Update the dataset definition to select only relevant columns<br/>def = def.keep_columns(['id', 'A', 'B', 'C'])<br/><br/># Update the dataset definition<br/>dataset = dataset.update_definition(def, 'select relevant columns')</pre>
+<p>在前面的代码中，我们通过<kbd>DatasetDefinition.keep_columns()</kbd>方法定义了一个转换。我们将在本章的后面部分看到更多的这些方法。然后，我们可以使用这个定义来更新数据集，并只向每个数据使用者显示相关的列。此外，您现在可以确保所有ML管道总是使用相同的数据集定义:</p>
+<pre># Access your dataset<br/>dataset = Dataset.get(ws, dataset_name)<br/><br/># Get the dataset definition with version 1<br/>def = dataset.get_definition(version_id=1)<br/><br/># Get the Pandas dataframe from this definition<br/>df = def.to_pandas_dataframe()</pre>
+<p>如果数据存储系统中的数据在其原始位置被覆盖(例如，在blob存储上)或改变(例如，在RDBMS上)，则不能保证相同的数据用于所有实验和训练。在这种情况下，您可以拍摄数据集的快照。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Taking data snapshots for reproducibility</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">为再现性拍摄数据快照</h1>
+                
+            
+            
+                
+<p>出于再现性、验证和审计的目的，您可能希望在企业级ML管道中拍摄数据集的快照。这将使ML工程师和数据科学家的工作与数据工程师和数据管家的工作完全分离。这两个小组可以并行工作，并在处理数据的摄取、清洗和质量时运行可重复的实验。</p>
+<p>默认情况下，Azure ML服务中的快照仅创建和存储数据集配置文件——所有列统计信息的摘要。它使用本地计算(当前的创作环境)并将其存储在默认的数据存储中——使用Azure ML服务自动部署的blob存储帐户。计算目标和存储目标都可以配置。当您需要并行运行分析时，指定计算目标是很有帮助的。例如，对于存储在数据湖中的大型Parquet数据集，您希望使用PySpark而不是单个Python解释器来并行执行。</p>
+<p>下面是如何在默认数据存储中创建这种本地快照的一个片段:</p>
+<pre># Name of the current snapshot<br/>snapshot_name = 'experiment_1'<br/><br/># Create a snapshot of the dataset<br/>snapshot = dataset.create_snapshot(snapshot_name=snapshot_name)<br/><br/># Monitor the snapshot process<br/>snapshot.wait_for_completion(show_output=True, status_update_frequency=10)<br/><br/># Return the snapshot<br/>dataset.get_snapshot(snapshot_name)</pre>
+<p>正如您在前面的代码中所看到的，我们只是为快照传递一个名称，并使用当前的Python解释器创建它。您可以通过向<kbd>Dataset.create_snapshot()</kbd>函数传递额外的参数来改变计算环境和存储位置。</p>
+<p>然而最重要的是，如果您还想拍摄数据的快照，您需要将<kbd>create_data_snapshot</kbd>参数设置为<kbd>True</kbd>。这将计算数据配置文件，并将其与数据一起存储到已配置的数据存储中。</p>
+<p>如果想要浏览数据集中的所有快照，我们可以使用以下代码片段列出它们:</p>
+<pre># Get all snapshots from a dataset<br/>dataset.get_all_snapshots()</pre>
+<p>但是，如果我们想要使用来自特定快照(也保存了数据快照)的数据，我们可以简单地从该快照返回pandas或PySpark数据帧:</p>
+<pre># Get snapshot from a dataset<br/>dataset_snap = dataset.get_snapshot(snapshot_name)<br/><br/># Get the Pandas dataframe from this snapshot<br/>df = dataset_snap.to_pandas_dataframe()</pre>
+<p>在前面的代码中，我们从数据快照中加载熊猫数据帧。现在，您可以在您的实验、培训和验证管道中使用该功能，以实现所有ML流程的重现性。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>The life cycle of a dataset</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">数据集的生命周期</h1>
+                
+            
+            
+                
+<p>正如您在前面几节中看到的，数据集应该与使用它们的实验代码和环境(库、脚本、配置等)一起进行版本化、快照化和管理。这是因为所有数据本质上都是动态的，会随着时间的推移而变化。Azure ML服务数据集的生命周期管理特性为您提供了处理这些变化的灵活性。</p>
+<p>最常见的情况是数据集被重组，数据集的名称、路径、物理存储等都发生了变化。使用Azure数据集，您可以通过数据存储抽象路径(或RDBMS中的表名)和物理存储。要修改数据集本身的名称，您可以使用数据集生命周期管理，并弃用数据集以支持较新的数据集。</p>
+<p>下面是一个略有不同的示例，您希望弃用数据集的某个版本，而使用新版本:</p>
+<pre># Dataset definition to deprecate<br/>def = dataset.get_definition(version_id=1)<br/><br/># Deprecate it by providing the replacement dataset definition<br/>def.deprecate(deprecate_by_dataset_id=dataset.id, <br/>              deprecated_by_definition_version=2)</pre>
+<p>弃用数据集将警告数据集的使用者，有一个更新的数据集版本可用，应该使用它。另一种可能是在不再使用数据集时将其存档:</p>
+<pre># Archive the dataset definition<br/>def = dataset.get_definition(version_id=1)<br/>def.archive()</pre>
+<p>为了完成生命周期，您还可以重新激活数据集定义，从而使其对您的使用者再次可见:</p>
+<pre># Reactivate the dataset definition<br/>def = dataset.get_definition(version_id=1)<br/>def.reactivate()</pre>
+<p>因此，您已经学会了如何使用Azure ML中数据集的生命周期管理功能来管理数据集。</p>
+<p>既然我们已经将数据定义为数据集，那么数据消费者就需要一种导航和浏览这些数据集的方法。这正是我们将在下一节讨论的内容。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Exploring data registered in the Azure ML service</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">探索在Azure ML服务中注册的数据</h1>
+                
+            
+            
+                
+<p>在这一节中，我们将从数据科学家的角度来看看如何探索在Azure ML服务中注册的数据。我们假设数据之前是由数据工程师加载到Azure中的，现在我们需要作为数据科学家使用这些数据。</p>
+<p>典型的工作流首先列出可用的不同数据集，然后深入数据集定义、配置文件和样本以评估数据。在接下来的几节中，您将学习如何实现这个工作流。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Exploring the datasets</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">探索数据集</h1>
+                
+            
+            
+                
+<p>首先，作为数据科学家，我们想知道哪些数据集是可用的。因此，我们将在Jupyter笔记本中探索来自Azure ML服务的数据集。请注意，探索注册数据集有多种方法，但出于本书的目的，我们将坚持使用每个数据科学家最可能熟悉和使用的工具:</p>
+<ol>
+<li>让我们从工作空间探索数据集:</li>
+</ol>
+<pre style="padding-left: 60px"># list all datasets from a workspace<br/>datasets = Dataset.list(ws)<br/><br/># Access your dataset<br/>dataset = Dataset.get(ws, dataset_name)</pre>
+<p style="padding-left: 60px">在前面的代码中，我们首先列出了所有可用的数据集。</p>
+<ol start="2">
+<li>使用标准Python过滤器函数，您还可以限制数据集列表。然后，我们选择一个给定了数据集名称的特定数据集，并检查以下代码片段中的所有数据集定义:</li>
+</ol>
+<pre style="padding-left: 60px"># List all definitions for the dataset<br/>definitions = dataset.get_definitions()<br/><br/># Get a specific dataset definition<br/>data_definition = dataset.get_definition(version_id=1)</pre>
+<p style="padding-left: 60px">数据集定义是数据集的特定版本，伴随着可选的转换，例如删除或重命名的列。当处理数据集本身时，您总是处理最新的数据集定义，因此是版本最大的数据集定义。</p>
+<ol start="3">
+<li>数据集定义只跟踪列转换，而不是数据本身的变化。为此，我们可以查看一个数据集中的所有快照，特别是那些与配置文件一起拍摄数据快照的快照:</li>
+</ol>
+<pre style="padding-left: 60px"># Get all snapshots from a dataset<br/>snapshots = dataset.get_all_snapshots()<br/><br/># Get snapshot from a dataset<br/>data_snapshot = dataset.get_snapshot(snapshot_name)</pre>
+<p style="padding-left: 60px">在前面的代码中，我们列出了所有快照，并按名称选择了一个特定的快照。</p>
+<ol start="4">
+<li>当您想要访问数据集、定义或快照中的数据时，您可以通过返回pandas或PySpark数据帧来直接完成，如以下代码片段所示:</li>
+</ol>
+<pre style="padding-left: 60px"># Load dataframe from dataset<br/>df = dataset.to_pandas_dataframe()<br/><br/># Load dataframe from dataset definition<br/>df = data_definition.to_pandas_dataframe()<br/><br/># Load dataframe from dataset snapshot<br/>df = data_snapshot.to_pandas_dataframe()</pre>
+<p>现在，您可以在Juptyer笔记本中或通过使用Python解释器来研究数据集、作为定义的数据转换和数据快照。但是，当数据集太大而不适合内存时，您需要以更有效的方式来浏览数据。一个常见的例子是pandas在试图解析一个大于可用内存的文件时耗尽了内存。在这种情况下，您需要分割文件并从多台机器上读取多个块(横向扩展)或增加机器上的RAM(纵向扩展)。我们将在下一节讨论这些技术。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Exploring the data</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">探索数据</h1>
+                
+            
+            
+                
+<p>有多种方法可以在不将数据集下载到本地计算机的情况下浏览大型数据集。最常见的技术是显示最上面的<em> N </em>行，返回一个(分层的)数据样本，或者计算一个数据集概要——所有列分布的汇总。在本节中，我们将探讨所有三个选项。</p>
+<ol>
+<li>让我们从最简单的开始，返回数据集的前<em> N </em>行。这个函数叫做<kbd>dataset.head()</kbd>，工作原理和熊猫完全一样；它甚至返回了一个包含前<em> N </em>条记录的pandas数据帧:</li>
+</ol>
+<pre style="padding-left: 60px"># Return the first 10 records as pandas dataframe<br/>df = dataset.head(10)</pre>
+<p style="padding-left: 60px">您可以使用前面的函数只返回记录的子集，并将这些记录加载到本地内存中。然而，如果记录被排序，那么获得第一个<em> N </em>值并不代表数据集。为了检索数据集的更具代表性的样本，您可以使用<kbd>dataset.sample()</kbd>函数。该函数使用提供的采样策略和参数，从原始数据集生成一个新的数据集作为样本。</p>
+<ol start="2">
+<li>一般的<kbd>sample()</kbd>函数被定义为<kbd>sample (sample_strategy, arguments)</kbd>，其中<kbd>sample_strategy</kbd>参数定义样本<kbd>strategy (top_n, simple_random or stratified)</kbd>，其中<kbd>arguments</kbd>是指定采样策略属性的字典。每种采样策略都有不同的属性。输出数据集是通过执行由类似于数据集定义的数据集定义的转换管道来生成的。因此，将使用您定义的采样策略和参数对返回数据进行采样。返回采样数据集后，可以使用与原始数据集中相同的方法:</li>
+</ol>
+<pre style="padding-left: 60px"># Specify the sampling strategy top_n<br/>sample_strategy = "top_n"<br/>sample_props = {n: 10}<br/><br/># Return a sampled dataset<br/>sampled_dataset = dataset.sample(sample_strategy, sample_props)<br/><br/># Get the Pandas dataframe of the dataset<br/>sampled_dataset.to_pandas_dataframe()</pre>
+<p style="padding-left: 60px">在前面的代码中，您可以看到sample函数返回一个带有采样转换的新数据集。因此，我们可以使用<kbd>dataset.to_pandas_dataframe()</kbd>将数据集转换成pandas数据帧或PySpark数据帧。</p>
+<ol start="3">
+<li>您也可以使用其他采样策略从数据集中检索更具代表性的样本。以下是检索随机采样的数据子集的配置示例:</li>
+</ol>
+<pre style="padding-left: 60px"># Specify the sampling strategy simple_random<br/>sample_strategy = "simple_random"<br/>sample_props = {probability: 0.7, seed: 1}<br/><br/># Return a sampled dataset<br/>sampled_dataset = dataset.sample(sample_strategy, sample_props)</pre>
+<ol start="4">
+<li>如果需要与原始数据具有相同分布的子集，可以使用分层子采样，如下例所示。您还必须定义应计算分层拆分的列和分数:</li>
+</ol>
+<pre style="padding-left: 60px"># Specify the sampling strategy stratified<br/>sample_strategy = "stratified"<br/>sample_props = {<br/>    columns: ["A", "B", "C"],<br/>    fractions: {("A", "B"): 0.6, ("C"): 0.4]},<br/>    seed: 1<br/>}<br/><br/># Return a sampled dataset<br/>sampled_dataset = dataset.sample(sample_strategy, sample_props)</pre>
+<p style="padding-left: 60px">前面的代码定义了对列<kbd>A</kbd>、<kbd>B</kbd>和<kbd>C</kbd>的分层采样策略，对列<kbd>A</kbd>和<kbd>B</kbd>使用了<kbd>0.6</kbd>的一部分，对列<kbd>C</kbd>使用了<kbd>0.4</kbd>的一部分。</p>
+<ol start="5">
+<li>如果您想在不将数据样本加载到本地内存的情况下研究数据分布，也可以加载数据概要文件。该配置文件是每个列的值分布的汇总，包含唯一值和缺失值的计数，以及最小值、最大值和中值。以下是加载数据集配置文件的示例:</li>
+</ol>
+<pre style="padding-left: 60px">dataset.get_profile()</pre>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>在本节中，您学习了如何在Python中探索数据集，如何在Azure ML服务中存储和注册数据，以及数据分发。</p>
+<p>在下一节中，我们将研究内置于Azure ML服务中的数据准备技术。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Preprocessing and feature engineering with Azure ML DataPrep  </title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">使用Azure ML DataPrep进行预处理和特征工程</h1>
+                
+            
+            
+                
+<p>在这一节中，我们将使用Azure ML服务更深入地研究预处理和特征提取过程。我们将首先从不同的存储系统中访问和提取不同数据格式的数据，例如blob存储中的文本数据和CSV数据，以及关系数据库系统中的表格数据。</p>
+<p>然后，我们将看看使用Azure ML DataPrep的常见数据转换技术，这是一个Python库，可以直接在Azure ML中在数据集上构建转换。您还将学习如何筛选列、通过表达式拆分列、修复缺失值、转换数据类型，甚至如何通过示例派生转换的常用技术。</p>
+<p>最后，我们将把数据写回到数据存储中，在那里它可以被注册为Azure ML服务中的干净数据集。通过这样做，您可以在Azure ML服务中实现完全企业级的ETL和数据准备管道。</p>
+<p>让我们从解析之前迁移到云中的数据开始。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Parsing different data formats</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">解析不同的数据格式</h1>
+                
+            
+            
+                
+<p>使用<kbd>dataprep</kbd> SDK将数据加载到Azure ML服务有不同的方式。推荐的方法是首先将数据上传到云中的blob存储，并将其转换为支持的格式。Azure DataPrep允许从许多不同的来源访问数据，并以各种编码方式使用数据。</p>
+<p>在写这本书的时候，Azure DataPrep不能从版本化的数据集定义中读取。我们建议首先从源中提取数据，然后将数据加载到Azure Blob存储中，使用DataPrep读取数据，将数据写回Azure Blob存储，然后从清理的数据中创建版本化的数据集。</p>
+<p>目前，Azure DataPrep可以从本地磁盘、blob存储、Azure数据湖存储和SQL数据库(如Microsoft SQL Server和PostgreSQL)加载数据。在访问数据文件时，Azure DataPrep目前支持分隔符分隔的文件，如CSV、固定宽度文件、Excel和Parquet等二进制格式以及复杂的嵌套JSON对象。</p>
+<p>DataPrep的一个奇妙特性是，它可以自动检测文件的模式和编码，并使用<kbd>auto_read_file (path, include_path)</kbd>方法推断出所有需要的设置。下面是一个从本地磁盘读取文本文件的快速示例:</p>
+<pre>import azureml.dataprep as dprep<br/><br/>dataflow = dprep.auto_read_file(path='./data/filename.txt')</pre>
+<p>像大多数其他的<kbd>dataprep</kbd>语句一样，前面的代码定义了一个<em>惰性</em>转换来从本地磁盘上的一个位置读取一个文件。这意味着通过调用这一行，执行引擎实际上并不加载任何数据。这种行为与你可能习惯于熊猫的行为截然不同。然而，这是在Spark中读取和转换<strong>弹性分布式数据帧</strong> ( <strong> RDDs </strong>)的默认行为。</p>
+<p>类似于Spark，所有转换都在一个<kbd>dataprep</kbd>流程中被惰性地评估。因此，如果您没有指定一个动作，转换将不会执行任何东西。</p>
+<p>事实上，<kbd>auto_read_file()</kbd>方法可能是你会发现自己大部分时间都在使用的方法，因为它非常有效。除了读取单个文件，您还可以定义一个模式作为<kbd>path</kbd>参数，并一次读取多个文件。将第二个参数<kbd>include_path</kbd>设置为<kbd>True</kbd>将向数据集添加一个额外的列，指定加载行的路径表单。</p>
+<p>但是，如果您需要对数据的解析进行更多的控制，并且您知道文件类型，那么建议使用我们在下面几节中讨论的特定于文件的函数。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Loading delimiter-separated data</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">加载分隔符分隔的数据</h1>
+                
+            
+            
+                
+<p>大多数其他库支持关于如何解析CSV和其他分隔符分隔文件的复杂规则。这与Azure DataPrep提供解析分隔符、引号、数据类型等选项的详尽列表，以及定义转换错误(例如，删除行)和文件头(例如，假设所有文件都有相同的头)的标准行为没有什么不同。</p>
+<p>下面是一个从本地磁盘读取CSV文件并推断数据集的列类型的小示例:</p>
+<pre>import azureml.dataprep as dprep<br/><br/># Read CSV files<br/>dataflow = dprep.read_csv(path='./data/*.csv', infer_column_types=True)</pre>
+<p>在前面的代码中，我们从磁盘中读取一个CSV文件，并推断出所有的列类型。为此，引擎必须扫描第一行，为数据集中的每一列提取标题类型。您可以使用<kbd>dataflow.dtypes</kbd>对象访问数据类型。</p>
+<p>Azure DataPrep还可以提取和读取zip存档中的CSV文件。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Parsing JSON data</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">解析JSON数据</h1>
+                
+            
+            
+                
+<p>读取和解析嵌套的JSON数据总是有点棘手。然而，使用Azure DataPrep非常简单，并且类似于上一节中的CSV示例。解析JSON的一个常见问题是如何处理嵌套数组。在大数据系统中，嵌套数组通常要么缩减为单个值、聚合，要么分解并拆分到多行上。</p>
+<p>在Azure DataPrep中读取JSON文件时也可以这样做。使用单个属性设置<kbd>flatten_nested_arrays</kbd>到<kbd>True</kbd>，所有嵌套数组被分解成数据集中的附加行。所有其他列都用原始行的相同内容复制，但数组的值被拆分到新创建的行中:</p>
+<pre>import azureml.dataprep as dprep<br/><br/># Read JSON files<br/>dataflow = dprep.read_json(path='./data/*.json')</pre>
+<p>前面的代码将读取多个JSON文件，并提供一个延迟评估的数据流。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Loading binary column-store data in Parquet format</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">以Parquet格式加载二进制列存储数据</h1>
+                
+            
+            
+                
+<p>Azure DataPrep提供了加载二进制编码的列存储数据的功能，比如Parquet格式。Parquet是一种流行的格式，用于存储针对快速分析和交互式查询而优化的大量数据。Parquet也是内部数据管道的一种很好的格式，因为它可以自动解决解析问题和性能瓶颈。</p>
+<p>在Azure ML DataPrep中有两种读取Parquet文件的方法— <kbd>read_parquet_file</kbd>和<kbd>read_parquet_dataset.</kbd>前者将读取通过路径字符串定义的单个或多个文件，类似于我们看到的CSV和JSON，而后者将把整个目录解析为一个大数据数据集。这有点令人困惑，但Hive和Spark等大数据系统通常用Parquet文件编写嵌套目录，其中分区键名和值编码在目录结构中。因此，后一种方法是为解析Parquet的这些嵌套目录结构而优化的。我们将在下面的代码片段中看到一个示例:</p>
+<pre>import azureml.dataprep as dprep<br/><br/># Read single parquet files individually<br/>dataflow = dprep.read_parquet_file(path='./data/filename.parquet')<br/><br/># Read nested folders of parquet files<br/>dataflow = dprep.read_parquet_dataset(path='./data/warehouse/telemetry')</pre>
+<p>在前面的代码中，我们使用这两个函数来延迟加载基于文件或包含整个分区目录结构的数据。作为一般建议，如果您只是将一堆Parquet文件放到一个平面文件夹结构中进行处理，请使用前者；如果你从一个<strong> Hadoop文件系统</strong> ( <strong> HDFS </strong>)或者Hive或者Spark生成的数据中读取，使用后者。</p>
+<p>因此，我们已经讨论了如何使用<kbd>dataprep</kbd> SDK将几个数据源和类型加载到Azure ML服务中。在下一节中，我们将展示如何使用相同的SDK来转换数据。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Building a data transformation pipeline in Azure ML</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">在Azure ML中构建数据转换管道</h1>
+                
+            
+            
+                
+<p>清理、预处理、过滤、输入缺失值和特征提取等数据转换是每个ETL管道的核心。在下面的小节中，我们将关注ETL管道的<em>转换</em>部分。值得一提的是，在基于云或大数据的数据管道中，顺序通常是ELT换句话说，从源头提取，加载到云端，在云端转化。</p>
+<p><kbd>azureml-dataprep</kbd>包不仅对读取和写入数据有用，而且它还包含大量转换数据的功能，无论是添加列、过滤掉行或列，还是输入丢失的值。在我们深入Azure中的转换和动作的概念之前，我们想快速看一下读取数据时返回的dataflow对象。</p>
+<p>如果您曾经使用过Spark或TensorFlow 1，数据流的概念可能对您来说并不陌生。在这两个框架中，您也已经懒惰地评估了操作的<strong>有向无环图</strong> ( <strong> DAGs </strong>)。在Spark中，您可能会对RDD执行过滤，而在TensorFlow中，您可能会计算图形中特定点的损耗度量。如果没有显示数据或者没有执行会话，那么惰性转换也不会执行。</p>
+<p>注意，数据流非常类似于Spark中的RDD，因为它是分布式数据集上的惰性操作的DAG。让我们开始探索Azure <kbd>dataprep</kbd> SDK中提供的不同转换。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Generating features through expression</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">通过表达式生成特征</h1>
+                
+            
+            
+                
+<p>首先，我们将了解向数据集添加要素的情况。当您需要从列中提取信息、转换信息并将其存储在新列中时，这是一项常见的任务。Azure <kbd>dataprep</kbd> SDK提供了一系列表达式，允许您从现有列中提取数据并将其存储在新列中。以下是可用的表达式:</p>
+<ul>
+<li><kbd>substring</kbd>:计算一列所有值的子串</li>
+<li><kbd>length</kbd>:计算一列所有值的长度</li>
+<li><kbd>to_upper</kbd>:将一列的所有值转换为大写</li>
+<li><kbd>to_lower</kbd>:将一列的所有值转换成小写</li>
+<li><kbd>RegEx.extract_record</kbd>:从正则表达式匹配器中提取捕获组</li>
+<li><kbd>create_datetime</kbd>:从年、月和日列创建日期时间对象</li>
+</ul>
+<p class="mce-root"/>
+<ul>
+<li>代数运算符:</li>
+<li style="padding-left: 30px">加法<kbd>+</kbd></li>
+<li style="padding-left: 30px">减法<kbd>-</kbd></li>
+<li style="padding-left: 30px">分部<kbd>/</kbd></li>
+<li style="padding-left: 30px">乘法运算<kbd>*</kbd></li>
+<li style="padding-left: 30px">整数除法<kbd>//</kbd></li>
+<li style="padding-left: 30px">模数<kbd>%</kbd></li>
+<li style="padding-left: 30px">电源<kbd>**</kbd></li>
+</ul>
+<p>让我们以<kbd>substring</kbd>方法为例，通过表达式创建新列。</p>
+<p><kbd>substring(start, length)</kbd>表达式可用于将一列的前缀提取到新列中。您也可以使用<kbd>substring(start)</kbd>而不在表达式中指定长度。如果您将子字符串表达式传递给<kbd>expression</kbd>参数，它将创建一个新的计算列，该计算列将执行在该列的每条记录上指定的表达式。</p>
+<p>让我们看一个例子。当您得到一个<strong>国际银行账号</strong> ( <strong> IBAN </strong>)字段时，您可能希望将该代码拆分为国家代码、银行标识符、分行和账户id。这可以通过使用<kbd>substring</kbd>表达式来实现。在示例IBAN，<kbd>IE29 AIBK 9311 5212 3456 78</kbd>中，我们希望提取前两个字符作为国家代码，以便在数据集中加入其他特定于国家的信息:</p>
+<pre>substr_exp = dprep.col('iban').substring(0, 2)<br/>country_code = dflow.add_column(expression=substr_exp,<br/>  new_column_name='country_code', prior_column='iban', <br/>  expression=substr_exp)</pre>
+<p>正如您在前面的代码中看到的，我们使用<kbd>add_column()</kbd>方法将新创建的列添加到数据流中。此方法需要表达式、新列的名称<kbd>new_column_name</kbd>和列的名称<kbd>prior_column</kbd>，之后计算列应作为参数添加。让我们继续一些数据类型转换。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Data type conversions</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">数据类型转换</h1>
+                
+            
+            
+                
+<p>在转换数据时，您经常会遇到将数据解析成不同数据类型的需求。因此，dataflow对象包含以下方法来转换列的数据类型:</p>
+<ul>
+<li><kbd>to_bool()</kbd></li>
+<li><kbd>to_datetime()</kbd></li>
+<li><kbd>to_long()</kbd></li>
+<li><kbd>to_number()</kbd></li>
+<li><kbd>to_string()</kbd></li>
+</ul>
+<p><kbd>to_long()</kbd>和<kbd>to_string()</kbd>函数除了要转换的列标识符数组之外，不接受任何其他参数。让我们看看其他的功能。</p>
+<p><kbd>to_bool()</kbd>方法允许我们将复杂的数据结构转换成布尔值。与所有其他函数类似，它的第一个参数是要应用的列的列表。<kbd>true_values</kbd>和<kbd>false_values</kbd>参数让我们定义一个应该被转换成<kbd>true</kbd>或<kbd>false</kbd>的定制值列表。此外，我们还可以使用<kbd>MismatchAsOption.ASERROR</kbd>、<kbd>MismatchAsOption.ASTRUE</kbd>或<kbd>MismatchAsOption.ASFALSE</kbd>来指定在两个列表中都找不到值时应该发生什么。让我们来看一个例子:</p>
+<pre>from azureml.dataprep import MismatchAsOption<br/>dflow = dflow.to_bool(['Survived'],<br/>  true_values=['yes'], false_values=['no'], mismatch_as=MismatchAsOption.ASFALSE)</pre>
+<p>在前面的代码中，我们将string类型的幸存列转换为Boolean数据类型。我们定义值<kbd>yes</kbd>要转换成<kbd>true</kbd>，值<kbd>no</kbd>要转换成<kbd>false</kbd>。最后，我们希望将任何不匹配解析为<kbd>false</kbd>值。</p>
+<p>接下来，我们将使用<kbd>to_number()</kbd>方法将字符串转换成浮点数。同样，我们使用将被转换的列的列名作为第一个参数。此外，我们可以指定<kbd>decimal_point</kbd>参数来指定源数据是使用点<kbd>DecimalMark.DOT</kbd>还是逗号<kbd>DecimalMark.COMMA</kbd>来表示小数点:</p>
+<pre>from azureml.dataprep import DecimalMark<br/>dflow = dflow.to_number(['Latitude', 'Longitude'], decimal_point=DecimalMark.COMMA)</pre>
+<p>在前面的代码中，我们将两列<kbd>Latitude</kbd>和<kbd>Longitude</kbd>从字符串转换为浮点数字数据类型。我们还将逗号指定为小数点。</p>
+<p>让我们看一下最后一个转换函数，<kbd>to_datetime()</kbd>，它将一个字符串解析成datetime格式。第一个参数也是一个列名数组。此外，我们可以使用用于转换的参数<kbd>date_time_formats</kbd>添加各种数据时间格式的列表。当您的数据源包含多个不同的datetime字符串表示形式，并且应该一次解析所有这些表示形式时，这非常有用。另一个参数<kbd>date_constant</kbd>，让我们将一个常量日期指定为一个字符串，该字符串将被追加到所有只包含时间而不包含日期值的值中:</p>
+<pre>dflow = dflow.to_datetime('Date', date_time_formats=['%d.%m.%Y %H:%M'])</pre>
+<p>前面的代码将<kbd>Date</kbd>列从字符串转换成数据类型格式。在下一节中，我们将通过例子学习如何执行类似的转换。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Deriving columns by example</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">通过示例派生列</h1>
+                
+            
+            
+                
+<p>接下来，我们将研究一种通过Azure <kbd>dataprep</kbd> SDK中的例子派生新列的巧妙方法。有两种方法可以用来派生新列:</p>
+<ul>
+<li><kbd>split_column_by_example</kbd>:这使用提供的示例将列拆分成多个列。</li>
+<li><kbd>derive_column_by_example</kbd>:这使用提供的例子将列转换成一个新列。</li>
+</ul>
+<p>当您想要执行复杂的转换或分割时，这些方法非常有用，因为通过一组示例来定义比通过一组规则来定义要容易得多。当处理杂乱的数据或来自不同来源的数据时，经常会出现这种情况。在我们的例子中，我们将研究<kbd>derive_column_by_example</kbd>方法，但是两种方法的工作方式相同:</p>
+<ol>
+<li>创建一个生成器对象。</li>
+<li>向构建器添加示例或修改建议示例的列表。</li>
+<li>预览转换。</li>
+<li>使用变压器。</li>
+</ol>
+<p>让我们看看这些步骤的实际操作。首先，我们使用<kbd>dflow.builders.derive_column_by_example</kbd>直接从<kbd>dflow</kbd>对象创建一个构建器。我们还需要使用<kbd>source_columns</kbd>和<kbd>new_column_name</kbd>参数指定源列和新派生列的名称。在下面的代码片段中，我们使用Titanic数据集的<kbd>Name</kbd>列来导出乘客的头衔:</p>
+<pre>builder = dflow.builders.derive_column_by_example(<br/>  source_columns=['Name'], new_column_name='Title')</pre>
+<p><kbd>Name</kbd>列中的数据和期望的到<kbd>Title</kbd>的转换如下所示:</p>
+<table style="border-collapse: collapse;width: 100%" border="1">
+<tbody>
+<tr>
+<td class="CDPAlignCenter CDPAlign">
+<p><strong>名称</strong></p>
+</td>
+<td class="CDPAlignCenter CDPAlign">
+<p><strong>标题</strong></p>
+</td>
+</tr>
+<tr>
+<td class="CDPAlignCenter CDPAlign">
+<p>布劳恩，欧文·哈里斯先生</p>
+</td>
+<td class="CDPAlignCenter CDPAlign">
+<p>先生</p>
+</td>
+</tr>
+<tr>
+<td class="CDPAlignCenter CDPAlign">
+<p>卡明斯，约翰·布莱德利夫人(佛罗伦萨布里格斯塞耶)</p>
+</td>
+<td class="CDPAlignCenter CDPAlign">
+<p>夫人</p>
+</td>
+</tr>
+<tr>
+<td class="CDPAlignCenter CDPAlign">
+<p>海基宁，小姐。莱娜</p>
+</td>
+<td class="CDPAlignCenter CDPAlign">
+<p>小姐ˌ女士</p>
+</td>
+</tr>
+<tr>
+<td class="CDPAlignCenter CDPAlign">
+<p>帕尔松，主人。戈斯塔·伦纳德</p>
+</td>
+<td class="CDPAlignCenter CDPAlign">
+<p>掌握</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>现在，我们可以使用<kbd>add_example</kbd>方法将示例添加到转换中。我们需要将源数据和示例转换指定为参数。最后，我们可以预览前10条记录的转换:</p>
+<pre>df = dflow.head()<br/>builder.add_example(source_data=df.iloc[0], example_value='Mr')<br/>builder.add_example(source_data=df.iloc[1], example_value='Mrs')<br/>builder.add_example(source_data=df.iloc[2], example_value='Miss')<br/>builder.add_example(source_data=df.iloc[3], example_value='Master')<br/>builder.preview(count=10)</pre>
+<p>在前面的例子中，我们使用<kbd>df.iloc[index]</kbd>符号来为指定的转换指定示例记录的索引，这与Pandas中的符号非常相似。然后我们预览转换的前10个记录。我们也可以使用<kbd>generate_suggested_examples</kbd>、<kbd>delete_example</kbd>或者<kbd>list_examples</kbd>方法来修改示例转换的列表。</p>
+<p>一旦我们对转换感到满意，我们就可以应用转换并使用<kbd>to_dataflow</kbd>方法生成新的数据流:</p>
+<pre>dflow = builder.to_dataflow()</pre>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Imputing missing values</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">输入缺失值</h1>
+                
+            
+            
+                
+<p>接下来，我们将研究另一个重要的预处理技术:输入缺失值。一般来说，我们可以区分两种类型的替换缺失值:常数替换或学习替换。因此，我们可以用常数值替换数据集中的缺失值，或者学习如何根据训练数据估算缺失值。</p>
+<p>当您选择使用常量替换来替换数据流中的值时，可以使用以下转换:</p>
+<ul>
+<li><kbd>replace</kbd>:替换与指定值匹配的所有值</li>
+<li><kbd>replace_na</kbd>:用空值替换所有自定义的NaN值</li>
+<li><kbd>fill_nulls</kbd>:用指定值填充所有空值</li>
+<li><kbd>error</kbd>:用错误代码和信息替换自定义值</li>
+<li><kbd>fill_errors</kbd>:用指定值填充所有错误</li>
+</ul>
+<p>通常，不断更换是不够的。在这些情况下，您必须选择插补构建器。插补构建器的工作方式类似于之前讨论的示例派生构建器。我们必须定义以下步骤来定义、学习和估算数据集中的缺失值:</p>
+<ol>
+<li>定义列插补参数</li>
+<li>创建列插补生成器</li>
+<li>学习估算法</li>
+<li>转换数据流</li>
+</ol>
+<p>我们从使用<kbd>ImputeColumnArguments</kbd>对象的插补参数开始。它将目标列<kbd>column_id</kbd>作为第一个参数，并允许您使用<kbd>custom_impute_value</kbd>定义一个常数值，或者使用<kbd>impute_function</kbd>参数定义一个计算值。首先，我们定义了一个简单的静态插补，并将泰坦尼克号数据集中的装载港设置为“S”(南安普敦)，所有空值都在<kbd>Embarked</kbd>列中——代表每位乘客的装载港:</p>
+<pre>impute_embarked = dprep.ImputeColumnArguments(column_id='Embarked',<br/>  custom_impute_value=S)</pre>
+<p>前面的代码和使用<kbd>fill_nulls</kbd>完全一样。然而，我们也可以创建更复杂的插补论点。在下面的代码中，我们使用<kbd>impute_function=ReplaceValueFunction.MEAN</kbd>将<kbd>Age</kbd>列中的空值与同一列的训练集平均值进行估算。我们对<kbd>Cabin</kbd>列进行同样的操作。使用<kbd>StringMissingReplacementOption</kbd>选项，我们可以定义何时应用插补，用于<kbd>EMPTY</kbd>、<kbd>NOTHING</kbd>、<kbd>NULLS</kbd>或<kbd>NULLSANDEMPTY</kbd>。让我们定义两种插补:</p>
+<pre>from azureml.dataprep import StringMissingReplacementOption<br/><br/>impute_cabin = dprep.ImputeColumnArguments(column_id='Cabin',<br/>  impute_function=dprep.ReplaceValueFunction.MIN,   <br/>  string_missing_option=StringMissingReplacementOption.NULLSANDEMPTY)<br/><br/>impute_age = dprep.ImputeColumnArguments(column_id='Age',<br/>  impute_function=dprep.ReplaceValueFunction.MEAN, <br/>  string_missing_option=StringMissingReplacementOption.NULLSANDEMPTY)</pre>
+<p>下一步，我们使用之前定义的插补参数创建插补构建器。该函数的优点在于，它还允许我们定义用于计算插补函数的分组列。在下面的示例中，我们将<kbd>Sex</kbd>和<kbd>Pclass</kbd>列定义为分组列，因此，年龄和客舱的聚合是按性别和乘客级别计算的。这比仅仅用整个训练集的平均值替换这些值要准确得多:</p>
+<pre>impute_builder = dflow.builders.impute_missing_values(<br/>  impute_columns=[impute_embarked, impute_cabin, impute_age],<br/>  group_by_columns=['Sex', 'Pclass'])</pre>
+<p>一旦构建了估算构建器，我们需要训练它。这将计算训练数据的分组插补函数，并将值存储在内部查找字典中:</p>
+<pre>impute_builder.learn()</pre>
+<p>最后，我们可以通过调用<kbd>to_dataflow</kbd>方法将训练好的插补函数应用于数据流:</p>
+<pre>dflow_imputed = impute_builder.to_dataflow()</pre>
+<p>接下来，我们将看看如何将分类变量编码成数值。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Label and one-hot encoding</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">标签和一次性编码</h1>
+                
+            
+            
+                
+<p>使用Azure <kbd>dataprep</kbd> SDK，您还可以将分类变量编码成数值。在本章中，我们将只看使用标签和一键编码转换分类值，但是在下一章<a href="2e9b480a-5003-4fc8-a5c6-bc2ba75c21b3.xhtml">第5章</a>T39】中，使用NLP 的高级特征提取，我们将看到许多更高级的编码技术。</p>
+<p>在标签编码中，我们用整数标签替换列中的所有分类值。如果我们将标签编码器应用于<kbd>Sex</kbd>列，则<kbd>male</kbd>值将被编码为<kbd>0</kbd>，而<kbd>female</kbd>值将被编码为<kbd>1</kbd>。让我们看看代码示例:</p>
+<pre>dflow = dflow.label_encode(<br/>  source_column='Sex', new_column_name='Sex_Label')</pre>
+<p>标签编码非常适合高基数分类值或序数值。如果分类列包含少量的唯一值，并且您正在寻找正交嵌入，则可以选择一键编码。让我们用正交向量<kbd>[1,0,0]</kbd>、<kbd>[0,1,0]</kbd>和<kbd>[0,0,1]</kbd>替换<kbd>Embarked</kbd>列的值，以下面的例子表示值<kbd>S</kbd>、<kbd>C</kbd>和<kbd>Q</kbd>:</p>
+<pre>dflow = dflow.one_hot_encode(<br/>  source_column='Embarked', prefix='Embarked_')</pre>
+<p>在前面的代码中，我们创建了以<kbd>Embarked_</kbd>前缀为前缀的新列；总之，与<kbd>Embarked</kbd>中唯一值一样多的列。</p>
+<p>如果数据包含许多不同但相似的值，还可以使用模糊分组将这些相似的值分组在一起。在Azure <kbd>dataprep</kbd> SDK中，这个操作使用<kbd>fuzzy_group_column</kbd>方法非常简单。如果需要，您需要定义源列和目标列<kbd>source_column</kbd>和<kbd>new_column_name</kbd>，以及相似性阈值和相似性得分的列名。</p>
+<p>在下面的示例中，我们使用这种模糊分组方法将来自<kbd>Ticket</kbd>列的所有相似值分组在一起:</p>
+<pre>dflow_grouped = dflow.fuzzy_group_column(source_column='Ticket',<br/>  new_column_name='Ticket_Groups',<br/>  similarity_threshold=0.75,<br/>  similarity_score_column_name='similarity_score')</pre>
+<p>前面的代码将相似的值组合在一起，并减少了<kbd>Ticket</kbd>列中不同分类值的数量。接下来，我们继续进行数值的特征转换。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Transformations and scaling</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">变换和缩放</h1>
+                
+            
+            
+                
+<p>在数据准备阶段，通常需要转换数值数据。在我们的数据集中，不是每个<kbd>Fare</kbd>都有一个确切的价格，我们可能更喜欢将票价分类成组。为此，我们可以使用分位数转换<kbd>quantile_transform</kbd>，它会将源列分组到<kbd>quantiles_count</kbd>个区间中。</p>
+<p>让我们来看看运行中的代码:</p>
+<pre>dflow = dflow.quantile_transform(source_column='Fare', new_column='Fare_Normal', <br/>  quantiles_count=5, output_distribution="Normal")</pre>
+<p>在前面的代码中，我们使用正态分布将票价分成五个分位数。如果我们喜欢均匀分割，我们也可以指定一个<kbd>Uniform</kbd>分布。</p>
+<p>如果我们想要将一个数字列的范围缩放到一个特定的范围，例如，为了规范化，我们可以使用<kbd>min_max_scale</kbd>函数来实现。该函数采用另外两个参数<kbd>range_min</kbd>和<kbd>range_max</kbd>，来定义源列应该缩放的目标范围。以下是这种转换的示例代码:</p>
+<pre>dflow_scaled = dflow.min_max_scale(column='Parch',<br/>  range_min=0, range_max=1)</pre>
+<p>一旦我们将源列转换成附加的特性列，我们通常需要从数据流中删除旧的列。现在，让我们研究一些行和列过滤技术。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Filtering columns and rows</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">过滤列和行</h1>
+                
+            
+            
+                
+<p><kbd>dataprep</kbd> SDK还允许您使用以下函数过滤数据集中的列和行:</p>
+<ul>
+<li><kbd>drop_columns</kbd>:从数据流中删除列</li>
+<li><kbd>filter</kbd>:从数据流中过滤行</li>
+</ul>
+<p>虽然<kbd>drop_columns</kbd>函数只接受列名列表作为参数，但是<kbd>filter</kbd>函数稍微复杂一些，可以使用表达式来过滤行。可以通过数据流列上的逻辑运算符或使用以下筛选函数来创建筛选表达式:</p>
+<ul>
+<li><kbd>starts_with</kbd></li>
+<li><kbd>ends_with</kbd></li>
+<li><kbd>contains</kbd></li>
+<li><kbd>is_error</kbd></li>
+<li><kbd>is_null</kbd></li>
+<li><kbd>distinct</kbd></li>
+<li><kbd>distinct_rows</kbd></li>
+</ul>
+<p>当数据被处理时，结果表达式将评估每条记录，并在过滤函数返回<kbd>false</kbd>时过滤掉数据。以下是根据逻辑运算符过滤数据流中的行的两个示例:</p>
+<pre>dflow.filter(dflow['a'] &gt; dflow['b'])<br/>dflow.filter(dprep.col('a') &gt; 0)</pre>
+<p>这里有两个使用过滤函数的例子:</p>
+<pre>dflow.filter(dflow['a'].starts_with('prefix'))<br/>dflow.filter(dflow['a'].ends_with('postfix'))</pre>
+<p>通常，当您需要创建复杂的过滤器时，前面的函数是不够的，例如两个过滤器函数的组合。为此，Azure DataPrep提供了布尔操作符<kbd>f_not</kbd>、<kbd>f_and</kbd>和<kbd>f_or</kbd>。</p>
+<p>以下示例使用一个<kbd>filter</kbd>函数从数据流中删除所有非空值:</p>
+<pre>dflow = dflow.filter(dprep.f_not(dprep.col('Survived').is_null()))</pre>
+<p>使用这些筛选表达式以及逻辑和布尔运算符，可以构造复杂的嵌套筛选表达式。如果这还不够，您还可以编写自定义转换和过滤函数。现在让我们看看如何将数据流的输出写回到blob存储中。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Writing the processed data back to a dataset</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">将处理后的数据写回数据集</h1>
+                
+            
+            
+                
+<p>在最后一节中，我们将教您如何使用数据流和DataPrep Python SDK将数据写回数据集。这是非常有用的，因为这将使您的数据管道完整。一旦数据集被更新并且有了新的版本和快照，它就可以被数据消费者用于进一步的分析和ML。</p>
+<p>首先，我们将数据写入一个定界文件——在本例中是一个<kbd>.csv</kbd>文件——并使用<kbd>write_to_csv</kbd>函数。如下例所示，可以使用此函数:</p>
+<pre>from azureml.dataprep import LocalFileOutput<br/><br/># Write dataflow to CSV<br/>dataflow.write_to_csv(directory_path=LocalFileOutput('./outputs')).run_local()</pre>
+<p>第一个参数是<kbd>directory_path</kbd>，它是我们将存储输出文件的目录的路径。因此，在Spark的例子中，它必须是空的。</p>
+<p><kbd>separator</kbd>参数定义了要使用的CSV列分隔符。<kbd>na</kbd>参数是用于空值的字符串，<kbd>error</kbd>是用于错误值的字符串(在本例中，我们使用<kbd>ERROR</kbd>字符串表示错误，使用<kbd>NA</kbd>表示NaN值)。<kbd>write_to_csv</kbd>方法返回修改后的数据流，其中<kbd>write</kbd>操作只是DAG中的另一个懒惰步骤。因此，每次执行返回的数据流都会再次执行<kbd>write</kbd>操作:</p>
+<pre># Create a new data flow using `write_to_csv`<br/>write_t = t.write_to_csv(directory_path=dprep.LocalFileOutput('./test_out/'))<br/><br/># Run the current data flow using the local execution runtime<br/># to begin the write operation<br/>write_t.run_local()<br/><br/>written_files = dprep.read_csv('./test_out/part-*')<br/>written_files.head(5)</pre>
+<p>在前面的代码示例中，我们将CSV文件写入磁盘，并使用Azure DataPrep将其作为CSV文件加载回来。这可能导致解析数字列时出错，因为数字是从包含<kbd>ERROR</kbd>和<kbd>NA</kbd>值的字符串中解析出来的。</p>
+<p>CSV仅在您需要手动检查数据时有用。对于大多数其他情况，带有嵌入式数据模式的二进制编码格式要高效得多，并且通常会消除大量CSV和文本文件的潜在解析问题。因此，我们建议您以Parquet格式存储数据，这是一种高性能的列数据存储格式，具有多种语言的适配器和库。</p>
+<p>将数据流写入拼花文件与<kbd>write_to_csv()</kbd>函数非常相似。让我们看一个使用Parquet writer导出数据集的类型安全示例:</p>
+<pre>dataflow.write_to_parquet(file_path='./outputs/train.parquet',       single_file=True).run_local()</pre>
+<p>在前面的代码中，我们使用Parquet格式写回由数据流转换的数据。我们可以使用<kbd>file_path</kbd>或<kbd>directory_path</kbd>参数来指定输出目的地。为了输出单个文件，我们还需要将参数<kbd>single_file</kbd>设置为<kbd>true</kbd>。</p>
+<p>由于列数据格式的并行化，Parquet写操作通常并行执行，以创建单个数据集的输出。默认情况下，这种并行执行将导致为数据集生成多个文件。使用<kbd>single_file</kbd>参数，您可以强制创建单个文件，同时降低写吞吐量。</p>
+<p>数据流、数据准备、数据集和数据存储是管理数据和数据管道的非常有用的概念，从数百条记录到每个数据集数十万个文件。因此，它们是在云中构建高质量、端到端数据管道不可或缺的工具。</p>
+
+
+            
+
+            
+        
+    
+
+
+
+
+
+
+    
+        <title>Summary</title>
+        
+        <meta charset="utf-8"/>
+    
+
+    
+        
+
+                            
+                    <h1 class="header-title">摘要</h1>
+                
+            
+            
+                
+<p>在本章中，你已经学习了如何在Azure ML服务中构建企业级ETL管道和数据转换，以及如何管理数据集。</p>
+<p>您已经学习了如何使用blob存储将数据加载到云中，以及如何从各种其他数据格式中提取数据。如果您在抽象数据存储和数据集中对数据进行建模，那么您的用户就不必知道数据位于何处，如何编码，或者访问数据的正确协议和权限是什么。这是ETL管道的重要部分。另一个很好的方法是将数据集定义视为关于用户可以从数据中获得什么的契约，非常类似于API。因此，在废弃和归档不再使用的数据集之前，遵循创建、更新和版本化数据集的特定生命周期应该是有意义的。</p>
+<p class="mce-root"/>
+<p class="mce-root"/>
+<p>通过使用Azure DataPrep SDK，您获得了使用数据流编写可伸缩数据平台的技能。我们研究了如何通过简单的转换创建列，如何通过分组聚合(如均值编码)估算缺失值，甚至通过示例使用派生表达式生成了一个字符串解析器。您了解了如何使用模糊分组对分类值进行分组，并使用标签和一次性编码对它们进行转换。</p>
+<p>最后，我们研究了使用Parquet将数据写回数据存储，Parquet是一种有效的二进制列存储格式。数据存储后，您可以再次将其注册为数据集，然后对其进行版本控制和快照。这将允许您的数据科学家使用他们已经熟悉的工具来访问、探索和使用数据。</p>
+<p>在下一章中，我们将研究更高级的预处理技术，如类别嵌入和<strong>自然语言处理</strong> ( <strong> NLP </strong>)，从文本特征中提取语义。</p>
+
+
+            
+
+            
+        
+    
+
+
+</body></html>

@@ -1,0 +1,646 @@
+<html><head/><body>
+<html>
+  <head>
+    <title>Chapter 8. Ensemble Learning</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08" class="calibre1"/>第八章。集成学习</h1></div></div></div><p class="calibre7">在本章中，我们将讨论以下主题:</p><div><ul class="itemizedlist"><li class="listitem">用bagging方法对数据进行分类</li><li class="listitem">用bagging方法进行交叉验证</li><li class="listitem">使用boosting方法对数据进行分类</li><li class="listitem">使用boosting方法执行交叉验证</li><li class="listitem">使用梯度增强对数据进行分类</li><li class="listitem">计算分类器的边距</li><li class="listitem">计算集合方法的误差演化</li><li class="listitem">用随机森林对数据进行分类</li><li class="listitem">估计不同分类器的预测误差</li></ul></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Chapter 8. Ensemble Learning</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h1 class="title" id="calibre_pb_1"><a id="ch08lvl1sec90" class="calibre1"/>简介</h1></div></div></div><p class="calibre7">集成学习是一种将不同学习者产生的结果组合成一种格式的方法，目的是产生更好的分类结果和回归结果。在前几章中，我们讨论了几种分类方法。这些方法采用不同的方法，但它们都有相同的目标，即找到一个最佳的分类模型。然而，单个分类器可能是不完美的，这可能会在某些类别中对数据进行错误分类。因为不是所有的分类器都是不完美的，所以更好的方法是通过投票来平均结果。换句话说，如果我们用相同的输入对每个分类器的预测结果进行平均，我们可以创建一个比使用<a id="id647" class="calibre1"/>个体方法更好的模型。</p><p class="calibre7">在集成学习中，bagging、boosting和随机森林是三种最常见的方法:</p><div><ul class="itemizedlist"><li class="listitem">Bagging <a id="id648" class="calibre1"/>是一种投票方式，首先<a id="id649" class="calibre1"/>用Bootstrap生成一个不同的训练集，然后用训练集做出不同的基础学习者。<a id="id650" class="calibre1"/> bagging方法采用基础学习者的组合<a id="id651" class="calibre1"/>来进行更好的预测。</li><li class="listitem">升压<a id="id652" class="calibre1"/>与装袋方法类似。然而，boosting的不同之处在于，它首先按顺序构建<a id="id653" class="calibre1"/>基础学习，其中每个后续学习器都是为前一个学习器的预测残差构建的。通过创建一个互补学习器的方法，它利用前一个学习器所犯的错误来训练下一个基础学习器。</li><li class="listitem">随机森林<a id="id654" class="calibre1"/>使用从许多分类树投票的分类<a id="id655" class="calibre1"/>结果。这个想法很简单；单个分类树将利用单个输入向量获得单个分类结果。但是，随机森林会生成许多分类树，从一个输入中获得多个结果。因此，随机林将使用来自所有决策树的大多数投票来对数据进行分类，或者使用平均输出进行回归。</li></ul></div><p class="calibre7">在下面的食谱中，我们将讨论如何使用bagging和boosting对数据进行分类。然后，我们可以执行交叉验证来估计每个分类器的错误率。除此之外，我们将介绍如何使用边际来衡量模型的确定性。接下来，我们介绍随机森林，类似于bagging和boosting方法，并介绍如何训练模型来对数据进行分类，并使用余量来估计模型的确定性。最后，我们将演示如何估计每个分类器的错误率，并使用错误率来比较不同分类器的性能。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec91" class="calibre1"/>用bagging方法对数据进行分类</h1></div></div></div><p class="calibre7"><code class="email">adabag</code>包实现了增压和装袋两种方法。对于bagging方法，该包实现了Breiman的Bagging算法，首先生成多个<a id="id656" class="calibre1"/>版本的分类器，然后得到一个聚合的分类器。在这个菜谱中，我们将说明如何使用来自<code class="email">adabag</code>的bagging <a id="id657" class="calibre1"/>方法来使用电信<code class="email">churn</code>数据集生成分类模型。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec309" class="calibre1"/>准备就绪</h2></div></div></div><p class="calibre7">在这个方法中，我们继续使用电信<code class="email">churn</code>数据集作为bagging方法的输入数据源。对于没有准备数据集的人，请参考<a class="calibre1" title="Chapter 5. Classification (I) – Tree, Lazy, and Probabilistic" href="part0060_split_000.html#page">第五章</a>、<em class="calibre8">分类(一)——树、懒、概率</em>，了解详细信息。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec310" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，为电信<code class="email">churn</code>数据集生成分类模型:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，您需要安装并加载<code class="email">adabag</code>包(安装<code class="email">adabag</code>可能需要一段时间):<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("adabag")</strong> <strong class="calibre2">&gt; library(adabag)</strong> </pre> </div></li><li class="listitem" value="2">接下来，您<a id="id658" class="calibre1"/>可以使用<code class="email">bagging</code>函数来训练一个训练数据集(训练过程中结果可能会有所不同):<div> <pre class="programlisting"> <strong class="calibre2">&gt; set.seed(2)</strong> <strong class="calibre2">&gt; churn.bagging = bagging(churn ~ ., data=trainset, mfinal=10)</strong> </pre> </div></li><li class="listitem" value="3">从装袋结果中取变量重要性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.bagging$importance</strong> <strong class="calibre2">           international_plan number_customer_service_calls </strong> <strong class="calibre2">                   10.4948380                    16.4260510 </strong> <strong class="calibre2">        number_vmail_messages               total_day_calls </strong> <strong class="calibre2">                    0.5319143                     0.3774190 </strong> <strong class="calibre2">             total_day_charge             total_day_minutes </strong> <strong class="calibre2">                    0.0000000                    28.7545042 </strong> <strong class="calibre2">              total_eve_calls              total_eve_charge </strong> <strong class="calibre2">                    0.1463585                     0.0000000 </strong> <strong class="calibre2">            total_eve_minutes              total_intl_calls </strong> <strong class="calibre2">                   14.2366754                     8.7733895 </strong> <strong class="calibre2">            total_intl_charge            total_intl_minutes </strong> <strong class="calibre2">                    0.0000000                     9.7838256 </strong> <strong class="calibre2">            total_night_calls            total_night_charge </strong> <strong class="calibre2">                    0.4349952                     0.0000000 </strong> <strong class="calibre2">          total_night_minutes               voice_mail_plan </strong> <strong class="calibre2">                    2.3379622                     7.7020671 </strong> </pre> </div></li><li class="listitem" value="4">生成分类模型后，可以使用测试数据集的预测结果:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.predbagging= predict.bagging(churn.bagging, newdata=testset)</strong> </pre> </div></li><li class="listitem" value="5">从预测结果中，可以得到一个分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.predbagging$confusion</strong> <strong class="calibre2">               Observed Class</strong> <strong class="calibre2">Predicted Class yes  no</strong> <strong class="calibre2">            no   35 866</strong> <strong class="calibre2">            yes 106  11</strong> </pre> </div></li><li class="listitem" value="6">最后，您可以检索装袋结果的平均误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.predbagging$error</strong> <strong class="calibre2">[1] 0.0451866</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch08lvl2sec311" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">bagging<a id="id659" class="calibre1"/>来源于Bootstrap aggregating这个名称，它是一种稳定、准确且易于实施的数据分类和回归模型。bagging的定义如下:给定大小为<em class="calibre8"> n </em>的训练数据集，bagging执行Bootstrap采样并生成大小为<em class="calibre8"> n </em>的<em class="calibre8"> m </em>个新的训练集<em class="calibre8"> Di </em>。最后，我们可以将<em class="calibre8"> m </em> Bootstrap样本拟合到<em class="calibre8"> m </em>模型，并通过平均输出(用于回归)或投票(用于分类)来组合结果:</p><div><img src="img/00132.jpeg" alt="How it works..." class="calibre9"/><div><p class="calibre12">装袋方法的说明</p></div></div><p class="calibre10"> </p><p class="calibre7">使用bagging的好处在于它是一种强大的学习方法，易于理解和实施。然而，这种技术的主要缺点是很难分析结果。</p><p class="calibre7">在这个方法中，我们使用<code class="email">adabag</code>中的boosting方法对电信客户流失数据进行分类。与前面章节中讨论的其他分类方法类似，您可以使用公式和训练数据集来训练提升分类器。此外，您可以在<code class="email">mfinal</code>参数中将迭代次数设置为10。一旦分类模型建立，你可以<a id="id660" class="calibre1"/>检查每个属性的重要性。按重要性排列属性揭示了客户服务呼叫的数量在分类模型中起着至关重要的作用。</p><p class="calibre7">接下来，有了合适的模型，您可以应用<code class="email">predict.bagging</code>函数来预测测试数据集的标签。因此，您可以使用测试数据集和预测结果的标签来生成分类表，并获得平均误差，在本例中为0.045。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">除了<code class="email">adabag</code>之外，<code class="email">ipred</code>包提供了分类树的装袋方法。我们在此演示<a id="id661" class="calibre1"/>如何使用<code class="email">ipred</code>包装的装袋方法来训练分类模型:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，你需要安装并加载<code class="email">ipred</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("ipred")</strong> <strong class="calibre2">&gt; library(ipred)</strong> </pre> </div></li><li class="listitem" value="2">然后，您可以使用<code class="email">bagging</code>方法来拟合分类方法:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.bagging = bagging(churn ~ ., data = trainset, coob = T)</strong> <strong class="calibre2">&gt; churn.bagging</strong>  <strong class="calibre2">Bagging classification trees with 25 bootstrap replications </strong>  <strong class="calibre2">Call: bagging.data.frame(formula = churn ~ ., data = trainset, coob = T)</strong>  <strong class="calibre2">Out-of-bag estimate of misclassification error:  0.0605 </strong> </pre> </div></li><li class="listitem" value="3">获得错误分类的估计值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; mean(predict(churn.bagging) != trainset$churn)</strong> <strong class="calibre2">[1] 0.06047516</strong> </pre> </div></li><li class="listitem" value="4">然后您可以使用<code class="email">predict</code>函数来获得测试数据集的预测标签:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.prediction = predict(churn.bagging, newdata=testset, type="class")</strong> </pre> </div></li><li class="listitem" value="5">从测试数据集和预测结果的标签中获取分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; prediction.table = table(churn.prediction, testset$churn)</strong> <strong class="calibre2">                </strong> <strong class="calibre2">churn.prediction yes  no</strong> <strong class="calibre2">             no   31 869</strong> <strong class="calibre2">             yes 110   8</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec92" class="calibre1"/>用bagging方法进行交叉验证</h1></div></div></div><p class="calibre7">要评估<a id="id663" class="calibre1"/>分类器的<a id="id662" class="calibre1"/>预测能力，您可以运行交叉验证方法来测试分类模型的稳健性。在本菜谱中，我们将介绍如何使用<code class="email">bagging.cv</code>通过bagging方法进行交叉验证。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec313" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">在这个配方中，我们继续使用telecom <code class="email">churn</code>数据集作为输入数据源，通过bagging方法执行k-fold交叉验证。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec314" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，通过使用bagging方法进行交叉验证来检索最小估计误差:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，我们使用<code class="email">bagging.cv</code>对训练数据集进行10次迭代的10重分类:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.baggingcv = bagging.cv(churn ~ ., v=10, data=trainset, mfinal=10)</strong> </pre> </div></li><li class="listitem" value="2">然后你可以从交叉验证结果中得到混淆矩阵:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.baggingcv$confusion</strong> <strong class="calibre2">               Observed Class</strong> <strong class="calibre2">Predicted Class  yes   no</strong> <strong class="calibre2">            no   100 1938</strong> <strong class="calibre2">            yes  242   35</strong> </pre> </div></li><li class="listitem" value="3">最后，您可以从交叉验证结果中检索最小估计误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.baggingcv$error</strong> <strong class="calibre2">[1] 0.05831533</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch08lvl2sec315" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><code class="email">adabag</code>包提供了用装袋或<a id="id664" class="calibre1"/>助推法进行k倍验证的功能。在这个<a id="id665" class="calibre1"/>的例子中，我们使用<code class="email">bagging.cv</code>通过bagging方法进行k重交叉验证。我们首先通过指定<code class="email">v=10</code>和<code class="email">mfinal=10</code>来执行10次迭代的10重交叉验证。请注意，由于迭代的次数，这是相当耗时的。在交叉验证过程完成后，我们可以从交叉验证结果中获得混淆矩阵和平均误差(在本例中为0.058)。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the bagging method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl2sec316" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">有兴趣调整<code class="email">bagging.cv</code>参数的，请使用<code class="email">help</code>功能查看<code class="email">bagging.cv</code>文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt; help(bagging.cv)</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec93" class="calibre1"/>用boosting方法对数据进行分类</h1></div></div></div><p class="calibre7">与bagging方法类似，boosting从简单或弱分类器开始，并通过对错误分类的样本进行重新加权来逐步改进。因此，新的分类器可以从以前的分类器中学习。<code class="email">adabag</code>包<a id="id667" class="calibre1"/>提供了<strong class="calibre2"> AdaBoost的实现。M1 </strong>和<strong class="calibre2"> SAMME </strong>算法。因此，可以使用<code class="email">adabag</code>中的boosting方法来执行<a id="id668" class="calibre1"/>集成学习。在这个配方中，我们将使用<code class="email">adabag</code>中的boosting方法对电信<code class="email">churn</code>数据集进行分类。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec317" class="calibre1"/>准备就绪</h2></div></div></div><p class="calibre7">在这个方法中，我们将继续使用电信客户流失数据集作为输入数据源，通过boosting方法执行分类。此外，在开始制作食谱之前，您需要将<code class="email">adabag</code>包加载到R中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec318" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，使用boosting方法对电信<code class="email">churn</code>数据集进行分类:</p><div><ol class="orderedlist"><li class="listitem" value="1">您可以使用<code class="email">adabag</code>包中的boosting函数来训练分类模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; set.seed(2)</strong> <strong class="calibre2">&gt; churn.boost = boosting(churn ~.,data=trainset,mfinal=10, coeflearn="Freund", boos=FALSE , control=rpart.control(maxdepth=3))</strong> </pre> </div></li><li class="listitem" value="2">然后，您<a id="id669" class="calibre1"/>可以基于增强的模型和测试数据集进行预测:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boost.pred = predict.boosting(churn.boost,newdata=testset)</strong> </pre> </div></li><li class="listitem" value="3">接下来，您可以从预测结果中检索分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boost.pred$confusion</strong> <strong class="calibre2">               Observed Class</strong> <strong class="calibre2">Predicted Class yes  no</strong> <strong class="calibre2">            no   41 858</strong> <strong class="calibre2">            yes 100  19</strong> </pre> </div></li><li class="listitem" value="4">最后，您可以从预测结果中获得平均误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boost.pred$error</strong> <strong class="calibre2">[1] 0.0589391</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch08lvl2sec319" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">boosting的思想是将弱学习者(例如，单个决策树)“助推”成强学习者。假设我们的训练数据集中有<em class="calibre8"> n </em>个点，我们可以为每个点分配一个权重<em class="calibre8"> Wi </em> (0 &lt; = i &lt; n)。然后在迭代学习过程中(我们假设迭代次数为<em class="calibre8"> m </em>)，我们可以在每次迭代中根据分类结果对每个点重新加权。如果点被正确分类，我们应该减少权重。否则，我们增加点的权重。当迭代过程结束后，我们就可以得到<em class="calibre8"> m </em>拟合模型，<em class="calibre8">f<sub class="calibre25">I</sub>(x)</em>(0&lt;= I&lt;n)。最后，我们可以通过对每棵树的预测进行加权平均来获得最终预测，其中权重b基于每棵树的质量:</p><div><img src="img/00133.jpeg" alt="How it works..." class="calibre9"/><div><p class="calibre12">助推法的一个例证</p></div></div><p class="calibre10"> </p><p class="calibre7">bagging和boosting都是集成方法，将每个<a id="id670" class="calibre1"/>单个学习器的预测能力组合成一个强学习器。bagging和boosting之间的区别在于，bagging方法组合了独立的模型，而boosting执行迭代过程，通过用连续的模型预测前面的模型来减少它们的误差。</p><p class="calibre7">在这个配方中，我们演示了如何在boosting方法中拟合分类模型。类似于bagging，必须指定用于训练分类模型的公式和训练数据集。此外，可以指定参数，例如迭代次数(<code class="email">mfinal</code>)、权重更新系数(<code class="email">coeflearn</code>)、如何使用每个观察的权重(<code class="email">boos</code>)以及对<code class="email">rpart</code>(单个决策树)的控制。在这个配方中，我们使用<code class="email">Freund</code>(AdaBoost)将迭代次数设置为10。M1算法实现方法)为<code class="email">coeflearn</code>，<code class="email">boos</code>设置为假，最大深度设置为<code class="email">3</code>用于<code class="email">rpart</code>配置。</p><p class="calibre7">我们使用boosting方法拟合分类模型，然后保存在<code class="email">churn.boost</code>中。然后我们可以使用<code class="email">prediction</code>函数获得预测的标签。此外，我们可以使用<code class="email">table</code>函数来检索基于预测标签的分类表，并测试数据集标签。最后，我们可以得到预测结果的平均误差。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">还有更多...</h2></div></div></div><p class="calibre7">除了使用<code class="email">adabag</code>包中的增强功能外，用户还可以使用<code class="email">caret</code>包通过增强方法执行分类:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，加载<code class="email">mboost</code>和<code class="email">pROC</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; library(mboost)</strong> <strong class="calibre2">&gt; install.packages("pROC")</strong> <strong class="calibre2">&gt; library(pROC)</strong> </pre> </div></li><li class="listitem" value="2">然后我们可以用<code class="email">trainControl</code>函数设置训练控制，用<code class="email">train</code>函数用adaboost: <div> <pre class="programlisting"> <strong class="calibre2">&gt; set.seed(2)</strong> <strong class="calibre2">&gt; ctrl = trainControl(method = "repeatedcv", repeats = 1, classProbs = TRUE, summaryFunction = twoClassSummary)</strong> <strong class="calibre2">&gt; ada.train = train(churn ~ ., data = trainset, method = "ada", metric = "ROC", trControl = ctrl)</strong> </pre> </div>训练分类模型</li><li class="listitem" value="3">使用<a id="id671" class="calibre1"/><code class="email">summary</code>函数获取分类模型的详细信息:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ada.train$result</strong> <strong class="calibre2">   nu maxdepth iter       ROC      Sens        Spec      ROCSD     SensSD      SpecSD</strong> <strong class="calibre2">1 0.1        1   50 0.8571988 0.9152941 0.012662155 0.03448418 0.04430519 0.007251045</strong> <strong class="calibre2">4 0.1        2   50 0.8905514 0.7138655 0.006083679 0.03538445 0.10089887 0.006236741</strong> <strong class="calibre2">7 0.1        3   50 0.9056456 0.4036134 0.007093780 0.03934631 0.09406015 0.006407402</strong> <strong class="calibre2">2 0.1        1  100 0.8550789 0.8918487 0.015705276 0.03434382 0.06190546 0.006503191</strong> <strong class="calibre2">5 0.1        2  100 0.8907720 0.6609244 0.009626724 0.03788941 0.11403364 0.006940001</strong> <strong class="calibre2">8 0.1        3  100 0.9077750 0.3832773 0.005576065 0.03601187 0.09630026 0.003738978</strong> <strong class="calibre2">3 0.1        1  150 0.8571743 0.8714286 0.016720505 0.03481526 0.06198773 0.006767313</strong> <strong class="calibre2">6 0.1        2  150 0.8929524 0.6171429 0.011654617 0.03638272 0.11383803 0.006777465</strong> <strong class="calibre2">9 0.1        3  150 0.9093921 0.3743697 0.007093780 0.03258220 0.09504202 0.005446136</strong> </pre> </div></li><li class="listitem" value="4">Use the <code class="email">plot</code> function to plot the ROC curve within different iterations:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(ada.train)</strong>
+</pre></div><div><img src="img/00134.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">重复交叉验证图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">最后，我们<a id="id672" class="calibre1"/>可以使用<code class="email">predict</code>函数进行预测，并查看分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; ada.predict = predict(ada.train, testset, "prob")</strong> <strong class="calibre2">&gt; ada.predict.result = ifelse(ada.predict[1] &gt; 0.5, "yes", "no")</strong>  <strong class="calibre2">&gt; table(testset$churn, ada.predict.result)</strong> <strong class="calibre2">     ada.predict.result</strong> <strong class="calibre2">       no yes</strong> <strong class="calibre2">  yes  40 101</strong> <strong class="calibre2">  no  872   5</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec94" class="calibre1"/>使用boosting方法进行交叉验证</h1></div></div></div><p class="calibre7">类似于<code class="email">bagging</code>函数，<code class="email">adabag</code>为boosting <a id="id673" class="calibre1"/>方法提供了一个交叉验证函数，命名为<code class="email">boosting.cv</code>。在<a id="id674" class="calibre1"/>这个配方中，我们将演示如何使用包<code class="email">adabag</code>中的<code class="email">boosting.cv</code>来执行交叉验证。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">在这个方法中，我们继续使用telecom <code class="email">churn</code>数据集作为输入数据源，通过<code class="email">boosting</code>方法执行k-fold交叉验证。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec322" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行<a id="id675" class="calibre1"/>以下步骤，通过与<code class="email">boosting</code>方法的交叉验证检索<a id="id676" class="calibre1"/>最小估计误差:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先可以用<code class="email">boosting.cv</code>交叉验证训练数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boostcv = boosting.cv(churn ~ ., v=10, data=trainset, mfinal=5,control=rpart.control(cp=0.01))</strong> </pre> </div></li><li class="listitem" value="2">然后你可以从boosting结果中得到混淆矩阵:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boostcv$confusion</strong> <strong class="calibre2">               Observed Class</strong> <strong class="calibre2">Predicted Class  yes   no</strong> <strong class="calibre2">            no   119 1940</strong> <strong class="calibre2">            yes  223   33</strong> </pre> </div></li><li class="listitem" value="3">最后，您可以检索boosting方法的平均误差:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.boostcv$error</strong> <strong class="calibre2">[1] 0.06565875</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">类似于<code class="email">bagging.cv</code>，我们可以使用<code class="email">boosting.cv</code>用boosting方法进行交叉验证。如果<code class="email">v</code>设置为<code class="email">10</code>且<code class="email">mfinal</code>设置为<code class="email">5</code>，则<code class="email">boosting</code>方法将执行10次交叉验证，共5次迭代。此外，用户可以在参数内设置<code class="email">rpart</code>配合的控制。在本例中，我们可以将复杂度参数设置为0.01。一旦训练完成，将获得增强结果的混淆矩阵和平均误差。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Performing cross-validation with the boosting method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl2sec324" class="calibre1"/>亦见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">如果需要更多关于<code class="email">boosting.cv</code>参数调整的信息，请使用<code class="email">help</code>功能查看<code class="email">boosting.cv</code>文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt; help(boosting.cv)</strong> </pre> </div></li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with gradient boosting</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec95" class="calibre1"/>利用梯度推进对数据进行分类</h1></div></div></div><p class="calibre7">梯度增强集成弱学习器，并创建新的基本学习器，该基本学习器最大限度地与损失函数的负梯度相关。人们可以将这种方法应用于回归或分类问题，并且它将在不同的数据集中表现良好。在这个菜谱中，我们将介绍如何使用<code class="email">gbm</code>对电信<code class="email">churn</code>数据集进行分类。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with gradient boosting</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">正在准备中</h2></div></div></div><p class="calibre7">在这个方法中，我们继续使用telecom <code class="email">churn</code>数据集作为<code class="email">bagging</code>方法的输入数据源。对于没有准备数据集的人，请参考<a class="calibre1" title="Chapter 5. Classification (I) – Tree, Lazy, and Probabilistic" href="part0060_split_000.html#page">第五章</a>、<em class="calibre8">分类(一)——树、懒、概率</em>，了解详细信息。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with gradient boosting</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec326" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">使用梯度增强方法执行以下步骤来计算和分类数据:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，安装并加载软件包，<code class="email">gbm</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("gbm")</strong> <strong class="calibre2">&gt; library(gbm)</strong> </pre> </div></li><li class="listitem" value="2"><code class="email">gbm</code>功能仅使用从<code class="email">0</code>到<code class="email">1</code>的响应；因此，您应该将是/否响应转换为数字响应(0/1): <div> <pre class="programlisting"> <strong class="calibre2">&gt; trainset$churn = ifelse(trainset$churn == "yes", 1, 0)</strong> </pre> </div></li><li class="listitem" value="3">接下来，您可以使用<code class="email">gbm</code>函数来训练一个训练数据集:<div> <pre class="programlisting"> <strong class="calibre2">&gt; set.seed(2)</strong> <strong class="calibre2">&gt; churn.gbm = gbm(formula = churn ~ .,distribution = "bernoulli",data = trainset,n.trees = 1000,interaction.depth = 7,shrinkage = 0.01, cv.folds=3)</strong> </pre> </div></li><li class="listitem" value="4">Then, you can obtain the summary information from the fitted model:<div><pre class="programlisting">
+<strong class="calibre2">&gt; summary(churn.gbm)</strong>
+<strong class="calibre2">                                         var    rel.inf</strong>
+<strong class="calibre2">total_day_minutes          total_day_minutes 28.1217147</strong>
+<strong class="calibre2">total_eve_minutes                total_eve_minutes 16.8097151</strong>
+<strong class="calibre2">number_customer_service_calls number_customer_service_calls 12.7894464</strong>
+<strong class="calibre2">total_intl_minutes             total_intl_minutes  9.4515822</strong>
+<strong class="calibre2">total_intl_calls                   total_intl_calls  8.1379826</strong>
+<strong class="calibre2">international_plan               international_plan  8.0703900</strong>
+<strong class="calibre2">total_night_minutes             total_night_minutes  4.0805153</strong>
+<strong class="calibre2">number_vmail_messages         number_vmail_messages  3.9173515</strong>
+<strong class="calibre2">voice_mail_plan                  voice_mail_plan  2.5501480</strong>
+<strong class="calibre2">total_night_calls              total_night_calls  2.1357970</strong>
+<strong class="calibre2">total_day_calls                     total_day_calls  1.7367888</strong>
+<strong class="calibre2">total_eve_calls                     total_eve_calls  1.4398047</strong>
+<strong class="calibre2">total_eve_charge                 total_eve_charge  0.5457486</strong>
+<strong class="calibre2">total_night_charge              total_night_charge  0.2130152</strong>
+<strong class="calibre2">total_day_charge                total_day_charge  0.0000000</strong>
+<strong class="calibre2">total_intl_charge                 total_intl_charge  0.0000000</strong>
+</pre></div><div><img src="img/00135.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">拟合模型的相对影响图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">You <a id="id679" class="calibre1"/>can obtain the best iteration using cross-validation:<div><pre class="programlisting">
+<strong class="calibre2">&gt; churn.iter = gbm.perf(churn.gbm,method="cv")</strong>
+</pre></div><div><img src="img/00136.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">性能测量图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="6">然后，您<a id="id680" class="calibre1"/>可以检索伯努利损失函数返回的日志的奇数值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.predict = predict(churn.gbm, testset, n.trees = churn.iter)</strong> <strong class="calibre2">&gt; str(churn.predict)</strong> <strong class="calibre2"> num [1:1018] -3.31 -2.91 -3.16 -3.47 -3.48 ...</strong> </pre> </div></li><li class="listitem" value="7">Next, you can plot the ROC curve and get the best cut off that will have the maximum accuracy:<div><pre class="programlisting">
+<strong class="calibre2">&gt; churn.roc = roc(testset$churn, churn.predict)</strong>
+<strong class="calibre2">&gt; plot(churn.roc)</strong>
+<strong class="calibre2">Call:</strong>
+<strong class="calibre2">roc.default(response = testset$churn, predictor = churn.predict)</strong>
+<strong class="calibre2">Data: churn.predict in 141 controls (testset$churn yes) &gt; 877 cases (testset$churn no).</strong>
+<strong class="calibre2">Area under the curve: 0.9393</strong>
+</pre></div><div><img src="img/00137.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">拟合模型的ROC曲线</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="8">您<a id="id681" class="calibre1"/>可以使用<code class="email">coords</code>功能检索最佳截止值，并使用该截止值获得预测标签:<div> <pre class="programlisting"> <strong class="calibre2">&gt; coords(churn.roc, "best")</strong> <strong class="calibre2">  threshold specificity sensitivity </strong> <strong class="calibre2"> -0.9495258   0.8723404   0.9703535 </strong> <strong class="calibre2">&gt; churn.predict.class = ifelse(churn.predict &gt; coords(churn.roc, "best")["threshold"], "yes", "no")</strong> </pre> </div></li><li class="listitem" value="9">最后，您可以从预测结果中获得分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; table( testset$churn,churn.predict.class)</strong> <strong class="calibre2">     churn.predict.class</strong> <strong class="calibre2">       no yes</strong> <strong class="calibre2">  yes  18 123</strong> <strong class="calibre2">  no  851  26</strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with gradient boosting</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">梯度推进算法首先计算每个分区的残差偏差，然后确定每个阶段的最佳数据分区。接下来，后续模型将拟合前一阶段的残差，并构建新模型来减少残差方差(误差)。残差方差的减少遵循函数梯度下降技术，通过降低其导数来最小化残差方差，如下所示:</p><div><img src="img/00138.jpeg" alt="How it works..." class="calibre9"/><div><p class="calibre12">梯度下降法</p></div></div><p class="calibre10"> </p><p class="calibre7">在这个配方中，我们使用来自<code class="email">gbm</code>的梯度推进方法对电信客户流失<a id="id682" class="calibre1"/>数据集进行分类。为了开始分类，我们首先安装并加载<code class="email">gbm</code>包。然后，我们使用<code class="email">gbm</code>函数来训练分类模型。这里，由于我们的预测目标是<code class="email">churn</code>属性，这是一个二元结果，因此我们将分布设置为<code class="email">distribution</code>参数中的<code class="email">bernoulli</code>。此外，我们设置1000棵树以适应<code class="email">n.tree</code>参数，变量交互的最大深度为<code class="email">interaction.depth</code>中的<code class="email">7</code>，步长减小的学习率为<code class="email">shrinkage</code>中的0.01，交叉验证的数量为<code class="email">cv.folds</code>中的<code class="email">3</code>。模型拟合后，我们可以利用汇总函数，在表格和图形中得到各个变量的相对影响信息。相对影响显示了可归因于平方差总和中每个变量的减少。在这里，我们可以发现<code class="email">total_day_minutes</code>是在减少损失功能中最有影响力的一个。</p><p class="calibre7">接下来，我们使用<code class="email">gbm.perf</code>函数来寻找最佳迭代。这里，我们通过将<code class="email">method</code>参数指定为<code class="email">cv</code>来估计交叉验证的最佳数量。该函数还会生成两个图，黑线表示训练误差，绿线表示验证误差。这里的误差测量是一个<code class="email">bernoulli</code>分布，我们在之前的训练阶段已经定义过。图上的蓝色虚线显示了最佳迭代的位置。</p><p class="calibre7">然后，我们使用<code class="email">predict</code>函数获得伯努利损失函数返回的每个测试用例中日志的奇数值。为了获得最佳预测结果，可以将<code class="email">n.trees</code>参数设置为最佳迭代次数。然而，由于返回值是一个奇数值日志，我们仍然必须确定最佳截止值来确定标签。因此，我们使用<code class="email">roc</code>函数来生成一条ROC曲线，并以最大的精确度得到临界值。</p><p class="calibre7">最后，我们可以使用函数<code class="email">coords</code>来检索最佳截止阈值，并使用<code class="email">ifelse</code>函数从对数的奇数值中确定类别标签。现在，我们可以使用<code class="email">table</code>函数生成分类表，看看分类模型有多准确。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with gradient boosting</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl2sec328" class="calibre1"/>还有更多...</h2></div></div></div><p class="calibre7">除了使用<code class="email">gbm</code>包中的<a id="id683" class="calibre1"/>增强功能外，还可以使用<code class="email">mboost</code>包通过梯度增强方法执行分类<a id="id684" class="calibre1"/>:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，安装并加载<code class="email">mboost</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("mboost")</strong> <strong class="calibre2">&gt; library(mboost)</strong> </pre> </div></li><li class="listitem" value="2"><code class="email">mboost</code>函数仅使用数字响应；因此，您应该将是/否响应转换为数字响应(0/1): <div> <pre class="programlisting"> <strong class="calibre2">&gt; trainset$churn = ifelse(trainset$churn == "yes", 1, 0)</strong> </pre> </div></li><li class="listitem" value="3">此外，您应该删除非数字属性，例如<code class="email">voice_mail_plan</code>和<code class="email">international_plan</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; trainset$voice_mail_plan = NULL</strong> <strong class="calibre2">&gt; trainset$international_plan = NULL</strong> </pre> </div></li><li class="listitem" value="4">然后我们可以使用<code class="email">mboost</code>来训练分类模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.mboost = mboost(churn ~ ., data=trainset,  control = boost_control(mstop = 10))</strong> </pre> </div></li><li class="listitem" value="5">使用<code class="email">summary</code>函数获取分类模型的详细信息:<div> <pre class="programlisting"> <strong class="calibre2">&gt; summary(churn.mboost)</strong>  <strong class="calibre2">   Model-based Boosting</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">mboost(formula = churn ~ ., data = trainset, control = boost_control(mstop = 10))</strong>   <strong class="calibre2">   Squared Error (Regression) </strong>  <strong class="calibre2">Loss function: (y - f)^2 </strong>  <strong class="calibre2">Number of boosting iterations: mstop = 10 </strong> <strong class="calibre2">Step size:  0.1 </strong> <strong class="calibre2">Offset:  1.147732 </strong> <strong class="calibre2">Number of baselearners:  14 </strong>  <strong class="calibre2">Selection frequencies:</strong> <strong class="calibre2">            bbs(total_day_minutes) bbs(number_customer_service_calls) </strong> <strong class="calibre2">                0.6                                0.4 </strong> </pre> </div></li><li class="listitem" value="6">Lastly, use<a id="id685" class="calibre1"/> the <code class="email">plot</code> function to draw a partial contribution plot of each attribute:<div><pre class="programlisting">
+<strong class="calibre2">&gt; par(mfrow=c(1,2))</strong>
+<strong class="calibre2">&gt; plot(churn.mboost)</strong>
+</pre></div><div><img src="img/00139.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">重要属性的部分贡献图</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the margins of a classifier</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch08lvl1sec96" class="calibre1"/>计算分类器的边距</h1></div></div></div><p class="calibre7">余量<a id="id686" class="calibre1"/>是分类确定性的度量。该方法<a id="id687" class="calibre1"/>计算正确类别的支持度和错误类别的最大支持度之间的差异。在这个菜谱中，我们将演示如何计算生成的分类器的边距。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the margins of a classifier</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">准备就绪</h2></div></div></div><p class="calibre7">你需要通过在变量<code class="email">churn.bagging</code>和<code class="email">churn.predbagging</code>中存储一个合适的装袋模型来完成前面的配方。同样，将安装好的助推分级器放入<code class="email">churn.boost</code>和<code class="email">churn.boost.pred</code>中。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the margins of a classifier</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch08lvl2sec330" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行<a id="id689" class="calibre1"/>以下步骤计算<a id="id690" class="calibre1"/>每个集合学习者的余量:</p><div><ol class="orderedlist"><li class="listitem" value="1">首先，使用<code class="email">margins</code>函数计算增强分类器的边距:<div> <pre class="programlisting"> <strong class="calibre2">&gt; boost.margins = margins(churn.boost, trainset)</strong> <strong class="calibre2">&gt; boost.pred.margins = margins(churn.boost.pred, testset)</strong> </pre> </div></li><li class="listitem" value="2">You can then use the <code class="email">plot</code> function to plot a marginal cumulative distribution graph of the boosting classifiers:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(sort(boost.margins[[1]]), (1:length(boost.margins[[1]]))/length(boost.margins[[1]]), type="l",xlim=c(-1,1),main="Boosting: Margin cumulative distribution graph", xlab="margin", ylab="% observations", col = "blue")</strong>
+<strong class="calibre2">&gt; lines(sort(boost.pred.margins[[1]]), (1:length(boost.pred.margins[[1]]))/length(boost.pred.margins[[1]]), type="l", col = "green")</strong>
+<strong class="calibre2">&gt; abline(v=0, col="red",lty=2)</strong>
+</pre></div><div><img src="img/00140.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">使用boosting方法的边际累积分布图</p></div></div><p class="calibre13">然后，您可以计算负裕度匹配训练误差<a id="id691" class="calibre1"/>的百分比和负裕度匹配测试误差<div> <pre class="programlisting"> <strong class="calibre2">&gt; boosting.training.margin = table(boost.margins[[1]] &gt; 0)</strong> <strong class="calibre2">&gt; boosting.negative.training = as.numeric(boosting.training.margin[1]/boosting.training.margin[2])</strong> <strong class="calibre2">&gt; boosting.negative.training</strong> <strong class="calibre2"> [1] 0.06387868</strong>  <strong class="calibre2">&gt; boosting.testing.margin = table(boost.pred.margins[[1]] &gt; 0)</strong> <strong class="calibre2">&gt; boosting.negative.testing = as.numeric(boosting.testing.margin[1]/boosting.testing.margin[2])</strong> <strong class="calibre2">&gt; boosting.negative.testing</strong> <strong class="calibre2">[1] 0.06263048</strong> </pre> </div>的百分比</p></li><li class="listitem" value="3">此外，您可以计算bagging分类器的边距。您可能会看到显示“<code class="email">no non-missing argument to min</code>”的警告消息。该消息仅表明最小值/最大值函数应用于长度为0的参数的数值:<div> <pre class="programlisting"> <strong class="calibre2">&gt; bagging.margins = margins(churn.bagging, trainset)</strong> <strong class="calibre2">&gt; bagging.pred.margins = margins(churn.predbagging, testset)</strong> </pre> </div></li><li class="listitem" value="4">bagging方法的边际累积分布图</li><li class="listitem" value="5">You can then use the <code class="email">plot</code> function to plot a margin cumulative distribution graph of the bagging classifiers:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(sort(bagging.margins[[1]]), (1:length(bagging.margins[[1]]))/length(bagging.margins[[1]]), type="l",xlim=c(-1,1),main="Bagging: Margin cumulative distribution graph", xlab="margin", ylab="% observations", col = "blue")</strong>
+
+<strong class="calibre2">&gt; lines(sort(bagging.pred.margins[[1]]), (1:length(bagging.pred.margins[[1]]))/length(bagging.pred.margins[[1]]), type="l", col = "green")</strong>
+<strong class="calibre2">&gt; abline(v=0, col="red",lty=2)</strong>
+</pre></div><div><img src="img/00141.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">The margin cumulative distribution graph of the bagging method</p></div></div><p class="calibre13">最后，您<a id="id693" class="calibre1"/>可以计算负边界匹配训练错误的百分比<a id="id694" class="calibre1"/>和负边界匹配测试错误的百分比:<div> <pre class="programlisting"> <strong class="calibre2">&gt; bagging.training.margin = table(bagging.margins[[1]] &gt; 0)</strong> <strong class="calibre2">&gt; bagging.negative.training = as.numeric(bagging.training.margin[1]/bagging.training.margin[2])</strong> <strong class="calibre2">&gt; bagging.negative.training</strong> <strong class="calibre2">[1] 0.1733401</strong>  <strong class="calibre2">&gt; bagging.testing.margin = table(bagging.pred.margins[[1]] &gt; 0)</strong> <strong class="calibre2">&gt; bagging.negative.testing = as.numeric(bagging.testing.margin[1]/bagging.testing.margin[2])</strong> <strong class="calibre2">&gt; bagging.negative.testing</strong> <strong class="calibre2">[1] 0.04303279</strong> </pre> </div></p></li><li class="listitem" value="6"><a id="ch08lvl2sec331" class="calibre1"/>工作原理...</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the margins of a classifier</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">裕度是分类确定性的度量；它由正确类别的支持度<a id="id695" class="calibre1"/>和错误类别的最大支持度<a id="id696" class="calibre1"/>计算得出。边距的公式可以表示为:</h2></div></div></div><p class="calibre7">这里，xi样本的余量等于正确分类的样本的支持度(<em class="calibre8"> c </em>表示正确的类别)减去被分类到类别<em class="calibre8"> j </em>的样本的最大支持度(其中<em class="calibre8"> j≠c </em>和<em class="calibre8"> j=1…k </em>)。因此，正确分类的示例将具有正边距，而错误分类的示例将具有负边距。如果裕度值接近1，则意味着正确分类的示例具有高置信度。另一方面，不确定分类的例子将具有小的余量。</p><div><img src="img/00142.jpeg" alt="How it works..." class="calibre9"/></div><p class="calibre10"><code class="email">margins</code>函数计算AdaBoost的裕量。M1、AdaBoost-SAMME或bagging分类器，它们返回边距的向量。为了直观显示利润分布，可以使用利润累积分布图。在这些图表中，x轴显示边距，y轴显示边距小于或等于x轴边距值的观察值的百分比。如果每个观察值都被正确分类，图表将在等于1的边距处显示一条垂直线(其中边距= 1)。</p><p class="calibre7">对于boosting分类器的边缘累积分布图，我们可以看到图上绘制了两条线，其中绿线表示测试数据集的边缘，蓝线表示训练集的边缘。该图显示，大约6.39%的负边际与训练误差相匹配，6.26%的负边际与测试误差相匹配。另一方面，在bagging分类器的边缘累积分布图中，我们可以发现17.33%的负边缘与训练误差匹配，4.3%的负边缘与测试误差匹配。通常，匹配训练误差的负边界百分比应该接近匹配测试误差的负边界百分比。因此，我们应该检查为什么与训练误差匹配的负边际百分比比与测试误差匹配的负边际百分比高得多。</p><p class="calibre7"><a id="ch08lvl2sec332" class="calibre1"/>参见</p><p class="calibre7">如果你对更多关于边缘分布图的细节感兴趣，请参考以下来源:<em class="calibre8"> Kuncheva LI (2004) </em>，<em class="calibre8">组合模式分类器:方法和算法</em>，<em class="calibre8"> John Wiley &amp; Sons </em>。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the margins of a classifier</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl1sec97" class="calibre1"/>计算误差演化的集成方法</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><code class="email">adabag</code>包为用户提供了<code class="email">errorevol</code>函数，用于根据迭代次数的<a id="id698" class="calibre1"/>估计集合<a id="id697" class="calibre1"/>方法误差。在这个菜谱中，我们将演示如何使用<code class="email">errorevol</code>来显示每个集成分类器的误差演变。</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the error evolution of the ensemble method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">准备就绪</h1></div></div></div><p class="calibre7">您需要通过在变量<code class="email">churn.bagging</code>中存储合适的装袋模型来完成之前的配方。此外，将安装好的助推分级器放入<code class="email">churn.boost</code>。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the error evolution of the ensemble method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec334" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来计算每个集成学习器的误差演化:</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the error evolution of the ensemble method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">提升误差与树数量的关系</h2></div></div></div><p class="calibre7">Perform the following steps to calculate the error evolution of each ensemble learner:</p><div><ol class="orderedlist"><li class="listitem" value="1">First, use the <code class="email">errorevol</code> function to calculate the error evolution of the boosting classifiers:<div><pre class="programlisting">
+<strong class="calibre2">&gt; boosting.evol.train = errorevol(churn.boost, trainset)</strong>
+<strong class="calibre2">&gt; boosting.evol.test = errorevol(churn.boost, testset)</strong>
+<strong class="calibre2">&gt; plot(boosting.evol.test$error, type = "l", ylim = c(0, 1),</strong>
+<strong class="calibre2">+       main = "Boosting error versus number of trees", xlab = "Iterations",</strong>
+<strong class="calibre2">+       ylab = "Error", col = "red", lwd = 2)</strong>
+<strong class="calibre2">&gt; lines(boosting.evol.train$error, cex = .5, col = "blue", lty = 2, lwd = 2)</strong>
+<strong class="calibre2">&gt; legend("topright", c("test", "train"), col = c("red", "blue"), lty = 1:2, lwd = 2)</strong>
+</pre></div><div><img src="img/00143.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">装袋误差与树木数量的关系</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">Next, use<a id="id699" class="calibre1"/> the <code class="email">errorevol</code> function<a id="id700" class="calibre1"/> to calculate the error evolution of the bagging classifiers:<div><pre class="programlisting">
+<strong class="calibre2">&gt; bagging.evol.train = errorevol(churn.bagging, trainset)</strong>
+<strong class="calibre2">&gt; bagging.evol.test = errorevol(churn.bagging, testset)</strong>
+<strong class="calibre2">&gt; plot(bagging.evol.test$error, type = "l", ylim = c(0, 1),</strong>
+<strong class="calibre2">+       main = "Bagging error versus number of trees", xlab = "Iterations",</strong>
+<strong class="calibre2">+       ylab = "Error", col = "red", lwd = 2)</strong>
+<strong class="calibre2">&gt; lines(bagging.evol.train$error, cex = .5, col = "blue", lty = 2, lwd = 2)</strong>
+<strong class="calibre2">&gt; legend("topright", c("test", "train"), col = c("red", "blue"), lty = 1:2, lwd = 2)</strong>
+</pre></div><div><img src="img/00144.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12"><a id="ch08lvl2sec335" class="calibre1"/>工作原理...</p></div></div><p class="calibre13"><code class="email">errorest</code>函数计算AdaBoost的误差演变。M1、AdaBoost-SAMME或bagging分类器，并返回误差演化向量。在这个配方中，我们<a id="id701" class="calibre1"/>使用boosting和bagging <a id="id702" class="calibre1"/>模型来生成误差演化向量，并绘制误差与树数量的关系图。</p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the error evolution of the ensemble method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">结果图揭示了每次迭代的错误率。错误率的趋势有助于衡量在迭代次数增加时错误减少的速度。除此之外，图表还可以显示模型是否过度拟合。</h2></div></div></div><p class="calibre7"><a id="ch08lvl2sec336" class="calibre1"/>参见</p><p class="calibre7">如果集合模型过拟合，您可以使用<code class="email">predict.bagging</code>和<code class="email">predict.boosting</code>功能来修剪集合模型。更多信息，请使用帮助功能参考<code class="email">predict.bagging</code>和<code class="email">predict.boosting</code> : <div> <pre class="programlisting"> <strong class="calibre2">&gt; help(predict.bagging)</strong> <strong class="calibre2">&gt; help(predict.boosting)</strong> </pre> </div></p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Calculating the error evolution of the ensemble method</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl1sec98" class="calibre1"/>用随机森林对数据进行分类</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">随机森林是另一种有用的集成学习方法，它在训练过程中生成多个决策<a id="id703" class="calibre1"/>树。每个决策树将输出它自己的对应于输入的预测结果。林将使用投票机制选择投票最多的类作为预测结果。在这个菜谱中，我们将说明如何使用<code class="email">randomForest</code>包对数据进行分类。</li></ul></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with random forest</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">做好准备</h1></div></div></div><p class="calibre7">在这个<a id="id704" class="calibre1"/>方案中，我们将继续使用电信<code class="email">churn</code>数据集作为输入数据源，通过随机森林方法执行分类。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with random forest</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec338" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，使用随机目录林对数据进行分类:</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with random forest</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">首先，你要安装并加载<code class="email">randomForest</code>包；<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("randomForest")</strong> <strong class="calibre2">&gt; library(randomForest)</strong> </pre> </div></h2></div></div></div><p class="calibre7">然后，您可以用训练集来拟合随机森林分类器:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.rf = randomForest(churn ~ ., data = trainset, importance = T)</strong> <strong class="calibre2">&gt; churn.rf</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2"> randomForest(formula = churn ~ ., data = trainset, importance = T) </strong> <strong class="calibre2">               Type of random forest: classification</strong> <strong class="calibre2">                     Number of trees: 500</strong> <strong class="calibre2">No. of variables tried at each split: 4</strong>  <strong class="calibre2">        OOB estimate of  error rate: 4.88%</strong> <strong class="calibre2">Confusion matrix:</strong> <strong class="calibre2">    yes   no class.error</strong> <strong class="calibre2">yes 247   95 0.277777778</strong> <strong class="calibre2">no   18 1955 0.009123163</strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">接下来，基于拟合的模型和测试数据集进行预测:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.prediction = predict(churn.rf, testset)</strong> </pre> </div></li><li class="listitem" value="2">类似于其他分类方法，可以得到分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; table(churn.prediction, testset$churn)</strong> <strong class="calibre2">                </strong> <strong class="calibre2">churn.prediction yes  no</strong> <strong class="calibre2">             yes 110   7</strong> <strong class="calibre2">             no   31 870</strong> </pre> </div></li><li class="listitem" value="3">随机森林的均方误差</li><li class="listitem" value="4">Similar to other classification methods, you can obtain the classification table:<div><pre class="programlisting">
+<strong class="calibre2">&gt; table(churn.prediction, testset$churn)</strong>
+<strong class="calibre2">                </strong>
+<strong class="calibre2">churn.prediction yes  no</strong>
+<strong class="calibre2">             yes 110   7</strong>
+<strong class="calibre2">             no   31 870</strong>
+</pre></div></li><li class="listitem" value="5">You <a id="id705" class="calibre1"/>can use the <code class="email">plot</code> function to plot the mean square error of the forest object:<div><pre class="programlisting">
+<strong class="calibre2">&gt; plot(churn.rf)</strong>
+</pre></div><div><img src="img/00145.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">然后，您可以检查适合的分类器中每个属性的重要性:<div> <pre class="programlisting"> <strong class="calibre2">&gt; importance(churn.rf)</strong> <strong class="calibre2">                                      yes         no</strong> <strong class="calibre2">international_plan            66.55206691 56.5100647</strong> <strong class="calibre2">voice_mail_plan               19.98337191 15.2354970</strong> <strong class="calibre2">number_vmail_messages         21.02976166 14.0707195</strong> <strong class="calibre2">total_day_minutes             28.05190188 27.7570444</strong> </pre> </div></p></div></div><p class="calibre13">可变重要性的可视化</p></li><li class="listitem" value="6">You can then examine the importance of each attribute within the fitted classifier:<div><pre class="programlisting">
+<strong class="calibre2">&gt; importance(churn.rf)</strong>
+<strong class="calibre2">                                      yes         no</strong>
+<strong class="calibre2">international_plan            66.55206691 56.5100647</strong>
+<strong class="calibre2">voice_mail_plan               19.98337191 15.2354970</strong>
+<strong class="calibre2">number_vmail_messages         21.02976166 14.0707195</strong>
+<strong class="calibre2">total_day_minutes             28.05190188 27.7570444</strong>
+</pre></div></li><li class="listitem" value="7">Next, you can use the <code class="email">varImpPlot</code> function to obtain the plot of variable importance:<div><pre class="programlisting">
+<strong class="calibre2">&gt; varImpPlot(churn.rf)</strong>
+</pre></div><div><img src="img/00146.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">随机森林方法的边际累积分布图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="8">You <a id="id706" class="calibre1"/>can also use the <code class="email">margin</code> function to calculate the margins and plot the margin cumulative distribution:<div><pre class="programlisting">
+<strong class="calibre2">&gt; margins.rf=margin(churn.rf,trainset)</strong>
+<strong class="calibre2">&gt; plot(margins.rf)</strong>
+</pre></div><div><img src="img/00147.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">边缘分布的直方图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="9">Furthermore, you can use a histogram to visualize the margin distribution of the random forest:<div><pre class="programlisting">
+<strong class="calibre2">&gt; hist(margins.rf,main="Margins of Random Forest for churn dataset")</strong>
+</pre></div><div><img src="img/00148.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">按类别划分的随机森林的边缘</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="10">You<a id="id707" class="calibre1"/> can also use <code class="email">boxplot</code> to visualize the margins of the random forest by class:<div><pre class="programlisting">
+<strong class="calibre2">&gt; boxplot(margins.rf~trainset$churn, main="Margins of Random Forest for churn dataset by class")</strong>
+</pre></div><div><img src="img/00149.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12"><a id="ch08lvl2sec339" class="calibre1"/>工作原理...</p></div></div><p class="calibre13">随机森林的目的是将弱学习器(例如，单个决策树)集成为强学习器。开发随机森林的过程与装袋方法非常相似，假设我们有一个包含具有<em class="calibre8"> M </em>个特征的<em class="calibre8"> N </em>个样本<a id="id708" class="calibre1"/>的训练集。该过程首先执行bootstrap采样，该采样随机地对<em class="calibre8"> N </em>个事例进行采样，替换作为每个单独决策树的训练数据集。接下来，在每个节点中，该过程首先随机选择<em class="calibre8"> m </em>个变量(其中<em class="calibre8">M&lt;T26】M</em>，然后在M个变量中找到提供最佳分割的预测变量。接下来，该过程在不修剪的情况下生长完整的树。最后，我们可以从每一棵单独的树上得到一个实例的预测结果。因此，我们可以通过对输出进行平均或加权平均(对于回归)或进行多数表决(对于分类)来获得预测结果:</p></li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with random forest</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch08lvl2sec339" class="calibre1"/>How it works...</h2></div></div></div><p class="calibre7">一个随机森林<a id="id709" class="calibre1"/>使用两个参数:<strong class="calibre2"> ntree </strong>(树的数量)和<strong class="calibre2"> mtry </strong>(用于寻找最佳特征的特征数量)，而bagging方法<a id="id710" class="calibre1"/>只使用ntree作为参数。因此，如果我们将mtry设置为等于训练数据集中的要素数，那么随机森林就等于bagging方法。</p><div><img src="img/00132.jpeg" alt="How it works..." class="calibre9"/></div><p class="calibre10">随机森林的主要优点是易于计算，能够高效处理数据，并且对缺失或不平衡的数据具有容错能力。随机森林的主要缺点是它无法预测超出定型数据集范围的值。此外，它容易对噪声数据进行过拟合。</p><p class="calibre7">在这个配方中，我们采用了从<code class="email">randomForest</code>包中改编的随机森林方法来拟合分类模型。首先，我们将<code class="email">randomForest</code>安装并加载到一个R会话中。然后，我们使用随机森林方法来训练分类模型。我们设置<code class="email">importance = T</code>，这将确保评估预测器的重要性。</p><p class="calibre7">类似于bagging和boosting方法，一旦模型被拟合，就可以使用拟合的模型对测试数据集进行预测，并且进一步获得分类表。</p><p class="calibre7">为了<a id="id712" class="calibre1"/>评估每个属性的重要性，<code class="email">randomForest</code>包提供了重要性和<code class="email">varImpPlot</code>函数，以列出拟合模型中每个属性的重要性，或者使用平均减少精度或平均减少<code class="email">gini</code>来可视化重要性。</p><p class="calibre7">类似于<code class="email">adabag</code>，它包含一个计算打包和增强方法的边距的方法，<code class="email">randomForest</code>提供了<code class="email">margin</code>函数来计算森林对象的边距。使用<code class="email">plot</code>、<code class="email">hist</code>和<code class="email">boxplot</code>功能，您可以可视化不同方面的裕量与正确分类的观察值的比例。</p><p class="calibre7"><a id="ch08lvl2sec340" class="calibre1"/>还有更多...</p><p class="calibre7">除了<code class="email">randomForest</code>包，<code class="email">party</code>包还提供了随机森林的实现<a id="id713" class="calibre1"/>。在下面的步骤中，我们将说明如何使用<code class="email">party</code>包中的<code class="email">cforest</code>函数来执行分类:</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Classifying data with random forest</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">首先，安装并加载<code class="email">party</code>包:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("party")</strong> <strong class="calibre2">&gt; library(party)</strong> </pre> </div></h2></div></div></div><p class="calibre7">然后，您可以使用<code class="email">cforest</code>函数来拟合分类模型:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.cforest = cforest(churn ~ ., data = trainset, controls=cforest_unbiased(ntree=1000, mtry=5))</strong> <strong class="calibre2">&gt; churn.cforest</strong>  <strong class="calibre2">   Random Forest using Conditional Inference Trees</strong>  <strong class="calibre2">Number of trees:  1000 </strong>  <strong class="calibre2">Response:  churn </strong> <strong class="calibre2">Inputs:  international_plan, voice_mail_plan, number_vmail_messages, total_day_minutes, total_day_calls, total_day_charge, total_eve_minutes, total_eve_calls, total_eve_charge, total_night_minutes, total_night_calls, total_night_charge, total_intl_minutes, total_intl_calls, total_intl_charge, number_customer_service_calls </strong> <strong class="calibre2">Number of observations:  2315 </strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">您<a id="id714" class="calibre1"/>可以根据建立的模型和测试数据集进行预测:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.cforest.prediction = predict(churn.cforest, testset, OOB=TRUE, type = "response")</strong> </pre> </div></li><li class="listitem" value="2">最后，从预测标签和测试数据集的标签中获取分类表:<div> <pre class="programlisting"> <strong class="calibre2">&gt; table(churn.cforest.prediction, testset$churn)</strong> <strong class="calibre2">                        </strong> <strong class="calibre2">churn.cforest.prediction yes  no</strong> <strong class="calibre2">                     yes  91   3</strong> <strong class="calibre2">                     no   50 874</strong> </pre> </div></li><li class="listitem" value="3"><a id="ch08lvl1sec99" class="calibre1"/>估计不同分类器的预测误差</li><li class="listitem" value="4">在本章的开始，我们讨论了为什么我们使用集成学习，以及与仅使用单个分类器相比，它如何提高<a id="id715" class="calibre1"/>预测性能。我们现在通过比较每种方法的性能来验证集成模型是否比单个决策树执行得更好。为了比较不同的分类器，我们可以对每个分类方法执行<a id="id716" class="calibre1"/> 10重交叉验证，以<a id="id717" class="calibre1"/>使用<code class="email">ipred</code>包中的<code class="email">erroreset</code>来估计测试误差。</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating the prediction errors of different classifiers</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">准备就绪</h1></div></div></div><p class="calibre7">在这个方案中，我们将继续使用电信<code class="email">churn</code>数据集作为输入数据源来估计不同分类器的预测误差。</p></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating the prediction errors of different classifiers</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch08lvl2sec342" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤来估计每种分类方法的预测误差:</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating the prediction errors of different classifiers</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">您可以估计bagging模型的错误率:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.bagging= errorest(churn ~ ., data = trainset, model = bagging)</strong> <strong class="calibre2">&gt; churn.bagging</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">errorest.data.frame(formula = churn ~ ., data = trainset, model = bagging)</strong>  <strong class="calibre2">   10-fold cross-validation estimator of misclassification error </strong>  <strong class="calibre2">Misclassification error:  0.0583 </strong> </pre> </div></h2></div></div></div><p class="calibre7">然后你<a id="id718" class="calibre1"/>可以估计boosting方法的错误率:<div> <pre class="programlisting"> <strong class="calibre2">&gt; install.packages("ada")</strong> <strong class="calibre2">&gt; library(ada)</strong> <strong class="calibre2">&gt; churn.boosting= errorest(churn ~ ., data = trainset, model = ada)</strong> <strong class="calibre2">&gt; churn.boosting</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">errorest.data.frame(formula = churn ~ ., data = trainset, model = ada)</strong>  <strong class="calibre2">   10-fold cross-validation estimator of misclassification error </strong>  <strong class="calibre2">Misclassification error:  0.0475 </strong> </pre> </div></p><div><ol class="orderedlist"><li class="listitem" value="1">接下来，估计随机森林模型的错误率:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.rf= errorest(churn ~ ., data = trainset, model = randomForest)</strong> <strong class="calibre2">&gt; churn.rf</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">errorest.data.frame(formula = churn ~ ., data = trainset, model = randomForest)</strong>  <strong class="calibre2">   10-fold cross-validation estimator of misclassification error </strong>  <strong class="calibre2">Misclassification error:  0.051 </strong> </pre> </div></li><li class="listitem" value="2">最后用<code class="email">churn.predict</code>做<a id="id719" class="calibre1"/>一个预测函数，然后用函数估计单决策树的错误率:<div> <pre class="programlisting"> <strong class="calibre2">&gt; churn.predict = function(object, newdata) {predict(object, newdata = newdata, type = "class")}</strong> <strong class="calibre2">&gt; churn.tree= errorest(churn ~ ., data = trainset, model = rpart,predict = churn.predict)</strong> <strong class="calibre2">&gt; churn.tree</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">errorest.data.frame(formula = churn ~ ., data = trainset, model = rpart, </strong> <strong class="calibre2">    predict = churn.predict)</strong>  <strong class="calibre2">   10-fold cross-validation estimator of misclassification error </strong>  <strong class="calibre2">Misclassification error:  0.0674 </strong> </pre> </div></li><li class="listitem" value="3"><a id="ch08lvl2sec343" class="calibre1"/>工作原理...</li><li class="listitem" value="4">在这个方法中，我们使用<code class="email">ipred</code>包中的<code class="email">errorest</code>函数来估计四个不同分类器的错误率。我们比较了boosting、bagging和随机森林方法，以及单一决策树分类器。<code class="email">errorest</code>函数对每个分类器执行10重交叉验证，并计算误分类误差。来自四个选择的模型的估计结果揭示了boosting方法以最低的错误率(0.0475)执行得最好。随机森林方法的错误率第二低(0.051)，而bagging方法的错误率为0.0583。单一决策树分类器<code class="email">rpart</code>在四种方法中表现最差，错误率等于0.0674。这些结果表明，所有三种集成学习方法，boosting，bagging和随机森林，都优于单个决策树分类器。</li></ol><div/></div></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating the prediction errors of different classifiers</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch08lvl2sec344" class="calibre1"/>参见</h2></div></div></div><p class="calibre7">在这个配方中，我们提到了<code class="email">ada</code>包，它包含了一个执行随机增强的方法。对这个包感兴趣的可以参考:<em class="calibre8">加性逻辑回归:弗里德曼</em>、<em class="calibre8">等(2000) </em>的Boosting的统计观点。</p></div></div></body></html>
+
+
+<html>
+  <head>
+    <title>Estimating the prediction errors of different classifiers</title>
+    <meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+
+</head>
+  <body id="page" class="calibre">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch08lvl2sec344" class="calibre1"/>See also</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">In this recipe we mentioned the <code class="email">ada</code> package, which contains a method to perform stochastic boosting. For those interested in this package, please refer to: <em class="calibre8">Additive Logistic Regression: A Statistical View of Boosting by Friedman</em>, <em class="calibre8">et al. (2000)</em>.</li></ul></div></div></div></body></html>
+</body></html>
