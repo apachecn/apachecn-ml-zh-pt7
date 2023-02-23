@@ -26,7 +26,7 @@
 
     <h1 id="_idParaDest-84" class="chapterTitle">用移动平均和自回归模型进行预测</h1>
 
-    <p class="normal">这一章是关于基于移动平均和自回归的时间序列建模。这包括一大套在不同学科中非常流行的模型，包括计量经济学和统计学。我们将讨论自回归和移动平均模型，以及结合这两种模型的其他模型，如ARMA、ARIMA、VAR、GARCH等。</p>
+    <p class="normal">这一章是关于基于移动平均和自回归的时间序列建模。这包括一大套在不同学科中非常流行的模型，包括计量经济学和统计学。我们将讨论自回归和移动平均模型，以及结合这两种模型的其他模型，如 ARMA、ARIMA、VAR、GARCH 等。</p>
 
     <p class="normal">这些模型仍然备受推崇，并找到了它们的应用。然而，许多新的模型已经涌现出来，它们被证明是有竞争力的，甚至优于这些简单的模型。然而，在其主要应用中，在单变量预测中，简单模型通常提供准确或足够准确的预测，因此这些模型构成了时间序列建模的主体。</p>
 
@@ -50,7 +50,7 @@
 
       </li>
 
-      <li class="bullet">Python库<ul>
+      <li class="bullet">Python 库<ul>
 
           <li class="bullet-l2">统计模型</li>
 
@@ -58,9 +58,9 @@
 
       </li>
 
-      <li class="bullet">Python实践<ul>
+      <li class="bullet">Python 实践<ul>
 
-          <li class="bullet-l2">用Python建模</li>
+          <li class="bullet-l2">用 Python 建模</li>
 
         </ul>
 
@@ -76,7 +76,7 @@
 
     <p class="normal">虽然统计学和机器学习方法之间有相当多的重叠，并且每个<a id="_idIndexMarker400"/>社区都在吸收其他社区的工作，但仍然有一些关键的差异。尽管统计学论文仍然是压倒性的形式和演绎，但机器学习研究人员更加务实，依赖于模型的预测准确性。</p>
 
-    <p class="normal">我们已经在<em class="chapterRef">第一章</em>、<em class="italic">Python时间序列介绍</em>中讨论了时间序列模型的早期历史。在这一章中，我们将讨论移动平均线和自回归预测方法。这些方法在20世纪早期被引入，并在1970年由George Box和Gwilym Jenkins在他们的书《时间序列分析预测和控制》中推广。至关重要的是，在他们的书中，Box和Jenkins将ARIMA模型形式化，并描述了如何将其应用于时间序列预测。</p>
+    <p class="normal">我们已经在<em class="chapterRef">第一章</em>、<em class="italic">Python 时间序列介绍</em>中讨论了时间序列模型的早期历史。在这一章中，我们将讨论移动平均线和自回归预测方法。这些方法在 20 世纪早期被引入，并在 1970 年由 George Box 和 Gwilym Jenkins 在他们的书《时间序列分析预测和控制》中推广。至关重要的是，在他们的书中，Box 和 Jenkins 将 ARIMA 模型形式化，并描述了如何将其应用于时间序列预测。</p>
 
     <p class="normal">许多时间序列表现出趋势和季节性，而本章中的许多模型假设平稳性。如果一个时间序列是平稳的，它的均值和标准差在一段时间内保持不变。这意味着时间序列没有趋势，也没有周期性变化。</p>
 
@@ -106,51 +106,51 @@
 
     <p class="normal">现实世界的时间序列来自复杂的过程，可能是非线性和非平稳的，描述它们的方式不止一种，每种方式都有其优缺点。因此，我们可以把一个建模问题看作是许多参数，或者仅仅是一个或几个参数。在下面的专门章节中，我们将讨论基于参数数量和准确性从一组备选方案中选择模型的问题。</p>
 
-    <p class="normal">如今，非线性模型来自不同的研究方向，要么是神经网络，要么是更广泛的机器学习领域。我们将在<em class="chapterRef">第10章</em>、<em class="italic">中看到针对时间序列的深度学习</em>中的神经网络，我们将在<em class="chapterRef">第7章</em>、<em class="italic">中讨论并应用针对时间序列的最新机器学习模型</em>。</p>
+    <p class="normal">如今，非线性模型来自不同的研究方向，要么是神经网络，要么是更广泛的机器学习领域。我们将在<em class="chapterRef">第 10 章</em>、<em class="italic">中看到针对时间序列的深度学习</em>中的神经网络，我们将在<em class="chapterRef">第 7 章</em>、<em class="italic">中讨论并应用针对时间序列的最新机器学习模型</em>。</p>
 
     <h2 id="_idParaDest-86" class="title">移动平均和自回归</h2>
 
-    <p class="normal">经典模型可以分为模型族——<strong class="keyword">移动平均线</strong> ( <strong class="keyword"> MA </strong>)、<strong class="keyword">自回归</strong> ( <strong class="keyword"> AR </strong>)模型、ARMA和ARIMA。这些模型被许多数学家和统计学家正式化并在书籍和论文中推广，包括Peter Whittle (1951)和George Box和Gwilym Jenkins (1970)。但是让我们早点开始。</p>
+    <p class="normal">经典模型可以分为模型族——<strong class="keyword">移动平均线</strong> ( <strong class="keyword"> MA </strong>)、<strong class="keyword">自回归</strong> ( <strong class="keyword"> AR </strong>)模型、ARMA 和 ARIMA。这些模型被许多数学家和统计学家正式化并在书籍和论文中推广，包括 Peter Whittle (1951)和 George Box 和 Gwilym Jenkins (1970)。但是让我们早点开始。</p>
 
     <p class="normal">移动平均线标志着现代时间序列预测的开始。在移动平均线中，数值的<a id="_idIndexMarker406"/>平均值(通常是算术平均值)取自过去特定数量的时间点(时间范围)。</p>
 
-    <p class="normal">更正式的说法是，<strong class="keyword">简单移动平均线</strong>，即k个点的一段时间内的<a id="_idIndexMarker407"/>未加权平均值，公式如下:</p>
+    <p class="normal">更正式的说法是，<strong class="keyword">简单移动平均线</strong>，即 k 个点的一段时间内的<a id="_idIndexMarker407"/>未加权平均值，公式如下:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_001.png" alt="" style="height: 2.8em;"/></figure>
 
-    <p class="normal">其中<em class="italic">x</em>T27】I代表观察到的时间序列。</p>
+    <p class="normal">其中<em class="italic">x</em>T27】I 代表观察到的时间序列。</p>
 
-    <p class="normal">移动平均可以用来平滑时间序列，从而消除短期内出现的噪声和周期性波动，有效地充当低通滤波器。因此，正如数学家雷金纳德·胡克在1902年的一份出版物中指出的，移动平均线可以用来隔离趋势和振荡成分。他将趋势定义为当振荡被忽略时，一个序列移动的方向。</p>
+    <p class="normal">移动平均可以用来平滑时间序列，从而消除短期内出现的噪声和周期性波动，有效地充当低通滤波器。因此，正如数学家雷金纳德·胡克在 1902 年的一份出版物中指出的，移动平均线可以用来隔离趋势和振荡成分。他将趋势定义为当振荡被忽略时，一个序列移动的方向。</p>
 
     <p class="normal">移动平均线可以平滑趋势，并在时间序列的历史上循环；然而，作为一个模型，<a id="_idIndexMarker408"/>移动平均线也可以用来预测未来。时间序列是序列当前值与<a id="_idIndexMarker409"/>观察值(误差项)的线性回归。订单<em class="italic"> q </em>、<em class="italic"> MA(q) </em>的移动平均模型可以表示为:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_002.png" alt="" style="height: 2em;"/></figure>
 
-    <p class="normal">其中<img src="img/B17577_05_003.png" alt="" style="height: 1em;"/>为<em class="italic"> x </em> <sub class="" style="font-style: italic;"> t </sub>(通常假设为0)的平均值(期望值)<img src="img/B17577_05_004.png" alt="" style="height: 1em;"/>为参数，<img src="img/B17577_05_005.png" alt="" style="height: 1em;"/>为随机噪声。</p>
+    <p class="normal">其中<img src="img/B17577_05_003.png" alt="" style="height: 1em;"/>为<em class="italic"> x </em> <sub class="" style="font-style: italic;"> t </sub>(通常假设为 0)的平均值(期望值)<img src="img/B17577_05_004.png" alt="" style="height: 1em;"/>为参数，<img src="img/B17577_05_005.png" alt="" style="height: 1em;"/>为随机噪声。</p>
 
     <p class="normal">胡克在剑桥接受教育，在英国农业、渔业和食品部的统计部门工作。他是一名业余统计学家，撰写气象学和社会经济话题，如工资、结婚率和贸易，以及作物预测。</p>
 
-    <p class="normal"><strong class="keyword"> AR </strong>技术的发明可以追溯到英国统计学家<a id="_idIndexMarker410"/> Udny Yule的一篇论文，他是Hooker的一个私人朋友，在1927年(<em class="italic">关于一种调查扰动时间序列的周期性的方法，特别参考了Wolfer的太阳黑子数</em>)。一个<strong class="keyword">自回归模型</strong>根据其自身的滞后值回归<a id="_idIndexMarker411"/>变量。换句话说，该值的当前值<a id="_idIndexMarker412"/>由使用线性组合的前一个值驱动。</p>
+    <p class="normal"><strong class="keyword"> AR </strong>技术的发明可以追溯到英国统计学家<a id="_idIndexMarker410"/> Udny Yule 的一篇论文，他是 Hooker 的一个私人朋友，在 1927 年(<em class="italic">关于一种调查扰动时间序列的周期性的方法，特别参考了 Wolfer 的太阳黑子数</em>)。一个<strong class="keyword">自回归模型</strong>根据其自身的滞后值回归<a id="_idIndexMarker411"/>变量。换句话说，该值的当前值<a id="_idIndexMarker412"/>由使用线性组合的前一个值驱动。</p>
 
-    <p class="normal">黑子的变化是高度周期性的，正如我们在这张黑子观测随时间变化的曲线图中所看到的那样(通过statsmodels数据实用程序加载):</p>
+    <p class="normal">黑子的变化是高度周期性的，正如我们在这张黑子观测随时间变化的曲线图中所看到的那样(通过 statsmodels 数据实用程序加载):</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_01.png" alt="../../../../../Downloads/Machine-Learning%20for%20Time-Series%20with%20Python/sunspot_act"/></figure>
 
-    <p class="packt_figref">图5.1:按年份划分的太阳黑子观测</p>
+    <p class="packt_figref">图 5.1:按年份划分的太阳黑子观测</p>
 
-    <p class="normal">Yule公式化了一个由噪音驱动的线性模型，作为对太阳黑子数的应用，太阳外壳上黑点的计数。这些斑点<a id="_idIndexMarker414"/>起源于大爆炸，表明太阳的磁活动，以及太阳耀斑等现象。</p>
+    <p class="normal">Yule 公式化了一个由噪音驱动的线性模型，作为对太阳黑子数的应用，太阳外壳上黑点的计数。这些斑点<a id="_idIndexMarker414"/>起源于大爆炸，表明太阳的磁活动，以及太阳耀斑等现象。</p>
 
-    <p class="normal">这是两张根据太阳黑子数量显示的低太阳活动和高太阳活动的图片(来自NASA):</p>
+    <p class="normal">这是两张根据太阳黑子数量显示的低太阳活动和高太阳活动的图片(来自 NASA):</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_02.png" alt="hat Will Solar Cycle 25 Look Like? | NASA"/></figure>
 
-    <p class="packt_figref">图5.2:太阳活动</p>
+    <p class="packt_figref">图 5.2:太阳活动</p>
 
-    <p class="normal">今天，我们知道太阳周期是太阳磁活动在高磁活动(太阳活动最大值)和低磁活动(太阳活动最小值)之间近11年的周期性变化。在高点，爆炸(太阳耀斑)可以将带电粒子释放到太空中，潜在地危及地球上的生命。</p>
+    <p class="normal">今天，我们知道太阳周期是太阳磁活动在高磁活动(太阳活动最大值)和低磁活动(太阳活动最小值)之间近 11 年的周期性变化。在高点，爆炸(太阳耀斑)可以将带电粒子释放到太空中，潜在地危及地球上的生命。</p>
 
-    <p class="normal">尤尔在伦敦大学学院学习工程学，在波恩和海因里希·赫兹一起工作，回到UCL和卡尔·皮尔逊一起工作，后来被提升为UCL的助理教授。在UCL大学获得统计学职位后，他去了剑桥。人们记得他的《统计学》一书《统计学理论导论》，该书于1911年首次出版，历经多个版本，以及他对今天被称为优先连接的过程的描述，在这一过程中，网络中新数量向节点的分配与节点已经拥有的数量一致；这有时被称为“越富越富”</p>
+    <p class="normal">尤尔在伦敦大学学院学习工程学，在波恩和海因里希·赫兹一起工作，回到 UCL 和卡尔·皮尔逊一起工作，后来被提升为 UCL 的助理教授。在 UCL 大学获得统计学职位后，他去了剑桥。人们记得他的《统计学》一书《统计学理论导论》，该书于 1911 年首次出版，历经多个版本，以及他对今天被称为优先连接的过程的描述，在这一过程中，网络中新数量向节点的分配与节点已经拥有的数量一致；这有时被称为“越富越富”</p>
 
-    <p class="normal">安德雷·柯尔莫哥洛夫在1931年定义了术语<strong class="keyword">平稳过程</strong>，尽管路易斯·巴奇列尔在更早的时候(1900年)用不同的术语引入了<a id="_idIndexMarker417"/>类似的定义。<strong class="keyword">平稳性</strong>由三个特征定义:</p>
+    <p class="normal">安德雷·柯尔莫哥洛夫在 1931 年定义了术语<strong class="keyword">平稳过程</strong>，尽管路易斯·巴奇列尔在更早的时候(1900 年)用不同的术语引入了<a id="_idIndexMarker417"/>类似的定义。<strong class="keyword">平稳性</strong>由三个特征定义:</p>
 
     <ol>
 
@@ -166,7 +166,7 @@
 
     <p class="normal">这是弱平稳性。在文献中，除非另有说明，通常平稳性是指弱平稳性。严格平稳性意味着时间序列的概率密度函数不随时间变化。换句话说，在严格平稳性下，<img src="img/B17577_05_007.png" alt="" style="height: 1em;"/>上的联合分布与<img src="img/B17577_05_008.png" alt="" style="height: 1.2em;"/>上的联合分布相同。</p>
 
-    <p class="normal">1938年，挪威<a id="_idIndexMarker419"/>数学家Herman Ole Andreas Wold描述了平稳时间序列的分解。他观察到，平稳时间序列可以表示为确定性成分(自回归)和随机成分(噪声)的总和。这种<a id="_idIndexMarker420"/>分解今天以他的名字命名为<strong class="keyword">沃尔德分解</strong>。</p>
+    <p class="normal">1938 年，挪威<a id="_idIndexMarker419"/>数学家 Herman Ole Andreas Wold 描述了平稳时间序列的分解。他观察到，平稳时间序列可以表示为确定性成分(自回归)和随机成分(噪声)的总和。这种<a id="_idIndexMarker420"/>分解今天以他的名字命名为<strong class="keyword">沃尔德分解</strong>。</p>
 
     <p class="normal">这导致了阶为<img src="img/B17577_05_009.png" alt="" style="height: 1em;"/>、<em class="italic"> AR(p) </em>的自回归模型的公式化，如下所示:</p>
 
@@ -174,43 +174,43 @@
 
     <p class="normal">其中<img src="img/B17577_05_011.png" alt="" style="height: 1em;"/>为模型参数，<em class="italic"> c </em>为常数，<img src="img/B17577_05_012.png" alt="" style="height: 1em;"/>表示噪声。在这个等式中，<em class="italic"> p </em>是时间序列的连续值之间的自相关的度量。</p>
 
-    <p class="normal">这项工作后来在1951年由新西兰人Peter whitt le(Wold是他的顾问)在一篇博士论文中推广到多元时间序列(“时间序列中的<em class="italic">假设检验】)。Peter Whittle还将AR和MA模型整合为一体，称为<strong class="keyword">自回归移动平均线</strong> ( <strong class="keyword"> ARMA </strong>)。这是时间序列建模历史上的又一个里程碑，汇集了尤尔和胡克的工作。</em></p>
+    <p class="normal">这项工作后来在 1951 年由新西兰人 Peter whitt le(Wold 是他的顾问)在一篇博士论文中推广到多元时间序列(“时间序列中的<em class="italic">假设检验】)。Peter Whittle 还将 AR 和 MA 模型整合为一体，称为<strong class="keyword">自回归移动平均线</strong> ( <strong class="keyword"> ARMA </strong>)。这是时间序列建模历史上的又一个里程碑，汇集了尤尔和胡克的工作。</em></p>
 
-    <p class="normal">ARMA模型由两种滞后值组成，一种是自回归分量，另一种是移动平均分量。因此，我们写<em class="italic"> ARMA(p，q) </em>，其中<a id="_idIndexMarker422"/>第一个参数p表示自回归的阶，第二个参数<em class="italic"> q </em>表示移动平均的阶，如下所示:</p>
+    <p class="normal">ARMA 模型由两种滞后值组成，一种是自回归分量，另一种是移动平均分量。因此，我们写<em class="italic"> ARMA(p，q) </em>，其中<a id="_idIndexMarker422"/>第一个参数 p 表示自回归的阶，第二个参数<em class="italic"> q </em>表示移动平均的阶，如下所示:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_013.png" alt="" style="height: 2em;"/></figure>
 
-    <p class="normal">ARMA假设序列是平稳的。在实践中，为了确保平稳性，必须应用预处理。</p>
+    <p class="normal">ARMA 假设序列是平稳的。在实践中，为了确保平稳性，必须应用预处理。</p>
 
-    <p class="normal">模型参数是通过最小二乘法估计的，直到George Box和Gwilym Jenkins推广了他们的参数最大似然估计方法。</p>
+    <p class="normal">模型参数是通过最小二乘法估计的，直到 George Box 和 Gwilym Jenkins 推广了他们的参数最大似然估计方法。</p>
 
     <p class="normal">乔治·博克斯不仅是经典时间序列预测的最有影响力的人物之一，也是更广泛的统计学领域的最有影响力的人物之一。在没有完成化学学业的情况下，他应征参加了第二次世界大战，为军队进行毒气实验，并自学统计学进行分析。</p>
 
     <p class="normal">战争结束后，他在伦敦大学学院学习数学和统计学，并在卡尔·皮尔逊之子埃贡·皮尔逊的指导下完成了博士学位。他后来在普林斯顿领导了一个研究小组，然后在威斯康星大学麦迪逊分校建立了统计系。</p>
 
-    <p class="normal">Box和Jenkin在1970年出版的《时序分析:预测和控制》一书中概述了许多时序预测和季节调整的应用实例。所谓的Box-Jenkins <a id="_idIndexMarker423"/>方法是最流行的预测方法之一。他们的书还包含了对<strong class="keyword">自回归综合移动平均</strong>模型(<strong class="keyword"> ARIMA </strong>)的描述。</p>
+    <p class="normal">Box 和 Jenkin 在 1970 年出版的《时序分析:预测和控制》一书中概述了许多时序预测和季节调整的应用实例。所谓的 Box-Jenkins <a id="_idIndexMarker423"/>方法是最流行的预测方法之一。他们的书还包含了对<strong class="keyword">自回归综合移动平均</strong>模型(<strong class="keyword"> ARIMA </strong>)的描述。</p>
 
     <p class="normal">ARIMA(p，d，q)包括一个数据预处理步骤，称为<strong class="keyword">积分</strong>，以使时间序列平稳，这<a id="_idIndexMarker424"/>是通过减去刚刚过去的<a id="_idIndexMarker425"/>值来替换值，这种转换称为<strong class="keyword">差分</strong>。</p>
 
-    <p class="normal">模型积分由d参数化，d是当前值和先前值之间的差值的次数。如上所述，这三个参数代表模型的三个部分。</p>
+    <p class="normal">模型积分由 d 参数化，d 是当前值和先前值之间的差值的次数。如上所述，这三个参数代表模型的三个部分。</p>
 
-    <p class="normal">有一些特殊情况；ARIMA(p，0，0)代表AR(p)，ARIMA(0，d，0)代表I(d)，ARIMA(0，0，q)代表MA(q)。I(0)有时被用作一种惯例来指代平稳的时间序列，它不需要任何差分就可以是平稳的。</p>
+    <p class="normal">有一些特殊情况；ARIMA(p，0，0)代表 AR(p)，ARIMA(0，d，0)代表 I(d)，ARIMA(0，0，q)代表 MA(q)。I(0)有时被用作一种惯例来指代平稳的时间序列，它不需要任何差分就可以是平稳的。</p>
 
-    <p class="normal">虽然ARIMA型<a id="_idIndexMarker426"/>模型有效地考虑了平稳过程，但是作为ARMA模型的扩展而开发的<strong class="keyword">季节性自回归综合移动平均</strong>模型(<strong class="keyword"> SARIMA </strong>)可以描述在季节内和跨季节表现出非平稳行为的过程。</p>
+    <p class="normal">虽然 ARIMA 型<a id="_idIndexMarker426"/>模型有效地考虑了平稳过程，但是作为 ARMA 模型的扩展而开发的<strong class="keyword">季节性自回归综合移动平均</strong>模型(<strong class="keyword"> SARIMA </strong>)可以描述在季节内和跨季节表现出非平稳行为的过程。</p>
 
-    <p class="normal">季节性ARIMA模型通常表示为ARIMA(p，D，q)(P，D，Q)m。这些参数值得进一步解释:</p>
+    <p class="normal">季节性 ARIMA 模型通常表示为 ARIMA(p，D，q)(P，D，Q)m。这些参数值得进一步解释:</p>
 
     <ul>
 
-      <li class="bullet">m表示一个季节的周期数</li>
+      <li class="bullet">m 表示一个季节的周期数</li>
 
-      <li class="bullet">p，D，Q参数化季节性部分的自回归、积分和移动平均分量</li>
+      <li class="bullet">p，D，Q 参数化季节性部分的自回归、积分和移动平均分量</li>
 
-      <li class="bullet">p，d，q指的是我们之前讨论过的ARIMA项</li>
+      <li class="bullet">p，d，q 指的是我们之前讨论过的 ARIMA 项</li>
 
     </ul>
 
-    <p class="normal">p是时间序列的连续季节成分之间的自相关性的量度。</p>
+    <p class="normal">p 是时间序列的连续季节成分之间的自相关性的量度。</p>
 
     <p class="normal">我们可以把季节性的部分写出来，这样更清楚。<strong class="keyword">季节性自回归</strong>，<strong class="keyword"> SAR </strong>，可以表述为:</p>
 
@@ -224,41 +224,41 @@
 
     <p class="normal">请注意，这些组件中的每一个都将使用一组不同的参数。</p>
 
-    <p class="normal">例如，模型SARIMA(0，1，1)(0，1，1)12过程将包含一个非季节性MA(1)项(具有相应的参数<img src="img/B17577_05_016.png" alt="" style="height: 1em;"/>)和一个季节性MA(1)项(具有相应的参数<img src="img/B17577_05_017.png" alt="" style="height: 1em;"/>)。</p>
+    <p class="normal">例如，模型 SARIMA(0，1，1)(0，1，1)12 过程将包含一个非季节性 MA(1)项(具有相应的参数<img src="img/B17577_05_016.png" alt="" style="height: 1em;"/>)和一个季节性 MA(1)项(具有相应的参数<img src="img/B17577_05_017.png" alt="" style="height: 1em;"/>)。</p>
 
     <h2 id="_idParaDest-87" class="title">型号选择和订购</h2>
 
-    <p class="normal">ARMA中的参数q通常为3或更小，但这更多地反映了计算资源而不是统计数据。今天，为了设置参数p和q，我们通常会查看<a id="_idIndexMarker429"/>自相关和偏自相关图，从中可以看到每个滞后的相关峰值。</p>
+    <p class="normal">ARMA 中的参数 q 通常为 3 或更小，但这更多地反映了计算资源而不是统计数据。今天，为了设置参数 p 和 q，我们通常会查看<a id="_idIndexMarker429"/>自相关和偏自相关图，从中可以看到每个滞后的相关峰值。</p>
 
-    <p class="normal">当我们有不同的模型时，比如说不同p和q的模型，每个都在相同的数据集上训练，我们如何知道应该使用哪一个呢？这就是模型选择的作用。</p>
+    <p class="normal">当我们有不同的模型时，比如说不同 p 和 q 的模型，每个都在相同的数据集上训练，我们如何知道应该使用哪一个呢？这就是模型选择的作用。</p>
 
-    <p class="normal">模型选择是决定竞争模型的方法。模型选择中的一个主要观点是奥卡姆剃刀，它是以生活在大约1287年到1347年间的英国方济各会修士和奥卡姆的经院哲学家威廉的名字命名的。</p>
+    <p class="normal">模型选择是决定竞争模型的方法。模型选择中的一个主要观点是奥卡姆剃刀，它是以生活在大约 1287 年到 1347 年间的英国方济各会修士和奥卡姆的经院哲学家威廉的名字命名的。</p>
 
     <p class="normal">根据奥卡姆剃刀理论，在选择不同的解决方案时，人们应该选择假设最少的解释。奥卡姆基于这种想法认为，神的干预原则是如此简单，奇迹是一个吝啬的解释。这条规则在拉丁语中也称为“<em class="italic"> lex parsimoniae </em>”，表示模型应该是简约的，这意味着它应该简单，但具有很高的解释力。</p>
 
     <p class="normal">在科学中，出于可证伪性原则，更简单的解释更受青睐。科学解释越简单，就越容易被检验，甚至可能被反驳——这赋予了模型科学的严谨性。</p>
 
-    <p class="normal">ARMA等模型<a id="_idIndexMarker433"/>通常用<strong class="keyword">最大似然估计</strong> ( <strong class="keyword"> MLE </strong>)进行估计。在MLE中，这意味着最大化一个似然函数，使得<a id="_idIndexMarker434"/>给定模型的参数<a id="_idIndexMarker435"/>，观察到的数据是最有可能的。</p>
+    <p class="normal">ARMA 等模型<a id="_idIndexMarker433"/>通常用<strong class="keyword">最大似然估计</strong> ( <strong class="keyword"> MLE </strong>)进行估计。在 MLE 中，这意味着最大化一个似然函数，使得<a id="_idIndexMarker434"/>给定模型的参数<a id="_idIndexMarker435"/>，观察到的数据是最有可能的。</p>
 
-    <p class="normal">最大似然法最常用的模型选择标准之一是<strong class="keyword">赤池信息标准</strong> ( <strong class="keyword"> AIC </strong>)，由赤池裕土谷<a id="_idIndexMarker437"/>于1973年首次以英文出版。</p>
+    <p class="normal">最大似然法最常用的模型选择标准之一是<strong class="keyword">赤池信息标准</strong> ( <strong class="keyword"> AIC </strong>)，由赤池裕土谷<a id="_idIndexMarker437"/>于 1973 年首次以英文出版。</p>
 
-    <p class="normal">AIC从最大似然法中取对数似然<em class="italic"> l </em>和模型中的参数数量<em class="italic"> k </em>。</p>
+    <p class="normal">AIC 从最大似然法中取对数似然<em class="italic"> l </em>和模型中的参数数量<em class="italic"> k </em>。</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_018.png" alt="" style="height: 1.5em;"/></figure>
 
-    <p class="normal">也就是说，AIC等于参数数量的两倍减去对数似然的两倍。在模型选择中，我们更喜欢AIC最低的模型，这意味着它的参数很少，但对数似然性也很高。</p>
+    <p class="normal">也就是说，AIC 等于参数数量的两倍减去对数似然的两倍。在模型选择中，我们更喜欢 AIC 最低的模型，这意味着它的参数很少，但对数似然性也很高。</p>
 
-    <p class="normal">对于ARIMA模型，我们可以写得更具体一些:</p>
+    <p class="normal">对于 ARIMA 模型，我们可以写得更具体一些:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_019.png" alt="" style="height: 1.5em;"/></figure>
 
-    <p class="normal">我省略了参数d，因为它没有引入额外的估计。</p>
+    <p class="normal">我省略了参数 d，因为它没有引入额外的估计。</p>
 
-    <p class="normal">几年后(1978年)，吉迪恩·施瓦茨(Gideon Schwarz)为模型选择提出了贝叶斯信息标准(T1)(<strong class="keyword">BIC</strong>)，看起来非常像AIC。它还需要<em class="italic"> N </em>，数据集中样本的数量<a id="_idIndexMarker438"/>:</p>
+    <p class="normal">几年后(1978 年)，吉迪恩·施瓦茨(Gideon Schwarz)为模型选择提出了贝叶斯信息标准(T1)(<strong class="keyword">BIC</strong>)，看起来非常像 AIC。它还需要<em class="italic"> N </em>，数据集中样本的数量<a id="_idIndexMarker438"/>:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_020.png" alt="" style="height: 1.5em;"/></figure>
 
-    <p class="normal">根据BIC的说法，我们想要一个参数少、对数似然高的模型，但也需要少量的训练样本。</p>
+    <p class="normal">根据 BIC 的说法，我们想要一个参数少、对数似然高的模型，但也需要少量的训练样本。</p>
 
     <h2 id="_idParaDest-88" class="title">指数平滑法</h2>
 
@@ -270,19 +270,19 @@
 
     <figure class="mediaobject"><img src="img/B17577_05_022.png" alt="" style="height: 1.6em;"/></figure>
 
-    <p class="normal">其中<img src="img/B17577_05_023.png" alt="" style="height: 0.7em;"/>是指数平滑因子(介于0和1之间的值)。</p>
+    <p class="normal">其中<img src="img/B17577_05_023.png" alt="" style="height: 0.7em;"/>是指数平滑因子(介于 0 和 1 之间的值)。</p>
 
     <p class="normal">本质上，这是权重为<em class="italic"> α </em>和<img src="img/B17577_05_024.png" alt="" style="height: 0.8em;"/>的加权移动平均线。你可以把第二项<img src="img/B17577_05_025.png" alt="" style="height: 1em;"/>看作是递归的，其中，当展开时，<img src="img/B17577_05_026.png" alt="" style="height: 1em;"/>不断地自我相乘——这是指数项。</p>
 
     <p class="normal">参数<img src="img/B17577_05_027.png" alt="" style="height: 0.7em;"/>控制平滑值在多大程度上由当前值和先前值决定。与移动平均线一样，这个公式的效果是结果变得更加平滑。</p>
 
-    <p class="normal">有趣的是，John Muth在1960年表明，SES为时间序列提供了最佳预测，其中，在每个时间步长，值从其前一个值随机离开一步，并且步长<a id="_idIndexMarker441"/>在大小和噪声上独立且相同地分布。这种时间序列被称为随机游走，有时，波动的股票价格被假设为遵循这样的行为。</p>
+    <p class="normal">有趣的是，John Muth 在 1960 年表明，SES 为时间序列提供了最佳预测，其中，在每个时间步长，值从其前一个值随机离开一步，并且步长<a id="_idIndexMarker441"/>在大小和噪声上独立且相同地分布。这种时间序列被称为随机游走，有时，波动的股票价格被假设为遵循这样的行为。</p>
 
-    <p class="normal">另一种指数平滑方法<strong class="keyword"> Theta方法</strong>，由于在2000年的M3竞赛中表现出色，因此从业者对其特别感兴趣。M3竞赛以斯皮罗斯·马克里达基斯的名字<a id="_idIndexMarker442"/>命名，其组织者是尼科西亚大学教授兼未来研究所所长，是一场从微观经济、工业、金融、人口统计和其他领域对3003个时间序列进行预测的竞赛。其主要结论之一是，非常简单的方法可以很好地执行单变量时间序列预测。M3竞赛被证明是预测的分水岭时刻，提供了基准和最先进的 ( <strong class="keyword"> SOTA </strong>)的<strong class="keyword">，尽管自那以后SOTA已经发生了巨大的变化，正如我们将在<em class="chapterRef">第7章</em>、<em class="italic">时间序列的机器学习模型</em>中看到的那样。</strong></p>
+    <p class="normal">另一种指数平滑方法<strong class="keyword"> Theta 方法</strong>，由于在 2000 年的 M3 竞赛中表现出色，因此从业者对其特别感兴趣。M3 竞赛以斯皮罗斯·马克里达基斯的名字<a id="_idIndexMarker442"/>命名，其组织者是尼科西亚大学教授兼未来研究所所长，是一场从微观经济、工业、金融、人口统计和其他领域对 3003 个时间序列进行预测的竞赛。其主要结论之一是，非常简单的方法可以很好地执行单变量时间序列预测。M3 竞赛被证明是预测的分水岭时刻，提供了基准和最先进的 ( <strong class="keyword"> SOTA </strong>)的<strong class="keyword">，尽管自那以后 SOTA 已经发生了巨大的变化，正如我们将在<em class="chapterRef">第 7 章</em>、<em class="italic">时间序列的机器学习模型</em>中看到的那样。</strong></p>
 
-    <p class="normal">西塔法是由瓦西里斯·阿西马科普洛斯和康斯坦丁诺·尼科洛普洛斯于2000年提出的，并由罗布·海因德曼和叶鬼·比拉于2001年再次提出。Theta模型可以理解为<strong class="keyword">带漂移的简单指数平滑</strong> ( <strong class="keyword"> SES </strong>)。</p>
+    <p class="normal">西塔法是由瓦西里斯·阿西马科普洛斯和康斯坦丁诺·尼科洛普洛斯于 2000 年提出的，并由罗布·海因德曼和叶鬼·比拉于 2001 年再次提出。Theta 模型可以理解为<strong class="keyword">带漂移的简单指数平滑</strong> ( <strong class="keyword"> SES </strong>)。</p>
 
-    <p class="normal">该方法基于将去季节性数据分解为两条线。第一条所谓的“theta”线估计长期分量，即趋势，然后取该趋势和SES的加权平均值。</p>
+    <p class="normal">该方法基于将去季节性数据分解为两条线。第一条所谓的“theta”线估计长期分量，即趋势，然后取该趋势和 SES 的加权平均值。</p>
 
     <p class="normal">让我们更正式地陈述这一点！趋势部分预测如下:</p>
 
@@ -290,13 +290,13 @@
 
     <p class="normal">在这个方程中，<em class="italic"> c </em>是截距，<img src="img/B17577_05_029.png" alt="" style="height: 1em;"/>是乘以时间步长的系数，<img src="img/B17577_05_030.png" alt="" style="height: 1em;"/>是残差。<img src="img/B17577_05_031.png" alt="" style="height: 1em;"/>可以通过普通最小二乘法拟合。</p>
 
-    <p class="normal">Theta的公式将这一趋势作为加权和添加到SES中:</p>
+    <p class="normal">Theta 的公式将这一趋势作为加权和添加到 SES 中:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_032.png" alt="" style="height: 2em;"/></figure>
 
     <p class="normal">这里，<img src="img/B17577_05_033.png" alt="" style="height: 1em;"/>是在时间步<em class="italic"> t </em>对<em class="italic"> X </em>的预测。</p>
 
-    <p class="normal">最流行的指数平滑法之一是霍尔茨-温特斯法。芝加哥大学教授查尔斯·霍尔茨(Charles Holtz)首先发表了双指数平滑法(1957年),允许根据趋势和水平进行预测。他的学生彼得·温特斯在1960年扩展了这种方法来捕捉季节性(“<em class="italic">通过指数加权移动平均数预测销售额</em>”)。甚至在后来，Holtz-Winters平滑法被扩展到多个季节(n阶平滑法)。</p>
+    <p class="normal">最流行的指数平滑法之一是霍尔茨-温特斯法。芝加哥大学教授查尔斯·霍尔茨(Charles Holtz)首先发表了双指数平滑法(1957 年),允许根据趋势和水平进行预测。他的学生彼得·温特斯在 1960 年扩展了这种方法来捕捉季节性(“<em class="italic">通过指数加权移动平均数预测销售额</em>”)。甚至在后来，Holtz-Winters 平滑法被扩展到多个季节(n 阶平滑法)。</p>
 
     <p class="normal">为了应用霍尔茨-温特斯方法，我们首先去除趋势和季节性。然后我们预测时间序列，并添加回季节性和趋势。</p>
 
@@ -350,31 +350,31 @@
 
     <h2 id="_idParaDest-89" class="title">阿奇和加尔奇</h2>
 
-    <p class="normal">麻省理工学院经济学教授罗伯特·恩格尔(Robert F. Engle)提出了一个时间序列预测模型(1982年)，他将其命名为ARCH(自回归条件异方差模型)。</p>
+    <p class="normal">麻省理工学院经济学教授罗伯特·恩格尔(Robert F. Engle)提出了一个时间序列预测模型(1982 年)，他将其命名为 ARCH(自回归条件异方差模型)。</p>
 
-    <p class="normal">对于金融机构来说，风险价值，即特定时间段内的金融风险水平，是风险管理的一个重要概念。因此，考虑资产回报的协方差结构是至关重要的。这就是ARCH所做的，并解释了它的重要性。</p>
+    <p class="normal">对于金融机构来说，风险价值，即特定时间段内的金融风险水平，是风险管理的一个重要概念。因此，考虑资产回报的协方差结构是至关重要的。这就是 ARCH 所做的，并解释了它的重要性。</p>
 
-    <p class="normal">事实上，为了表彰他在时间序列计量经济学领域的贡献，恩格尔与我们之前遇到的克莱夫·格兰杰一起获得了2003年诺贝尔经济学奖(诺贝尔经济学奖)。引文中特别提到了他在ARCH方面的开创性工作。</p>
+    <p class="normal">事实上，为了表彰他在时间序列计量经济学领域的贡献，恩格尔与我们之前遇到的克莱夫·格兰杰一起获得了 2003 年诺贝尔经济学奖(诺贝尔经济学奖)。引文中特别提到了他在 ARCH 方面的开创性工作。</p>
 
-    <p class="normal">虽然在ARMA型模型中，收益被建模为独立的，并随时间同分布，但ARCH通过参数化在不同频率观察到的收益之间的高阶相关性，允许时变(异方差)误差项。</p>
+    <p class="normal">虽然在 ARMA 型模型中，收益被建模为独立的，并随时间同分布，但 ARCH 通过参数化在不同频率观察到的收益之间的高阶相关性，允许时变(异方差)误差项。</p>
 
-    <p class="normal">在ARCH中，残差被表示为由随机变量<em class="italic"> z </em> <sub class="" style="font-style: italic;"> t </sub>和标准差<img src="img/B17577_05_043.png" alt="" style="height: 1em;"/>组成，两者都是时间相关的:<img src="img/B17577_05_044.png" alt="" style="height: 1em;"/>。</p>
+    <p class="normal">在 ARCH 中，残差被表示为由随机变量<em class="italic"> z </em> <sub class="" style="font-style: italic;"> t </sub>和标准差<img src="img/B17577_05_043.png" alt="" style="height: 1em;"/>组成，两者都是时间相关的:<img src="img/B17577_05_044.png" alt="" style="height: 1em;"/>。</p>
 
     <p class="normal">时间<em class="italic"> t </em>处残差的标准偏差根据之前点的序列残差进行建模:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_045.png" alt="" style="height: 3.5em;"/></figure>
 
-    <p class="normal">其中q是方差所依赖的先前时间点的数量。</p>
+    <p class="normal">其中 q 是方差所依赖的先前时间点的数量。</p>
 
-    <p class="normal">可以使用最小二乘法来确定模型ARCH(q)。</p>
+    <p class="normal">可以使用最小二乘法来确定模型 ARCH(q)。</p>
 
-    <div><p class="Tip--PACKT-">最小二乘算法是求解β的线性方程y=X.β。它包括寻找使误差平方最小的参数<a id="_idIndexMarker455"/>，<img src="img/B17577_05_046.png" alt="" style="height: 1.5em;"/>。</p>
+    <div><p class="Tip--PACKT-">最小二乘算法是求解β的线性方程 y=X.β。它包括寻找使误差平方最小的参数<a id="_idIndexMarker455"/>，<img src="img/B17577_05_046.png" alt="" style="height: 1.5em;"/>。</p>
 
     </div>
 
-    <p class="normal"><strong class="keyword"> GARCH </strong> ( <strong class="keyword">广义ARCH </strong>)诞生于蒂姆·博勒斯列夫(1986)和斯蒂芬·泰勒(1986)两人<a id="_idIndexMarker456"/>独立扩展恩格尔模型使其更具<a id="_idIndexMarker457"/>一般性之时。GARCH和ARCH的主要区别在于残差来自ARCH模型，而不是来自自回归模型AR。</p>
+    <p class="normal"><strong class="keyword"> GARCH </strong> ( <strong class="keyword">广义 ARCH </strong>)诞生于蒂姆·博勒斯列夫(1986)和斯蒂芬·泰勒(1986)两人<a id="_idIndexMarker456"/>独立扩展恩格尔模型使其更具<a id="_idIndexMarker457"/>一般性之时。GARCH 和 ARCH 的主要区别在于残差来自 ARCH 模型，而不是来自自回归模型 AR。</p>
 
-    <p class="normal">一般来说，在应用GARCH或ARCH模型之前，要进行同方差的统计检验，换句话说，方差是否随时间保持不变。通常使用的是ARCH-LM检验，它使用时间序列没有ARCH效应的零假设。</p>
+    <p class="normal">一般来说，在应用 GARCH 或 ARCH 模型之前，要进行同方差的统计检验，换句话说，方差是否随时间保持不变。通常使用的是 ARCH-LM 检验，它使用时间序列没有 ARCH 效应的零假设。</p>
 
     <h2 id="_idParaDest-90" class="title">向量自回归</h2>
 
@@ -382,41 +382,41 @@
 
     <p class="normal">例如，如果我们的时间序列是关于冰淇淋销售的数量，我们可能知道温度或游泳衣的销售。我们可以预计冰淇淋的销售与温度高度相关，事实上，我们可以预计当温度高时，冰淇淋的消费量会越来越大。同样，我们可以推测，游泳衣的销售要么与冰淇淋的销售同时发生，要么早于或晚于冰淇淋的销售。</p>
 
-    <p class="normal">向量自回归模型可以跟踪几个变量随时间变化的关系。他们<a id="_idIndexMarker459"/>可以捕捉时间序列对当前时间戳之前的值向量的线性依赖，将ar模型推广到多元时间序列。</p>
+    <p class="normal">向量自回归模型可以跟踪几个变量随时间变化的关系。他们<a id="_idIndexMarker459"/>可以捕捉时间序列对当前时间戳之前的值向量的线性依赖，将 ar 模型推广到多元时间序列。</p>
 
-    <p class="normal">风险值模型的特征在于它们的顺序，顺序指的是进入模型的先前时间点的数量<a id="_idIndexMarker461"/>。最简单的情况是VAR(1 ),其中模型仅采用序列的一个滞后，可表述如下:</p>
+    <p class="normal">风险值模型的特征在于它们的顺序，顺序指的是进入模型的先前时间点的数量<a id="_idIndexMarker461"/>。最简单的情况是 VAR(1 ),其中模型仅采用序列的一个滞后，可表述如下:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_047.png" alt="" style="height: 1.5em;"/></figure>
 
-    <p class="normal">其中<em class="italic"> c </em>为常数，直线的截距，<img src="img/B17577_05_048.png" alt="" style="height: 1em;"/>为模型的系数，<img src="img/B17577_05_049.png" alt="" style="height: 1em;"/>为t点的误差项，<em class="italic">x</em>T9】t和<em class="italic"> c </em>为长度为<em class="italic"> k </em>的向量，<img src="img/B17577_05_050.png" alt="" style="height: 1em;"/>为<img src="img/B17577_05_051.png" alt="" style="height: 0.7em;"/>矩阵。</p>
+    <p class="normal">其中<em class="italic"> c </em>为常数，直线的截距，<img src="img/B17577_05_048.png" alt="" style="height: 1em;"/>为模型的系数，<img src="img/B17577_05_049.png" alt="" style="height: 1em;"/>为 t 点的误差项，<em class="italic">x</em>T9】t 和<em class="italic"> c </em>为长度为<em class="italic"> k </em>的向量，<img src="img/B17577_05_050.png" alt="" style="height: 1em;"/>为<img src="img/B17577_05_051.png" alt="" style="height: 0.7em;"/>矩阵。</p>
 
-    <p class="normal">p阶模型VAR(p)表示为:</p>
+    <p class="normal">p 阶模型 VAR(p)表示为:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_052.png" alt="" style="height: 3.5em;"/></figure>
 
-    <p class="normal">VAR假设误差项的均值为0，并且误差项之间没有序列相关性。</p>
+    <p class="normal">VAR 假设误差项的均值为 0，并且误差项之间没有序列相关性。</p>
 
-    <p class="normal">就像向量自回归是自回归的多变量推广一样，<strong class="keyword">向量ARIMA </strong> ( <strong class="keyword"> VARIMA </strong>)是单变量ARIMA模型对多变量时间序列的扩展。虽然它早在1957年就已经正式化了，但是可用的软件实现只是在很久以后才出现。</p>
+    <p class="normal">就像向量自回归是自回归的多变量推广一样，<strong class="keyword">向量 ARIMA </strong> ( <strong class="keyword"> VARIMA </strong>)是单变量 ARIMA 模型对多变量时间序列的扩展。虽然它早在 1957 年就已经正式化了，但是可用的软件实现只是在很久以后才出现。</p>
 
-    <p class="normal">在下一节中，我们将看看Python中的几个库，它们可以用于经典模型的预测。</p>
+    <p class="normal">在下一节中，我们将看看 Python 中的几个库，它们可以用于经典模型的预测。</p>
 
-    <h1 id="_idParaDest-91" class="title">Python库</h1>
+    <h1 id="_idParaDest-91" class="title">Python 库</h1>
 
-    <p class="normal">Python中有一些流行的经典时间序列建模库，但是到目前为止<a id="_idIndexMarker462"/>最流行的是statsmodels。下图比较了图书馆在GitHub上的受欢迎程度:</p>
+    <p class="normal">Python 中有一些流行的经典时间序列建模库，但是到目前为止<a id="_idIndexMarker462"/>最流行的是 statsmodels。下图比较了图书馆在 GitHub 上的受欢迎程度:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_03.png" alt="forecasting_libraries.png"/></figure>
 
-    <p class="packt_figref">图5.3:用于经典时间序列预测的Python库的流行程度</p>
+    <p class="packt_figref">图 5.3:用于经典时间序列预测的 Python 库的流行程度</p>
 
-    <p class="normal">Statsmodels显然是这些库中最受欢迎的。我只选择了那些被积极维护的库<a id="_idIndexMarker463"/>，它们直接实现了算法，而不是从其他库中导入。例如，SkTime或Darts库提供了传统的预测模型，但它们不是在那里实现的，而是在statsmodels中实现的。</p>
+    <p class="normal">Statsmodels 显然是这些库中最受欢迎的。我只选择了那些被积极维护的库<a id="_idIndexMarker463"/>，它们直接实现了算法，而不是从其他库中导入。例如，SkTime 或 Darts 库提供了传统的预测模型，但它们不是在那里实现的，而是在 statsmodels 中实现的。</p>
 
-    <p class="normal">pmdarima(最初是金字塔-arima)包含<a id="_idIndexMarker464"/>一个参数搜索，以帮助使最佳arima模型适合单变量时间序列。Anticipy <a id="_idIndexMarker465"/>包含许多模型，如指数<a id="_idIndexMarker466"/>衰减和阶跃模型。Arch实现了金融计量经济学的工具和<strong class="keyword">自回归条件异方差</strong> ( <strong class="keyword"> ARCH </strong>)的功能。</p>
+    <p class="normal">pmdarima(最初是金字塔-arima)包含<a id="_idIndexMarker464"/>一个参数搜索，以帮助使最佳 arima 模型适合单变量时间序列。Anticipy <a id="_idIndexMarker465"/>包含许多模型，如指数<a id="_idIndexMarker466"/>衰减和阶跃模型。Arch 实现了金融计量经济学的工具和<strong class="keyword">自回归条件异方差</strong> ( <strong class="keyword"> ARCH </strong>)的功能。</p>
 
-    <p class="normal">虽然不像Scikit-Learn那样活跃，而且只有几个人维护，但statsmodels是传统统计学和计量经济学时间序列方法的首选库，比机器学习更强调参数估计和统计测试。</p>
+    <p class="normal">虽然不像 Scikit-Learn 那样活跃，而且只有几个人维护，但 statsmodels 是传统统计学和计量经济学时间序列方法的首选库，比机器学习更强调参数估计和统计测试。</p>
 
     <h2 id="_idParaDest-92" class="title">统计模型</h2>
 
-    <p class="normal">statsmodels库<a id="_idIndexMarker467"/>可以帮助估计统计模型<a id="_idIndexMarker468"/>并执行统计测试。它建立在SciPy和NumPy之上，有很多统计函数和模型。</p>
+    <p class="normal">statsmodels 库<a id="_idIndexMarker467"/>可以帮助估计统计模型<a id="_idIndexMarker468"/>并执行统计测试。它建立在 SciPy 和 NumPy 之上，有很多统计函数和模型。</p>
 
     <p class="normal">下表说明了与本章相关的一些建模类:</p>
 
@@ -516,11 +516,11 @@
 
     </table>
 
-    <p class="packt_figref">图5.4:在statsmodels中实现的一些模型</p>
+    <p class="packt_figref">图 5.4:在 statsmodels 中实现的一些模型</p>
 
-    <p class="normal">ARIMA类还通过一个<em class="italic">search _ order</em>参数——带有季节性成分的ARIMA——为萨里玛提供功能。根据定义，ARIMA也支持MA、AR和differencing(集成)。</p>
+    <p class="normal">ARIMA 类还通过一个<em class="italic">search _ order</em>参数——带有季节性成分的 ARIMA——为萨里玛提供功能。根据定义，ARIMA 也支持 MA、AR 和 differencing(集成)。</p>
 
-    <p class="normal">还有一些其他的<a id="_idIndexMarker469"/>模型，比如MarkovAutoregression，但是我们<a id="_idIndexMarker470"/>不会讨论所有这些模型——我们将选择一个进行讨论。</p>
+    <p class="normal">还有一些其他的<a id="_idIndexMarker469"/>模型，比如 MarkovAutoregression，但是我们<a id="_idIndexMarker470"/>不会讨论所有这些模型——我们将选择一个进行讨论。</p>
 
     <p class="normal">下面列出了一些其他有用的函数:</p>
 
@@ -626,7 +626,7 @@
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">恩格尔自回归条件异方差检验(ARCH)，也称为ARCH-LM检验</p>
+            <p class="Table-Column-Content--PACKT-">恩格尔自回归条件异方差检验(ARCH)，也称为 ARCH-LM 检验</p>
 
           </td>
 
@@ -642,7 +642,7 @@
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">永盒Q统计量</p>
+            <p class="Table-Column-Content--PACKT-">永盒 Q 统计量</p>
 
           </td>
 
@@ -684,7 +684,7 @@
 
     </table>
 
-    <p class="packt_figref">图5.5:stats models中有用的函数</p>
+    <p class="packt_figref">图 5.5:stats models 中有用的函数</p>
 
     <p class="normal">按照惯例，我们像这样导入统计模型:</p>
 
@@ -692,31 +692,31 @@
 
 </code></pre>
 
-    <p class="normal">这些statsmodels算法<a id="_idIndexMarker471"/>也可以通过SkTime获得，这使得<a id="_idIndexMarker472"/>可以通过类似于Sklearn接口的接口获得。</p>
+    <p class="normal">这些 statsmodels 算法<a id="_idIndexMarker471"/>也可以通过 SkTime 获得，这使得<a id="_idIndexMarker472"/>可以通过类似于 Sklearn 接口的接口获得。</p>
 
     <p class="normal">这应该足够做一个简单的概述了。让我们进入建模本身！</p>
 
-    <h1 id="_idParaDest-93" class="title">Python实践</h1>
+    <h1 id="_idParaDest-93" class="title">Python 实践</h1>
 
-    <p class="normal">正如本章介绍中提到的，我们将使用statsmodels库进行建模。</p>
+    <p class="normal">正如本章介绍中提到的，我们将使用 statsmodels 库进行建模。</p>
 
     <h2 id="_idParaDest-94" class="title">要求</h2>
 
-    <p class="normal">在本章中，我们将使用几个库，我们可以从终端(或者类似地从anaconda navigator)快速安装这些库:</p>
+    <p class="normal">在本章中，我们将使用几个库，我们可以从终端(或者类似地从 anaconda navigator)快速安装这些库:</p>
 
     <pre class="programlisting con"><code class="hljs-con">pip install statsmodels pandas_datareader
 
 </code></pre>
 
-    <p class="normal">我们将从Python(或IPython)终端执行命令，但同样，我们也可以从Jupyter笔记本(或不同的环境)执行它们。</p>
+    <p class="normal">我们将从 Python(或 IPython)终端执行命令，但同样，我们也可以从 Jupyter 笔记本(或不同的环境)执行它们。</p>
 
     <p class="normal">让我们开始建模吧！</p>
 
-    <h2 id="_idParaDest-95" class="title">用Python建模</h2>
+    <h2 id="_idParaDest-95" class="title">用 Python 建模</h2>
 
-    <p class="normal">我们将使用Yahoo finance的股票<a id="_idIndexMarker474"/>行情数据集，我们将通过yfinance库下载该数据集。我们将首先<a id="_idIndexMarker475"/>加载数据集，进行一些快速探索，然后我们将构建本章中提到的几个模型。</p>
+    <p class="normal">我们将使用 Yahoo finance 的股票<a id="_idIndexMarker474"/>行情数据集，我们将通过 yfinance 库下载该数据集。我们将首先<a id="_idIndexMarker475"/>加载数据集，进行一些快速探索，然后我们将构建本章中提到的几个模型。</p>
 
-    <p class="normal">我们将载入一系列标准普尔存托凭证(SPDR 标准普尔500 ETF信托):</p>
+    <p class="normal">我们将载入一系列标准普尔存托凭证(SPDR 标准普尔 500 ETF 信托):</p>
 
     <pre class="programlisting code"><code class="hljs-code">from datetime import datetime
 
@@ -766,9 +766,9 @@ plt.xlabel('Date');
 
     <figure class="mediaobject"><img src="img/B17577_05_04.png" alt="ticker_price.png"/></figure>
 
-    <p class="packt_figref">图5.6:标准普尔存托凭证价格随时间的变化</p>
+    <p class="packt_figref">图 5.6:标准普尔存托凭证价格随时间的变化</p>
 
-    <p class="normal">由于这是每日数据，并且<a id="_idIndexMarker478"/>一年中有253或252个工作日，我决定将数据重新采样<a id="_idIndexMarker479"/>为每周数据，并使每年保持一致。</p>
+    <p class="normal">由于这是每日数据，并且<a id="_idIndexMarker478"/>一年中有 253 或 252 个工作日，我决定将数据重新采样<a id="_idIndexMarker479"/>为每周数据，并使每年保持一致。</p>
 
     <pre class="programlisting code"><code class="hljs-code">df1 = df.reset_index().resample('W', on="Date")['Open'].mean()
 
@@ -776,9 +776,9 @@ df1 = df1[df1.index.week &lt; 53]
 
 </code></pre>
 
-    <p class="normal">有些年份有53周。我们处理不了，所以我们会去掉第53周。我们现在有16年52周的每周数据。</p>
+    <p class="normal">有些年份有 53 周。我们处理不了，所以我们会去掉第 53 周。我们现在有 16 年 52 周的每周数据。</p>
 
-    <p class="normal">最后一个修正:statsmodels可以使用与DateTimeIndex关联的频率信息；然而，这通常不被设置，并且<code class="Code-In-Text--PACKT-">df1.index.freq </code>是<code class="Code-In-Text--PACKT-">None</code>。所以，我们自己来设置:</p>
+    <p class="normal">最后一个修正:statsmodels 可以使用与 DateTimeIndex 关联的频率信息；然而，这通常不被设置，并且<code class="Code-In-Text--PACKT-">df1.index.freq </code>是<code class="Code-In-Text--PACKT-">None</code>。所以，我们自己来设置:</p>
 
     <pre class="programlisting code"><code class="hljs-code">df1 = df1.asfreq('W').fillna(method='ffill')
 
@@ -786,7 +786,7 @@ df1 = df1[df1.index.week &lt; 53]
 
     <p class="normal">如果我们现在检查，<code class="Code-In-Text--PACKT-">df1.index.freq</code>就是<code class="Code-In-Text--PACKT-">&lt;Week: weekday=6&gt;.</code></p>
 
-    <p class="normal">设置频率可能会导致值丢失。因此，我们通过<code class="Code-In-Text--PACKT-">fillna()</code>操作，从最后一个有效值继续寻找缺失值。如果我们不这样做，一些模型将不会收敛并返回NaN(不是一个数字)值而不是预测值。</p>
+    <p class="normal">设置频率可能会导致值丢失。因此，我们通过<code class="Code-In-Text--PACKT-">fillna()</code>操作，从最后一个有效值继续寻找缺失值。如果我们不这样做，一些模型将不会收敛并返回 NaN(不是一个数字)值而不是预测值。</p>
 
     <p class="normal">现在，我们需要了解一下<a id="_idIndexMarker480"/>模型阶数的合理范围。我们来看看<a id="_idIndexMarker481"/>自相关和偏自相关函数:</p>
 
@@ -806,19 +806,19 @@ sm.graphics.tsa.plot_acf(df1, lags=20, ax=axs[1])
 
     <figure class="mediaobject"><img src="img/B17577_05_05.png" alt="pcf_acf.png"/></figure>
 
-    <p class="packt_figref">图5.7:部分自相关和自相关</p>
+    <p class="packt_figref">图 5.7:部分自相关和自相关</p>
 
-    <p class="normal">这些图表显示了时间序列在长达20个时间步长的滞后时与其自身的相关性。r或<img src="img/B17577_05_053.png" alt="" style="height: 0.36em;"/>值接近0意味着滞后处的连续观测值彼此不相关。相反，接近1或-1的相关性表明在滞后的这些观察值之间存在很强的正相关或负相关。</p>
+    <p class="normal">这些图表显示了时间序列在长达 20 个时间步长的滞后时与其自身的相关性。r 或<img src="img/B17577_05_053.png" alt="" style="height: 0.36em;"/>值接近 0 意味着滞后处的连续观测值彼此不相关。相反，接近 1 或-1 的相关性表明在滞后的这些观察值之间存在很强的正相关或负相关。</p>
 
     <p class="normal">自相关和偏自相关都返回置信区间。如果超出置信区间(用阴影区域表示)，则相关性是显著的。</p>
 
-    <p class="normal">我们可以看到，滞后1的部分自相关非常高，滞后越大越低。对于所有滞后，<a id="_idIndexMarker482"/>自相关是显著的和高的，但是随着滞后增加，显著性下降<a id="_idIndexMarker483"/>。</p>
+    <p class="normal">我们可以看到，滞后 1 的部分自相关非常高，滞后越大越低。对于所有滞后，<a id="_idIndexMarker482"/>自相关是显著的和高的，但是随着滞后增加，显著性下降<a id="_idIndexMarker483"/>。</p>
 
-    <p class="normal">让我们继续讨论自回归模型。从现在开始，我们将使用statsmodels建模功能。正如您将看到的，界面非常方便。</p>
+    <p class="normal">让我们继续讨论自回归模型。从现在开始，我们将使用 statsmodels 建模功能。正如您将看到的，界面非常方便。</p>
 
     <p class="normal">我们不能直接使用自回归模型，因为它需要时间序列是平稳的，这意味着均值和方差在一段时间内是恒定的——没有季节性，没有趋势。</p>
 
-    <p class="normal">我们可以使用statsmodels实用程序查看时间序列的季节性和趋势:</p>
+    <p class="normal">我们可以使用 statsmodels 实用程序查看时间序列的季节性和趋势:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from statsmodels.tsa.seasonal import seasonal_decompose
 
@@ -828,19 +828,19 @@ result.plot()
 
 </code></pre>
 
-    <p class="normal">我们将周期设置为1，因为每个数据点(行)对应一年。</p>
+    <p class="normal">我们将周期设置为 1，因为每个数据点(行)对应一年。</p>
 
     <p class="normal">让我们看看组件是什么样子的:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_06.png" alt="seasonal_decompose.png"/></figure>
 
-    <p class="packt_figref">图5.8:时间序列的季节性分解</p>
+    <p class="packt_figref">图 5.8:时间序列的季节性分解</p>
 
     <p class="normal">第一个次要情节是原始的时间序列。在这个数据集中既有季节性也有趋势性，这<a id="_idIndexMarker484"/>你可以在次要情节中看到。</p>
 
-    <p class="normal">如前所述，我们需要一个<a id="_idIndexMarker485"/>平稳序列来建模。为了建立平稳性，我们需要去除季节和趋势成分。我们也可以去掉之前估计的季节性或趋势性因素。或者，我们可以在statsmodels中使用包装器功能，或者在ARIMA中设置d参数。</p>
+    <p class="normal">如前所述，我们需要一个<a id="_idIndexMarker485"/>平稳序列来建模。为了建立平稳性，我们需要去除季节和趋势成分。我们也可以去掉之前估计的季节性或趋势性因素。或者，我们可以在 statsmodels 中使用包装器功能，或者在 ARIMA 中设置 d 参数。</p>
 
-    <p class="normal">我们可以使用扩展的迪基-富勒和KPSS测试来检查平稳性:</p>
+    <p class="normal">我们可以使用扩展的迪基-富勒和 KPSS 测试来检查平稳性:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from arch.unitroot import KPSS, ADF
 
@@ -848,15 +848,15 @@ ADF(df1)
 
 </code></pre>
 
-    <p class="normal">我们可以使用<code class="Code-In-Text--PACKT-">statsmodels.tsa.stattools.adfuller</code>或<code class="Code-In-Text--PACKT-">statsmodels.tsa.stattools.kpss</code>，但是我们更喜欢ARCH库版本的便利性。我们让用户来检查KPSS测试的输出。我们得到以下输出:</p>
+    <p class="normal">我们可以使用<code class="Code-In-Text--PACKT-">statsmodels.tsa.stattools.adfuller</code>或<code class="Code-In-Text--PACKT-">statsmodels.tsa.stattools.kpss</code>，但是我们更喜欢 ARCH 库版本的便利性。我们让用户来检查 KPSS 测试的输出。我们得到以下输出:</p>
 
     <figure class="mediaobject"><img src="img/B17577_05_07.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_Y7Tw2W/Screenshot 2021-08-22 at 15.36.52.png"/></figure>
 
-    <p class="packt_figref">图5.9:KPSS平稳性测试的输出</p>
+    <p class="packt_figref">图 5.9:KPSS 平稳性测试的输出</p>
 
-    <p class="normal">给定p值为0.997，我们可以拒绝单位根的零假设，我们得出结论，我们的过程是弱平稳的。</p>
+    <p class="normal">给定 p 值为 0.997，我们可以拒绝单位根的零假设，我们得出结论，我们的过程是弱平稳的。</p>
 
-    <p class="normal">那么我们如何找到<a id="_idIndexMarker486"/>好的差值呢？我们可以使用pmdarima库来实现这个目的，其中有一个函数正好可以实现这个目的:</p>
+    <p class="normal">那么我们如何找到<a id="_idIndexMarker486"/>好的差值呢？我们可以使用 pmdarima 库来实现这个目的，其中有一个函数正好可以实现这个目的:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from pmdarima.arima.utils import ndiffs
 
@@ -866,25 +866,25 @@ ndiffs(df1, test='adf')
 
 </code></pre>
 
-    <p class="normal">我们得到的值是1。对于KPSS和PP测试，我们会得到相同的值。这意味着我们可以消除第一个差异。</p>
+    <p class="normal">我们得到的值是 1。对于 KPSS 和 PP 测试，我们会得到相同的值。这意味着我们可以消除第一个差异。</p>
 
     <p class="normal">让我们从一个自回归模型开始。</p>
 
-    <p class="normal">提醒一下，ARIMA是用参数p，d，q来参数化的，其中:</p>
+    <p class="normal">提醒一下，ARIMA 是用参数 p，d，q 来参数化的，其中:</p>
 
     <ul>
 
-      <li class="bullet">p代表自回归模型:AR(p)</li>
+      <li class="bullet">p 代表自回归模型:AR(p)</li>
 
-      <li class="bullet">d代表积分</li>
+      <li class="bullet">d 代表积分</li>
 
-      <li class="bullet">q代表移动平均线:MA(q)</li>
+      <li class="bullet">q 代表移动平均线:MA(q)</li>
 
     </ul>
 
-    <p class="normal">因此，ARIMA(p，d，0)是具有d阶差分的AR(p)</p>
+    <p class="normal">因此，ARIMA(p，d，0)是具有 d 阶差分的 AR(p)</p>
 
-    <p class="normal">令人欣慰的是，statsmodels会检查并警告平稳性假设是否不成立。让我们尝试运行以符合以下AR模型:</p>
+    <p class="normal">令人欣慰的是，statsmodels 会检查并警告平稳性假设是否不成立。让我们尝试运行以符合以下 AR 模型:</p>
 
     <pre class="programlisting code"><code class="hljs-code">mod = sm.tsa.arima.ARIMA(endog=df, order=(1, 0, 0))
 
@@ -900,7 +900,7 @@ print(res.summary())
 
 </code></pre>
 
-    <p class="normal">因为我们已经知道<a id="_idIndexMarker488"/>我们需要一个1度的差，我们可以设置d为1。再来一次<a id="_idIndexMarker489"/>吧。这一次，我们将使用<code class="Code-In-Text--PACKT-">STLForecast</code>包装器，去除季节性并将其添加回去。这是必要的，因为ARIMA无法解决季节性问题:</p>
+    <p class="normal">因为我们已经知道<a id="_idIndexMarker488"/>我们需要一个 1 度的差，我们可以设置 d 为 1。再来一次<a id="_idIndexMarker489"/>吧。这一次，我们将使用<code class="Code-In-Text--PACKT-">STLForecast</code>包装器，去除季节性并将其添加回去。这是必要的，因为 ARIMA 无法解决季节性问题:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from statsmodels.tsa.forecasting.stl import STLForecast
 
@@ -922,9 +922,9 @@ print(res.summary())
 
     <figure class="mediaobject"><img src="img/B17577_05_08.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_EjesO5/Screenshot 2021-08-22 at 17.07.45.png"/></figure>
 
-    <p class="packt_figref">图5.10:我们的ARIMA模型总结</p>
+    <p class="packt_figref">图 5.10:我们的 ARIMA 模型总结</p>
 
-    <p class="normal">这个结果摘要给出了<a id="_idIndexMarker490"/>所有的关键统计数据。我们看到模型是ARIMA(1，1，0)。<a id="_idIndexMarker491"/>对数似然是-1965。我们还看到了BIC和AIC值，如果我们愿意，我们可以用它们来选择模型。</p>
+    <p class="normal">这个结果摘要给出了<a id="_idIndexMarker490"/>所有的关键统计数据。我们看到模型是 ARIMA(1，1，0)。<a id="_idIndexMarker491"/>对数似然是-1965。我们还看到了 BIC 和 AIC 值，如果我们愿意，我们可以用它们来选择模型。</p>
 
     <p class="normal">请注意，我们需要在这里设置<code class="Code-In-Text--PACKT-">trend="t"</code>，以便模型包含一个常数。否则，我们将得到一个虚假的回归。</p>
 
@@ -936,7 +936,7 @@ forecasts_df = res.get_forecast(steps=STEPS).summary_frame()
 
 </code></pre>
 
-    <p class="normal">这给了我们对未来20步的预测。</p>
+    <p class="normal">这给了我们对未来 20 步的预测。</p>
 
     <p class="normal">让我们想象一下！</p>
 
@@ -966,9 +966,9 @@ ax.fill_between(
 
     <figure class="mediaobject"><img src="img/B17577_05_09.png" alt="spy_forecast.png"/></figure>
 
-    <p class="packt_figref">图5.11:间谍股票代码的价格预测</p>
+    <p class="packt_figref">图 5.11:间谍股票代码的价格预测</p>
 
-    <p class="normal">实线是我们知道的数据。虚线代表我们对未来20年的预测。我们预测周围的灰色区域是95%的置信区间。</p>
+    <p class="normal">实线是我们知道的数据。虚线代表我们对未来 20 年的预测。我们预测周围的灰色区域是 95%的置信区间。</p>
 
     <p class="normal">这看起来不太糟。这是留给读者尝试不同参数的练习。有趣的变化是趋势参数和模型的顺序。</p>
 
@@ -1008,7 +1008,7 @@ forecasts_df.columns = qs
 
 </code></pre>
 
-    <p class="normal">在循环中，我们<a id="_idIndexMarker494"/>迭代不同的q参数，选择0、10和20。我们<a id="_idIndexMarker495"/>用这些q值估计移动平均模型，并预测未来20年。我们还打印对应于每个q的AIC值。这是我们得到的输出:</p>
+    <p class="normal">在循环中，我们<a id="_idIndexMarker494"/>迭代不同的 q 参数，选择 0、10 和 20。我们<a id="_idIndexMarker495"/>用这些 q 值估计移动平均模型，并预测未来 20 年。我们还打印对应于每个 q 的 AIC 值。这是我们得到的输出:</p>
 
     <pre class="programlisting con"><code class="hljs-con">aic (0): 3989.0104184919096
 
@@ -1032,19 +1032,19 @@ forecasts_df.plot(ax=ax)
 
     <figure class="mediaobject"><img src="img/B17577_05_10.png" alt="forecasts_qs.png"/></figure>
 
-    <p class="packt_figref">图5.12:使用不同q参数的预测</p>
+    <p class="packt_figref">图 5.12:使用不同 q 参数的预测</p>
 
     <p class="normal">那么，这些模型中哪一个在统计学上更好呢？</p>
 
-    <p class="normal">让我们回到AIC。AIC值越低，给定对数似然和参数数量的模型越好。</p>
+    <p class="normal">让我们回到 AIC。AIC 值越低，给定对数似然和参数数量的模型越好。</p>
 
-    <p class="normal">在这种情况下，10的阶数<a id="_idIndexMarker496"/>给出了最低的AIC，根据这个标准，我们应该选择q=10。当然，我们只尝试了三种不同的值。我将把它作为一个练习，为q提出一个更合理的参数值。</p>
+    <p class="normal">在这种情况下，10 的阶数<a id="_idIndexMarker496"/>给出了最低的 AIC，根据这个标准，我们应该选择 q=10。当然，我们只尝试了三种不同的值。我将把它作为一个练习，为 q 提出一个更合理的参数值。</p>
 
-    <p class="normal">请注意，pmdarima库具有查找最佳参数值的功能，而SkTime库提供了自动发现arima模型最佳阶数的实现:AutoARIMA。</p>
+    <p class="normal">请注意，pmdarima 库具有查找最佳参数值的功能，而 SkTime 库提供了自动发现 arima 模型最佳阶数的实现:AutoARIMA。</p>
 
     <p class="normal">让我们继续，使用指数平滑模型进行预测。</p>
 
-    <p class="normal">在循环中，我们迭代不同的q参数，选择0、10和20。我们用这些q值估计移动平均模型，并预测未来20年。我们还<a id="_idIndexMarker497"/>打印对应于每个q的AIC值。这是我们得到的结果:</p>
+    <p class="normal">在循环中，我们迭代不同的 q 参数，选择 0、10 和 20。我们用这些 q 值估计移动平均模型，并预测未来 20 年。我们还<a id="_idIndexMarker497"/>打印对应于每个 q 的 AIC 值。这是我们得到的结果:</p>
 
     <pre class="programlisting code"><code class="hljs-code">mod = sm.tsa.ExponentialSmoothing(
 
@@ -1058,7 +1058,7 @@ res = mod.fit()
 
     <p class="normal">这使<a id="_idIndexMarker498"/>模型符合我们的数据。</p>
 
-    <p class="normal">让我们来看看未来20年的预测:</p>
+    <p class="normal">让我们来看看未来 20 年的预测:</p>
 
     <pre class="programlisting code"><code class="hljs-code">forecasts = pd.Series(res.forecast(steps=STEPS))
 
@@ -1078,11 +1078,11 @@ forecasts.plot(style='k--')
 
     <figure class="mediaobject"><img src="img/B17577_05_11.png" alt="exponential_forecast.png"/></figure>
 
-    <p class="packt_figref">图5.13:指数平滑预测</p>
+    <p class="packt_figref">图 5.13:指数平滑预测</p>
 
-    <p class="normal">到目前为止，我们只是看了20步预测的图表。我们仍然没有对我们的模型性能进行非常复杂的分析。让我们来看看错误！</p>
+    <p class="normal">到目前为止，我们只是看了 20 步预测的图表。我们仍然没有对我们的模型性能进行非常复杂的分析。让我们来看看错误！</p>
 
-    <p class="normal">为此，我们首先必须将数据集分为训练和测试两部分。我们可以提前n步预测并检查误差。我们只是将运行到某个时间点的时间序列作为训练数据，将之后的时间点作为测试数据，这样我们可以将预测与实际数据点进行比较:</p>
+    <p class="normal">为此，我们首先必须将数据集分为训练和测试两部分。我们可以提前 n 步预测并检查误差。我们只是将运行到某个时间点的时间序列作为训练数据，将之后的时间点作为测试数据，这样我们可以将预测与实际数据点进行比较:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from statsmodels.tsa.forecasting.theta import ThetaModel
 
@@ -1106,7 +1106,7 @@ forecasts.plot(style='k--')
 
     <figure class="mediaobject"><img src="img/B17577_05_12.png" alt="theta_forecast.png"/></figure>
 
-    <p class="packt_figref">图5.14:模型预测</p>
+    <p class="packt_figref">图 5.14:模型预测</p>
 
     <p class="normal">虚线是预测。这似乎与时间序列的实际行为不太相符。让我们使用我们在前一章<em class="italic">时间序列的机器学习简介</em>中讨论过的一个误差度量来量化<a id="_idIndexMarker500"/>:</p>
 
@@ -1118,7 +1118,7 @@ metrics.mean_squared_error(forecasts, df1[train_length:], squared=False)
 
     <p class="normal">我们得到一个值<code class="Code-In-Text--PACKT-">37.06611385754943</code>。这是均方根误差(我们将<code class="Code-In-Text--PACKT-">squared</code>参数设置为<code class="Code-In-Text--PACKT-">False</code>)。</p>
 
-    <p class="normal">在预测比赛中，比如在Kaggle网站上，误差最小的获胜。在现实生活中，简约也很重要；然而，我们通常仍然以我们能得到的最低误差为目标。</p>
+    <p class="normal">在预测比赛中，比如在 Kaggle 网站上，误差最小的获胜。在现实生活中，简约也很重要；然而，我们通常仍然以我们能得到的最低误差为目标。</p>
 
     <p class="normal">还有更多的模型可以探索和使用，但是是时候结束这一章了。</p>
 
@@ -1126,7 +1126,7 @@ metrics.mean_squared_error(forecasts, df1[train_length:], squared=False)
 
     <p class="normal">在本章中，我们已经讨论了基于移动平均和自回归的时间序列预测。这个主题包括一大套在不同学科中非常流行的模型，如计量经济学和统计学。这些模型构成了时间序列建模的主体，并提供了最先进的预测。</p>
 
-    <p class="normal">我们已经讨论了自回归和移动平均模型，以及结合这两种模型的其他模型，包括ARMA、ARIMA、VAR、GARCH等。在练习环节中，我们将一些模型应用于股票价格数据集。</p>
+    <p class="normal">我们已经讨论了自回归和移动平均模型，以及结合这两种模型的其他模型，包括 ARMA、ARIMA、VAR、GARCH 等。在练习环节中，我们将一些模型应用于股票价格数据集。</p>
 
   </div>
 

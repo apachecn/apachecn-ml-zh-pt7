@@ -28,11 +28,11 @@
 
     <p class="normal">预处理是机器学习中至关重要的一步，但却常常被忽视。许多书没有深入讨论预处理，或者完全跳过预处理。当向外人介绍一个机器学习项目时，好奇心自然会被算法吸引，而不是数据集或预处理。</p>
 
-    <p class="normal">预处理相对沉默的一个原因可能是它没有机器学习本身有吸引力。然而，这往往是花费时间最多的一步，有时估计占整个机器学习过程的98%左右。通常在预处理中，相对容易的工作会对机器学习模型的最终性能产生巨大影响。数据的质量在很大程度上决定了结果——在最糟糕的情况下，低质量的输入可以使机器学习工作完全无效(这可以用谚语“垃圾进，垃圾出”来概括)。</p>
+    <p class="normal">预处理相对沉默的一个原因可能是它没有机器学习本身有吸引力。然而，这往往是花费时间最多的一步，有时估计占整个机器学习过程的 98%左右。通常在预处理中，相对容易的工作会对机器学习模型的最终性能产生巨大影响。数据的质量在很大程度上决定了结果——在最糟糕的情况下，低质量的输入可以使机器学习工作完全无效(这可以用谚语“垃圾进，垃圾出”来概括)。</p>
 
-    <p class="normal">预处理包括管理和筛选数据，这与前一章中介绍的分析过程有些重叠，<em class="chapterRef">第2章</em>，<em class="italic">用Python进行时间序列分析</em>。预处理的预期输出是数据集，在该数据集上更容易进行机器学习。这意味着它比原始数据集更可靠，噪音更小。</p>
+    <p class="normal">预处理包括管理和筛选数据，这与前一章中介绍的分析过程有些重叠，<em class="chapterRef">第 2 章</em>，<em class="italic">用 Python 进行时间序列分析</em>。预处理的预期输出是数据集，在该数据集上更容易进行机器学习。这意味着它比原始数据集更可靠，噪音更小。</p>
 
-    <p class="normal">你可以在本书的GitHub资源库中找到这一章的代码。</p>
+    <p class="normal">你可以在本书的 GitHub 资源库中找到这一章的代码。</p>
 
     <p class="normal">我们将讨论以下主题:</p>
 
@@ -44,7 +44,7 @@
 
       <li class="bullet">特征工程</li>
 
-      <li class="bullet">Python实践</li>
+      <li class="bullet">Python 实践</li>
 
     </ul>
 
@@ -88,7 +88,7 @@
 
     <p class="normal">宁滨或离散化也可以是预处理的一部分，但也可以用于根据相似性对数据点进行分组。我们将在第六章、<em class="italic">时间序列的无监督方法</em>中讨论离散化和其他聚类技术。</p>
 
-    <p class="normal">在继续之前，让我们先了解一下用Python预处理时间序列数据集的一些基础知识。这将包括时间序列数据作为介绍操作背后的理论。</p>
+    <p class="normal">在继续之前，让我们先了解一下用 Python 预处理时间序列数据集的一些基础知识。这将包括时间序列数据作为介绍操作背后的理论。</p>
 
     <h1 id="_idParaDest-43" class="title">特征转换</h1>
 
@@ -98,7 +98,7 @@
 
     <p class="normal">通常，避开处理时间序列数据的传统机器学习算法可能更容易，相反，使用更新的所谓非线性方法，这些方法不依赖于数据的分布。</p>
 
-    <p class="normal">最后，虽然以下所有变换和缩放方法都可以直接应用于要素，但时间序列数据集的一个有趣之处在于，它们会随着时间而变化，我们可能不完全了解时间序列。这些转换中的许多都有在线变体，其中所有的统计数据都是动态估计和调整的。你可以看看<em class="chapterRef">第8章</em>、<em class="italic">时间序列在线学习</em>，了解更多关于这个话题的细节。</p>
+    <p class="normal">最后，虽然以下所有变换和缩放方法都可以直接应用于要素，但时间序列数据集的一个有趣之处在于，它们会随着时间而变化，我们可能不完全了解时间序列。这些转换中的许多都有在线变体，其中所有的统计数据都是动态估计和调整的。你可以看看<em class="chapterRef">第 8 章</em>、<em class="italic">时间序列在线学习</em>，了解更多关于这个话题的细节。</p>
 
     <p class="normal">在下一节中，我们将研究伸缩性，这是回归中的一个普遍问题。</p>
 
@@ -106,27 +106,27 @@
 
     <p class="normal">有些特征<a id="_idIndexMarker167"/>有自然界限，比如人的年龄或产品的生产年份。如果这些范围在不同的特征之间有所不同，一些模型类型(同样，大多数是线性模型)会遇到这个问题，更喜欢相似的范围和相似的方法。</p>
 
-    <p class="normal">两种非常常见的缩放方法是最小-最大缩放和z分数归一化。</p>
+    <p class="normal">两种非常常见的缩放方法是最小-最大缩放和 z 分数归一化。</p>
 
     <p class="normal"><strong class="keyword">最小-最大缩放</strong>包括将<a id="_idIndexMarker169"/>特征的范围限制在两个常数<em class="italic"> a </em>和<em class="italic"> b </em>内。其定义如下:</p>
 
     <figure class="mediaobject"><img src="img/B17577_03_001.png" alt="" style="height: 3em;"/></figure>
 
-    <p class="normal">在<em class="italic"> a </em>为0而<em class="italic"> b </em>为1的特殊情况下，这将特征的范围限制在0和1之间。</p>
+    <p class="normal">在<em class="italic"> a </em>为 0 而<em class="italic"> b </em>为 1 的特殊情况下，这将特征的范围限制在 0 和 1 之间。</p>
 
-    <p class="normal"><strong class="keyword"> Z值归一化</strong>将特征的平均值<a id="_idIndexMarker170"/>设置为0，方差设置为1(单位方差)，如下所示:</p>
+    <p class="normal"><strong class="keyword"> Z 值归一化</strong>将特征的平均值<a id="_idIndexMarker170"/>设置为 0，方差设置为 1(单位方差)，如下所示:</p>
 
     <figure class="mediaobject"><img src="img/B17577_03_002.png" alt="" style="height: 3em;"/></figure>
 
     <p class="normal">在<em class="italic"> x </em>来自高斯分布的情况下，<img src="img/B17577_03_003.png" alt="" style="height: 1em;"/>是标准的正态分布。</p>
 
-    <p class="normal">在下一节中，我们将研究对数和幂变换。这些转换非常重要，尤其是对于我们将在第5章<em class="chapterRef">、<em class="italic">移动平均时间序列预测和自回归模型</em>中遇到的传统时间序列模型。</em></p>
+    <p class="normal">在下一节中，我们将研究对数和幂变换。这些转换非常重要，尤其是对于我们将在第 5 章<em class="chapterRef">、<em class="italic">移动平均时间序列预测和自回归模型</em>中遇到的传统时间序列模型。</em></p>
 
     <h2 id="_idParaDest-45" class="title">对数和幂变换</h2>
 
     <p class="normal">对数变换和幂变换都可以将大幅度分布的值压缩成小范围的输出值。<strong class="keyword">对数变换</strong>是一种特征变换，其中每个值<em class="italic"> x </em>被<em class="italic">对数(x) </em>所取代。</p>
 
-    <p class="normal">对数函数<a id="_idIndexMarker172"/>是指数函数的反函数，重要的是要记住0和1之间的范围被映射到负数(<img src="img/B17577_03_004.png" alt="" style="height: 0.47em;"/>，而数字<em class="italic"> x &gt; =1 </em>在正数范围内被压缩。对数的选择通常介于自然数和以10为底的数之间，但也可以是任何有助于使您的要素更接近对称钟形分布(即正态分布)的数。</p>
+    <p class="normal">对数函数<a id="_idIndexMarker172"/>是指数函数的反函数，重要的是要记住 0 和 1 之间的范围被映射到负数(<img src="img/B17577_03_004.png" alt="" style="height: 0.47em;"/>，而数字<em class="italic"> x &gt; =1 </em>在正数范围内被压缩。对数的选择通常介于自然数和以 10 为底的数之间，但也可以是任何有助于使您的要素更接近对称钟形分布(即正态分布)的数。</p>
 
     <p class="normal">可以说，对数变换是应用于使数据分布更接近高斯分布的不同类型的变换中最流行的一种。对数变换可用于减少分布的偏斜。在最佳情况下，如果要素遵循对数正态分布，则对数变换后的数据遵循正态分布。不幸的是，您的要素可能不会按照对数正态分布进行分布，因此应用此变换没有任何帮助。</p>
 
@@ -140,7 +140,7 @@
 
     <p class="normal">其中<img src="img/B17577_03_006.png" alt="" style="height: 1em;"/>。</p>
 
-    <p class="normal">当<em class="italic"> n </em>是大于1的整数时，我们可以根据<em class="italic"> n </em>是奇数还是偶数做出两个主要的区分。如果是偶数，函数<img src="img/B17577_03_007.png" alt="" style="height: 1em;"/>将趋向正无穷大，且<em class="italic"> x </em>很大，无论<a id="_idIndexMarker177"/>是正还是负。</p>
+    <p class="normal">当<em class="italic"> n </em>是大于 1 的整数时，我们可以根据<em class="italic"> n </em>是奇数还是偶数做出两个主要的区分。如果是偶数，函数<img src="img/B17577_03_007.png" alt="" style="height: 1em;"/>将趋向正无穷大，且<em class="italic"> x </em>很大，无论<a id="_idIndexMarker177"/>是正还是负。</p>
 
     <p class="normal">如果是奇数，<em class="italic"> f(x) </em>会随着<em class="italic"> x </em>的增大而趋向正无穷大，而随着<em class="italic"> x </em>的增大而趋向负无穷大。</p>
 
@@ -162,19 +162,19 @@
 
     </ul>
 
-    <p class="normal">对于<strong class="keyword"> Box-Cox变换</strong>，有两个<a id="_idIndexMarker178"/>变量，单参数变量和<a id="_idIndexMarker179"/>双参数变量。单参数盒–Cox变换的定义如下:</p>
+    <p class="normal">对于<strong class="keyword"> Box-Cox 变换</strong>，有两个<a id="_idIndexMarker178"/>变量，单参数变量和<a id="_idIndexMarker179"/>双参数变量。单参数盒–Cox 变换的定义如下:</p>
 
     <figure class="mediaobject"><img src="img/B17577_03_011.png" alt="" style="height: 3.5em;"/></figure>
 
     <p class="normal">参数<img src="img/B17577_03_012.png" alt="" style="height: 0.38em;"/>的值可以经由不同的优化方法，例如变换后的<a id="_idIndexMarker180"/>特征是高斯的最大似然。</p>
 
-    <p class="normal">所以lambda的值对应的是幂运算的指数，比如<img src="img/B17577_03_013.png" alt="" style="height: 0.8em;"/>带<img src="img/B17577_03_014.png" alt="" style="height: 0.8em;"/>或者<img src="img/B17577_03_015.png" alt="" style="height: 0.9em;"/>带<img src="img/B17577_03_016.png" alt="" style="height: 0.8em;"/>。</p>
+    <p class="normal">所以 lambda 的值对应的是幂运算的指数，比如<img src="img/B17577_03_013.png" alt="" style="height: 0.8em;"/>带<img src="img/B17577_03_014.png" alt="" style="height: 0.8em;"/>或者<img src="img/B17577_03_015.png" alt="" style="height: 0.9em;"/>带<img src="img/B17577_03_016.png" alt="" style="height: 0.8em;"/>。</p>
 
-    <div><p class="Tip--PACKT-">有趣的事实:Box-Cox变换是以统计学家George E . P Box和David Cox的名字命名的，他们决定一起工作，因为Box-Cox听起来不错。</p>
+    <div><p class="Tip--PACKT-">有趣的事实:Box-Cox 变换是以统计学家 George E . P Box 和 David Cox 的名字命名的，他们决定一起工作，因为 Box-Cox 听起来不错。</p>
 
     </div>
 
-    <p class="normal"><strong class="keyword">Yeo–Johnson变换</strong>是Box-Cox变换的扩展，允许零值和负值的<a id="_idIndexMarker181"/>x。<img src="img/B17577_03_017.png" alt="" style="height: 1em;"/>可以是任意实数<a id="_idIndexMarker182"/>，其中<img src="img/B17577_03_018.png" alt="" style="height: 1em;"/> =1产生恒等式变换。该转换定义为:</p>
+    <p class="normal"><strong class="keyword">Yeo–Johnson 变换</strong>是 Box-Cox 变换的扩展，允许零值和负值的<a id="_idIndexMarker181"/>x。<img src="img/B17577_03_017.png" alt="" style="height: 1em;"/>可以是任意实数<a id="_idIndexMarker182"/>，其中<img src="img/B17577_03_018.png" alt="" style="height: 1em;"/> =1 产生恒等式变换。该转换定义为:</p>
 
     <figure class="mediaobject"><img src="img/B17577_03_019.png" alt="" style="height: 8em;"/></figure>
 
@@ -188,7 +188,7 @@
 
     <ul>
 
-      <li class="bullet">单位插补——缺失值由常数代替<a id="_idIndexMarker186"/>,如平均值或0</li>
+      <li class="bullet">单位插补——缺失值由常数代替<a id="_idIndexMarker186"/>,如平均值或 0</li>
 
       <li class="bullet">基于模型的插补——用来自机器学习模型的<a id="_idIndexMarker187"/>预测替换缺失值</li>
 
@@ -202,7 +202,7 @@
 
     <p class="normal">机器学习算法可以使用输入特征的不同表示。正如我们在介绍中提到的，特征工程的目标是产生新的特征，可以在机器学习过程中帮助我们。一些特征的表示或扩充可以提高性能。</p>
 
-    <p class="normal">我们可以区分手工制作和自动特征提取<a id="_idIndexMarker188"/>，其中手工制作意味着我们浏览数据并尝试提出可能有用的表示，或者我们可以使用一组从研究人员和从业人员的工作中建立的特征。一组确定特征的例子是<strong class="keyword"> Catch22 </strong>，它包括22个特征和从相位相关间隔提取的简单汇总统计。Catch22集合是<strong class="keyword">高度比较时间序列分析</strong> ( <strong class="keyword"> HCTSA </strong>)工具箱的子集，另一组特性。</p>
+    <p class="normal">我们可以区分手工制作和自动特征提取<a id="_idIndexMarker188"/>，其中手工制作意味着我们浏览数据并尝试提出可能有用的表示，或者我们可以使用一组从研究人员和从业人员的工作中建立的特征。一组确定特征的例子是<strong class="keyword"> Catch22 </strong>，它包括 22 个特征和从相位相关间隔提取的简单汇总统计。Catch22 集合是<strong class="keyword">高度比较时间序列分析</strong> ( <strong class="keyword"> HCTSA </strong>)工具箱的子集，另一组特性。</p>
 
     <p class="normal">另一个区别是可解释和不可解释的特性。可解释的要素可以是汇总要素，如平均值、最大值、最小值等。这些可以在时间段、窗口内汇集，给我们更多的功能。</p>
 
@@ -210,7 +210,7 @@
 
     <p class="normal">在极端情况下，这可以是一种形式的<strong class="keyword">模型堆叠</strong>，其中模型的结果作为其他模型的输入<a id="_idIndexMarker189"/>。这可以是一种分解学习问题的有效方法，即在监督设置中训练不太复杂(较少特征、较少参数)的模型，并使用它们的输出来训练其他模型。</p>
 
-    <p class="normal">请注意，重要的是，任何新功能只取决于过去和现在的输入。在信号处理中，这种操作被称为<strong class="keyword">因果滤波器</strong>。单词causal表示在时间<em class="italic"> t </em>的值的滤波器输出仅使用在时间<em class="italic"> t </em>可用的信息，而不窥视未来。相反，其输出<a id="_idIndexMarker190"/>也取决于未来输入的滤波器是非因果的。我们将在第10章《时间序列的深度学习》中讨论时间卷积网络，基本上是因果卷积。</p>
+    <p class="normal">请注意，重要的是，任何新功能只取决于过去和现在的输入。在信号处理中，这种操作被称为<strong class="keyword">因果滤波器</strong>。单词 causal 表示在时间<em class="italic"> t </em>的值的滤波器输出仅使用在时间<em class="italic"> t </em>可用的信息，而不窥视未来。相反，其输出<a id="_idIndexMarker190"/>也取决于未来输入的滤波器是非因果的。我们将在第 10 章《时间序列的深度学习》中讨论时间卷积网络，基本上是因果卷积。</p>
 
     <p class="normal">我们应该在训练和测试中非常小心，在预处理中提取和应用的任何统计数据都要经过仔细考虑——如果模型依赖的数据在预测过程中不可用，那么它的性能充其量会过于乐观。我们将在下一章讨论泄漏，<em class="chapterRef">第四章</em>，<em class="italic">时间序列的机器学习</em>。</p>
 
@@ -236,19 +236,19 @@
 
     <p class="normal">与日历和时间相关的特性非常相似，所以我们将在同一部分讨论它们。</p>
 
-    <p class="normal">基于窗口的特征是在(滚动)窗口内，即在一个时间段内集成特征的特征<a id="_idIndexMarker191"/>。例如，15分钟窗口的平均值或7天内的销售额。由于我们在第2章、<em class="italic">中用Python </em>处理了滚动窗口，在本章中，我们将处理更复杂的特征，如卷积和shapelets。</p>
+    <p class="normal">基于窗口的特征是在(滚动)窗口内，即在一个时间段内集成特征的特征<a id="_idIndexMarker191"/>。例如，15 分钟窗口的平均值或 7 天内的销售额。由于我们在第 2 章、<em class="italic">中用 Python </em>处理了滚动窗口，在本章中，我们将处理更复杂的特征，如卷积和 shapelets。</p>
 
-    <p class="normal">许多预处理算法都在<code class="Code-In-Text--PACKT-">sktime</code>中实现。另一个方便的库是tsfresh，它为时间序列计算了大量可解释的特征。在本章的代码中，我们已经通过特性工具访问了tsfresh特性。</p>
+    <p class="normal">许多预处理算法都在<code class="Code-In-Text--PACKT-">sktime</code>中实现。另一个方便的库是 tsfresh，它为时间序列计算了大量可解释的特征。在本章的代码中，我们已经通过特性工具访问了 tsfresh 特性。</p>
 
-    <p class="normal">让我们用Python再做一些时序预处理！接下来我们将讨论与日期和时间相关的特性。</p>
+    <p class="normal">让我们用 Python 再做一些时序预处理！接下来我们将讨论与日期和时间相关的特性。</p>
 
     <h2 id="_idParaDest-48" class="title">与日期和时间相关的功能</h2>
 
-    <p class="normal">日期和时间变量包含有关日期、时间或日期时间组合的信息。我们在前一章中看到了几个<a id="_idIndexMarker193"/>示例，<em class="chapterRef">第二章</em>，<em class="italic">使用Python进行时间序列分析</em>——其中一个是与污染相对应的年份。其他例子可能是一个人的出生年份或贷款日期。</p>
+    <p class="normal">日期和时间变量包含有关日期、时间或日期时间组合的信息。我们在前一章中看到了几个<a id="_idIndexMarker193"/>示例，<em class="chapterRef">第二章</em>，<em class="italic">使用 Python 进行时间序列分析</em>——其中一个是与污染相对应的年份。其他例子可能是一个人的出生年份或贷款日期。</p>
 
     <p class="normal">如果我们想要将这些<a id="_idIndexMarker194"/>字段输入到机器学习模型中，我们需要导出相关信息。例如，我们可以将年份作为一个整数，但是还有更多从日期时间变量中提取特征的例子，我们将在本节中讨论。通过用这些提取的特征来丰富我们的数据集，我们可以显著提高我们的机器学习模型的性能。</p>
 
-    <p class="normal">Workalendar是一个Python模块，它提供了能够处理日历的类，包括银行<a id="_idIndexMarker195"/>和宗教节日的列表，它还提供了与工作日相关的函数。Python-holidays是一个类似的库，但是这里我们将使用workalendar。</p>
+    <p class="normal">Workalendar 是一个 Python 模块，它提供了能够处理日历的类，包括银行<a id="_idIndexMarker195"/>和宗教节日的列表，它还提供了与工作日相关的函数。Python-holidays 是一个类似的库，但是这里我们将使用 workalendar。</p>
 
     <p class="normal">在下一节中，我们将讨论火箭的特性。</p>
 
@@ -268,57 +268,57 @@
 
     <figure class="mediaobject"><img src="img/B17577_03_01.png" alt="merged.png"/></figure>
 
-    <p class="packt_figref">图3.1:锐化滤镜</p>
+    <p class="packt_figref">图 3.1:锐化滤镜</p>
 
-    <p class="normal">此图为灰色版“一分为二的女人，代表生与死”(伦敦博物馆及展览中心Wellcome Collection所有；由4.0在CC下许可)。</p>
+    <p class="normal">此图为灰色版“一分为二的女人，代表生与死”(伦敦博物馆及展览中心 Wellcome Collection 所有；由 4.0 在 CC 下许可)。</p>
 
     <p class="normal">锐化内核强调相邻像素值的差异。你可以看到右边的图片更加粗糙或生动——这是卷积的结果。</p>
 
-    <p class="normal">我们不仅可以将内核<a id="_idIndexMarker201"/>应用于图像，还可以应用于向量或矩阵，这将我们带回ROCKET。ROCKET从每个内核和特征卷积中计算两个聚合特征。这两个特性是使用众所周知的方法全局/平均最大池和一种新颖的方法创建的，我们稍后将介绍这种方法。</p>
+    <p class="normal">我们不仅可以将内核<a id="_idIndexMarker201"/>应用于图像，还可以应用于向量或矩阵，这将我们带回 ROCKET。ROCKET 从每个内核和特征卷积中计算两个聚合特征。这两个特性是使用众所周知的方法全局/平均最大池和一种新颖的方法创建的，我们稍后将介绍这种方法。</p>
 
-    <p class="normal"><strong class="keyword">全局最大池</strong>输出卷积结果的最大值，最大池取池大小内的最大值<a id="_idIndexMarker202"/>。例如，如果卷积的<a id="_idIndexMarker203"/>结果是0，1，2，2，5，1，2，全局最大池返回5，而池大小为3的<strong class="keyword">最大池</strong>输出窗口3内的最大值，因此我们将得到2，2，5，5，5。</p>
+    <p class="normal"><strong class="keyword">全局最大池</strong>输出卷积结果的最大值，最大池取池大小内的最大值<a id="_idIndexMarker202"/>。例如，如果卷积的<a id="_idIndexMarker203"/>结果是 0，1，2，2，5，1，2，全局最大池返回 5，而池大小为 3 的<strong class="keyword">最大池</strong>输出窗口 3 内的最大值，因此我们将得到 2，2，5，5，5。</p>
 
     <p class="normal"><strong class="keyword">正比例值</strong> ( <strong class="keyword"> PPV </strong>)，来自论文的方法论，是来自卷积<a id="_idIndexMarker204"/>的值为正(或高于偏差阈值)的比例(百分比)。</p>
 
-    <p class="normal">我们可以通过卷积核应用变换<a id="_idIndexMarker205"/>来提高时间序列的机器学习精度。每个特征由随机核进行变换，随机核的数量是算法的一个参数。默认情况下，该值设置为10，000。转换后的特征现在可以作为输入输入到任何机器学习算法中。作者建议使用线性算法，如岭回归分类器或逻辑回归。</p>
+    <p class="normal">我们可以通过卷积核应用变换<a id="_idIndexMarker205"/>来提高时间序列的机器学习精度。每个特征由随机核进行变换，随机核的数量是算法的一个参数。默认情况下，该值设置为 10，000。转换后的特征现在可以作为输入输入到任何机器学习算法中。作者建议使用线性算法，如岭回归分类器或逻辑回归。</p>
 
-    <p class="normal">ROCKET的想法<a id="_idIndexMarker206"/>与卷积神经网络(CNN)非常相似，我们将在第10章《时间序列的深度学习》中讨论，然而，两个大的区别是:</p>
+    <p class="normal">ROCKET 的想法<a id="_idIndexMarker206"/>与卷积神经网络(CNN)非常相似，我们将在第 10 章《时间序列的深度学习》中讨论，然而，两个大的区别是:</p>
 
     <ol>
 
-      <li class="numbered">ROCKET不使用任何隐藏层或非线性</li>
+      <li class="numbered">ROCKET 不使用任何隐藏层或非线性</li>
 
       <li class="numbered">卷积独立地应用于每个特征</li>
 
     </ol>
 
-    <p class="normal">在下一节中，我们将讨论shapelets。</p>
+    <p class="normal">在下一节中，我们将讨论 shapelets。</p>
 
     <h2 id="_idParaDest-50" class="title">Shapelets</h2>
 
-    <p class="normal">时间序列的shape let在研究论文<em class="italic">时间序列shape let:一种新的数据挖掘原语</em>中提出(叶乐翔和埃蒙，2009)。shape let的基本思想是将<a id="_idIndexMarker207"/>时间序列分解成不同的子部分(shape let)。</p>
+    <p class="normal">时间序列的 shape let 在研究论文<em class="italic">时间序列 shape let:一种新的数据挖掘原语</em>中提出(叶乐翔和埃蒙，2009)。shape let 的基本思想是将<a id="_idIndexMarker207"/>时间序列分解成不同的子部分(shape let)。</p>
 
-    <p class="normal">第一步，学习shapelets <a id="_idIndexMarker208"/>。该算法计算可能候选的信息增益，并挑选最佳候选来创建区分子部分的shapelet字典。这可能相当昂贵。然后，基于特征的shapelet分解，可以应用决策树或其他机器学习算法。</p>
+    <p class="normal">第一步，学习 shapelets <a id="_idIndexMarker208"/>。该算法计算可能候选的信息增益，并挑选最佳候选来创建区分子部分的 shapelet 字典。这可能相当昂贵。然后，基于特征的 shapelet 分解，可以应用决策树或其他机器学习算法。</p>
 
-    <p class="normal">与其他方法相比，Shapelets有几个优点:</p>
+    <p class="normal">与其他方法相比，Shapelets 有几个优点:</p>
 
     <ul>
 
       <li class="bullet">他们可以提供可解释的结果</li>
 
-      <li class="bullet">shape let的应用<a id="_idIndexMarker209"/>可以非常快——仅取决于特征与shape let字典的匹配</li>
+      <li class="bullet">shape let 的应用<a id="_idIndexMarker209"/>可以非常快——仅取决于特征与 shape let 字典的匹配</li>
 
-      <li class="bullet">shapelets之上的机器学习算法的性能通常非常有竞争力</li>
+      <li class="bullet">shapelets 之上的机器学习算法的性能通常非常有竞争力</li>
 
     </ul>
 
-    <p class="normal">现在是我们用实际数据集进行Python练习的时候了。</p>
+    <p class="normal">现在是我们用实际数据集进行 Python 练习的时候了。</p>
 
-    <h1 id="_idParaDest-51" class="title">Python实践</h1>
+    <h1 id="_idParaDest-51" class="title">Python 实践</h1>
 
-    <p class="normal">NumPy和SciPy提供了我们需要的大部分功能，但是我们可能还需要一些库。</p>
+    <p class="normal">NumPy 和 SciPy 提供了我们需要的大部分功能，但是我们可能还需要一些库。</p>
 
-    <p class="normal">在本节中，我们将使用几个库，我们可以从终端快速安装这些库，<strong class="keyword">Jupyter Notebook</strong>，或者类似地从Anaconda Navigator 安装:</p>
+    <p class="normal">在本节中，我们将使用几个库，我们可以从终端快速安装这些库，<strong class="keyword">Jupyter Notebook</strong>，或者类似地从 Anaconda Navigator 安装:</p>
 
     <pre class="programlisting con"><code class="hljs-con">pip install -U tsfresh workalendar astral "featuretools[tsfresh]" sktime
 
@@ -352,11 +352,11 @@ vals = np.random.lognormal(0, 1.0, pts)
 
     <figure class="mediaobject"><img src="img/B17577_03_02.png" alt="lognormal_hist.png"/></figure>
 
-    <p class="packt_figref">图3.2:从对数正态分布取样的数组</p>
+    <p class="packt_figref">图 3.2:从对数正态分布取样的数组</p>
 
-    <p class="normal">我在y轴上用了对数刻度。我们可以看到，这些值分布在多个数量级上。</p>
+    <p class="normal">我在 y 轴上用了对数刻度。我们可以看到，这些值分布在多个数量级上。</p>
 
-    <p class="normal">我们可以将标准的<a id="_idIndexMarker212"/>归一化应用于z分数。我们还可以对其中一个转换后的分布应用统计正态性检验<a id="_idIndexMarker213"/>:</p>
+    <p class="normal">我们可以将标准的<a id="_idIndexMarker212"/>归一化应用于 z 分数。我们还可以对其中一个转换后的分布应用统计正态性检验<a id="_idIndexMarker213"/>:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sklearn.preprocessing import StandardScaler
 
@@ -372,7 +372,7 @@ print(f"significance: {p:.2f}")
 
 </code></pre>
 
-    <p class="normal">该统计检验的无效假设是样本来自正态分布。因此，低于阈值(通常设置为0.05或0.01)的显著性值(p值)会让我们拒绝零假设。</p>
+    <p class="normal">该统计检验的无效假设是样本来自正态分布。因此，低于阈值(通常设置为 0.05 或 0.01)的显著性值(p 值)会让我们拒绝零假设。</p>
 
     <p class="normal">我们得到了这个输出:<code class="Code-In-Text--PACKT-">significance: 0.00</code>。</p>
 
@@ -396,7 +396,7 @@ print(f"significance: {p:.2f}")
 
     <figure class="mediaobject"><img src="img/B17577_03_03.png" alt="standard_scaled.png"/></figure>
 
-    <p class="packt_figref">图3.3:原始值的线性变换</p>
+    <p class="packt_figref">图 3.3:原始值的线性变换</p>
 
     <p class="normal">我们可以看到一切都在对角线上。</p>
 
@@ -410,7 +410,7 @@ print(f"significance: {p:.2f}")
 
 </code></pre>
 
-    <p class="normal">我们得到了<code class="Code-In-Text--PACKT-">0.31</code>的重要性。这让我们得出结论，我们不能拒绝零假设。我们的分布<a id="_idIndexMarker214"/>与常态相似。事实上，我们得到的标准差<a id="_idIndexMarker215"/>接近1.0，平均值接近0.0，正如我们对正态分布的预期。</p>
+    <p class="normal">我们得到了<code class="Code-In-Text--PACKT-">0.31</code>的重要性。这让我们得出结论，我们不能拒绝零假设。我们的分布<a id="_idIndexMarker214"/>与常态相似。事实上，我们得到的标准差<a id="_idIndexMarker215"/>接近 1.0，平均值接近 0.0，正如我们对正态分布的预期。</p>
 
     <p class="normal">我们可以看到对数正态分布是一个连续的概率分布，它的对数是正态分布，所以我们得到这个结果并不完全令人惊讶。</p>
 
@@ -418,11 +418,11 @@ print(f"significance: {p:.2f}")
 
     <figure class="mediaobject"><img src="img/B17577_03_04.png" alt="log_transformed_hist.png"/></figure>
 
-    <p class="packt_figref">图3.4:对数转换后的对数正态数组</p>
+    <p class="packt_figref">图 3.4:对数转换后的对数正态数组</p>
 
     <p class="normal">对数转换<a id="_idIndexMarker216"/>看起来更正常——正如我们所理解的。</p>
 
-    <p class="normal">我们还可以应用Box-Cox变换:</p>
+    <p class="normal">我们还可以应用 Box-Cox 变换:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from scipy.stats import boxcox
 
@@ -430,13 +430,13 @@ vals_bc = boxcox(vals, 0.0)
 
 </code></pre>
 
-    <p class="normal">我们得到了0.46的显著性。同样，我们可以得出结论，我们的Box-Cox变换是正常的。我们还可以在Box-Cox变换分布图中看到这一点:</p>
+    <p class="normal">我们得到了 0.46 的显著性。同样，我们可以得出结论，我们的 Box-Cox 变换是正常的。我们还可以在 Box-Cox 变换分布图中看到这一点:</p>
 
     <figure class="mediaobject"><img src="img/B17577_03_041.png" alt="bc_transformed_hist.png" style="height: 9.51em;"/></figure>
 
-    <p class="packt_figref">图3.5: Box-Cox变换的对数正态数组</p>
+    <p class="packt_figref">图 3.5: Box-Cox 变换的对数正态数组</p>
 
-    <p class="normal">同样，这看起来很像正态分布。该图看起来与之前的对数变换图非常相似，这并不奇怪<a id="_idIndexMarker219"/>，因为对数运算对应于Box-Cox变换中的λ参数0。</p>
+    <p class="normal">同样，这看起来很像正态分布。该图看起来与之前的对数变换图非常相似，这并不奇怪<a id="_idIndexMarker219"/>，因为对数运算对应于 Box-Cox 变换中的λ参数 0。</p>
 
     <p class="normal">这是一小部分变换，可以帮助我们将数据与经典预测方法中常见的正态假设相协调。</p>
 
@@ -446,7 +446,7 @@ vals_bc = boxcox(vals, 0.0)
 
     <p class="normal">机器学习算法能够直接处理缺失值是相当罕见的<a id="_idIndexMarker220"/>。相反，我们要么用常量替换丢失的值，要么根据其他特性推断出可能的值。</p>
 
-    <p class="normal">scikit-learn文档<a id="_idIndexMarker221"/>列出了一个简单的单位插补示例:</p>
+    <p class="normal">scikit-learn 文档<a id="_idIndexMarker221"/>列出了一个简单的单位插补示例:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import numpy as np
 
@@ -464,7 +464,7 @@ print(imp_mean.transform(df))
 
 </code></pre>
 
-    <p class="normal">我们再次使用(类似于之前的标准缩放器)scikit-learn转换器，它带有<code class="Code-In-Text--PACKT-">fit()</code>和<code class="Code-In-Text--PACKT-">transform()</code>方法。</p>
+    <p class="normal">我们再次使用(类似于之前的标准缩放器)scikit-learn 转换器，它带有<code class="Code-In-Text--PACKT-">fit()</code>和<code class="Code-In-Text--PACKT-">transform()</code>方法。</p>
 
     <p class="normal">我们得到以下估算值:</p>
 
@@ -546,7 +546,7 @@ custom_holidays = create_custom_holidays(2021)
 
 </code></pre>
 
-    <p class="normal">这给了我们2021年的自定义<a id="_idIndexMarker224"/>假期:</p>
+    <p class="normal">这给了我们 2021 年的自定义<a id="_idIndexMarker224"/>假期:</p>
 
     <pre class="programlisting con"><code class="hljs-con">{datetime.date(2021, 1, 1): 'New year',
 
@@ -586,7 +586,7 @@ custom_holidays = create_custom_holidays(2021)
 
 </code></pre>
 
-    <p class="normal">这意味着我们期待一个名为<code class="Code-In-Text--PACKT-">year</code>的整数，并且期待一个<code class="Code-In-Text--PACKT-">List</code>作为输出。注释是可选的，它们不会被检查(如果你不调用mypy)，但是它们可以使Python中的代码更加清晰。</p>
+    <p class="normal">这意味着我们期待一个名为<code class="Code-In-Text--PACKT-">year</code>的整数，并且期待一个<code class="Code-In-Text--PACKT-">List</code>作为输出。注释是可选的，它们不会被检查(如果你不调用 mypy)，但是它们可以使 Python 中的代码更加清晰。</p>
 
     <p class="normal">现在我们可以像这样实现一个简单的查找:</p>
 
@@ -608,7 +608,7 @@ is_holiday(today)
 
     <h2 id="_idParaDest-55" class="title">日期注释</h2>
 
-    <p class="normal">日历模块提供了许多方法，例如，<code class="Code-In-Text--PACKT-">monthrange() - calendar.monthrange</code>返回<a id="_idIndexMarker226"/>给定年份和月份中一个月的第一个工作日和天数。星期几以整数给出，其中星期一是0，星期日是6。</p>
+    <p class="normal">日历模块提供了许多方法，例如，<code class="Code-In-Text--PACKT-">monthrange() - calendar.monthrange</code>返回<a id="_idIndexMarker226"/>给定年份和月份中一个月的第一个工作日和天数。星期几以整数给出，其中星期一是 0，星期日是 6。</p>
 
     <pre class="programlisting code"><code class="hljs-code">import calendar
 
@@ -616,7 +616,7 @@ calendar.monthrange(2021, 1)
 
 </code></pre>
 
-    <p class="normal">我们该走了。这意味着2021年的第一个工作日是星期五。2021年1月有31天。</p>
+    <p class="normal">我们该走了。这意味着 2021 年的第一个工作日是星期五。2021 年 1 月有 31 天。</p>
 
     <p class="normal">我们还可以提取与一年中的某一天相关的特征。以下函数提供自上一年年末到本年末的天数:</p>
 
@@ -682,7 +682,7 @@ get_last_friday(today)
 
 </code></pre>
 
-    <p class="normal">到最后一个星期五，我就满30岁了。</p>
+    <p class="normal">到最后一个星期五，我就满 30 岁了。</p>
 
     <p class="normal">季节也可以预测。</p>
 
@@ -718,7 +718,7 @@ is_in_interval(today, seasons)
 
 </code></pre>
 
-    <p class="normal">我们应该在这里得到T1，但是鼓励读者用不同的值来尝试。</p>
+    <p class="normal">我们应该在这里得到 T1，但是鼓励读者用不同的值来尝试。</p>
 
     <h2 id="_idParaDest-58" class="title">太阳和月亮</h2>
 
@@ -766,11 +766,11 @@ get_business_days(date.today())
 
 </code></pre>
 
-    <p class="normal">我们应该得到<code class="Code-In-Text--PACKT-">(22, 9)</code>–22个工作日和9个周末和假日。</p>
+    <p class="normal">我们应该得到<code class="Code-In-Text--PACKT-">(22, 9)</code>–22 个工作日和 9 个周末和假日。</p>
 
     <h2 id="_idParaDest-60" class="title">自动特征提取</h2>
 
-    <p class="normal">我们也可以从featuretools这样的模块中使用自动特征提取工具<a id="_idIndexMarker233"/>。Featuretools计算许多与日期时间相关的函数。这里有一个简单的例子:</p>
+    <p class="normal">我们也可以从 featuretools 这样的模块中使用自动特征提取工具<a id="_idIndexMarker233"/>。Featuretools 计算许多与日期时间相关的函数。这里有一个简单的例子:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import featuretools as ft
 
@@ -824,11 +824,11 @@ fm, features = ft.dfs(
 
     <figure class="mediaobject"><img src="img/B17577_03_05.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/(A Document Being Saved By screencaptureui 3)/Screenshot 2021-04-11 at 21.58.52.png"/></figure>
 
-    <p class="packt_figref">图3.6:功能工具输出</p>
+    <p class="packt_figref">图 3.6:功能工具输出</p>
 
-    <p class="normal">我们可以提取更多的特征。有关更多详细信息，请参见featuretools文档。</p>
+    <p class="normal">我们可以提取更多的特征。有关更多详细信息，请参见 featuretools 文档。</p>
 
-    <p class="normal">tsfresh模块还为特征提取提供了自动化功能:</p>
+    <p class="normal">tsfresh 模块还为特征提取提供了自动化功能:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from tsfresh.feature_extraction import extract_features
 
@@ -840,23 +840,23 @@ extract_features(data, column_id='Time', default_fc_parameters=settings)
 
 </code></pre>
 
-    <div><p class="Information-Box--PACKT-">请注意，tsfresh使用statsmodels的自回归来优化特性，并且(我最后检查的)仍然没有更新为使用<code class="Code-In-Text--PACKT-">statsmodels.tsa.AutoReg</code>而不是<code class="Code-In-Text--PACKT-">statsmodels.tsa.AR</code>，后者已被否决。</p>
+    <div><p class="Information-Box--PACKT-">请注意，tsfresh 使用 statsmodels 的自回归来优化特性，并且(我最后检查的)仍然没有更新为使用<code class="Code-In-Text--PACKT-">statsmodels.tsa.AutoReg</code>而不是<code class="Code-In-Text--PACKT-">statsmodels.tsa.AR</code>，后者已被否决。</p>
 
     </div>
 
-    <p class="normal">我们得到1574个特征来描述我们的<code class="Code-In-Text--PACKT-">time</code>物体。这些特征可以在机器学习模型中帮助我们。</p>
+    <p class="normal">我们得到 1574 个特征来描述我们的<code class="Code-In-Text--PACKT-">time</code>物体。这些特征可以在机器学习模型中帮助我们。</p>
 
     <p class="normal">让我们演示如何从时间序列中提取火箭特征。</p>
 
     <h2 id="_idParaDest-61" class="title">火箭</h2>
 
-    <p class="normal">我们将在<code class="Code-In-Text--PACKT-">sktime</code>库中使用ROCKET的实现。</p>
+    <p class="normal">我们将在<code class="Code-In-Text--PACKT-">sktime</code>库中使用 ROCKET 的实现。</p>
 
     <p class="normal"><code class="Code-In-Text--PACKT-">sktime</code>库表示嵌套数据帧中的<a id="_idIndexMarker235"/>数据。正如所料，每一列代表一个特性，然而，令人惊讶的是，每一行都是一个时间序列的实例。每个像元包含一段时间内给定要素的所有值的数组。换句话说，每个单元都有一个嵌套的对象结构，其中存储了实例-特征组合。</p>
 
-    <p class="normal">这种结构是有意义的，因为它允许我们在同一个数据帧中存储多个时间序列的实例，然而，一开始并不直观。幸运的是，正如我们将看到的，SkTime提供了实用函数来解除SkTime数据集的嵌套。</p>
+    <p class="normal">这种结构是有意义的，因为它允许我们在同一个数据帧中存储多个时间序列的实例，然而，一开始并不直观。幸运的是，正如我们将看到的，SkTime 提供了实用函数来解除 SkTime 数据集的嵌套。</p>
 
-    <p class="normal">如果我们想在SkTime中加载一个示例时间序列，我们可以这样做:</p>
+    <p class="normal">如果我们想在 SkTime 中加载一个示例时间序列，我们可以这样做:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sktime.datasets import load_arrow_head
 
@@ -872,13 +872,13 @@ from_nested_to_2d_array(X_train).head()
 
     <figure class="mediaobject"><img src="img/B17577_03_06.png" alt="../../../../../../Desktop/Screenshot%202021-04-12%20at%2"/></figure>
 
-    <p class="packt_figref">图3.7:火箭特征</p>
+    <p class="packt_figref">图 3.7:火箭特征</p>
 
-    <p class="normal">同样，每一行都是一个时间序列。只有一个特点，叫<code class="Code-In-Text--PACKT-">dim_0</code>。该时间序列有251个测量值。</p>
+    <p class="normal">同样，每一行都是一个时间序列。只有一个特点，叫<code class="Code-In-Text--PACKT-">dim_0</code>。该时间序列有 251 个测量值。</p>
 
-    <p class="normal">我们可以导入火箭，然后创建火箭特征。我们首先要学习这些特性，然后应用它们。这是机器学习的典型模式。在scitkit-learn中，我们将对模型使用<code class="Code-In-Text--PACKT-">fit()</code>和<code class="Code-In-Text--PACKT-">predict()</code>方法，其中<code class="Code-In-Text--PACKT-">fit()</code>应用于训练数据，<code class="Code-In-Text--PACKT-">predict()</code>给出测试集上的预测。</p>
+    <p class="normal">我们可以导入火箭，然后创建火箭特征。我们首先要学习这些特性，然后应用它们。这是机器学习的典型模式。在 scitkit-learn 中，我们将对模型使用<code class="Code-In-Text--PACKT-">fit()</code>和<code class="Code-In-Text--PACKT-">predict()</code>方法，其中<code class="Code-In-Text--PACKT-">fit()</code>应用于训练数据，<code class="Code-In-Text--PACKT-">predict()</code>给出测试集上的预测。</p>
 
-    <p class="normal">学习步骤应该只应用于训练集。ROCKET中的一个参数是内核的数量。我们在这里将其设置为1，000，但我们也可以将其设置为更高的数字。默认值为10，000个内核:</p>
+    <p class="normal">学习步骤应该只应用于训练集。ROCKET 中的一个参数是内核的数量。我们在这里将其设置为 1，000，但我们也可以将其设置为更高的数字。默认值为 10，000 个内核:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sktime.transformations.panel.rocket import Rocket
 
@@ -890,13 +890,13 @@ X_train_transform = rocket.transform(X_train)
 
 </code></pre>
 
-    <p class="normal">返回的数据集<a id="_idIndexMarker236"/>不是嵌套的，它包含2000列。每一列都描述了整个时间序列，但却是来自不同内核的结果。</p>
+    <p class="normal">返回的数据集<a id="_idIndexMarker236"/>不是嵌套的，它包含 2000 列。每一列都描述了整个时间序列，但却是来自不同内核的结果。</p>
 
-    <p class="normal">在下一部分，我们将做一个shapelets练习。</p>
+    <p class="normal">在下一部分，我们将做一个 shapelets 练习。</p>
 
     <h2 id="_idParaDest-62" class="title">实践中的小形体</h2>
 
-    <p class="normal">让我们为之前查看ROCKET时使用的数据集<a id="_idIndexMarker237"/>创建shapelets。我们将再次使用<code class="Code-In-Text--PACKT-">SkTime</code>:</p>
+    <p class="normal">让我们为之前查看 ROCKET 时使用的数据集<a id="_idIndexMarker237"/>创建 shapelets。我们将再次使用<code class="Code-In-Text--PACKT-">SkTime</code>:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sktime.transformations.panel.shapelets import ContractedShapeletTransform
 
@@ -916,7 +916,7 @@ shapelets_transform.fit(X_train, y_train)
 
     <p class="normal">培训可能需要几分钟时间。我们将得到一些关于正在被检查的候选人的输出。</p>
 
-    <p class="normal">我们可以使用shapelet转换器再次转换我们的时间序列。其工作原理如下:</p>
+    <p class="normal">我们可以使用 shapelet 转换器再次转换我们的时间序列。其工作原理如下:</p>
 
     <pre class="programlisting code"><code class="hljs-code">X_train_transform = shapelets_transform.transform(X_train)
 
@@ -924,7 +924,7 @@ shapelets_transform.fit(X_train, y_train)
 
     <p class="normal">这为我们提供了一个可以在机器学习模型中使用的转换数据集。我们鼓励读者尝试这些特性集。</p>
 
-    <p class="normal">我们的Python实践到此结束。</p>
+    <p class="normal">我们的 Python 实践到此结束。</p>
 
     <h1 id="_idParaDest-63" class="title">摘要</h1>
 
@@ -934,7 +934,7 @@ shapelets_transform.fit(X_train, y_train)
 
     <p class="normal">我们已经讨论了时间序列数据的特征转换和特征工程方法，也讨论了自动化方法。</p>
 
-    <p class="normal">在接下来的章节中，我们将探索如何在机器学习模型中使用这些提取的特征。我们将在下一章讨论特征和建模算法的组合，<em class="chapterRef">第4章</em>，<em class="italic">时序的机器学习介绍</em>。在<em class="chapterRef">第5章</em>、<em class="italic">用移动平均和自回归模型进行时间序列预测</em>中，我们将使用机器学习管道，在这里我们可以连接特征提取和机器学习模型。</p>
+    <p class="normal">在接下来的章节中，我们将探索如何在机器学习模型中使用这些提取的特征。我们将在下一章讨论特征和建模算法的组合，<em class="chapterRef">第 4 章</em>，<em class="italic">时序的机器学习介绍</em>。在<em class="chapterRef">第 5 章</em>、<em class="italic">用移动平均和自回归模型进行时间序列预测</em>中，我们将使用机器学习管道，在这里我们可以连接特征提取和机器学习模型。</p>
 
   </div>
 

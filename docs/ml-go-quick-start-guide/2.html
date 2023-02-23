@@ -32,21 +32,21 @@
 
                 
 
-<p class="mce-root">就像传统的软件开发一样，ML应用程序开发需要掌握专业的样板代码和一个允许开发人员以最少的摩擦和干扰进行的开发环境。软件开发人员通常会在基本的设置和数据争论任务上浪费大量时间。作为一名高效专业的ML开发者，需要有快速建立解决方案原型的能力；这意味着在琐碎的任务上花费尽可能少的精力。</p>
+<p class="mce-root">就像传统的软件开发一样，ML 应用程序开发需要掌握专业的样板代码和一个允许开发人员以最少的摩擦和干扰进行的开发环境。软件开发人员通常会在基本的设置和数据争论任务上浪费大量时间。作为一名高效专业的 ML 开发者，需要有快速建立解决方案原型的能力；这意味着在琐碎的任务上花费尽可能少的精力。</p>
 
-<p>在前一章中，我们概述了主要的ML问题和一个开发过程，你可以遵循它来获得一个商业解决方案。我们还解释了Go作为一种编程语言在创建ML应用程序时所提供的优势。</p>
+<p>在前一章中，我们概述了主要的 ML 问题和一个开发过程，你可以遵循它来获得一个商业解决方案。我们还解释了 Go 作为一种编程语言在创建 ML 应用程序时所提供的优势。</p>
 
-<p class="mce-root">在这一章中，我们将指导你为Go建立一个为ML应用程序优化的开发环境。具体来说，我们将涵盖以下主题:</p>
+<p class="mce-root">在这一章中，我们将指导你为 Go 建立一个为 ML 应用程序优化的开发环境。具体来说，我们将涵盖以下主题:</p>
 
 <ul>
 
-<li>如何安装Go</li>
+<li>如何安装 Go</li>
 
-<li>使用Jupyter和gophernotes交互式运行Go</li>
+<li>使用 Jupyter 和 gophernotes 交互式运行 Go</li>
 
-<li>与Gota的数据争论</li>
+<li>与 Gota 的数据争论</li>
 
-<li>使用gonum/plot和gophernotes进行数据可视化</li>
+<li>使用 gonum/plot 和 gophernotes 进行数据可视化</li>
 
 <li>数据预处理(格式化、清理和采样)</li>
 
@@ -54,9 +54,9 @@
 
 </ul>
 
-<p>本书附带的代码示例针对基于Debian的Linux发行版进行了优化。但是，它们可以适用于其他发行版(例如，将<kbd>apt</kbd>改为<kbd>yum</kbd>)和带有Cygwin的窗口。</p>
+<p>本书附带的代码示例针对基于 Debian 的 Linux 发行版进行了优化。但是，它们可以适用于其他发行版(例如，将<kbd>apt</kbd>改为<kbd>yum</kbd>)和带有 Cygwin 的窗口。</p>
 
-<p>完成本章后，您将能够快速探索、可视化和处理任何数据集，以供ML算法后续使用。</p>
+<p>完成本章后，您将能够快速探索、可视化和处理任何数据集，以供 ML 算法后续使用。</p>
 
 
 
@@ -99,7 +99,7 @@
 
                             
 
-                    <h1 class="header-title">安装Go</h1>
+                    <h1 class="header-title">安装 Go</h1>
 
                 
 
@@ -109,11 +109,11 @@
 
                 
 
-<p>开发环境是个性化的。大多数开发人员更喜欢一种代码编辑器或工具集，而不是另一种。虽然我们建议使用交互式工具，如Jupyter via gophernotes，但运行本书中的代码示例的唯一先决条件是Go 1.10或更高版本的有效安装。也就是说，<kbd>go</kbd>命令应该可用，并且<kbd>GOPATH</kbd>环境变量应该设置正确。</p>
+<p>开发环境是个性化的。大多数开发人员更喜欢一种代码编辑器或工具集，而不是另一种。虽然我们建议使用交互式工具，如 Jupyter via gophernotes，但运行本书中的代码示例的唯一先决条件是 Go 1.10 或更高版本的有效安装。也就是说，<kbd>go</kbd>命令应该可用，并且<kbd>GOPATH</kbd>环境变量应该设置正确。</p>
 
-<p>要安装Go，请从https://golang.org/dl/的<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://golang.org/dl/">下载你系统的二进制版本。然后，参考以下与您的操作系统相匹配的小节<sup xmlns:epub="http://www.idpf.org/2007/ops">【2】</sup>。</a></p>
+<p>要安装 Go，请从 https://golang.org/dl/的<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://golang.org/dl/">下载你系统的二进制版本。然后，参考以下与您的操作系统相匹配的小节<sup xmlns:epub="http://www.idpf.org/2007/ops">【2】</sup>。</a></p>
 
-<p>如果您只想使用gophernotes运行Go代码，并且打算使用Docker作为安装方法，那么您可以跳过这一节，直接进入<em>使用gophernotes交互运行Go</em>一节。</p>
+<p>如果您只想使用 gophernotes 运行 Go 代码，并且打算使用 Docker 作为安装方法，那么您可以跳过这一节，直接进入<em>使用 gophernotes 交互运行 Go</em>一节。</p>
 
 
 
@@ -156,7 +156,7 @@
 
                             
 
-                    <h1 class="header-title">Linux、macOS和FreeBSD</h1>
+                    <h1 class="header-title">Linux、macOS 和 FreeBSD</h1>
 
                 
 
@@ -166,17 +166,17 @@
 
                 
 
-<p>二进制版本被打包成tarballs。提取二进制文件并将它们添加到您的<kbd>PATH</kbd>中。这里有一个例子:</p>
+<p>二进制版本被打包成 tarballs。提取二进制文件并将它们添加到您的<kbd>PATH</kbd>中。这里有一个例子:</p>
 
 <pre><strong>tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz &amp;&amp; \</strong><br/><strong> export PATH=$PATH:/usr/local/go/bin</strong></pre>
 
-<p>要配置您的<kbd>GOPATH</kbd>环境变量，您将需要决定您希望您的Go文件，包括任何个人存储库，存放在哪里。一个可能的地点是<kbd>$HOME/go</kbd>。一旦决定了这一点，就可以设置环境变量，例如如下所示:</p>
+<p>要配置您的<kbd>GOPATH</kbd>环境变量，您将需要决定您希望您的 Go 文件，包括任何个人存储库，存放在哪里。一个可能的地点是<kbd>$HOME/go</kbd>。一旦决定了这一点，就可以设置环境变量，例如如下所示:</p>
 
 <pre><strong>export GOPATH=$HOME/go</strong></pre>
 
-<p class="mce-root">为了使该指令永久有效，您需要将该行添加到<kbd>.bashrc</kbd>。如果您使用其他外壳(如<kbd>.zsh</kbd>，请参考<a href="https://github.com/golang/go/wiki/SettingGOPATH">https://github.com/golang/go/wiki/SettingGOPATH</a>的官方Go安装说明。</p>
+<p class="mce-root">为了使该指令永久有效，您需要将该行添加到<kbd>.bashrc</kbd>。如果您使用其他外壳(如<kbd>.zsh</kbd>，请参考<a href="https://github.com/golang/go/wiki/SettingGOPATH">https://github.com/golang/go/wiki/SettingGOPATH</a>的官方 Go 安装说明。</p>
 
-<p>确保你的<kbd>GOPATH</kbd>和你的Go安装不在同一个目录下，否则会导致问题。</p>
+<p>确保你的<kbd>GOPATH</kbd>和你的 Go 安装不在同一个目录下，否则会导致问题。</p>
 
 
 
@@ -219,7 +219,7 @@
 
                             
 
-                    <h1 class="header-title">Windows操作系统</h1>
+                    <h1 class="header-title">Windows 操作系统</h1>
 
                 
 
@@ -229,13 +229,13 @@
 
                 
 
-<p>二进制版本打包为ZIP文件或MSI安装程序，后者会自动配置您的环境变量。我们建议使用MSI安装程序。但是，如果没有，那么在将ZIP文件的内容提取到一个合适的位置(比如<kbd>C:\Program Files\Go</kbd>)之后，确保使用控制面板将<kbd>subdirectory</kbd> bin添加到您的<kbd>PATH</kbd>环境变量中。</p>
+<p>二进制版本打包为 ZIP 文件或 MSI 安装程序，后者会自动配置您的环境变量。我们建议使用 MSI 安装程序。但是，如果没有，那么在将 ZIP 文件的内容提取到一个合适的位置(比如<kbd>C:\Program Files\Go</kbd>)之后，确保使用控制面板将<kbd>subdirectory</kbd> bin 添加到您的<kbd>PATH</kbd>环境变量中。</p>
 
-<p>一旦二进制文件被安装到合适的位置，您将需要配置您的<kbd>GOPATH</kbd>。首先，决定您希望您的Go文件(包括任何个人存储库)存放在哪里。一个可能的位置是<kbd>C:\go</kbd>。一旦做出决定，将<kbd>GOPATH</kbd>环境变量设置为该目录的路径。</p>
+<p>一旦二进制文件被安装到合适的位置，您将需要配置您的<kbd>GOPATH</kbd>。首先，决定您希望您的 Go 文件(包括任何个人存储库)存放在哪里。一个可能的位置是<kbd>C:\go</kbd>。一旦做出决定，将<kbd>GOPATH</kbd>环境变量设置为该目录的路径。</p>
 
-<p>如果您不确定如何设置环境变量，请参考位于<a href="https://github.com/golang/go/wiki/SettingGOPATH">https://github.com/golang/go/wiki/SettingGOPATH</a>的官方Go安装说明。</p>
+<p>如果您不确定如何设置环境变量，请参考位于<a href="https://github.com/golang/go/wiki/SettingGOPATH">https://github.com/golang/go/wiki/SettingGOPATH</a>的官方 Go 安装说明。</p>
 
-<p>确保你的<kbd>GOPATH</kbd>和你的Go安装不在同一个目录下，否则会导致问题。</p>
+<p>确保你的<kbd>GOPATH</kbd>和你的 Go 安装不在同一个目录下，否则会导致问题。</p>
 
 
 
@@ -278,7 +278,7 @@
 
                             
 
-                    <h1 class="header-title">使用gophernotes交互式运行Go</h1>
+                    <h1 class="header-title">使用 gophernotes 交互式运行 Go</h1>
 
                 
 
@@ -288,31 +288,31 @@
 
                 
 
-<p>Project Jupyter是一个非营利性组织，旨在为数据科学开发语言无关的交互式计算。其结果是一个成熟的、支持良好的环境来探索、可视化和处理数据，通过提供即时反馈和与绘图库(如<kbd>gonum</kbd> / <kbd>plot</kbd>)的集成，可以显著加快开发。</p>
+<p>Project Jupyter 是一个非营利性组织，旨在为数据科学开发语言无关的交互式计算。其结果是一个成熟的、支持良好的环境来探索、可视化和处理数据，通过提供即时反馈和与绘图库(如<kbd>gonum</kbd> / <kbd>plot</kbd>)的集成，可以显著加快开发。</p>
 
-<p>虽然它的第一次迭代名为iPython，起初只支持基于Python的处理程序(称为<em>内核</em>),但最新版本的Jupyter拥有50多个内核，支持数十种语言，包括三个用于Go语言的内核<sup>【4】</sup>。GitHub支持渲染Jupyter文件(称为<em>笔记本</em>)<sup>【5】</sup>)，还有各种专门用于在线共享笔记本的Hub，包括Google Research cola bs<sup>【6】</sup>，Jupyter的社区hub称为nb viewer<sup>【7】</sup>，以及其企业版产品JupyterHub<sup>【8】</sup>。用于演示的笔记本可以使用nbconvert实用程序<sup>【9】</sup>转换成其他文件格式，如HTML。</p>
+<p>虽然它的第一次迭代名为 iPython，起初只支持基于 Python 的处理程序(称为<em>内核</em>),但最新版本的 Jupyter 拥有 50 多个内核，支持数十种语言，包括三个用于 Go 语言的内核<sup>【4】</sup>。GitHub 支持渲染 Jupyter 文件(称为<em>笔记本</em>)<sup>【5】</sup>)，还有各种专门用于在线共享笔记本的 Hub，包括 Google Research cola bs<sup>【6】</sup>，Jupyter 的社区 hub 称为 nb viewer<sup>【7】</sup>，以及其企业版产品 JupyterHub<sup>【8】</sup>。用于演示的笔记本可以使用 nbconvert 实用程序<sup>【9】</sup>转换成其他文件格式，如 HTML。</p>
 
-<p class="mce-root">在本书中，我们将把Jupyter和gophernotes内核一起用于Go。在Linux和Windows上开始使用gophernotes最简单的方法是使用它的Docker<sup>【10】</sup>映像。</p>
+<p class="mce-root">在本书中，我们将把 Jupyter 和 gophernotes 内核一起用于 Go。在 Linux 和 Windows 上开始使用 gophernotes 最简单的方法是使用它的 Docker<sup>【10】</sup>映像。</p>
 
-<p>对于其他安装方法，我们建议查看gophernotes GitHub库的README页面，网址:<br/><a href="https://github.com/gopherdata/gophernotes">https://github.com/gopherdata/gophernotes</a>。</p>
+<p>对于其他安装方法，我们建议查看 gophernotes GitHub 库的 README 页面，网址:<br/><a href="https://github.com/gopherdata/gophernotes">https://github.com/gopherdata/gophernotes</a>。</p>
 
-<p class="mce-root">开始一个新的基于gophernotes的项目的步骤如下:</p>
+<p class="mce-root">开始一个新的基于 gophernotes 的项目的步骤如下:</p>
 
 <ol>
 
 <li>创建一个新目录来保存项目文件(这个目录不需要在您的<kbd>GOPATH</kbd>中)。</li>
 
-<li>(可选)通过在新目录中运行<kbd>git init</kbd>来初始化新的git存储库。</li>
+<li>(可选)通过在新目录中运行<kbd>git init</kbd>来初始化新的 git 存储库。</li>
 
-<li>从新目录运行下面的命令(你可能需要给它加上前缀<kbd>sudo</kbd>，这取决于你如何安装Docker): <br/> <kbd>docker run -it -p 8888:8888 -v $(pwd):/usr/share/notebooks gopherdata/gophernotes:latest-ds</kbd></li>
+<li>从新目录运行下面的命令(你可能需要给它加上前缀<kbd>sudo</kbd>，这取决于你如何安装 Docker): <br/> <kbd>docker run -it -p 8888:8888 -v $(pwd):/usr/share/notebooks gopherdata/gophernotes:latest-ds</kbd></li>
 
-<li>在终端中，会有一个以<kbd>?token=[some combination of letters and numbers]</kbd>结尾的URL。在现代网络浏览器中导航到此URL。您创建的新目录将被映射到<kbd>/usr/share/notebooks</kbd>，因此在出现的树中导航到这个目录。</li>
+<li>在终端中，会有一个以<kbd>?token=[some combination of letters and numbers]</kbd>结尾的 URL。在现代网络浏览器中导航到此 URL。您创建的新目录将被映射到<kbd>/usr/share/notebooks</kbd>，因此在出现的树中导航到这个目录。</li>
 
 </ol>
 
-<p>在Windows上，您可能需要修改前面的命令，将<kbd>$(pwd)</kbd>替换为<kbd>%CD%</kbd>。</p>
+<p>在 Windows 上，您可能需要修改前面的命令，将<kbd>$(pwd)</kbd>替换为<kbd>%CD%</kbd>。</p>
 
-<p>既然我们已经学习了如何安装Go并使用gophernotes建立一个基本的开发环境，那么是时候学习数据预处理了。</p>
+<p>既然我们已经学习了如何安装 Go 并使用 gophernotes 建立一个基本的开发环境，那么是时候学习数据预处理了。</p>
 
 
 
@@ -365,7 +365,7 @@
 
                 
 
-<p>在我们的第一个代码示例中，我们将使用多领域情感数据集(版本2.0)<sup>【11】</sup>。该数据集包含来自四个不同产品类别的亚马逊评论。我们将下载它，对它进行预处理，并将其加载到Gota，一个数据辩论库，以找到正面和负面评论中最常见的短语，这些短语不会在两者中同时出现。这是一个不涉及ML算法的基本示例，但将作为Go、gophernotes和Gota的实际介绍。</p>
+<p>在我们的第一个代码示例中，我们将使用多领域情感数据集(版本 2.0)<sup>【11】</sup>。该数据集包含来自四个不同产品类别的亚马逊评论。我们将下载它，对它进行预处理，并将其加载到 Gota，一个数据辩论库，以找到正面和负面评论中最常见的短语，这些短语不会在两者中同时出现。这是一个不涉及 ML 算法的基本示例，但将作为 Go、gophernotes 和 Gota 的实际介绍。</p>
 
 <p>您可以在本书的配套资源库<a href="https://github.com/PacktPublishing/Machine-Learning-with-Go-Quick-Start-Guide" target="_blank">https://github . com/packt publishing/Machine-Learning-with-Go-Quick-Start-Guide</a>中找到完整的代码示例。</p>
 
@@ -420,17 +420,17 @@
 
                 
 
-<p>按照我们之前实现的过程，创建一个空目录来保存代码文件。在打开gophernotes之前，从<a href="http://www.cs.jhu.edu/~mdredze/datasets/sentiment/processed_acl.tar.gz">http://www . cs . jhu . edu/~ MDR edze/datasets/sensation/processed _ ACL . tar . gz</a>下载数据集并解压到<kbd>datasets/words</kbd>。在大多数Linux发行版上，您可以使用下面的脚本来实现这一点:</p>
+<p>按照我们之前实现的过程，创建一个空目录来保存代码文件。在打开 gophernotes 之前，从<a href="http://www.cs.jhu.edu/~mdredze/datasets/sentiment/processed_acl.tar.gz">http://www . cs . jhu . edu/~ MDR edze/datasets/sensation/processed _ ACL . tar . gz</a>下载数据集并解压到<kbd>datasets/words</kbd>。在大多数 Linux 发行版上，您可以使用下面的脚本来实现这一点:</p>
 
 <pre><strong>mkdir -p datasets/words &amp;&amp; \</strong><br/><strong>wget http://www.cs.jhu.edu/~mdredze/datasets/sentiment/processed_acl.tar.gz -O datasets/words-temp.tar.gz &amp;&amp; \</strong><br/><strong>tar xzvf datasets/words-temp.tar.gz -C datasets/words &amp;&amp; \</strong><br/><strong>rm datasets/words-temp.tar.gz</strong></pre>
 
-<p>现在，启动gophernotes，将树导航到<kbd>/usr/share/notebooks</kbd>。点击<em>新建</em> | <em>转到</em>创建一个新笔记本。你会看到一个空白的Jupyter笔记本:</p>
+<p>现在，启动 gophernotes，将树导航到<kbd>/usr/share/notebooks</kbd>。点击<em>新建</em> | <em>转到</em>创建一个新笔记本。你会看到一个空白的 Jupyter 笔记本:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-382 image-border" src="img/d688d626-95d1-4552-a14b-8d7287e0f1df.png" style="width:43.17em;height:9.50em;"/></p>
 
-<p class="mce-root">Jupyter中的输入单元格标有<kbd>In</kbd>标签。当您在输入单元格中运行代码(<em> Shift </em> + <em> Enter </em>)时，将会创建一个新的输出单元格，其结果标记为<kbd>Out</kbd>。每个单元格都按照其执行顺序进行编号。例如，<kbd>In [1]</kbd>单元格是您在给定会话中运行的第一个单元格。</p>
+<p class="mce-root">Jupyter 中的输入单元格标有<kbd>In</kbd>标签。当您在输入单元格中运行代码(<em> Shift </em> + <em> Enter </em>)时，将会创建一个新的输出单元格，其结果标记为<kbd>Out</kbd>。每个单元格都按照其执行顺序进行编号。例如，<kbd>In [1]</kbd>单元格是您在给定会话中运行的第一个单元格。</p>
 
-<p>尝试运行一些Go语句，如下面的代码片段:</p>
+<p>尝试运行一些 Go 语句，如下面的代码片段:</p>
 
 <p>特别要注意的是，<kbd>a</kbd>变量显示在输出单元格中，即使没有调用<kbd>fmt.Println()</kbd>。</p>
 
@@ -481,7 +481,7 @@
 
                             
 
-                    <h1 class="header-title">数据处理的基本任务之一是读取输入文件并加载其内容。一个简单的方法是使用<kbd>io/ioutil</kbd>实用函数<kbd>ReadFile</kbd>。不像在<kbd>.go</kbd>文件中，你需要将这段代码放在你的<kbd>main</kbd> func中，使用gophernotes，你可以运行下面的代码而不用声明任何func:</h1>
+                    <h1 class="header-title">数据处理的基本任务之一是读取输入文件并加载其内容。一个简单的方法是使用<kbd>io/ioutil</kbd>实用函数<kbd>ReadFile</kbd>。不像在<kbd>.go</kbd>文件中，你需要将这段代码放在你的<kbd>main</kbd> func 中，使用 gophernotes，你可以运行下面的代码而不用声明任何 func:</h1>
 
                 
 
@@ -497,7 +497,7 @@
 
 <p>如果您已经在文本编辑器中打开了<kbd>positive.review</kbd>或<kbd>negative.review</kbd>文件，您可能会注意到它们被格式化为空格或换行符分隔的成对列表，即<kbd>phrase:frequency</kbd>。例如，正面评审的开始如下:</p>
 
-<p>在下一小节中，我们将把这些对解析成一个Go结构。</p>
+<p>在下一小节中，我们将把这些对解析成一个 Go 结构。</p>
 
 <pre>them_it:1 hovering:1 and_occasional:1 cousin_the:2 fictional_baudelaire:1 their_struggles:1</pre>
 
@@ -558,7 +558,7 @@
 
 <pre>type Pair struct {<br/>  Phrase string<br/>  Frequency int<br/>}</pre>
 
-<p>首先，观察线对之间的分隔可以是一个新行(<kbd>\n</kbd>)或一个空格。我们将使用strings包的<kbd>strings.Fields</kbd> func，它将通过任何连续的空白字符分割字符串:</p>
+<p>首先，观察线对之间的分隔可以是一个新行(<kbd>\n</kbd>)或一个空格。我们将使用 strings 包的<kbd>strings.Fields</kbd> func，它将通过任何连续的空白字符分割字符串:</p>
 
 <ol>
 
@@ -586,13 +586,13 @@
 
 <ol start="4">
 
-<li>下一步是将解析后的数据对加载到Gota中，Gota是Go的数据交换库。</li>
+<li>下一步是将解析后的数据对加载到 Gota 中，Gota 是 Go 的数据交换库。</li>
 
 </ol>
 
 <pre style="padding-left: 60px">parsedPositives, posPhrases := pairsAndFilters(pairsPositive)<br/>parsedNegatives, negPhrases := pairsAndFilters(pairsNegative)<br/>parsedPositives = exclude(parsedPositives, negPhrases)<br/>parsedNegatives = exclude(parsedNegatives, posPhrases)</pre>
 
-<p>将数据加载到Gota数据帧中</p>
+<p>将数据加载到 Gota 数据帧中</p>
 
 
 
@@ -635,7 +635,7 @@
 
                             
 
-                    <h1 class="header-title">Gota库包含数据帧、序列和一些通用数据争论算法的实现<sup>【12】</sup>。数据框架的概念是许多流行的数据科学库和语言不可或缺的，如Python的pandas、R和Julia。简而言之，<strong>数据帧</strong>是一系列长度相同的列表(称为<strong>列</strong>或<strong>系列</strong>)。每个列表都有一个名称——列名或系列名，这取决于库喜欢的命名法。这种抽象模仿了数据库表，为数学和统计工具提供了一个简单的基础构件。</h1>
+                    <h1 class="header-title">Gota 库包含数据帧、序列和一些通用数据争论算法的实现<sup>【12】</sup>。数据框架的概念是许多流行的数据科学库和语言不可或缺的，如 Python 的 pandas、R 和 Julia。简而言之，<strong>数据帧</strong>是一系列长度相同的列表(称为<strong>列</strong>或<strong>系列</strong>)。每个列表都有一个名称——列名或系列名，这取决于库喜欢的命名法。这种抽象模仿了数据库表，为数学和统计工具提供了一个简单的基础构件。</h1>
 
                 
 
@@ -645,9 +645,9 @@
 
                 
 
-<p>Gota库有两个包:<kbd>dataframe</kbd>和<kbd>series</kbd>包。series包包含表示单个列表的函数和结构，而<kbd>dataframe</kbd>包将整个数据帧——也就是表——作为一个整体来处理。Go开发人员可能希望使用Gota快速排序、过滤、聚合或执行关系操作，比如两个表之间的内部连接，节省样板代码，比如实现一个<kbd>sort</kbd>接口<sup>【13】</sup>。</p>
+<p>Gota 库有两个包:<kbd>dataframe</kbd>和<kbd>series</kbd>包。series 包包含表示单个列表的函数和结构，而<kbd>dataframe</kbd>包将整个数据帧——也就是表——作为一个整体来处理。Go 开发人员可能希望使用 Gota 快速排序、过滤、聚合或执行关系操作，比如两个表之间的内部连接，节省样板代码，比如实现一个<kbd>sort</kbd>接口<sup>【13】</sup>。</p>
 
-<p>使用Gota创建新数据帧有几种方法:</p>
+<p>使用 Gota 创建新数据帧有几种方法:</p>
 
 <p><kbd>dataframe.New(se ...series.Series)</kbd>:接受系列的切片(可通过<kbd>series.New</kbd>功能创建)。</p>
 
@@ -655,17 +655,17 @@
 
 <li><kbd>dataframe.LoadRecords(records [][]string, options ...LoadOption)</kbd>:接受切片中的切片。第一个片段是表示列名的字符串片段。</li>
 
-<li><kbd>dataframe.LoadStructs(i interface{}, options ...LoadOption)</kbd>:接受一部分结构。Gota将使用反射来根据struct字段名确定列名。</li>
+<li><kbd>dataframe.LoadStructs(i interface{}, options ...LoadOption)</kbd>:接受一部分结构。Gota 将使用反射来根据 struct 字段名确定列名。</li>
 
 <li><kbd>dataframe.LoadMaps(maps []map[string][]interface{})</kbd>:接受列名到切片的映射切片。</li>
 
-<li><kbd>dataframe.LoadMatrix(mat Matrix)</kbd>:接受与mat64矩阵接口兼容的切片。</li>
+<li><kbd>dataframe.LoadMatrix(mat Matrix)</kbd>:接受与 mat64 矩阵接口兼容的切片。</li>
 
 <li>在我们的例子中，因为我们已经将数据解析为结构，所以我们将使用<kbd>LoadStructs</kbd>函数，为正面评价和负面评价分别创建一个数据帧:</li>
 
 </ul>
 
-<p>如果要检查一个数据帧的内容，即<kbd>df</kbd>，只需使用<kbd>fmt.Println(df)</kbd>。这将显示dataframe的前10行，以及它的列名和一些有用的元数据，比如总行数。</p>
+<p>如果要检查一个数据帧的内容，即<kbd>df</kbd>，只需使用<kbd>fmt.Println(df)</kbd>。这将显示 dataframe 的前 10 行，以及它的列名和一些有用的元数据，比如总行数。</p>
 
 <pre>dfPos := dataframe.LoadStructs(parsedPositives)<br/>dfNeg := dataframe.LoadStructs(parsedNegatives)</pre>
 
@@ -712,7 +712,7 @@
 
                             
 
-                    <h1 class="header-title">既然数据已经被解析，共现短语已经被过滤掉，并且产生的短语/频率对已经被加载到数据帧中，剩下的就是找到正面和负面评论的最常见短语并显示它们。不使用数据帧的一种方法是创建一个实现<kbd>sort</kbd>接口的<kbd>type ByFrequency []Pair</kbd>类型，然后组合<kbd>sort.Reverse</kbd>和<kbd>sort.Sort</kbd>来按降序排列正对和负对。但是，通过使用Gota，我们可以实现每个数据帧一行:</h1>
+                    <h1 class="header-title">既然数据已经被解析，共现短语已经被过滤掉，并且产生的短语/频率对已经被加载到数据帧中，剩下的就是找到正面和负面评论的最常见短语并显示它们。不使用数据帧的一种方法是创建一个实现<kbd>sort</kbd>接口的<kbd>type ByFrequency []Pair</kbd>类型，然后组合<kbd>sort.Reverse</kbd>和<kbd>sort.Sort</kbd>来按降序排列正对和负对。但是，通过使用 Gota，我们可以实现每个数据帧一行:</h1>
 
                 
 
@@ -722,7 +722,7 @@
 
                 
 
-<p>现在，打印数据框会分别给出厨房产品正面和负面评价的前10个最常见短语。对于正面评论，我们有以下输出:</p>
+<p>现在，打印数据框会分别给出厨房产品正面和负面评价的前 10 个最常见短语。对于正面评论，我们有以下输出:</p>
 
 <pre>dfPos = dfPos.Arrange(dataframe.RevSort("Frequency"))<br/>dfNeg = dfNeg.Arrange(dataframe.RevSort("Frequency"))</pre>
 
@@ -758,7 +758,7 @@
 
 </div>
 
-<p>这就完成了这个例子。在下一节中，我们将更详细地介绍Gota的其他转换和处理特性。</p>
+<p>这就完成了这个例子。在下一节中，我们将更详细地介绍 Gota 的其他转换和处理特性。</p>
 
 <div><div><pre>[45760x2] DataFrame
 
@@ -788,7 +788,7 @@
 
 </div>
 
-<p>示例–使用gonum/plot探索身体质量指数数据</p>
+<p>示例–使用 gonum/plot 探索身体质量指数数据</p>
 
 
 
@@ -831,7 +831,7 @@
 
                             
 
-                    <h1 class="header-title">在上一节中，我们介绍了gophernotes和Gota。在本节中，我们将探索一个包含500个性别、身高和身体质量指数指数样本的数据集。我们将使用<kbd>gonum/plot</kbd>库来完成这项工作。这个库最初是2012 Plotinum库<sup>【15】</sup>的一个分支，包含了几个使在Go中创建数据可视化更加容易的包<sup>【16】</sup>:</h1>
+                    <h1 class="header-title">在上一节中，我们介绍了 gophernotes 和 Gota。在本节中，我们将探索一个包含 500 个性别、身高和身体质量指数指数样本的数据集。我们将使用<kbd>gonum/plot</kbd>库来完成这项工作。这个库最初是 2012 Plotinum 库<sup>【15】</sup>的一个分支，包含了几个使在 Go 中创建数据可视化更加容易的包<sup>【16】</sup>:</h1>
 
                 
 
@@ -849,9 +849,9 @@
 
 <li><kbd>plotutil</kbd>包包含常用绘图类型的实用函数。</li>
 
-<li><kbd>vg</kbd>包公开了一个矢量图形API，在将图形导出到其他软件时特别有用。我们不会报道这个包裹。</li>
+<li><kbd>vg</kbd>包公开了一个矢量图形 API，在将图形导出到其他软件时特别有用。我们不会报道这个包裹。</li>
 
-<li>安装gonum和gonum/plot</li>
+<li>安装 gonum 和 gonum/plot</li>
 
 </ul>
 
@@ -896,7 +896,7 @@
 
                             
 
-                    <h1 class="header-title">不管您是使用Docker映像运行gophernotes，还是使用不同的方法，您都需要使用<kbd>gonum/plot</kbd>。为此，运行<kbd>go get gonum.org/v1/plot/...</kbd>命令。如果您没有安装<kbd>gonum</kbd>库，并且您没有使用gophernotes Docker映像，您将需要使用<kbd>go get github.com/gonum/...</kbd>命令单独安装它。</h1>
+                    <h1 class="header-title">不管您是使用 Docker 映像运行 gophernotes，还是使用不同的方法，您都需要使用<kbd>gonum/plot</kbd>。为此，运行<kbd>go get gonum.org/v1/plot/...</kbd>命令。如果您没有安装<kbd>gonum</kbd>库，并且您没有使用 gophernotes Docker 映像，您将需要使用<kbd>go get github.com/gonum/...</kbd>命令单独安装它。</h1>
 
                 
 
@@ -906,9 +906,9 @@
 
                 
 
-<p>要从Jupyter打开一个终端，打开web UI到树形视图(默认视图)，然后点击<strong>新建</strong> | <strong>终端</strong>。</p>
+<p>要从 Jupyter 打开一个终端，打开 web UI 到树形视图(默认视图)，然后点击<strong>新建</strong> | <strong>终端</strong>。</p>
 
-<p>注意，尽管它们的名字不同，但gonum和gonum/plot并不属于同一个存储库，所以您需要分别安装这两个存储库。</p>
+<p>注意，尽管它们的名字不同，但 gonum 和 gonum/plot 并不属于同一个存储库，所以您需要分别安装这两个存储库。</p>
 
 <p>加载数据</p>
 
@@ -953,7 +953,7 @@
 
                             
 
-                    <h1 class="header-title">如果您已经克隆了项目存储库，那么它将在<kbd>datasets/bmi</kbd>文件夹中包含500人的身体质量指数数据集。也可以自己从ka ggle<sup>【14】</sup>下载数据集。数据集是一个CSV文件，前几行如下:</h1>
+                    <h1 class="header-title">如果您已经克隆了项目存储库，那么它将在<kbd>datasets/bmi</kbd>文件夹中包含 500 人的身体质量指数数据集。也可以自己从 ka ggle<sup>【14】</sup>下载数据集。数据集是一个 CSV 文件，前几行如下:</h1>
 
                 
 
@@ -963,7 +963,7 @@
 
                 
 
-<p class="mce-root">与上一节一样，我们将使用<kbd>io</kbd> / <kbd>ioutil</kbd>将文件读入一个字节片，但这一次，我们将利用Gota的ReadCSV方法(该方法使用<kbd>io.Reader</kbd>作为参数)将数据直接加载到dataframe中，无需预处理:</p>
+<p class="mce-root">与上一节一样，我们将使用<kbd>io</kbd> / <kbd>ioutil</kbd>将文件读入一个字节片，但这一次，我们将利用 Gota 的 ReadCSV 方法(该方法使用<kbd>io.Reader</kbd>作为参数)将数据直接加载到 dataframe 中，无需预处理:</p>
 
 <pre>Gender,Height,Weight,Index<br/>Male,174,96,4<br/>Male,189,87,2<br/>Female,185,110,4<br/>Female,195,104,3<br/>Male,149,61,3<br/>...</pre>
 
@@ -1044,7 +1044,7 @@
 
                             
 
-                    <h1 class="header-title">理解每个系列的一个好方法是绘制直方图。这会让你对每个系列是如何分布的有个印象。使用<kbd>gonum</kbd> / <kbd>plot</kbd>，我们将为每个系列绘制直方图。然而，在我们绘制任何东西之前，我们可以通过Gota快速访问一些汇总统计数据，以获得对数据集的初步了解:</h1>
+                    <h1 class="header-title">理解每个系列的一个好方法是绘制直方图。这会让你对每个系列是如何分布的有个印象。使用<kbd>gonum</kbd> / <kbd>plot</kbd>，我们将为每个系列绘制直方图。然而，在我们绘制任何东西之前，我们可以通过 Gota 快速访问一些汇总统计数据，以获得对数据集的初步了解:</h1>
 
                 
 
@@ -1054,13 +1054,13 @@
 
                 
 
-<p>这告诉我们，样本个体的身高介于140厘米和199厘米之间，他们的均值和中位数分别为169厘米和170厘米，均值和中位数如此接近的事实表明偏度较低——即对称分布。</p>
+<p>这告诉我们，样本个体的身高介于 140 厘米和 199 厘米之间，他们的均值和中位数分别为 169 厘米和 170 厘米，均值和中位数如此接近的事实表明偏度较低——即对称分布。</p>
 
 <pre>fmt.Println("Minimum", df.Col("Height").Min())<br/>fmt.Println("Maximum", df.Col("Height").Max())<br/>fmt.Println("Mean", df.Col("Height").Mean())<br/>fmt.Println("Median", df.Col("Height").Quantile(0.5))</pre>
 
 <p>为所有列同时实现这一点的更快方法是使用<kbd>dataframe.Describe</kbd>函数。这将生成另一个数据帧，其中包含每列的汇总统计信息:</p>
 
-<p class="mce-root">现在，我们将使用直方图可视化分布。首先，我们需要将Gota数据帧的一列转换成易于绘图的<kbd>plotter.Values</kbd>切片。这可以通过以下实用函数来实现:</p>
+<p class="mce-root">现在，我们将使用直方图可视化分布。首先，我们需要将 Gota 数据帧的一列转换成易于绘图的<kbd>plotter.Values</kbd>切片。这可以通过以下实用函数来实现:</p>
 
 <pre>[7x5] DataFrame
 
@@ -1079,17 +1079,17 @@
 
 <br/>    &lt;string&gt; &lt;string&gt; &lt;float&gt;    &lt;float&gt;    &lt;float&gt; </pre>
 
-<p><kbd>dataframe.Col</kbd> func从给定的数据帧中提取所需的列——在我们的例子中，是一个单独的列。您还可以使用<kbd>dataframe.Select</kbd>，它获取一部分列名字符串来返回一个只包含所需列的dataframe。这对于丢弃不必要的数据很有用。</p>
+<p><kbd>dataframe.Col</kbd> func 从给定的数据帧中提取所需的列——在我们的例子中，是一个单独的列。您还可以使用<kbd>dataframe.Select</kbd>，它获取一部分列名字符串来返回一个只包含所需列的 dataframe。这对于丢弃不必要的数据很有用。</p>
 
 <pre>// SeriesToPlotValues takes a column of a Dataframe and converts it to a gonum/plot/plotter.Values slice.<br/>// Panics if the column does not exist.<br/>func SeriesToPlotValues(df dataframe.DataFrame, col string) plotter.Values {<br/>  rows, _ := df.Dims()<br/>  v := make(plotter.Values, rows)<br/>  s := df.Col(col)<br/>  for i := 0; i &lt; rows; i++ {<br/>    v[i] = s.Elem(i).Float()<br/>  }<br/>  return v<br/>}</pre>
 
-<p>现在，我们可以使用gonum/plot来创建一个JPEG图像，显示给定列的直方图，并选择标题:</p>
+<p>现在，我们可以使用 gonum/plot 来创建一个 JPEG 图像，显示给定列的直方图，并选择标题:</p>
 
-<p>要使用gophernotes显示结果图，请使用display对象的适当方法。在本例中，我们正在生成一个JPEG图像，因此用前面代码生成的字节片调用<kbd>display.JPEG</kbd>将在输出单元格中显示绘图。完整的代码输入单元如下所示:</p>
+<p>要使用 gophernotes 显示结果图，请使用 display 对象的适当方法。在本例中，我们正在生成一个 JPEG 图像，因此用前面代码生成的字节片调用<kbd>display.JPEG</kbd>将在输出单元格中显示绘图。完整的代码输入单元如下所示:</p>
 
 <pre>// HistogramData returns a byte slice of JPEG data for a histogram of the column with name col in the dataframe df.<br/>func HistogramData(v plotter.Values, title string) []byte {<br/>  // Make a plot and set its title.<br/>  p, err := plot.New()<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/>  p.Title.Text = title<br/>  h, err := plotter.NewHist(v, 10)<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/>  //h.Normalize(1) // Uncomment to normalize the area under the histogram to 1<br/>  p.Add(h)<br/>  w, err := p.WriterTo(5*vg.Inch, 4*vg.Inch, "jpg")<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/>  var b bytes.Buffer<br/>  writer := bufio.NewWriter(&amp;b)<br/>  w.WriteTo(writer)<br/>  return b.Bytes()<br/>}</pre>
 
-<p>一般来说，从gonum的内置绘图仪创建新图的步骤如下:</p>
+<p>一般来说，从 gonum 的内置绘图仪创建新图的步骤如下:</p>
 
 <pre>Display.JPEG(HistogramData(SeriesToPlotValues(df, "Age"), "Age Histogram"))</pre>
 
@@ -1103,19 +1103,19 @@
 
 <li>设置任何绘图仪属性，并通过调用其<kbd>Add</kbd>方法将绘图仪添加到绘图中。</li>
 
-<li>如果您希望通过gophernotes显示绘图，使用<kbd>WriterTo</kbd>方法和一个字节缓冲区将绘图数据输出为一个字节片，该字节片可以传递给内置显示对象。否则，使用<kbd>p.Save</kbd>将图像保存到文件中。</li>
+<li>如果您希望通过 gophernotes 显示绘图，使用<kbd>WriterTo</kbd>方法和一个字节缓冲区将绘图数据输出为一个字节片，该字节片可以传递给内置显示对象。否则，使用<kbd>p.Save</kbd>将图像保存到文件中。</li>
 
-<li>如果不是在gophernotes中显示图像，而是希望保存它，可以使用plot的<kbd>Save</kbd>方法来完成。例如，<kbd>p.Save(5*vg.Inch, 4*vg.Inch, title + ".png")</kbd>将把绘图保存到一个5" x 4 "的PNG文件中。</li>
+<li>如果不是在 gophernotes 中显示图像，而是希望保存它，可以使用 plot 的<kbd>Save</kbd>方法来完成。例如，<kbd>p.Save(5*vg.Inch, 4*vg.Inch, title + ".png")</kbd>将把绘图保存到一个 5" x 4 "的 PNG 文件中。</li>
 
 </ol>
 
-<p>500人体重/身高/身体质量指数数据集的结果直方图如下:</p>
+<p>500 人体重/身高/身体质量指数数据集的结果直方图如下:</p>
 
 <p><img class="alignnone size-full wp-image-433 image-border" src="img/28d2f746-280a-4d9c-aaa8-c16831aaae93.png" style="width:124.83em;height:34.67em;"/></p>
 
-<p class="CDPAlignCenter CDPAlign">在下面的例子中，我们不仅要加载和可视化数据，还要转换数据，使其更适合用于ML算法。</p>
+<p class="CDPAlignCenter CDPAlign">在下面的例子中，我们不仅要加载和可视化数据，还要转换数据，使其更适合用于 ML 算法。</p>
 
-<p>示例–使用Gota预处理数据</p>
+<p>示例–使用 Gota 预处理数据</p>
 
 
 
@@ -1158,7 +1158,7 @@
 
                             
 
-                    <h1 class="header-title">ML算法训练过程的质量和速度取决于输入数据的质量。虽然许多算法对于不相关的列和没有被规范化的数据是健壮的，但是有些算法不是。例如，许多模型要求数据输入被标准化为介于0和1之间。在这一节中，我们将看看用Gota预处理数据的一些快速简单的方法。对于这些例子，我们将使用一个包含1035条美国职业棒球大联盟球员身高(英寸)和体重(磅)记录的数据集<sup>【17】</sup>。如加州大学洛杉矶分校网站所述，该数据集由以下特征组成:</h1>
+                    <h1 class="header-title">ML 算法训练过程的质量和速度取决于输入数据的质量。虽然许多算法对于不相关的列和没有被规范化的数据是健壮的，但是有些算法不是。例如，许多模型要求数据输入被标准化为介于 0 和 1 之间。在这一节中，我们将看看用 Gota 预处理数据的一些快速简单的方法。对于这些例子，我们将使用一个包含 1035 条美国职业棒球大联盟球员身高(英寸)和体重(磅)记录的数据集<sup>【17】</sup>。如加州大学洛杉矶分校网站所述，该数据集由以下特征组成:</h1>
 
                 
 
@@ -1192,7 +1192,7 @@
 
 <li>将高度和重量列转换为浮点类型</li>
 
-<li>过滤掉体重大于或等于260磅的玩家</li>
+<li>过滤掉体重大于或等于 260 磅的玩家</li>
 
 <li>规范化身高和体重列</li>
 
@@ -1200,9 +1200,9 @@
 
 <ul>
 
-<li>将数据分为定型子集和验证子集，定型子集中大约有70%的行，验证子集中有30%的行</li>
+<li>将数据分为定型子集和验证子集，定型子集中大约有 70%的行，验证子集中有 30%的行</li>
 
-<li>将数据加载到Gota</li>
+<li>将数据加载到 Gota</li>
 
 </ul>
 
@@ -1247,7 +1247,7 @@
 
                             
 
-                    <h1 class="header-title">数据集在加州大学洛杉矶分校网站上以HTML表格的形式提供<sup>【17】</sup>。在本书的配套资源库中，您会找到一个CSV版本。要快速将HTML表格转换为CSV格式而无需编写任何代码，首先突出显示该表格，然后将其复制并粘贴到Microsoft Excel等电子表格程序中。然后，将电子表格保存为CSV文件。在文本编辑器中打开该文件，以确保文件中没有伪像或多余的行。</h1>
+                    <h1 class="header-title">数据集在加州大学洛杉矶分校网站上以 HTML 表格的形式提供<sup>【17】</sup>。在本书的配套资源库中，您会找到一个 CSV 版本。要快速将 HTML 表格转换为 CSV 格式而无需编写任何代码，首先突出显示该表格，然后将其复制并粘贴到 Microsoft Excel 等电子表格程序中。然后，将电子表格保存为 CSV 文件。在文本编辑器中打开该文件，以确保文件中没有伪像或多余的行。</h1>
 
                 
 
@@ -1332,7 +1332,7 @@
 
                             
 
-                    <h1 class="header-title">在这个练习中，我们决定不需要<kbd>Name</kbd>或<kbd>Team</kbd>列。我们可以使用dataframe的<kbd>Select</kbd>方法来指定我们希望保留的一部分列名字符串:</h1>
+                    <h1 class="header-title">在这个练习中，我们决定不需要<kbd>Name</kbd>或<kbd>Team</kbd>列。我们可以使用 dataframe 的<kbd>Select</kbd>方法来指定我们希望保留的一部分列名字符串:</h1>
 
                 
 
@@ -1421,7 +1421,7 @@
 
                             
 
-                    <h1 class="header-title">我们的数据框架现在有了正确的列和更简洁的名称。然而，身高和体重列是<kbd>int</kbd>类型的，而我们需要它们是<kbd>float</kbd>类型的，这样我们才能正确地规范化它们的值。最简单的方法是在第一次将数据加载到dataframe时，将其作为<kbd>LoadOption</kbd>添加。也就是说，<kbd>func WithTypes(coltypes map[string]series.Type) LoadOption</kbd>接受列名到序列类型的映射，我们可以用它在加载时执行转换。</h1>
+                    <h1 class="header-title">我们的数据框架现在有了正确的列和更简洁的名称。然而，身高和体重列是<kbd>int</kbd>类型的，而我们需要它们是<kbd>float</kbd>类型的，这样我们才能正确地规范化它们的值。最简单的方法是在第一次将数据加载到 dataframe 时，将其作为<kbd>LoadOption</kbd>添加。也就是说，<kbd>func WithTypes(coltypes map[string]series.Type) LoadOption</kbd>接受列名到序列类型的映射，我们可以用它在加载时执行转换。</h1>
 
                 
 
@@ -1510,7 +1510,7 @@
 
                             
 
-                    <h1 class="header-title">假设，在研究数据之后，我们不希望保留运动员体重大于或等于260磅的样本。这可能是因为没有足够的较重球员样本，因此任何分析都不能代表球员群体的整体情况。就当前数据集而言，这样的玩家可以被称为<strong>离群值</strong>。</h1>
+                    <h1 class="header-title">假设，在研究数据之后，我们不希望保留运动员体重大于或等于 260 磅的样本。这可能是因为没有足够的较重球员样本，因此任何分析都不能代表球员群体的整体情况。就当前数据集而言，这样的玩家可以被称为<strong>离群值</strong>。</h1>
 
                 
 
@@ -1520,9 +1520,9 @@
 
                 
 
-<p>你可以在https://godoc.org/github.com/kniren/gota<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://godoc.org/github.com/kniren/gota">找到Gota图书馆的参考资料(Godocs)。</a></p>
+<p>你可以在 https://godoc.org/github.com/kniren/gota<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://godoc.org/github.com/kniren/gota">找到 Gota 图书馆的参考资料(Godocs)。</a></p>
 
-<p>可以使用<kbd>Filter</kbd>功能过滤Gota数据帧。它接受一个由目标列、一个比较器和一个值组成的<kbd>dataframe.F struct</kbd>，比如<kbd>{"Column", series.Eq, 1}</kbd>，它只匹配<kbd>Column</kbd>等于<kbd>1</kbd>的行。可用的比较器如下:</p>
+<p>可以使用<kbd>Filter</kbd>功能过滤 Gota 数据帧。它接受一个由目标列、一个比较器和一个值组成的<kbd>dataframe.F struct</kbd>，比如<kbd>{"Column", series.Eq, 1}</kbd>，它只匹配<kbd>Column</kbd>等于<kbd>1</kbd>的行。可用的比较器如下:</p>
 
 <p><kbd>series.Eq</kbd>:只保留等于给定值的行</p>
 
@@ -1542,11 +1542,11 @@
 
 <li><kbd>series.LessEq</kbd>:仅保留小于或等于给定值的行</li>
 
-<li><kbd>series.Comparator</kbd>类型是字符串的别名。这些字符串与Go语言本身使用的字符串相同。比如<kbd>series.Neq</kbd>相当于<kbd>"!="</kbd>。</li>
+<li><kbd>series.Comparator</kbd>类型是字符串的别名。这些字符串与 Go 语言本身使用的字符串相同。比如<kbd>series.Neq</kbd>相当于<kbd>"!="</kbd>。</li>
 
 </ul>
 
-<p>在本练习中，我们将应用系列。我们将使用<kbd>less</kbd>过滤器来删除重量大于或等于260磅的行:</p>
+<p>在本练习中，我们将应用系列。我们将使用<kbd>less</kbd>过滤器来删除重量大于或等于 260 磅的行:</p>
 
 <p>标准化身高、体重和年龄列</p>
 
@@ -1603,7 +1603,7 @@
 
                 
 
-<p class="mce-root"><strong>重新缩放</strong> <strong>(最小/最大归一化)</strong>:这将变量范围线性映射到[0，1]范围，其中系列的最小值映射到0，最大值映射到1。这是通过应用以下公式实现的:</p>
+<p class="mce-root"><strong>重新缩放</strong> <strong>(最小/最大归一化)</strong>:这将变量范围线性映射到[0，1]范围，其中系列的最小值映射到 0，最大值映射到 1。这是通过应用以下公式实现的:</p>
 
 <ul>
 
@@ -1619,7 +1619,7 @@
 
 </ul>
 
-<p class="CDPAlignCenter CDPAlign"><strong>标准化</strong> <strong> (z分数标准化)</strong>:这是一种非常常见的用于ML应用的标准化方法，它使用平均值和标准偏差将一系列值转换成它们的z分数，即数据点距离平均值多少标准偏差。这是通过计算系列的平均值和标准偏差，然后应用以下公式来完成的:</p>
+<p class="CDPAlignCenter CDPAlign"><strong>标准化</strong> <strong> (z 分数标准化)</strong>:这是一种非常常见的用于 ML 应用的标准化方法，它使用平均值和标准偏差将一系列值转换成它们的 z 分数，即数据点距离平均值多少标准偏差。这是通过计算系列的平均值和标准偏差，然后应用以下公式来完成的:</p>
 
 <ul>
 
@@ -1643,7 +1643,7 @@
 
 <pre>// meanNormalise maps the given column values onto the range [-1,1] by subtracting mean and dividing by max - min<br/>func standardise(df dataframe.DataFrame, col string) dataframe.DataFrame {<br/>  s := df.Col(col)<br/>  std := s.StdDev()<br/>  mean := s.Mean()<br/>  v := make([]float64, s.Len(), s.Len())<br/>  for i := 0; i &lt; s.Len(); i++ {<br/>    v[i] = (s.Elem(i).Float() - mean) / std<br/>  }<br/>  rs := series.Floats(v)<br/>  rs.Name = col<br/>  return df.Mutate(rs)<br/>}</pre>
 
-<p>结果如下。请注意，<kbd>Height</kbd>和<kbd>Weight</kbd>列的值现在位于0和1之间，正如预期的那样:</p>
+<p>结果如下。请注意，<kbd>Height</kbd>和<kbd>Weight</kbd>列的值现在位于 0 和 1 之间，正如预期的那样:</p>
 
 <pre>df = rescale(df, "Height")<br/>df = rescale(df, "Weight")</pre>
 
@@ -1718,7 +1718,7 @@
 
                             
 
-                    <h1 class="header-title">当训练ML算法时，保留数据集的一部分用于验证是有用的。这用于测试模型对以前未见过的数据的泛化能力，从而确保它在显示不属于训练集的真实数据时有用。没有验证步骤，就不可能说一个模型是否具有良好的预测能力。</h1>
+                    <h1 class="header-title">当训练 ML 算法时，保留数据集的一部分用于验证是有用的。这用于测试模型对以前未见过的数据的泛化能力，从而确保它在显示不属于训练集的真实数据时有用。没有验证步骤，就不可能说一个模型是否具有良好的预测能力。</h1>
 
                 
 
@@ -1728,19 +1728,19 @@
 
                 
 
-<p>虽然对于保留多少数据集用于验证没有公认的约定，但是10%到30%之间的分数是常见的。关于保留多少数据集用于验证的研究得出结论，模型的可调参数越多，需要保留用于验证的数据部分就越少<sup>【18】</sup>。对于这个练习，我们将把我们的MLB数据集分成两个子集:包含大约70%样本的训练子集，以及包含30%样本的验证子集。有两种方法可以做到这一点:</p>
+<p>虽然对于保留多少数据集用于验证没有公认的约定，但是 10%到 30%之间的分数是常见的。关于保留多少数据集用于验证的研究得出结论，模型的可调参数越多，需要保留用于验证的数据部分就越少<sup>【18】</sup>。对于这个练习，我们将把我们的 MLB 数据集分成两个子集:包含大约 70%样本的训练子集，以及包含 30%样本的验证子集。有两种方法可以做到这一点:</p>
 
-<p>选择前70%的行作为定型子集的一部分，后30%的行作为验证子集的一部分</p>
+<p>选择前 70%的行作为定型子集的一部分，后 30%的行作为验证子集的一部分</p>
 
 <ul>
 
-<li>随机选择70%的样本作为训练子集的一部分，并将剩余部分用于验证子集</li>
+<li>随机选择 70%的样本作为训练子集的一部分，并将剩余部分用于验证子集</li>
 
-<li>一般来说，最好避免确定性抽样，以确保两个子集都能代表总体。为了实现随机抽样，我们将使用<kbd>math/rand</kbd>包来产生随机指数，并将其与Gota的<kbd>dataframe.Subset</kbd>方法相结合。第一步是生成数据帧索引的随机排列:</li>
+<li>一般来说，最好避免确定性抽样，以确保两个子集都能代表总体。为了实现随机抽样，我们将使用<kbd>math/rand</kbd>包来产生随机指数，并将其与 Gota 的<kbd>dataframe.Subset</kbd>方法相结合。第一步是生成数据帧索引的随机排列:</li>
 
 </ul>
 
-<p>现在，我们将把这一部分的前70%用于训练，剩余的元素用于验证，从而产生以下效用:</p>
+<p>现在，我们将把这一部分的前 70%用于训练，剩余的元素用于验证，从而产生以下效用:</p>
 
 <pre>rand.Perm(df.Nrow())</pre>
 
@@ -1843,7 +1843,7 @@
 
                             
 
-                    <h1 class="header-title">在前面的数据帧中，<kbd>Position</kbd>列是一个字符串。假设我们想要一个ML算法来使用这个输入，因为，比方说，我们试图预测运动员的体重，而在某些位置的运动员往往有不同的身体组成。在这种情况下，我们需要<strong>将字符串编码</strong>为算法可以使用的数值。</h1>
+                    <h1 class="header-title">在前面的数据帧中，<kbd>Position</kbd>列是一个字符串。假设我们想要一个 ML 算法来使用这个输入，因为，比方说，我们试图预测运动员的体重，而在某些位置的运动员往往有不同的身体组成。在这种情况下，我们需要<strong>将字符串编码</strong>为算法可以使用的数值。</h1>
 
                 
 
@@ -1853,11 +1853,11 @@
 
                 
 
-<p>简单的解决方案是确定所有玩家位置的集合，并为集合中的每个成员分配一个递增的整数。例如，我们可能以<kbd>{Relief_Pitcher, Starting_Pitcher, Shortstop, Outfielder,...}</kbd>集合结束，于是我们将<kbd>0</kbd>分配给<kbd>Relief_Pitcher</kbd>、<kbd>1</kbd>分配给<kbd>Starting_Pitcher</kbd>、<kbd>2</kbd>分配给<kbd>Shortstop</kbd>，等等。然而，这种方法的缺陷在于编号是如何分配的，因为它强调了不存在的类别的顺序。假设ML算法的一个步骤计算类别间的平均值。因此，可能会得出这样的结论:<kbd>Starting_Pitcher</kbd>是<kbd>Relief_Pitcher</kbd>和<kbd>Shortstop</kbd>的平均值！其他类型的算法可能推断出不存在的相关性。</p>
+<p>简单的解决方案是确定所有玩家位置的集合，并为集合中的每个成员分配一个递增的整数。例如，我们可能以<kbd>{Relief_Pitcher, Starting_Pitcher, Shortstop, Outfielder,...}</kbd>集合结束，于是我们将<kbd>0</kbd>分配给<kbd>Relief_Pitcher</kbd>、<kbd>1</kbd>分配给<kbd>Starting_Pitcher</kbd>、<kbd>2</kbd>分配给<kbd>Shortstop</kbd>，等等。然而，这种方法的缺陷在于编号是如何分配的，因为它强调了不存在的类别的顺序。假设 ML 算法的一个步骤计算类别间的平均值。因此，可能会得出这样的结论:<kbd>Starting_Pitcher</kbd>是<kbd>Relief_Pitcher</kbd>和<kbd>Shortstop</kbd>的平均值！其他类型的算法可能推断出不存在的相关性。</p>
 
-<p>为了解决这个问题，我们可以使用<strong>一键编码</strong>。这种类型的编码会将具有N个可能值的分类列拆分成N列。对应于其中一个类别的每一列将具有值<kbd>1</kbd>，其中该输入属于给定的列，否则为<kbd>0</kbd>。这也允许输入样本可能属于多个类别的情况。</p>
+<p>为了解决这个问题，我们可以使用<strong>一键编码</strong>。这种类型的编码会将具有 N 个可能值的分类列拆分成 N 列。对应于其中一个类别的每一列将具有值<kbd>1</kbd>，其中该输入属于给定的列，否则为<kbd>0</kbd>。这也允许输入样本可能属于多个类别的情况。</p>
 
-<p>使用Gota为给定列生成一个独热编码的步骤如下:</p>
+<p>使用 Gota 为给定列生成一个独热编码的步骤如下:</p>
 
 <p>枚举分类列的唯一值</p>
 
@@ -1865,7 +1865,7 @@
 
 <ol>
 
-<li>通过添加在<em>步骤2 </em>中创建的系列并删除原始列来改变原始数据帧</li>
+<li>通过添加在<em>步骤 2 </em>中创建的系列并删除原始列来改变原始数据帧</li>
 
 <li>使用地图可以轻松枚举唯一值:</li>
 
@@ -1923,7 +1923,7 @@
 
 <br/>Starting_Pitcher &lt;int&gt;, Relief_Pitcher &lt;int&gt;, First_Baseman &lt;int&gt;, Third_Baseman &lt;int&gt;</pre>
 
-<p>在这一章中，我们介绍了如何为Go建立一个开发环境，它是为ML应用程序优化的。我们解释了如何安装一个交互式环境Jupyter，以使用Gota和gonum/plot等库来加速数据探索和可视化。</p>
+<p>在这一章中，我们介绍了如何为 Go 建立一个开发环境，它是为 ML 应用程序优化的。我们解释了如何安装一个交互式环境 Jupyter，以使用 Gota 和 gonum/plot 等库来加速数据探索和可视化。</p>
 
 
 
@@ -1966,7 +1966,7 @@
 
                             
 
-                    <h1 class="header-title">我们还介绍了一些基本的数据处理步骤，比如过滤异常值、删除不必要的列和归一化。最后，我们讨论了采样。本章介绍了ML生命周期的前几个步骤:数据获取、探索和准备。现在您已经阅读了这一章，您已经学会了如何将数据加载到Gota数据帧中，如何使用数据帧和系列包将数据处理和准备成您选择的算法所需的格式，以及如何使用gonum的绘图包将其可视化。您还了解了规范化数据的不同方法，这是提高许多ML算法的准确性和速度的重要一步。</h1>
+                    <h1 class="header-title">我们还介绍了一些基本的数据处理步骤，比如过滤异常值、删除不必要的列和归一化。最后，我们讨论了采样。本章介绍了 ML 生命周期的前几个步骤:数据获取、探索和准备。现在您已经阅读了这一章，您已经学会了如何将数据加载到 Gota 数据帧中，如何使用数据帧和系列包将数据处理和准备成您选择的算法所需的格式，以及如何使用 gonum 的绘图包将其可视化。您还了解了规范化数据的不同方法，这是提高许多 ML 算法的准确性和速度的重要一步。</h1>
 
                 
 
@@ -1976,11 +1976,11 @@
 
                 
 
-<p class="mce-root">在下一章，我们将介绍监督学习算法，并举例说明如何选择一个ML算法，训练它，并验证它对以前看不见的数据的预测能力。</p>
+<p class="mce-root">在下一章，我们将介绍监督学习算法，并举例说明如何选择一个 ML 算法，训练它，并验证它对以前看不见的数据的预测能力。</p>
 
 <p class="mce-root">进一步阅读</p>
 
-<p><em>软件开发浪费</em>。托德·塞达诺和保罗·拉尔夫。ICSE第39届国际软件工程会议录。第130-140页。</p>
+<p><em>软件开发浪费</em>。托德·塞达诺和保罗·拉尔夫。ICSE 第 39 届国际软件工程会议录。第 130-140 页。</p>
 
 
 
@@ -2023,7 +2023,7 @@
 
                             
 
-                    <h1 class="header-title">参见https://golang.org/doc/install的<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://golang.org/doc/install">官方Go安装说明。检索时间2019年2月19日。</a></h1>
+                    <h1 class="header-title">参见 https://golang.org/doc/install 的<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://golang.org/doc/install">官方 Go 安装说明。检索时间 2019 年 2 月 19 日。</a></h1>
 
                 
 
@@ -2035,35 +2035,35 @@
 
 <ol>
 
-<li>【https://jupyter.org/about】T4。检索时间2019年2月19日。</li>
+<li>【https://jupyter.org/about】T4。检索时间 2019 年 2 月 19 日。</li>
 
-<li><a href="https://github.com/jupyter/jupyter/wiki/Jupyter-kernels">https://github.com/jupyter/jupyter/wiki/Jupyter-kernels</a>。检索时间2019年2月19日。</li>
+<li><a href="https://github.com/jupyter/jupyter/wiki/Jupyter-kernels">https://github.com/jupyter/jupyter/wiki/Jupyter-kernels</a>。检索时间 2019 年 2 月 19 日。</li>
 
-<li>有关进一步的说明，请参见<a href="https://help.github.com/articles/working-with-jupyter-notebook-files-on-github/">https://help . github . com/articles/working-with-jupyter-notebook-files-on-github/</a>。检索时间2019年2月19日。</li>
+<li>有关进一步的说明，请参见<a href="https://help.github.com/articles/working-with-jupyter-notebook-files-on-github/">https://help . github . com/articles/working-with-jupyter-notebook-files-on-github/</a>。检索时间 2019 年 2 月 19 日。</li>
 
-<li><a href="https://colab.research.google.com">https://colab.research.google.com</a>。检索时间2019年2月19日。</li>
+<li><a href="https://colab.research.google.com">https://colab.research.google.com</a>。检索时间 2019 年 2 月 19 日。</li>
 
-<li><a href="https://nbviewer.jupyter.org/">https://nbviewer.jupyter.org/</a>检索时间2019年2月19日。</li>
+<li><a href="https://nbviewer.jupyter.org/">https://nbviewer.jupyter.org/</a>检索时间 2019 年 2 月 19 日。</li>
 
-<li>https://jupyter.org/hub。检索时间2019年2月19日。</li>
+<li>https://jupyter.org/hub。检索时间 2019 年 2 月 19 日。</li>
 
-<li><a href="https://github.com/jupyter/nbconvert">https://github.com/jupyter/nbconvert</a>检索时间2019年2月19日。</li>
+<li><a href="https://github.com/jupyter/nbconvert">https://github.com/jupyter/nbconvert</a>检索时间 2019 年 2 月 19 日。</li>
 
-<li>有关Docker安装说明，请参见Linux的<a href="https://docs.docker.com/install/">https://docs.docker.com/install/</a>和Windows的<a href="https://docs.docker.com/docker-for-windows/install/">https://docs.docker.com/docker-for-windows/install/</a>。检索时间2019年2月19日。</li>
+<li>有关 Docker 安装说明，请参见 Linux 的<a href="https://docs.docker.com/install/">https://docs.docker.com/install/</a>和 Windows 的<a href="https://docs.docker.com/docker-for-windows/install/">https://docs.docker.com/docker-for-windows/install/</a>。检索时间 2019 年 2 月 19 日。</li>
 
-<li>约翰布利泽，马克德雷泽，费尔南多佩雷拉。传记，宝莱坞，<em xmlns:epub="http://www.idpf.org/2007/ops">音箱和搅拌机:情感分类的领域适应。计算语言学协会，2007年。</em></li>
+<li>约翰布利泽，马克德雷泽，费尔南多佩雷拉。传记，宝莱坞，<em xmlns:epub="http://www.idpf.org/2007/ops">音箱和搅拌机:情感分类的领域适应。计算语言学协会，2007 年。</em></li>
 
-<li>https://github.com/go-gota/gota<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/go-gota/gota">。检索时间2019年2月19日。</a></li>
+<li>https://github.com/go-gota/gota<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/go-gota/gota">。检索时间 2019 年 2 月 19 日。</a></li>
 
-<li>【https://godoc.org/sort#Interface】T4。检索时间2019年2月19日。</li>
+<li>【https://godoc.org/sort#Interface】T4。检索时间 2019 年 2 月 19 日。</li>
 
-<li><a href="https://www.kaggle.com/yersever/500-person-gender-height-weight-bodymassindex/version/2">https://www . ka ggle . com/yersever/500-person-gender-height-weight-bodymassindex/version/2</a>。检索时间2019年2月20日。</li>
+<li><a href="https://www.kaggle.com/yersever/500-person-gender-height-weight-bodymassindex/version/2">https://www . ka ggle . com/yersever/500-person-gender-height-weight-bodymassindex/version/2</a>。检索时间 2019 年 2 月 20 日。</li>
 
-<li><a href="https://code.google.com/archive/p/plotinum/">https://code.google.com/archive/p/plotinum/</a>。检索时间2019年2月20日。</li>
+<li><a href="https://code.google.com/archive/p/plotinum/">https://code.google.com/archive/p/plotinum/</a>。检索时间 2019 年 2 月 20 日。</li>
 
-<li><a href="https://github.com/gonum/plot">https://github.com/gonum/plot</a>。检索时间2019年2月20日。</li>
+<li><a href="https://github.com/gonum/plot">https://github.com/gonum/plot</a>。检索时间 2019 年 2 月 20 日。</li>
 
-<li><a href="http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data_MLB_HeightsWeights">http://wiki . stat . UCLA . edu/socr/index . PHP/SOCR _数据_ MLB _身高体重</a>。检索时间2019年2月20日。</li>
+<li><a href="http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data_MLB_HeightsWeights">http://wiki . stat . UCLA . edu/socr/index . PHP/SOCR _ 数据 _ MLB _ 身高体重</a>。检索时间 2019 年 2 月 20 日。</li>
 
 <li>伙计们，伊莎贝尔。1996.<em>验证集训练集大小比例的缩放法则</em>。在贝尔实验室。1.</li>
 

@@ -22,7 +22,7 @@
 
                             
 
-                    <h1 class="header-title">使用Firebase深入了解ML套件</h1>
+                    <h1 class="header-title">使用 Firebase 深入了解 ML 套件</h1>
 
                 
 
@@ -32,23 +32,23 @@
 
                 
 
-<p>在这一章中，我们将进一步探索基于Google Firebase的移动应用ML工具包平台。</p>
+<p>在这一章中，我们将进一步探索基于 Google Firebase 的移动应用 ML 工具包平台。</p>
 
-<p>谷歌在I/O 2018上推出Firebase ML套件。ML工具包是Firebase应用程序套件的一部分，它使开发人员能够将<strong>机器学习</strong> ( <strong> ML </strong>)功能整合到移动应用程序中。Firebase ML工具包<strong>软件开发工具包</strong> ( <strong> SDK </strong>)附带了一些移动应用程序中常见的功能，无论Android和iOS开发人员对ML的熟悉程度如何，都可以为他们提供帮助。</p>
+<p>谷歌在 I/O 2018 上推出 Firebase ML 套件。ML 工具包是 Firebase 应用程序套件的一部分，它使开发人员能够将<strong>机器学习</strong> ( <strong> ML </strong>)功能整合到移动应用程序中。Firebase ML 工具包<strong>软件开发工具包</strong> ( <strong> SDK </strong>)附带了一些移动应用程序中常见的功能，无论 Android 和 iOS 开发人员对 ML 的熟悉程度如何，都可以为他们提供帮助。</p>
 
 <p>本章涵盖的概念如下:</p>
 
 <ul>
 
-<li>了解ML试剂盒的基础知识</li>
+<li>了解 ML 试剂盒的基础知识</li>
 
-<li>学习将Firebase添加到我们的应用程序中</li>
+<li>学习将 Firebase 添加到我们的应用程序中</li>
 
-<li>使用Firebase创建可用于人脸检测、条形码扫描和设备上文本识别的多个应用程序</li>
+<li>使用 Firebase 创建可用于人脸检测、条形码扫描和设备上文本识别的多个应用程序</li>
 
 </ul>
 
-<p>这是我们本章知识库的链接:<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter4">https://g</a>T10】itT12】hub.com/intrepidkarthi/MLmobileapps/tree/master/Chapter4和<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://github . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。</p>
+<p>这是我们本章知识库的链接:<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter4">https://g</a>T10】itT12】hub.com/intrepidkarthi/MLmobileapps/tree/master/Chapter4 和<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://github . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。</p>
 
 
 
@@ -91,7 +91,7 @@
 
                             
 
-                    <h1 class="header-title">ML试剂盒基础</h1>
+                    <h1 class="header-title">ML 试剂盒基础</h1>
 
                 
 
@@ -101,11 +101,11 @@
 
                 
 
-<p>当然，我们总是可以在没有Firebase帮助的情况下完成所有基于ML的实现。然而，有几个原因可以解释为什么不是每个人都能做到这一点。这可能是以下原因之一:</p>
+<p>当然，我们总是可以在没有 Firebase 帮助的情况下完成所有基于 ML 的实现。然而，有几个原因可以解释为什么不是每个人都能做到这一点。这可能是以下原因之一:</p>
 
 <ul>
 
-<li>一个非常优秀的移动应用开发者可能不擅长构建ML模型。建立一个ML模型肯定需要时间。这可能因具体情况而异。</li>
+<li>一个非常优秀的移动应用开发者可能不擅长构建 ML 模型。建立一个 ML 模型肯定需要时间。这可能因具体情况而异。</li>
 
 <li>找到解决您的用例的正确的数据模型集将是一个非常困难的问题。假设你想检测一个亚洲人脸上的年龄和性别分类。在这种情况下，可用的现有模型对于您的用例来说可能不够准确。</li>
 
@@ -113,7 +113,7 @@
 
 </ul>
 
-<p class="mce-root">ML工具包是本地设备上Google Cloud Vision API、移动视觉和TensorFlow Lite模型的组合:</p>
+<p class="mce-root">ML 工具包是本地设备上 Google Cloud Vision API、移动视觉和 TensorFlow Lite 模型的组合:</p>
 
 <p class="mce-root CDPAlignCenter CDPAlign"><img src="img/c4e94a35-93e4-4daf-8931-36595e17094e.png" style="width:27.50em;height:14.33em;"/></p>
 
@@ -168,13 +168,13 @@
 
                 
 
-<p>ML Kit附带了一个现成的代码库，可用于常见情况，如从图像中检测人脸、条形码扫描、在图像中查找文本以及图像标记。通过将数据传递给API，我们可以用几行代码获得基本用例查询的答案。</p>
+<p>ML Kit 附带了一个现成的代码库，可用于常见情况，如从图像中检测人脸、条形码扫描、在图像中查找文本以及图像标记。通过将数据传递给 API，我们可以用几行代码获得基本用例查询的答案。</p>
 
-<p>ML工具包既提供了设备上的API，也提供了云API。根据我们的要求，我们可以使用这些服务中的任何一个。虽然设备上的API工作更快，但云API将提供更好的准确性。</p>
+<p>ML 工具包既提供了设备上的 API，也提供了云 API。根据我们的要求，我们可以使用这些服务中的任何一个。虽然设备上的 API 工作更快，但云 API 将提供更好的准确性。</p>
 
-<p>并非所有的移动应用程序都属于ML工具包提供的默认API。我们总会有自己的案子要通过ML来解决。ML Kit支持将我们的定制TensorFlow Lite模型部署到云中，并作为一个层与您的模型进行交互。</p>
+<p>并非所有的移动应用程序都属于 ML 工具包提供的默认 API。我们总会有自己的案子要通过 ML 来解决。ML Kit 支持将我们的定制 TensorFlow Lite 模型部署到云中，并作为一个层与您的模型进行交互。</p>
 
-<p>在撰写本书时，ML Kit在测试模式下提供了以下功能:</p>
+<p>在撰写本书时，ML Kit 在测试模式下提供了以下功能:</p>
 
 <ul>
 
@@ -192,17 +192,17 @@
 
 <p>根据使用情况，这些功能可以通过设备上和基于云的检测来实现。例如，离线时从图像中检测人脸可以通过编程在设备上实现，而不是通过将图像上传到云并获得结果。与此同时，从图像中检测地标不能离线高效地完成，因为数据会随时间而变化，并且地标上的数据量将是巨大的。</p>
 
-<p>我们将在将要构建的Android应用程序中涵盖上述每一项功能的一个基本示例。在开发应用程序时，在云中运行ML模型会带来两个主要问题:</p>
+<p>我们将在将要构建的 Android 应用程序中涵盖上述每一项功能的一个基本示例。在开发应用程序时，在云中运行 ML 模型会带来两个主要问题:</p>
 
 <ul>
 
-<li>这些应用程序需要使用互联网。我们通常在文本、图像、音频和视频之上应用ML。根据我们的使用案例，我们最终可能会在数据带宽上花费更多。</li>
+<li>这些应用程序需要使用互联网。我们通常在文本、图像、音频和视频之上应用 ML。根据我们的使用案例，我们最终可能会在数据带宽上花费更多。</li>
 
 <li>应用程序不会只留在您身边。当设备中的数据离开您的设备时，您可能无法控制它。</li>
 
 </ul>
 
-<p>记住这些问题，我们需要考虑构建一个更好的基于ML的应用程序。下表显示了每个API在本地设备和云中的可用性:</p>
+<p>记住这些问题，我们需要考虑构建一个更好的基于 ML 的应用程序。下表显示了每个 API 在本地设备和云中的可用性:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/a9b008f2-f5e9-4db1-b1cd-3326644ebd9f.png" style="width:44.42em;height:16.42em;"/></p>
 
@@ -257,7 +257,7 @@
 
                 
 
-<p>我们现在将使用Android Studio安装一个新的Android应用程序。为此，安装最新的Android Studio并创建一个新项目，如下所示:</p>
+<p>我们现在将使用 Android Studio 安装一个新的 Android 应用程序。为此，安装最新的 Android Studio 并创建一个新项目，如下所示:</p>
 
 <div><div><img src="img/8eba5a5c-f325-4911-b687-acc6d9cbcbf9.png" style="width:60.25em;height:42.83em;"/></div>
 
@@ -265,7 +265,7 @@
 
 <p class="mce-root"/>
 
-<p class="graf graf--p graf-after--p">下一个截图描述了我们要瞄准的Android API。选择<strong> API 15 </strong>及以上版本几乎涵盖了所有现有的Android设备，因此建议使用:</p>
+<p class="graf graf--p graf-after--p">下一个截图描述了我们要瞄准的 Android API。选择<strong> API 15 </strong>及以上版本几乎涵盖了所有现有的 Android 设备，因此建议使用:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/014884d8-8bd1-4dfa-9a5d-f94bd65e892d.png" style="width:53.42em;height:18.33em;"/></p>
 
@@ -310,7 +310,7 @@
 
                             
 
-                    <h1 class="header-title">将Firebase添加到我们的应用程序中</h1>
+                    <h1 class="header-title">将 Firebase 添加到我们的应用程序中</h1>
 
                 
 
@@ -320,11 +320,11 @@
 
                 
 
-<p>我们已经创建了Android Studio应用程序，其中包含一个空白活动。如果您使用的是Android Studio 2.2或任何更高版本，请使用Firebase助手将您的应用程序连接到Firebase。该助手将帮助您连接到现有的Firebase项目或创建一个新的项目。它还将安装所有必要的<em> Gradle依赖关系</em>。除此之外，我们还可以手动添加Firebase项目。</p>
+<p>我们已经创建了 Android Studio 应用程序，其中包含一个空白活动。如果您使用的是 Android Studio 2.2 或任何更高版本，请使用 Firebase 助手将您的应用程序连接到 Firebase。该助手将帮助您连接到现有的 Firebase 项目或创建一个新的项目。它还将安装所有必要的<em> Gradle 依赖关系</em>。除此之外，我们还可以手动添加 Firebase 项目。</p>
 
-<p>这个项目是使用Android Studio版本3.1.3构建的。</p>
+<p>这个项目是使用 Android Studio 版本 3.1.3 构建的。</p>
 
-<p>如果在您的<strong>工具</strong>部分没有找到Firebase助手，请转到文件|设置|构建、执行和部署|所需插件，然后添加<strong> Firebase服务</strong>。或者，您可以按照以下步骤手动添加它:</p>
+<p>如果在您的<strong>工具</strong>部分没有找到 Firebase 助手，请转到文件|设置|构建、执行和部署|所需插件，然后添加<strong> Firebase 服务</strong>。或者，您可以按照以下步骤手动添加它:</p>
 
 <ol>
 
@@ -334,7 +334,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/bb187a3b-3d82-4071-80b8-42cf5e48cf4a.png" style="width:38.17em;height:42.75em;"/></p>
 
-<p>前面的屏幕截图显示了如何添加一个新项目。另一种方法是使用Firebase的现有项目。该应用程序支持跨Android、iOS和web平台的项目。之后，在Firebase控制台上添加更多关于您的应用程序的详细信息。您可以从应用程序的<kbd>app</kbd>文件夹下的<kbd>build.gradle</kbd>文件中获得您的Android软件包名称:</p>
+<p>前面的屏幕截图显示了如何添加一个新项目。另一种方法是使用 Firebase 的现有项目。该应用程序支持跨 Android、iOS 和 web 平台的项目。之后，在 Firebase 控制台上添加更多关于您的应用程序的详细信息。您可以从应用程序的<kbd>app</kbd>文件夹下的<kbd>build.gradle</kbd>文件中获得您的 Android 软件包名称:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-788 image-border" src="img/810cf6c9-7c19-4c33-8ff6-1b60aafc9ea2.png" style="width:127.50em;height:68.58em;"/></p>
 
@@ -344,7 +344,7 @@
 
 </ol>
 
-<p style="padding-left: 60px">创建应用程序后，您可以从Firebase控件下载该文件:</p>
+<p style="padding-left: 60px">创建应用程序后，您可以从 Firebase 控件下载该文件:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/ecab47e8-98ea-4c26-91b8-8636aeeeb094.png" style="width:43.83em;height:39.67em;"/></p>
 
@@ -360,7 +360,7 @@
 
 <pre>buildscript {<br/>    repositories {<br/>        google()<br/>        jcenter()<br/>    }<br/>    dependencies {<br/>        classpath 'com.android.tools.build:gradle:3.1.3'<br/>        classpath 'com.google.gms:google-services:4.0.0'<br/>    }<br/>}</pre>
 
-<p class="a12g-setup-section">app级<kbd>build.gradle</kbd>文件放在以下文件夹下:<kbd>&lt;project&gt;/&lt;app-module&gt;/build.gradle</kbd>。在其中添加以下几行:</p>
+<p class="a12g-setup-section">app 级<kbd>build.gradle</kbd>文件放在以下文件夹下:<kbd>&lt;project&gt;/&lt;app-module&gt;/build.gradle</kbd>。在其中添加以下几行:</p>
 
 <div><div><div><pre style="padding-left: 30px">dependencies {
 
@@ -376,33 +376,33 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 </div>
 
-<p>默认情况下，这包括Firebase的分析服务。</p>
+<p>默认情况下，这包括 Firebase 的分析服务。</p>
 
 </div>
 
-<p class="a12g-setup-note">现在，单击IDE右上角的“立即同步”按钮。</p>
+<p class="a12g-setup-note">现在，单击 IDE 右上角的“立即同步”按钮。</p>
 
-<p class="a12g-setup-note">完成后，在连接的Android设备或模拟器上运行应用程序:</p>
+<p class="a12g-setup-note">完成后，在连接的 Android 设备或模拟器上运行应用程序:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/67758a4b-efe8-48b2-989d-826392354ee6.png" style="width:36.33em;height:26.25em;"/></p>
 
-<p>在前面的屏幕截图中看到的消息确认Firebase配置已经成功完成。现在，您可以看到控制台中的新应用程序下添加了一个用户。</p>
+<p>在前面的屏幕截图中看到的消息确认 Firebase 配置已经成功完成。现在，您可以看到控制台中的新应用程序下添加了一个用户。</p>
 
-<p>现在，让我们开始在应用程序中构建特性。在我们开始之前，我们需要在应用程序级的<kbd>build.gradle</kbd>文件中添加ML套件依赖，如下所示:</p>
+<p>现在，让我们开始在应用程序中构建特性。在我们开始之前，我们需要在应用程序级的<kbd>build.gradle</kbd>文件中添加 ML 套件依赖，如下所示:</p>
 
 <pre class="prettyprint">dependencies {<br/>  // You should always use the latest version <br/>  implementation 'com.google.firebase:firebase-ml-vision:16.0.0'<br/>}</pre>
 
-<p>在Firebase中，你会被默认放在星火计划中。您可以升级到Blaze计划，以便使用Cloud Vision APIs，根据免费计划，每月的请求限制为1，000次。在这一章中，我们将在一个直播摄像机上使用他们的所有设备上的模块。</p>
+<p>在 Firebase 中，你会被默认放在星火计划中。您可以升级到 Blaze 计划，以便使用 Cloud Vision APIs，根据免费计划，每月的请求限制为 1，000 次。在这一章中，我们将在一个直播摄像机上使用他们的所有设备上的模块。</p>
 
 <p>通过设备上的培训，当我们第一次运行应用程序时，模型将自动下载。如果我们只想下载那些特定的模型，可以通过将以下元数据添加到您的应用程序<kbd>manifest</kbd>文件中来实现:</p>
 
 <pre class="prettyprint">&lt;application ...&gt;<br/>  ...<br/>  &lt;meta-data<br/>      android:name="com.google.firebase.ml.vision.DEPENDENCIES"<br/>      android:value="ocr" /&gt;<br/>  &lt;!-- To use multiple models: android:value="ocr, barcode, face, model4, model5" --&gt;<br/>&lt;/application&gt;</pre>
 
-<p>特定模型的使用取决于应用。如果ML模型将成为你的应用体验的核心部分，这将是有意义的。否则，应该只在需要时才下载模型。这将减少移动设备上不必要的负载。</p>
+<p>特定模型的使用取决于应用。如果 ML 模型将成为你的应用体验的核心部分，这将是有意义的。否则，应该只在需要时才下载模型。这将减少移动设备上不必要的负载。</p>
 
-<p>在我们正在构建的应用程序中，我们将启动摄像头视图，从这里我们将切换到ML套件中的所有设备上ML配置。</p>
+<p>在我们正在构建的应用程序中，我们将启动摄像头视图，从这里我们将切换到 ML 套件中的所有设备上 ML 配置。</p>
 
-<p>在相机视图的底部，我们将添加一个<kbd>spinner</kbd>，此时我们将选择当前的ML功能:</p>
+<p>在相机视图的底部，我们将添加一个<kbd>spinner</kbd>，此时我们将选择当前的 ML 功能:</p>
 
 <pre>Spinner spinner = (Spinner) findViewById(R.id.spinner);<br/>//Adding the list of items to be detected <br/>List&lt;String&gt; options = new ArrayList&lt;&gt;();<br/>options.add(FACE_DETECTION);<br/>options.add(TEXT_DETECTION);<br/>options.add(BARCODE_DETECTION);<br/>options.add(IMAGE_LABEL_DETECTION);<br/>options.add(CLASSIFICATION);<br/>// Creating adapter for spinner<br/>ArrayAdapter&lt;String&gt; dataAdapter = new ArrayAdapter&lt;&gt;(this, <br/>                           R.layout.spinner_style, options);<br/>// Drop down layout style - list view with radio button<br/>dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dro<br/>                                    pdown_item);<br/>// attaching data adapter to spinner<br/>spinner.setAdapter(dataAdapter);<br/>spinner.setOnItemSelectedListener(this);</pre>
 
@@ -459,7 +459,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p>通过人脸检测，您可以自动检测图像或视频中的人脸。这将报告人脸在媒体中的实际位置以及大小和方向。一旦一张脸被识别出来，我们就可以进一步检测它的其他身体部位，比如鼻子、眼睛和嘴巴。人脸检测API检测以下内容:</p>
+<p>通过人脸检测，您可以自动检测图像或视频中的人脸。这将报告人脸在媒体中的实际位置以及大小和方向。一旦一张脸被识别出来，我们就可以进一步检测它的其他身体部位，比如鼻子、眼睛和嘴巴。人脸检测 API 检测以下内容:</p>
 
 <ul>
 
@@ -473,7 +473,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 </ul>
 
-<p>有几个术语与ML工具包的人脸检测功能相关联。</p>
+<p>有几个术语与 ML 工具包的人脸检测功能相关联。</p>
 
 
 
@@ -532,15 +532,15 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <ul>
 
-<li><strong>欧拉X </strong>:欧拉X角为正的面朝上</li>
+<li><strong>欧拉 X </strong>:欧拉 X 角为正的面朝上</li>
 
-<li><strong>欧拉Y </strong>:一个有正欧拉Y角的面转向相机的右边和左边</li>
+<li><strong>欧拉 Y </strong>:一个有正欧拉 Y 角的面转向相机的右边和左边</li>
 
-<li><strong>欧拉Z </strong>:欧拉Z角为正的面相对于相机逆时针旋转</li>
+<li><strong>欧拉 Z </strong>:欧拉 Z 角为正的面相对于相机逆时针旋转</li>
 
 </ul>
 
-<p>这三个角度中，ML Kit只支持欧拉Z角的检测；不支持欧拉X角，欧拉Y角只在相机运行在<em>精确</em>模式下测量。在<em>快速</em>模式下，相机会创建快捷方式以更快地获得结果。</p>
+<p>这三个角度中，ML Kit 只支持欧拉 Z 角的检测；不支持欧拉 X 角，欧拉 Y 角只在相机运行在<em>精确</em>模式下测量。在<em>快速</em>模式下，相机会创建快捷方式以更快地获得结果。</p>
 
 
 
@@ -593,11 +593,11 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p>ML套件可以检测组成面部的<strong>标志点</strong>。这些标志点包括左眼、右眼、鼻根、嘴的左侧等等。</p>
+<p>ML 套件可以检测组成面部的<strong>标志点</strong>。这些标志点包括左眼、右眼、鼻根、嘴的左侧等等。</p>
 
 <p>它独立于地标信息检测人脸，不使用地标信息作为识别整张脸的依据，所以默认不启用。</p>
 
-<p>根据相关的欧拉Y角，可以识别以下所有地标:</p>
+<p>根据相关的欧拉 Y 角，可以识别以下所有地标:</p>
 
 <div><img src="img/9f656fa9-75d2-4e46-bd69-fab5b97fe71c.png" style="width:33.17em;height:21.25em;"/></div>
 
@@ -660,9 +660,9 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <p><strong>分类</strong>用于根据某些面部特征对图像进行分类，例如眼睛是睁开还是闭上，以及此人是否在微笑。</p>
 
-<p>分类以0到1之间的值表示。例如，在微笑分类中0.7或更大的幸福值可以分类该人在微笑。同样，眼睛是否睁开的状态也可以通过分类追踪。</p>
+<p>分类以 0 到 1 之间的值表示。例如，在微笑分类中 0.7 或更大的幸福值可以分类该人在微笑。同样，眼睛是否睁开的状态也可以通过分类追踪。</p>
 
-<p>这两种分类都依赖于地标检测。<em>睁眼</em>和<em>微笑</em>分类只在正面人脸上起作用。这意味着他们需要一个更小的欧拉Y角(+/- 18度)来计算这些因子。</p>
+<p>这两种分类都依赖于地标检测。<em>睁眼</em>和<em>微笑</em>分类只在正面人脸上起作用。这意味着他们需要一个更小的欧拉 Y 角(+/- 18 度)来计算这些因子。</p>
 
 
 
@@ -810,7 +810,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <ul class="postList">
 
-<li class="graf graf--li graf-after--pre"><strong>启用人脸跟踪</strong>:决定是否给人脸分配一个ID，用于跨图像跟踪人脸；</li>
+<li class="graf graf--li graf-after--pre"><strong>启用人脸跟踪</strong>:决定是否给人脸分配一个 ID，用于跨图像跟踪人脸；</li>
 
 </ul>
 
@@ -877,7 +877,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-749 image-border" src="img/1d074738-3403-4a80-8c4a-f06c186d33e2.png" style="width:43.67em;height:23.50em;"/></p>
 
-<p>边界框是由两个经度和两个纬度定义的区域，其中:纬度是介于-90.0和90.0之间的十进制数，经度是介于-180.0和180.0之间的十进制数。</p>
+<p>边界框是由两个经度和两个纬度定义的区域，其中:纬度是介于-90.0 和 90.0 之间的十进制数，经度是介于-180.0 和 180.0 之间的十进制数。</p>
 
 
 
@@ -920,7 +920,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">第一步:从输入创建一个FirebaseVisionImage</h1>
+                    <h1 class="header-title">第一步:从输入创建一个 FirebaseVisionImage</h1>
 
                 
 
@@ -1101,11 +1101,11 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="graf graf--p graf-after--h4">让我们使用ByteBuffer创建这个<kbd>FirebaseVisionImage</kbd>的实例。然而，要做到这一点，我们必须首先创建一个<kbd>FirebaseVisionImageMetadata</kbd>的实例。这包含构建视觉图像所需的数据，如格式、旋转和测量值(高度和宽度)，如下所示:</p>
+<p class="graf graf--p graf-after--h4">让我们使用 ByteBuffer 创建这个<kbd>FirebaseVisionImage</kbd>的实例。然而，要做到这一点，我们必须首先创建一个<kbd>FirebaseVisionImageMetadata</kbd>的实例。这包含构建视觉图像所需的数据，如格式、旋转和测量值(高度和宽度)，如下所示:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImageMetadata metadata = new <br/>    FirebaseVisionImageMetadata.Builder()<br/>        .setWidth(1280)<br/>        .setHeight(720)<br/>        .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)<br/>        .setRotation(rotation)<br/>        .build();</pre>
 
-<p class="graf graf--p graf-after--pre">然后，我们可以将其与ByteBuffer一起传递，以创建以下实例:</p>
+<p class="graf graf--p graf-after--pre">然后，我们可以将其与 ByteBuffer 一起传递，以创建以下实例:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImage myImage = <br/>                FirebaseVisionImage.fromByteBuffer(buffer, metadata);</pre>
 
@@ -1160,7 +1160,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="graf graf--p graf-after--h4">从ByteArray创建图像的工作方式与ByteBuffer相同，只是我们必须使用<kbd>fromByteArray()</kbd>函数:</p>
+<p class="graf graf--p graf-after--h4">从 ByteArray 创建图像的工作方式与 ByteBuffer 相同，只是我们必须使用<kbd>fromByteArray()</kbd>函数:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImage myImage = <br/>              FirebaseVisionImage.fromByteArray(byteArray, metadata);</pre>
 
@@ -1260,7 +1260,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">第二步:创建FirebaseVisionFaceDetector对象的实例</h1>
+                    <h1 class="header-title">第二步:创建 FirebaseVisionFaceDetector 对象的实例</h1>
 
                 
 
@@ -1390,7 +1390,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <pre class="prettyprint">for (FirebaseVisionFace face : faces) {<br/>    Rect bounds = face.getBoundingBox();<br/>    float rotY = face.getHeadEulerAngleY();  // Head is rotated to the <br/>                                                right rotY degrees<br/>    float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways <br/>                                                rotZ degrees<br/><br/>   // If landmark detection was enabled (mouth, ears, eyes, cheeks, and<br/>   // nose available):<br/>    FirebaseVisionFaceLandmark leftEar = <br/>             face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR);<br/>    if (leftEar != null) {<br/>        FirebaseVisionPoint leftEarPos = leftEar.getPosition();<br/>    }<br/><br/>    // If classification was enabled:<br/>    if (face.getSmilingProbability() != <br/>             FirebaseVisionFace.UNCOMPUTED_PROBABILITY) {<br/>        float smileProb = face.getSmilingProbability();<br/>    }<br/>    if (face.getRightEyeOpenProbability() != <br/>          FirebaseVisionFace.UNCOMPUTED_PROBABILITY) {<br/>            float rightEyeOpenProb = face.getRightEyeOpenProbability();<br/>    }<br/><br/>    // If face tracking was enabled:<br/>    if (face.getTrackingId() != FirebaseVisionFace.INVALID_ID) {<br/>        int id = face.getTrackingId();<br/>    }<br/>}</pre>
 
-<p>有了这个，我们就可以用ML工具包来研究人脸检测器了。现在，去我们的仓库直接从那里提取代码:</p>
+<p>有了这个，我们就可以用 ML 工具包来研究人脸检测器了。现在，去我们的仓库直接从那里提取代码:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-750 image-border" src="img/d949baf4-83a5-4518-9495-8cbdf19ce493.png" style="width:19.08em;height:32.83em;"/></p>
 
@@ -1447,7 +1447,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p>现在让我们开始使用ML Kit实现一个基于移动设备的条形码扫描仪。条形码有多种格式。ML试剂盒支持下列所有格式:</p>
+<p>现在让我们开始使用 ML Kit 实现一个基于移动设备的条形码扫描仪。条形码有多种格式。ML 试剂盒支持下列所有格式:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/5b72d7db-c33e-41de-b095-75e2bd298562.png" style="width:50.67em;height:24.67em;"/></p>
 
@@ -1455,7 +1455,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <pre>/**<br/> * Draws the barcode block annotations<br/>*/<br/>@Override<br/>public void draw(Canvas canvas) {<br/>  if (barcode == null) {<br/>    throw new IllegalStateException("Attempting to draw a null <br/>                                     barcode.");<br/>  }<br/><br/>  // Draws the bounding box around the BarcodeBlock.<br/>  RectF rect = new RectF(barcode.getBoundingBox());<br/>  rect.left = translateX(rect.left);<br/>  rect.top = translateY(rect.top);<br/>  rect.right = translateX(rect.right);<br/>  rect.bottom = translateY(rect.bottom);<br/>  canvas.drawRect(rect, rectPaint);<br/><br/>  // Renders the barcode at the bottom of the box.<br/>  canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, <br/>                  barcodePaint);<br/>}</pre>
 
-<p>如果我们知道将要读取的条形码格式，我们可以通过仅在配置设置时检测该格式来加快过程。例如，为了检测QR码，让我们通过设置如下所示的条形码格式来创建<kbd>FirebaseVisionBarcodeDetectorOptions</kbd>实例:</p>
+<p>如果我们知道将要读取的条形码格式，我们可以通过仅在配置设置时检测该格式来加快过程。例如，为了检测 QR 码，让我们通过设置如下所示的条形码格式来创建<kbd>FirebaseVisionBarcodeDetectorOptions</kbd>实例:</p>
 
 <pre class="prettyprint">FirebaseVisionBarcodeDetectorOptions options =<br/>        new FirebaseVisionBarcodeDetectorOptions.Builder()<br/>        .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_QR_CODE)<br/>        .build();</pre>
 
@@ -1506,7 +1506,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">第一步:创建FirebaseVisionImage对象</h1>
+                    <h1 class="header-title">第一步:创建 FirebaseVisionImage 对象</h1>
 
                 
 
@@ -1516,7 +1516,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p>在构建选项之后，我们可以继续进行识别。与我们对人脸检测所做的类似，<kbd>FirebaseVisionImage</kbd>对象可以从位图、ByteBuffer、<kbd>media.Image</kbd>、ByteArray或设备上的文件中创建。</p>
+<p>在构建选项之后，我们可以继续进行识别。与我们对人脸检测所做的类似，<kbd>FirebaseVisionImage</kbd>对象可以从位图、ByteBuffer、<kbd>media.Image</kbd>、ByteArray 或设备上的文件中创建。</p>
 
 
 
@@ -1673,7 +1673,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">来自ByteBuffer</h1>
+                    <h1 class="header-title">来自 ByteBuffer</h1>
 
                 
 
@@ -1683,7 +1683,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="graf graf--p graf-after--h4">让我们使用ByteBuffer创建这个<kbd>FirebaseVisionImage</kbd>的实例。然而，为了做到这一点，我们必须首先创建一个<kbd>FirebaseVisionImageMetadata</kbd>的实例。这包含构建视觉图像所需的数据，例如旋转和测量，如下所述:</p>
+<p class="graf graf--p graf-after--h4">让我们使用 ByteBuffer 创建这个<kbd>FirebaseVisionImage</kbd>的实例。然而，为了做到这一点，我们必须首先创建一个<kbd>FirebaseVisionImageMetadata</kbd>的实例。这包含构建视觉图像所需的数据，例如旋转和测量，如下所述:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImageMetadata metadata = new <br/>    FirebaseVisionImageMetadata.Builder()<br/>        .setWidth(1280)<br/>        .setHeight(720)<br/>        .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)<br/>        .setRotation(rotation)<br/>        .build();</pre>
 
@@ -1691,7 +1691,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <p>如果想了解更多图片格式参数，可以查看:<a href="https://developer.android.com/reference/android/graphics/ImageFormat" target="_blank">https://developer . Android . com/reference/Android/graphics/image format</a>。</p>
 
-<p class="graf graf--p graf-after--pre">然后，我们可以将其与ByteBuffer一起传递，以创建以下实例:</p>
+<p class="graf graf--p graf-after--pre">然后，我们可以将其与 ByteBuffer 一起传递，以创建以下实例:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImage image = FirebaseVisionImage.fromByteBuffer(buffer, <br/>                            metadata);</pre>
 
@@ -1736,7 +1736,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">来自ByteArray</h1>
+                    <h1 class="header-title">来自 ByteArray</h1>
 
                 
 
@@ -1746,7 +1746,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="graf graf--p graf-after--h4">ByteBuffer就像一个构建器来创建一个<kbd>byte[]</kbd>。与数组不同，它有更多的助手方法。从ByteArray创建图像的工作方式与ByteBuffer相同，只是我们必须使用如下所示的<kbd>fromByteArray()</kbd>函数:</p>
+<p class="graf graf--p graf-after--h4">ByteBuffer 就像一个构建器来创建一个<kbd>byte[]</kbd>。与数组不同，它有更多的助手方法。从 ByteArray 创建图像的工作方式与 ByteBuffer 相同，只是我们必须使用如下所示的<kbd>fromByteArray()</kbd>函数:</p>
 
 <pre class="graf graf--pre graf-after--p">FirebaseVisionImage image =  <br/>            FirebaseVisionImage.fromByteArray(byteArray, metadata);</pre>
 
@@ -1801,7 +1801,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="graf graf--p graf-after--h4">通过使用上下文和URI调用<kbd>fromFilePath()</kbd>函数，可以从文件中创建一个视觉图像实例:</p>
+<p class="graf graf--p graf-after--h4">通过使用上下文和 URI 调用<kbd>fromFilePath()</kbd>函数，可以从文件中创建一个视觉图像实例:</p>
 
 <pre class="graf graf--pre graf-after--p graf--trailing">val image: FirebaseVisionImage?<br/>try {<br/>    image = FirebaseVisionImage.fromFilePath(context, uri);<br/>} catch (IOException e) {<br/>    e.printStackTrace();<br/>}</pre>
 
@@ -1846,7 +1846,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                             
 
-                    <h1 class="header-title">第二步:创建FirebaseVisionBarcodeDetector对象</h1>
+                    <h1 class="header-title">第二步:创建 FirebaseVisionBarcodeDetector 对象</h1>
 
                 
 
@@ -1919,7 +1919,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
 <pre class="prettyprint">for (FirebaseVisionBarcode barcode: barcodes) {<br/>    //Returns a Rect instance that contains the bounding box for the recognized barcode<br/>    Rect bounds = barcode.getBoundingBox();<br/>    <br/>//Returns the coordinates for each corner of the barcode.<br/>    Point[] corners = barcode.getCornerPoints();<br/>    <br/>//Returns the barcode value in its raw format<br/>    String rawValue = barcode.getRawValue();<br/>    <br/>//Returns the format type of the barcode<br/>    int valueType = barcode.getValueType();<br/>    <br/>// See API reference for complete list of supported types<br/>    switch (valueType) {<br/>        case FirebaseVisionBarcode.TYPE_WIFI:<br/>            String ssid = barcode.getWifi().getSsid();<br/>            String password = barcode.getWifi().getPassword();<br/>            int type = barcode.getWifi().getEncryptionType();<br/>            break;<br/>        case FirebaseVisionBarcode.TYPE_URL:<br/>            String title = barcode.getUrl().getTitle();<br/>            String url = barcode.getUrl().getUrl();<br/>            break;<br/>    }<br/>}</pre>
 
-<p class="CDPAlignLeft CDPAlign">这样，我们现在应该能够使用ML试剂盒进行条形码扫描。这将是任何零售商业应用的便利工具:</p>
+<p class="CDPAlignLeft CDPAlign">这样，我们现在应该能够使用 ML 试剂盒进行条形码扫描。这将是任何零售商业应用的便利工具:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-751 image-border" src="img/acd47226-e919-4b93-8038-1c63cc14ff9a.png" style="width:19.42em;height:33.25em;"/></p>
 
@@ -2151,7 +2151,7 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p>要使用基于云的检测，我们需要在开发人员控制台上为您的项目启用Google Vision API。云API需要额外的费用，但是每月对API的前1000次调用是免费的。无论如何，您仍然需要输入您的信用卡信息以确保订阅计划的安全。根据你的需要选择这个。</p>
+<p>要使用基于云的检测，我们需要在开发人员控制台上为您的项目启用 Google Vision API。云 API 需要额外的费用，但是每月对 API 的前 1000 次调用是免费的。无论如何，您仍然需要输入您的信用卡信息以确保订阅计划的安全。根据你的需要选择这个。</p>
 
 
 
@@ -2275,9 +2275,9 @@ apply plugin: 'com.google.gms.google-services'</pre></div>
 
                 
 
-<p class="mce-root">在这一点上，我们很容易实现基于移动设备的ML应用程序的基本功能，包括文本内检测、人脸检测和条形码扫描。同样，我们可以通过云API实现图像标注和地标检测。我们现在应该能够看到ML Kit涵盖了基于移动的ML应用程序的基本需求。</p>
+<p class="mce-root">在这一点上，我们很容易实现基于移动设备的 ML 应用程序的基本功能，包括文本内检测、人脸检测和条形码扫描。同样，我们可以通过云 API 实现图像标注和地标检测。我们现在应该能够看到 ML Kit 涵盖了基于移动的 ML 应用程序的基本需求。</p>
 
-<p class="mce-root">在下一章，我们将继续构建类似于Snapchat上可用的<strong>增强现实</strong> ( <strong> AR </strong>)过滤器。</p>
+<p class="mce-root">在下一章，我们将继续构建类似于 Snapchat 上可用的<strong>增强现实</strong> ( <strong> AR </strong>)过滤器。</p>
 
 
 

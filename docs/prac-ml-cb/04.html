@@ -2,13 +2,13 @@
 
 
 
-<title>Chapter 4. Model Selection and Regularization</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04"/>第四章。模型选择和正则化</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">收缩方法-每天消耗的卡路里</li><li class="listitem" style="list-style-type: disc">降维方法-达美航空的机队</li><li class="listitem" style="list-style-type: disc">主成分分析-了解世界美食</li></ul></div><div><div><div><div><h1 class="title"><a id="ch04lvl1sec22"/>简介</h1></div></div></div><p><strong>子集选择</strong>:使用带标签的例子归纳出一个模型，将对象分类到有限的一组已知类别中，这是机器学习中监督分类的主要挑战之一。数字或标称特征的向量用于描述各种示例。在特征子集选择问题中，学习算法面临的问题是选择一些特征子集来集中注意力，而忽略其余的。</p><p>当拟合线性回归模型时，最好地描述数据的变量子集是感兴趣的。当搜索变量集时，应用许多不同的策略，有许多不同的方法可以采用最佳子集。如果有<em> m </em>个变量，并且最佳回归模型由<em> p </em>个变量、<em> p≤m </em>个变量组成，那么挑选最佳子集的更一般的方法可能是尝试所有可能的<em> p </em>个变量的组合，并选择最符合数据的模型。</p><p>不过，还有<em> m！p！(m p)！</em>可能的组合，随着<em> m </em>值的增加而增加，例如<em> m = 20 </em>和<em> p = 4 </em>给出了4845种可能的组合。此外，通过使用更少的特征，我们可以降低获取数据的成本，并提高分类模型的可理解性。</p><p><strong>缩水法:</strong>缩水回归是指在回归情况下进行估计或预测的缩水法；当回归变量之间存在多重共线性时非常有用。在数据集与所研究的协变量相比较小的情况下，收缩技术可能会改善预测。常见的收缩方法如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">线性收缩系数-用相同的系数收缩所有系数</li><li class="listitem" style="list-style-type: disc">岭回归-惩罚最大似然，惩罚因子被添加到似然函数中，使得系数根据每个协变量的方差单独收缩</li><li class="listitem" style="list-style-type: disc">Lasso -通过对标准化协变量系数的绝对值之和设置约束，将一些系数收缩为零</li></ul></div><p>收缩方法保留了预测值的一个子集，而丢弃了其余的。子集选择产生了可解释的模型，并且产生了可能比完整模型更低的预测误差，同时没有减少完整模型的预测误差。收缩方法更加连续，不会受到高可变性的影响。当线性回归模型中有许多相关变量时，它们的系数很难确定，并且表现出很高的方差。</p><p><strong>降维方法:</strong>包括模式识别、数据压缩、机器学习和数据库导航在内的各种信息处理领域的一个重大挑战是流形学习。测量的数据向量是高维的，并且在许多情况下，数据位于低维流形附近。高维数据的主要挑战是它是多重的；它间接测量通常无法直接测量的潜在来源。降维也可以看作是导出一组自由度的过程，这些自由度可用于重现数据集的大部分可变性。</p></div></div>
+<title>Chapter 4. Model Selection and Regularization</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04"/>第四章。模型选择和正则化</h1></div></div></div><p>在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">收缩方法-每天消耗的卡路里</li><li class="listitem" style="list-style-type: disc">降维方法-达美航空的机队</li><li class="listitem" style="list-style-type: disc">主成分分析-了解世界美食</li></ul></div><div><div><div><div><h1 class="title"><a id="ch04lvl1sec22"/>简介</h1></div></div></div><p><strong>子集选择</strong>:使用带标签的例子归纳出一个模型，将对象分类到有限的一组已知类别中，这是机器学习中监督分类的主要挑战之一。数字或标称特征的向量用于描述各种示例。在特征子集选择问题中，学习算法面临的问题是选择一些特征子集来集中注意力，而忽略其余的。</p><p>当拟合线性回归模型时，最好地描述数据的变量子集是感兴趣的。当搜索变量集时，应用许多不同的策略，有许多不同的方法可以采用最佳子集。如果有<em> m </em>个变量，并且最佳回归模型由<em> p </em>个变量、<em> p≤m </em>个变量组成，那么挑选最佳子集的更一般的方法可能是尝试所有可能的<em> p </em>个变量的组合，并选择最符合数据的模型。</p><p>不过，还有<em> m！p！(m p)！</em>可能的组合，随着<em> m </em>值的增加而增加，例如<em> m = 20 </em>和<em> p = 4 </em>给出了 4845 种可能的组合。此外，通过使用更少的特征，我们可以降低获取数据的成本，并提高分类模型的可理解性。</p><p><strong>缩水法:</strong>缩水回归是指在回归情况下进行估计或预测的缩水法；当回归变量之间存在多重共线性时非常有用。在数据集与所研究的协变量相比较小的情况下，收缩技术可能会改善预测。常见的收缩方法如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">线性收缩系数-用相同的系数收缩所有系数</li><li class="listitem" style="list-style-type: disc">岭回归-惩罚最大似然，惩罚因子被添加到似然函数中，使得系数根据每个协变量的方差单独收缩</li><li class="listitem" style="list-style-type: disc">Lasso -通过对标准化协变量系数的绝对值之和设置约束，将一些系数收缩为零</li></ul></div><p>收缩方法保留了预测值的一个子集，而丢弃了其余的。子集选择产生了可解释的模型，并且产生了可能比完整模型更低的预测误差，同时没有减少完整模型的预测误差。收缩方法更加连续，不会受到高可变性的影响。当线性回归模型中有许多相关变量时，它们的系数很难确定，并且表现出很高的方差。</p><p><strong>降维方法:</strong>包括模式识别、数据压缩、机器学习和数据库导航在内的各种信息处理领域的一个重大挑战是流形学习。测量的数据向量是高维的，并且在许多情况下，数据位于低维流形附近。高维数据的主要挑战是它是多重的；它间接测量通常无法直接测量的潜在来源。降维也可以看作是导出一组自由度的过程，这些自由度可用于重现数据集的大部分可变性。</p></div></div>
 
 
 
 
 
-<title>Shrinkage methods - calories burned per day</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec23"/>减肥方法-每天消耗的卡路里</h1></div></div></div><p>为了比较人类的代谢率，<strong>基础代谢率</strong> ( <strong> BMR </strong>)的概念在临床上非常关键，是确定人类甲状腺状态的一种手段。哺乳动物的基础代谢率随体重而变化，异速生长指数与现场代谢率相同，并随许多生理和生化率而变化。Fitbit作为一种设备，使用基础代谢率和白天进行的活动来估计一整天燃烧的卡路里。</p><div><div><div><div><h2 class="title">做好准备</h2></div></div></div><p>为了执行收缩方法，我们将使用从Fitbit收集的数据集和消耗卡路里的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec54"/>步骤1 -收集和描述数据</h3></div></div></div><p>应使用CSV格式的名为<code class="literal">fitbit_export_20160806.csv</code>的数据集。数据集采用标准格式。有30行数据和10个变量。数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Calories Burned</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Steps</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Distance</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Floors</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Sedentary</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Lightly Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Fairly Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">ExAng</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Very Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Activity Calories</code></li></ul></div><p>非数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Date</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec22"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec55"/>第二步-探索数据</h3></div></div></div><p>作为第一步，需要加载以下包:</p><pre class="programlisting">
+<title>Shrinkage methods - calories burned per day</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec23"/>减肥方法-每天消耗的卡路里</h1></div></div></div><p>为了比较人类的代谢率，<strong>基础代谢率</strong> ( <strong> BMR </strong>)的概念在临床上非常关键，是确定人类甲状腺状态的一种手段。哺乳动物的基础代谢率随体重而变化，异速生长指数与现场代谢率相同，并随许多生理和生化率而变化。Fitbit 作为一种设备，使用基础代谢率和白天进行的活动来估计一整天燃烧的卡路里。</p><div><div><div><div><h2 class="title">做好准备</h2></div></div></div><p>为了执行收缩方法，我们将使用从 Fitbit 收集的数据集和消耗卡路里的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec54"/>步骤 1 -收集和描述数据</h3></div></div></div><p>应使用 CSV 格式的名为<code class="literal">fitbit_export_20160806.csv</code>的数据集。数据集采用标准格式。有 30 行数据和 10 个变量。数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Calories Burned</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Steps</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Distance</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Floors</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Sedentary</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Lightly Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Fairly Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">ExAng</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Minutes Very Active</code></li><li class="listitem" style="list-style-type: disc"><code class="literal">Activity Calories</code></li></ul></div><p>非数字变量如下:</p><div><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">Date</code></li></ul></div></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec22"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec55"/>第二步-探索数据</h3></div></div></div><p>作为第一步，需要加载以下包:</p><pre class="programlisting">
 <strong>    &gt; install.packages("glmnet")</strong>
 <strong>    &gt; install.packages("dplyr")</strong>
 <strong>    &gt; install.packages("tidyr")</strong>
@@ -25,7 +25,7 @@
 <strong>    &gt; library(boot)</strong>
 <strong>    &gt; library(RColorBrewer)</strong>
 <strong>    &gt; library(Metrics)</strong>
-</pre><div><div><h3 class="title"><a id="note10"/>注</h3><p>版本信息:此页面的代码在R版本3.3.0中进行了测试(2016-05-03)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">fitbit_export_20160806.csv</code>的csv数据文件开始。我们将把数据保存到<code class="literal">fitbit_details</code>帧:</p><pre class="programlisting">
+</pre><div><div><h3 class="title"><a id="note10"/>注</h3><p>版本信息:此页面的代码在 R 版本 3.3.0 中进行了测试(2016-05-03)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">fitbit_export_20160806.csv</code>的 csv 数据文件开始。我们将把数据保存到<code class="literal">fitbit_details</code>帧:</p><pre class="programlisting">
 <strong>    &gt; fitbit_details &lt;- read.csv("https://raw.githubusercontent.com/ellisp/ellisp.github.io/source/data/fitbit_export_20160806.csv", </strong>
 <strong>    + skip = 1, stringsAsFactors = FALSE) %&gt;%</strong>
 <strong>    + mutate(</strong>
@@ -72,7 +72,7 @@
 <strong>&gt; ggplot(fitbit, aes(x = Distance / Steps)) + geom_rug() + geom_density() +ggtitle("Stride Length Reverse- Engineered from Fitbit Data", subtitle = "Not all strides identical, due to rounding or other jitter")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_004.jpg" alt="Step 2 - exploring data"/></div><p>
-</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec56"/>第3步-建立模型</h3></div></div></div><p>以步骤为唯一解释变量，以<code class="literal">Calories.Burned</code>为响应变量，构建普通最小二乘估计。<code class="literal">lm()</code>作为函数用于拟合线性模型。<code class="literal">Calories.Burned ~ Steps</code>是公式，<code class="literal">fitbit</code>是数据框。然后将结果存储在中等数据帧中:</p><pre class="programlisting">
+</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec56"/>第 3 步-建立模型</h3></div></div></div><p>以步骤为唯一解释变量，以<code class="literal">Calories.Burned</code>为响应变量，构建普通最小二乘估计。<code class="literal">lm()</code>作为函数用于拟合线性模型。<code class="literal">Calories.Burned ~ Steps</code>是公式，<code class="literal">fitbit</code>是数据框。然后将结果存储在中等数据帧中:</p><pre class="programlisting">
 <strong>&gt; moderate &lt;- lm(Calories.Burned ~ Steps, data = fitbit)</strong>
 </pre><p>打印<code class="literal">moderate</code>数据帧:</p><pre class="programlisting">
 <strong>&gt; moderate</strong>
@@ -82,7 +82,7 @@
 <strong>&gt; round(coef(moderate))</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_006.jpg" alt="Step 3 - building the model"/></div><p>
-</p><p>用所用模型的残差绘制预测的卡路里。<code class="literal">plot()</code>功能是用于绘制R对象的通用功能。<code class="literal">moderate</code>数据帧作为函数值传递。<code class="literal">bty</code>参数决定绘制的关于图的方框类型:</p><pre class="programlisting">
+</p><p>用所用模型的残差绘制预测的卡路里。<code class="literal">plot()</code>功能是用于绘制 R 对象的通用功能。<code class="literal">moderate</code>数据帧作为函数值传递。<code class="literal">bty</code>参数决定绘制的关于图的方框类型:</p><pre class="programlisting">
 <strong>&gt; plot(moderate, which = 1, bty = "l", main = "Predicted Calories compared with Residuals")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_007.jpg" alt="Step 3 - building the model"/></div><p>
@@ -92,7 +92,7 @@
 <strong>&gt; grid()</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_008.jpg" alt="Step 3 - building the model"/></div><p>
-</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec57"/>第四步——改进模型</h3></div></div></div><p>基于所有七个解释变量预测每日卡路里。将模型拟合到不同α值的多个样本，使用拟合模型从原始样本中预测不在重新样本中的出袋点。它是关于通过选择适当的α值在岭回归和套索估计的两个极端之间建立平衡。</p><p>通过标准化创建矩阵X。<code class="literal">as.matrix()</code>函数将<code class="literal">fitbit[ , -1]</code>即除日期列以外的列转化为矩阵:</p><pre class="programlisting">
+</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec57"/>第四步——改进模型</h3></div></div></div><p>基于所有七个解释变量预测每日卡路里。将模型拟合到不同α值的多个样本，使用拟合模型从原始样本中预测不在重新样本中的出袋点。它是关于通过选择适当的α值在岭回归和套索估计的两个极端之间建立平衡。</p><p>通过标准化创建矩阵 X。<code class="literal">as.matrix()</code>函数将<code class="literal">fitbit[ , -1]</code>即除日期列以外的列转化为矩阵:</p><pre class="programlisting">
 <strong>    &gt; X &lt;- as.matrix(fitbit[ , -1])</strong>
 </pre><p>打印<code class="literal">X</code>数据框。<code class="literal">head()</code>函数返回<code class="literal">X</code>数据帧的第一部分。<code class="literal">X</code>数据帧作为输入参数传递:</p><pre class="programlisting">
 <strong>&gt; head(X)</strong>
@@ -109,7 +109,7 @@
 </pre><p>生成规则序列:</p><pre class="programlisting">
 <strong>    &gt; alphas &lt;- seq(from = 0, to  = 1, length.out = 10)</strong>
 <strong>    &gt; res &lt;- matrix(0, nrow = length(alphas), ncol = 6)</strong>
-</pre><p>为每个CV运行创建五个重复:</p><pre class="programlisting">
+</pre><p>为每个 CV 运行创建五个重复:</p><pre class="programlisting">
 <strong>    &gt; for(i in 1:length(alphas)){</strong>
 <strong>    + for(j in 2:6){</strong>
 <strong>    # k-fold cross-validation for glmnet</strong>
@@ -153,9 +153,9 @@
 <strong>&gt; bestalpha</strong>
 </pre><p>
 </p><div><img src="img/image_04_015.jpg" alt="Step 4 - improving the model"/></div><p>
-</p><p>使用弹性网将普通最小二乘等值与八个系数(七个解释变量加一个截距)的估计值进行比较。</p><p>确定最佳α值的λ。通过调用<code class="literal">cv.glmnet()</code>函数计算<code class="literal">glmnet</code>的k重交叉验证:</p><pre class="programlisting">
+</p><p>使用弹性网将普通最小二乘等值与八个系数(七个解释变量加一个截距)的估计值进行比较。</p><p>确定最佳α值的λ。通过调用<code class="literal">cv.glmnet()</code>函数计算<code class="literal">glmnet</code>的 k 重交叉验证:</p><pre class="programlisting">
 <strong>&gt; crossvalidated &lt;- cv.glmnet(X, Y, alpha = bestalpha)</strong>
-</pre><p>创建模型。<code class="literal">glmnet()</code>通过惩罚最大似然拟合广义线性模型。在正则化参数λ的网格值处，为lasso或<code class="literal">elasticnet</code>罚值计算正则化路径。<code class="literal">X</code>是输入矩阵，而<code class="literal">Y</code>是响应变量。<code class="literal">alpha</code>为<code class="literal">elasticnet</code>混合参数，0 ≤ α ≤ 1:</p><pre class="programlisting">
+</pre><p>创建模型。<code class="literal">glmnet()</code>通过惩罚最大似然拟合广义线性模型。在正则化参数λ的网格值处，为 lasso 或<code class="literal">elasticnet</code>罚值计算正则化路径。<code class="literal">X</code>是输入矩阵，而<code class="literal">Y</code>是响应变量。<code class="literal">alpha</code>为<code class="literal">elasticnet</code>混合参数，0 ≤ α ≤ 1:</p><pre class="programlisting">
 <strong>&gt; moderate1 &lt;- glmnet(X, Y, alpha = bestalpha)</strong>
 </pre><p>构建普通最小二乘估计，将<code class="literal">fitbit</code>作为唯一解释变量，将<code class="literal">Calories.Burned</code>作为响应变量。<code class="literal">lm()</code>作为函数用于拟合线性模型。<code class="literal">Calories.Burned ~ Steps</code>是公式，<code class="literal">fitbit</code>是数据框。然后将结果存储在<code class="literal">OLSmodel</code>数据帧中:</p><pre class="programlisting">
 <strong>&gt; OLSmodel &lt;- lm(Calories.Burned ~ ., data = fitbit)</strong>
@@ -201,7 +201,7 @@
 <strong>&gt; round(data.frame("elastic, lambda = 0" = as.vector(coef(moderate3)), "lm" = coef(moderate4), check.names = FALSE), 3)</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_023.jpg" alt="Step 4 - improving the model"/></div><p>
-</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec58"/>第5步-比较模型</h3></div></div></div><p>通过使用bootstrapping比较不同模型的预测强度，其中建模方法被应用于bootstrapping数据的重新采样。然后使用估计模型来预测完整的原始数据集。</p><p>提供给进行弹性建模的boot的函数:</p><pre class="programlisting">
+</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec58"/>第 5 步-比较模型</h3></div></div></div><p>通过使用 bootstrapping 比较不同模型的预测强度，其中建模方法被应用于 bootstrapping 数据的重新采样。然后使用估计模型来预测完整的原始数据集。</p><p>提供给进行弹性建模的 boot 的函数:</p><pre class="programlisting">
 <strong>    &gt; modellingfucn1 &lt;- function(data, i){</strong>
 <strong>    + X &lt;- as.matrix(data[i , -1])</strong>
 <strong>    + Y &lt;- data[i , 1]</strong>
@@ -212,24 +212,24 @@
 <strong>    # Computing the root mean squared error</strong>
 <strong>    + rmse(predict(moderate1, newx = as.matrix(data[ , -1]), s =     crossvalidated$lambda.min), data[ , 1])</strong>
 <strong>    + }</strong>
-</pre><p>生成应用于数据的统计的R引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingfucn1</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
+</pre><p>生成应用于数据的统计的 R 引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingfucn1</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
 <strong>&gt; elastic_boot &lt;- boot(fitbit, statistic = modellingfucn1, R = 99)</strong>
 </pre><p>打印<code class="literal">elastic_boot</code>数据框:</p><pre class="programlisting">
 <strong>    &gt; elastic_boot</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_024.jpg" alt="Step 5 - comparing the model"/></div><p>
-</p><p>提供给进行OLS建模的引导的函数:</p><pre class="programlisting">
+</p><p>提供给进行 OLS 建模的引导的函数:</p><pre class="programlisting">
 <strong>    &gt; modellingOLS &lt;- function(data, i){</strong>
 <strong>    + mod0 &lt;- lm(Calories.Burned ~ Steps, data = data[i, ])</strong>
 <strong>    + rmse(predict(moderate, newdata = data), data[ , 1])</strong>
 <strong>    + }</strong>
-</pre><p>生成应用于数据的统计的R引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingOLS</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
+</pre><p>生成应用于数据的统计的 R 引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingOLS</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
 <strong>&gt; lmOLS_boot &lt;- boot(fitbit, statistic = modellingOLS, R = 99)</strong>
 </pre><p>打印<code class="literal">lmOLS_boot</code>数据框:</p><pre class="programlisting">
 <strong>&gt; lmOLS_boot</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_025.jpg" alt="Step 5 - comparing the model"/></div><p>
-</p><p>生成应用于数据的统计的R引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingfucn2</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
+</p><p>生成应用于数据的统计的 R 引导副本。<code class="literal">fitbit</code>是数据集，<code class="literal">statistic = modellingfucn2</code>是函数，当应用于<code class="literal">fitbit</code>时，返回包含感兴趣的统计数据的向量。<code class="literal">R = 99</code>表示引导程序复制的数量:</p><pre class="programlisting">
 <strong>&gt; lm_boot &lt;- boot(fitbit, statistic = modellingfucn2, R = 99)</strong>
 </pre><p>打印<code class="literal">lm_boot</code>数据帧:</p><pre class="programlisting">
 <strong>&gt; lm_boot</strong>
@@ -256,16 +256,16 @@
 
 
 
-<title>Dimension reduction methods - Delta's Aircraft Fleet</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec24"/>降维方法-达美航空的机队</h1></div></div></div><p>机队规划是任何航空公司战略规划过程的一部分。机队是指航空公司运营的飞机总数，以及组成整个机队的具体飞机类型。飞机采购的航空公司选择标准基于技术/性能特征、经济和财务影响、环境法规和限制、市场考虑和政治现实。对于航空公司来说，机队组成是一项关键的长期战略决策。每种类型的飞机都有不同的技术性能特征，例如，在最大飞行距离或范围内运载有效载荷的能力。它影响财务状况、运营成本，尤其是服务特定航线的能力。</p><div><div><div><div><h2 class="title">准备就绪</h2></div></div></div><p>为了进行降维，我们将使用从达美航空公司机队收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec59"/>步骤1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">delta.csv</code>的数据集。数据集采用标准格式。有44行数据和34个变量。</p></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec24"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec60"/>步骤2 -探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">
+<title>Dimension reduction methods - Delta's Aircraft Fleet</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec24"/>降维方法-达美航空的机队</h1></div></div></div><p>机队规划是任何航空公司战略规划过程的一部分。机队是指航空公司运营的飞机总数，以及组成整个机队的具体飞机类型。飞机采购的航空公司选择标准基于技术/性能特征、经济和财务影响、环境法规和限制、市场考虑和政治现实。对于航空公司来说，机队组成是一项关键的长期战略决策。每种类型的飞机都有不同的技术性能特征，例如，在最大飞行距离或范围内运载有效载荷的能力。它影响财务状况、运营成本，尤其是服务特定航线的能力。</p><div><div><div><div><h2 class="title">准备就绪</h2></div></div></div><p>为了进行降维，我们将使用从达美航空公司机队收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec59"/>步骤 1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">delta.csv</code>的数据集。数据集采用标准格式。有 44 行数据和 34 个变量。</p></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec24"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec60"/>步骤 2 -探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">
 <strong>    &gt; install.packages("rgl")</strong>
 <strong>    &gt; install.packages("RColorBrewer")</strong>
 <strong>    &gt; install.packages("scales")</strong>
 <strong>    &gt; library(rgl)</strong>
 <strong>    &gt; library(RColorBrewer)</strong>
 <strong>    &gt; library(scales)</strong>
-</pre><div><div><h3 class="title"><a id="note11"/>注意</h3><p>版本信息:此页面的代码在R版本3.3.2中测试过(2016-10-31)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">delta.csv</code>的csv数据文件开始。我们将把数据保存到增量帧:</p><pre class="programlisting">
+</pre><div><div><h3 class="title"><a id="note11"/>注意</h3><p>版本信息:此页面的代码在 R 版本 3.3.2 中测试过(2016-10-31)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">delta.csv</code>的 csv 数据文件开始。我们将把数据保存到增量帧:</p><pre class="programlisting">
 <strong>    &gt; delta &lt;- read.csv(file="d:/delta.csv", header=T, sep=",", row.names=1)</strong>
-</pre><p>探索<code class="literal">delta</code>数据帧的内部结构。<code class="literal">str()</code>功能显示数据帧的内部结构。细节作为R对象传递给<code class="literal">str()</code>函数:</p><pre class="programlisting">
+</pre><p>探索<code class="literal">delta</code>数据帧的内部结构。<code class="literal">str()</code>功能显示数据帧的内部结构。细节作为 R 对象传递给<code class="literal">str()</code>函数:</p><pre class="programlisting">
 <strong>&gt; str(delta)</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_029.jpg" alt="Step 2 - exploring data"/></div><p>
@@ -273,7 +273,7 @@
 <strong>&gt; plot(delta[,16:22], main = "Aircraft Physical Characteristics", col = "red")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_030.jpg" alt="Step 2 - exploring data"/></div><p>
-</p><p>所有这些变量之间存在正相关关系，因为它们都与飞机的总体尺寸有关。</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec61"/>步骤3 -应用主成分分析</h3></div></div></div><p>可视化高维数据集，如引擎数量。将主成分分析应用于数据。<code class="literal">princomp()</code>函数对<code class="literal">delta</code>数据矩阵进行主成分分析。结果是<code class="literal">principal_comp_analysis</code>，它是类<code class="literal">princomp</code>的一个对象:</p><pre class="programlisting">
+</p><p>所有这些变量之间存在正相关关系，因为它们都与飞机的总体尺寸有关。</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec61"/>步骤 3 -应用主成分分析</h3></div></div></div><p>可视化高维数据集，如引擎数量。将主成分分析应用于数据。<code class="literal">princomp()</code>函数对<code class="literal">delta</code>数据矩阵进行主成分分析。结果是<code class="literal">principal_comp_analysis</code>，它是类<code class="literal">princomp</code>的一个对象:</p><pre class="programlisting">
 <strong>&gt; principal_comp_analysis &lt;- princomp(delta)</strong>
 </pre><p>打印<code class="literal">principal_comp_analysis</code>数据帧:</p><pre class="programlisting">
 <strong>&gt; principal_comp_analysis</strong>
@@ -283,7 +283,7 @@
 <strong>&gt; plot(principal_comp_analysis, main ="Principal Components Analysis of Raw Data", col ="blue")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_032.jpg" alt="Step 3 - applying principal components analysis"/></div><p>
-</p><p>可以证明，第一主成分具有标准差，其占数据中方差的99.8%以上。</p><p>主成分分析的印刷装载量。<code class="literal">loadings()</code>函数使用<code class="literal">principal_comp_analysis</code>主成分分析数据对象作为输入:</p><pre class="programlisting">
+</p><p>可以证明，第一主成分具有标准差，其占数据中方差的 99.8%以上。</p><p>主成分分析的印刷装载量。<code class="literal">loadings()</code>函数使用<code class="literal">principal_comp_analysis</code>主成分分析数据对象作为输入:</p><pre class="programlisting">
 <strong>&gt; loadings(principal_comp_analysis)</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_033.jpg" alt="Step 3 - applying principal components analysis"/></div><p>
@@ -299,7 +299,7 @@
 </p><div><img src="img/image_04_035.jpg" alt="Step 3 - applying principal components analysis"/></div><p>
 </p><pre class="programlisting">
 <strong>&gt; par(mar=mar)</strong>
-</pre></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec62"/>步骤4 -缩放数据</h3></div></div></div><p>在某些情况下，<code class="literal">delta</code>数据的缩放是有用的，因为变量跨越不同的范围。<code class="literal">scale()</code>作为函数居中和/或缩放<code class="literal">delta</code>矩阵的列。然后将结果存储在<code class="literal">delta2</code>数据帧中:</p><pre class="programlisting">
+</pre></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec62"/>步骤 4 -缩放数据</h3></div></div></div><p>在某些情况下，<code class="literal">delta</code>数据的缩放是有用的，因为变量跨越不同的范围。<code class="literal">scale()</code>作为函数居中和/或缩放<code class="literal">delta</code>矩阵的列。然后将结果存储在<code class="literal">delta2</code>数据帧中:</p><pre class="programlisting">
 <strong>&gt; delta2 &lt;- data.frame(scale(delta))</strong>
 </pre><p>验证方差是否一致:</p><pre class="programlisting">
 <strong>&gt; plot(sapply(delta2, var), main = "Variances Across Different Variables", ylab = "Variances")</strong>
@@ -323,7 +323,7 @@
 <strong>&gt; principal_comp_vectors &lt;- prcomp(delta2)</strong>
 </pre><p>创建一个<code class="literal">principal_comp_vectors</code>的数据帧:</p><pre class="programlisting">
 <strong>&gt; comp &lt;- data.frame(principal_comp_vectors$x[,1:4])</strong>
-</pre><p>用<code class="literal">k = 4</code>应用k手段。<code class="literal">kmeans()</code>函数对comp执行k-means聚类。<code class="literal">nstart=25</code>表示要选择的随机组的数量。<code class="literal">iter.max=1000</code>是允许的最大迭代次数:</p><pre class="programlisting">
+</pre><p>用<code class="literal">k = 4</code>应用 k 手段。<code class="literal">kmeans()</code>函数对 comp 执行 k-means 聚类。<code class="literal">nstart=25</code>表示要选择的随机组的数量。<code class="literal">iter.max=1000</code>是允许的最大迭代次数:</p><pre class="programlisting">
 <strong>&gt; k_means &lt;- kmeans(comp, 4, nstart=25, iter.max=1000)</strong>
 </pre><p>创建九种连续颜色的矢量:</p><pre class="programlisting">
 <strong>&gt; palette(alpha(brewer.pal(9,'Set1'), 0.5))</strong>
@@ -331,11 +331,11 @@
 <strong>&gt; plot(comp, col=k_means$clust, pch=16)</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_040.jpg" alt="Step 4 - scaling the data"/></div><p>
-</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec63"/>步骤5 -在3D绘图中可视化</h3></div></div></div><p>3D出图<code class="literal">comp$PC1</code>、<code class="literal">comp$PC2</code>、<code class="literal">comp$PC3</code>:</p><pre class="programlisting">
+</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec63"/>步骤 5 -在 3D 绘图中可视化</h3></div></div></div><p>3D 出图<code class="literal">comp$PC1</code>、<code class="literal">comp$PC2</code>、<code class="literal">comp$PC3</code>:</p><pre class="programlisting">
 <strong>&gt; plot3d(comp$PC1, comp$PC2, comp$PC3, col=k_means$clust)    </strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_041.jpg" alt="Step 5 - visualizing in 3D plot"/></div><p>
-</p><p>3D绘图<code class="literal">comp$PC1</code>、<code class="literal">comp$PC3</code>、<code class="literal">comp$PC4</code>:</p><pre class="programlisting">
+</p><p>3D 绘图<code class="literal">comp$PC1</code>、<code class="literal">comp$PC3</code>、<code class="literal">comp$PC4</code>:</p><pre class="programlisting">
 <strong>&gt; plot3d(comp$PC1, comp$PC3, comp$PC4, col=k_means$clust)</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_042.jpg" alt="Step 5 - visualizing in 3D plot"/></div><p>
@@ -367,15 +367,15 @@
 
 
 
-<title>Principal component analysis - understanding world cuisine</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec25"/>主成分分析-了解世界美食</h1></div></div></div><p>食物是我们是谁的有力象征。有许多类型的食物标识，如种族、宗教和阶级标识。在有味觉的外国人面前，民族食物偏好成为身份标记，例如当一个人出国时，或者当那些外国人访问本国海岸时。</p><div><div><div><div><h2 class="title"><a id="ch04lvl2sec25"/>做好准备</h2></div></div></div><p>为了执行主成分分析，我们将使用在Epicurious食谱数据集上收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec64"/>步骤1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">epic_recipes.txt</code>的数据集。数据集采用标准格式。</p></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec26"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec65"/>第2步-探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">
+<title>Principal component analysis - understanding world cuisine</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch04lvl1sec25"/>主成分分析-了解世界美食</h1></div></div></div><p>食物是我们是谁的有力象征。有许多类型的食物标识，如种族、宗教和阶级标识。在有味觉的外国人面前，民族食物偏好成为身份标记，例如当一个人出国时，或者当那些外国人访问本国海岸时。</p><div><div><div><div><h2 class="title"><a id="ch04lvl2sec25"/>做好准备</h2></div></div></div><p>为了执行主成分分析，我们将使用在 Epicurious 食谱数据集上收集的数据集。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec64"/>步骤 1 -收集和描述数据</h3></div></div></div><p>应使用名为<code class="literal">epic_recipes.txt</code>的数据集。数据集采用标准格式。</p></div></div><div><div><div><div><h2 class="title"><a id="ch04lvl2sec26"/>怎么做...</h2></div></div></div><p>让我们进入细节。</p><div><div><div><div><h3 class="title"><a id="ch04lvl3sec65"/>第 2 步-探索数据</h3></div></div></div><p>第一步是加载以下包:</p><pre class="programlisting">
 <strong>    &gt; install.packages("glmnet") </strong>
 <strong>    &gt; library(ggplot2)</strong>
 <strong>    &gt; library(glmnet)</strong>
-</pre><div><div><h3 class="title"><a id="note12"/>注</h3><p>版本信息:此页面的代码在R版本3.3.2中测试过(2016-10-31)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">epic_recipes.txt</code>的TXT数据文件开始。我们将把数据保存到<code class="literal">datafile</code>框架中:</p><pre class="programlisting">
+</pre><div><div><h3 class="title"><a id="note12"/>注</h3><p>版本信息:此页面的代码在 R 版本 3.3.2 中测试过(2016-10-31)</p></div></div><p>让我们探索数据，了解变量之间的关系。我们将从导入名为<code class="literal">epic_recipes.txt</code>的 TXT 数据文件开始。我们将把数据保存到<code class="literal">datafile</code>框架中:</p><pre class="programlisting">
 <strong>&gt; datafile &lt;- file.path("d:","epic_recipes.txt")</strong>
 </pre><p>读取表格格式的文件并从中创建数据框。<code class="literal">datafile</code>是文件名，作为输入传递:</p><pre class="programlisting">
 <strong>&gt; recipes_data &lt;- read.table(datafile, fill=TRUE, col.names=1:max(count.fields(datafile)), na.strings=c("", "NA"), stringsAsFactors = FALSE)</strong>
-</pre></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec66"/>步骤3 -准备数据</h3></div></div></div><p>将数据分成子集。<code class="literal">aggregate()</code>拆分<code class="literal">recipes_data[,-1]</code>并计算汇总统计数据。<code class="literal">recipes_data[,-1]</code>分组元素列表，每个只要数据框中的变量。然后将结果存储在<code class="literal">agg</code>数据帧中:</p><pre class="programlisting">
+</pre></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec66"/>步骤 3 -准备数据</h3></div></div></div><p>将数据分成子集。<code class="literal">aggregate()</code>拆分<code class="literal">recipes_data[,-1]</code>并计算汇总统计数据。<code class="literal">recipes_data[,-1]</code>分组元素列表，每个只要数据框中的变量。然后将结果存储在<code class="literal">agg</code>数据帧中:</p><pre class="programlisting">
 <strong>&gt; agg &lt;- aggregate(recipes_data[,-1], by=list(recipes_data[,1]), paste, collapse=",")</strong>
 </pre><p>创建向量、数组或值列表:</p><pre class="programlisting">
 <strong>&gt; agg$combined &lt;- apply(agg[,2:ncol(agg)], 1, paste, collapse=",")</strong>
@@ -396,7 +396,7 @@
 <strong>    + ingredients_freq[[i]][,2] &lt;- ingredients_freq[[i]][,2]/cuisines[i,2] </strong>
 <strong>    + ingredients_freq[[i]]}</strong>
 <strong>    + )</strong>
-</pre><p>26种元素列表，每种菜系一种:</p><pre class="programlisting">
+</pre><p>26 种元素列表，每种菜系一种:</p><pre class="programlisting">
 <strong>    &gt; names(proportion) &lt;- a[,1]</strong>
 <strong>    &gt; final &lt;- Reduce(function(...) merge(..., all=TRUE, by="Var1"), proportion)</strong>
 <strong>    &gt; row.names(final) &lt;- final[,1]</strong>
@@ -410,7 +410,7 @@
 <strong>&gt; heatmap.2(final_imp, trace="none", margins = c(6,11), col=topo.colors(7), key=TRUE, key.title=NA, keysize=1.2, density.info="none")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_04_049.jpg" alt="Step 3 - preparing data"/></div><p>
-</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec67"/>步骤4 -应用主成分分析</h3></div></div></div><p>将主成分分析应用于数据。<code class="literal">princomp()</code>对<code class="literal">final_imp</code>数据矩阵进行主成分分析。结果是<code class="literal">pca_computation</code>，它是类<code class="literal">princomp</code>的一个对象:</p><pre class="programlisting">
+</p></div><div><div><div><div><h3 class="title"><a id="ch04lvl3sec67"/>步骤 4 -应用主成分分析</h3></div></div></div><p>将主成分分析应用于数据。<code class="literal">princomp()</code>对<code class="literal">final_imp</code>数据矩阵进行主成分分析。结果是<code class="literal">pca_computation</code>，它是类<code class="literal">princomp</code>的一个对象:</p><pre class="programlisting">
 <strong>&gt; pca_computation &lt;- princomp(final_imp) </strong>
 </pre><p>打印<code class="literal">pca_computation</code>数据框:</p><pre class="programlisting">
 <strong>&gt; pca_computation</strong>

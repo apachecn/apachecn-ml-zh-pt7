@@ -54,7 +54,7 @@
 
 <li class="h1">区别</li>
 
-<li class="h1">AR模型</li>
+<li class="h1">AR 模型</li>
 
 <li class="h1">移动平均模型</li>
 
@@ -176,7 +176,7 @@
 
                 
 
-<p>均值为零、标准差为<em xmlns:epub="http://www.idpf.org/2007/ops">σ<sup>2</sup>T5的不相关随机变量集合的简单序列称为<strong xmlns:epub="http://www.idpf.org/2007/ops">白噪声</strong>。在这种情况下，变量是独立且同分布的。所有值都具有相同的方差<em xmlns:epub="http://www.idpf.org/2007/ops"> σ <sup> 2 </sup> </em>。在这种情况下，序列是从高斯分布中提取的，称为<strong xmlns:epub="http://www.idpf.org/2007/ops">高斯白噪声</strong>。</em></p>
+<p>均值为零、标准差为<em xmlns:epub="http://www.idpf.org/2007/ops">σ<sup>2</sup>T5 的不相关随机变量集合的简单序列称为<strong xmlns:epub="http://www.idpf.org/2007/ops">白噪声</strong>。在这种情况下，变量是独立且同分布的。所有值都具有相同的方差<em xmlns:epub="http://www.idpf.org/2007/ops"> σ <sup> 2 </sup> </em>。在这种情况下，序列是从高斯分布中提取的，称为<strong xmlns:epub="http://www.idpf.org/2007/ops">高斯白噪声</strong>。</em></p>
 
 <p>当序列变成白噪声时，意味着序列的性质完全是随机的，序列内部没有关联。因此，模型无法开发，在这种情况下也无法进行预测。</p>
 
@@ -253,7 +253,7 @@
 
 </ul>
 
-<p>让我们用Python来做这件事:</p>
+<p>让我们用 Python 来做这件事:</p>
 
 <ol>
 
@@ -285,7 +285,7 @@
 
 <p class="mce-root"/>
 
-<p style="padding-left: 60px">在这里，我们可以看到均值接近于零，标准差接近于1。</p>
+<p style="padding-left: 60px">在这里，我们可以看到均值接近于零，标准差接近于 1。</p>
 
 <ol start="4">
 
@@ -392,7 +392,7 @@
 
 <li class="CDPAlignLeft CDPAlign"><em xmlns:epub="http://www.idpf.org/2007/ops"> b <sub> o </sub></em></li>
 
-<li class="CDPAlignLeft CDPAlign"><em xmlns:epub="http://www.idpf.org/2007/ops">b<sub>1</sub>T28】:系数，设置为1</em></li>
+<li class="CDPAlignLeft CDPAlign"><em xmlns:epub="http://www.idpf.org/2007/ops">b<sub>1</sub>T28】:系数，设置为 1</em></li>
 
 <li class="CDPAlignLeft CDPAlign"><em xmlns:epub="http://www.idpf.org/2007/ops">w<sub>t</sub>T32<strong xmlns:epub="http://www.idpf.org/2007/ops">:</strong>白噪声</em></li>
 
@@ -453,13 +453,13 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/1724339d-2858-4f5d-a54f-5a0f39cad697.png" style="width:10.67em;height:1.25em;"/></p>
 
-<p>如前面的等式所示，先前的值<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-1 </sub> </em>已经成为这里的预测值，并且<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t </sub> </em>是要预测的响应值。另外，<em xmlns:epub="http://www.idpf.org/2007/ops"> ε <sub> t </sub> </em>正态分布，均值为零，方差为1。自回归模型的阶由模型用来确定下一个值的前一个值的数量来定义。因此，前面的方程是一阶自回归，或<strong xmlns:epub="http://www.idpf.org/2007/ops"> AR(1) </strong>。如果一定要推广的话，一个<em xmlns:epub="http://www.idpf.org/2007/ops">k</em><sup xmlns:epub="http://www.idpf.org/2007/ops"><em>th</em></sup>阶自回归，写作<strong xmlns:epub="http://www.idpf.org/2007/ops"> AR(k) </strong>，是一个多元线性回归，其中任意时刻(<em xmlns:epub="http://www.idpf.org/2007/ops"> t </em>)的序列值是时间<em xmlns:epub="http://www.idpf.org/2007/ops">t1</em>、<em xmlns:epub="http://www.idpf.org/2007/ops">T2</em>、…、<em xmlns:epub="http://www.idpf.org/2007/ops"/><em xmlns:epub="http://www.idpf.org/2007/ops">t k的值的(线性)函数</em></p>
+<p>如前面的等式所示，先前的值<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-1 </sub> </em>已经成为这里的预测值，并且<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t </sub> </em>是要预测的响应值。另外，<em xmlns:epub="http://www.idpf.org/2007/ops"> ε <sub> t </sub> </em>正态分布，均值为零，方差为 1。自回归模型的阶由模型用来确定下一个值的前一个值的数量来定义。因此，前面的方程是一阶自回归，或<strong xmlns:epub="http://www.idpf.org/2007/ops"> AR(1) </strong>。如果一定要推广的话，一个<em xmlns:epub="http://www.idpf.org/2007/ops">k</em><sup xmlns:epub="http://www.idpf.org/2007/ops"><em>th</em></sup>阶自回归，写作<strong xmlns:epub="http://www.idpf.org/2007/ops"> AR(k) </strong>，是一个多元线性回归，其中任意时刻(<em xmlns:epub="http://www.idpf.org/2007/ops"> t </em>)的序列值是时间<em xmlns:epub="http://www.idpf.org/2007/ops">t1</em>、<em xmlns:epub="http://www.idpf.org/2007/ops">T2</em>、…、<em xmlns:epub="http://www.idpf.org/2007/ops"/><em xmlns:epub="http://www.idpf.org/2007/ops">t k 的值的(线性)函数</em></p>
 
-<p>下表显示了以下值对于AR(1)模型的意义:</p>
+<p>下表显示了以下值对于 AR(1)模型的意义:</p>
 
 <ul>
 
-<li>当<em xmlns:epub="http://www.idpf.org/2007/ops"> β <sub> 1 </sub> = 0 </em>，<em xmlns:epub="http://www.idpf.org/2007/ops">y</em>t时，它<sub xmlns:epub="http://www.idpf.org/2007/ops"> </sub>相当于白噪声</li>
+<li>当<em xmlns:epub="http://www.idpf.org/2007/ops"> β <sub> 1 </sub> = 0 </em>，<em xmlns:epub="http://www.idpf.org/2007/ops">y</em>t 时，它<sub xmlns:epub="http://www.idpf.org/2007/ops"> </sub>相当于白噪声</li>
 
 <li>当<em> β <sub> 1 </sub> = 1 </em>且<em> β <sub> 0 </sub> = 0 </em>，<em> y <sub> t </sub> </em>时，相当于一次随机游走</li>
 
@@ -520,7 +520,7 @@
 
                 
 
-<p>自相关是时间序列滞后值之间相关性的度量。例如，<em xmlns:epub="http://www.idpf.org/2007/ops"> r <sub> 1 </sub> </em>是<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t </sub> </em>和<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-1之间的自相关；</sub> </em>同理，<em xmlns:epub="http://www.idpf.org/2007/ops"> r <sub> 2 </sub> </em>是<em xmlns:epub="http://www.idpf.org/2007/ops">y<sub>t</sub>T19】和<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-2 </sub> </em>之间的自相关。这可以用下面的公式来概括:</em></p>
+<p>自相关是时间序列滞后值之间相关性的度量。例如，<em xmlns:epub="http://www.idpf.org/2007/ops"> r <sub> 1 </sub> </em>是<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t </sub> </em>和<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-1 之间的自相关；</sub> </em>同理，<em xmlns:epub="http://www.idpf.org/2007/ops"> r <sub> 2 </sub> </em>是<em xmlns:epub="http://www.idpf.org/2007/ops">y<sub>t</sub>T19】和<em xmlns:epub="http://www.idpf.org/2007/ops"> y <sub> t-2 </sub> </em>之间的自相关。这可以用下面的公式来概括:</em></p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/a10d9b15-19a3-45ce-bb47-e2c67c544a52.png" style="width:14.83em;height:3.42em;"/></p>
 
@@ -544,7 +544,7 @@
 
 <li>蓝线是相关性是否明显不同于零的指标</li>
 
-<li>滞后0处的自相关始终为1</li>
+<li>滞后 0 处的自相关始终为 1</li>
 
 </ul>
 
@@ -609,7 +609,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><em>E(x<sub>t</sub><sup>2</sup>)=σ</em><sup><em>2</em></sup>，对于所有<em> t </em></p>
 
-<p class="CDPAlignCenter CDPAlign"><em> cov(x <sub> t </sub>，x<sub>k</sub>)= cov(x<sub>t+s</sub>，x <sub> k+s </sub> ) </em>，对于所有<em> t </em>、<em> k </em>和s</p>
+<p class="CDPAlignCenter CDPAlign"><em> cov(x <sub> t </sub>，x<sub>k</sub>)= cov(x<sub>t+s</sub>，x <sub> k+s </sub> ) </em>，对于所有<em> t </em>、<em> k </em>和 s</p>
 
 
 
@@ -666,7 +666,7 @@
 
 <ul>
 
-<li><strong>绘制数据图</strong>:绘制数据相对于时间变量的图可以帮助我们了解它是否有趋势。我们从平稳性的定义中知道，数据中的趋势意味着没有恒定的均值和方差。让我们用Python来做这件事。对于这个例子，我们使用的是国际航班的乘客数据。</li>
+<li><strong>绘制数据图</strong>:绘制数据相对于时间变量的图可以帮助我们了解它是否有趋势。我们从平稳性的定义中知道，数据中的趋势意味着没有恒定的均值和方差。让我们用 Python 来做这件事。对于这个例子，我们使用的是国际航班的乘客数据。</li>
 
 </ul>
 
@@ -694,11 +694,11 @@
 
 <pre style="padding-left: 60px">mean1=182.902778, mean2=377.694444 variance1=2244.087770, variance2=7367.962191</pre>
 
-<p style="padding-left: 60px">我们可以看到系列1和系列2的均值和方差不相等，因此我们可以得出结论，该系列不是平稳的。</p>
+<p style="padding-left: 60px">我们可以看到系列 1 和系列 2 的均值和方差不相等，因此我们可以得出结论，该系列不是平稳的。</p>
 
 <ul>
 
-<li><strong>增广的Dickey-Fuller检验</strong>:增广的Dickey-Fuller检验是一种统计检验，它倾向于在一定的置信度下给出一个关于序列是否平稳的指示。统计测试获取数据，并使用其假设和过程来测试我们对数据的假设。最终，它会在一定程度上自信地给出结果，这有助于我们做出决定。</li>
+<li><strong>增广的 Dickey-Fuller 检验</strong>:增广的 Dickey-Fuller 检验是一种统计检验，它倾向于在一定的置信度下给出一个关于序列是否平稳的指示。统计测试获取数据，并使用其假设和过程来测试我们对数据的假设。最终，它会在一定程度上自信地给出结果，这有助于我们做出决定。</li>
 
 </ul>
 
@@ -722,13 +722,13 @@
 
 <p class="mce-root"/>
 
-<p>根据假设检验的规则，如果我们选择5%的显著性水平进行检验，那么结果将解释如下:</p>
+<p>根据假设检验的规则，如果我们选择 5%的显著性水平进行检验，那么结果将解释如下:</p>
 
-<p class="CDPAlignLeft CDPAlign">如果<em> p值&gt; 0.05 </em> = &gt;，那么我们无法拒绝零假设。也就是说，序列是非平稳的。</p>
+<p class="CDPAlignLeft CDPAlign">如果<em> p 值&gt; 0.05 </em> = &gt;，那么我们无法拒绝零假设。也就是说，序列是非平稳的。</p>
 
-<p class="CDPAlignLeft CDPAlign">如果<em> p值&lt; 0.05 </em> = &gt;，那么零假设被拒绝，这意味着序列是平稳的。</p>
+<p class="CDPAlignLeft CDPAlign">如果<em> p 值&lt; 0.05 </em> = &gt;，那么零假设被拒绝，这意味着序列是平稳的。</p>
 
-<p>让我们用Python来执行:</p>
+<p>让我们用 Python 来执行:</p>
 
 <ol>
 
@@ -792,7 +792,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/5eac6c3a-a6f6-4d71-b144-8c49b23ac8ba.png" style="width:21.17em;height:9.50em;"/></p>
 
-<p>由于<em> p值&gt; 0.05 </em>和<em>t</em>-统计量大于所有临界值(1%、5%、10%)，<em> tt </em>暗示序列是非平稳的，因为我们未能拒绝零假设。</p>
+<p>由于<em> p 值&gt; 0.05 </em>和<em>t</em>-统计量大于所有临界值(1%、5%、10%)，<em> tt </em>暗示序列是非平稳的，因为我们未能拒绝零假设。</p>
 
 <p>那么，如果数据是不稳定的，该怎么办呢？我们使用差分法将非平稳数据转化为平稳数据。</p>
 
@@ -839,7 +839,7 @@
 
                             
 
-                    <h1 class="header-title">AR模型</h1>
+                    <h1 class="header-title">AR 模型</h1>
 
                 
 
@@ -849,7 +849,7 @@
 
                 
 
-<p>AR模型是随机过程的一部分，其中特定的滞后值<em> y <sub> t </sub> </em>被用作预测变量，并在<em> y <sub> t </sub> </em>上回归以估计其值。滞后值是前期序列的值，往往会对序列的当前值产生影响。让我们看一个例子。假设我们必须评估和预测明天的天气。我们将从思考今天的天气和昨天的天气开始，因为这将有助于我们预测天气是会下雨、晴朗还是多云。潜意识里，我们也意识到前一天的天气可能与今天的天气有关联。这就是我们所说的<strong> AR模型</strong>。</p>
+<p>AR 模型是随机过程的一部分，其中特定的滞后值<em> y <sub> t </sub> </em>被用作预测变量，并在<em> y <sub> t </sub> </em>上回归以估计其值。滞后值是前期序列的值，往往会对序列的当前值产生影响。让我们看一个例子。假设我们必须评估和预测明天的天气。我们将从思考今天的天气和昨天的天气开始，因为这将有助于我们预测天气是会下雨、晴朗还是多云。潜意识里，我们也意识到前一天的天气可能与今天的天气有关联。这就是我们所说的<strong> AR 模型</strong>。</p>
 
 <p>这具有一定程度的不确定性，导致未来值预测的准确性降低。该公式与带有<em> p </em>滞后的系列的公式相同，如下所示:</p>
 
@@ -859,7 +859,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/32d5bfdb-35ea-4877-a922-ed08417f2ab5.png" style="width:9.42em;height:3.25em;"/></p>
 
-<p>偶尔，我们可能会讨论模型的顺序。例如，我们可以将AR模型描述为阶数为<em> p </em>。在这种情况下，<strong/><em>p</em>代表模型中使用的滞后变量的数量。例如，AR(2)模型或二阶<em> </em> AR模型如下所示:</p>
+<p>偶尔，我们可能会讨论模型的顺序。例如，我们可以将 AR 模型描述为阶数为<em> p </em>。在这种情况下，<strong/><em>p</em>代表模型中使用的滞后变量的数量。例如，AR(2)模型或二阶<em> </em> AR 模型如下所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/de8924d2-fec8-4208-99eb-c3ee056e35a1.png" style="width:15.42em;height:1.25em;"/></p>
 
@@ -922,7 +922,7 @@
 
 <p>这里，<em> ω </em>为白噪声，其中<em> E(ω <sub> t </sub> )=0 </em>，方差= <em> σ <sup> 2 </sup> </em>。</p>
 
-<p>为了找出AR模型的阶次，我们需要绘制一个偏自相关函数图，然后寻找第一次越过上置信水平的滞后。</p>
+<p>为了找出 AR 模型的阶次，我们需要绘制一个偏自相关函数图，然后寻找第一次越过上置信水平的滞后。</p>
 
 
 
@@ -979,27 +979,27 @@
 
 <ul>
 
-<li><strong>自回归算子</strong>:我们已经了解了这是什么意思；只是重申一句，就是站化系列的滞后。用<em> p </em>表示，无非是自回归项的个数。PACF图产生了这个分量。</li>
+<li><strong>自回归算子</strong>:我们已经了解了这是什么意思；只是重申一句，就是站化系列的滞后。用<em> p </em>表示，无非是自回归项的个数。PACF 图产生了这个分量。</li>
 
 <li><strong>积分算子</strong>:一个需要求微分才能平稳的数列被称为平稳数列的积分版。用<em> d </em>表示，这是将非平稳时间序列转换为平稳时间序列所需的差分量。这是通过从上一个周期中减去当前周期的观测值来完成的。如果对系列只进行了一次，则称为<strong>第一次差分</strong>。这个过程消除了以恒定速率增长的序列的趋势。在这种情况下，数列是以递增的速率增长的，差分后的数列需要再进行一轮差分，称为<strong>二次差分</strong>。</li>
 
-<li><strong>移动平均算子</strong>:预测误差的滞后，用<em> q </em>表示。它是等式中滞后预测误差的数量。ACF图会产生这个分量。</li>
+<li><strong>移动平均算子</strong>:预测误差的滞后，用<em> q </em>表示。它是等式中滞后预测误差的数量。ACF 图会产生这个分量。</li>
 
 </ul>
 
-<p>ARIMA模型只能应用于平稳序列。因此，在应用它之前，必须在序列中检查平稳性条件。可以进行ADF测试来确定这一点。</p>
+<p>ARIMA 模型只能应用于平稳序列。因此，在应用它之前，必须在序列中检查平稳性条件。可以进行 ADF 测试来确定这一点。</p>
 
-<p>ARIMA转动方程如下所示:</p>
+<p>ARIMA 转动方程如下所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/627d8248-1c5b-4643-85e4-01d8b54e1444.png" style="width:29.92em;height:1.42em;"/></p>
 
-<p>方程的第一部分(在<em> - </em>符号之前)是自回归段，第二部分(在<em> - </em>符号之后)是MA段。</p>
+<p>方程的第一部分(在<em> - </em>符号之前)是自回归段，第二部分(在<em> - </em>符号之后)是 MA 段。</p>
 
-<p>我们还可以在ARIMA添加一个季节成分，这将是ARIMA <em> (p，d，q)(p，d，q) <sub> s </sub> </em>。在添加它时，我们需要执行季节差异，这意味着从季节滞后中减去当前观测值。</p>
+<p>我们还可以在 ARIMA 添加一个季节成分，这将是 ARIMA <em> (p，d，q)(p，d，q) <sub> s </sub> </em>。在添加它时，我们需要执行季节差异，这意味着从季节滞后中减去当前观测值。</p>
 
-<p>为了找出参数<em> p </em>和<em> q </em>，我们绘制ACF和PACF。</p>
+<p>为了找出参数<em> p </em>和<em> q </em>，我们绘制 ACF 和 PACF。</p>
 
-<p>这里，我们将lag的数量设为20，并使用<kbd>statsmodel.tsa.stattools </kbd>库来导入<kbd>acf</kbd>和<kbd>pacf</kbd>函数，如下所示:</p>
+<p>这里，我们将 lag 的数量设为 20，并使用<kbd>statsmodel.tsa.stattools </kbd>库来导入<kbd>acf</kbd>和<kbd>pacf</kbd>函数，如下所示:</p>
 
 <pre>from statsmodels.tsa.stattools import acf,pacf<br/>lag_acf= acf(ts_log_dif,nlags=20)<br/>lag_pacf = pacf(ts_log_dif, nlags=20,method="ols")</pre>
 
@@ -1011,15 +1011,15 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-977 image-border" src="img/daafb80f-b167-4394-8fc0-c8668dffea4d.png" style="width:40.50em;height:22.17em;"/></p>
 
-<p>这里，我们测量的是时间序列与其自身的滞后版本之间的相关性。例如，在滞后5时，ACF会将时刻<em> t1 </em>、<em> t2 </em>的序列与时刻<em> t <sub> 1-5 </sub> </em>、<em> … </em>、<em> t <sub> 2-5 </sub> </em>的序列进行比较。它是相关系数与其滞后值的关系图。</p>
+<p>这里，我们测量的是时间序列与其自身的滞后版本之间的相关性。例如，在滞后 5 时，ACF 会将时刻<em> t1 </em>、<em> t2 </em>的序列与时刻<em> t <sub> 1-5 </sub> </em>、<em> … </em>、<em> t <sub> 2-5 </sub> </em>的序列进行比较。它是相关系数与其滞后值的关系图。</p>
 
-<p>如果我们仔细观察前面的图，我们会发现在滞后2时已经越过了置信水平上线。因此，MA的顺序为<em> 2 </em>和<em> q=2 </em>。</p>
+<p>如果我们仔细观察前面的图，我们会发现在滞后 2 时已经越过了置信水平上线。因此，MA 的顺序为<em> 2 </em>和<em> q=2 </em>。</p>
 
-<p>绘制了序列和滞后值之间的偏相关，并给出了一个<strong>偏相关泛函</strong> ( <strong> PACF </strong>)图。这是一个非常有趣的术语。如果我们继续计算一个<em> Y </em>变量和<em> X </em> 3之间的相关性，同时我们知道<em> Y </em>与<em> X </em> 1和<em> X </em> 2具有分离关联，那么偏相关解决了不能用它们与<em> X </em> 1和<em> X </em> 2的相关性来解释的那部分相关性。</p>
+<p>绘制了序列和滞后值之间的偏相关，并给出了一个<strong>偏相关泛函</strong> ( <strong> PACF </strong>)图。这是一个非常有趣的术语。如果我们继续计算一个<em> Y </em>变量和<em> X </em> 3 之间的相关性，同时我们知道<em> Y </em>与<em> X </em> 1 和<em> X </em> 2 具有分离关联，那么偏相关解决了不能用它们与<em> X </em> 1 和<em> X </em> 2 的相关性来解释的那部分相关性。</p>
 
 <p>这里，偏相关是平方根(通过增加一个变量(这里，<em> X </em> 3)同时对其他变量(这里，<em> X </em> 1，<em> X </em> 2)回归<em> Y </em>来减少方差)。</p>
 
-<p>在时间序列的情况下，Y和滞后值Y <sub xmlns:epub="http://www.idpf.org/2007/ops"> t-3 </sub>之间的偏相关将是不能用<em xmlns:epub="http://www.idpf.org/2007/ops"> Y </em>和<em xmlns:epub="http://www.idpf.org/2007/ops">Y</em><sub xmlns:epub="http://www.idpf.org/2007/ops">T51-1</sub>和<em xmlns:epub="http://www.idpf.org/2007/ops">Y</em><sub xmlns:epub="http://www.idpf.org/2007/ops">t-2</sub>之间的相关性来解释的值，如下面的代码所示:</p>
+<p>在时间序列的情况下，Y 和滞后值 Y <sub xmlns:epub="http://www.idpf.org/2007/ops"> t-3 </sub>之间的偏相关将是不能用<em xmlns:epub="http://www.idpf.org/2007/ops"> Y </em>和<em xmlns:epub="http://www.idpf.org/2007/ops">Y</em><sub xmlns:epub="http://www.idpf.org/2007/ops">T51-1</sub>和<em xmlns:epub="http://www.idpf.org/2007/ops">Y</em><sub xmlns:epub="http://www.idpf.org/2007/ops">t-2</sub>之间的相关性来解释的值，如下面的代码所示:</p>
 
 <pre>#Plot PACF:<br/>plt.subplot(122)<br/>plt.plot(lag_pacf)<br/>plt.axhline(y=0,linestyle='--',color='gray')<br/>plt.axhline(y=-1.96/np.sqrt(len(ts_log_diff)),linestyle='--',color='gray')<br/>plt.axhline(y=1.96/np.sqrt(len(ts_log_diff)),linestyle='--',color='gray')<br/>plt.title('Partial Autocorrelation Function')<br/>plt.tight_layout()</pre>
 
@@ -1027,9 +1027,9 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/3736fa84-2505-4317-a0b0-04f9398d23e1.png" style="width:49.00em;height:22.67em;"/></p>
 
-<p>如果我们仔细观察前面的图，我们会发现在滞后2时已经越过了置信水平上线。因此，AR的顺序将是2并且<em> p=2 </em>。</p>
+<p>如果我们仔细观察前面的图，我们会发现在滞后 2 时已经越过了置信水平上线。因此，AR 的顺序将是 2 并且<em> p=2 </em>。</p>
 
-<p>让我们尝试一个阶数为<em> (p=2，d=1，q=0) </em>的AR模型。<em> d </em>值被取为1，因为它是单次差分的情况。还计算了平方的残差和，以判断模型的好坏并将其与其他模型进行比较，如以下代码所示:</p>
+<p>让我们尝试一个阶数为<em> (p=2，d=1，q=0) </em>的 AR 模型。<em> d </em>值被取为 1，因为它是单次差分的情况。还计算了平方的残差和，以判断模型的好坏并将其与其他模型进行比较，如以下代码所示:</p>
 
 <pre>from statsmodels.tsa.arima_model import ARIMA<br/>model1 = ARIMA(ts_log, order=(2, 1, 0)) <br/>results_AR = model1.fit(disp=-1) <br/>plt.plot(ts_log_dif)<br/>plt.plot(results_AR.fittedvalues, color='red')<br/>plt.title('RSS: %.4f'% sum((results_AR.fittedvalues-ts_log_dif)**2))</pre>
 
@@ -1037,13 +1037,13 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/6302a46b-427d-4c32-9ccd-cd4093856311.png"/></p>
 
-<p>现在，我们可以使用以下代码查看描述AR1和AR2系数的模型摘要:</p>
+<p>现在，我们可以使用以下代码查看描述 AR1 和 AR2 系数的模型摘要:</p>
 
 <pre>results_AR.summary()</pre>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/8386ccb1-d258-419f-bfc0-97f4a536f099.png" style="width:29.58em;height:24.83em;"/></p>
 
-<p>现在，让我们使用以下代码构建一个顺序为<em> (p=0，d=1，q=2) </em>的MA模型:</p>
+<p>现在，让我们使用以下代码构建一个顺序为<em> (p=0，d=1，q=2) </em>的 MA 模型:</p>
 
 <pre>model2 = ARIMA(ts_log, order=(0, 1, 2)) <br/>results_MA = model2.fit(disp=-1) <br/>plt.plot(ts_log_dif)<br/>plt.plot(results_MA.fittedvalues, color='red')<br/>plt.title('RSS: %.4f'% sum((results_MA.fittedvalues-ts_log_dif)**2))</pre>
 
@@ -1051,7 +1051,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/58645090-67c5-41f9-8af7-fa7641911d6b.jpg"/></p>
 
-<p>现在，让我们结合这两个模型，使用以下代码构建一个ARIMA模型:</p>
+<p>现在，让我们结合这两个模型，使用以下代码构建一个 ARIMA 模型:</p>
 
 <pre>model3 = ARIMA(ts_log, order=(2, 1, 2))  
 
@@ -1067,7 +1067,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/74a2b07b-767b-4f40-93b7-80652cb8c0dc.png"/></p>
 
-<p>从AR模型到ARIMA，我们可以体验到RSS价值的下降。现在<strong> RSS= 1.0292 </strong>:</p>
+<p>从 AR 模型到 ARIMA，我们可以体验到 RSS 价值的下降。现在<strong> RSS= 1.0292 </strong>:</p>
 
 <pre>results_ARIMA.summary()</pre>
 
@@ -1075,7 +1075,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
 <p class="mce-root"/>
 
-<p>我们可以看到AR1、AR2、MA1和MA2的系数，并且，如果我们通过<em> p </em>值，我们可以看到所有这些参数都很重要，如下面的屏幕截图所示:</p>
+<p>我们可以看到 AR1、AR2、MA1 和 MA2 的系数，并且，如果我们通过<em> p </em>值，我们可以看到所有这些参数都很重要，如下面的屏幕截图所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/7ef067a9-23ce-4363-9c3d-23505461dc85.png"/></p>
 
@@ -1213,7 +1213,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
                             
 
-                    <h1 class="header-title">AR模型</h1>
+                    <h1 class="header-title">AR 模型</h1>
 
                 
 
@@ -1226,7 +1226,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 <pre>import statsmodels.tsa.api as smtsa<br/>aic=[] <br/>for ari in range(1, 3): <br/> obj_arima = smtsa.ARIMA(ts_log_diff, order=(ari,2,0)).fit(maxlag=30, method='mle', trend='nc') <br/> aic.append([ari,2,0, obj_arima.aic])<br/>print(aic)
 [[1, 2, 0, -76.46506473849644], [2, 2, 0, -116.1112196485397]]</pre>
 
-<p>因此，在AR模型的这个场景中，我们的模型参数是<kbd>p=2</kbd>、<kbd>d=2</kbd>和<kbd>q=0</kbd>，因为这个组合的AIC最小。</p>
+<p>因此，在 AR 模型的这个场景中，我们的模型参数是<kbd>p=2</kbd>、<kbd>d=2</kbd>和<kbd>q=0</kbd>，因为这个组合的 AIC 最小。</p>
 
 
 
@@ -1269,7 +1269,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
                             
 
-                    <h1 class="header-title">ARIMA模型</h1>
+                    <h1 class="header-title">ARIMA 模型</h1>
 
                 
 
@@ -1279,7 +1279,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
                 
 
-<p>即使对于ARIMA模型，我们也可以通过使用以下代码来优化参数:</p>
+<p>即使对于 ARIMA 模型，我们也可以通过使用以下代码来优化参数:</p>
 
 <pre>import statsmodels.tsa.api as smtsa<br/>aic=[] <br/>for ari in range(1, 3): <br/>     for maj in range(1,3): <br/>        arima_obj = smtsa.ARIMA(ts_log, order=(ari,1,maj)).fit(maxlag=30, method='mle', trend='nc') <br/>        aic.append([ari,1, maj, arima_obj.aic])<br/>print(aic)</pre>
 
@@ -1340,7 +1340,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
                 
 
-<p>异常本质上是一系列异常模式，是对预期行为的不规则偏离。例如，我们很多人都看过板球比赛。在这项运动中，出局的一种形式是被接住，在球直接传到守场员手中之前，它必须碰到击球手的球棒。如果球场很吵，有时候谁都很难判断球有没有碰到球棒。为了解决这个问题，裁判使用一种叫做<strong>嗅觉仪</strong>的设备来帮助他们判断。snickometer使用来自残端麦克风的声音来生成麦克风声音的曲线图。如果图是一条直线，那么球没有与球棒接触；否则，该图将显示尖峰。因此，峰值是异常的标志。异常的另一个例子可以是在扫描中检测到恶性肿瘤。</p>
+<p>异常本质上是一系列异常模式，是对预期行为的不规则偏离。例如，我们很多人都看过板球比赛。在这项运动中，出局的一种形式是被接住，在球直接传到守场员手中之前，它必须碰到击球手的球棒。如果球场很吵，有时候谁都很难判断球有没有碰到球棒。为了解决这个问题，裁判使用一种叫做<strong>嗅觉仪</strong>的设备来帮助他们判断。snickometer 使用来自残端麦克风的声音来生成麦克风声音的曲线图。如果图是一条直线，那么球没有与球棒接触；否则，该图将显示尖峰。因此，峰值是异常的标志。异常的另一个例子可以是在扫描中检测到恶性肿瘤。</p>
 
 <p>异常检测是一种我们可以用来找出异常行为的技术。异常也可以称为<strong>异常值</strong>。以下列表显示了几种不同的异常情况:</p>
 
@@ -1384,7 +1384,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-1018 image-border" src="img/7890f46f-ae72-4d05-99ed-1ff3692503b3.png" style="width:73.42em;height:27.83em;"/></p>
 
-<p>现在，引入的异常现象可以被视为1959年后游客数量的下降。然而，应该注意的是，这是较简单的方法之一。ARIMA和霍尔特-温特斯也可以用在这种情况下。</p>
+<p>现在，引入的异常现象可以被视为 1959 年后游客数量的下降。然而，应该注意的是，这是较简单的方法之一。ARIMA 和霍尔特-温特斯也可以用在这种情况下。</p>
 
 <p class="mce-root"/>
 
@@ -1443,7 +1443,7 @@ plt.title('RSS: %.4f'% sum((results_ARIMA.fittedvalues-ts_log_dif)**2))</pre>
 
 <p>在这一章中，我们学习了时间序列分析和白噪声。我们学习了随机游走、自回归、自相关和平稳性的概念，这些概念描述了如何判断数据是否平稳。</p>
 
-<p>我们还学习了差分，获取时间序列数据并计算连续观察值之间的差异，从而形成新的序列。本章还谈到了AR模型，它是随机过程的一部分，其中将特定的滞后值<em>y</em><em><sub>t</sub></em><em/>用作预测变量，并在<em> y </em> <em> <sub> t </sub> </em>上进行回归，以估计这些值。我们还学习了两个优化参数，即AR模型和ARIMA模型。</p>
+<p>我们还学习了差分，获取时间序列数据并计算连续观察值之间的差异，从而形成新的序列。本章还谈到了 AR 模型，它是随机过程的一部分，其中将特定的滞后值<em>y</em><em><sub>t</sub></em><em/>用作预测变量，并在<em> y </em> <em> <sub> t </sub> </em>上进行回归，以估计这些值。我们还学习了两个优化参数，即 AR 模型和 ARIMA 模型。</p>
 
 <p>在下一章，我们将学习自然语言处理。</p>
 

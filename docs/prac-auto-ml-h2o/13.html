@@ -5,89 +5,89 @@
 </head>
 <body>
 <div><div><h1 class="chapter-number" id="_idParaDest-150"><a id="_idTextAnchor196"/> 10</h1>
-<h1 id="_idParaDest-151"><a id="_idTextAnchor197"/>使用普通旧Java对象(POJOs)</h1>
+<h1 id="_idParaDest-151"><a id="_idTextAnchor197"/>使用普通旧 Java 对象(POJOs)</h1>
 <p>公司通常使用多种策略来提供符合预期标准的服务。在使用<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)的服务的情况下，他们需要考虑如何在不影响他们正在进行的服务的情况下，在生产中快速、轻松地构建、提取和部署他们的模型。</p>
 <p>因此，训练模型的可移植性非常重要。您如何将通过某种技术构建的培训管道创建的模型对象用于您的预测管道，而预测管道可能是使用不同的技术构建的？理想情况下，模型对象应该是一个自包含且易于分发的对象。</p>
-<p>在软件工程领域，众所周知，Java编程语言是使用最广泛的平台无关编程语言之一。当Java编译程序时，它将程序转换成独立于平台的字节码，这些字节码可以被任何安装了<strong class="bold"> Java虚拟机</strong> ( <strong class="bold"> JVM </strong>)的机器解释。扩展这个特性，你就有了<strong class="bold">普通的旧Java对象</strong>(<strong class="bold">POJO</strong>)。</p>
-<p>POJOs是可以由任何Java程序运行的普通对象，与任何框架无关。这使得POJOs在部署到不同类型的机器时非常容易移植。H2O还规定以POJOs的形式提取经过训练的模型，然后用于生产部署。</p>
-<p>在这一章中，我们将深入理解POJOs是什么，以及在成功地用Python、R和H2O流训练了一个模型之后，如何下载它们。然后，我们将学习如何将POJO加载到一个简单的Java程序中进行预测。</p>
+<p>在软件工程领域，众所周知，Java 编程语言是使用最广泛的平台无关编程语言之一。当 Java 编译程序时，它将程序转换成独立于平台的字节码，这些字节码可以被任何安装了<strong class="bold"> Java 虚拟机</strong> ( <strong class="bold"> JVM </strong>)的机器解释。扩展这个特性，你就有了<strong class="bold">普通的旧 Java 对象</strong>(<strong class="bold">POJO</strong>)。</p>
+<p>POJOs 是可以由任何 Java 程序运行的普通对象，与任何框架无关。这使得 POJOs 在部署到不同类型的机器时非常容易移植。H2O 还规定以 POJOs 的形式提取经过训练的模型，然后用于生产部署。</p>
+<p>在这一章中，我们将深入理解 POJOs 是什么，以及在成功地用 Python、R 和 H2O 流训练了一个模型之后，如何下载它们。然后，我们将学习如何将 POJO 加载到一个简单的 Java 程序中进行预测。</p>
 <p>在本章中，我们将讨论以下主题:</p>
 <ul>
-<li>POJOs简介</li>
-<li>将H2O模型提取为POJOs</li>
-<li>使用H2O模型作为POJO</li>
+<li>POJOs 简介</li>
+<li>将 H2O 模型提取为 POJOs</li>
+<li>使用 H2O 模型作为 POJO</li>
 </ul>
-<p>本章结束时，您应该能够使用Python、R或H2O流提取POJO形式的训练模型，然后将这些POJO模型加载到您的ML程序中进行预测。</p>
+<p>本章结束时，您应该能够使用 Python、R 或 H2O 流提取 POJO 形式的训练模型，然后将这些 POJO 模型加载到您的 ML 程序中进行预测。</p>
 <h1 id="_idParaDest-152"><a id="_idTextAnchor198"/>技术要求</h1>
 <p>对于本章，您将需要以下内容:</p>
 <ul>
-<li>您首选的web浏览器的最新版本。</li>
+<li>您首选的 web 浏览器的最新版本。</li>
 <li>您选择的<strong class="bold">集成开发环境</strong> ( <strong class="bold"> IDE </strong>)。</li>
-<li>(可选)Jupyter项目的Jupyter笔记本(<a href="https://jupyter.org/">https://jupyter.org/</a>)</li>
+<li>(可选)Jupyter 项目的 Jupyter 笔记本(<a href="https://jupyter.org/">https://jupyter.org/</a>)</li>
 </ul>
-<p>本章中进行的所有实验都是在Jupyter笔记本上进行的，以便为您提供更好的可视化输出示例。您可以自由地使用相同的设置，或者在特定于您正在使用的语言的环境中执行相同的实验。本章的所有代码示例都可以在GitHub上找到，网址是<a href="https://github.com/PacktPublishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter%2010">https://GitHub . com/packt publishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter % 2010</a>。</p>
-<h1 id="_idParaDest-153"><a id="_idTextAnchor199"/>POJO简介</h1>
-<p>POJO是马丁·福勒、丽贝卡·帕森斯和乔希·麦肯齐在2000年9月创造的一个术语。它是一个普通的Java对象，但是让它变得普通的不是它应该做什么，而是它不应该做什么。</p>
-<p>在下列情况下，Java对象可以是POJO:</p>
+<p>本章中进行的所有实验都是在 Jupyter 笔记本上进行的，以便为您提供更好的可视化输出示例。您可以自由地使用相同的设置，或者在特定于您正在使用的语言的环境中执行相同的实验。本章的所有代码示例都可以在 GitHub 上找到，网址是<a href="https://github.com/PacktPublishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter%2010">https://GitHub . com/packt publishing/Practical-Automated-Machine-Learning-on-H2O/tree/main/Chapter % 2010</a>。</p>
+<h1 id="_idParaDest-153"><a id="_idTextAnchor199"/>POJO 简介</h1>
+<p>POJO 是马丁·福勒、丽贝卡·帕森斯和乔希·麦肯齐在 2000 年 9 月创造的一个术语。它是一个普通的 Java 对象，但是让它变得普通的不是它应该做什么，而是它不应该做什么。</p>
+<p>在下列情况下，Java 对象可以是 POJO:</p>
 <ul>
-<li>Java对象不从任何类扩展。</li>
-<li>Java对象不实现任何接口。</li>
-<li>Java对象不使用任何外部注释。</li>
+<li>Java 对象不从任何类扩展。</li>
+<li>Java 对象不实现任何接口。</li>
+<li>Java 对象不使用任何外部注释。</li>
 </ul>
-<p>这三个限制导致的结果是，Java对象不依赖于自身之外的任何其他库或对象，并且是自包含的，足以独立执行其逻辑。由于POJOs的可移植性，您可以很容易地将它们嵌入到任何Java环境中，并且由于Java的平台独立性，它们可以在任何机器上运行。</p>
-<p>H2O可以以POJOs的形式出口训练有素的模型。然后可以部署这些POJO模型，并用于对入站数据进行预测。使用POJO模型的惟一依赖是<code>h2o-genmodel.jar</code>文件。这是一个编译和运行H2O模型POJOs所需的JAR文件。这个JAR文件是一个包含基类和<code>GenModel</code>的库，后者是一个支持Java生成的模型的助手类，模型POJOs就是从这个类派生出来的。这个库还负责通过使用POJOs模型来支持评分。</p>
-<p>当在生产中使用模型POJO时，您将需要<a id="_idTextAnchor200"/> <code>h2o-genmodel.jar</code>文件来编译、部署和运行您的模型POJO。POJOs是简单的Java代码，不依赖于任何特定版本的H2O。但是，仍然建议使用最新版本的<code>h2o-genmodel.jar</code>，因为它可以加载POJO的当前版本以及旧版本。你可以在<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-genmodel/javadoc/index.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML</a>找到关于<code>h2o-genmodel.jar</code>的详细文档。</p>
-<p>现在我们已经知道了POJO是什么以及H2O模型POJO是如何工作的，让我们通过使用简单的例子来学习如何使用AutoML作为POJO提取经过训练的H2O模型。</p>
-<h1 id="_idParaDest-154"><a id="_idTextAnchor201"/>提取H2O模型作为POJOs</h1>
-<p>使用H2O AutoML训练的模型也可以被提取为POJOs，这样它们就可以被部署到你的生产系统中。</p>
-<p>在下面的小节中，我们将学习如何使用Python和R编程语言提取模型POJO，以及如何使用H2O流提取模型POJO。</p>
-<h2 id="_idParaDest-155"><a id="_idTextAnchor202"/>用Python下载H2O模型作为POJOs</h2>
-<p>让我们看看如何使用Python中的一个简单例子将H2O模型提取为POJOs。我们将使用到目前为止一直使用的相同的Iris flower数据集。这个数据集可以在https://archive.ics.uci.edu/ml/datasets/iris找到。</p>
-<p>按照以下步骤使用Python中的H2O AutoML训练模型。完成此操作后，您将提取领导者模型并将其下载为POJO:</p>
+<p>这三个限制导致的结果是，Java 对象不依赖于自身之外的任何其他库或对象，并且是自包含的，足以独立执行其逻辑。由于 POJOs 的可移植性，您可以很容易地将它们嵌入到任何 Java 环境中，并且由于 Java 的平台独立性，它们可以在任何机器上运行。</p>
+<p>H2O 可以以 POJOs 的形式出口训练有素的模型。然后可以部署这些 POJO 模型，并用于对入站数据进行预测。使用 POJO 模型的惟一依赖是<code>h2o-genmodel.jar</code>文件。这是一个编译和运行 H2O 模型 POJOs 所需的 JAR 文件。这个 JAR 文件是一个包含基类和<code>GenModel</code>的库，后者是一个支持 Java 生成的模型的助手类，模型 POJOs 就是从这个类派生出来的。这个库还负责通过使用 POJOs 模型来支持评分。</p>
+<p>当在生产中使用模型 POJO 时，您将需要<a id="_idTextAnchor200"/> <code>h2o-genmodel.jar</code>文件来编译、部署和运行您的模型 POJO。POJOs 是简单的 Java 代码，不依赖于任何特定版本的 H2O。但是，仍然建议使用最新版本的<code>h2o-genmodel.jar</code>，因为它可以加载 POJO 的当前版本以及旧版本。你可以在<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-genmodel/javadoc/index.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML</a>找到关于<code>h2o-genmodel.jar</code>的详细文档。</p>
+<p>现在我们已经知道了 POJO 是什么以及 H2O 模型 POJO 是如何工作的，让我们通过使用简单的例子来学习如何使用 AutoML 作为 POJO 提取经过训练的 H2O 模型。</p>
+<h1 id="_idParaDest-154"><a id="_idTextAnchor201"/>提取 H2O 模型作为 POJOs</h1>
+<p>使用 H2O AutoML 训练的模型也可以被提取为 POJOs，这样它们就可以被部署到你的生产系统中。</p>
+<p>在下面的小节中，我们将学习如何使用 Python 和 R 编程语言提取模型 POJO，以及如何使用 H2O 流提取模型 POJO。</p>
+<h2 id="_idParaDest-155"><a id="_idTextAnchor202"/>用 Python 下载 H2O 模型作为 POJOs</h2>
+<p>让我们看看如何使用 Python 中的一个简单例子将 H2O 模型提取为 POJOs。我们将使用到目前为止一直使用的相同的 Iris flower 数据集。这个数据集可以在 https://archive.ics.uci.edu/ml/datasets/iris 找到。</p>
+<p>按照以下步骤使用 Python 中的 H2O AutoML 训练模型。完成此操作后，您将提取领导者模型并将其下载为 POJO:</p>
 <ol>
-<li>导入<code>h2o</code>模块，启动你的H2O服务器:<pre>import h2o h2o.init()</pre></li>
+<li>导入<code>h2o</code>模块，启动你的 H2O 服务器:<pre>import h2o h2o.init()</pre></li>
 <li>通过传递数据集在系统中的位置来导入数据集。执行以下命令:<pre><strong class="bold">data_frame = h2o.import_file("Dataset/iris.data")</strong></pre></li>
 <li>通过执行以下命令设置特征和标签名称:<pre>features = data_frame.columns label = "C5" features.remove(label)</pre></li>
-<li>通过执行以下命令，初始化<a id="_idIndexMarker1047"/>H2O<a id="_idIndexMarker1049"/>AutoML对象，并将<code>max_model</code>参数设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code></li>
-<li>通过将定型数据集、特征列和标签列作为参数传递来触发AutoML，如下所示:<pre>aml.train(x = features, y = label, training_frame = data_frame)</pre></li>
-<li>培训结束后，H2O汽车公司应该已经培训了一些车型，并根据排行榜上的默认排名性能指标对它们进行了排名。排行榜上排名最高的型号称为<em class="italic">领先者</em>，可以通过使用<code>aml.leader</code>命令直接访问。使用这个引用，您可以通过运行以下命令将leader模型下载为POJO:<pre>h2o.download_pojo(aml.leader, path="~/Downloads/", jar_name="AutoMLModel")</pre></li>
+<li>通过执行以下命令，初始化<a id="_idIndexMarker1047"/>H2O<a id="_idIndexMarker1049"/>AutoML 对象，并将<code>max_model</code>参数设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code></li>
+<li>通过将定型数据集、特征列和标签列作为参数传递来触发 AutoML，如下所示:<pre>aml.train(x = features, y = label, training_frame = data_frame)</pre></li>
+<li>培训结束后，H2O 汽车公司应该已经培训了一些车型，并根据排行榜上的默认排名性能指标对它们进行了排名。排行榜上排名最高的型号称为<em class="italic">领先者</em>，可以通过使用<code>aml.leader</code>命令直接访问。使用这个引用，您可以通过运行以下命令将 leader 模型下载为 POJO:<pre>h2o.download_pojo(aml.leader, path="~/Downloads/", jar_name="AutoMLModel")</pre></li>
 </ol>
-<p>这应该将一个名为<code>AutoMLModel</code>的模型POJO下载到<code>path</code>参数中指定的路径，如<code>jar_name</code>参数中所指定的。如果没有设置<code>path</code>参数，那么H2O将在控制台上打印模型POJO的详细信息，而不是下载为JAR文件。</p>
-<p>您还可以通过在任何编辑器中打开文件来查看POJO的内容。该文件将包含一个以leader模型命名的公共类，并扩展了<code>GenModel</code>类，后者是<code>h2o-genmodel.jar</code>的一部分。</p>
-<p>既然<a id="_idIndexMarker1050"/>我们<a id="_idIndexMarker1051"/>知道了<a id="_idIndexMarker1052"/>如何使用Python提取POJO模型，让我们看看R programmi <a id="_idTextAnchor203"/> ng语言中类似的例子。</p>
-<h2 id="_idParaDest-156">在R中下载H2O模型作为POJOs</h2>
-<p>类似于我们如何用Python从AutoML排行榜中提取模型，我们可以用R编程语言做同样的事情。在这一节中，我们将使用相同的Iris flower数据集。按照以下步骤使用H2O AutoML训练模型，然后提取leader模型并将其下载为POJO:</p>
+<p>这应该将一个名为<code>AutoMLModel</code>的模型 POJO 下载到<code>path</code>参数中指定的路径，如<code>jar_name</code>参数中所指定的。如果没有设置<code>path</code>参数，那么 H2O 将在控制台上打印模型 POJO 的详细信息，而不是下载为 JAR 文件。</p>
+<p>您还可以通过在任何编辑器中打开文件来查看 POJO 的内容。该文件将包含一个以 leader 模型命名的公共类，并扩展了<code>GenModel</code>类，后者是<code>h2o-genmodel.jar</code>的一部分。</p>
+<p>既然<a id="_idIndexMarker1050"/>我们<a id="_idIndexMarker1051"/>知道了<a id="_idIndexMarker1052"/>如何使用 Python 提取 POJO 模型，让我们看看 R programmi <a id="_idTextAnchor203"/> ng 语言中类似的例子。</p>
+<h2 id="_idParaDest-156">在 R 中下载 H2O 模型作为 POJOs</h2>
+<p>类似于我们如何用 Python 从 AutoML 排行榜中提取模型，我们可以用 R 编程语言做同样的事情。在这一节中，我们将使用相同的 Iris flower 数据集。按照以下步骤使用 H2O AutoML 训练模型，然后提取 leader 模型并将其下载为 POJO:</p>
 <ol>
-<li value="1">导入<code>h2o</code>模块并启动您的H2O服务器:<pre>library(h2o) h2o.init()</pre></li>
+<li value="1">导入<code>h2o</code>模块并启动您的 H2O 服务器:<pre>library(h2o) h2o.init()</pre></li>
 <li>通过传递数据集在系统中的位置来导入数据集。执行以下命令:<pre>data_frame &lt;- h2o.importFile("Dataset/iris.data")</pre></li>
 <li>通过执行以下命令设置特征和标签名称:<pre>label &lt;- "C5" features &lt;- setdiff(names(data), label)</pre></li>
-<li>通过将定型数据集、要素列和标签列作为参数传递来触发AutoML。同样，将<code>max_models</code>设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code> : <pre>aml &lt;- h2o.automl(x = features, y = label, training_frame = data_frame, max_models=10, seed = 5)</pre></li>
-<li>一旦培训结束，你有了排行榜，你就可以使用<code>aml@leaderboard</code>进入领导者模式。我们还可以通过执行以下命令将leader模型下载为POJO:<pre>h2o.download_pojo(aml@leaderboard, path="~/Downloads/", jar_name="AutoMLModel")</pre></li>
+<li>通过将定型数据集、要素列和标签列作为参数传递来触发 AutoML。同样，将<code>max_models</code>设置为<code>10</code>并将<code>seed</code>值设置为<code>5</code> : <pre>aml &lt;- h2o.automl(x = features, y = label, training_frame = data_frame, max_models=10, seed = 5)</pre></li>
+<li>一旦培训结束，你有了排行榜，你就可以使用<code>aml@leaderboard</code>进入领导者模式。我们还可以通过执行以下命令将 leader 模型下载为 POJO:<pre>h2o.download_pojo(aml@leaderboard, path="~/Downloads/", jar_name="AutoMLModel")</pre></li>
 </ol>
-<p>这将使<a id="_idIndexMarker1056"/>开始<a id="_idIndexMarker1057"/>将<code>AutoMLModel</code>型号POJO下载<a id="_idIndexMarker1058"/>到您设备的指定路径。</p>
-<p>既然我们知道了如何在R编程语言中提取POJO模型，让我们看看如何在H2O流中做到这一点。</p>
-<h2 id="_idParaDest-157"><a id="_idTextAnchor205"/>在H2O流程中将H2O模型下载为POJOs</h2>
-<p>在H2O流中下载<a id="_idIndexMarker1059"/>型号<a id="_idIndexMarker1060"/>POJO<a id="_idIndexMarker1061"/>非常容易。H2O允许只需点击一个按钮就可以下载模型作为POJOs。在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第二章</em> </a>、<em class="italic">使用H2O流程(H2O的Web UI) </em>中，在<em class="italic">使用H2O流程中的模型训练功能</em>部分，您学习了如何访问特定模型的信息。</p>
-<p>对于H2O流程中每个模型的信息输出，在<strong class="bold">动作</strong>子部分，有一个名为<strong class="bold">下载POJO </strong>的交互按钮，如下图所示:</p>
+<p>这将使<a id="_idIndexMarker1056"/>开始<a id="_idIndexMarker1057"/>将<code>AutoMLModel</code>型号 POJO 下载<a id="_idIndexMarker1058"/>到您设备的指定路径。</p>
+<p>既然我们知道了如何在 R 编程语言中提取 POJO 模型，让我们看看如何在 H2O 流中做到这一点。</p>
+<h2 id="_idParaDest-157"><a id="_idTextAnchor205"/>在 H2O 流程中将 H2O 模型下载为 POJOs</h2>
+<p>在 H2O 流中下载<a id="_idIndexMarker1059"/>型号<a id="_idIndexMarker1060"/>POJO<a id="_idIndexMarker1061"/>非常容易。H2O 允许只需点击一个按钮就可以下载模型作为 POJOs。在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第二章</em> </a>、<em class="italic">使用 H2O 流程(H2O 的 Web UI) </em>中，在<em class="italic">使用 H2O 流程中的模型训练功能</em>部分，您学习了如何访问特定模型的信息。</p>
+<p>对于 H2O 流程中每个模型的信息输出，在<strong class="bold">动作</strong>子部分，有一个名为<strong class="bold">下载 POJO </strong>的交互按钮，如下图所示:</p>
 <div><div><img alt="Figure 10.1 – Gathering model information with the Download POJO button  " height="223" src="img/B17298_10_001.jpg" width="1162"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图10.1–使用下载POJO按钮收集模型信息</p>
-<p>您可以简单地点击<strong class="bold">下载POJO </strong>按钮，将模型下载为POJO。您可以使用H2O流中的这个交互按钮下载H2O训练过的所有模型。</p>
-<p>既然<a id="_idIndexMarker1062"/>我们已经探索了如何<a id="_idIndexMarker1063"/>将<a id="_idIndexMarker1064"/>模型下载为Python、R和H2O流中的POJO，让我们学习如何使用这个POJO模型进行预测。</p>
-<h1 id="_idParaDest-158"><a id="_idTextAnchor206"/>使用H2O模型作为POJO</h1>
-<p>正如前面的<a id="_idIndexMarker1066"/>小节中提到的<a id="_idIndexMarker1065"/>，POJO模型可以在任何安装了JVM的平台上使用。唯一的依赖项是<code>h2o-genmodel.jar</code>文件，这是一个JAR文件，需要编译和运行模型POJO来进行预测。</p>
-<p>所以，让我们完成一个实验，在这个实验中，我们可以使用模型POJO和<code>h2o-genmodel.jar</code>文件来理解我们如何在任何有JVM的环境中使用模型POJO。我们将编写一个Java程序，导入<code>h2o-genmodel.jar</code>文件，并使用它将POJO模型加载到程序中。一旦加载了POJO模型，我们将使用它对样本数据进行预测。</p>
-<p>所以，让我们首先创建一个文件夹，我们可以保存实验所需的H2O POJO文件，然后编写一些使用它的代码。请遵循以下步骤:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 10.1–使用下载 POJO 按钮收集模型信息</p>
+<p>您可以简单地点击<strong class="bold">下载 POJO </strong>按钮，将模型下载为 POJO。您可以使用 H2O 流中的这个交互按钮下载 H2O 训练过的所有模型。</p>
+<p>既然<a id="_idIndexMarker1062"/>我们已经探索了如何<a id="_idIndexMarker1063"/>将<a id="_idIndexMarker1064"/>模型下载为 Python、R 和 H2O 流中的 POJO，让我们学习如何使用这个 POJO 模型进行预测。</p>
+<h1 id="_idParaDest-158"><a id="_idTextAnchor206"/>使用 H2O 模型作为 POJO</h1>
+<p>正如前面的<a id="_idIndexMarker1066"/>小节中提到的<a id="_idIndexMarker1065"/>，POJO 模型可以在任何安装了 JVM 的平台上使用。唯一的依赖项是<code>h2o-genmodel.jar</code>文件，这是一个 JAR 文件，需要编译和运行模型 POJO 来进行预测。</p>
+<p>所以，让我们完成一个实验，在这个实验中，我们可以使用模型 POJO 和<code>h2o-genmodel.jar</code>文件来理解我们如何在任何有 JVM 的环境中使用模型 POJO。我们将编写一个 Java 程序，导入<code>h2o-genmodel.jar</code>文件，并使用它将 POJO 模型加载到程序中。一旦加载了 POJO 模型，我们将使用它对样本数据进行预测。</p>
+<p>所以，让我们首先创建一个文件夹，我们可以保存实验所需的 H2O POJO 文件，然后编写一些使用它的代码。请遵循以下步骤:</p>
 <ol>
 <li value="1">打开您的终端，通过执行以下命令创建一个空文件夹:<pre>mkdir H2O_POJO cd H2O_POJO</pre></li>
-<li>现在，通过执行下面的命令将您的模型POJO文件复制到这个文件夹:<pre>mv {path_to_download_location}/{name_of_model_POJO} .</pre></li>
+<li>现在，通过执行下面的命令将您的模型 POJO 文件复制到这个文件夹:<pre>mv {path_to_download_location}/{name_of_model_POJO} .</pre></li>
 </ol>
-<p>请记住，您可能需要提到您下载的模型的名称，以及您下载模型POJO文件的路径。</p>
+<p>请记住，您可能需要提到您下载的模型的名称，以及您下载模型 POJO 文件的路径。</p>
 <ol>
-<li value="3">然后，你需要下载<code>h2o-genmodel.jar</code>文件。有两种方法可以做到这一点:<pre>curl http://localhost:54321/3/h2o-genmodel.jar &gt; h2o-genmodel.jar</pre><ol><li>您可以通过运行以下命令从您当前运行的<a id="_idIndexMarker1068"/>本地H2O服务器上<a id="_idIndexMarker1067"/>下载<code>h2o-genmodel.jar</code>文件:</li></ol></li>
+<li value="3">然后，你需要下载<code>h2o-genmodel.jar</code>文件。有两种方法可以做到这一点:<pre>curl http://localhost:54321/3/h2o-genmodel.jar &gt; h2o-genmodel.jar</pre><ol><li>您可以通过运行以下命令从您当前运行的<a id="_idIndexMarker1068"/>本地 H2O 服务器上<a id="_idIndexMarker1067"/>下载<code>h2o-genmodel.jar</code>文件:</li></ol></li>
 </ol>
-<p>请记住，在<code>localhost:54321</code>上，您需要一个活跃运行的H2O服务器。如果您的服务器运行在不同的端口上，则使用适当的端口号编辑该命令。</p>
+<p>请记住，在<code>localhost:54321</code>上，您需要一个活跃运行的 H2O 服务器。如果您的服务器运行在不同的端口上，则使用适当的端口号编辑该命令。</p>
 <ol>
 <li value="2"><code>h2o-genmodel.jar</code>文件也可以作为<code>pom.xml</code>文件在其<code>dependencies</code>标签中使用，最好是最新版本:</li>
 </ol>
@@ -100,15 +100,15 @@
     
     
     </pre>
-<p>这方面的Maven知识库可以在这里找到:https://mvnrepository.com/artifact/ai.h2o/h2o-genmodel.</p>
+<p>这方面的 Maven 知识库可以在这里找到:https://mvnrepository.com/artifact/ai.h2o/h2o-genmodel.</p>
 <ol>
-<li value="4">现在，让我们<a id="_idIndexMarker1069"/>创建<a id="_idIndexMarker1070"/>一个样本Java程序，它使用模型POJO和<code>h2o<a id="_idTextAnchor207"/>-genmodel.jar</code>文件来预测随机数据值。通过在您的终端中执行以下命令创建一个名为<code>main.java</code>的Java程序:<pre><strong class="bold"><a id="_idTextAnchor208"/>vim main.java</strong></pre></li>
+<li value="4">现在，让我们<a id="_idIndexMarker1069"/>创建<a id="_idIndexMarker1070"/>一个样本 Java 程序，它使用模型 POJO 和<code>h2o<a id="_idTextAnchor207"/>-genmodel.jar</code>文件来预测随机数据值。通过在您的终端中执行以下命令创建一个名为<code>main.java</code>的 Java 程序:<pre><strong class="bold"><a id="_idTextAnchor208"/>vim main.java</strong></pre></li>
 </ol>
 <p>这将打开<code>vim</code>编辑器，您可以在其中编写程序。</p>
 <ol>
-<li value="5">让我们开始编写我们的Java程序:<pre>import hex.genmodel.easy.RowData; import hex.genmodel.easy.EasyPredictModelWrapper; import hex.genmodel.easy.prediction.*;</pre><pre>public class main { }</pre><pre>private static final String modelPOJOClassName = "{name_of_model_POJO}";</pre><pre>public static void main(String[] args) throws Exception { }</pre><pre>hex.genmodel.GenModel rawModel; rawModel = (hex.genmodel.GenModel) Class.forName(modelPOJOClassName).getDeclaredConstructor().newInstance();</pre><pre>EasyPredictModelWrapper model = new EasyPredictModelWrapper(rawModel);</pre><pre>RowData row = new RowData(); row.put("C1", 5.1); row.put("C2", 3.5); row.put("C3", 1.4); row.put("C4", 0.2);</pre><pre>MultinomialModelPrediction predictionResultHandler = model.predictMultinomial(row);</pre><ol><li>首先，导入必要的依赖项，如下所示:</li></ol><ol><li value="2">然后，创建<code>main</code>类，如下所示:</li></ol><ol><li value="3">在<code>main</code>类中，声明我们的模型POJO的类名，如下所示:</li></ol><ol><li value="4">然后，在<code>main</code>类中创建一个<code>main</code>函数，如下所示:</li></ol><ol><li value="5">在这个<code>main</code>函数中，将<code>rawModel</code>变量声明为一个<code>GenModel</code>对象，并通过传递<code>modelPOJOClassName</code>将其创建为模型POJO的一个实例来初始化它，如下所示:</li></ol><ol><li value="6">现在，让我们用一个<code>EasyPredictModelWrapper</code>类<a id="_idIndexMarker1072"/>包装这个<code>rawModel</code>对象。这个类带有易于使用的函数，使我们可以很容易地进行预测。将以下代码添加到您的文件中:</li></ol><ol><li value="7">现在我们已经将<code>modelPOJO</code>对象加载并包装在<code>EasyPredictModelWrapper</code>中，让我们创建一些样本数据来进行预测。由于我们使用的是使用Iris数据集训练的模型，所以让我们创建一个包含<code>C1</code>、<code>C2</code>、<code>C3</code>和<code>C4</code>作为特征和一些适当值的<code>RowData</code>。将以下代码添加到您的文件中:</li></ol><ol><li value="8">现在，我们需要创建一个预测处理程序对象来存储预测结果。由于Iris数据集用于多项式分类问题，我们将创建一个适当的多项式预测处理程序对象，如下所示:</li></ol></li>
+<li value="5">让我们开始编写我们的 Java 程序:<pre>import hex.genmodel.easy.RowData; import hex.genmodel.easy.EasyPredictModelWrapper; import hex.genmodel.easy.prediction.*;</pre><pre>public class main { }</pre><pre>private static final String modelPOJOClassName = "{name_of_model_POJO}";</pre><pre>public static void main(String[] args) throws Exception { }</pre><pre>hex.genmodel.GenModel rawModel; rawModel = (hex.genmodel.GenModel) Class.forName(modelPOJOClassName).getDeclaredConstructor().newInstance();</pre><pre>EasyPredictModelWrapper model = new EasyPredictModelWrapper(rawModel);</pre><pre>RowData row = new RowData(); row.put("C1", 5.1); row.put("C2", 3.5); row.put("C3", 1.4); row.put("C4", 0.2);</pre><pre>MultinomialModelPrediction predictionResultHandler = model.predictMultinomial(row);</pre><ol><li>首先，导入必要的依赖项，如下所示:</li></ol><ol><li value="2">然后，创建<code>main</code>类，如下所示:</li></ol><ol><li value="3">在<code>main</code>类中，声明我们的模型 POJO 的类名，如下所示:</li></ol><ol><li value="4">然后，在<code>main</code>类中创建一个<code>main</code>函数，如下所示:</li></ol><ol><li value="5">在这个<code>main</code>函数中，将<code>rawModel</code>变量声明为一个<code>GenModel</code>对象，并通过传递<code>modelPOJOClassName</code>将其创建为模型 POJO 的一个实例来初始化它，如下所示:</li></ol><ol><li value="6">现在，让我们用一个<code>EasyPredictModelWrapper</code>类<a id="_idIndexMarker1072"/>包装这个<code>rawModel</code>对象。这个类带有易于使用的函数，使我们可以很容易地进行预测。将以下代码添加到您的文件中:</li></ol><ol><li value="7">现在我们已经将<code>modelPOJO</code>对象加载并包装在<code>EasyPredictModelWrapper</code>中，让我们创建一些样本数据来进行预测。由于我们使用的是使用 Iris 数据集训练的模型，所以让我们创建一个包含<code>C1</code>、<code>C2</code>、<code>C3</code>和<code>C4</code>作为特征和一些适当值的<code>RowData</code>。将以下代码添加到您的文件中:</li></ol><ol><li value="8">现在，我们需要创建一个预测处理程序对象来存储预测结果。由于 Iris 数据集用于多项式分类问题，我们将创建一个适当的多项式预测处理程序对象，如下所示:</li></ol></li>
 </ol>
-<p>对于不同类型的问题，您将需要使用适当类型的预测处理程序对象。你可以在https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML找到更多关于这个的信息。</p>
+<p>对于不同类型的问题，您将需要使用适当类型的预测处理程序对象。你可以在 https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML 找到更多关于这个的信息。</p>
 <ol>
 <li value="9">现在，让我们添加一些<code>print</code>语句，这样我们就可以得到一个清晰易懂的<a id="_idIndexMarker1073"/>输出。添加<a id="_idIndexMarker1074"/>以下<code>print</code>语句:</li>
 </ol>
@@ -132,17 +132,17 @@ for (int labelClassIndex = 0; labelClassIndex &lt; predictionResultHandler.class
 <div><div><img alt="Figure 10.2 – Prediction results from the H2O model POJO implementation  " height="156" src="img/B17298_10_002.jpg" width="713"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图10.2–H2O模型POJO实施的预测结果</p>
-<p>正如您所看到的，使用POJO模型非常容易——您只需要创建POJO，并通过实现<code>h2o-genmodel.jar</code>文件在任何常规的Java程序中使用它。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 10.2–H2O 模型 POJO 实施的预测结果</p>
+<p>正如您所看到的，使用 POJO 模型非常容易——您只需要创建 POJO，并通过实现<code>h2o-genmodel.jar</code>文件在任何常规的 Java 程序中使用它。</p>
 <p class="callout-heading">小费</p>
-<p class="callout">如果您计划在生产中使用模型POJOs，那么强烈建议您详细了解<code>h2o-genmodel.jar</code>库。这个库可以为您提供许多特性和功能，使您的部署体验变得简单。你可以在这里了解这个库的更多信息:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-genmodel/javadoc/index.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML</a>。</p>
-<p>恭喜你！本章帮助您理解了如何构建、提取和部署模型POJO<a id="_idIndexMarker1077"/>来对入站数据进行预测。你现在离在生产中使用H2O更近了一步。</p>
+<p class="callout">如果您计划在生产中使用模型 POJOs，那么强烈建议您详细了解<code>h2o-genmodel.jar</code>库。这个库可以为您提供许多特性和功能，使您的部署体验变得简单。你可以在这里了解这个库的更多信息:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-genmodel/javadoc/index.xhtml">https://docs . H2O . ai/H2O/latest-stable/H2O-gen model/javadoc/index . XHTML</a>。</p>
+<p>恭喜你！本章帮助您理解了如何构建、提取和部署模型 POJO<a id="_idIndexMarker1077"/>来对入站数据进行预测。你现在离在生产中使用 H2O 更近了一步。</p>
 <h1 id="_idParaDest-159"><a id="_idTextAnchor209"/>总结</h1>
-<p>在这一章中，我们从理解在生产中使用ML服务时的常见问题开始。我们知道软件的可移植性以及ML模型在无缝部署中扮演着重要的角色。我们还理解了Java的平台独立性如何使其有利于部署，以及POJOs如何在其中发挥作用。</p>
-<p>然后，我们探索了什么是POJOs，以及它们是如何在Java领域中独立运行的对象。我们还了解到，H2O规定以POJOs的形式提取由AutoML训练的模型，我们可以将其用作能够进行预测的自包含ML模型。</p>
-<p>在此基础上，我们学习了如何在Python、R和H2O流中将H2O的ML模型提取为POJOs。一旦我们理解了如何下载H2O ML模型作为POJOs，我们就学会了如何使用它们进行预测。</p>
-<p>首先，我们知道我们需要<code>h2o-genmodel.jar</code>库，它负责解释Java中的POJO模型。然后，我们创建了一个实验，我们下载了H2O模型POJO和<code>h2o-genmodel.jar</code>，并创建了一个简单的Java程序，使用这两个文件对一些样本数据进行预测；这给了我们一些使用POJOs模型的实际经验。</p>
-<p>在下一章，我们将探索MOJOs，类似于POJOs的对象，但是有一些特殊的好处，也可以用在生产中。</p>
+<p>在这一章中，我们从理解在生产中使用 ML 服务时的常见问题开始。我们知道软件的可移植性以及 ML 模型在无缝部署中扮演着重要的角色。我们还理解了 Java 的平台独立性如何使其有利于部署，以及 POJOs 如何在其中发挥作用。</p>
+<p>然后，我们探索了什么是 POJOs，以及它们是如何在 Java 领域中独立运行的对象。我们还了解到，H2O 规定以 POJOs 的形式提取由 AutoML 训练的模型，我们可以将其用作能够进行预测的自包含 ML 模型。</p>
+<p>在此基础上，我们学习了如何在 Python、R 和 H2O 流中将 H2O 的 ML 模型提取为 POJOs。一旦我们理解了如何下载 H2O ML 模型作为 POJOs，我们就学会了如何使用它们进行预测。</p>
+<p>首先，我们知道我们需要<code>h2o-genmodel.jar</code>库，它负责解释 Java 中的 POJO 模型。然后，我们创建了一个实验，我们下载了 H2O 模型 POJO 和<code>h2o-genmodel.jar</code>，并创建了一个简单的 Java 程序，使用这两个文件对一些样本数据进行预测；这给了我们一些使用 POJOs 模型的实际经验。</p>
+<p>在下一章，我们将探索 MOJOs，类似于 POJOs 的对象，但是有一些特殊的好处，也可以用在生产中。</p>
 </div>
 <div><div/>
 </div>

@@ -109,17 +109,17 @@
 
 <ul>
 
-<li><strong>家人</strong>:比方说，每当我们咨询家人并听取他们的意见时，他们有60%的机会被证明是正确的，我们最终在旅行中获得了良好的体验。</li>
+<li><strong>家人</strong>:比方说，每当我们咨询家人并听取他们的意见时，他们有 60%的机会被证明是正确的，我们最终在旅行中获得了良好的体验。</li>
 
 <li><strong>朋友</strong>:同样，如果我们听朋友的话，他们会建议我们去一些可能会有美好经历的地方。在这些情况下，50%的案例都有良好的体验。</li>
 
-<li>旅游网站:旅游网站是另一个来源，在那里我们可以获得大量关于去哪里旅游的信息。如果我们选择接受他们的建议，有35%的可能性他们是对的，我们有一个很好的经历。</li>
+<li>旅游网站:旅游网站是另一个来源，在那里我们可以获得大量关于去哪里旅游的信息。如果我们选择接受他们的建议，有 35%的可能性他们是对的，我们有一个很好的经历。</li>
 
-<li>旅行社:如果我们先去旅行社核实一下，他们可能会提供另一条建议和信息。根据我们过去的经验，我们发现他们在45%的情况下是正确的。</li>
+<li>旅行社:如果我们先去旅行社核实一下，他们可能会提供另一条建议和信息。根据我们过去的经验，我们发现他们在 45%的情况下是正确的。</li>
 
 </ul>
 
-<p>然而，我们必须积累所有之前的输入并做出决定，因为迄今为止没有任何来源是100%正确的。如果我们将这些结果结合起来，精确度方案将如下:</p>
+<p>然而，我们必须积累所有之前的输入并做出决定，因为迄今为止没有任何来源是 100%正确的。如果我们将这些结果结合起来，精确度方案将如下:</p>
 
 <pre>1 - (60% * 50% * 35% * 45%)                                                                                                                                                                              1- 0.04725 = 0.95275<br/><br/># Accuracy is close to 95%.</pre>
 
@@ -233,31 +233,31 @@
 
                 
 
-<p>Bootstrapping是一种统计技术，用于根据替换抽取的样本对总体参数进行推断，并对这些结果进行平均。在替换抽样的情况下，样本被一个接一个地抽取，一旦从总体中抽取一个样本，总体就被补充抽样数据:</p>
+<p>Bootstrapping 是一种统计技术，用于根据替换抽取的样本对总体参数进行推断，并对这些结果进行平均。在替换抽样的情况下，样本被一个接一个地抽取，一旦从总体中抽取一个样本，总体就被补充抽样数据:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-828 image-border" src="img/bd6e63b8-5481-4f46-8fe6-c3ecc23016dd.png" style="width:67.67em;height:43.75em;"/></p>
 
-<p>在上图中，有一个数据集有多个组件(<strong> A </strong>、<strong> B </strong>、<strong> C </strong>、<strong> D </strong>、<strong> E </strong>、<strong> F </strong>、<strong> G </strong>、<strong> H </strong>和<strong> I </strong>)。首先，我们需要画三个同样大小的样本。我们随机抽取<strong>样本1 </strong>说第一个元素原来是<strong> A </strong>。然而，在我们绘制第二个元素<strong>样本1 </strong>之前，<strong>一个</strong>被返回到数据集。整个抽奖过程也是如此。这被称为<strong>取样和替换</strong>。因此，我们有机会在集合中多次选择相同的项目。按照这个过程，我们抽取了三个样品，即<strong>样品1 </strong>、<strong>样品2 </strong>和<strong>样品3 </strong>。</p>
+<p>在上图中，有一个数据集有多个组件(<strong> A </strong>、<strong> B </strong>、<strong> C </strong>、<strong> D </strong>、<strong> E </strong>、<strong> F </strong>、<strong> G </strong>、<strong> H </strong>和<strong> I </strong>)。首先，我们需要画三个同样大小的样本。我们随机抽取<strong>样本 1 </strong>说第一个元素原来是<strong> A </strong>。然而，在我们绘制第二个元素<strong>样本 1 </strong>之前，<strong>一个</strong>被返回到数据集。整个抽奖过程也是如此。这被称为<strong>取样和替换</strong>。因此，我们有机会在集合中多次选择相同的项目。按照这个过程，我们抽取了三个样品，即<strong>样品 1 </strong>、<strong>样品 2 </strong>和<strong>样品 3 </strong>。</p>
 
-<p class="mce-root">当我们更进一步，确定<strong>样本1 </strong>、<strong>样本2 </strong>和<strong>样本3 </strong>的统计数据(各种指标)时，我们找出所有统计数据的平均值，以推断数据集(总体)的一些情况。这个整个过程被称为<strong>自举</strong>，抽取的样本被称为自举样本。这可以用下面的等式来定义:</p>
+<p class="mce-root">当我们更进一步，确定<strong>样本 1 </strong>、<strong>样本 2 </strong>和<strong>样本 3 </strong>的统计数据(各种指标)时，我们找出所有统计数据的平均值，以推断数据集(总体)的一些情况。这个整个过程被称为<strong>自举</strong>，抽取的样本被称为自举样本。这可以用下面的等式来定义:</p>
 
-<p><em>关于数据集的推断(总体)=平均值(样本1，样本2，............，样本N) </em></p>
+<p><em>关于数据集的推断(总体)=平均值(样本 1，样本 2，............，样本 N) </em></p>
 
 <p class="CDPAlignCenter CDPAlign">如果您仔细观察前面的图表，可能会发现数据集的一些元素没有被选取，或者不是这三个样本的一部分:</p>
 
-<p><strong>样品1 </strong> : ( <strong> A </strong>、<strong> E </strong>、<strong> H </strong>、<strong> C </strong>)</p>
+<p><strong>样品 1 </strong> : ( <strong> A </strong>、<strong> E </strong>、<strong> H </strong>、<strong> C </strong>)</p>
 
 <ul>
 
-<li><strong>样品2 </strong> : ( <strong> F </strong>、<strong> G </strong>、<strong> A </strong>、<strong> C </strong>)</li>
+<li><strong>样品 2 </strong> : ( <strong> F </strong>、<strong> G </strong>、<strong> A </strong>、<strong> C </strong>)</li>
 
-<li><strong>样品3 </strong> : ( <strong> E </strong>，<strong> H </strong>，<strong> G </strong>，<strong> F </strong></li>
+<li><strong>样品 3 </strong> : ( <strong> E </strong>，<strong> H </strong>，<strong> G </strong>，<strong> F </strong></li>
 
 <li>因此，没有被拾取的元素是<strong> B </strong>、<strong> D </strong>和<strong> I </strong>。不属于抽取样品的样品称为<strong>开箱</strong> ( <strong> OOB </strong>)样品。</li>
 
 </ul>
 
-<p>让我们做一个简单的编码练习，看看如何在Python中实现这一点:</p>
+<p>让我们做一个简单的编码练习，看看如何在 Python 中实现这一点:</p>
 
 <p>这里，我们将使用<kbd>sklearn</kbd>和<kbd>resample</kbd>函数。让我们导入必要的库:</p>
 
@@ -279,7 +279,7 @@
 
 <ol start="3" style="font-size: 16px">
 
-<li>我们将使用列表理解提取一个OOB样本:</li>
+<li>我们将使用列表理解提取一个 OOB 样本:</li>
 
 </ol>
 
@@ -307,7 +307,7 @@
 
 <pre style="padding-left: 60px">print(boot_samp)</pre>
 
-<p style="padding-left: 60px">我们可以看到在抽样中有一个60的重复。这是由于替换取样造成的。</p>
+<p style="padding-left: 60px">我们可以看到在抽样中有一个 60 的重复。这是由于替换取样造成的。</p>
 
 <pre style="padding-left: 60px">[60, 90, 100, 60, 10]</pre>
 
@@ -325,7 +325,7 @@
 
 <pre style="padding-left: 60px">[20, 30, 40, 50, 70, 80]</pre>
 
-<p><em> OOB =数据集-启动_样本</em></p>
+<p><em> OOB =数据集-启动 _ 样本</em></p>
 
 <p class="CDPAlignCenter CDPAlign"><em> =[10，20，30，40，50，60，70，80，90，100] - [60，90，100，60，10] </em></p>
 
@@ -376,7 +376,7 @@
 
                             
 
-                    <h1 class="header-title">Bagging代表引导<strong>聚合</strong>。因此，很明显，打包的概念源于自举。暗示着bagging已经具备了自举的元素。这是一种bootstrap集成方法，其中多个分类器(通常来自同一算法)在样本上进行训练，这些样本是用来自训练集/群体的替换(bootstrap样本)随机抽取的。所有分类器的聚集以平均或投票的形式发生。它试图减少模型中过度拟合问题的影响，如下图所示:</h1>
+                    <h1 class="header-title">Bagging 代表引导<strong>聚合</strong>。因此，很明显，打包的概念源于自举。暗示着 bagging 已经具备了自举的元素。这是一种 bootstrap 集成方法，其中多个分类器(通常来自同一算法)在样本上进行训练，这些样本是用来自训练集/群体的替换(bootstrap 样本)随机抽取的。所有分类器的聚集以平均或投票的形式发生。它试图减少模型中过度拟合问题的影响，如下图所示:</h1>
 
                 
 
@@ -394,7 +394,7 @@
 
 <ul>
 
-<li><strong>模型拟合</strong> : <strong> </strong>在这个阶段，我们在bootstrap样本上建立模型。通常，相同的算法用于建立模型。但是，使用不同的算法没有限制。</li>
+<li><strong>模型拟合</strong> : <strong> </strong>在这个阶段，我们在 bootstrap 样本上建立模型。通常，相同的算法用于建立模型。但是，使用不同的算法没有限制。</li>
 
 <li><strong>组合模型</strong> : <strong> </strong>这一步包括组合所有模型并取平均值。例如，如果我们应用了一个决策树分类器，那么每个分类器产生的概率是平均的。</li>
 
@@ -455,11 +455,11 @@
 
                 
 
-<p>例如，假设我们有一个向银行申请贷款的人的样本。对于这个例子，我们将把计数作为50。在这里，我们得到了三个属性，即性别、收入和此人持有的其他贷款数量，以预测是否给他们贷款。</p>
+<p>例如，假设我们有一个向银行申请贷款的人的样本。对于这个例子，我们将把计数作为 50。在这里，我们得到了三个属性，即性别、收入和此人持有的其他贷款数量，以预测是否给他们贷款。</p>
 
 <p>我们需要根据性别、收入和他们持有的其他贷款数量对这些人进行细分，并找出最重要的因素。这往往会创建最同质的集合。</p>
 
-<p>让我们先来看看收入，并尝试在此基础上创造细分市场。申请贷款的总人数是50人。在50人中，有20人获得了贷款。但是，如果我们把这个按收入分解，我们可以看到，分解已经按收入&lt;100,000 and &gt; =10万完成了。这不会生成一个同质的组。我们可以看到40%的申请人(20人)获得了贷款。在收入低于10万英镑的人群中，30%的人设法获得了贷款。同样，收入大于或等于10万的人群中，有46.67 %的人设法获得了贷款。下图显示了基于收入的树拆分:</p>
+<p>让我们先来看看收入，并尝试在此基础上创造细分市场。申请贷款的总人数是 50 人。在 50 人中，有 20 人获得了贷款。但是，如果我们把这个按收入分解，我们可以看到，分解已经按收入&lt;100,000 and &gt; =10 万完成了。这不会生成一个同质的组。我们可以看到 40%的申请人(20 人)获得了贷款。在收入低于 10 万英镑的人群中，30%的人设法获得了贷款。同样，收入大于或等于 10 万的人群中，有 46.67 %的人设法获得了贷款。下图显示了基于收入的树拆分:</p>
 
 <p><img class="alignnone size-full wp-image-826 image-border" src="img/92c46e1e-2cb7-4b7e-8f24-a15ef8a9a299.png" style="width:31.58em;height:19.75em;"/></p>
 
@@ -467,7 +467,7 @@
 
 <p><img class="alignnone size-full wp-image-825 image-border" src="img/6d36994c-4d82-4617-a5d3-4e8c4f27e2fc.png" style="width:30.92em;height:19.92em;"/></p>
 
-<p class="CDPAlignCenter CDPAlign">让我们继续讨论性别问题，看看它在创造一个同质群体方面表现如何。这就是同质群体。有15名女性，其中53.3%获得了贷款。34.3%的男性最终也获得了贷款。下图显示了基于性别的树拆分:</p>
+<p class="CDPAlignCenter CDPAlign">让我们继续讨论性别问题，看看它在创造一个同质群体方面表现如何。这就是同质群体。有 15 名女性，其中 53.3%获得了贷款。34.3%的男性最终也获得了贷款。下图显示了基于性别的树拆分:</p>
 
 <p><img class="alignnone size-full wp-image-824 image-border" src="img/48b51511-931c-4a3f-a32a-9be7d3edf359.png" style="width:30.83em;height:21.00em;"/></p>
 
@@ -542,7 +542,7 @@
 
                 
 
-<p>基尼指数(Gini index):这表示如果我们从总体中随机选择两个项目，它们必须来自同一个阶层。如果种群是完全纯的，这一事件的概率将会是1。它只执行二进制分割。<strong xmlns:epub="http://www.idpf.org/2007/ops">分类回归树</strong> ( <strong xmlns:epub="http://www.idpf.org/2007/ops">推车</strong>)就利用了这种拆分。</p>
+<p>基尼指数(Gini index):这表示如果我们从总体中随机选择两个项目，它们必须来自同一个阶层。如果种群是完全纯的，这一事件的概率将会是 1。它只执行二进制分割。<strong xmlns:epub="http://www.idpf.org/2007/ops">分类回归树</strong> ( <strong xmlns:epub="http://www.idpf.org/2007/ops">推车</strong>)就利用了这种拆分。</p>
 
 <ol>
 
@@ -558,7 +558,7 @@
 
 <p class="graf graf--p graf-after--p" style="padding-left: 60px"><em>= 1—(1/2)^2—(1/2)^2</em><br/><em>= 1–2*(1/2)^2</em><br/><em>= 1-2 *(1/4)</em><br/><em>= 1–0.5</em><br/><em>= 0.5</em></p>
 
-<p class="graf graf--p graf-after--p CDPAlignCenter CDPAlign">基尼系数给出了一个概念，通过分裂产生的两个群体中的阶级混合程度来判断分裂有多好。完美的分离导致基尼系数为0，而最坏的分离导致50/50的等级。</p>
+<p class="graf graf--p graf-after--p CDPAlignCenter CDPAlign">基尼系数给出了一个概念，通过分裂产生的两个群体中的阶级混合程度来判断分裂有多好。完美的分离导致基尼系数为 0，而最坏的分离导致 50/50 的等级。</p>
 
 <p style="padding-left: 60px">对于一个具有<em> k </em>水平的名义变量，基尼指数的最大值为<em> (1- 1/k)。</em></p>
 
@@ -570,7 +570,7 @@
 
 </ol>
 
-<p class="CDPAlignCenter CDPAlign">由于<strong> Z </strong>看起来相当均匀，并且它的所有值都相似，所以它被称为<strong>纯集合</strong>。因此，它需要较少的努力来解释它。然而，<strong> Y </strong>需要更多的信息来解释，因为它不是纯的。X是他们中最不纯洁的。它试图传达的是，随机性和无组织性增加了复杂性，因此它需要更多的信息来解释。这种随机程度被称为熵。如果样本是完全同质的，那么熵就是<em> 0 </em>。如果样本被等分，它的熵将是<em> 1 </em>:</p>
+<p class="CDPAlignCenter CDPAlign">由于<strong> Z </strong>看起来相当均匀，并且它的所有值都相似，所以它被称为<strong>纯集合</strong>。因此，它需要较少的努力来解释它。然而，<strong> Y </strong>需要更多的信息来解释，因为它不是纯的。X 是他们中最不纯洁的。它试图传达的是，随机性和无组织性增加了复杂性，因此它需要更多的信息来解释。这种随机程度被称为熵。如果样本是完全同质的，那么熵就是<em> 0 </em>。如果样本被等分，它的熵将是<em> 1 </em>:</p>
 
 <p style="padding-left: 60px"><em>熵=-p log<sub>2</sub>p-q log<sub>2</sub>q</em></p>
 
@@ -716,7 +716,7 @@
 
 <ul>
 
-<li>如果有<em> M个</em>输入特征(变量)，则<em> m个</em>特征被绘制为<em> M个</em>特征的子集，当然还有<em> m个&lt; M个</em>特征。这是在树的每个节点随机选择m个特征。</li>
+<li>如果有<em> M 个</em>输入特征(变量)，则<em> m 个</em>特征被绘制为<em> M 个</em>特征的子集，当然还有<em> m 个&lt; M 个</em>特征。这是在树的每个节点随机选择 m 个特征。</li>
 
 <li>每棵树都长到了最大限度。</li>
 
@@ -905,7 +905,7 @@
 
 <pre>truth = pd.DataFrame(y_test, columns= ['Truth'])<br/>predictions = pd.DataFrame(y_pred, columns= ['Predictions'])<br/>frames = [truth, predictions]<br/>_result = pd.concat(frames, axis=1)<br/>print(_result.shape)<br/>_result.head()</pre>
 
-<p class="CDPAlignCenter CDPAlign">由此可见，10 k倍交叉验证均值为<kbd>94.9661835749</kbd>:</p>
+<p class="CDPAlignCenter CDPAlign">由此可见，10 k 倍交叉验证均值为<kbd>94.9661835749</kbd>:</p>
 
 <pre># 10 fold cross-validation with a Tree classifier on the training dataset# 10 fold <br/>#splitting the data, fitting a model and computing the score 10 consecutive times<br/>cv_scores = []<br/>scores = cross_val_score(rfc, X_train, y_train, cv=10, scoring='accuracy')<br/>cv_scores.append(scores.mean())<br/>cv_scores.append(scores.std())<br/><br/>#cross validation mean score<br/>print("10 k-fold cross validation mean score: ", scores.mean() *100)</pre>
 
@@ -927,9 +927,9 @@
 
 <p class="CDPAlignCenter CDPAlign">上图是一个<strong>接收器操作特性</strong> ( <strong> ROC </strong>)度量，用于使用交叉验证评估分类器输出质量。</p>
 
-<p>前面的图显示了对我们选择的特征(<kbd>['compactness_mean', 'perimeter_mean', 'radius_mean', 'texture_mean', 'concavity_mean', 'smoothness_mean']</kbd>)的ROC反应和从k倍交叉验证中创建的诊断相关变量。</p>
+<p>前面的图显示了对我们选择的特征(<kbd>['compactness_mean', 'perimeter_mean', 'radius_mean', 'texture_mean', 'concavity_mean', 'smoothness_mean']</kbd>)的 ROC 反应和从 k 倍交叉验证中创建的诊断相关变量。</p>
 
-<p><kbd>0.99</kbd>的一个ROC区挺好的。</p>
+<p><kbd>0.99</kbd>的一个 ROC 区挺好的。</p>
 
 <p>助推</p>
 
@@ -974,7 +974,7 @@
 
                             
 
-                    <h1 class="header-title">说到装袋，它既适用于分类，也适用于回归。然而，还有一种技术也是合奏家族的一部分:增强。然而，这两者的基本原理是完全不同的。在bagging中，每个模型独立运行，然后在最后汇总结果。这是一个并行操作。增压的作用方式不同，因为它是按顺序流动的。这里的每个模型都运行并将重要特性传递给另一个模型:</h1>
+                    <h1 class="header-title">说到装袋，它既适用于分类，也适用于回归。然而，还有一种技术也是合奏家族的一部分:增强。然而，这两者的基本原理是完全不同的。在 bagging 中，每个模型独立运行，然后在最后汇总结果。这是一个并行操作。增压的作用方式不同，因为它是按顺序流动的。这里的每个模型都运行并将重要特性传递给另一个模型:</h1>
 
                 
 
@@ -1029,7 +1029,7 @@
 
                             
 
-                    <h1 class="header-title">为了解释梯度推进，我们将采用伟大的数据科学家Ben Gorman的路线。他已经能够用一种简单的数学方法来解释它。假设我们有九个训练示例，其中我们需要根据三个特征来预测一个人的年龄，例如他们是否喜欢园艺、玩视频游戏或上网。相关数据如下:</h1>
+                    <h1 class="header-title">为了解释梯度推进，我们将采用伟大的数据科学家 Ben Gorman 的路线。他已经能够用一种简单的数学方法来解释它。假设我们有九个训练示例，其中我们需要根据三个特征来预测一个人的年龄，例如他们是否喜欢园艺、玩视频游戏或上网。相关数据如下:</h1>
 
                 
 
@@ -1230,7 +1230,7 @@
 
 <pre>truth = pd.DataFrame(y_test, columns= ['Truth'])<br/>predictions = pd.DataFrame(y_pred, columns= ['Predictions'])<br/>frames = [truth, predictions]<br/>_result = pd.concat(frames, axis=1)<br/>print(_result.shape)<br/>_result.head()</pre>
 
-<p class="CDPAlignCenter CDPAlign">10 k倍交叉验证平均得分为<kbd>94.9420289855</kbd>:</p>
+<p class="CDPAlignCenter CDPAlign">10 k 倍交叉验证平均得分为<kbd>94.9420289855</kbd>:</p>
 
 <p>分类精度为<kbd>96.0</kbd>:</p>
 
@@ -1250,7 +1250,7 @@
 
 <p>摘要</p>
 
-<p class="CDPAlignCenter CDPAlign">在这一章中，我们学习了集成学习及其不同的方法，即打包、提升和堆叠。我们甚至看到了什么是bootstrapping，这是bagging和boosting等集成学习方法的根源。我们还学习了决策树及其分而治之的方法，例如人们申请贷款。然后我们讨论了树分裂和分裂决策树的参数，接着讨论随机森林算法。我们使用所涵盖的概念对乳腺癌进行了案例研究。我们还发现了装袋增压和梯度增压的区别。我们还讨论了梯度增强的参数，以乳腺癌为例。</p>
+<p class="CDPAlignCenter CDPAlign">在这一章中，我们学习了集成学习及其不同的方法，即打包、提升和堆叠。我们甚至看到了什么是 bootstrapping，这是 bagging 和 boosting 等集成学习方法的根源。我们还学习了决策树及其分而治之的方法，例如人们申请贷款。然后我们讨论了树分裂和分裂决策树的参数，接着讨论随机森林算法。我们使用所涵盖的概念对乳腺癌进行了案例研究。我们还发现了装袋增压和梯度增压的区别。我们还讨论了梯度增强的参数，以乳腺癌为例。</p>
 
 
 

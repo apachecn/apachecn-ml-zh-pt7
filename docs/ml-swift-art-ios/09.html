@@ -15,19 +15,19 @@
             
             
                 
-<p class="NormalPACKT">在本章中，我们将讨论<strong>卷积神经网络</strong>(<strong>CNN</strong>)。首先，我们将通过Swift中的示例来讨论所有组件，以便对算法和实际情况有一个直观的了解。然而，在现实生活中，你很可能不会从头开始开发CNN，因为你将使用一些现成的和经过战斗考验的深度学习框架。</p>
-<p>因此，在本章的第二部分，我们将展示深度学习移动应用的完整开发周期。我们将拍摄标记有情绪的人脸照片，在GPU工作站上训练CNN，然后使用Keras、Vision和Core ML框架将其集成到iOS应用程序中。</p>
+<p class="NormalPACKT">在本章中，我们将讨论<strong>卷积神经网络</strong>(<strong>CNN</strong>)。首先，我们将通过 Swift 中的示例来讨论所有组件，以便对算法和实际情况有一个直观的了解。然而，在现实生活中，你很可能不会从头开始开发 CNN，因为你将使用一些现成的和经过战斗考验的深度学习框架。</p>
+<p>因此，在本章的第二部分，我们将展示深度学习移动应用的完整开发周期。我们将拍摄标记有情绪的人脸照片，在 GPU 工作站上训练 CNN，然后使用 Keras、Vision 和 Core ML 框架将其集成到 iOS 应用程序中。</p>
 <p>本章结束时，您将了解到:</p>
 <ul>
 <li>情感计算</li>
 <li>计算机视觉，它的任务和方法</li>
 <li>有线电视新闻网，他们的解剖，以及背后的核心概念</li>
 <li>细胞神经网络在计算机视觉中的应用</li>
-<li>如何使用GPU工作站和Keras训练CNN</li>
+<li>如何使用 GPU 工作站和 Keras 训练 CNN</li>
 <li>深度学习技巧:正规化、数据扩充和提前停止</li>
-<li>CNN架构</li>
-<li>如何将训练好的模型转换为核心ML格式，以便在iOS应用程序中使用</li>
-<li>如何使用CNN和视觉框架检测照片中的人脸和面部表情</li>
+<li>CNN 架构</li>
+<li>如何将训练好的模型转换为核心 ML 格式，以便在 iOS 应用程序中使用</li>
+<li>如何使用 CNN 和视觉框架检测照片中的人脸和面部表情</li>
 </ul>
 
 
@@ -55,7 +55,7 @@
             
             
                 
-<p>虽然语音输入无疑是一个有用的功能，但我们都知道句子的实际意思可能与字面意思相反，这取决于说话者的语调、面部表情和上下文。试试这个简单的句子:<em>哦，真的吗？</em>根据条件的不同，这可以表示:<em>我怀疑</em>，<em>我不知道</em>，<em>我印象深刻</em>，<em>我不在乎</em>，<em>这是显而易见的</em>等等。问题是语音并不是人类唯一的对话模式，这就是为什么现在很多研究都集中在教计算机理解(也模拟)手势、面部表情、文本中的情感、眼球运动、讽刺和其他情感表现上。围绕情感和同情心人工智能问题出现的跨学科领域被称为<strong>情感计算</strong>。它整合了计算机科学、认知科学、心理学和机器人学的知识。其目的是创造能够适应用户情绪状态、理解用户情绪并模拟移情的计算机系统。早在1995年，在智能手机出现之前，这个领域的名字是由罗莎琳德·皮卡德创造的。在她名为<em>情感计算</em>【2】的技术报告中，她预测这将与可穿戴设备特别相关。通过本章中的面部表情识别，我们将把情感智能的元素引入到我们的移动应用程序中。这可以用在语言理解的环境中，或者用在从表情符号推荐到智能照片排序的许多其他方面。</p>
+<p>虽然语音输入无疑是一个有用的功能，但我们都知道句子的实际意思可能与字面意思相反，这取决于说话者的语调、面部表情和上下文。试试这个简单的句子:<em>哦，真的吗？</em>根据条件的不同，这可以表示:<em>我怀疑</em>，<em>我不知道</em>，<em>我印象深刻</em>，<em>我不在乎</em>，<em>这是显而易见的</em>等等。问题是语音并不是人类唯一的对话模式，这就是为什么现在很多研究都集中在教计算机理解(也模拟)手势、面部表情、文本中的情感、眼球运动、讽刺和其他情感表现上。围绕情感和同情心人工智能问题出现的跨学科领域被称为<strong>情感计算</strong>。它整合了计算机科学、认知科学、心理学和机器人学的知识。其目的是创造能够适应用户情绪状态、理解用户情绪并模拟移情的计算机系统。早在 1995 年，在智能手机出现之前，这个领域的名字是由罗莎琳德·皮卡德创造的。在她名为<em>情感计算</em>【2】的技术报告中，她预测这将与可穿戴设备特别相关。通过本章中的面部表情识别，我们将把情感智能的元素引入到我们的移动应用程序中。这可以用在语言理解的环境中，或者用在从表情符号推荐到智能照片排序的许多其他方面。</p>
 <p>请注意，情感计算类似于情感分析，但它是一个更广泛的术语:前者对所有类型的情感及其检测和模拟感兴趣，而后者主要关注文本的极性(积极/消极)。</p>
 
 
@@ -98,9 +98,9 @@
 </ul>
 <p>一些常见的计算机视觉任务，像<strong>光学字符识别</strong> ( <strong> OCR </strong>)，由几个步骤组成；例如<em>图像分割→图像识别</em>:</p>
 <div><img src="img/99e472bb-5b9d-4033-8aef-001f80a257d3.png"/></div>
-<p>图9.1:流行的计算机视觉任务。顶行:识别，本地化。中间一行:物体检测，姿态估计。底部一行:语义分段和实例分段</p>
-<p>这些任务被认为是困难的问题，因为可变的因素:不同的摄像机位置、照明、对象的遮挡、类内可变性、对象形状的变化等等。许多熟悉的机器学习算法在计算机视觉中发现了意想不到的应用。比如我们已经看到了<em> k </em> -means可以用于图像分割，线性回归的扩展RANSAC用于将照片拼接成全景图。</p>
-<p>CNNs历史背景:<strong> <br/> </strong>多年来，计算机视觉领域的进展一直缓慢而艰巨，涉及大量领域专家知识、人工特征选取和模型参数调整。重大的变化悄然而至:2012年，Alex Krizhevsky赢得了年度ImageNet图像识别比赛，将其他竞争者远远甩在身后。对于他的分类器，他使用了当时鲜为人知的CNN (AlexNet架构)。更令人惊讶的是，CNN至少早在1994年就被提出，当时Yan LeCunn发表了他的用于手写数字识别的LeNet5体系结构描述。但是它们被认为对于大多数现实世界的任务是不切实际的，因为需要几乎永恒的时间和大量的数据来学习任何有用的东西。新奇的是，Krizhevsky使用图形加速器(GPU)而不是CPU来训练他的网络。利用这些设备的巨大并行性，他将训练时间从数周缩短到数小时。结果是惊人的，因此卷积网络很快在研究人员和从业人员中流行起来。</p>
+<p>图 9.1:流行的计算机视觉任务。顶行:识别，本地化。中间一行:物体检测，姿态估计。底部一行:语义分段和实例分段</p>
+<p>这些任务被认为是困难的问题，因为可变的因素:不同的摄像机位置、照明、对象的遮挡、类内可变性、对象形状的变化等等。许多熟悉的机器学习算法在计算机视觉中发现了意想不到的应用。比如我们已经看到了<em> k </em> -means 可以用于图像分割，线性回归的扩展 RANSAC 用于将照片拼接成全景图。</p>
+<p>CNNs 历史背景:<strong> <br/> </strong>多年来，计算机视觉领域的进展一直缓慢而艰巨，涉及大量领域专家知识、人工特征选取和模型参数调整。重大的变化悄然而至:2012 年，Alex Krizhevsky 赢得了年度 ImageNet 图像识别比赛，将其他竞争者远远甩在身后。对于他的分类器，他使用了当时鲜为人知的 CNN (AlexNet 架构)。更令人惊讶的是，CNN 至少早在 1994 年就被提出，当时 Yan LeCunn 发表了他的用于手写数字识别的 LeNet5 体系结构描述。但是它们被认为对于大多数现实世界的任务是不切实际的，因为需要几乎永恒的时间和大量的数据来学习任何有用的东西。新奇的是，Krizhevsky 使用图形加速器(GPU)而不是 CPU 来训练他的网络。利用这些设备的巨大并行性，他将训练时间从数周缩短到数小时。结果是惊人的，因此卷积网络很快在研究人员和从业人员中流行起来。</p>
 <p>让我们仔细看看这种类型的神经网络。</p>
 
 
@@ -128,8 +128,8 @@
             
             
                 
-<p>在过去的几年中，CNN或ConvNets得到了很多关注，主要是因为它们在计算机视觉领域取得了重大成功。它们是当今大多数计算机视觉系统的核心，包括自动驾驶汽车和大规模照片分类系统。</p>
-<p>在某种意义上，CNN非常类似于多层感知器，我们在前一章已经讨论过。这些网络也是从这些层建立起来的，但是与MLP不同，它通常具有彼此相似的所有层，CNN通常包括许多不同类型的层。该层最重要的类型是卷积层。现代CNN可能真的很深——有数百个不同的层次。尽管如此，您仍然可以将整个网络视为一个可微分函数，它接受一些输入(通常是图像像素的原始值)，并产生一些输出(例如，类概率:0.8猫，0.2狗)。</p>
+<p>在过去的几年中，CNN 或 ConvNets 得到了很多关注，主要是因为它们在计算机视觉领域取得了重大成功。它们是当今大多数计算机视觉系统的核心，包括自动驾驶汽车和大规模照片分类系统。</p>
+<p>在某种意义上，CNN 非常类似于多层感知器，我们在前一章已经讨论过。这些网络也是从这些层建立起来的，但是与 MLP 不同，它通常具有彼此相似的所有层，CNN 通常包括许多不同类型的层。该层最重要的类型是卷积层。现代 CNN 可能真的很深——有数百个不同的层次。尽管如此，您仍然可以将整个网络视为一个可微分函数，它接受一些输入(通常是图像像素的原始值)，并产生一些输出(例如，类概率:0.8 猫，0.2 狗)。</p>
 
 
             
@@ -156,10 +156,10 @@
             
             
                 
-<p>汇集或子采样是输入大小减小的简单操作(<em>图9.2 </em>)。如果你有一个黑白图像，你想缩小它的尺寸，你可以用下面的方法:选择一个大小为<em> n </em> × <em> m </em>的滑动窗口，步长<em> s </em>。浏览图像，应用滑动窗口并在每次想要移动窗口时移动<em> s </em>像素。在每个位置计算平均值(平均池)或最大值(最大池)，并将该值记录到目标矩阵中。现在，有两种常见的方法来处理图像的边框:</p>
+<p>汇集或子采样是输入大小减小的简单操作(<em>图 9.2 </em>)。如果你有一个黑白图像，你想缩小它的尺寸，你可以用下面的方法:选择一个大小为<em> n </em> × <em> m </em>的滑动窗口，步长<em> s </em>。浏览图像，应用滑动窗口并在每次想要移动窗口时移动<em> s </em>像素。在每个位置计算平均值(平均池)或最大值(最大池)，并将该值记录到目标矩阵中。现在，有两种常见的方法来处理图像的边框:</p>
 <div><img height="290" src="img/946d1545-57a8-4f6c-a55f-70179847b0ce.png" width="332"/></div>
-<p>图9.2。联营业务。源图像中的灰色窗口对应于目标图像中的灰色单元</p>
-<div><p class="NormalPACKT">当数据在网络中传输时，在CNN中使用池来减少数据的大小。</p>
+<p>图 9.2。联营业务。源图像中的灰色窗口对应于目标图像中的灰色单元</p>
+<div><p class="NormalPACKT">当数据在网络中传输时，在 CNN 中使用池来减少数据的大小。</p>
 </div>
 
 
@@ -187,10 +187,10 @@
             
             
                 
-<p>卷积是图像处理中最重要的运算之一。图像编辑器中的模糊、锐化、边缘检测、去噪、浮雕等很多大家熟悉的操作，其实都是卷积。它在某种程度上类似于池操作，因为它也是一种滑动窗口操作，但它不是在窗口上取平均值，而是通过大小为n × n的内核矩阵执行元素级乘法，并将结果求和。运算的结果取决于内核(又称<strong>卷积滤波器</strong>)——一个矩阵，通常是正方形，但不一定，见<em>图9.3 </em>。步幅和填充的概念与合并的情况相同:</p>
+<p>卷积是图像处理中最重要的运算之一。图像编辑器中的模糊、锐化、边缘检测、去噪、浮雕等很多大家熟悉的操作，其实都是卷积。它在某种程度上类似于池操作，因为它也是一种滑动窗口操作，但它不是在窗口上取平均值，而是通过大小为 n × n 的内核矩阵执行元素级乘法，并将结果求和。运算的结果取决于内核(又称<strong>卷积滤波器</strong>)——一个矩阵，通常是正方形，但不一定，见<em>图 9.3 </em>。步幅和填充的概念与合并的情况相同:</p>
 <div><img src="img/9f18394a-88e1-4072-814a-000e0ae6147c.png"/></div>
 <div><img height="296" src="img/e6f3cf21-6116-49be-bea5-e5ca70f56b9f.png" width="498"/></div>
-<p>图9.3:不同的卷积滤镜对图片有不同的效果</p>
+<p>图 9.3:不同的卷积滤镜对图片有不同的效果</p>
 <p>卷积运算的工作方式如下(见下图):</p>
 <ul>
 <li>卷积核(过滤器)从左到右、从上到下滑过图像</li>
@@ -199,7 +199,7 @@
 <li>卷积的结果是一个由滤波器每个位置的和组成的矩阵:</li>
 </ul>
 <div><img height="315" src="img/387e8b16-9d41-43bd-9389-8150265706fa.png" width="484"/></div>
-<p>图9.4:使用3×3内核、步长1和有效填充的卷积运算: :源图像被分割成多个窗口；每个窗口按元素乘以滤波器；每个窗口中值的总和</p>
+<p>图 9.4:使用 3×3 内核、步长 1 和有效填充的卷积运算: :源图像被分割成多个窗口；每个窗口按元素乘以滤波器；每个窗口中值的总和</p>
 <p>该算法乍看起来很简单，因此您可能会想到一个与此类似的快速实现:</p>
 <pre>let input = ... //source image, 2D array<br/>var output = ... //destination image, 2D array<br/>for i in 0..&lt;imageHeight {<br/>     for j in 0..&lt;imageWidth {<br/>         var accumulator = 0;<br/>         for ik in 0..&lt;kernelHeight {<br/>             for jk in 0..&lt;kernelWidth {<br/>                 accumulator += kernel[ik][jk] *<br/>                 input[i+ik-kernelHeight/2][j+jk-kernelWidth/2]<br/>             } <br/>         }<br/>         output[i][j] = accumulator;<br/>     }<br/>}</pre>
 <p>但是，您真的不应该在生产代码中实现自己的卷积运算。以下是您必须处理的问题的非详尽列表:</p>
@@ -209,25 +209,25 @@
 <li>正确处理整数溢出</li>
 <li>优化速度</li>
 </ul>
-<p>一个好的卷积实现可能需要数百行代码(甚至更多)。iOS SDK为开发人员提供了几种API供他们选择，具体取决于他们的需求和目标:</p>
+<p>一个好的卷积实现可能需要数百行代码(甚至更多)。iOS SDK 为开发人员提供了几种 API 供他们选择，具体取决于他们的需求和目标:</p>
 <ul>
 <li>对于图像过滤:<ul>
 <li><kbd>CIImageFilter</kbd>来自核心形象框架</li>
 <li><kbd>vImage convolution</kbd>加速框架中的函数，例如<kbd>vImageConvolve_ARGB8888()</kbd></li>
 </ul>
 </li>
-<li>对于运行CNN:<ul>
-<li><strong>对于CPU执行</strong> : BNNS卷积层:<kbd>BNNSFilterCreateConvolutionLayer</kbd></li>
-<li><strong>用于GPU执行</strong>:来自金属性能着色器框架的<kbd>MPSCNNConvolution</kbd>类</li>
+<li>对于运行 CNN:<ul>
+<li><strong>对于 CPU 执行</strong> : BNNS 卷积层:<kbd>BNNSFilterCreateConvolutionLayer</kbd></li>
+<li><strong>用于 GPU 执行</strong>:来自金属性能着色器框架的<kbd>MPSCNNConvolution</kbd>类</li>
 </ul>
 </li>
 </ul>
-<p><kbd xmlns:epub="http://www.idpf.org/2007/ops">vImage functions</kbd>是处理大型图像或连续多次重复操作的推荐方式。要过滤中等大小的图像，坚持使用CoreImage更有效。当您实现CNN时，您通常希望使用Metal或accelerate框架。这是我们将在第十一章、<em xmlns:epub="http://www.idpf.org/2007/ops">机器学习库</em>中详细讨论的内容。</p>
-<p>检查补充代码中的<kbd>Convolution.playground</kbd>，看看不同的卷积滤波器如何产生不同的效果。试试你自己的过滤器，看看会发生什么。我们使用accelerate框架中的<kbd>vImageConvolve_ARGB8888()</kbd>函数来应用过滤器。</p>
+<p><kbd xmlns:epub="http://www.idpf.org/2007/ops">vImage functions</kbd>是处理大型图像或连续多次重复操作的推荐方式。要过滤中等大小的图像，坚持使用 CoreImage 更有效。当您实现 CNN 时，您通常希望使用 Metal 或 accelerate 框架。这是我们将在第十一章、<em xmlns:epub="http://www.idpf.org/2007/ops">机器学习库</em>中详细讨论的内容。</p>
+<p>检查补充代码中的<kbd>Convolution.playground</kbd>，看看不同的卷积滤波器如何产生不同的效果。试试你自己的过滤器，看看会发生什么。我们使用 accelerate 框架中的<kbd>vImageConvolve_ARGB8888()</kbd>函数来应用过滤器。</p>
 <div><p>下面是一个例子:</p>
 <pre>import Accelerate<br/><br/>let error = vImageConvolve_ARGB8888(&amp;input, &amp;output, nil, 0, 0, kernel, kernelHeight, kernelWidth, Int32(divisor), nil, flags)</pre></div>
 <div><img src="img/dc35ae9a-ca4c-4de2-a4d4-f7abff75d0ef.png"/></div>
-<p>图9.5:多通道卷积</p>
+<p>图 9.5:多通道卷积</p>
 
 
             
@@ -249,14 +249,14 @@
         
 
                             
-                    <h1 class="header-title">CNN中的卷积</h1>
+                    <h1 class="header-title">CNN 中的卷积</h1>
                 
             
             
                 
-<p>第一层将滤波器应用于输入图像，并将结果特征矩阵发送到下游。接下来的层将它们的过滤器应用于它们得到的输入，从越来越高的层次提取特征(见<em>图9.6 - 9.8 </em>)。在图像分类(或<em>物体识别</em>的任务中，CNN在训练过程中逐渐调整滤波器，从图片中提取有用的特征。在这种情况下，有用的特征是不同的图案，如眼睛、喙、轮子等:</p>
+<p>第一层将滤波器应用于输入图像，并将结果特征矩阵发送到下游。接下来的层将它们的过滤器应用于它们得到的输入，从越来越高的层次提取特征(见<em>图 9.6 - 9.8 </em>)。在图像分类(或<em>物体识别</em>的任务中，CNN 在训练过程中逐渐调整滤波器，从图片中提取有用的特征。在这种情况下，有用的特征是不同的图案，如眼睛、喙、轮子等:</p>
 <div><img src="img/082a0c8c-162c-4989-9b44-50c2e14b26b0.png"/></div>
-<p>图9.6:每个CNN层学习一组卷积核。在这里，您可以看到VGG 16的第二个模块中第二个卷积层的不同滤波器的输出</p>
+<p>图 9.6:每个 CNN 层学习一组卷积核。在这里，您可以看到 VGG 16 的第二个模块中第二个卷积层的不同滤波器的输出</p>
 <p>有趣的是，卷积神经网络在计算机视觉领域之外被广泛使用；例如，在自然语言建模和语音识别中。这是因为它们能够从原始数据中提取有意义的特征。从图像中提取边缘和角点与从文本中提取句法特征没有本质的区别。</p>
 
 
@@ -284,17 +284,17 @@
             
             
                 
-<p>当您第一次遇到CNN的各种架构时，您会被大量的新术语、不同的层及其超参数所淹没。事实上，目前只有少数架构找到了广泛的应用，适合移动开发的设计数量更少。</p>
+<p>当您第一次遇到 CNN 的各种架构时，您会被大量的新术语、不同的层及其超参数所淹没。事实上，目前只有少数架构找到了广泛的应用，适合移动开发的设计数量更少。</p>
 <p class="NormalPACKT">有五种基本类型的层和一个输入层，输入层通常除了向前传递数据之外什么也不做:</p>
 <ul>
 <li class="NormalPACKT"><strong>输入层</strong>:神经网络中的第一层。它什么也不做，只接受输入并将其传递到下游。</li>
 <li class="NormalPACKT"><strong>回旋层</strong>:回旋发生的地方</li>
 <li class="NormalPACKT"><strong>完全</strong>:连接或密集层</li>
-<li class="NormalPACKT"><strong>非线性层</strong>:这些层将激活函数应用于前一层的输出:sigmoid、ReLU、tanh、softmax等。</li>
+<li class="NormalPACKT"><strong>非线性层</strong>:这些层将激活函数应用于前一层的输出:sigmoid、ReLU、tanh、softmax 等。</li>
 <li class="NormalPACKT"><strong>合并图层</strong>:对它们的输入进行缩减采样。</li>
 <li class="NormalPACKT"><strong>规则化层</strong>:对抗过度拟合的层。</li>
 </ul>
-<p>现代深度学习框架包含更多不同类型的层来满足所有需求，但这些是最常用的。在下面几节中，我们将详细讨论每种类型的层。由于CNN通常不在移动设备上训练，而是仅用于预测，因此我们在此不详细讨论CNN中的反向传播。不过，如果你有兴趣了解更多细节，本章补充资料中的<kbd>NN Demo.playground</kbd>包含了CNN及其所有经典层的纯Swift实现。它还包含随机梯度下降算法及其几个变体的实现。请参考这个操场，了解更多关于图层齿轮和训练算法的技术细节。操场是安德烈·卡帕西设计的<kbd>ConvNetJS</kbd>图书馆的快捷港。它仅仅是为了研究目的而开发的，用来演示CNN如何在内部工作，而不是为了在实际应用中使用，并且它没有利用GPU或CPU加速。原JS库可以在这里找到:<a href="https://cs.stanford.edu/people/karpathy/convnetjs/" target="_blank">https://cs.stanford.edu/people/karpathy/convnetjs/</a></p>
+<p>现代深度学习框架包含更多不同类型的层来满足所有需求，但这些是最常用的。在下面几节中，我们将详细讨论每种类型的层。由于 CNN 通常不在移动设备上训练，而是仅用于预测，因此我们在此不详细讨论 CNN 中的反向传播。不过，如果你有兴趣了解更多细节，本章补充资料中的<kbd>NN Demo.playground</kbd>包含了 CNN 及其所有经典层的纯 Swift 实现。它还包含随机梯度下降算法及其几个变体的实现。请参考这个操场，了解更多关于图层齿轮和训练算法的技术细节。操场是安德烈·卡帕西设计的<kbd>ConvNetJS</kbd>图书馆的快捷港。它仅仅是为了研究目的而开发的，用来演示 CNN 如何在内部工作，而不是为了在实际应用中使用，并且它没有利用 GPU 或 CPU 加速。原 JS 库可以在这里找到:<a href="https://cs.stanford.edu/people/karpathy/convnetjs/" target="_blank">https://cs.stanford.edu/people/karpathy/convnetjs/</a></p>
 
 
             
@@ -348,15 +348,15 @@
             
             
                 
-<p class="NormalPACKT">在CNN中，卷积发生在特殊的层，称为<strong>卷积层</strong>。每一层都有一个卷积滤波器阵列，也可以看作一个具有宽度、高度和通道数(或深度)的3D卷积滤波器。在第一卷积层中，我们通常希望有3个通道对应于输入图像的RGB通道:</p>
+<p class="NormalPACKT">在 CNN 中，卷积发生在特殊的层，称为<strong>卷积层</strong>。每一层都有一个卷积滤波器阵列，也可以看作一个具有宽度、高度和通道数(或深度)的 3D 卷积滤波器。在第一卷积层中，我们通常希望有 3 个通道对应于输入图像的 RGB 通道:</p>
 <div><img height="309" src="img/b21feafc-aae7-4050-bc73-8ddad7b6cf93.png" width="312"/></div>
-<p>图9.7:第一个卷积层以一批图像为输入，输出一批特征图。将16个红色、绿色和蓝色过滤器中的每一个的结果相加，以获得最终的特征地图</p>
+<p>图 9.7:第一个卷积层以一批图像为输入，输出一批特征图。将 16 个红色、绿色和蓝色过滤器中的每一个的结果相加，以获得最终的特征地图</p>
 <div><p class="NormalPACKT">卷积层的输出被称为<strong>特征图</strong>，因为它显示了特定特征在输入图像中的位置。请注意，只有第一个卷积层将图像作为其输入，所有后续层都将它们的前任(特征映射)的输出作为其输入。这些特征地图被存储为张量。</p>
-<p>深度学习背景下的张量是一个多维数组。神经网络参数，例如卷积滤波器，存储为张量，所有数据以张量形式通过深度神经网络传输。0维张量是标量，1D是矢量，2D是矩阵，3D有时称为<strong>体积</strong>。</p>
+<p>深度学习背景下的张量是一个多维数组。神经网络参数，例如卷积滤波器，存储为张量，所有数据以张量形式通过深度神经网络传输。0 维张量是标量，1D 是矢量，2D 是矩阵，3D 有时称为<strong>体积</strong>。</p>
 </div>
 <div><img height="299" src="img/e59a6123-b1da-443a-a86a-7e2ba6aa711b.png" width="478"/></div>
-<p>图9.8:CNN中的每一个下一层都比前一层提取更多的抽象特征。取自VGG 16网络的示例。</p>
-<p class="NormalPACKT">注意，对于你的生产应用，你通常不希望在Swift中编写自己的卷积层，因为你想利用GPU的能力，所以你通常使用现有的深度学习库(见<a href="a0699ba2-e643-4a53-914b-890b435be480.xhtml" target="_blank">第10章</a>、<em>自然语言处理</em>)或在Metal或Accelerate中实现自定义层(见<a href="dc502f3c-ae07-4291-8cfe-4ea4bef76e24.xhtml" target="_blank">第11章</a>、<em>机器学习库</em>)。</p>
+<p>图 9.8:CNN 中的每一个下一层都比前一层提取更多的抽象特征。取自 VGG 16 网络的示例。</p>
+<p class="NormalPACKT">注意，对于你的生产应用，你通常不希望在 Swift 中编写自己的卷积层，因为你想利用 GPU 的能力，所以你通常使用现有的深度学习库(见<a href="a0699ba2-e643-4a53-914b-890b435be480.xhtml" target="_blank">第 10 章</a>、<em>自然语言处理</em>)或在 Metal 或 Accelerate 中实现自定义层(见<a href="dc502f3c-ae07-4291-8cfe-4ea4bef76e24.xhtml" target="_blank">第 11 章</a>、<em>机器学习库</em>)。</p>
 
 
             
@@ -383,9 +383,9 @@
             
             
                 
-<p class="NormalPACKT">完全收集层就像上一章中多层感知器的一层，但是没有激活功能。你可以把它想象成一个权重乘以一个输入的矩阵或者一层人工神经元(<em>图9.9 </em>):</p>
+<p class="NormalPACKT">完全收集层就像上一章中多层感知器的一层，但是没有激活功能。你可以把它想象成一个权重乘以一个输入的矩阵或者一层人工神经元(<em>图 9.9 </em>):</p>
 <div><img height="228" src="img/88732ed1-f431-4e77-a2cc-3e8e20b414a0.png" width="479"/></div>
-<p>图9.9:表示全连接层的两种方式:矩阵向量乘法和图形。</p>
+<p>图 9.9:表示全连接层的两种方式:矩阵向量乘法和图形。</p>
 
 
             
@@ -412,8 +412,8 @@
             
             
                 
-<p>这些都是我们在前一章已经讨论过的非线性:tanh、sigmoid、ReLU等。您通常希望将它们放在卷积层或全连接层之后。</p>
-<p>Softmax是逻辑函数对向量的推广:当逻辑函数<kbd>squashes</kbd>的标量值在0和1之间时，softmax压缩向量，使其元素相加为1。在统计学中，离散随机分布的结果的概率加起来是1，所以这个函数对于目标变量是离散的分类非常有用。</p>
+<p>这些都是我们在前一章已经讨论过的非线性:tanh、sigmoid、ReLU 等。您通常希望将它们放在卷积层或全连接层之后。</p>
+<p>Softmax 是逻辑函数对向量的推广:当逻辑函数<kbd>squashes</kbd>的标量值在 0 和 1 之间时，softmax 压缩向量，使其元素相加为 1。在统计学中，离散随机分布的结果的概率加起来是 1，所以这个函数对于目标变量是离散的分类非常有用。</p>
 
 
             
@@ -521,16 +521,16 @@
             
             
                 
-<p class="CDPAlignCenter CDPAlign CDPAlignLeft">层参数的微小变化会影响所有后续层的输入，并且这种影响会随着每个后续层而放大。这对于深层网络来说尤其成问题。<br/>由于前一层的参数正在被调整，在训练过程中，每一层的输入分布发生变化。这个问题被称为<strong>内部协变移位</strong>。<br/>批量归一化技术是由谷歌的Sergey Ioffe和Christian Szegedy在2015年提出来解决这个问题的[1]。作为网络架构的一部分，它允许标准化每个小批量的层输入。批量标准化层通常插在点积和非线性之间。</p>
+<p class="CDPAlignCenter CDPAlign CDPAlignLeft">层参数的微小变化会影响所有后续层的输入，并且这种影响会随着每个后续层而放大。这对于深层网络来说尤其成问题。<br/>由于前一层的参数正在被调整，在训练过程中，每一层的输入分布发生变化。这个问题被称为<strong>内部协变移位</strong>。<br/>批量归一化技术是由谷歌的 Sergey Ioffe 和 Christian Szegedy 在 2015 年提出来解决这个问题的[1]。作为网络架构的一部分，它允许标准化每个小批量的层输入。批量标准化层通常插在点积和非线性之间。</p>
 <p class="CDPAlignCenter CDPAlign CDPAlignLeft">好处如下:</p>
 <ul>
 <li>你可以用更高的学习率</li>
 <li>您可以不太在意权重初始化</li>
 <li>正常工作-不需要辍学</li>
-<li>相同型号的火车速度快14倍</li>
+<li>相同型号的火车速度快 14 倍</li>
 </ul>
 <div><p>协变量移位:</p>
-<p>机器学习系统中的常见问题正式称为<strong>协变量移位</strong>:当模型被部署到生产环境中时，它的数据分布似乎与训练数据的分布不同。名字来源于协变量，协变量和特征基本相同。通过类比，引入了内部协变量移位的概念:当在神经网络中输入数据到每一层的分布不稳定时，但是在SGD的每一步之后显著变化。</p>
+<p>机器学习系统中的常见问题正式称为<strong>协变量移位</strong>:当模型被部署到生产环境中时，它的数据分布似乎与训练数据的分布不同。名字来源于协变量，协变量和特征基本相同。通过类比，引入了内部协变量移位的概念:当在神经网络中输入数据到每一层的分布不稳定时，但是在 SGD 的每一步之后显著变化。</p>
 <p>如果输入和输出分布都发生变化，这就是所谓的<strong>数据集偏移</strong>。</p>
 </div>
 
@@ -568,12 +568,12 @@
 <td><strong>通常用于</strong></td>
 </tr>
 <tr>
-<td>均方误差或L2损失</td>
+<td>均方误差或 L2 损失</td>
 <td><img class="fm-editor-equation" height="38" src="img/e0a5a6c3-0470-47b0-9f6a-6cdff048825a.png" width="135"/></td>
 <td>回归</td>
 </tr>
 <tr>
-<td>平均绝对误差或L1损失</td>
+<td>平均绝对误差或 L1 损失</td>
 <td><img class="fm-editor-equation" height="43" src="img/a98f39f2-ef47-4747-ace5-12eed888d600.png" width="145"/></td>
 <td>回归</td>
 </tr>
@@ -581,7 +581,7 @@
 <td>范畴交叉熵</td>
 <td><img class="fm-editor-equation" height="41" src="img/59dffc6c-561a-42a0-9a54-7a13b800ca7d.png" width="154"/></td>
 <td>
-<p class="mce-root">Softmax多类分类</p>
+<p class="mce-root">Softmax 多类分类</p>
 </td>
 </tr>
 </tbody>
@@ -614,15 +614,15 @@
             
             
                 
-<p><strong>随机梯度下降</strong> ( <strong> SGD </strong>)是训练深度神经网络的有效方法。SGD寻求网络的这些参数<em>θ</em>，使损失函数<em> ℒ </em>最小。</p>
+<p><strong>随机梯度下降</strong> ( <strong> SGD </strong>)是训练深度神经网络的有效方法。SGD 寻求网络的这些参数<em>θ</em>，使损失函数<em> ℒ </em>最小。</p>
 <div><img class="fm-editor-equation" height="46" src="img/6ecb17ad-db43-4752-8d7d-96bf2c9f8acf.png" width="198"/></div>
 <p>其中<img class="fm-editor-equation" height="12" src="img/9b892e10-be03-447c-8d55-3ddf5ca7b656.png" width="44"/>是训练数据集。</p>
-<p>训练是循序渐进的。在每一步，我们选择一个规模为m(小批量)的训练集的子集，并使用它来逼近关于参数<em>θ</em>的损失函数梯度:</p>
+<p>训练是循序渐进的。在每一步，我们选择一个规模为 m(小批量)的训练集的子集，并使用它来逼近关于参数<em>θ</em>的损失函数梯度:</p>
 <div><img class="fm-editor-equation" height="36" src="img/f702edb5-06d3-4679-8bc1-1c8fe2811353.png" width="90"/></div>
 <p class="NormalPACKT">小批量培训的优势如下:</p>
 <ul>
 <li>小批量损失函数的梯度是对整个训练集的梯度的更好的近似，而不是仅对一个样本进行计算</li>
-<li>多亏了GPU，你可以对批量中的每个样本并行执行计算，这样速度更快，然后逐个处理它们</li>
+<li>多亏了 GPU，你可以对批量中的每个样本并行执行计算，这样速度更快，然后逐个处理它们</li>
 </ul>
 <p><a href="http://willwolf.io/2017/04/19/deriving-the-softmax-from-first-principles/" target="_blank"/></p>
 
@@ -646,21 +646,21 @@
         
 
                             
-                    <h1 class="header-title">训练CNN进行面部表情识别</h1>
+                    <h1 class="header-title">训练 CNN 进行面部表情识别</h1>
                 
             
             
                 
-<p class="NormalPACKT">为了演示CNN，我们将实现一个简单的用于情感识别的神经网络。我们将使用来自ICML 2013年比赛<em>面部表情识别挑战赛</em>【1】的面部表情数据集<kbd>fer2013</kbd>。</p>
-<div><p>数据集可以从kaggle网站下载:</p>
+<p class="NormalPACKT">为了演示 CNN，我们将实现一个简单的用于情感识别的神经网络。我们将使用来自 ICML 2013 年比赛<em>面部表情识别挑战赛</em>【1】的面部表情数据集<kbd>fer2013</kbd>。</p>
+<div><p>数据集可以从 kaggle 网站下载:</p>
 <p><a href="https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data" target="_blank">https://www . ka ggle . com/c/challenges-in-re presentation-learning-face-expression-recognition-challenge/data</a></p>
 <p>您将被要求注册并接受条款和条件。</p>
 </div>
-<p class="NormalPACKT">归档文件<kbd>fer2013.tar.gz</kbd>包含带有数据集本身的<kbd>fer2013.csv</kbd>和一些补充信息文件。<kbd>.csv</kbd>文件包含35887个样本，其中28709个标记为训练集，3589个标记为公共测试，3589个标记为私有测试。表格中有三栏:情感、像素和使用情况。每个样本都是像素阵列形式的48 × 48像素灰度人脸照片。人脸是以自动方式裁剪的，所以数据集中有一些假阳性(非人脸和卡通人脸)。每个面都被标记为属于7个类别中的一个。情绪在数据集中的分布如下:</p>
+<p class="NormalPACKT">归档文件<kbd>fer2013.tar.gz</kbd>包含带有数据集本身的<kbd>fer2013.csv</kbd>和一些补充信息文件。<kbd>.csv</kbd>文件包含 35887 个样本，其中 28709 个标记为训练集，3589 个标记为公共测试，3589 个标记为私有测试。表格中有三栏:情感、像素和使用情况。每个样本都是像素阵列形式的 48 × 48 像素灰度人脸照片。人脸是以自动方式裁剪的，所以数据集中有一些假阳性(非人脸和卡通人脸)。每个面都被标记为属于 7 个类别中的一个。情绪在数据集中的分布如下:</p>
 <table>
 <tbody>
 <tr>
-<td><strong>类别id </strong></td>
+<td><strong>类别 id </strong></td>
 <td>0</td>
 <td>一</td>
 <td>2</td>
@@ -717,17 +717,17 @@
             
             
                 
-<p>要训练深度CNN，你需要一台配有CUDA兼容GPU的电脑。我用了一台Ubuntu 16.x的机器，搭配NVidia GTX980 GPU进行模型训练，用了一台macOS的机器将模型转换成Core ML格式。如果没有兼容CUDA的GPU，可以尝试在CPU上训练模型；但是请注意，这将需要很多时间。此外，本章的训练模型可以在补充材料中找到，所以如果你不想通过从头开始重新训练模型来加剧全球变暖，这也是可行的。</p>
+<p>要训练深度 CNN，你需要一台配有 CUDA 兼容 GPU 的电脑。我用了一台 Ubuntu 16.x 的机器，搭配 NVidia GTX980 GPU 进行模型训练，用了一台 macOS 的机器将模型转换成 Core ML 格式。如果没有兼容 CUDA 的 GPU，可以尝试在 CPU 上训练模型；但是请注意，这将需要很多时间。此外，本章的训练模型可以在补充材料中找到，所以如果你不想通过从头开始重新训练模型来加剧全球变暖，这也是可行的。</p>
 <p>下面列出了您的系统中应该安装哪些组件来训练网络:</p>
 <ul>
-<li>最新的NVIDIA驱动程序</li>
+<li>最新的 NVIDIA 驱动程序</li>
 <li>CUDA 8.0</li>
 <li>cuDNN 5.1</li>
 <li>Python 2.7</li>
-<li><kbd>tensorflow-gpu</kbd>(或纯CPU模式的张量流)</li>
+<li><kbd>tensorflow-gpu</kbd>(或纯 CPU 模式的张量流)</li>
 <li>克拉斯</li>
 <li>喀拉斯-维兹</li>
-<li>熊猫Matplotlib</li>
+<li>熊猫 Matplotlib</li>
 </ul>
 <p class="NormalPACKT">请参考官方网站的安装说明。</p>
 
@@ -756,8 +756,8 @@
             
             
                 
-<p>针对不同类型的平台，有大量的深度学习工具包和库。很长一段时间，其中最受欢迎的三个是Theano (Python)、Torch (Lua)和Caffe (C++)。不知何故，咖啡成了一种工业标准，而茶和火炬主要用于研究人员。我把这三个库称为第一代深度学习框架。互联网上可用的大多数预训练神经网络仍然是Caffe格式的。他们有自己的问题，所以几年后下一代框架出现了。如果说第一代主要是由个体研究人员创造的，那么第二代则是由大型IT公司推动的。今天，除了苹果，每个互联网巨头都有自己的开源深度学习框架:谷歌有TensorFlow和Keras，微软有CNTK，脸书发布了Caffe 2，Torch重生为PyTorch，这都要感谢Twitter和脸书。亚马逊已经选择MXNet作为其在AWS的深度学习框架。你的深度学习项目应该选择哪一个？目前，最好的iOS支持由Caffe 2和TensorFlow框架提供。随着Core ML的发布，我们也可以轻松地将Caffe和Keras中训练的模型转换为苹果的<kbd>ml</kbd>模型格式。在这一章中，我们对CNN使用Keras。</p>
-<p>旁注:苹果的Metal 2也包含许多用于构建深度学习神经网络的原语，但很难称之为深度学习框架，最重要的是因为它不支持训练神经网络。</p>
+<p>针对不同类型的平台，有大量的深度学习工具包和库。很长一段时间，其中最受欢迎的三个是 Theano (Python)、Torch (Lua)和 Caffe (C++)。不知何故，咖啡成了一种工业标准，而茶和火炬主要用于研究人员。我把这三个库称为第一代深度学习框架。互联网上可用的大多数预训练神经网络仍然是 Caffe 格式的。他们有自己的问题，所以几年后下一代框架出现了。如果说第一代主要是由个体研究人员创造的，那么第二代则是由大型 IT 公司推动的。今天，除了苹果，每个互联网巨头都有自己的开源深度学习框架:谷歌有 TensorFlow 和 Keras，微软有 CNTK，脸书发布了 Caffe 2，Torch 重生为 PyTorch，这都要感谢 Twitter 和脸书。亚马逊已经选择 MXNet 作为其在 AWS 的深度学习框架。你的深度学习项目应该选择哪一个？目前，最好的 iOS 支持由 Caffe 2 和 TensorFlow 框架提供。随着 Core ML 的发布，我们也可以轻松地将 Caffe 和 Keras 中训练的模型转换为苹果的<kbd>ml</kbd>模型格式。在这一章中，我们对 CNN 使用 Keras。</p>
+<p>旁注:苹果的 Metal 2 也包含许多用于构建深度学习神经网络的原语，但很难称之为深度学习框架，最重要的是因为它不支持训练神经网络。</p>
 
 
             
@@ -784,10 +784,10 @@
             
             
                 
-<p>Keras是一个流行的Python包，用于构建深度学习神经网络。它有一个用户友好的语法。在其中构建原型和构建深度模型既简单又快速。它最初是作为Theano符号计算库的门面，但随着时间的推移，它也开发了TensorFlow后端，因此最终成为TensorFlow的一部分。所以现在，TensorFlow是一个默认的后端，但你仍然可以选择切换回Theano。还有MXNet和CNTK后端的在建项目。</p>
-<p>Keras包含最常见数据类型的预处理函数:图像、文本和时间序列。</p>
-<p>核心ML支持Keras内置的卷积和递归神经网络。</p>
-<p>Keras官网:<a href="https://keras.io/" target="_blank">https://keras.io/</a></p>
+<p>Keras 是一个流行的 Python 包，用于构建深度学习神经网络。它有一个用户友好的语法。在其中构建原型和构建深度模型既简单又快速。它最初是作为 Theano 符号计算库的门面，但随着时间的推移，它也开发了 TensorFlow 后端，因此最终成为 TensorFlow 的一部分。所以现在，TensorFlow 是一个默认的后端，但你仍然可以选择切换回 Theano。还有 MXNet 和 CNTK 后端的在建项目。</p>
+<p>Keras 包含最常见数据类型的预处理函数:图像、文本和时间序列。</p>
+<p>核心 ML 支持 Keras 内置的卷积和递归神经网络。</p>
+<p>Keras 官网:<a href="https://keras.io/" target="_blank">https://keras.io/</a></p>
 
 
             
@@ -814,14 +814,14 @@
             
             
                 
-<p>像往常一样，首先我们添加一些魔法来显示Jupyter中的内嵌图像:</p>
+<p>像往常一样，首先我们添加一些魔法来显示 Jupyter 中的内嵌图像:</p>
 <pre>%matplotlib inline </pre>
 <p>我们用熊猫来处理我们的数据:</p>
 <pre>import pandas </pre>
-<p class="mce-root">请访问Kaggle网站并下载数据集:<a href="https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge" target="_blank">https://www . ka ggle . com/c/challenges-in-re presentation-learning-face-expression-recognition-challenge</a></p>
+<p class="mce-root">请访问 Kaggle 网站并下载数据集:<a href="https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge" target="_blank">https://www . ka ggle . com/c/challenges-in-re presentation-learning-face-expression-recognition-challenge</a></p>
 <p>将数据集加载到内存中:</p>
 <pre>data = pandas.read_csv("fer2013/fer2013.csv") </pre>
-<p class="mce-root">数据集由编码为像素强度的灰度人脸照片组成。48 x 48为每个像素提供2304个像素。每一个图像都是根据脸上的情绪来标注的。</p>
+<p class="mce-root">数据集由编码为像素强度的灰度人脸照片组成。48 x 48 为每个像素提供 2304 个像素。每一个图像都是根据脸上的情绪来标注的。</p>
 <pre>data.head() 
 emotion  pixels   Usage 
 0  0  70 80 82 72 58 58 60 63 54 58 60 48 89 115 121...  Training 
@@ -840,7 +840,7 @@ data.emotion.value_counts()
 5    4002 
 1     547 
 Name: emotion, dtype: int64 </pre>
-<p>这里0 =生气，1 =厌恶，2 =恐惧，3 =快乐，4 =悲伤，5 =惊讶，6 =中立。</p>
+<p>这里 0 =生气，1 =厌恶，2 =恐惧，3 =快乐，4 =悲伤，5 =惊讶，6 =中立。</p>
 <p>让我们去掉<kbd>Disgust</kbd>，因为我们的样本太少了:</p>
 <pre>data = data[data.emotion != 1] 
 data.loc[data.emotion &gt; 1, "emotion"] -= 1 
@@ -962,12 +962,12 @@ datagen = ImageDataGenerator(
     width_shift_range=0.2, 
     height_shift_range=0.2, 
     horizontal_flip=True) </pre>
-<p>计算特征标准化所需的数量(标准差、平均值和主成分，如果应用ZCA白化):</p>
+<p>计算特征标准化所需的数量(标准差、平均值和主成分，如果应用 ZCA 白化):</p>
 <pre> datagen.fit(X_train)<br/> batch_size = 32 </pre>
-<p>在每次迭代中，我们会一次性考虑32个训练样本，换句话说，我们的批量是32个。让我们看看增强后的图像:</p>
+<p>在每次迭代中，我们会一次性考虑 32 个训练样本，换句话说，我们的批量是 32 个。让我们看看增强后的图像:</p>
 <pre>from matplotlib import pyplot 
 for X_batch, y_batch in datagen.flow(X_train, y_train, batch_size=9): </pre>
-<p>创建3 x 3图像的网格:</p>
+<p>创建 3 x 3 图像的网格:</p>
 <pre>    for i in range(0, 9): 
         pyplot.axis('off') 
         pyplot.subplot(330 + 1 + i) 
@@ -1007,7 +1007,7 @@ test_flow = datagen.flow(X_test, y_test) </pre>
             
             
                 
-<p class="NormalPACKT">Keras允许通过一个接一个地添加新层来建立深度神经网络。请注意，到目前为止，所有图层都应该是您熟悉的。</p>
+<p class="NormalPACKT">Keras 允许通过一个接一个地添加新层来建立深度神经网络。请注意，到目前为止，所有图层都应该是您熟悉的。</p>
 <pre>from keras.models import Sequential 
 from keras.layers import Activation, Dropout, Flatten, Dense, BatchNormalization, Conv2D, MaxPool2D 
 model = Sequential() 
@@ -1143,7 +1143,7 @@ SVG(model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
 from IPython.display import Image 
 from keras.utils import plot_model 
 plot_model(model, show_shapes=True, show_layer_names=True, to_file='model.png') </pre>
-<p>结果见<em>图9.10 </em>。</p>
+<p>结果见<em>图 9.10 </em>。</p>
 
 
             
@@ -1170,7 +1170,7 @@ plot_model(model, show_shapes=True, show_layer_names=True, to_file='model.png') 
             
             
                 
-<p>首先，我们必须定义我们要训练网络多长时间。一次<kbd>epoch</kbd>是训练集的一次完整通过。历元中的步骤数取决于批量大小和训练集中的样本数。假设我们想跳过训练集100次:</p>
+<p>首先，我们必须定义我们要训练网络多长时间。一次<kbd>epoch</kbd>是训练集的一次完整通过。历元中的步骤数取决于批量大小和训练集中的样本数。假设我们想跳过训练集 100 次:</p>
 <pre class="CodePACKT">num_epochs = 100</pre>
 <p>通过实时数据扩充在批次上拟合模型:</p>
 <pre>num_epochs = 100 # we iterate 200 times over the entire training set 
@@ -1190,7 +1190,7 @@ Epoch 100/100
 883/883 [==============================] - 13s - loss: 0.9225 - acc: 0.6487 - val_loss: 1.0829 - val_acc: 0.6122 </pre>
 <p>如果训练顺利，损失值应该会随着时间的推移而减少，如下图所示:</p>
 <div><img height="590" src="img/758e10e1-3dac-46c5-b7f0-8b79c68b53cf.png" width="152"/></div>
-<p>图9.10:神经网络结构</p>
+<p>图 9.10:神经网络结构</p>
 
 
             
@@ -1228,7 +1228,7 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left') 
 plt.show() </pre>
 <div><img height="185" src="img/90169982-d160-4eee-9e32-0ab7e6b1099d.png" width="339"/></div>
-<p>图9.11:训练和测试集在训练时期的损失</p>
+<p>图 9.11:训练和测试集在训练时期的损失</p>
 
 
             
@@ -1271,7 +1271,7 @@ print(prediction)
 [[ 0.05708674  0.35863262  0.03299783  0.17862292  0.00069717  0.37196276]] 
 emotion_labels[prediction.argmax()] 
 'Neutral' </pre>
-<p>请注意那些由6个浮点数组成数组。这些是属于每一类的概率。换句话说，该模型预测，这张脸可能是一个愤怒的人，只有5%的概率。完整的表格将如下所示:</p>
+<p>请注意那些由 6 个浮点数组成数组。这些是属于每一类的概率。换句话说，该模型预测，这张脸可能是一个愤怒的人，只有 5%的概率。完整的表格将如下所示:</p>
 <table>
 <tbody>
 <tr>
@@ -1330,7 +1330,7 @@ Fear </pre>
 <p>在测试集上评估训练的模型。该函数报告损失值和精确度，如下所示:</p>
 <pre>model.evaluate_generator(test_flow, steps=len(X_test) / batch_size) 
 [1.1285726155553546, 0.60696517426491459]</pre>
-<p>所以，我们模型的最终准确率大约是60%。考虑到数据集有多嘈杂，这还不算太糟糕。</p>
+<p>所以，我们模型的最终准确率大约是 60%。考虑到数据集有多嘈杂，这还不算太糟糕。</p>
 
 
             
@@ -1352,7 +1352,7 @@ Fear </pre>
         
 
                             
-                    <h1 class="header-title">以HDF5格式保存模型</h1>
+                    <h1 class="header-title">以 HDF5 格式保存模型</h1>
                 
             
             
@@ -1380,12 +1380,12 @@ Fear </pre>
         
 
                             
-                    <h1 class="header-title">转换为核心ML格式</h1>
+                    <h1 class="header-title">转换为核心 ML 格式</h1>
                 
             
             
                 
-<p>在iOS上使用预训练CNN的最简单方法是将其转换为核心ML格式:</p>
+<p>在 iOS 上使用预训练 CNN 的最简单方法是将其转换为核心 ML 格式:</p>
 <pre>from keras.models import load_model<br/>model = load_model('Emotions.h5')<br/>coreml_model = convert(model, <br/>                       image_input_names = 'image', <br/>                       class_labels = emotion_labels)<br/>...<br/>coreml_model.save('Emotions.mlmodel')</pre>
 
 
@@ -1413,7 +1413,7 @@ Fear </pre>
             
             
                 
-<p>调试CNN是出了名的困难。检查卷积层是否学到了任何有意义的东西的方法之一是使用<kbd>Keras-vis</kbd>包可视化它们的输出:</p>
+<p>调试 CNN 是出了名的困难。检查卷积层是否学到了任何有意义的东西的方法之一是使用<kbd>Keras-vis</kbd>包可视化它们的输出:</p>
 <pre>from vis.utils import utils 
 from vis.visualization import visualize_class_activation, get_num_filters </pre>
 <p>我们必须将灰度图像转换为<kbd>rgb</kbd>，以便与<kbd>keras-vis</kbd>一起使用:</p>
@@ -1447,7 +1447,7 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
         img = visualize_class_activation(model, layer_idx, filter_indices=idx)  
         vis_images.append(to_rgb(img.reshape(48,48))) 
  </pre>
-<p>生成8列拼接图像调色板，如下所示:</p>
+<p>生成 8 列拼接图像调色板，如下所示:</p>
 <pre>    stitched = utils.stitch_images(vis_images, cols=8) 
     stitched_figs.append(stitched) 
      
@@ -1458,7 +1458,7 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
     plt.savefig(layer_name+"_filters.png", bbox_inches='tight') 
     plt.show() </pre>
 <div><img src="img/007ae5cc-3d5a-40f3-b9b0-239b04170296.png"/></div>
-<p>图9.12:网络最后一个卷积层的卷积滤波器</p>
+<p>图 9.12:网络最后一个卷积层的卷积滤波器</p>
 
 
             
@@ -1480,19 +1480,19 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
         
 
                             
-                    <h1 class="header-title">将CNN部署到iOS</h1>
+                    <h1 class="header-title">将 CNN 部署到 iOS</h1>
                 
             
             
                 
-<p>您需要将上一节中生成的核心ML文件拖放到您的项目中，以开始使用模型。</p>
+<p>您需要将上一节中生成的核心 ML 文件拖放到您的项目中，以开始使用模型。</p>
 <p>进口:</p>
 <pre>import Foundation<br/>import Vision<br/>import AVFoundation<br/>import UIKit</pre>
 <p>首先，让我们定义一些数据结构。可能分类结果的枚举:</p>
 <pre>enum FaceExpressions: String {<br/> case angry = "angry"<br/> case anxious = "anxious"<br/> case neutral = "neutral"<br/> case happy = "happy"<br/> case sad = "sad"<br/>}</pre>
 <p>分类器错误的枚举:</p>
 <pre>enum ClassifierError: Error {<br/> case unableToResizeBuffer<br/> case noResults<br/>}</pre>
-<p><kbd>Classifier</kbd>是核心ML模型的包装器单例:</p>
+<p><kbd>Classifier</kbd>是核心 ML 模型的包装器单例:</p>
 <pre>class Classifier {<br/> public static let shared = Classifier()<br/> <br/> private let visionModel: VNCoreMLModel<br/> var visionRequests = [VNRequest]()<br/> var completion: ((_ label: [(FaceExpressions, Double)], _ error: Error?)-&gt;())?</pre>
 <pre class="mce-root">private init() {<br/> guard let visionModel = try? VNCoreMLModel(for: Emotions().model) else {<br/> fatalError("Could not load model")<br/> }<br/> <br/> self.visionModel = visionModel<br/> <br/> let classificationRequest = VNCoreMLRequest(model: visionModel, completionHandler: classificationResultHandler)<br/> classificationRequest.imageCropAndScaleOption = .centerCrop<br/> visionRequests = [classificationRequest]<br/> }</pre>
 <p>根据推理运行网络的功能:</p>
@@ -1500,7 +1500,7 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
 <p>当新的分类结果出现时，将调用该方法:</p>
 <pre>private func classificationResultHandler(request: VNRequest, error: Error?) {<br/> if let error = error {<br/> print(error.localizedDescription)<br/> self.completion?([], error)<br/> return<br/> }<br/> guard let results = request.results as? [VNClassificationObservation] else {<br/> print("No results")<br/> self.completion?([], ClassifierError.noResults)<br/> return<br/> }<br/> <br/> let sortedResults = results<br/> .sorted { $0.confidence &gt; $1.confidence }<br/> .map{(FaceExpressions(rawValue:$0.identifier)!, Double($0.confidence))}</pre>
 <pre class="mce-root">self.completion?(sortedResults, nil)<br/> print(sortedResults)<br/> }<br/>}</pre>
-<p>这里我们省略了应用程序的UI部分，完整代码请参考演示应用程序。</p>
+<p>这里我们省略了应用程序的 UI 部分，完整代码请参考演示应用程序。</p>
 
 
             
@@ -1527,8 +1527,8 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
             
             
                 
-<p>在这一章中，我们建立了一个深度学习CNN，并使用Keras训练它识别照片上的面部表情。然后，我们使用Core ML将其移植到移动应用程序中。该模型可以实时工作。我们也已经熟悉了苹果的愿景框架。</p>
-<p>CNN是强大的工具，可以应用于许多计算机视觉任务，以及时间序列预测、自然语言处理等。它们是围绕卷积的概念构建的，卷积是一种数学运算，可用于定义多种类型的图像变换。CNN学习卷积滤波器的方式与通常的神经网络使用相同的随机梯度下降学习权重的方式相似。卷积比通常的矩阵乘法需要更少的计算，这就是为什么它们可以有效地用于移动设备。除了卷积层，CNN通常包括其他类型的层，如池化、全连接、非线性、正则化等等。多年来，研究人员出于不同的目的提出了许多CNN架构。其中一些是专门为在移动设备上运行而设计的；例如SquizeNet和MobileNets。</p>
+<p>在这一章中，我们建立了一个深度学习 CNN，并使用 Keras 训练它识别照片上的面部表情。然后，我们使用 Core ML 将其移植到移动应用程序中。该模型可以实时工作。我们也已经熟悉了苹果的愿景框架。</p>
+<p>CNN 是强大的工具，可以应用于许多计算机视觉任务，以及时间序列预测、自然语言处理等。它们是围绕卷积的概念构建的，卷积是一种数学运算，可用于定义多种类型的图像变换。CNN 学习卷积滤波器的方式与通常的神经网络使用相同的随机梯度下降学习权重的方式相似。卷积比通常的矩阵乘法需要更少的计算，这就是为什么它们可以有效地用于移动设备。除了卷积层，CNN 通常包括其他类型的层，如池化、全连接、非线性、正则化等等。多年来，研究人员出于不同的目的提出了许多 CNN 架构。其中一些是专门为在移动设备上运行而设计的；例如 SquizeNet 和 MobileNets。</p>
 <p>在下一章，我们将探索人类自然语言的神奇世界。我们还将使用神经网络来构建几个具有不同个性的聊天机器人。</p>
 
 
@@ -1557,8 +1557,8 @@ for (layer_name, layer_size) in zip(layer_names, layer_sizes):
             
                 
 <ol>
-<li><em>表征学习的挑战:关于三个机器学习</em> <em>竞赛的报告</em>，I Goodfellow，D Erhan，PL Carrier，A，M Mirza，B Hamner，W Cukierski，Y Tang，DH Lee，Y Zhou，C Ramaiah，F Feng，R Li，X Wang，D Athanasakis，J Shawe-Taylor，M Milakov，J Park，R，M Popescu，C Grozea，J Bergstra，J Xie，L Romaszko，B Xu，Z Chuang，和arXiv 2013。比赛地点<a href="http://deeplearning.net/icml2013-workshop-competition" target="_blank">http://deeplearning.net/icml2013-workshop-competition</a>。<a href="http://deeplearning.net/icml2013-workshop-competition" target="_blank"/></li>
-<li><em xmlns:epub="http://www.idpf.org/2007/ops">情感计算</em>，罗莎琳德·皮卡尔。麻省理工学院技术报告#32，1995年【http://affect.media.mit.edu/pdfs/95.picard.pdf T2】。<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://affect.media.mit.edu/pdfs/95.picard.pdf" target="_blank"/></li>
+<li><em>表征学习的挑战:关于三个机器学习</em> <em>竞赛的报告</em>，I Goodfellow，D Erhan，PL Carrier，A，M Mirza，B Hamner，W Cukierski，Y Tang，DH Lee，Y Zhou，C Ramaiah，F Feng，R Li，X Wang，D Athanasakis，J Shawe-Taylor，M Milakov，J Park，R，M Popescu，C Grozea，J Bergstra，J Xie，L Romaszko，B Xu，Z Chuang，和 arXiv 2013。比赛地点<a href="http://deeplearning.net/icml2013-workshop-competition" target="_blank">http://deeplearning.net/icml2013-workshop-competition</a>。<a href="http://deeplearning.net/icml2013-workshop-competition" target="_blank"/></li>
+<li><em xmlns:epub="http://www.idpf.org/2007/ops">情感计算</em>，罗莎琳德·皮卡尔。麻省理工学院技术报告#32，1995 年【http://affect.media.mit.edu/pdfs/95.picard.pdf T2】。<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://affect.media.mit.edu/pdfs/95.picard.pdf" target="_blank"/></li>
 <li>批量标准化:通过减少内部协变量转移加速深度网络训练。谢尔盖·约夫，克里斯蒂安·塞格迪，2015。</li>
 </ol>
 <p class="mce-root"/>

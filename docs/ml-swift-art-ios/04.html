@@ -10,18 +10,18 @@
         
 
                             
-                    <h1 class="header-title">k均值聚类</h1>
+                    <h1 class="header-title">k 均值聚类</h1>
                 
             
             
                 
 <p class="mce-root"/>
-<p>在这一章中，我们将把注意力从监督学习转移到非监督学习。我们将在本章中讨论和实现的算法是k-means和k-means++聚类。</p>
+<p>在这一章中，我们将把注意力从监督学习转移到非监督学习。我们将在本章中讨论和实现的算法是 k-means 和 k-means++聚类。</p>
 <p>在本章中，我们将讨论以下主题:</p>
 <ul>
-<li>基于实例的k-均值聚类算法</li>
-<li>k-means的缺点以及如何用k-means++修正它们</li>
-<li>哪里可以用k-means，哪里不应该用</li>
+<li>基于实例的 k-均值聚类算法</li>
+<li>k-means 的缺点以及如何用 k-means++修正它们</li>
+<li>哪里可以用 k-means，哪里不应该用</li>
 <li>聚类在信号量化中的应用</li>
 <li>如何选择聚类数</li>
 </ul>
@@ -66,7 +66,7 @@
 <li>根据所描绘的人的身份对脸部照片进行聚类</li>
 <li>使用客户交易数据库(市场细分)寻找目标广告的客户群</li>
 <li>有了一组文本文档，根据作者的个人风格(风格学)(作者归属)或根据主题(主题建模)将它们分类到一个文件夹中</li>
-<li>具有亲缘关系的DNA标记，构建系统发育或家族树(等级聚类；在这种情况下集群是嵌套的)</li>
+<li>具有亲缘关系的 DNA 标记，构建系统发育或家族树(等级聚类；在这种情况下集群是嵌套的)</li>
 </ul>
 <p>请注意，只有在没有预先定义组/类别/集群的情况下，这些才是集群任务。一旦有了预定义的对象类别，使用分类算法会更好。</p>
 <p>在移动开发环境中，哪里需要集群？在地图上聚集图钉可能看起来是最自然的想法。有了用户位置的聚类，你可以猜测他的重要位置的位置，比如房子和工作场所。我们将从这里开始，稍后讨论更复杂的集群应用。现在，我们将专注于经典的聚类算法:<em> k </em> -means。</p>
@@ -91,18 +91,18 @@
         
 
                             
-                    <h1 class="header-title">k均值聚类</h1>
+                    <h1 class="header-title">k 均值聚类</h1>
                 
             
             
                 
 <p>这种算法的名称来自于样本被划分成的<em> k </em>个聚类，以及每个聚类围绕某个平均值分组的事实，即聚类的<strong>质心</strong>。这个质心作为一个类的原型。每个数据点属于质心最近的聚类。</p>
-<p>该算法是1957年在贝尔实验室发明的。</p>
-<p>在该算法中，每个数据点只属于一个聚类。作为该算法的结果，我们将特征空间划分为Voronoi单元。</p>
-<p>由于其名称中的<em> k </em>，该算法经常与KNN算法混淆，但是正如我们已经看到的<em> k </em>折叠交叉验证，并不是所有的<em> k </em>都是相同的。你可能会奇怪，为什么机器学习的人对这个字母如此着迷，以至于把它放在每个算法的名字里。我现在不知道。</p>
+<p>该算法是 1957 年在贝尔实验室发明的。</p>
+<p>在该算法中，每个数据点只属于一个聚类。作为该算法的结果，我们将特征空间划分为 Voronoi 单元。</p>
+<p>由于其名称中的<em> k </em>，该算法经常与 KNN 算法混淆，但是正如我们已经看到的<em> k </em>折叠交叉验证，并不是所有的<em> k </em>都是相同的。你可能会奇怪，为什么机器学习的人对这个字母如此着迷，以至于把它放在每个算法的名字里。我现在不知道。</p>
 <div><img height="472" src="img/caa0c7ed-e0fa-4951-9ef2-16af5506580c.png" width="472"/></div>
-<p>图4.1:使用<em> k </em> -means算法对相同数据进行聚类的四种不同方法。光秃秃的黑点是星团的质心。样本来自经典的虹膜数据集，绘制了花瓣长度与花瓣宽度的关系。</p>
-<p>让我们更正式地定义算法的目标。如果<em> n </em>是你的数据点(样本，表示为长度为<em> d </em>的实向量)的数量，那么k-means算法将它们分成<em> k </em>个集合(聚类，<em> k </em> &lt; <em> n </em>)，这样在每个聚类内，从点到中心的距离之和(平均值)最小。换句话说，该算法的目标是找到一组具有最小WCSS的聚类:</p>
+<p>图 4.1:使用<em> k </em> -means 算法对相同数据进行聚类的四种不同方法。光秃秃的黑点是星团的质心。样本来自经典的虹膜数据集，绘制了花瓣长度与花瓣宽度的关系。</p>
+<p>让我们更正式地定义算法的目标。如果<em> n </em>是你的数据点(样本，表示为长度为<em> d </em>的实向量)的数量，那么 k-means 算法将它们分成<em> k </em>个集合(聚类，<em> k </em> &lt; <em> n </em>)，这样在每个聚类内，从点到中心的距离之和(平均值)最小。换句话说，该算法的目标是找到一组具有最小 WCSS 的聚类:</p>
 <div><img class="fm-editor-equation" height="54" src="img/0ac6e286-86f9-4d11-aabb-71200778f292.png" width="197"/></div>
 <p>其中:</p>
 <ul>
@@ -138,15 +138,15 @@
         
 
                             
-                    <h1 class="header-title">在Swift中实施k-means</h1>
+                    <h1 class="header-title">在 Swift 中实施 k-means</h1>
                 
             
             
                 
-<p>类似于上一章的KNN，我们将有一个结构来表示一个算法并保存它的所有超参数:</p>
+<p>类似于上一章的 KNN，我们将有一个结构来表示一个算法并保存它的所有超参数:</p>
 <pre>struct KMeans { 
   public let k: Int </pre>
-<p>标准k-means算法被设计为仅用于欧几里德距离:</p>
+<p>标准 k-means 算法被设计为仅用于欧几里德距离:</p>
 <pre>internal let distanceMetric = Euclidean.distance </pre>
 <p>我们需要几个数组在集群期间存储不同种类的数据。</p>
 <p>样品储存:</p>
@@ -161,7 +161,7 @@
 <pre>public init (k: Int) { 
   self.k = k 
 }<br/>} </pre>
-<p>与KNN不同，k-means的接口只有一个方法:<kbd>train(data:)</kbd>，返回聚类的结果，每个样本所属的聚类的索引:</p>
+<p>与 KNN 不同，k-means 的接口只有一个方法:<kbd>train(data:)</kbd>，返回聚类的结果，每个样本所属的聚类的索引:</p>
 <pre>public mutating func train(data: [[Double]]) -&gt; [Int] { </pre>
 <p>在开始实际计算之前，有几个不可避免的仪式要进行。</p>
 <p>数据点计数应大于或等于<kbd>k</kbd>，样本数(<kbd>n</kbd>)应大于零:</p>
@@ -181,12 +181,12 @@ precondition(d &gt; 0) </pre>
 } </pre>
 <p>用零填充<kbd>clusters</kbd>数组:</p>
 <pre>clusters = [Int](repeating: 0, count: n) </pre>
-<p>k-means的重要细节是质心的初始选择。取决于初始化步骤，算法的结果可能显著不同。现在我们不要过多考虑它，继续进行随机初始化:</p>
+<p>k-means 的重要细节是质心的初始选择。取决于初始化步骤，算法的结果可能显著不同。现在我们不要过多考虑它，继续进行随机初始化:</p>
 <pre>chooseCentroidsAtRandom() // The function body will be described later. </pre>
-<p>该算法的主要部分是while循环，当满足收敛条件时，该循环中断:</p>
+<p>该算法的主要部分是 while 循环，当满足收敛条件时，该循环中断:</p>
 <pre>while true { </pre>
 <p>在这些循环中，算法由两个步骤组成:更新步骤和分配步骤。</p>
-<p><strong>类内平方和</strong> ( <strong> WCSS) </strong>是k-means的重要性能度量。我们在每次迭代开始时将它设置为零，并且当它每次都改变时，我们更新聚类质心:</p>
+<p><strong>类内平方和</strong> ( <strong> WCSS) </strong>是 k-means 的重要性能度量。我们在每次迭代开始时将它设置为零，并且当它每次都改变时，我们更新聚类质心:</p>
 <pre>WCSS = 0.0 </pre>
 
 
@@ -225,7 +225,7 @@ precondition(d &gt; 0) </pre>
       minDistance = distance 
     } 
   } </pre>
-<p>保存有关WCSS的信息以备将来使用:</p>
+<p>保存有关 WCSS 的信息以备将来使用:</p>
 <pre>  WCSS += minDistance 
 } </pre>
 
@@ -294,7 +294,7 @@ return clusters
     centroidID += 1 
   } 
 } </pre>
-<p>这个<kbd>Random.Weighted.indicesNoReplace(weights:uniformWeights, count: k)</kbd>看起来很神秘，但它只是一个从数组中用预定义的权重进行随机采样的实用函数。它不进行替换采样，并返回一个索引数组。在这种情况下，所有权重都相等，因此每个元素被采样的概率相等。稍后，我们将对此进行更改，以提高聚类质量和收敛速度。我从R标准库中移植了这个函数。</p>
+<p>这个<kbd>Random.Weighted.indicesNoReplace(weights:uniformWeights, count: k)</kbd>看起来很神秘，但它只是一个从数组中用预定义的权重进行随机采样的实用函数。它不进行替换采样，并返回一个索引数组。在这种情况下，所有权重都相等，因此每个元素被采样的概率相等。稍后，我们将对此进行更改，以提高聚类质量和收敛速度。我从 R 标准库中移植了这个函数。</p>
 
 
             
@@ -321,7 +321,7 @@ return clusters
             
             
                 
-<p>在移动开发的背景下，哪里可以应用k-means？在地图上聚集图钉可能看起来是最自然的想法。有了用户位置的聚类，您就可以猜测用户的重要位置，例如家和工作场所。我们将实现pin聚类来可视化k-means，它的一些不幸的属性，并展示为什么这样的应用可能不是最好的主意。</p>
+<p>在移动开发的背景下，哪里可以应用 k-means？在地图上聚集图钉可能看起来是最自然的想法。有了用户位置的聚类，您就可以猜测用户的重要位置，例如家和工作场所。我们将实现 pin 聚类来可视化 k-means，它的一些不幸的属性，并展示为什么这样的应用可能不是最好的主意。</p>
 <p>在补充代码的<kbd>4_kmeans/MapKMeans</kbd>文件夹下可以找到一个演示应用。一切有趣的事情都发生在<kbd>ViewController.swift</kbd>。聚类发生在<kbd>clusterize()</kbd>方法中:</p>
 <pre>func clusterize() { 
   let k = Settings.k 
@@ -346,9 +346,9 @@ return clusters
 } </pre>
 <p>该应用程序显示地图，你可以通过点击它放入任意多的大头针。尝试形成几个集群，并通过多次按下圆形箭头按钮来运行算法。注意，算法的结果通常是不稳定的:它每次都能给出不同的结果。检查当您选择其他数量的分类时，结果有何不同。</p>
 <div><img src="img/f873f245-b482-4080-846d-43be7485bf20.png"/></div>
-<p>图4.2:演示应用程序工作的结果。结合照片库元数据中的位置，您可以猜测用户在哪里生活、工作和度过空闲时间。</p>
-<p>现在来谈谈对地理空间数据使用k-means的问题。你可能会注意到，看起来算法对待水平和垂直空间是不平等的。那是因为经度的一度总是大约111公里，但是纬度的一度有不同的长度，这取决于你离赤道有多远。基本上，你不应该使用地理坐标作为欧几里德距离的特征。更重要的是，如果你把一些点放在阿拉斯加和俄罗斯的边界上，你会发现KNN把俄罗斯的点和靠近阿拉斯加的点区别对待。这是由于180°子午线。基本上，我们可以说使用k-means进行pin聚类是一个错误。它可以在相对较小的规模上发挥作用。例如，它可以在城市范围内运行良好。只是不要用在世界地图比例尺上。地图是典型的k-means问题演示的理想选择。</p>
-<p>但是等等。切，难道我们不能用其他的距离度量来代替欧几里得距离吗，就像我们在前一章对KNN所做的那样？不，不幸的是这次没有。严格来说，k-means不是一个基于距离的算法。该算法的目标是最小化组内方差(或平方误差)。方差公式恰好与欧几里得距离公式相同。这使得无法插入到您的自定义距离度量中，因为算法可能会停止收敛。对于pin聚类，最好选择一些其他的算法，对于k-means最好选择一些其他的应用程序，我们确实会这样做。但首先，让我们讨论一些在我们第一次实验后变得明显的问题:</p>
+<p>图 4.2:演示应用程序工作的结果。结合照片库元数据中的位置，您可以猜测用户在哪里生活、工作和度过空闲时间。</p>
+<p>现在来谈谈对地理空间数据使用 k-means 的问题。你可能会注意到，看起来算法对待水平和垂直空间是不平等的。那是因为经度的一度总是大约 111 公里，但是纬度的一度有不同的长度，这取决于你离赤道有多远。基本上，你不应该使用地理坐标作为欧几里德距离的特征。更重要的是，如果你把一些点放在阿拉斯加和俄罗斯的边界上，你会发现 KNN 把俄罗斯的点和靠近阿拉斯加的点区别对待。这是由于 180°子午线。基本上，我们可以说使用 k-means 进行 pin 聚类是一个错误。它可以在相对较小的规模上发挥作用。例如，它可以在城市范围内运行良好。只是不要用在世界地图比例尺上。地图是典型的 k-means 问题演示的理想选择。</p>
+<p>但是等等。切，难道我们不能用其他的距离度量来代替欧几里得距离吗，就像我们在前一章对 KNN 所做的那样？不，不幸的是这次没有。严格来说，k-means 不是一个基于距离的算法。该算法的目标是最小化组内方差(或平方误差)。方差公式恰好与欧几里得距离公式相同。这使得无法插入到您的自定义距离度量中，因为算法可能会停止收敛。对于 pin 聚类，最好选择一些其他的算法，对于 k-means 最好选择一些其他的应用程序，我们确实会这样做。但首先，让我们讨论一些在我们第一次实验后变得明显的问题:</p>
 <ul>
 <li><a href="https://datascience.stackexchange.com/questions/761/clustering-geo-location-coordinates-lat-long-pairs" target="_blank">https://data science . stack exchange . com/questions/761/clustering-geo-location-coordinates-lat-long-pairs</a></li>
 <li><a href="https://stats.stackexchange.com/questions/81481/why-does-k-means-clustering-algorithm-use-only-euclidean-distance-metric" target="_blank">https://stats . stack exchange . com/questions/81481/why-k-means-clustering-algorithm-use-only-euclidean-distance-metric</a></li>
@@ -380,9 +380,9 @@ return clusters
             
                 
 <p>如果你事先不知道你有多少个集群，那么你如何选择最优的<em> k </em>？这本质上是一个先有蛋还是先有鸡的问题。几种方法是流行的，我们将讨论其中的一种:肘方法。</p>
-<p>你还记得我们在k-means的每次迭代中计算的那些神秘的WCSS吗？这个度量告诉我们每个聚类中有多少点与它们的质心不同。我们可以计算几个不同的k值，并画出结果。它通常看起来有点类似于下图中的曲线:</p>
+<p>你还记得我们在 k-means 的每次迭代中计算的那些神秘的 WCSS 吗？这个度量告诉我们每个聚类中有多少点与它们的质心不同。我们可以计算几个不同的 k 值，并画出结果。它通常看起来有点类似于下图中的曲线:</p>
 <div><img src="img/528b1d56-3caa-4135-a7e0-601eca7e4f04.png"/></div>
-<p>图4.3: WCSS相对于集群数量的曲线</p>
+<p>图 4.3: WCSS 相对于集群数量的曲线</p>
 <p>这个图应该让你想起第三章、<em xmlns:epub="http://www.idpf.org/2007/ops">K-最近邻分类器</em>中类似的损失函数图。它显示了我们的模型与数据的吻合程度。肘方法的思想是选择<em xmlns:epub="http://www.idpf.org/2007/ops"> k </em>值，在此之后结果不会再有明显的改善。名字来源于剧情与手臂的相似性。我们选择肘部的点，在图上用红线标出。</p>
 <p>有关更多信息，请参考以下链接:<ul>
 <li><a href="https://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set" target="_blank">https://en . Wikipedia . org/wiki/Determining _ the _ number _ of _ clusters _ in _ a _ data _ set</a></li>
@@ -415,19 +415,19 @@ return clusters
             
             
                 
-<p>有关k-means和k-means++的更多信息，请参考以下内容:</p>
+<p>有关 k-means 和 k-means++的更多信息，请参考以下内容:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank">https://en.wikipedia.org/wiki/K-means_clustering</a></li>
 <li><a href="https://en.wikipedia.org/wiki/K-means%2B%2B" target="_blank">https://en.wikipedia.org/wiki/K-means%2B%2B</a></li>
 </ul>
-<p>K-means算法至少有两个缺点:</p>
+<p>K-means 算法至少有两个缺点:</p>
 <ul>
 <li>该算法在最坏情况下的时间复杂度是输入大小的超多项式，这意味着它不受任何多项式的限制</li>
 <li>与最佳聚类相比，标准算法的性能可能会很差，因为它只能找到真正最佳聚类的近似值</li>
 </ul>
 <p>自己尝试一下:在地图上放四个大头针，如下图所示。运行几次聚类分析后，您可能会注意到算法通常会收敛到次优解:</p>
 <div><img src="img/a2765c9a-a645-4e96-915d-30837149ae3e.png"/></div>
-<p>图4.4:同一数据集上的最佳和非最佳聚类结果</p>
+<p>图 4.4:同一数据集上的最佳和非最佳聚类结果</p>
 
 
             
@@ -454,22 +454,22 @@ return clusters
             
             
                 
-<p>2007年提出了一种改进的算法。K-means++通过引入一个额外的步骤来实现良好的质心初始化，从而解决了次优聚类的问题。</p>
+<p>2007 年提出了一种改进的算法。K-means++通过引入一个额外的步骤来实现良好的质心初始化，从而解决了次优聚类的问题。</p>
 <p>初始中心选择的改进算法如下:</p>
 <ol>
 <li>随机选择任意数据点作为第一个中心</li>
 <li>对于所有其他数据点，计算到第一个中心<em> d </em> ( <em> x </em>)的距离</li>
 <li>从加权概率分布中抽取下一个中心，每个数据点成为下一个中心的概率与距离的平方成正比<em>d</em>(<em>x</em>)<sup>2</sup></li>
-<li>重复步骤2和步骤3，直到选择了<em> k </em>中心</li>
-<li>继续标准的k-means算法</li>
+<li>重复步骤 2 和步骤 3，直到选择了<em> k </em>中心</li>
+<li>继续标准的 k-means 算法</li>
 </ol>
-<p>在Swift中，它看起来像这样:</p>
+<p>在 Swift 中，它看起来像这样:</p>
 <pre>internal mutating func chooseCentroids() { 
   let n = data.count 
  
   var minDistances = [Double](repeating: Double.infinity, count: n) 
   var centerIndices = [Int]() </pre>
-<p><kbd>clusterID</kbd>是一个分类的整数标识符:第一个分类的标识符为0，第二个分类的标识符为1，依此类推:</p>
+<p><kbd>clusterID</kbd>是一个分类的整数标识符:第一个分类的标识符为 0，第二个分类的标识符为 1，依此类推:</p>
 <pre>for clusterID in 0 ..&lt; k { 
   var pointIndex: Int 
   if clusterID == 0 { </pre>
@@ -489,7 +489,7 @@ centroids.append(center) </pre>
 <p>到最近中心的距离为零。因此，再次采样的概率也为零:</p>
 <pre>minDistances[pointIndex] = 0.0 
 clusters[pointIndex] = clusterID </pre>
-<p>在此之后，我们必须执行一次分配步骤的迭代，以便当我们继续使用通常的k-means算法时，所有点都被分配到相应的聚类中。</p>
+<p>在此之后，我们必须执行一次分配步骤的迭代，以便当我们继续使用通常的 k-means 算法时，所有点都被分配到相应的聚类中。</p>
 <p>计算每个数据点到质心的距离:</p>
 <pre>var nextI = (0, centerIndices.first ?? Int.max) 
 for (pointIndex, point) in data.enumerated() { </pre>
@@ -555,16 +555,16 @@ public mutating func train(data: [[Double]]) -&gt; [Int] {
         
 
                             
-                    <h1 class="header-title">基于k-均值的图像分割</h1>
+                    <h1 class="header-title">基于 k-均值的图像分割</h1>
                 
             
             
                 
-<p>k-means算法是在数字信号处理领域中发明的，并且仍然在该领域中普遍用于信号量化。对于此任务，它的性能要比pin聚类好得多。让我们看看下图中的一个例子。可以使用色彩空间量化将图片分割成有意义的部分。我们选择聚类的数量，然后对每个像素的RGB值运行k-means，并找到聚类的质心。然后，我们将每个像素替换为其对应质心的颜色。这可以在图像编辑中用于从背景中分离对象或用于有损图像压缩。在<a href="d015f90c-90f8-45ba-916f-0dd892d92648.xhtml" target="_blank">第12章</a>、<em>为移动设备优化神经网络</em>中，我们将使用这种方法进行深度学习神经网络压缩:</p>
+<p>k-means 算法是在数字信号处理领域中发明的，并且仍然在该领域中普遍用于信号量化。对于此任务，它的性能要比 pin 聚类好得多。让我们看看下图中的一个例子。可以使用色彩空间量化将图片分割成有意义的部分。我们选择聚类的数量，然后对每个像素的 RGB 值运行 k-means，并找到聚类的质心。然后，我们将每个像素替换为其对应质心的颜色。这可以在图像编辑中用于从背景中分离对象或用于有损图像压缩。在<a href="d015f90c-90f8-45ba-916f-0dd892d92648.xhtml" target="_blank">第 12 章</a>、<em>为移动设备优化神经网络</em>中，我们将使用这种方法进行深度学习神经网络压缩:</p>
 <div><img src="img/47f66851-a8bb-418f-9446-3bc96a497f28.png"/></div>
-<p>图4.5:使用k均值的图像分割</p>
+<p>图 4.5:使用 k 均值的图像分割</p>
 <p class="mce-root"/>
-<p>下面是一个Objective-C++代码示例，使用k-means的快速OpenCV实现。您可以在文件夹<kbd>4_kmeans/ImageSegmentation</kbd>中找到整个iOS应用程序:</p>
+<p>下面是一个 Objective-C++代码示例，使用 k-means 的快速 OpenCV 实现。您可以在文件夹<kbd>4_kmeans/ImageSegmentation</kbd>中找到整个 iOS 应用程序:</p>
 <pre>- (cv::Mat)kMeansClustering:(cv::Mat)input withK:(int)k { 
   cv::cvtColor(input, input, CV_RGBA2RGB); 
   cv::Mat samples(input.rows * input.cols, 3, CV_32F); 
@@ -622,7 +622,7 @@ public mutating func train(data: [[Double]]) -&gt; [Int] {
             
             
                 
-<p>在这一章中，我们讨论了一个重要的无监督学习任务:聚类。最简单的聚类算法是k-means。它不能提供稳定的结果，并且计算复杂，但这可以使用k-means++来改进。该算法可以应用于欧几里德距离是有意义的度量的任何数据，但是应用它的最佳领域是信号量化。例如，我们已经把它用于图像分割。对于不同类型的任务，存在更多的聚类算法。</p>
+<p>在这一章中，我们讨论了一个重要的无监督学习任务:聚类。最简单的聚类算法是 k-means。它不能提供稳定的结果，并且计算复杂，但这可以使用 k-means++来改进。该算法可以应用于欧几里德距离是有意义的度量的任何数据，但是应用它的最佳领域是信号量化。例如，我们已经把它用于图像分割。对于不同类型的任务，存在更多的聚类算法。</p>
 <p>在下一章，我们将更深入地探索无监督学习。具体来说，我们将讨论在数据中发现关联规则的算法:关联学习。</p>
 <p class="mce-root"/>
 

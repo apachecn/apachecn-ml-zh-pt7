@@ -8,7 +8,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04" class="calibre1"/>第四章。了解回归分析</h1></div></div></div><p class="calibre7">在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem">用lm拟合线性回归模型</li><li class="listitem">总结线性模型拟合</li><li class="listitem">使用线性回归预测未知值</li><li class="listitem">生成拟合模型的诊断图</li><li class="listitem">用lm拟合多项式回归模型</li><li class="listitem">用rlm拟合稳健线性回归模型</li><li class="listitem">滑动数据线性回归案例研究</li><li class="listitem">应用高斯模型进行广义线性回归</li><li class="listitem">应用泊松模型进行广义线性回归</li><li class="listitem">应用二项式模型进行广义线性回归</li><li class="listitem">用广义加性模型拟合数据</li><li class="listitem">可视化广义加性模型</li><li class="listitem">诊断广义加性模型</li></ul></div></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04" class="calibre1"/>第四章。了解回归分析</h1></div></div></div><p class="calibre7">在本章中，我们将介绍以下配方:</p><div><ul class="itemizedlist"><li class="listitem">用 lm 拟合线性回归模型</li><li class="listitem">总结线性模型拟合</li><li class="listitem">使用线性回归预测未知值</li><li class="listitem">生成拟合模型的诊断图</li><li class="listitem">用 lm 拟合多项式回归模型</li><li class="listitem">用 rlm 拟合稳健线性回归模型</li><li class="listitem">滑动数据线性回归案例研究</li><li class="listitem">应用高斯模型进行广义线性回归</li><li class="listitem">应用泊松模型进行广义线性回归</li><li class="listitem">应用二项式模型进行广义线性回归</li><li class="listitem">用广义加性模型拟合数据</li><li class="listitem">可视化广义加性模型</li><li class="listitem">诊断广义加性模型</li></ul></div></div></body></html>
 
 
 <html>
@@ -32,7 +32,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec41" class="calibre1"/>用lm拟合线性回归模型</h1></div></div></div><p class="calibre7">回归中最简单的模型是线性回归，当只有一个<a id="id355" class="calibre1"/>预测变量，且响应变量与自变量之间的关系为线性时，最好使用线性回归。在R中，我们<a id="id356" class="calibre1"/>可以用<code class="email">lm</code>函数将线性模型拟合到数据。</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec41" class="calibre1"/>用 lm 拟合线性回归模型</h1></div></div></div><p class="calibre7">回归中最简单的模型是线性回归，当只有一个<a id="id355" class="calibre1"/>预测变量，且响应变量与自变量之间的关系为线性时，最好使用线性回归。在 R 中，我们<a id="id356" class="calibre1"/>可以用<code class="email">lm</code>函数将线性模型拟合到数据。</p></div></body></html>
 
 
 <html>
@@ -60,7 +60,7 @@
 <strong class="calibre2">&gt; plot(Quartet$x, Quartet$y1)</strong>
 <strong class="calibre2">&gt; lmfit = lm(y1~x, Quartet) </strong>
 <strong class="calibre2">&gt; abline(lmfit, col="red")  </strong>
-</pre></div><div><img src="img/00078.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">用lm拟合的简单回归图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">要查看拟合模型，执行以下命令:<div> <pre class="programlisting"> <strong class="calibre2">&gt; lmfit</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">lm(formula = y1 ~ x, data = Quartet)</strong>  <strong class="calibre2">Coefficients:</strong> <strong class="calibre2">(Intercept)            x  </strong> <strong class="calibre2">     3.0001       0.5001 </strong> </pre> </div></li></ol><div/></div></div></div></body></html>
+</pre></div><div><img src="img/00078.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">用 lm 拟合的简单回归图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="5">要查看拟合模型，执行以下命令:<div> <pre class="programlisting"> <strong class="calibre2">&gt; lmfit</strong>  <strong class="calibre2">Call:</strong> <strong class="calibre2">lm(formula = y1 ~ x, data = Quartet)</strong>  <strong class="calibre2">Coefficients:</strong> <strong class="calibre2">(Intercept)            x  </strong> <strong class="calibre2">     3.0001       0.5001 </strong> </pre> </div></li></ol><div/></div></div></div></body></html>
 
 
 <html>
@@ -72,7 +72,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec127" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><a id="id359" class="calibre1"/>回归模型具有<code class="email">response ~ terms</code>形式，其中<code class="email">response</code>是响应向量，<code class="email">terms</code>是指定预测值的一系列<a id="id360" class="calibre1"/>项。我们可以用公式<em class="calibre8"> y=α+βx </em>来说明一个简单的回归模型，其中<em class="calibre8"> α </em>是截距，而斜率<em class="calibre8"> β </em>描述了当<em class="calibre8"> x </em>变化时<em class="calibre8"> y </em>的变化。利用最小二乘法，我们可以估计出<img src="img/00079.jpeg" alt="How it works..." class="calibre24"/>和<img src="img/00080.jpeg" alt="How it works..." class="calibre24"/>(其中<img src="img/00081.jpeg" alt="How it works..." class="calibre24"/>表示<em class="calibre8"> y </em>的平均值，<img src="img/00082.jpeg" alt="How it works..." class="calibre24"/>表示<em class="calibre8"> x </em>的平均值)。</p><p class="calibre7">为了执行线性回归，我们首先准备在预测变量和响应变量之间具有线性关系的数据。在这个例子中，我们从package car加载Anscombe的四重奏数据集。在数据集中，<em class="calibre8"> x </em>和<em class="calibre8"> y1 </em>变量具有线性关系，我们准备了这些变量的散点图。为了生成回归线，我们使用lm函数来生成两个变量的模型。此外，我们使用<code class="email">abline</code>在图上画一条回归线。根据之前的截图，回归线说明了<em class="calibre8"> x </em>和<em class="calibre8"> y1 </em>变量的线性关系。我们可以看到，拟合模型的系数显示截距等于3.0001，系数等于0.5001。因此，我们可以使用截距和系数来推断响应值。比如我们可以推断出在3处的<em class="calibre8"> x </em>等于<em class="calibre8">4.5103(3 * 0.5001+3.0001)</em>时的响应值。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec127" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><a id="id359" class="calibre1"/>回归模型具有<code class="email">response ~ terms</code>形式，其中<code class="email">response</code>是响应向量，<code class="email">terms</code>是指定预测值的一系列<a id="id360" class="calibre1"/>项。我们可以用公式<em class="calibre8"> y=α+βx </em>来说明一个简单的回归模型，其中<em class="calibre8"> α </em>是截距，而斜率<em class="calibre8"> β </em>描述了当<em class="calibre8"> x </em>变化时<em class="calibre8"> y </em>的变化。利用最小二乘法，我们可以估计出<img src="img/00079.jpeg" alt="How it works..." class="calibre24"/>和<img src="img/00080.jpeg" alt="How it works..." class="calibre24"/>(其中<img src="img/00081.jpeg" alt="How it works..." class="calibre24"/>表示<em class="calibre8"> y </em>的平均值，<img src="img/00082.jpeg" alt="How it works..." class="calibre24"/>表示<em class="calibre8"> x </em>的平均值)。</p><p class="calibre7">为了执行线性回归，我们首先准备在预测变量和响应变量之间具有线性关系的数据。在这个例子中，我们从 package car 加载 Anscombe 的四重奏数据集。在数据集中，<em class="calibre8"> x </em>和<em class="calibre8"> y1 </em>变量具有线性关系，我们准备了这些变量的散点图。为了生成回归线，我们使用 lm 函数来生成两个变量的模型。此外，我们使用<code class="email">abline</code>在图上画一条回归线。根据之前的截图，回归线说明了<em class="calibre8"> x </em>和<em class="calibre8"> y1 </em>变量的线性关系。我们可以看到，拟合模型的系数显示截距等于 3.0001，系数等于 0.5001。因此，我们可以使用截距和系数来推断响应值。比如我们可以推断出在 3 处的<em class="calibre8"> x </em>等于<em class="calibre8">4.5103(3 * 0.5001+3.0001)</em>时的响应值。</p></div></div></body></html>
 
 
 <html>
@@ -88,7 +88,7 @@
 <strong class="calibre2">&gt; plot(Quartet$x, Quartet$y1)</strong>
 <strong class="calibre2">&gt; lmfit2 = lsfit(Quartet$x,Quartet$y1)</strong>
 <strong class="calibre2">&gt; abline(lmfit2, col="red")</strong>
-</pre></div><div><img src="img/00083.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">由lsfit函数拟合的简单回归。</p></div></div><p class="calibre10"> </p></div></div></body></html>
+</pre></div><div><img src="img/00083.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">由 lsfit 函数拟合的简单回归。</p></div></div><p class="calibre10"> </p></div></div></body></html>
 
 
 <html>
@@ -136,7 +136,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec131" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><code class="email">summary</code>函数是一个通用函数，用于生成汇总统计数据。在这种情况下，它<a id="id363" class="calibre1"/>计算并返回拟合线性模型的汇总统计列表。在这里，它将输出诸如残差、系数标准差R平方、f统计量和自由度等信息。在<code class="email">Call</code>部分，显示调用生成拟合<a id="id364" class="calibre1"/>模型的函数。在<code class="email">Residuals</code>部分，它提供了分布的快速总结(最小值、1Q值、中值、3Q、最大值)。</p><p class="calibre7">在<code class="email">Coefficients</code>部分，每个系数都是一个高斯随机变量。在本节中，<code class="email">Estimate</code>代表变量的平均分布；<code class="email">Std.Error</code>显示变量的标准误差；<code class="email">t</code>值是<code class="email">Estimate</code>除以<code class="email">Std.Error</code>，<code class="email">p</code>值表示获得大于<code class="email">t</code>值的值的概率。在本例中，截距(0.002573)和x (0.00217)的<code class="email">p</code>值都有95%的置信度。</p><p class="calibre7">残差标准差输出残差的标准差，而自由度表示训练样本中的观察值与模型中使用的数量之间的差异。通过除以平方和得到多个R平方。人们可以使用R平方来衡量数据与回归线的拟合程度。通常，R平方越高，模型就越符合您的数据。然而，它不一定表明回归模型是否足够。这意味着您可能会得到一个R平方较低的好模型，也可能会得到一个R平方较高的坏模型。由于多个R平方忽略了一个自由度，因此计算出的分数是有偏差的。为了使计算公平，调整后的R平方(0.6295)使用无偏估计值，并且将略小于R平方的倍数(0.6665)。通过对模型执行f检验来检索f统计量。等于0.00217 ( &lt; 0.05)的<code class="email">p</code>值拒绝零假设(变量之间没有线性相关性)，并表明观察到的<code class="email">F</code>大于临界<code class="email">F</code>值。换句话说，结果显示变量之间存在显著的正线性相关性。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec131" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7"><code class="email">summary</code>函数是一个通用函数，用于生成汇总统计数据。在这种情况下，它<a id="id363" class="calibre1"/>计算并返回拟合线性模型的汇总统计列表。在这里，它将输出诸如残差、系数标准差 R 平方、f 统计量和自由度等信息。在<code class="email">Call</code>部分，显示调用生成拟合<a id="id364" class="calibre1"/>模型的函数。在<code class="email">Residuals</code>部分，它提供了分布的快速总结(最小值、1Q 值、中值、3Q、最大值)。</p><p class="calibre7">在<code class="email">Coefficients</code>部分，每个系数都是一个高斯随机变量。在本节中，<code class="email">Estimate</code>代表变量的平均分布；<code class="email">Std.Error</code>显示变量的标准误差；<code class="email">t</code>值是<code class="email">Estimate</code>除以<code class="email">Std.Error</code>，<code class="email">p</code>值表示获得大于<code class="email">t</code>值的值的概率。在本例中，截距(0.002573)和 x (0.00217)的<code class="email">p</code>值都有 95%的置信度。</p><p class="calibre7">残差标准差输出残差的标准差，而自由度表示训练样本中的观察值与模型中使用的数量之间的差异。通过除以平方和得到多个 R 平方。人们可以使用 R 平方来衡量数据与回归线的拟合程度。通常，R 平方越高，模型就越符合您的数据。然而，它不一定表明回归模型是否足够。这意味着您可能会得到一个 R 平方较低的好模型，也可能会得到一个 R 平方较高的坏模型。由于多个 R 平方忽略了一个自由度，因此计算出的分数是有偏差的。为了使计算公平，调整后的 R 平方(0.6295)使用无偏估计值，并且将略小于 R 平方的倍数(0.6665)。通过对模型执行 f 检验来检索 f 统计量。等于 0.00217 ( &lt; 0.05)的<code class="email">p</code>值拒绝零假设(变量之间没有线性相关性)，并表明观察到的<code class="email">F</code>大于临界<code class="email">F</code>值。换句话说，结果显示变量之间存在显著的正线性相关性。</p></div></div></body></html>
 
 
 <html>
@@ -172,7 +172,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">您需要通过从<code class="email">quartet</code>数据集计算x和y1变量的线性模型来完成之前的配方。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">您需要通过从<code class="email">quartet</code>数据集计算 x 和 y1 变量的线性模型来完成之前的配方。</p></div></div></body></html>
 
 
 <html>
@@ -196,7 +196,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec135" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">我们首先用<code class="email">x</code>和<code class="email">y1</code>变量建立一个线性拟合模型。接下来，我们将要预测的值分配到数据帧中，<code class="email">newdata</code>。需要注意的是，生成的模型是<code class="email">y1 ~ x</code>的形式。</p><p class="calibre7">接下来，我们通过在自变量区间中指定<code class="email">confidence</code>来使用置信区间计算预测结果。从第1行的输出中，我们得到了符合<code class="email">x=3</code>输入的<code class="email">y1</code>，它等于<code class="email">4.500364</code>，并且<code class="email">x=3</code>的<code class="email">y1</code>平均值的95%置信区间(在<code class="email">level</code>参数中设置为0.95)在<code class="email">2.691375</code>和<code class="email">6.309352</code>之间。除此之外，第2行和第3行给出了输入为<code class="email">x=6</code>和<code class="email">x=15</code>的<code class="email">y1</code>的预测结果。</p><p class="calibre7">接下来，我们通过在自变量区间中指定<code class="email">prediction</code>来使用预测区间计算预测结果。从第1行的输出中，我们可以看到<code class="email">x=3</code>输入的拟合<code class="email">y1</code>等于<code class="email">4.500364</code>，并且<code class="email">x=3</code>的<code class="email">y1</code>的95%预测区间在<code class="email">1.169022</code>和<code class="email">7.831705</code>之间。第2行和第3行用输入<code class="email">x=6</code>和<code class="email">x=15</code>输出<code class="email">y1</code>的预测结果。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><a id="ch04lvl2sec135" class="calibre1"/>工作原理...</h2></div></div></div><p class="calibre7">我们首先用<code class="email">x</code>和<code class="email">y1</code>变量建立一个线性拟合模型。接下来，我们将要预测的值分配到数据帧中，<code class="email">newdata</code>。需要注意的是，生成的模型是<code class="email">y1 ~ x</code>的形式。</p><p class="calibre7">接下来，我们通过在自变量区间中指定<code class="email">confidence</code>来使用置信区间计算预测结果。从第 1 行的输出中，我们得到了符合<code class="email">x=3</code>输入的<code class="email">y1</code>，它等于<code class="email">4.500364</code>，并且<code class="email">x=3</code>的<code class="email">y1</code>平均值的 95%置信区间(在<code class="email">level</code>参数中设置为 0.95)在<code class="email">2.691375</code>和<code class="email">6.309352</code>之间。除此之外，第 2 行和第 3 行给出了输入为<code class="email">x=6</code>和<code class="email">x=15</code>的<code class="email">y1</code>的预测结果。</p><p class="calibre7">接下来，我们通过在自变量区间中指定<code class="email">prediction</code>来使用预测区间计算预测结果。从第 1 行的输出中，我们可以看到<code class="email">x=3</code>输入的拟合<code class="email">y1</code>等于<code class="email">4.500364</code>，并且<code class="email">x=3</code>的<code class="email">y1</code>的 95%预测区间在<code class="email">1.169022</code>和<code class="email">7.831705</code>之间。第 2 行和第 3 行用输入<code class="email">x=6</code>和<code class="email">x=15</code>输出<code class="email">y1</code>的预测结果。</p></div></div></body></html>
 
 
 <html>
@@ -208,7 +208,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch04lvl2sec136" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">对于<a id="id369" class="calibre1"/>那些对预测区间和置信区间的区别感兴趣的<a id="id370" class="calibre1"/>，可以参考<a class="calibre1" href="http://en.wikipedia.org/wiki/Prediction_interval#Contrast_with_confidence_intervals">http://en . Wikipedia . org/wiki/Prediction _ interval # Contrast _ with _ confidence _ intervals</a>的维基百科词条<em class="calibre8"> contrast with置信区间</em>。</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><a id="ch04lvl2sec136" class="calibre1"/>参见</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">对于<a id="id369" class="calibre1"/>那些对预测区间和置信区间的区别感兴趣的<a id="id370" class="calibre1"/>，可以参考<a class="calibre1" href="http://en.wikipedia.org/wiki/Prediction_interval#Contrast_with_confidence_intervals">http://en . Wikipedia . org/wiki/Prediction _ interval # Contrast _ with _ confidence _ intervals</a>的维基百科词条<em class="calibre8"> contrast with 置信区间</em>。</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -232,7 +232,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch04lvl2sec137" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">您需要通过计算来自四元组的x和y1变量的线性模型来完成之前的配方，并将该模型分配给<code class="email">lmfit</code>变量。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1"><a id="ch04lvl2sec137" class="calibre1"/>做好准备</h2></div></div></div><p class="calibre7">您需要通过计算来自四元组的 x 和 y1 变量的线性模型来完成之前的配方，并将该模型分配给<code class="email">lmfit</code>变量。</p></div></div></body></html>
 
 
 <html>
@@ -259,7 +259,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">绘图功能<a id="id372" class="calibre1"/>生成回归模型的四个诊断图:</p><div><ul class="itemizedlist"><li class="listitem">左上图显示了残差与拟合值的关系。在图中，残差表示从点到回归线的垂直距离。如果所有点都正好落在回归线上，则所有残差都将正好落在灰色虚线上。图中的红线是关于残差的平滑曲线，如果所有的点都正好落在回归线上，红线的位置应该正好与灰色虚线匹配。</li><li class="listitem">右上角的<a id="id373" class="calibre1"/>显示残差的法线。该图验证了残差呈正态分布的假设。因此，如果残差呈正态分布，它们应该正好位于灰色虚线上。</li><li class="listitem">左下角的<strong class="calibre2">刻度位置</strong>图用于测量<a id="id374" class="calibre1"/>标准化残差相对于拟合值的平方根。因此，如果所有的点都位于回归线上，则<em class="calibre8"> y </em>的值应该接近零。由于假设残差的方差基本不改变分布，如果假设正确，红线应该是相对平坦的。</li><li class="listitem">右下角的图显示了标准化残差与杠杆率的关系。杠杆是每个数据点如何影响回归的度量。它是对回归形心的距离和隔离级别的度量(通过是否有邻居来衡量)。还有，你可以找到库克距离的等高线，这个等高线受高杠杆和大残差的影响。如果删除一个点，您可以使用它来测量回归将如何变化。关于标准化残差，红线是平滑的。对于完美拟合回归，红线应该接近虚线，在库克距离中没有超过0.5的点。</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的...</h2></div></div></div><p class="calibre7">绘图功能<a id="id372" class="calibre1"/>生成回归模型的四个诊断图:</p><div><ul class="itemizedlist"><li class="listitem">左上图显示了残差与拟合值的关系。在图中，残差表示从点到回归线的垂直距离。如果所有点都正好落在回归线上，则所有残差都将正好落在灰色虚线上。图中的红线是关于残差的平滑曲线，如果所有的点都正好落在回归线上，红线的位置应该正好与灰色虚线匹配。</li><li class="listitem">右上角的<a id="id373" class="calibre1"/>显示残差的法线。该图验证了残差呈正态分布的假设。因此，如果残差呈正态分布，它们应该正好位于灰色虚线上。</li><li class="listitem">左下角的<strong class="calibre2">刻度位置</strong>图用于测量<a id="id374" class="calibre1"/>标准化残差相对于拟合值的平方根。因此，如果所有的点都位于回归线上，则<em class="calibre8"> y </em>的值应该接近零。由于假设残差的方差基本不改变分布，如果假设正确，红线应该是相对平坦的。</li><li class="listitem">右下角的图显示了标准化残差与杠杆率的关系。杠杆是每个数据点如何影响回归的度量。它是对回归形心的距离和隔离级别的度量(通过是否有邻居来衡量)。还有，你可以找到库克距离的等高线，这个等高线受高杠杆和大残差的影响。如果删除一个点，您可以使用它来测量回归将如何变化。关于标准化残差，红线是平滑的。对于完美拟合回归，红线应该接近虚线，在库克距离中没有超过 0.5 的点。</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -275,7 +275,7 @@
 <strong class="calibre2">&gt; ?plot.lm</strong>
 </pre></div><p class="calibre7">为了发现是否存在库克距离大的点，可以使用<code class="email">cooks.distance</code>函数计算每个点的库克距离，并通过可视化分析距离的分布:</p><div><pre class="programlisting">
 <strong class="calibre2">&gt; plot(cooks.distance(lmfit))</strong>
-</pre></div><div><img src="img/00085.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">库克的距离图</p></div></div><p class="calibre10"> </p><p class="calibre7">在这种<a id="id375" class="calibre1"/>情况下，索引3上的点显示出比其他点更大的库克距离，可以调查该点是否可能是异常值。</p></div></div></body></html>
+</pre></div><div><img src="img/00085.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">库克的距离图</p></div></div><p class="calibre10"> </p><p class="calibre7">在这种<a id="id375" class="calibre1"/>情况下，索引 3 上的点显示出比其他点更大的库克距离，可以调查该点是否可能是异常值。</p></div></div></body></html>
 
 
 <html>
@@ -287,7 +287,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec45" class="calibre1"/>用lm拟合多项式回归模型</h1></div></div></div><p class="calibre7">一些<a id="id376" class="calibre1"/>预测变量和<a id="id377" class="calibre1"/>响应变量可能具有非线性关系，它们的关系可以建模为一个<em class="calibre8">n次</em>多项式。在这个配方中，我们介绍如何使用<code class="email">lm</code>和<code class="email">poly</code>函数处理多项式回归。</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec45" class="calibre1"/>用 lm 拟合多项式回归模型</h1></div></div></div><p class="calibre7">一些<a id="id376" class="calibre1"/>预测变量和<a id="id377" class="calibre1"/>响应变量可能具有非线性关系，它们的关系可以建模为一个<em class="calibre8">n 次</em>多项式。在这个配方中，我们介绍如何使用<code class="email">lm</code>和<code class="email">poly</code>函数处理多项式回归。</p></div></body></html>
 
 
 <html>
@@ -299,7 +299,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">准备包含预测值和响应变量之间关系的数据集，该关系可以建模为一个<em class="calibre8">n次</em>多项式。在这个菜谱中，我们将继续使用来自<code class="email">car</code>包的<code class="email">Quartet</code>数据集。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">做好准备</h2></div></div></div><p class="calibre7">准备包含预测值和响应变量之间关系的数据集，该关系可以建模为一个<em class="calibre8">n 次</em>多项式。在这个菜谱中，我们将继续使用来自<code class="email">car</code>包的<code class="email">Quartet</code>数据集。</p></div></div></body></html>
 
 
 <html>
@@ -313,10 +313,10 @@
   <body id="page" class="calibre">
 <div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch04lvl2sec142" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">lm</code>拟合多项式回归模型:</p><div><ol class="orderedlist"><li class="listitem" value="1">First, we make a scatter plot of the <code class="email">x</code> and <code class="email">y2</code> variables:<div><pre class="programlisting">
 <strong class="calibre2">&gt; plot(Quartet$x, Quartet$y2)</strong>
-</pre></div><div><img src="img/00086.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量x和y2的散点图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">You<a id="id379" class="calibre1"/> can apply the <code class="email">poly</code> function<a id="id380" class="calibre1"/> by specifying <code class="email">2</code> in the argument:<div><pre class="programlisting">
+</pre></div><div><img src="img/00086.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量 x 和 y2 的散点图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">You<a id="id379" class="calibre1"/> can apply the <code class="email">poly</code> function<a id="id380" class="calibre1"/> by specifying <code class="email">2</code> in the argument:<div><pre class="programlisting">
 <strong class="calibre2">&gt; lmfit = lm(Quartet$y2~poly(Quartet$x,2))</strong>
 <strong class="calibre2">&gt; lines(sort(Quartet$x), lmfit$fit[order(Quartet$x)], col = "red")</strong>
-</pre></div><div><img src="img/00087.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量x和y2的回归图的二次拟合示例</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+</pre></div><div><img src="img/00087.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量 x 和 y2 的回归图的二次拟合示例</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
 
 
 <html>
@@ -328,7 +328,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的</h2></div></div></div><p class="calibre7">我们<a id="id381" class="calibre1"/>可以在公式<img src="img/00088.jpeg" alt="How it works" class="calibre24"/>中说明二阶<a id="id382" class="calibre1"/>多项式回归模型，其中<em class="calibre8"> α </em>是截距，而<em class="calibre8"> β </em>说明回归系数。</p><p class="calibre7">在前面的截图(步骤1)中，<code class="email">x</code>和<code class="email">y2</code>变量的散点图不符合线性关系，而是显示一条向下凹的曲线(或向上凸的曲线),转折点在x=11。为了对非线性关系建模，我们应用自变量为2的<code class="email">poly</code>函数来拟合自变量<code class="email">x</code>和因变量<code class="email">y2</code>。截图中的红线显示模型与数据完美吻合。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的</h2></div></div></div><p class="calibre7">我们<a id="id381" class="calibre1"/>可以在公式<img src="img/00088.jpeg" alt="How it works" class="calibre24"/>中说明二阶<a id="id382" class="calibre1"/>多项式回归模型，其中<em class="calibre8"> α </em>是截距，而<em class="calibre8"> β </em>说明回归系数。</p><p class="calibre7">在前面的截图(步骤 1)中，<code class="email">x</code>和<code class="email">y2</code>变量的散点图不符合线性关系，而是显示一条向下凹的曲线(或向上凸的曲线),转折点在 x=11。为了对非线性关系建模，我们应用自变量为 2 的<code class="email">poly</code>函数来拟合自变量<code class="email">x</code>和因变量<code class="email">y2</code>。截图中的红线显示模型与数据完美吻合。</p></div></div></body></html>
 
 
 <html>
@@ -355,7 +355,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec46" class="calibre1"/>用rlm拟合稳健线性回归模型</h1></div></div></div><p class="calibre7">数据集<a id="id384" class="calibre1"/>中的<a id="id383" class="calibre1"/>异常值将使回归线远离主流。除了移除它，我们还可以应用稳健的线性回归来拟合包含异常值的数据集。在这份食谱中，我们介绍了如何应用<code class="email">rlm</code>对包含异常值的数据集执行稳健的线性回归。</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><a id="ch04lvl1sec46" class="calibre1"/>用 rlm 拟合稳健线性回归模型</h1></div></div></div><p class="calibre7">数据集<a id="id384" class="calibre1"/>中的<a id="id383" class="calibre1"/>异常值将使回归线远离主流。除了移除它，我们还可以应用稳健的线性回归来拟合包含异常值的数据集。在这份食谱中，我们介绍了如何应用<code class="email">rlm</code>对包含异常值的数据集执行稳健的线性回归。</p></div></body></html>
 
 
 <html>
@@ -381,11 +381,11 @@
   <body id="page" class="calibre">
 <div><div><div><div><div><h2 class="title1" id="calibre_pb_2"><a id="ch04lvl2sec146" class="calibre1"/>怎么做...</h2></div></div></div><p class="calibre7">执行以下步骤，用<code class="email">rlm</code>拟合稳健线性回归模型:</p><div><ol class="orderedlist"><li class="listitem" value="1">Generate a scatter plot of the <code class="email">x</code> variable against <code class="email">y3</code>:<div><pre class="programlisting">
 <strong class="calibre2">&gt; plot(Quartet$x, Quartet$y3)</strong>
-</pre></div><div><img src="img/00089.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量x和y3的散点图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">Next, you should import the <code class="email">MASS</code> library first. Then, you can apply the <code class="email">rlm</code> function to fit the model, and visualize the fitted line with the <code class="email">abline</code> function:<div><pre class="programlisting">
+</pre></div><div><img src="img/00089.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量 x 和 y3 的散点图</p></div></div><p class="calibre13"> </p></li><li class="listitem" value="2">Next, you should import the <code class="email">MASS</code> library first. Then, you can apply the <code class="email">rlm</code> function to fit the model, and visualize the fitted line with the <code class="email">abline</code> function:<div><pre class="programlisting">
 <strong class="calibre2">&gt; library(MASS)</strong>
 <strong class="calibre2">&gt; lmfit = rlm(Quartet$y3~Quartet$x)</strong>
 <strong class="calibre2">&gt; abline(lmfit, col="red")</strong>
-</pre></div><div><img src="img/00090.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量x和y3的稳健线性回归</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
+</pre></div><div><img src="img/00090.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">变量 x 和 y3 的稳健线性回归</p></div></div><p class="calibre13"> </p></li></ol><div/></div></div></div></body></html>
 
 
 <html>
@@ -397,7 +397,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的</h2></div></div></div><p class="calibre7">根据前面的截图(步骤1)，您可能会遇到包含主流之外的离群值的数据集。为了消除异常值的影响，我们演示了如何应用稳健的线性<a id="id386" class="calibre1"/>回归(<code class="email">rlm</code>)来拟合数据。在第二个屏幕截图(步骤2)中，稳健回归线忽略了异常值，与主流相匹配。</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">它是如何工作的</h2></div></div></div><p class="calibre7">根据前面的截图(步骤 1)，您可能会遇到包含主流之外的离群值的数据集。为了消除异常值的影响，我们演示了如何应用稳健的线性<a id="id386" class="calibre1"/>回归(<code class="email">rlm</code>)来拟合数据。在第二个屏幕截图(步骤 2)中，稳健回归线忽略了异常值，与主流相匹配。</p></div></div></body></html>
 
 
 <html>
@@ -413,7 +413,7 @@
 <strong class="calibre2">&gt; plot(Quartet$x, Quartet$y3)</strong>
 <strong class="calibre2">&gt; lmfit = lm(Quartet$y3~Quartet$x)</strong>
 <strong class="calibre2">&gt; abline(lmfit, col="red")</strong>
-</pre></div><div><img src="img/00091.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">变量x和y3的线性回归</p></div></div><p class="calibre10">很明显，离群值(x=13)使回归线远离主流。</p><p class="calibre7"><a id="ch04lvl1sec47" class="calibre1"/>研究滑动数据的线性回归案例</p></div></div></body></html>
+</pre></div><div><img src="img/00091.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">变量 x 和 y3 的线性回归</p></div></div><p class="calibre10">很明显，离群值(x=13)使回归线远离主流。</p><p class="calibre7"><a id="ch04lvl1sec47" class="calibre1"/>研究滑动数据的线性回归案例</p></div></div></body></html>
 
 
 <html>
@@ -473,7 +473,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">这个<a id="id396" class="calibre1"/>配方演示了如何对SLID数据集进行线性回归分析。首先，我们通过使用<code class="email">str</code>函数加载滑动数据并显示其结构。从数据的结构中，我们知道有四个自变量会影响因变量的工资。</h2></div></div></div><p class="calibre7">接下来，我们通过可视化探索每个自变量与因变量<code class="email">wages</code>的关系；可视化结果显示在前面的屏幕截图中(步骤2)。在这张截图的左上方，可以找到三种不同语言对工资的方框图；语言和工资之间的相关性并不明显。截图的右上部分显示年龄似乎与因变量<code class="email">wages</code>成正相关。在截图的左下方，显示了教育似乎也与工资呈正相关。最后，截图右下部分的方框图显示，男性的工资略高于女性。</p><p class="calibre7">接下来，我们将除了<code class="email">wages</code>之外的所有属性作为预测变量拟合到模型中。通过总结该模型，表明教育、年龄和性别表现出显著性(<em class="calibre8"> p值&lt; 0.05 </em>)。因此，我们删除了无关紧要的<code class="email">language</code>属性(其p值大于0.05)，并根据线性模型中的因变量(<code class="email">wages</code>)拟合了三个自变量(教育、性别和年龄)。这相应地将f统计值从336.8提高到565.3。</p><p class="calibre7">接下来，我们生成拟合模型的诊断图。在诊断图中，所有四个图都表明回归模型遵循回归假设。然而，从残差与拟合值和比例位置图来看，较小拟合值的残差偏向回归模型。由于工资的范围跨越几个数量级，为了引起对称性，我们对工资进行了对数变换，并将数据重新调整为回归模型。残差与拟合值图的红线和比例位置图现在更靠近灰色虚线。</p><p class="calibre7">接下来，我们<a id="id397" class="calibre1"/>想要测试模型中是否存在多重共线性。当一个预测因子与其他预测因子高度相关时，就会出现多重共线性。如果模型中存在多重共线性，您可能会看到一些变量具有较高的R平方值，但显示为无关紧要的变量。为了检测多重共线性，我们可以使用<code class="email">vif</code>函数计算线性和广义线性模型的方差膨胀和广义方差膨胀因子。如果存在多重共线性，我们应该找到方差膨胀因子的平方根大于2的预测因子。然后，我们可以移除多余的预测因子，或者使用主成分分析将预测因子转换为一个较小的不相关成分集。</p><p class="calibre7">最后，我们要<a id="id398" class="calibre1"/>检验<strong class="calibre2">异方差</strong>是否存在于模型中。在讨论异方差的定义之前，我们首先要知道，在经典的假设中，普通的回归模型假设误差的方差是恒定的或者跨观测值是齐次的。相反，异方差意味着不同观测值之间的方差不相等。因此，异方差可能偏向于我们估计的标准误差，从而误导假设的检验。为了检测和测试异方差性，我们<a id="id399" class="calibre1"/>可以使用<code class="email">lmtest</code>包中的<code class="email">bptest</code>函数执行<strong class="calibre2"> Breusch-Pagan </strong>异方差性测试。在这种情况下，p值显示为2.206e-06 ( &lt; 0.5)，拒绝了同异方差(无异方差)的零假设。这里，它意味着参数估计的标准误差是不正确的。但是，我们可以使用稳健的标准误差来校正标准误差(不要移除异方差)，并使用<code class="email">rms</code>包中的<code class="email">robcov</code>来增加真正重要参数的重要性。然而，由于它只接受来自<code class="email">rms</code>系列的拟合模型作为输入，我们必须事先拟合普通的最小二乘模型。</p><p class="calibre7"><a id="ch04lvl2sec152" class="calibre1"/>亦见</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">这个<a id="id396" class="calibre1"/>配方演示了如何对 SLID 数据集进行线性回归分析。首先，我们通过使用<code class="email">str</code>函数加载滑动数据并显示其结构。从数据的结构中，我们知道有四个自变量会影响因变量的工资。</h2></div></div></div><p class="calibre7">接下来，我们通过可视化探索每个自变量与因变量<code class="email">wages</code>的关系；可视化结果显示在前面的屏幕截图中(步骤 2)。在这张截图的左上方，可以找到三种不同语言对工资的方框图；语言和工资之间的相关性并不明显。截图的右上部分显示年龄似乎与因变量<code class="email">wages</code>成正相关。在截图的左下方，显示了教育似乎也与工资呈正相关。最后，截图右下部分的方框图显示，男性的工资略高于女性。</p><p class="calibre7">接下来，我们将除了<code class="email">wages</code>之外的所有属性作为预测变量拟合到模型中。通过总结该模型，表明教育、年龄和性别表现出显著性(<em class="calibre8"> p 值&lt; 0.05 </em>)。因此，我们删除了无关紧要的<code class="email">language</code>属性(其 p 值大于 0.05)，并根据线性模型中的因变量(<code class="email">wages</code>)拟合了三个自变量(教育、性别和年龄)。这相应地将 f 统计值从 336.8 提高到 565.3。</p><p class="calibre7">接下来，我们生成拟合模型的诊断图。在诊断图中，所有四个图都表明回归模型遵循回归假设。然而，从残差与拟合值和比例位置图来看，较小拟合值的残差偏向回归模型。由于工资的范围跨越几个数量级，为了引起对称性，我们对工资进行了对数变换，并将数据重新调整为回归模型。残差与拟合值图的红线和比例位置图现在更靠近灰色虚线。</p><p class="calibre7">接下来，我们<a id="id397" class="calibre1"/>想要测试模型中是否存在多重共线性。当一个预测因子与其他预测因子高度相关时，就会出现多重共线性。如果模型中存在多重共线性，您可能会看到一些变量具有较高的 R 平方值，但显示为无关紧要的变量。为了检测多重共线性，我们可以使用<code class="email">vif</code>函数计算线性和广义线性模型的方差膨胀和广义方差膨胀因子。如果存在多重共线性，我们应该找到方差膨胀因子的平方根大于 2 的预测因子。然后，我们可以移除多余的预测因子，或者使用主成分分析将预测因子转换为一个较小的不相关成分集。</p><p class="calibre7">最后，我们要<a id="id398" class="calibre1"/>检验<strong class="calibre2">异方差</strong>是否存在于模型中。在讨论异方差的定义之前，我们首先要知道，在经典的假设中，普通的回归模型假设误差的方差是恒定的或者跨观测值是齐次的。相反，异方差意味着不同观测值之间的方差不相等。因此，异方差可能偏向于我们估计的标准误差，从而误导假设的检验。为了检测和测试异方差性，我们<a id="id399" class="calibre1"/>可以使用<code class="email">lmtest</code>包中的<code class="email">bptest</code>函数执行<strong class="calibre2"> Breusch-Pagan </strong>异方差性测试。在这种情况下，p 值显示为 2.206e-06 ( &lt; 0.5)，拒绝了同异方差(无异方差)的零假设。这里，它意味着参数估计的标准误差是不正确的。但是，我们可以使用稳健的标准误差来校正标准误差(不要移除异方差)，并使用<code class="email">rms</code>包中的<code class="email">robcov</code>来增加真正重要参数的重要性。然而，由于它只接受来自<code class="email">rms</code>系列的拟合模型作为输入，我们必须事先拟合普通的最小二乘模型。</p><p class="calibre7"><a id="ch04lvl2sec152" class="calibre1"/>亦见</p></div></div></body></html>
 
 
 <html>
@@ -485,7 +485,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">有关SLID数据集的更多信息，您可以使用<code class="email">help</code>功能查看相关文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt;  ?SLID</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec48" class="calibre1"/>应用高斯模型进行广义线性回归</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">有关 SLID 数据集的更多信息，您可以使用<code class="email">help</code>功能查看相关文档:<div> <pre class="programlisting"> <strong class="calibre2">&gt;  ?SLID</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec48" class="calibre1"/>应用高斯模型进行广义线性回归</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -509,7 +509,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">检查<a id="id403" class="calibre1"/>是否安装并加载了<code class="email">car</code>库，因为我们需要该包中的SLID数据集。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec154" class="calibre1"/>怎么做...</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">检查<a id="id403" class="calibre1"/>是否安装并加载了<code class="email">car</code>库，因为我们需要该包中的 SLID 数据集。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec154" class="calibre1"/>怎么做...</p></div></div></body></html>
 
 
 <html>
@@ -545,7 +545,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">关于广义线性模型与线性模型的比较，可以参考<em class="calibre8">维纳布尔斯，W. N .，&amp;里普利，B. D. (2002)。现代应用统计学与S. Springer </em>。</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec49" class="calibre1"/>应用泊松模型进行广义线性回归</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">关于广义线性模型与线性模型的比较，可以参考<em class="calibre8">维纳布尔斯，W. N .，&amp;里普利，B. D. (2002)。现代应用统计学与 S. Springer </em>。</h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec49" class="calibre1"/>应用泊松模型进行广义线性回归</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -593,7 +593,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在泊松分布的<a id="id410" class="calibre1"/>假设下，计数<a id="id411" class="calibre1"/>数据可以符合对数线性模型。在这个配方中，我们首先从<code class="email">warpbreaks</code>数据集中加载一个样本计数数据，它包含关于每台织机经纱断头数的数据。接下来，我们应用了<code class="email">glm</code>函数，将breaks作为因变量，<code class="email">tension</code>作为自变量，Poisson作为族对象。最后，我们用总结函数来观察拟合的对数线性模型。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec160" class="calibre1"/>参见</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在泊松分布的<a id="id410" class="calibre1"/>假设下，计数<a id="id411" class="calibre1"/>数据可以符合对数线性模型。在这个配方中，我们首先从<code class="email">warpbreaks</code>数据集中加载一个样本计数数据，它包含关于每台织机经纱断头数的数据。接下来，我们应用了<code class="email">glm</code>函数，将 breaks 作为因变量，<code class="email">tension</code>作为自变量，Poisson 作为族对象。最后，我们用总结函数来观察拟合的对数线性模型。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec160" class="calibre1"/>参见</p></div></div></body></html>
 
 
 <html>
@@ -605,7 +605,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">要了解泊松模型如何与计数数据相关的更多信息，您可以参考<em class="calibre8"> Cameron，A. C .，&amp; Trivedi，P. K. (2013)。计数数据的回归分析(第53期)。剑桥大学出版社。</em></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec50" class="calibre1"/>应用二项式模型进行广义线性回归</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">要了解泊松模型如何与计数数据相关的更多信息，您可以参考<em class="calibre8"> Cameron，A. C .，&amp; Trivedi，P. K. (2013)。计数数据的回归分析(第 53 期)。剑桥大学出版社。</em></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem"><a id="ch04lvl1sec50" class="calibre1"/>应用二项式模型进行广义线性回归</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -629,7 +629,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">这项任务的先决条件是准备一个二元因变量。这里我们用<code class="email">vs</code>变量(V型发动机或直列发动机)作为因变量。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec162" class="calibre1"/>怎么做...</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_1">这项任务的先决条件是准备一个二元因变量。这里我们用<code class="email">vs</code>变量(V 型发动机或直列发动机)作为因变量。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec162" class="calibre1"/>怎么做...</p></div></div></body></html>
 
 
 <html>
@@ -653,7 +653,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在<a id="id414" class="calibre1"/>二进制数据中，<a id="id415" class="calibre1"/>响应值的每个观察值被编码为<code class="email">0</code>或<code class="email">1</code>。拟合二元数据的回归模型需要二项式分布函数。在这个例子中，我们首先从<code class="email">mtcars</code>数据集中加载二元因变量<code class="email">vs</code>。<code class="email">vs</code>适合二项式模型，因为它包含二进制数据。接下来，我们通过将<code class="email">binomial</code>指定为family对象，使用<code class="email">glm</code>函数将模型拟合到二进制数据中。最后，通过参考概要，我们可以获得拟合模型的描述。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec164" class="calibre1"/>参见</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">在<a id="id414" class="calibre1"/>二进制数据中，<a id="id415" class="calibre1"/>响应值的每个观察值被编码为<code class="email">0</code>或<code class="email">1</code>。拟合二元数据的回归模型需要二项式分布函数。在这个例子中，我们首先从<code class="email">mtcars</code>数据集中加载二元因变量<code class="email">vs</code>。<code class="email">vs</code>适合二项式模型，因为它包含二进制数据。接下来，我们通过将<code class="email">binomial</code>指定为 family 对象，使用<code class="email">glm</code>函数将模型拟合到二进制数据中。最后，通过参考概要，我们可以获得拟合模型的描述。</h2></div></div></div><p class="calibre7"><a id="ch04lvl2sec164" class="calibre1"/>参见</p></div></div></body></html>
 
 
 <html>
@@ -665,7 +665,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">如果仅在参数中指定族对象，将使用默认链接来拟合模型。但是，要使用替代的link函数，可以添加link参数。例如:<div> <pre class="programlisting"> <strong class="calibre2">&gt; lm1 = glm(vs ~ hp+mpg+gear,data=mtcars, family=binomial(link="probit"))</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">如果您想知道您可以使用多少个替代链接，请通过帮助功能参考系列文档:<div> <pre class="programlisting"> <strong class="calibre2"> &gt; ?family</strong> </pre> </div></li><li class="listitem"><a id="ch04lvl1sec51" class="calibre1"/>对数据拟合广义可加模型</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">如果仅在参数中指定族对象，将使用默认链接来拟合模型。但是，要使用替代的 link 函数，可以添加 link 参数。例如:<div> <pre class="programlisting"> <strong class="calibre2">&gt; lm1 = glm(vs ~ hp+mpg+gear,data=mtcars, family=binomial(link="probit"))</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">如果您想知道您可以使用多少个替代链接，请通过帮助功能参考系列文档:<div> <pre class="programlisting"> <strong class="calibre2"> &gt; ?family</strong> </pre> </div></li><li class="listitem"><a id="ch04lvl1sec51" class="calibre1"/>对数据拟合广义可加模型</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -677,7 +677,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><strong class="calibre2">广义可加模型</strong> ( <strong class="calibre2"> GAM </strong>)，用于拟合广义可加模型，可以<a id="id416" class="calibre1"/>看作是GLM的半参数推广。GLM假设因变量和自变量之间存在线性关系，而GAM则根据数据的局部行为来拟合模型。因此，GAM有能力处理因变量和自变量之间的高度非线性关系。在下面的食谱中，我们将介绍如何使用广义加法模型来拟合回归。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0"><strong class="calibre2">广义可加模型</strong> ( <strong class="calibre2"> GAM </strong>)，用于拟合广义可加模型，可以<a id="id416" class="calibre1"/>看作是 GLM 的半参数推广。GLM 假设因变量和自变量之间存在线性关系，而 GAM 则根据数据的局部行为来拟合模型。因此，GAM 有能力处理因变量和自变量之间的高度非线性关系。在下面的食谱中，我们将介绍如何使用广义加法模型来拟合回归。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
 
 
 <html>
@@ -713,7 +713,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">GAM<a id="id419" class="calibre1"/>旨在通过估计预测器的非参数函数来最大化来自各种分布的因变量<code class="email">y</code>的预测，预测器通过链接函数链接到因变量。GAM的概念是<img src="img/00095.jpeg" alt="How it works" class="calibre24"/>，其中为<em class="calibre8"> y </em>指定了一个指数族<em class="calibre8"> E </em>，以及<code class="email">g</code>链接函数；<code class="email">f</code>表示预测值的链接函数。</h2></div></div></div><p class="calibre7"><code class="email">gam</code>函数包含在<code class="email">mgcv</code>包中，所以，首先安装这个包，并将其加载到R会话中。接下来，从<code class="email">MASS</code>包中加载波士顿数据集(<em class="calibre8">波士顿</em>郊区的房价)。从数据集中，我们使用<code class="email">dis</code>(到五个波士顿就业中心的距离的加权平均值)作为因变量，<code class="email">nox</code>(氮氧化物浓度)作为自变量，然后将它们输入到<code class="email">gam</code>函数中，以生成拟合模型。</p><p class="calibre7">与<code class="email">glm</code>类似，<code class="email">gam</code>允许用户总结<code class="email">gam</code>的适合度。从概要中，可以找到参数参数、平滑项的重要性以及其他有用的信息。</p><p class="calibre7"><a id="ch04lvl2sec168" class="calibre1"/>亦见</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3">GAM<a id="id419" class="calibre1"/>旨在通过估计预测器的非参数函数来最大化来自各种分布的因变量<code class="email">y</code>的预测，预测器通过链接函数链接到因变量。GAM 的概念是<img src="img/00095.jpeg" alt="How it works" class="calibre24"/>，其中为<em class="calibre8"> y </em>指定了一个指数族<em class="calibre8"> E </em>，以及<code class="email">g</code>链接函数；<code class="email">f</code>表示预测值的链接函数。</h2></div></div></div><p class="calibre7"><code class="email">gam</code>函数包含在<code class="email">mgcv</code>包中，所以，首先安装这个包，并将其加载到 R 会话中。接下来，从<code class="email">MASS</code>包中加载波士顿数据集(<em class="calibre8">波士顿</em>郊区的房价)。从数据集中，我们使用<code class="email">dis</code>(到五个波士顿就业中心的距离的加权平均值)作为因变量，<code class="email">nox</code>(氮氧化物浓度)作为自变量，然后将它们输入到<code class="email">gam</code>函数中，以生成拟合模型。</p><p class="calibre7">与<code class="email">glm</code>类似，<code class="email">gam</code>允许用户总结<code class="email">gam</code>的适合度。从概要中，可以找到参数参数、平滑项的重要性以及其他有用的信息。</p><p class="calibre7"><a id="ch04lvl2sec168" class="calibre1"/>亦见</p></div></div></body></html>
 
 
 <html>
@@ -725,7 +725,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">除了<code class="email">gam</code>之外，<code class="email">mgcv</code>包为大型数据集提供了另一个通用的附加模型<code class="email">bam</code>。<a id="id420" class="calibre1"/> <code class="email">bam</code>包与<code class="email">gam</code>非常相似，但使用的内存更少，效率相对更高。请使用<code class="email">help</code>功能了解该型号的更多信息:<div> <pre class="programlisting"> <strong class="calibre2"> &gt; ? bam</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">有关R中广义加性模型的更多信息，请参考<em class="calibre8"> Wood，S. (2006)。广义可加模型:与R. CRC出版社的介绍</em>。</li><li class="listitem"><a id="ch04lvl1sec52" class="calibre1"/>可视化广义加法模型</li></ul></div></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4">除了<code class="email">gam</code>之外，<code class="email">mgcv</code>包为大型数据集提供了另一个通用的附加模型<code class="email">bam</code>。<a id="id420" class="calibre1"/> <code class="email">bam</code>包与<code class="email">gam</code>非常相似，但使用的内存更少，效率相对更高。请使用<code class="email">help</code>功能了解该型号的更多信息:<div> <pre class="programlisting"> <strong class="calibre2"> &gt; ? bam</strong> </pre> </div></h2></div></div></div><div><ul class="itemizedlist"><li class="listitem">有关 R 中广义加性模型的更多信息，请参考<em class="calibre8"> Wood，S. (2006)。广义可加模型:与 R. CRC 出版社的介绍</em>。</li><li class="listitem"><a id="ch04lvl1sec52" class="calibre1"/>可视化广义加法模型</li></ul></div></div></div></body></html>
 
 
 <html>
@@ -737,7 +737,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">在本食谱中，我们演示了如何将<code class="email">gam</code>拟合回归线添加到散点图中。此外，我们使用<code class="email">plot</code>函数<a id="id421" class="calibre1"/>可视化gam拟合。</h1></div></div></div><p class="calibre7">准备就绪</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">在本食谱中，我们演示了如何将<code class="email">gam</code>拟合回归线添加到散点图中。此外，我们使用<code class="email">plot</code>函数<a id="id421" class="calibre1"/>可视化 gam 拟合。</h1></div></div></div><p class="calibre7">准备就绪</p></div></body></html>
 
 
 <html>
@@ -761,13 +761,13 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤来可视化广义加法模型:</h2></div></div></div><p class="calibre7">可变nox与dis的散点图</p><div><ol class="orderedlist"><li class="listitem" value="1">Generate a scatter plot using the <code class="email">nox</code> and <code class="email">dis</code> variables:<div><pre class="programlisting">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行以下步骤来可视化广义加法模型:</h2></div></div></div><p class="calibre7">可变 nox 与 dis 的散点图</p><div><ol class="orderedlist"><li class="listitem" value="1">Generate a scatter plot using the <code class="email">nox</code> and <code class="email">dis</code> variables:<div><pre class="programlisting">
 <strong class="calibre2">&gt; plot(nox, dis)</strong>
-</pre></div><div><img src="img/00096.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Scatter plot of variable nox against dis</p></div></div><p class="calibre13">散点图上gam的拟合回归</p></li><li class="listitem" value="2">Add the regression to the scatter plot:<div><pre class="programlisting">
+</pre></div><div><img src="img/00096.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Scatter plot of variable nox against dis</p></div></div><p class="calibre13">散点图上 gam 的拟合回归</p></li><li class="listitem" value="2">Add the regression to the scatter plot:<div><pre class="programlisting">
 <strong class="calibre2">&gt; x = seq(0, 1, length = 500)</strong>
 <strong class="calibre2">&gt; y = predict(fit, data.frame(nox = x))</strong>
 <strong class="calibre2">&gt; lines(x, y, col = "red", lwd = 2)</strong>
-</pre></div><div><img src="img/00097.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Fitted regression of gam on a scatter plot</p></div></div><p class="calibre13">拟合gam图</p></li><li class="listitem" value="3">Alternatively, you <a id="id422" class="calibre1"/>can plot the fitted model using the <code class="email">plot</code> function:<div><pre class="programlisting">
+</pre></div><div><img src="img/00097.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Fitted regression of gam on a scatter plot</p></div></div><p class="calibre13">拟合 gam 图</p></li><li class="listitem" value="3">Alternatively, you <a id="id422" class="calibre1"/>can plot the fitted model using the <code class="email">plot</code> function:<div><pre class="programlisting">
 <strong class="calibre2">&gt; plot(fit)</strong>
 </pre></div><div><img src="img/00098.jpeg" alt="How to do it..." class="calibre9"/><div><p class="calibre12">Plot of fitted gam</p></div></div><p class="calibre13"><a id="ch04lvl2sec171" class="calibre1"/>工作原理...</p></li></ol><div/></div></div></div></body></html>
 
@@ -793,7 +793,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><code class="email">vis.gam</code>功能用于产生<code class="email">gam</code>模型预测的透视图或等高线图。观察反应变量如何与两个预测变量相互作用是有帮助的。以下是<code class="email">Boston</code>数据集的等高线图示例:</h2></div></div></div><p class="calibre7">由vis.gam生成的等高线图示例</p><div><pre class="programlisting">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_4"><code class="email">vis.gam</code>功能用于产生<code class="email">gam</code>模型预测的透视图或等高线图。观察反应变量如何与两个预测变量相互作用是有帮助的。以下是<code class="email">Boston</code>数据集的等高线图示例:</h2></div></div></div><p class="calibre7">由 vis.gam 生成的等高线图示例</p><div><pre class="programlisting">
 <strong class="calibre2">&gt; fit2=gam(medv~crim+zn+crim:zn, data=Boston)</strong>
 <strong class="calibre2">&gt; vis.gam(fit2)</strong>
 </pre></div><div><img src="img/00099.jpeg" alt="There's more..." class="calibre9"/><div><p class="calibre12">A sample contour plot produced by vis.gam</p></div></div><p class="calibre10"><a id="ch04lvl1sec53" class="calibre1"/>诊断广义加性模型</p></div></div></body></html>
@@ -808,7 +808,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">GAM还<a id="id424" class="calibre1"/>提供关于广义加性模型的拟合程序和结果的诊断信息。在本配方中，我们演示如何通过<code class="email">gam.check</code>功能绘制诊断图。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
+<div/><div><div><div><div><h1 class="title" id="calibre_pb_0">GAM 还<a id="id424" class="calibre1"/>提供关于广义加性模型的拟合程序和结果的诊断信息。在本配方中，我们演示如何通过<code class="email">gam.check</code>功能绘制诊断图。</h1></div></div></div><p class="calibre7">做好准备</p></div></body></html>
 
 
 <html>
@@ -832,7 +832,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行<a id="id425" class="calibre1"/>以下步骤诊断广义加性模型:</h2></div></div></div><p class="calibre7">拟合gam的诊断图</p><div><ol class="orderedlist"><li class="listitem" value="1">Generate the diagnostic plot using <code class="email">gam.check</code> on the fitted model:<div><pre class="programlisting">
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_2">执行<a id="id425" class="calibre1"/>以下步骤诊断广义加性模型:</h2></div></div></div><p class="calibre7">拟合 gam 的诊断图</p><div><ol class="orderedlist"><li class="listitem" value="1">Generate the diagnostic plot using <code class="email">gam.check</code> on the fitted model:<div><pre class="programlisting">
 <strong class="calibre2">&gt; gam.check(fit)</strong>
 
 <strong class="calibre2">Method: GCV   Optimizer: magic</strong>
@@ -859,7 +859,7 @@
 
 </head>
   <body id="page" class="calibre">
-<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><code class="email">gam.check</code>功能首先产生平滑参数估计收敛信息。在<a id="id426" class="calibre1"/>这个例子中，平滑参数，<strong class="calibre2"> GCV/UBRE </strong> ( <strong class="calibre2">广义交叉验证/无偏风险估计器</strong>)分数在七次迭代后收敛<a id="id427" class="calibre1"/>。GCV/UBRE函数的平均<a id="id428" class="calibre1"/>绝对梯度最小值为8.79622e-06，估计秩为<code class="email">10</code>。尺寸检查是为了测试平滑函数的基本尺寸是否足够。在这个例子中，低p值表示k设置得太低。用户可以通过将<code class="email">gam</code>与数据拟合来指定参数k，从而调整平滑的尺寸选择。</h2></div></div></div><p class="calibre7">除了提供关于平滑参数估计收敛的信息，该函数还返回四个诊断图。截屏图的左上部分显示了一个<strong class="calibre2">分位数比较</strong>图。该图有助于识别异常值<a id="id429" class="calibre1"/>和重尾。图的右上部分显示了残差与线性预测值的关系，这在查找非恒定误差方差时非常有用。图的左下部分显示了残差的直方图，这有助于检测非正态性。右下部分显示了响应与拟合值的对比。</p><p class="calibre7"><a id="ch04lvl2sec176" class="calibre1"/>还有更多...</p></div></div></body></html>
+<div><div><div><div><div><h2 class="title1" id="calibre_pb_3"><code class="email">gam.check</code>功能首先产生平滑参数估计收敛信息。在<a id="id426" class="calibre1"/>这个例子中，平滑参数，<strong class="calibre2"> GCV/UBRE </strong> ( <strong class="calibre2">广义交叉验证/无偏风险估计器</strong>)分数在七次迭代后收敛<a id="id427" class="calibre1"/>。GCV/UBRE 函数的平均<a id="id428" class="calibre1"/>绝对梯度最小值为 8.79622e-06，估计秩为<code class="email">10</code>。尺寸检查是为了测试平滑函数的基本尺寸是否足够。在这个例子中，低 p 值表示 k 设置得太低。用户可以通过将<code class="email">gam</code>与数据拟合来指定参数 k，从而调整平滑的尺寸选择。</h2></div></div></div><p class="calibre7">除了提供关于平滑参数估计收敛的信息，该函数还返回四个诊断图。截屏图的左上部分显示了一个<strong class="calibre2">分位数比较</strong>图。该图有助于识别异常值<a id="id429" class="calibre1"/>和重尾。图的右上部分显示了残差与线性预测值的关系，这在查找非恒定误差方差时非常有用。图的左下部分显示了残差的直方图，这有助于检测非正态性。右下部分显示了响应与拟合值的对比。</p><p class="calibre7"><a id="ch04lvl2sec176" class="calibre1"/>还有更多...</p></div></div></body></html>
 
 
 <html>

@@ -32,9 +32,9 @@
 
                 
 
-<p class="mce-root">在本章中，我们将使用<strong>迁移学习</strong>对食物进行分类。为此，我们建立了自己的基于TensorFlow的<strong>机器学习</strong> ( <strong> ML </strong>)模型，我们将重点介绍一些印度食品。现代识别模型中有数百万个参数。我们需要大量的时间和数据来从头训练一个新的模型，以及数百个运行数小时的<strong>图形处理单元</strong>(<strong>GPU</strong>)或<strong>张量处理单元</strong> ( <strong> TPUs </strong>)。</p>
+<p class="mce-root">在本章中，我们将使用<strong>迁移学习</strong>对食物进行分类。为此，我们建立了自己的基于 TensorFlow 的<strong>机器学习</strong> ( <strong> ML </strong>)模型，我们将重点介绍一些印度食品。现代识别模型中有数百万个参数。我们需要大量的时间和数据来从头训练一个新的模型，以及数百个运行数小时的<strong>图形处理单元</strong>(<strong>GPU</strong>)或<strong>张量处理单元</strong> ( <strong> TPUs </strong>)。</p>
 
-<p>迁移学习通过使用已经训练好的现有模型并在新模型上重用它，使这项任务变得更容易。在我们的示例中，我们将使用MobileNet模型的特征提取功能，并在此基础上训练我们自己的分类器。即使我们不能获得100%的准确性，这在很多情况下也是最好的，尤其是在移动电话上，我们不会获得大量的资源。即使没有GPU，我们也可以在典型的笔记本电脑上轻松训练这个模型几个小时。这款机型基于配备2.6 GHZ英特尔i5处理器和8 GB内存的MacBook Pro。</p>
+<p>迁移学习通过使用已经训练好的现有模型并在新模型上重用它，使这项任务变得更容易。在我们的示例中，我们将使用 MobileNet 模型的特征提取功能，并在此基础上训练我们自己的分类器。即使我们不能获得 100%的准确性，这在很多情况下也是最好的，尤其是在移动电话上，我们不会获得大量的资源。即使没有 GPU，我们也可以在典型的笔记本电脑上轻松训练这个模型几个小时。这款机型基于配备 2.6 GHZ 英特尔 i5 处理器和 8 GB 内存的 MacBook Pro。</p>
 
 <p>在本章中，我们将详细了解以下内容:</p>
 
@@ -44,7 +44,7 @@
 
 <li>训练我们自己的张量流模型</li>
 
-<li>构建一个使用模型的iOS应用程序</li>
+<li>构建一个使用模型的 iOS 应用程序</li>
 
 </ul>
 
@@ -113,7 +113,7 @@
 
 <p>通常我们需要大量数据来训练我们的模型，但大多数时候我们没有足够的相关数据。这就是迁移学习发挥作用的地方，你可以用很少的数据训练你的模型。</p>
 
-<p>如果您的旧分类器是使用TensorFlow开发和训练的，您可以重用它来重新训练新分类器的一些层。只有当从旧任务中学到的特性在本质上更加通用时，这才会完美地工作。例如，您不能在基于图像分类的任务中重用为文本分类器开发的模型。此外，两个模型的输入数据大小应该匹配。如果大小不匹配，我们需要添加一个额外的预处理步骤来相应地调整输入数据的大小。</p>
+<p>如果您的旧分类器是使用 TensorFlow 开发和训练的，您可以重用它来重新训练新分类器的一些层。只有当从旧任务中学到的特性在本质上更加通用时，这才会完美地工作。例如，您不能在基于图像分类的任务中重用为文本分类器开发的模型。此外，两个模型的输入数据大小应该匹配。如果大小不匹配，我们需要添加一个额外的预处理步骤来相应地调整输入数据的大小。</p>
 
 
 
@@ -172,13 +172,13 @@
 
 <li><strong>使用预先训练好的模型</strong>:有很多预先训练好的模型可以满足你基本的深度学习研究。在本书中，我们使用了许多预先训练好的模型，从中我们可以得出我们的结果。</li>
 
-<li><strong>为重用训练一个模型</strong>:假设你想解决问题A，但是你没有足够的数据来实现结果。为了解决这个问题，我们有另一个问题B，我们有足够多的数据。在这种情况下，我们可以为问题B开发一个模型，并使用该模型作为问题a的起点。如果我们需要重用所有层或仅重用一些层，这取决于我们正在解决的问题的类型。</li>
+<li><strong>为重用训练一个模型</strong>:假设你想解决问题 A，但是你没有足够的数据来实现结果。为了解决这个问题，我们有另一个问题 B，我们有足够多的数据。在这种情况下，我们可以为问题 B 开发一个模型，并使用该模型作为问题 a 的起点。如果我们需要重用所有层或仅重用一些层，这取决于我们正在解决的问题的类型。</li>
 
 <li><strong>特征提取</strong>:通过深度学习，我们可以提取数据集的特征。大多数时候，这些特性是由开发人员手工制作的。神经网络有能力学习哪些特征，你必须通过，哪些不通过。例如，我们将仅使用初始图层来检测要素的正确表示，但我们不会使用输出，因为它可能更特定于某个特定任务。我们将简单地将数据输入我们的网络，并使用其中一个中间层作为输出层。</li>
 
 </ol>
 
-<p>这样，我们将开始使用TensorFlow构建我们的模型。</p>
+<p>这样，我们将开始使用 TensorFlow 构建我们的模型。</p>
 
 
 
@@ -231,9 +231,9 @@
 
                 
 
-<p>构建我们自己的定制模型需要遵循一步一步的过程。首先，我们将使用TensorFlow Hub通过预先训练好的模型输入图像。</p>
+<p>构建我们自己的定制模型需要遵循一步一步的过程。首先，我们将使用 TensorFlow Hub 通过预先训练好的模型输入图像。</p>
 
-<p>TensorFlow Hub是一个用于发布、发现和消费机器学习模型的可重用部分的库。一个<em>模块</em>是一个张量流图的独立部分，以及它的权重和资产，可以在一个被称为<strong>迁移学习</strong>的过程中跨不同的任务重用。</p>
+<p>TensorFlow Hub 是一个用于发布、发现和消费机器学习模型的可重用部分的库。一个<em>模块</em>是一个张量流图的独立部分，以及它的权重和资产，可以在一个被称为<strong>迁移学习</strong>的过程中跨不同的任务重用。</p>
 
 
 
@@ -276,7 +276,7 @@
 
                             
 
-                    <h1 class="header-title">安装TensorFlow</h1>
+                    <h1 class="header-title">安装 TensorFlow</h1>
 
                 
 
@@ -286,11 +286,11 @@
 
                 
 
-<p>写这本书的时候，TensorFlow 1.7.0已经可以用了。TensorFlow Hub依赖于TensorFlow库，可以按如下方式与<kbd>pip</kbd>一起安装:</p>
+<p>写这本书的时候，TensorFlow 1.7.0 已经可以用了。TensorFlow Hub 依赖于 TensorFlow 库，可以按如下方式与<kbd>pip</kbd>一起安装:</p>
 
 <pre>$ pip install "tensorflow&gt;=1.7.0"<br/>$ pip install tensorflow-hub</pre>
 
-<p>安装TensorFlow库后，我们需要在训练过程开始前开始收集图像数据集。在开始训练之前，我们需要研究很多东西。</p>
+<p>安装 TensorFlow 库后，我们需要在训练过程开始前开始收集图像数据集。在开始训练之前，我们需要研究很多东西。</p>
 
 
 
@@ -349,7 +349,7 @@
 
 <ol>
 
-<li>首先，我们需要至少100张你想识别的每个图像类别的照片。我们的模型的准确性与集合中图像的数量成正比。</li>
+<li>首先，我们需要至少 100 张你想识别的每个图像类别的照片。我们的模型的准确性与集合中图像的数量成正比。</li>
 
 <li>我们需要确保图像集中有更多相关的图像。例如，如果我们拍摄了具有单一颜色背景的图像集，假设图像中的所有对象都具有白色背景，并且是在室内拍摄的，并且用户试图识别具有分散注意力的背景的对象(在室外拍摄的彩色背景)，这不会导致更好的准确性。</li>
 
@@ -367,13 +367,13 @@
 
 </ol>
 
-<p>我们从Google images上拍摄了一些食物图片。这些图像具有可重复使用的权限，因此在为您的模型收集图像时，请始终确保您拥有此权限。你可以从谷歌图片中搜索任何关键词，然后根据标记为重用的<em xmlns:epub="http://www.idpf.org/2007/ops">使用权过滤图片。我们可以通过点击搜索栏下面的工具找到这个选项。</em></p>
+<p>我们从 Google images 上拍摄了一些食物图片。这些图像具有可重复使用的权限，因此在为您的模型收集图像时，请始终确保您拥有此权限。你可以从谷歌图片中搜索任何关键词，然后根据标记为重用的<em xmlns:epub="http://www.idpf.org/2007/ops">使用权过滤图片。我们可以通过点击搜索栏下面的工具找到这个选项。</em></p>
 
 <p>我们从互联网上收集了一些可重复使用的图片，并将它们组织在以下文件夹中:</p>
 
 <pre><strong>$:cd ~/Chapter8/images</strong><br/><strong>$:ls</strong><br/><strong>dosa</strong><br/><strong>idly</strong><br/><strong>biriyani</strong><br/><strong>burger</strong><br/><strong>pizza</strong></pre>
 
-<p>我们在相应的文件夹下保存了大约100张每种食物的图片。一旦我们的图像准备好了，我们就可以开始训练了。这些文件夹名称很重要，因为我们要用文件夹名称标记每个文件夹中的所有食品。例如，<kbd>pizza</kbd>文件夹下的所有食物都将被标记为<kbd>pizza</kbd>。</p>
+<p>我们在相应的文件夹下保存了大约 100 张每种食物的图片。一旦我们的图像准备好了，我们就可以开始训练了。这些文件夹名称很重要，因为我们要用文件夹名称标记每个文件夹中的所有食品。例如，<kbd>pizza</kbd>文件夹下的所有食物都将被标记为<kbd>pizza</kbd>。</p>
 
 <p>当数据收集完成后，我们可以通过迁移学习开始训练过程。</p>
 
@@ -542,7 +542,7 @@
 
                 
 
-<p>MobileNet是一种更小、低功耗、低延迟的模型，旨在满足移动设备的限制。在我们的应用中，我们从MobileNet数据集选择了以下架构，它具有更好的准确性基准:</p>
+<p>MobileNet 是一种更小、低功耗、低延迟的模型，旨在满足移动设备的限制。在我们的应用中，我们从 MobileNet 数据集选择了以下架构，它具有更好的准确性基准:</p>
 
 <pre> --architecture="mobilenet_1.0_224"</pre>
 
@@ -674,7 +674,7 @@
 
 <ul>
 
-<li><kbd>--testing_percentage</kbd> <strong>和</strong> <kbd>--validation_percentage</kbd> <strong>标志</strong>:为了避免过度拟合，我们将80%的数据保留在主训练集中。在这些数据中，10%用于在训练过程中进行验证，最后10%用于测试模型。我们可以使用以下参数调整这些控制:<ul>
+<li><kbd>--testing_percentage</kbd> <strong>和</strong> <kbd>--validation_percentage</kbd> <strong>标志</strong>:为了避免过度拟合，我们将 80%的数据保留在主训练集中。在这些数据中，10%用于在训练过程中进行验证，最后 10%用于测试模型。我们可以使用以下参数调整这些控制:<ul>
 
 <li><kbd>--validation_batch_size</kbd>:我们可以看到验证的准确性在迭代之间波动。这可以通过设置以下参数来减少。</li>
 
@@ -741,7 +741,7 @@
 
 <pre>python retrain.py \<br/> --bottleneck_dir=./ \<br/> --how_many_training_steps=4000 \ <br/> --model_dir=./ \<br/> --output_graph=./food_graph.pb \<br/> --output_labels=food_labels.txt \<br/> --architecture="mobilenet_1.0_224" \ <br/> --image_dir=/Users/karthikeyan/Documents/docs/book/Chapter8/images</pre>
 
-<p>根据我们的处理器的能力以及我们拥有的图像数量，脚本可能需要更长的时间进行训练。对我来说，我花了10多个小时来研究50种不同的食物，每种食物包含1500张图片。一旦脚本完成，我们将在输出中获得TensorFlow模型。</p>
+<p>根据我们的处理器的能力以及我们拥有的图像数量，脚本可能需要更长的时间进行训练。对我来说，我花了 10 多个小时来研究 50 种不同的食物，每种食物包含 1500 张图片。一旦脚本完成，我们将在输出中获得 TensorFlow 模型。</p>
 
 
 
@@ -794,7 +794,7 @@
 
                 
 
-<p>一旦我们准备好张量流模型，我们将把它转换成一个核心ML模型。正如我们在其他章节中所做的转换一样，要获得最新版本的转换器，克隆这个存储库并从源代码安装它，如下所示:</p>
+<p>一旦我们准备好张量流模型，我们将把它转换成一个核心 ML 模型。正如我们在其他章节中所做的转换一样，要获得最新版本的转换器，克隆这个存储库并从源代码安装它，如下所示:</p>
 
 <div><pre>git clone https://github.com/tf-coreml/tf-coreml.git
 
@@ -804,7 +804,7 @@ cd tf-coreml </pre></div>
 
 <pre>pip install -U tfcoreml</pre>
 
-<p>从下面的代码中，我们循环通过<kbd>graphDef</kbd>来查找信息，因为要将TensorFlow模型转换为核心ML模型，我们需要知道一些信息。<br/>我们将从下面的代码中得到下面的细节列表:</p>
+<p>从下面的代码中，我们循环通过<kbd>graphDef</kbd>来查找信息，因为要将 TensorFlow 模型转换为核心 ML 模型，我们需要知道一些信息。<br/>我们将从下面的代码中得到下面的细节列表:</p>
 
 <ul>
 
@@ -812,7 +812,7 @@ cd tf-coreml </pre></div>
 
 <li><strong>输出名称</strong>:soft max<kbd>op</kbd>向图形末端的输出，即(<kbd>final_result:0</kbd>)。</li>
 
-<li><strong>模型形状</strong>:我们从TensorBoard获取模型形状，在模型创建过程中找到它的形状，或者我们也可以使用<kbd>tf.shape()</kbd>找到它的形状。我们的模型形状是[1，224，224，3]。我们现在可以将其转换为核心ML模型(<kbd>.mlmodel</kbd>):</li>
+<li><strong>模型形状</strong>:我们从 TensorBoard 获取模型形状，在模型创建过程中找到它的形状，或者我们也可以使用<kbd>tf.shape()</kbd>找到它的形状。我们的模型形状是[1，224，224，3]。我们现在可以将其转换为核心 ML 模型(<kbd>.mlmodel</kbd>):</li>
 
 </ul>
 
@@ -862,9 +862,9 @@ coreml_model = tfcoreml.convert(
 
         class_labels = class_labels)</pre>
 
-<p>现在我们已经准备好了我们的核心ML模型。</p>
+<p>现在我们已经准备好了我们的核心 ML 模型。</p>
 
-<p>下面是Python脚本的源代码:<a href="https://github.com/intrepidkarthi/MLmobileapps/blob/master/Chapter8/tf_to_coreml.py" target="_blank">https://github . com/intrepidkarthi/MLmobileapps/tree/master/chapter 8/TF _ to _ coreml . py</a>。</p>
+<p>下面是 Python 脚本的源代码:<a href="https://github.com/intrepidkarthi/MLmobileapps/blob/master/Chapter8/tf_to_coreml.py" target="_blank">https://github . com/intrepidkarthi/MLmobileapps/tree/master/chapter 8/TF _ to _ coreml . py</a>。</p>
 
 <p>一旦你下载了<kbd>tf_to_coreml.py</kbd>文件，你需要修改输入，如<kbd>tf_model_path</kbd>、<kbd>input_name_shape_dict</kbd>、<kbd>image_input_names</kbd>等等。基于重新培训车型的详细信息<kbd>food_graph.pb</kbd>。修改完成后，执行以下命令获得<kbd>food_graph.mlmodel</kbd>。</p>
 
@@ -935,7 +935,7 @@ coreml_model = tfcoreml.convert(
 
                             
 
-                    <h1 class="header-title">构建iOS应用程序</h1>
+                    <h1 class="header-title">构建 iOS 应用程序</h1>
 
                 
 
@@ -945,11 +945,11 @@ coreml_model = tfcoreml.convert(
 
                 
 
-<p class="mce-root">我们将创建一个新的iOS应用程序，并将ML模型导入其中:</p>
+<p class="mce-root">我们将创建一个新的 iOS 应用程序，并将 ML 模型导入其中:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/2d5b875d-d398-441a-be60-72f9efa24744.png" style="font-size: 1em;width:80.17em;height:40.00em;"/></p>
 
-<p>一旦你选择了<kbd>.mlmodel</kbd>文件，你将会看到关于它的细节，其中重要的是ML模型<strong>类型</strong>、<strong>输入</strong>和<strong>输出</strong>。<strong>输入</strong>类型应该是<strong>图像</strong>，因为我们的输入将是食物项目的图像。</p>
+<p>一旦你选择了<kbd>.mlmodel</kbd>文件，你将会看到关于它的细节，其中重要的是 ML 模型<strong>类型</strong>、<strong>输入</strong>和<strong>输出</strong>。<strong>输入</strong>类型应该是<strong>图像</strong>，因为我们的输入将是食物项目的图像。</p>
 
 <p>一旦我们导入了模型，我们必须将模型加载到内存中:</p>
 
@@ -961,7 +961,7 @@ coreml_model = tfcoreml.convert(
 
 <p>用户界面非常简单，我们可以选择一张图片或抓拍一张照片来识别食物分类。我们将创建满足需求的接口。我们将不得不为我们的模型选择一个图像来识别，我们将有两个选项可供选择，一个是从相机胶卷中选择，另一个是通过单击食物的图片。我们在屏幕底部添加了一个工具栏，并在顶部添加了一个相机类型的工具栏项目。</p>
 
-<p>工具栏项目有一个内置类型的摄像头，所以，你不必得到一个摄像头图标。我们将不得不显示食品项目的图像，所以我们将添加一个图像视图，然后为它在屏幕上的位置的约束。我们将添加一个按钮，如上图所示，带有UI位置约束:</p>
+<p>工具栏项目有一个内置类型的摄像头，所以，你不必得到一个摄像头图标。我们将不得不显示食品项目的图像，所以我们将添加一个图像视图，然后为它在屏幕上的位置的约束。我们将添加一个按钮，如上图所示，带有 UI 位置约束:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/6934d602-ce1d-448a-a6f8-df0930460f3c.png" style="width:73.67em;height:42.00em;"/></p>
 
@@ -969,7 +969,7 @@ coreml_model = tfcoreml.convert(
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/7e46d316-abd4-4b8a-b988-a68aadab2e05.png" style="width:77.83em;height:44.00em;"/></p>
 
-<p>然后，我们将添加控件，从相机拍摄照片并输入。下面的add控件方法从照片库中启动照相机或照片拾取器。只有当摄像机可用时，我们才会显示摄像机选项。我们将在照片拾取器上添加三个动作来拍照、从图库中拾取图像和取消弹出动作:</p>
+<p>然后，我们将添加控件，从相机拍摄照片并输入。下面的 add 控件方法从照片库中启动照相机或照片拾取器。只有当摄像机可用时，我们才会显示摄像机选项。我们将在照片拾取器上添加三个动作来拍照、从图库中拾取图像和取消弹出动作:</p>
 
 <pre> @IBAction func takePicture() {<br/> guard UIImagePickerController.isSourceTypeAvailable(.camera) else {<br/> // Show options for the source picker only if the camera is available.<br/> presentPhotoPicker(sourceType: .photoLibrary)<br/> return<br/> }<br/> <br/>     let photoSourcePicker = UIAlertController()<br/>     let takePhoto = UIAlertAction(title: "Take Photo", style: <br/>                              .default) { [unowned self] _ in<br/>     self.presentPhotoPicker(sourceType: .camera)<br/> }<br/>     let choosePhoto = UIAlertAction(title: "Choose Photo", style: <br/>                              .default) { [unowned self] _ in<br/>     self.presentPhotoPicker(sourceType: .photoLibrary)<br/> }<br/>     <br/>     //Adding actions on the photo picker control<br/>     photoSourcePicker.addAction(takePhoto)<br/>     photoSourcePicker.addAction(choosePhoto)<br/>     photoSourcePicker.addAction(UIAlertAction(title: "Cancel", <br/>                                 style:.cancel, handler: nil))<br/> <br/>     present(photoSourcePicker, animated: true)<br/> }<br/> </pre>
 
@@ -989,7 +989,7 @@ coreml_model = tfcoreml.convert(
 
 <pre> ///Perform image classification requests<br/> func updateClassifications(for image: UIImage) {<br/>     classificationLabel.text = "Classifying..."<br/>     classificationBgView.isHidden = false<br/>     let orientation = <br/>           CGImagePropertyOrientation(image.imageOrientation)<br/>     guard let ciImage = CIImage(image: image) else {                  <br/>          fatalError("Unable to create \(CIImage.self) from \(image).") <br/>    }<br/> <br/>     DispatchQueue.global(qos: .userInitiated).async {<br/>     let handler = VNImageRequestHandler(ciImage: ciImage, orientation: <br/>                                         orientation)<br/>     do {<br/>         try handler.perform([self.classificationRequest])<br/>         } catch {<br/>         print("Failed to perform classification.\n\                            <br/>(error.localizedDescription)")<br/>         }<br/>     }<br/> }<br/> </pre>
 
-<p>一旦我们收到来自模型的结果，我们将在UI中更新它:</p>
+<p>一旦我们收到来自模型的结果，我们将在 UI 中更新它:</p>
 
 <pre> /// Updates the UI with the results of the classification.<br/> /// - Tag: ProcessClassifications<br/> func processClassifications(for request: VNRequest, error: Error?)      {<br/>     DispatchQueue.main.async {<br/>         guard let results = request.results else {<br/>         self.classificationLabel.text = "Unable to classify image.\n\<br/>                                        (error!.localizedDescription)"<br/>         return<br/>        }<br/> // The `results` will always be `VNClassificationObservation`s, as <br/>    specified by the Core ML model in this project.<br/>        let classifications = results as! [VNClassificationObservation]<br/> <br/>        if classifications.isEmpty {<br/>           self.classificationLabel.text = "Nothing recognized."<br/>        } <br/>        else {<br/>        // Display top classifications ranked by confidence in the UI.<br/>        let topClassifications = classifications.prefix(2)<br/>        let descriptions = topClassifications.map { classification in<br/>        // Formats the classification for display; e.g. "(0.37) cliff, <br/>           drop, drop-off".<br/>        return String(format: " (%.2f) %@", classification.confidence, <br/>                      classification.identifier)<br/>       }<br/>      self.classificationLabel.text = "Classification:\n" + <br/>                descriptions.joined(separator: "\n")<br/>       }<br/>    }<br/> }</pre>
 
@@ -997,11 +997,11 @@ coreml_model = tfcoreml.convert(
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/1d15891f-3e3d-416e-90c0-a7a0cf60b1d1.png" style="width:18.42em;height:39.92em;"/></p>
 
-<p>这是我们早期模型的一个样本图像，带有不正确的数据集。尽管我们对每一类食物都有1000多张照片，但还是有一些照片包含了多种菜肴，如下图所示。我们对输入的选择很糟糕，因为在一幅图像中有多个食物项目，所以它包含了围绕主要食物的大量噪声。这混淆了算法，很难得到想要的结果。选择数据集时，请尽量避免这些问题:</p>
+<p>这是我们早期模型的一个样本图像，带有不正确的数据集。尽管我们对每一类食物都有 1000 多张照片，但还是有一些照片包含了多种菜肴，如下图所示。我们对输入的选择很糟糕，因为在一幅图像中有多个食物项目，所以它包含了围绕主要食物的大量噪声。这混淆了算法，很难得到想要的结果。选择数据集时，请尽量避免这些问题:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/3c1251b0-7fb4-4f73-957c-7d121352e31e.png" style="width:16.58em;height:35.92em;"/></p>
 
-<p>前面的屏幕截图是另一个例子，在同一个图像中有两个可检测的项目，您可以看到分类器值。你可以看到棒棒糖和idli vada都被标记在这里。</p>
+<p>前面的屏幕截图是另一个例子，在同一个图像中有两个可检测的项目，您可以看到分类器值。你可以看到棒棒糖和 idli vada 都被标记在这里。</p>
 
 
 
@@ -1054,7 +1054,7 @@ coreml_model = tfcoreml.convert(
 
                 
 
-<p>此时，您应该能够构建自己的TensorFlow模型，并将其转换为核心ML模型，以便在iOS应用程序中使用。相同的TensorFlow模型可以转换成TensorFlow Lite模型，以便在Android应用程序中使用。你可以接受这个任务，并在那里试验结果。说到这里，我们现在将进入下一章。</p>
+<p>此时，您应该能够构建自己的 TensorFlow 模型，并将其转换为核心 ML 模型，以便在 iOS 应用程序中使用。相同的 TensorFlow 模型可以转换成 TensorFlow Lite 模型，以便在 Android 应用程序中使用。你可以接受这个任务，并在那里试验结果。说到这里，我们现在将进入下一章。</p>
 
 <p>在下一章中，我们将会看到如何利用从本书中学到的知识，以及如何构建自己的应用程序。</p>
 

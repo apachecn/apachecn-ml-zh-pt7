@@ -54,7 +54,7 @@
 
       <li class="bullet">适应性学习方法</li>
 
-      <li class="bullet">Python实践</li>
+      <li class="bullet">Python 实践</li>
 
     </ul>
 
@@ -230,9 +230,9 @@
 
     </table>
 
-    <p class="packt_figref">图8.1:时间序列中的在线和离线学习方法</p>
+    <p class="packt_figref">图 8.1:时间序列中的在线和离线学习方法</p>
 
-    <p class="normal">还有许多其他工具不是专门针对在线学习的，但支持在线学习，例如<a id="_idIndexMarker633"/>最受欢迎的深度学习库——py torch和TensorFlow，其中模型固有地支持在线学习，数据<a id="_idIndexMarker634"/>加载器支持流场景——通过迭代器，可以根据需要加载数据。</p>
+    <p class="normal">还有许多其他工具不是专门针对在线学习的，但支持在线学习，例如<a id="_idIndexMarker633"/>最受欢迎的深度学习库——py torch 和 TensorFlow，其中模型固有地支持在线学习，数据<a id="_idIndexMarker634"/>加载器支持流场景——通过迭代器，可以根据需要加载数据。</p>
 
     <p class="normal">监督机器学习问题的流公式可以被提出如下:</p>
 
@@ -248,7 +248,7 @@
 
     <p class="normal">在批量设置中，一组<em class="italic"> n </em>点<img src="img/B17577_08_002.png" alt="" style="height: 1em;"/>在时间<em class="italic"> t </em>同时到达，在真实标签被揭示和下一批点到达之前，所有<em class="italic"> n </em>点将被在线模型预测。</p>
 
-    <p class="normal">我们可以演示Python代码片段中的差异，以显示在线和离线设置中机器学习的特征模式。你应该熟悉离线学习，它看起来像这样的特征<code class="Code-In-Text--PACKT-">X</code>，目标向量<code class="Code-In-Text--PACKT-">y</code>，和模型参数<code class="Code-In-Text--PACKT-">params</code>:</p>
+    <p class="normal">我们可以演示 Python 代码片段中的差异，以显示在线和离线设置中机器学习的特征模式。你应该熟悉离线学习，它看起来像这样的特征<code class="Code-In-Text--PACKT-">X</code>，目标向量<code class="Code-In-Text--PACKT-">y</code>，和模型参数<code class="Code-In-Text--PACKT-">params</code>:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sklearn import linear_model
 
@@ -258,7 +258,7 @@ offline_model.fit(X, Y)
 
 </code></pre>
 
-    <p class="normal">这应该从前面的章节中熟悉，例如<em class="chapterRef">第7章</em>、<em class="italic">时间序列的机器学习模型</em>。为了简单起见，我们省略了数据加载、预处理、交叉验证和参数调整等问题。</p>
+    <p class="normal">这应该从前面的章节中熟悉，例如<em class="chapterRef">第 7 章</em>、<em class="italic">时间序列的机器学习模型</em>。为了简单起见，我们省略了数据加载、预处理、交叉验证和参数调整等问题。</p>
 
     <p class="normal">在线学习遵循以下模式:</p>
 
@@ -290,9 +290,9 @@ for xi, yi in zip(X, y):
 
     <p class="normal">在<strong class="keyword">顺序评估</strong>中，我们在执行顺序时进行测试。每一个新的数据点首先经过<a id="_idIndexMarker636"/>测试，然后进行训练。</p>
 
-    <p class="normal">在线学习的一个有趣的方面是模型选择，即如何在一组候选模型中选择最佳模型。我们在<em class="chapterRef">第4章</em>、<em class="italic">时序机器学习模型</em>中看到了时序模型的模型选择。在线设置中有不同的型号选择选项。</p>
+    <p class="normal">在线学习的一个有趣的方面是模型选择，即如何在一组候选模型中选择最佳模型。我们在<em class="chapterRef">第 4 章</em>、<em class="italic">时序机器学习模型</em>中看到了时序模型的模型选择。在线设置中有不同的型号选择选项。</p>
 
-    <p class="normal">在<strong class="keyword">多臂土匪</strong>(也叫<strong class="keyword"> K臂土匪</strong>)问题中，有限的资源必须以最大化期望增益的方式在竞争的选择之间分配。每一个选择(“手臂”)都会带来回报，这可以通过时间来学习。随着时间的推移，我们可以调整对每一种武器的偏好，并根据<a id="_idIndexMarker638"/>预期回报做出最佳选择。类似地，通过学习竞争分类或回归模型的预期回报，可以将用于多武装匪徒的方法应用于模型选择。在实践部分，我们将讨论多臂土匪的模型选择。</p>
+    <p class="normal">在<strong class="keyword">多臂土匪</strong>(也叫<strong class="keyword"> K 臂土匪</strong>)问题中，有限的资源必须以最大化期望增益的方式在竞争的选择之间分配。每一个选择(“手臂”)都会带来回报，这可以通过时间来学习。随着时间的推移，我们可以调整对每一种武器的偏好，并根据<a id="_idIndexMarker638"/>预期回报做出最佳选择。类似地，通过学习竞争分类或回归模型的预期回报，可以将用于多武装匪徒的方法应用于模型选择。在实践部分，我们将讨论多臂土匪的模型选择。</p>
 
     <p class="normal">在接下来的部分中，我们将更详细地研究增量方法和漂移。</p>
 
@@ -304,9 +304,9 @@ for xi, yi in zip(X, y):
 
     <p class="normal">增量算法可以随机访问以前的样本或原型(选定的样本)。这些算法，比如基于最近邻算法的，叫做部分记忆增量算法。它们的变体可以适用于循环漂移情况。</p>
 
-    <p class="normal">许多著名的机器学习算法都有增量变体，如自适应随机森林、自适应XGBoost分类器或增量支持向量机。</p>
+    <p class="normal">许多著名的机器学习算法都有增量变体，如自适应随机森林、自适应 XGBoost 分类器或增量支持向量机。</p>
 
-    <p class="normal">强化学习和主动学习都可以被视为在线学习的类型，因为它们以在线或主动的方式工作。我们将在<em class="chapterRef">第11章</em>、<em class="italic">时间序列的强化学习</em>中讨论强化学习。</p>
+    <p class="normal">强化学习和主动学习都可以被视为在线学习的类型，因为它们以在线或主动的方式工作。我们将在<em class="chapterRef">第 11 章</em>、<em class="italic">时间序列的强化学习</em>中讨论强化学习。</p>
 
     <p class="normal">在在线学习中，更新是不断计算的。这一过程的核心是运行统计数据，因此可以说明如何递增地计算均值和方差(在在线设置中)。</p>
 
@@ -324,19 +324,19 @@ for xi, yi in zip(X, y):
 
     <p class="normal">离线算法的一个缺点是它们有时更难实现，并且需要一个学习曲线来跟上库、算法和方法的速度。</p>
 
-    <p class="normal">scikit-learn，Python中机器学习的标准<a id="_idIndexMarker643"/>库，只有有限数量的增量<a id="_idIndexMarker644"/>算法。它专注于批量学习模型。相比之下，有专门的在线学习库，具有覆盖许多用例的自适应和增量算法，如不平衡数据集。</p>
+    <p class="normal">scikit-learn，Python 中机器学习的标准<a id="_idIndexMarker643"/>库，只有有限数量的增量<a id="_idIndexMarker644"/>算法。它专注于批量学习模型。相比之下，有专门的在线学习库，具有覆盖许多用例的自适应和增量算法，如不平衡数据集。</p>
 
-    <p class="normal">来自怀卡托大学(新西兰)、巴黎电信公司和巴黎理工学院的研究工程师、学生和机器学习研究人员一直在致力于<strong class="keyword">河流图书馆</strong>。River是两个库合并的结果:Creme(意为incremental的双关语<a id="_idIndexMarker645"/>)和Scikit-Multiflow。River提供了许多元方法和集合方法。最重要的是，许多元方法或集成方法可以使用scikit-learn模型作为基础模型。</p>
+    <p class="normal">来自怀卡托大学(新西兰)、巴黎电信公司和巴黎理工学院的研究工程师、学生和机器学习研究人员一直在致力于<strong class="keyword">河流图书馆</strong>。River 是两个库合并的结果:Creme(意为 incremental 的双关语<a id="_idIndexMarker645"/>)和 Scikit-Multiflow。River 提供了许多元方法和集合方法。最重要的是，许多元方法或集成方法可以使用 scikit-learn 模型作为基础模型。</p>
 
-    <p class="normal">在撰写本文时，河流库拥有1700颗恒星，并实现了许多非监督和监督算法。在写作的时候，River的文档仍然是一个正在进行的工作，但是很多功能是可用的，正如我们将在本章最后的实用部分看到的。</p>
+    <p class="normal">在撰写本文时，河流库拥有 1700 颗恒星，并实现了许多非监督和监督算法。在写作的时候，River 的文档仍然是一个正在进行的工作，但是很多功能是可用的，正如我们将在本章最后的实用部分看到的。</p>
 
-    <p class="normal">该图表显示了River和Scikit-Multiflow随时间的流行程度(根据GitHub上的明星数量):</p>
+    <p class="normal">该图表显示了 River 和 Scikit-Multiflow 随时间的流行程度(根据 GitHub 上的明星数量):</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_01.png" alt="online_learning-star_history.png"/></figure>
 
-    <p class="packt_figref">图8.2:河流和Scikit-Multiflow库的恒星历史</p>
+    <p class="packt_figref">图 8.2:河流和 Scikit-Multiflow 库的恒星历史</p>
 
-    <p class="normal">我们可以看到，尽管Scikit-Multiflow稳步上升，但这种上升基本上是平稳的。River在2019年超过了Scikit-Multiflow，并继续获得GitHub用户的许多星级评分。这些明星<a id="_idIndexMarker646"/>的评分类似于社交媒体平台上的一个“赞”。</p>
+    <p class="normal">我们可以看到，尽管 Scikit-Multiflow 稳步上升，但这种上升基本上是平稳的。River 在 2019 年超过了 Scikit-Multiflow，并继续获得 GitHub 用户的许多星级评分。这些明星<a id="_idIndexMarker646"/>的评分类似于社交媒体平台上的一个“赞”。</p>
 
     <p class="normal">下表显示了一些在线算法，其中一些适用于漂移情况:</p>
 
@@ -404,7 +404,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">学习++吧。国家证券交易所（ National Stock Exchange的缩写）</p>
+            <p class="Table-Column-Content--PACKT-">学习++吧。国家证券交易所（ National Stock Exchange 的缩写）</p>
 
           </td>
 
@@ -420,19 +420,19 @@ for xi, yi in zip(X, y):
 
     </table>
 
-    <p class="packt_figref">图8.3:在线机器学习算法——其中一些适合漂移</p>
+    <p class="packt_figref">图 8.3:在线机器学习算法——其中一些适合漂移</p>
 
     <p class="normal">最优秀的在线算法是<strong class="keyword">赫夫丁树</strong>(杰夫·胡尔顿、劳里·斯潘塞和佩德罗·多明戈斯，2001)，也叫做<a id="_idIndexMarker647"/>非常快速决策树 ( <strong class="keyword"> VFDT </strong>)。这是最广泛使用的在线决策树归纳算法之一。</p>
 
-    <p class="normal">虽然一些在线学习算法相当有效，但所获得的性能可能对数据点的排序高度敏感，并且潜在地，在早期示例的驱动下，它们可能永远无法摆脱它们最终所处的局部最小值。吸引人的是，VFDTs提供了很高的分类精度，并在理论上保证它们会随着时间的推移向决策树的性能靠拢。事实上，VFDT和<a id="_idIndexMarker649"/>传统训练的树在它们的树分裂上<a id="_idIndexMarker650"/>不同的概率随着例子的数量而指数下降。</p>
+    <p class="normal">虽然一些在线学习算法相当有效，但所获得的性能可能对数据点的排序高度敏感，并且潜在地，在早期示例的驱动下，它们可能永远无法摆脱它们最终所处的局部最小值。吸引人的是，VFDTs 提供了很高的分类精度，并在理论上保证它们会随着时间的推移向决策树的性能靠拢。事实上，VFDT 和<a id="_idIndexMarker649"/>传统训练的树在它们的树分裂上<a id="_idIndexMarker650"/>不同的概率随着例子的数量而指数下降。</p>
 
-    <p class="normal">由瓦西里·赫夫丁在1963年提出的<strong class="keyword">赫夫丁界限</strong>指出，在概率<img src="img/B17577_08_011.png" alt="" style="height: 1em;"/>下，随机变量<em class="italic"> Z </em>的计算均值<img src="img/B17577_08_012.png" alt="" style="height: 1em;"/>，在<em class="italic"> n </em>个样本上计算，与真实均值<img src="img/B17577_08_014.png" alt="" style="height: 1em;"/>的偏差小于<img src="img/B17577_08_013.png" alt="" style="height: 0.7em;"/>:</p>
+    <p class="normal">由瓦西里·赫夫丁在 1963 年提出的<strong class="keyword">赫夫丁界限</strong>指出，在概率<img src="img/B17577_08_011.png" alt="" style="height: 1em;"/>下，随机变量<em class="italic"> Z </em>的计算均值<img src="img/B17577_08_012.png" alt="" style="height: 1em;"/>，在<em class="italic"> n </em>个样本上计算，与真实均值<img src="img/B17577_08_014.png" alt="" style="height: 1em;"/>的偏差小于<img src="img/B17577_08_013.png" alt="" style="height: 0.7em;"/>:</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_015.png" alt="" style="height: 4em;"/></figure>
 
     <p class="normal">在这个方程中，<em class="italic"> R </em>是随机变量<em class="italic"> Z </em>的范围。这个界限与产生观测值的概率分布无关。</p>
 
-    <p class="normal">随着数据的输入，新的分支不断增加，过时的分支从Hoeffding树中删除。然而，有问题的是，在概念漂移下，一些节点可能不再满足Hoefdding边界。</p>
+    <p class="normal">随着数据的输入，新的分支不断增加，过时的分支从 Hoeffding 树中删除。然而，有问题的是，在概念漂移下，一些节点可能不再满足 Hoefdding 边界。</p>
 
     <p class="normal">在下一节中，我们将讨论漂移，为什么要关注漂移，以及如何应对漂移。</p>
 
@@ -444,7 +444,7 @@ for xi, yi in zip(X, y):
 
     <figure class="mediaobject"><img src="img/B17577_08_02.png" alt="../Conceptdrift4%20-%20page%201.png"/></figure>
 
-    <p class="packt_figref">图8.4:四种类型的概念漂移转换</p>
+    <p class="packt_figref">图 8.4:四种类型的概念漂移转换</p>
 
     <p class="normal">当转变是突然的，它从一个时间步到另一个时间步发生，没有明显的准备<a id="_idIndexMarker653"/>或警告。相比之下，它也可以是递增的，首先是一点点的变化，然后是更大的变化，然后又是更大的变化。</p>
 
@@ -462,7 +462,7 @@ for xi, yi in zip(X, y):
 
     </ul>
 
-    <p class="normal"><strong class="keyword">协变量漂移</strong>描述了自变量(特征)的变化。一个例子可能是监管<a id="_idIndexMarker655"/>干预，新的法律将动摇市场格局，消费者<a id="_idIndexMarker656"/>行为将遵循与以前不同的行为<a id="_idIndexMarker657"/>。一个例子是，如果我们想预测给定吸烟行为的10年内的慢性疾病，吸烟突然变得不那么流行了，因为新的法律。这意味着我们的预测可能不太可靠。</p>
+    <p class="normal"><strong class="keyword">协变量漂移</strong>描述了自变量(特征)的变化。一个例子可能是监管<a id="_idIndexMarker655"/>干预，新的法律将动摇市场格局，消费者<a id="_idIndexMarker656"/>行为将遵循与以前不同的行为<a id="_idIndexMarker657"/>。一个例子是，如果我们想预测给定吸烟行为的 10 年内的慢性疾病，吸烟突然变得不那么流行了，因为新的法律。这意味着我们的预测可能不太可靠。</p>
 
     <p class="normal"><strong class="keyword">概率漂移</strong>是目标变量的变化。例如，在欺诈检测中，欺诈<a id="_idIndexMarker658"/>发生率会发生变化；在零售业，商品的平均价值增加了。漂移的一个原因可能是季节性——例如，在冬天卖出更多的外套。</p>
 
@@ -478,19 +478,19 @@ for xi, yi in zip(X, y):
 
     <p class="normal">通常，当构建机器学习模型时，我们假设数据集不同部分内的点属于同一分布。</p>
 
-    <p class="normal">虽然偶尔出现的异常(如异常事件)通常会被视为噪音并被忽略，但当分布发生变化时，通常必须根据新的样本从头开始重建模型，以捕捉最新的特征。这就是我们测试带有前推验证的时间序列模型的原因，正如在<em class="chapterRef">第7章</em>、<em class="italic">时间序列的机器学习模型</em>中所讨论的。然而，这种从头开始的训练可能非常耗时，并且会占用大量计算资源。</p>
+    <p class="normal">虽然偶尔出现的异常(如异常事件)通常会被视为噪音并被忽略，但当分布发生变化时，通常必须根据新的样本从头开始重建模型，以捕捉最新的特征。这就是我们测试带有前推验证的时间序列模型的原因，正如在<em class="chapterRef">第 7 章</em>、<em class="italic">时间序列的机器学习模型</em>中所讨论的。然而，这种从头开始的训练可能非常耗时，并且会占用大量计算资源。</p>
 
     <p class="normal">漂移会给机器学习模型带来问题，因为模型会变得陈旧——随着时间的推移，它们会变得不可靠，因为它们捕获的关系不再有效。这导致这些模型的性能下降。因此，预测、分类、回归或异常检测的方法应该能够及时检测概念漂移并对其做出反应，以便能够尽快更新模型<a id="_idIndexMarker663"/>。机器学习模型通常会定期重新训练，以避免性能下降。或者，基于模型的性能监控或者基于变化检测方法，可以在需要时触发再训练。</p>
 
     <p class="normal">至于时间序列的应用，在许多领域，如金融、电子商务、经济和医疗保健，时间序列的统计属性可能会改变，导致预测模型无用。令人困惑的是，尽管漂移问题的概念在文献中得到了很好的研究，但很少有人用时间序列方法来解决它。</p>
 
-    <p class="normal">Gustavo Oliveira等人在2017年提出(“<em class="italic">存在概念漂移的时间序列预测:一种基于粒子群算法的方法</em>”)训练几个时间序列预测模型。在每个时间点，这些模型中的每个模型的参数根据最新的性能(粒子群优化)进行加权改变。当最佳模型(最佳粒子)偏离超过某个置信区间时，触发模型的再训练。</p>
+    <p class="normal">Gustavo Oliveira 等人在 2017 年提出(“<em class="italic">存在概念漂移的时间序列预测:一种基于粒子群算法的方法</em>”)训练几个时间序列预测模型。在每个时间点，这些模型中的每个模型的参数根据最新的性能(粒子群优化)进行加权改变。当最佳模型(最佳粒子)偏离超过某个置信区间时，触发模型的再训练。</p>
 
     <p class="normal">下面的图表说明了错误触发的再培训和在线学习的结合，这是一种时间序列预测的方法:</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_03.png" alt="https://github.com/GustavoHFMO/IDPSO-ELM-S/raw/master/images/idpso_elm_s_execution.png"/></figure>
 
-    <p class="packt_figref">图8.5:时间序列预测的在线学习和再培训</p>
+    <p class="packt_figref">图 8.5:时间序列预测的在线学习和再培训</p>
 
     <p class="normal">您可以看到，随着概念漂移的发生，错误率<a id="_idIndexMarker664"/>周期性地增加，并且根据漂移检测的概念，触发了重新训练。</p>
 
@@ -502,7 +502,7 @@ for xi, yi in zip(X, y):
 
     <p class="normal">漂移检测器通常通过性能指标来监控<a id="_idIndexMarker665"/>模型的性能，然而，它们也可以基于输入特征，尽管这是一个例外。基本思想是，当样本的类别分布发生变化时，模型不再对应于当前分布，并且性能下降(错误率增加)。因此，模型性能的质量控制可以作为漂移检测。</p>
 
-    <p class="normal">漂移检测方法至少可分为三类(joo Gama等人，2014年之后):</p>
+    <p class="normal">漂移检测方法至少可分为三类(joo Gama 等人，2014 年之后):</p>
 
     <ul>
 
@@ -510,19 +510,19 @@ for xi, yi in zip(X, y):
 
       <li class="bullet">顺序分析</li>
 
-      <li class="bullet">基于Windows的比较</li>
+      <li class="bullet">基于 Windows 的比较</li>
 
     </ul>
 
-    <p class="normal">统计过程控制方法考虑汇总统计数据，如模型预测的平均值和标准偏差。比如<strong class="keyword">漂移检测法</strong>(<strong class="keyword">DDM</strong>)；joo Gama等人，2004年)如果误差率超过先前记录的<a id="_idIndexMarker666"/>最小误差率三个标准差，就会发出警报。根据统计学习理论，在连续训练的模型中，误差应该随着样本数量的增加而减小，因此只有在漂移的情况下才应该超过这个阈值。</p>
+    <p class="normal">统计过程控制方法考虑汇总统计数据，如模型预测的平均值和标准偏差。比如<strong class="keyword">漂移检测法</strong>(<strong class="keyword">DDM</strong>)；joo Gama 等人，2004 年)如果误差率超过先前记录的<a id="_idIndexMarker666"/>最小误差率三个标准差，就会发出警报。根据统计学习理论，在连续训练的模型中，误差应该随着样本数量的增加而减小，因此只有在漂移的情况下才应该超过这个阈值。</p>
 
-    <p class="normal">顺序方法基于模型预测的阈值。例如，在<strong class="keyword">线性四费率</strong>(王，2015)方法中，列联表中的费率是增量更新的。显著性<a id="_idIndexMarker667"/>是根据在开始时通过蒙特卡洛采样估计一次的阈值计算的。这种方法可以比DDM更好地处理类不平衡。</p>
+    <p class="normal">顺序方法基于模型预测的阈值。例如，在<strong class="keyword">线性四费率</strong>(王，2015)方法中，列联表中的费率是增量更新的。显著性<a id="_idIndexMarker667"/>是根据在开始时通过蒙特卡洛采样估计一次的阈值计算的。这种方法可以比 DDM 更好地处理类不平衡。</p>
 
     <div><p class="Information-Box--PACKT-"><strong class="keyword">列联表</strong>:比较变量频率分布的表。具体来说，在机器学习分类中，该表显示了相对于实际标签的测试集上标签的预测数量<a id="_idIndexMarker668"/>。在二元分类的情况下，单元格显示真阳性、假阳性、假阴性和真阴性。</p>
 
     </div>
 
-    <p class="normal">基于窗口的方法监控错误的分布。例如，<strong class="keyword"> ADWIN </strong> ( <strong class="keyword">自适应窗口化</strong>)由Albert Bifet和Ricard Gavaldà于2007年发表。时间窗口<em class="italic"> W </em>内的预测误差<a id="_idIndexMarker669"/>被划分成更小的窗口，并且这些窗口内的平均误差率的差异<a id="_idIndexMarker670"/>与Hoeffding界限相比较。最初的版本提出了这种策略的一种变型，其时间复杂度为<em class="italic"> O(log W) </em>，其中<em class="italic"> W </em>是窗口的长度。</p>
+    <p class="normal">基于窗口的方法监控错误的分布。例如，<strong class="keyword"> ADWIN </strong> ( <strong class="keyword">自适应窗口化</strong>)由 Albert Bifet 和 Ricard Gavaldà于 2007 年发表。时间窗口<em class="italic"> W </em>内的预测误差<a id="_idIndexMarker669"/>被划分成更小的窗口，并且这些窗口内的平均误差率的差异<a id="_idIndexMarker670"/>与 Hoeffding 界限相比较。最初的版本提出了这种策略的一种变型，其时间复杂度为<em class="italic"> O(log W) </em>，其中<em class="italic"> W </em>是窗口的长度。</p>
 
     <p class="normal">下面列出了一些漂移检测方法:</p>
 
@@ -616,7 +616,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">统计两个误差之间的平均距离。类似于DDM，但更适合逐渐漂移。</p>
+            <p class="Table-Column-Content--PACKT-">统计两个误差之间的平均距离。类似于 DDM，但更适合逐渐漂移。</p>
 
           </td>
 
@@ -638,7 +638,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">基于Hoeffding界限的非参数方法——移动平均检验或移动加权平均检验。</p>
+            <p class="Table-Column-Content--PACKT-">基于 Hoeffding 界限的非参数方法——移动平均检验或移动加权平均检验。</p>
 
           </td>
 
@@ -654,13 +654,13 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-"><strong class="keyword"> Kolmogorov-Smirnov开窗</strong> ( <strong class="keyword"> KSWIN </strong>)</p>
+            <p class="Table-Column-Content--PACKT-"><strong class="keyword"> Kolmogorov-Smirnov 开窗</strong> ( <strong class="keyword"> KSWIN </strong>)</p>
 
           </td>
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">时间序列窗口中的Kolmogorov-Smirnov检验。</p>
+            <p class="Table-Column-Content--PACKT-">时间序列窗口中的 Kolmogorov-Smirnov 检验。</p>
 
           </td>
 
@@ -698,11 +698,11 @@ for xi, yi in zip(X, y):
 
     </table>
 
-    <p class="packt_figref">图8.6:漂移检测算法</p>
+    <p class="packt_figref">图 8.6:漂移检测算法</p>
 
-    <p class="normal">Kolmogorov-Smirnov是连续一维概率分布相等的非参数检验。</p>
+    <p class="normal">Kolmogorov-Smirnov 是连续一维概率分布相等的非参数检验。</p>
 
-    <p class="normal">这些方法可以在回归和分类(以及，通过扩展，预测)的上下文中使用。它们可用于触发模型的再训练。例如，如果检测到漂移，Hassan Mehmood等人(2021)重新训练时间序列预测模型(在其他模型中，他们使用了脸书的先知)。</p>
+    <p class="normal">这些方法可以在回归和分类(以及，通过扩展，预测)的上下文中使用。它们可用于触发模型的再训练。例如，如果检测到漂移，Hassan Mehmood 等人(2021)重新训练时间序列预测模型(在其他模型中，他们使用了脸书的先知)。</p>
 
     <p class="normal">漂移探测器都有<a id="_idIndexMarker671"/>关于输入数据的假设。了解这些假设很重要，我已尝试在表格中列出这些假设，因此您可以对数据集使用正确的检测器。</p>
 
@@ -714,11 +714,11 @@ for xi, yi in zip(X, y):
 
     <p class="normal"><strong class="keyword">自适应学习</strong>是指带有漂移调整的增量方法。这个概念指的是在线更新<a id="_idIndexMarker672"/>预测模型，以对概念漂移做出反应。目标是<a id="_idIndexMarker673"/>通过考虑漂移，模型可以确保与当前数据分布的一致性。</p>
 
-    <p class="normal">集合方法可以与漂移检测器结合来触发基本模型的再训练。他们可以监控基本模型的性能(通常使用ADWIN)——如果新模型更准确，表现不佳的模型将被重新训练的模型所取代。</p>
+    <p class="normal">集合方法可以与漂移检测器结合来触发基本模型的再训练。他们可以监控基本模型的性能(通常使用 ADWIN)——如果新模型更准确，表现不佳的模型将被重新训练的模型所取代。</p>
 
-    <p class="normal">例如，<strong class="keyword">自适应XGBoost </strong>算法(<strong class="keyword">AXGB</strong>；Jacob Montiel等人，2020)是对XGBoost的改编，用于进化数据流，其中随着新数据变得可用，从小批量数据<a id="_idIndexMarker674"/>创建新子树。最大集合大小是固定的，一旦达到该大小，集合就根据新数据进行更新。</p>
+    <p class="normal">例如，<strong class="keyword">自适应 XGBoost </strong>算法(<strong class="keyword">AXGB</strong>；Jacob Montiel 等人，2020)是对 XGBoost 的改编，用于进化数据流，其中随着新数据变得可用，从小批量数据<a id="_idIndexMarker674"/>创建新子树。最大集合大小是固定的，一旦达到该大小，集合就根据新数据进行更新。</p>
 
-    <p class="normal">在Scikit-Multiflow和River库中，有几种方法将机器学习方法与漂移检测方法相结合，从而调节适应性。其中许多是由两个库的维护者发布的。以下是这些方法中的一些:</p>
+    <p class="normal">在 Scikit-Multiflow 和 River 库中，有几种方法将机器学习方法与漂移检测方法相结合，从而调节适应性。其中许多是由两个库的维护者发布的。以下是这些方法中的一些:</p>
 
     <table id="table004-1" class="No-Table-Style _idGenTablePara-1">
 
@@ -752,13 +752,13 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-"><strong class="keyword">带有ADWIN变化检测器的K-最近邻</strong> ( <strong class="keyword"> KNN </strong>)分类器</p>
+            <p class="Table-Column-Content--PACKT-"><strong class="keyword">带有 ADWIN 变化检测器的 K-最近邻</strong> ( <strong class="keyword"> KNN </strong>)分类器</p>
 
           </td>
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">KNN用ADWIN变化检测器来决定保留或遗忘哪些样本。</p>
+            <p class="Table-Column-Content--PACKT-">KNN 用 ADWIN 变化检测器来决定保留或遗忘哪些样本。</p>
 
           </td>
 
@@ -806,7 +806,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">配对ADWIN来检测漂移，配对Hoeffding树模型来学习。</p>
+            <p class="Table-Column-Content--PACKT-">配对 ADWIN 来检测漂移，配对 Hoeffding 树模型来学习。</p>
 
           </td>
 
@@ -822,7 +822,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">类似于VFDT，但规则集合而不是一棵树。在Scikit中，支持利用ADWIN、DDM和EDDM进行多流漂移检测。</p>
+            <p class="Table-Column-Content--PACKT-">类似于 VFDT，但规则集合而不是一棵树。在 Scikit 中，支持利用 ADWIN、DDM 和 EDDM 进行多流漂移检测。</p>
 
           </td>
 
@@ -838,7 +838,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">不同于替换取样，每个样品都有一个重量。在River中，这可以与ADWIN变化检测器结合使用。</p>
+            <p class="Table-Column-Content--PACKT-">不同于替换取样，每个样品都有一个重量。在 River 中，这可以与 ADWIN 变化检测器结合使用。</p>
 
           </td>
 
@@ -848,13 +848,13 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">在线CSB2</p>
+            <p class="Table-Column-Content--PACKT-">在线 CSB2</p>
 
           </td>
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">在线升压算法，在AdaBoost和AdaC2之间折衷，并可选择使用变化检测器。</p>
+            <p class="Table-Column-Content--PACKT-">在线升压算法，在 AdaBoost 和 AdaC2 之间折衷，并可选择使用变化检测器。</p>
 
           </td>
 
@@ -870,7 +870,7 @@ for xi, yi in zip(X, y):
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">带ADWIN漂移检测的AdaBoost。</p>
+            <p class="Table-Column-Content--PACKT-">带 ADWIN 漂移检测的 AdaBoost。</p>
 
           </td>
 
@@ -880,21 +880,21 @@ for xi, yi in zip(X, y):
 
     </table>
 
-    <p class="packt_figref">图8.7:自适应学习算法</p>
+    <p class="packt_figref">图 8.7:自适应学习算法</p>
 
     <p class="normal">这些方法通过用漂移检测的概念来调节自适应或学习，对漂移是鲁棒的。</p>
 
     <p class="normal">让我们试试这些方法吧！</p>
 
-    <h1 id="_idParaDest-132" class="title">Python实践</h1>
+    <h1 id="_idParaDest-132" class="title">Python 实践</h1>
 
-    <p class="normal">本章中的安装非常简单，因为在本章中，我们将只使用River。我们可以从终端(或者类似地从Anaconda Navigator)快速安装<a id="_idIndexMarker676"/>:</p>
+    <p class="normal">本章中的安装非常简单，因为在本章中，我们将只使用 River。我们可以从终端(或者类似地从 Anaconda Navigator)快速安装<a id="_idIndexMarker676"/>:</p>
 
     <pre class="programlisting con"><code class="hljs-con">pip install river
 
 </code></pre>
 
-    <p class="normal">我们将从Python(或IPython)终端执行命令，但同样，我们也可以从Jupyter笔记本(或不同的环境)执行它们。</p>
+    <p class="normal">我们将从 Python(或 IPython)终端执行命令，但同样，我们也可以从 Jupyter 笔记本(或不同的环境)执行它们。</p>
 
     <h2 id="_idParaDest-133" class="title">漂移检测</h2>
 
@@ -934,7 +934,7 @@ data_stream = np.concatenate(
 
 </code></pre>
 
-    <p class="normal">现在我们可以在这个时间序列上尝试ADWIN漂移检测方法。让我们创建另一种方法来绘制时间序列上的漂移点:</p>
+    <p class="normal">现在我们可以在这个时间序列上尝试 ADWIN 漂移检测方法。让我们创建另一种方法来绘制时间序列上的漂移点:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import matplotlib.pyplot as plt
 
@@ -966,11 +966,11 @@ plt.tight_layout()
 
 </code></pre>
 
-    <p class="normal">这是ADWIN漂移点的图<a id="_idIndexMarker678"/>:</p>
+    <p class="normal">这是 ADWIN 漂移点的图<a id="_idIndexMarker678"/>:</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_04.png" alt="ADWIN_drift_detection.png"/></figure>
 
-    <p class="packt_figref">图8.9:人工数据集上的ADWIN漂移点</p>
+    <p class="packt_figref">图 8.9:人工数据集上的 ADWIN 漂移点</p>
 
     <p class="normal">我鼓励你尝试一下这种方法，并尝试其他漂移检测方法。</p>
 
@@ -980,9 +980,9 @@ plt.tight_layout()
 
     <p class="normal">我们将估计中等太阳耀斑的发生。</p>
 
-    <p class="normal">为此，我们将使用UCI机器学习库中的太阳耀斑数据集。River library附带了一个压缩的列分隔数据集，我们将加载它，指定列类型，并选择我们感兴趣的输出。</p>
+    <p class="normal">为此，我们将使用 UCI 机器学习库中的太阳耀斑数据集。River library 附带了一个压缩的列分隔数据集，我们将加载它，指定列类型，并选择我们感兴趣的输出。</p>
 
-    <p class="normal">现在让我们绘制ADWIN结果图:</p>
+    <p class="normal">现在让我们绘制 ADWIN 结果图:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from river import stream
 
@@ -1070,11 +1070,11 @@ for x, y in SolarFlare():
 
     <figure class="mediaobject"><img src="img/B17577_08_05.png" alt="/var/folders/80/g9sqgdws2rn0yc3rd5y3nd340000gp/T/TemporaryItems/NSIRD_screencaptureui_XK8zOB/Screenshot 2021-07-05 at 23.37.50.png"/></figure>
 
-    <p class="packt_figref">图8.10:中等大小耀斑的太阳耀斑数据集的第一个点</p>
+    <p class="packt_figref">图 8.10:中等大小耀斑的太阳耀斑数据集的第一个点</p>
 
     <p class="normal">我们把这十个特性列看作一个字典，把输出看作一个浮点数。</p>
 
-    <p class="normal">让我们在River中构建我们的模型管道:</p>
+    <p class="normal">让我们在 River 中构建我们的模型管道:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import numbers
 
@@ -1094,7 +1094,7 @@ pipeline = (num + cat) | model
 
 </code></pre>
 
-    <p class="normal">像这样的管道非常容易阅读:数字特征得到最小-最大缩放，而字符串特征得到一次性编码。预处理后的特征被输入Hoeffding树模型进行回归。</p>
+    <p class="normal">像这样的管道非常容易阅读:数字特征得到最小-最大缩放，而字符串特征得到一次性编码。预处理后的特征被输入 Hoeffding 树模型进行回归。</p>
 
     <p class="normal">我们现在可以通过预测值，然后像前面讨论的那样训练它们，来预先学习我们的模型:</p>
 
@@ -1110,7 +1110,7 @@ evaluate.progressive_val_score(SolarFlare(), pipeline, metric)
 
     <p class="normal">我们<a id="_idIndexMarker682"/>使用<strong class="keyword">平均绝对误差</strong> ( <strong class="keyword"> MAE </strong>)作为我们的度量。</p>
 
-    <p class="normal">我们得到的平均相对误差为0.096979。</p>
+    <p class="normal">我们得到的平均相对误差为 0.096979。</p>
 
     <p class="normal">这个顺序的<a id="_idIndexMarker683"/>评估<code class="Code-In-Text--PACKT-">evaluate.progressive_val_score()</code>相当于以下内容:</p>
 
@@ -1158,9 +1158,9 @@ ax.set_ylabel("MAE")
 
     <figure class="mediaobject"><img src="img/B17577_08_06.png" alt="solar_flares_regression_mae.png"/></figure>
 
-    <p class="packt_figref">图8.11:按点数排列的MAE</p>
+    <p class="packt_figref">图 8.11:按点数排列的 MAE</p>
 
-    <p class="normal">我们可以看到，在20-30个点之后，在度量稳定之后，Hoeffding树开始学习，并且<a id="_idIndexMarker684"/>误差保持降低，直到大约800个点，在该点，误差再次增加。这可能是行排序效应。</p>
+    <p class="normal">我们可以看到，在 20-30 个点之后，在度量稳定之后，Hoeffding 树开始学习，并且<a id="_idIndexMarker684"/>误差保持降低，直到大约 800 个点，在该点，误差再次增加。这可能是行排序效应。</p>
 
     <p class="normal">具有概念漂移的数据集是自适应模型的用例。让我们在有概念漂移的数据集上比较自适应和非自适应模型:</p>
 
@@ -1214,21 +1214,21 @@ HoeffdingAdaptiveTreeRegressor: 8.203782e+42 AdaptiveRandomForestRegressor: 1.65
 
     <p class="normal">由于这些算法的性质，您的结果可能会有所不同。我们可以设置一个随机数生成器<a id="_idIndexMarker686"/>种子来避免这种情况，但是，我发现有必要强调这一点。</p>
 
-    <p class="normal">我们在科学记数法中看到了模型误差(MSE ),这有助于理解这些数字，因为它们非常大。您会看到误差分为两部分，首先是一个因子，然后是以10的指数表示的数量级。三个模型的数量级是相同的，但是，自适应随机森林回归器得到的误差大约是其他两个模型的五分之一。</p>
+    <p class="normal">我们在科学记数法中看到了模型误差(MSE ),这有助于理解这些数字，因为它们非常大。您会看到误差分为两部分，首先是一个因子，然后是以 10 的指数表示的数量级。三个模型的数量级是相同的，但是，自适应随机森林回归器得到的误差大约是其他两个模型的五分之一。</p>
 
     <p class="normal">随着模型的学习和适应，我们还可以将误差可视化:</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_07.png" alt="performance_adaptive_models.png"/></figure>
 
-    <p class="packt_figref">图8.12:概念漂移数据流(MSE)的模型性能</p>
+    <p class="packt_figref">图 8.12:概念漂移数据流(MSE)的模型性能</p>
 
-    <p class="normal">River中没有非自适应版本的随机森林算法，所以我们无法对此进行比较。对于自适应算法实际上是否工作得更好，我们无法得出明确的结论。</p>
+    <p class="normal">River 中没有非自适应版本的随机森林算法，所以我们无法对此进行比较。对于自适应算法实际上是否工作得更好，我们无法得出明确的结论。</p>
 
     <p class="normal">如果您想体验一下，可以尝试许多其他模型、元模型和预处理器。</p>
 
     <h2 id="_idParaDest-135" class="title">型号选择</h2>
 
-    <p class="normal">我们在本章前面已经提到了多臂强盗的模型选择，这里我们将通过<a id="_idIndexMarker687"/>来看一个实际的例子。这是基于River中的文档。</p>
+    <p class="normal">我们在本章前面已经提到了多臂强盗的模型选择，这里我们将通过<a id="_idIndexMarker687"/>来看一个实际的例子。这是基于 River 中的文档。</p>
 
     <p class="normal">让我们使用<code class="Code-In-Text--PACKT-">UCBRegressor</code>来选择线性回归模型的最佳学习率。同样的模式可以更广泛地用于在任何一组(在线)回归模型之间进行选择。</p>
 
@@ -1258,7 +1258,7 @@ models = [
 
 </code></pre>
 
-    <p class="normal">我们在TrumpApproval数据集上构建和评估我们的模型:</p>
+    <p class="normal">我们在 TrumpApproval 数据集上构建和评估我们的模型:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from river import datasets
 
@@ -1266,7 +1266,7 @@ dataset = datasets.TrumpApproval()
 
 </code></pre>
 
-    <p class="normal">我们将应用UCB班迪特，它计算回归模型的回报:</p>
+    <p class="normal">我们将应用 UCB 班迪特，它计算回归模型的回报:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from river.expert import UCBRegressor
 
@@ -1274,7 +1274,7 @@ bandit = UCBRegressor(models=models, seed=1)
 
 </code></pre>
 
-    <p class="normal">bandit提供了在线训练模型的方法:</p>
+    <p class="normal">bandit 提供了在线训练模型的方法:</p>
 
     <pre class="programlisting code"><code class="hljs-code">for x, y in dataset:
 
@@ -1330,15 +1330,15 @@ bandit = UCBRegressor(models=models, seed=1)
 
     <figure class="mediaobject"><img src="img/B17577_08_08.png" alt="bandit_reward.png"/></figure>
 
-    <p class="packt_figref">图8.13:长期回报</p>
+    <p class="packt_figref">图 8.13:长期回报</p>
 
-    <p class="normal">你可以看到，随着我们逐步处理数据，模型得到更新，回报慢慢变得为人所知。模型奖励在大约100个时间步长时明显分开，而在大约1000个时间步长时，似乎已经收敛。</p>
+    <p class="normal">你可以看到，随着我们逐步处理数据，模型得到更新，回报慢慢变得为人所知。模型奖励在大约 100 个时间步长时明显分开，而在大约 1000 个时间步长时，似乎已经收敛。</p>
 
     <p class="normal">我们还可以画出每一步选择不同模型的时间的<a id="_idIndexMarker689"/>百分比(这是基于奖励的):</p>
 
     <figure class="mediaobject"><img src="img/B17577_08_09.png" alt="bandit_percentage.png"/></figure>
 
-    <p class="packt_figref">图8.14:随时间选择的模型比率</p>
+    <p class="packt_figref">图 8.14:随时间选择的模型比率</p>
 
     <p class="normal">随着时间的推移，这种分布大致遵循报酬分布。这是意料之中的，因为模型的选择取决于奖励(以及一个控制探索的随机数)。</p>
 
@@ -1354,7 +1354,7 @@ bandit = UCBRegressor(models=models, seed=1)
 
 </code></pre>
 
-    <p class="normal">学习率为0.01。</p>
+    <p class="normal">学习率为 0.01。</p>
 
     <h1 id="_idParaDest-136" class="title">摘要</h1>
 
@@ -1372,9 +1372,9 @@ bandit = UCBRegressor(models=models, seed=1)
 
     <p class="normal">概念漂移是数据和学习目标之间关系的变化。我们已经谈到了漂移的重要性，即机器学习模型的性能会受到数据集变化的强烈影响，以至于模型会变得过时(陈旧)。</p>
 
-    <p class="normal">漂移检测器不监控数据本身，但它们用于监控模型性能。漂移检测器可以使流学习方法对概念漂移具有鲁棒性，在River中，许多自适应模型使用漂移检测器进行部分重置或改变学习参数。自适应模型是结合漂移检测方法的算法，以避免性能下降或昂贵的重新训练。我们已经给出了一些自适应学习算法的概述。</p>
+    <p class="normal">漂移检测器不监控数据本身，但它们用于监控模型性能。漂移检测器可以使流学习方法对概念漂移具有鲁棒性，在 River 中，许多自适应模型使用漂移检测器进行部分重置或改变学习参数。自适应模型是结合漂移检测方法的算法，以避免性能下降或昂贵的重新训练。我们已经给出了一些自适应学习算法的概述。</p>
 
-    <p class="normal">在Python实践中，我们使用了River库中的一些算法，包括漂移检测、回归和使用多臂bandit方法的模型选择。</p>
+    <p class="normal">在 Python 实践中，我们使用了 River 库中的一些算法，包括漂移检测、回归和使用多臂 bandit 方法的模型选择。</p>
 
   </div>
 

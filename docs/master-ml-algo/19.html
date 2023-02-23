@@ -42,15 +42,15 @@
 
 			<h1 id="_idParaDest-294" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor307"/>深度卷积网络</h1>
 
-			<p class="normal">在前一章中，我们看到了当<a id="_idIndexMarker1207"/>处理一个并不复杂的图像数据集时，例如MNIST手写数字数据集，多层感知器如何能够实现非常高的精度。然而，由于完全连接的层是水平的，通常为三维结构(<em class="italics">宽度</em> x <em class="italics">高度</em> x <em class="italics">通道</em>)的图像必须被展平并转换成一维阵列，在一维阵列中几何属性肯定会丢失。</p>
+			<p class="normal">在前一章中，我们看到了当<a id="_idIndexMarker1207"/>处理一个并不复杂的图像数据集时，例如 MNIST 手写数字数据集，多层感知器如何能够实现非常高的精度。然而，由于完全连接的层是水平的，通常为三维结构(<em class="italics">宽度</em> x <em class="italics">高度</em> x <em class="italics">通道</em>)的图像必须被展平并转换成一维阵列，在一维阵列中几何属性肯定会丢失。</p>
 
 			<p class="normal">对于更复杂的数据集，类之间的区别取决于细节和它们之间的关系，这种方法可以产生中等精度，但它永远无法达到生产就绪应用程序所需的精度。</p>
 
-			<p class="normal">神经科学研究和图像处理技术的结合建议对神经网络进行实验，其中第一层与二维结构(没有通道)一起工作，试图提取严格依赖于图像几何属性的特征层次。事实上，正如关于视觉皮层的神经科学研究所证实的，人类不会直接解码图像。该过程是连续的，并且从检测诸如线和方向的低级元素开始；逐步地，它通过关注定义越来越复杂的形状、不同颜色、结构特征等的子属性来继续，直到信息量<a id="_idIndexMarker1208"/>足以解决任何可能的模糊性(关于进一步的科学细节，我推荐Stone J. V .，<em class="italics">Vision and Brain</em>:<em class="italics">How We percept The World</em>，麻省理工学院出版社，2012)。</p>
+			<p class="normal">神经科学研究和图像处理技术的结合建议对神经网络进行实验，其中第一层与二维结构(没有通道)一起工作，试图提取严格依赖于图像几何属性的特征层次。事实上，正如关于视觉皮层的神经科学研究所证实的，人类不会直接解码图像。该过程是连续的，并且从检测诸如线和方向的低级元素开始；逐步地，它通过关注定义越来越复杂的形状、不同颜色、结构特征等的子属性来继续，直到信息量<a id="_idIndexMarker1208"/>足以解决任何可能的模糊性(关于进一步的科学细节，我推荐 Stone J. V .，<em class="italics">Vision and Brain</em>:<em class="italics">How We percept The World</em>，麻省理工学院出版社，2012)。</p>
 
 			<p class="normal">例如，我们可以将眼睛的解码过程想象为由这些过滤器组成的序列(当然，这只是一个说教的例子):方向(占优势的水平维度)，椭球形内部的中心圆，较暗的中心(瞳孔)和清晰的背景(灯泡)，瞳孔中间较小的较暗的圆，眉毛的存在，等等。即使该过程在生物学上是不正确的，它也可以被认为是一个合理的分级过程，其中在较低级别的过滤之后获得了较高级别的子特征。</p>
 
-			<p class="normal">这种方法已经使用二维卷积算子进行了综合，二维卷积算子已经被认为是一种强大的图像处理工具。然而，在这种情况下，有一个非常重要的区别:滤波器的结构不是预先强加的，而是由网络使用与MLP相同的反向传播算法学习的。通过这种方式，模型可以根据最终目标(即分类输出)来调整权重，而无需考虑任何预处理步骤。事实上，深度卷积网络，而不仅仅是MLP，是基于端到端学习的概念，这是一种不同的方式来表达我们之前描述的内容。</p>
+			<p class="normal">这种方法已经使用二维卷积算子进行了综合，二维卷积算子已经被认为是一种强大的图像处理工具。然而，在这种情况下，有一个非常重要的区别:滤波器的结构不是预先强加的，而是由网络使用与 MLP 相同的反向传播算法学习的。通过这种方式，模型可以根据最终目标(即分类输出)来调整权重，而无需考虑任何预处理步骤。事实上，深度卷积网络，而不仅仅是 MLP，是基于端到端学习的概念，这是一种不同的方式来表达我们之前描述的内容。</p>
 
 			<p class="normal">输入是来源；在中间，有一个灵活的结构。最后，我们定义了一个全局代价函数，来衡量分类的准确性。学习过程必须反向传播误差并校正权重以达到特定目标，但我们不知道这个过程是如何工作的。我们可以很容易地在学习阶段结束时分析过滤器的结构，发现网络已经将第一层专门化为低级细节(如方向)，最后一层专门化为高级，有时是可识别的细节(如面部的组成部分)。</p>
 
@@ -58,7 +58,7 @@
 
 			<p class="normal">有研究人员注意到，人类在没有大量经验的情况下也能学会归纳，而且在未来几十年，我们很可能会看到这种观点的进步。然而，深度卷积网络已经彻底改变了许多人工智能领域，使得仅仅几年前还被认为几乎不可能的结果成为可能。</p>
 
-			<p class="normal">在本节中，我们将讨论不同种类的卷积，以及如何使用TensorFlow和Keras实现它们；所以，对于具体的技术细节，我继续建议你查阅官方文档和书籍Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版，2019。</p>
+			<p class="normal">在本节中，我们将讨论不同种类的卷积，以及如何使用 TensorFlow 和 Keras 实现它们；所以，对于具体的技术细节，我继续建议你查阅官方文档和书籍 Holdroyd T .，<em class="italics"> TensorFlow 2.0 快速入门指南</em>，Packt 出版，2019。</p>
 
 			<h1 id="_idParaDest-295" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor308"/>卷积运算符</h1>
 
@@ -74,7 +74,7 @@
 
 			<p class="packt_figref">移位卷积二次核的例子</p>
 
-			<p class="normal">第一张图是原始内核(也是对称的)。另外两个图分别显示了向前和向后的移动。现在应该更清楚了，卷积<a id="_idIndexMarker1211"/>将函数<img style="height: 1.2em! important;" src="img/B14713_19_007.png" alt=""/>乘以移动后的内核，并计算结果曲线下的面积。由于变量t没有积分，面积是<em class="italics"> t </em>的函数，定义了一个新函数，这个新函数就是卷积本身。换句话说，为<em class="italics"> t </em> = 5计算出的<em class="italics"> f </em> ( <em class="italics"> t </em>)和<em class="italics"> k </em> ( <em class="italics"> t </em>)的卷积值，就是乘法<img style="height: 1.2em! important;" src="img/B14713_19_008.png" alt=""/>得到的曲线下面积(当然要积分出来的变量是<img src="img/B14713_19_003.png" alt=""/>)。根据定义，卷积是:</p>
+			<p class="normal">第一张图是原始内核(也是对称的)。另外两个图分别显示了向前和向后的移动。现在应该更清楚了，卷积<a id="_idIndexMarker1211"/>将函数<img style="height: 1.2em! important;" src="img/B14713_19_007.png" alt=""/>乘以移动后的内核，并计算结果曲线下的面积。由于变量 t 没有积分，面积是<em class="italics"> t </em>的函数，定义了一个新函数，这个新函数就是卷积本身。换句话说，为<em class="italics"> t </em> = 5 计算出的<em class="italics"> f </em> ( <em class="italics"> t </em>)和<em class="italics"> k </em> ( <em class="italics"> t </em>)的卷积值，就是乘法<img style="height: 1.2em! important;" src="img/B14713_19_008.png" alt=""/>得到的曲线下面积(当然要积分出来的变量是<img src="img/B14713_19_003.png" alt=""/>)。根据定义，卷积是:</p>
 
 			<ul>
 
@@ -86,21 +86,21 @@
 
 			</ul>
 
-			<p class="normal">然而，在深度学习中，我们从不与连续卷积一起工作；因此，我省略了所有的属性和数学细节，将注意力集中在离散的情况。对该理论感兴趣的读者可以在麻省理工学院出版社Siebert w . m .<em class="italics">电路、信号和系统</em>中找到更多细节。相反，一种常见的做法是堆叠具有不同内核(通常称为滤波器)的多个卷积，以将包含<em class="italics"> n </em>个通道的输入转换为具有<em class="italics"> m </em>个通道的输出，其中m对应于内核的数量。</p>
+			<p class="normal">然而，在深度学习中，我们从不与连续卷积一起工作；因此，我省略了所有的属性和数学细节，将注意力集中在离散的情况。对该理论感兴趣的读者可以在麻省理工学院出版社 Siebert w . m .<em class="italics">电路、信号和系统</em>中找到更多细节。相反，一种常见的做法是堆叠具有不同内核(通常称为滤波器)的多个卷积，以将包含<em class="italics"> n </em>个通道的输入转换为具有<em class="italics"> m </em>个通道的输出，其中 m 对应于内核的数量。</p>
 
-			<p class="normal">由于不同输出的协同作用，这种方法<a id="_idIndexMarker1212"/>允许释放卷积的全部能量。按照惯例，具有n个滤波器的卷积层的输出被称为特征图(<em class="italics">w</em>(<em class="italics">t</em>)x<em class="italics">h</em>(<em class="italics">t</em>)x<em class="italics">n</em>)，因为其结构不再与特定图像相关，而是类似于不同特征检测器的重叠。在这一章中，我们经常谈到图像(考虑一个假设的第一层)，但所有的考虑都隐式地扩展到任何特征图。</p>
+			<p class="normal">由于不同输出的协同作用，这种方法<a id="_idIndexMarker1212"/>允许释放卷积的全部能量。按照惯例，具有 n 个滤波器的卷积层的输出被称为特征图(<em class="italics">w</em>(<em class="italics">t</em>)x<em class="italics">h</em>(<em class="italics">t</em>)x<em class="italics">n</em>)，因为其结构不再与特定图像相关，而是类似于不同特征检测器的重叠。在这一章中，我们经常谈到图像(考虑一个假设的第一层)，但所有的考虑都隐式地扩展到任何特征图。</p>
 
 			<h2 id="_idParaDest-296" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor309"/>二维离散卷积</h2>
 
-			<p class="normal">深度学习中最常见的卷积类型是基于具有任意数量通道的二维<a id="_idIndexMarker1213"/>阵列(如灰度或RGB图像)。为了简单起见，让我们<a id="_idIndexMarker1214"/>分析一个单层(通道)卷积，因为扩展到<em class="italics"> n </em>层是很简单的。如果<img style="height: 1.2em! important;" src="img/B14713_19_010.png" alt=""/>和<img style="height: 1.2em! important;" src="img/B14713_19_011.png" alt=""/>，卷积<em class="italics"> X * k </em>定义为(索引从0开始):</p>
+			<p class="normal">深度学习中最常见的卷积类型是基于具有任意数量通道的二维<a id="_idIndexMarker1213"/>阵列(如灰度或 RGB 图像)。为了简单起见，让我们<a id="_idIndexMarker1214"/>分析一个单层(通道)卷积，因为扩展到<em class="italics"> n </em>层是很简单的。如果<img style="height: 1.2em! important;" src="img/B14713_19_010.png" alt=""/>和<img style="height: 1.2em! important;" src="img/B14713_19_011.png" alt=""/>，卷积<em class="italics"> X * k </em>定义为(索引从 0 开始):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_012.png" alt=""/></figure>
 
-			<p class="normal">很明显，前面的表达式是连续定义的自然衍生。在下图中，有一个3×3内核的示例:</p>
+			<p class="normal">很明显，前面的表达式是连续定义的自然衍生。在下图中，有一个 3×3 内核的示例:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_02.png" alt=""/></figure>
 
-			<p class="packt_figref">具有3×3内核的二维卷积示例</p>
+			<p class="packt_figref">具有 3×3 内核的二维卷积示例</p>
 
 			<p class="normal">内核被<a id="_idIndexMarker1215"/>水平和垂直移动，产生相应元素的逐元素乘法的和。因此，每一次<a id="_idIndexMarker1216"/>操作都会导致单个像素的输出。示例中使用的内核被称为<a id="_idIndexMarker1217"/>离散拉普拉斯算子(因为它是通过离散化真实拉普拉斯算子获得的)；让我们观察一下这个内核在一个完整的灰度图上的效果:</p>
 
@@ -116,7 +116,7 @@
 
 			<p class="normal">这种考虑可以是先验的，就像在许多视觉处理技术中一样，或者，由于深度学习的力量，它可以留给训练过程。由于成本函数和输出类隐含地控制差异，深度卷积网络可以了解什么是达到特定目标的重要因素，同时丢弃所有无用的细节。</p>
 
-			<p class="normal">在上一节中，我们已经说过特征提取过程主要是分层的。现在，应该很清楚不同的内核大小和随后的卷积正好实现了这个目标。假设我们有一个100 x 100的图像和一个3 x 3的内核。生成的图像将是98 x 98像素(我们将在后面解释这个概念)。然而，每个像素编码3×3块的信息，并且由于这些块是重叠的，两个连续的像素将共享一些知识，但是同时，它们强调相应块之间的差异。</p>
+			<p class="normal">在上一节中，我们已经说过特征提取过程主要是分层的。现在，应该很清楚不同的内核大小和随后的卷积正好实现了这个目标。假设我们有一个 100 x 100 的图像和一个 3 x 3 的内核。生成的图像将是 98 x 98 像素(我们将在后面解释这个概念)。然而，每个像素编码 3×3 块的信息，并且由于这些块是重叠的，两个连续的像素将共享一些知识，但是同时，它们强调相应块之间的差异。</p>
 
 			<p class="normal">在下图中，相同的拉普拉斯核应用于黑色背景上的简单白色正方形:</p>
 
@@ -134,33 +134,33 @@
 
 			<p class="normal">敏锐的眼睛可以立即注意到三个结果:紧凑的表面(黑色和白色)变得越来越相似，边界仍然可见，最重要的是，左上角和左下角的<a id="_idIndexMarker1222"/>现在更清楚地标记有白色像素。因此，第二次卷积的结果添加了一条更细粒度的信息，这在原始图像<a id="_idIndexMarker1223"/>中更难检测。事实上，拉普拉斯算子的效果非常简单，它只对教学有用。在真正的深度卷积网络中，过滤器被训练来执行更复杂的处理操作，这些操作可以揭示不能立即用来对图像进行分类的细节(以及它们的内部和外部关系)。它们的隔离(得益于许多并行过滤器的作用)允许网络以不同的方式标记相似的元素(例如正方形的角)，并做出更准确的决定。</p>
 
-			<p class="normal">此示例的目的是展示卷积序列如何允许生成分层过程，该过程将在开始时提取粗粒度特征，在结束时提取非常高级的特征，而不会丢失已经收集的信息。打个比方，我们可以说，深度卷积网络开始放置指示线、方向和边界的标签，并通过用进一步的细节(如角和特定形状)丰富现有的本体来继续。由于这种能力，如果训练样本的数量足够大，这种模型可以轻松胜过任何MLP，并且几乎达到贝叶斯水平。这些模型的主要缺点是在应用仿射变换(例如旋转或平移)后，它们不能容易地识别物体。换句话说，如果一个网络是用一个只包含自然位置的人脸的<a id="_idIndexMarker1224"/>数据集训练的，那么当一个旋转的(或颠倒的)样本出现时，它的性能会很差。在接下来的章节中，我们将讨论几个<a id="_idIndexMarker1225"/>有助于缓解这个问题的方法(在翻译的情况下)；然而，已经提出了一种称为胶囊网络的新的实验性架构(这超出了本书的范围)，以便用稍微不同并且更加鲁棒的方法来解决这个问题(读者可以在Sabour S .、Frosst N .、Hinton G. E .、<em class="italics">胶囊之间的动态路由</em>、arXiv:1710.09829【cs。CV])。</p>
+			<p class="normal">此示例的目的是展示卷积序列如何允许生成分层过程，该过程将在开始时提取粗粒度特征，在结束时提取非常高级的特征，而不会丢失已经收集的信息。打个比方，我们可以说，深度卷积网络开始放置指示线、方向和边界的标签，并通过用进一步的细节(如角和特定形状)丰富现有的本体来继续。由于这种能力，如果训练样本的数量足够大，这种模型可以轻松胜过任何 MLP，并且几乎达到贝叶斯水平。这些模型的主要缺点是在应用仿射变换(例如旋转或平移)后，它们不能容易地识别物体。换句话说，如果一个网络是用一个只包含自然位置的人脸的<a id="_idIndexMarker1224"/>数据集训练的，那么当一个旋转的(或颠倒的)样本出现时，它的性能会很差。在接下来的章节中，我们将讨论几个<a id="_idIndexMarker1225"/>有助于缓解这个问题的方法(在翻译的情况下)；然而，已经提出了一种称为胶囊网络的新的实验性架构(这超出了本书的范围)，以便用稍微不同并且更加鲁棒的方法来解决这个问题(读者可以在 Sabour S .、Frosst N .、Hinton G. E .、<em class="italics">胶囊之间的动态路由</em>、arXiv:1710.09829【cs。CV])。</p>
 
 			<h3 id="_idParaDest-297" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor310"/>步幅和衬垫</h3>
 
-			<p class="normal">所有卷积共有的两个重要参数是填充和步幅。让我们考虑二维情况，但是记住概念总是相同的。当一个核(<em class="italics"> n </em> x <em class="italics"> m </em>带<em class="italics"> n </em>，<em class="italics"> m </em> &gt; 1)在图像上移动并到达一个维度的末端时，有两种<a id="_idIndexMarker1227"/>可能性。第一种称为<a id="_idIndexMarker1228"/>有效填充，包括即使结果图像比原始图像小<a id="_idIndexMarker1229"/>也不继续。特别是，如果<em class="italics"> X </em>是一个<em class="italics"> w </em> x <em class="italics"> h </em>矩阵，那么得到的<a id="_idIndexMarker1230"/>卷积输出的维数将等于(<em class="italics">w</em>–<em class="italics">n</em>+1)X(<em class="italics">h</em>–<em class="italics">m</em>+1)。然而，在许多情况下，保持原始维度是有用的，例如，能够对不同的输出求和。这种方法被称为same padding，它基于一个简单的想法，即添加<em class="italics"> n </em> - 1个空白列和<em class="italics"> m </em> - 1个空白行，以允许内核在原始图像上移动，产生与初始尺寸相等的像素数量。在许多实现中，默认值被设置为有效填充。</p>
+			<p class="normal">所有卷积共有的两个重要参数是填充和步幅。让我们考虑二维情况，但是记住概念总是相同的。当一个核(<em class="italics"> n </em> x <em class="italics"> m </em>带<em class="italics"> n </em>，<em class="italics"> m </em> &gt; 1)在图像上移动并到达一个维度的末端时，有两种<a id="_idIndexMarker1227"/>可能性。第一种称为<a id="_idIndexMarker1228"/>有效填充，包括即使结果图像比原始图像小<a id="_idIndexMarker1229"/>也不继续。特别是，如果<em class="italics"> X </em>是一个<em class="italics"> w </em> x <em class="italics"> h </em>矩阵，那么得到的<a id="_idIndexMarker1230"/>卷积输出的维数将等于(<em class="italics">w</em>–<em class="italics">n</em>+1)X(<em class="italics">h</em>–<em class="italics">m</em>+1)。然而，在许多情况下，保持原始维度是有用的，例如，能够对不同的输出求和。这种方法被称为 same padding，它基于一个简单的想法，即添加<em class="italics"> n </em> - 1 个空白列和<em class="italics"> m </em> - 1 个空白行，以允许内核在原始图像上移动，产生与初始尺寸相等的像素数量。在许多实现中，默认值被设置为有效填充。</p>
 
 			<p class="normal">另一个参数称为步幅，定义每次移动时要跳过的像素数。例如，设置为(1，1)的值对应于标准卷积，而下图显示了设置为(2，1)的步长:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_06.png" alt=""/></figure>
 
-			<p class="packt_figref">x轴上跨距=2的二维卷积示例</p>
+			<p class="packt_figref">x 轴上跨距=2 的二维卷积示例</p>
 
 			<p class="normal">在这种情况下，每次水平移动都会跳过一个像素。当不需要高粒度时(例如，在第一层中)，较大的步距强制降维，而在最后一层中通常采用设置为(1，1)的步距来捕捉较小的细节。没有找到最佳值的标准规则，测试不同的配置总是最好的方法。像任何其他超参数一样，正确选择步幅和衬垫需要对整个配置进行全面的<a id="_idIndexMarker1232"/>评估，不能简单地局限于几个单一的考虑因素。然而，关于数据集的一些常规信息(因此也是关于底层<a id="_idIndexMarker1233"/>数据生成过程的)可以帮助做出合理的初始决策。例如，如果我们正在处理尺寸<a id="_idIndexMarker1234"/>是垂直的建筑物的图片，有可能开始选择(1，2)的值，因为我们可以假设在<em class="italics"> y </em>轴上比在<em class="italics"> x </em>轴上有更多的信息冗余。这种选择可以极大地加快训练过程，因为输出是一维的，是原始一维的一半(填充相同)。这样，较大的步幅产生部分去噪，并且可以提高训练速度。同时，信息丢失可能会对准确性产生负面影响。如果发生这种情况，可能意味着规模不够大，无法在不损害语义的情况下跳过一些元素。例如，具有非常小的面部的图像可能在大步长时被不可逆地损坏，导致无法检测到正确的特征，并因此降低分类精度。</p>
 
 			<h2 id="_idParaDest-298" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor311"/>阿特鲁卷积</h2>
 
-			<p class="normal">在某些情况下，大于1的步幅可能是一个好的解决方案，因为它减少了维度<a id="_idIndexMarker1235"/>并加快了训练过程，但它可能导致图像失真，其中主要特征不再可检测<a id="_idIndexMarker1236"/>。atrous卷积(也称为扩张卷积)提供了一种替代方法。在这种情况下，内核应用于一个更大的图像补丁，但跳过了区域本身内部的一些像素(这就是为什么有人称之为带孔卷积)。在下图中，有一个(3 x 3)和膨胀率设置为2的示例:</p>
+			<p class="normal">在某些情况下，大于 1 的步幅可能是一个好的解决方案，因为它减少了维度<a id="_idIndexMarker1235"/>并加快了训练过程，但它可能导致图像失真，其中主要特征不再可检测<a id="_idIndexMarker1236"/>。atrous 卷积(也称为扩张卷积)提供了一种替代方法。在这种情况下，内核应用于一个更大的图像补丁，但跳过了区域本身内部的一些像素(这就是为什么有人称之为带孔卷积)。在下图中，有一个(3 x 3)和膨胀率设置为 2 的示例:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_07.png" alt=""/></figure>
 
-			<p class="packt_figref">具有拉普拉斯核的atrous卷积示例</p>
+			<p class="packt_figref">具有拉普拉斯核的 atrous 卷积示例</p>
 
-			<p class="normal">现在每个面片都是9 x 9，但是内核仍然是3 x 3拉普拉斯算子。这种方法的效果比增加步幅更健壮，因为内核周界将总是包含一组具有相同几何关系的像素。当然，细粒度的特征可能会被扭曲，但是因为步幅通常被设置为(1，1)，所以最终的结果通常更加一致。与标准卷积的主要区别在于，在这种情况下，我们假设可以考虑更远的元素来确定输出像素的性质。例如，如果主要特征不包含非常小的细节，atrous卷积可以考虑更大的区域，直接关注标准卷积仅在几次运算后才能检测到的元素。这种技术的选择必须考虑到最终的精度，但是就像对于步幅一样，只要可以更有效地检测几何属性，就可以从一开始就考虑这种技术，考虑具有几个代表性元素的较大面片。</p>
+			<p class="normal">现在每个面片都是 9 x 9，但是内核仍然是 3 x 3 拉普拉斯算子。这种方法的效果比增加步幅更健壮，因为内核周界将总是包含一组具有相同几何关系的像素。当然，细粒度的特征可能会被扭曲，但是因为步幅通常被设置为(1，1)，所以最终的结果通常更加一致。与标准卷积的主要区别在于，在这种情况下，我们假设可以考虑更远的元素来确定输出像素的性质。例如，如果主要特征不包含非常小的细节，atrous 卷积可以考虑更大的区域，直接关注标准卷积仅在几次运算后才能检测到的元素。这种技术的选择必须考虑到最终的精度，但是就像对于步幅一样，只要可以更有效地检测几何属性，就可以从一开始就考虑这种技术，考虑具有几个代表性元素的较大面片。</p>
 
-			<p class="normal">即使这种方法在特定的环境中非常有效，它通常也不是非常深的模型的首选。在最重要的图像分类模型中，采用标准卷积(有或没有更大的步幅),因为它们已经被证明可以对非常普通的数据集(如ImageNet或Microsoft Coco)产生<a id="_idIndexMarker1237"/>最佳性能。不过，我建议读者用这个方法<a id="_idIndexMarker1238"/>进行实验并比较结果。特别是，分析哪些类被更好地分类并尝试为观察到的行为找到合理的解释将是一个好主意。</p>
+			<p class="normal">即使这种方法在特定的环境中非常有效，它通常也不是非常深的模型的首选。在最重要的图像分类模型中，采用标准卷积(有或没有更大的步幅),因为它们已经被证明可以对非常普通的数据集(如 ImageNet 或 Microsoft Coco)产生<a id="_idIndexMarker1237"/>最佳性能。不过，我建议读者用这个方法<a id="_idIndexMarker1238"/>进行实验并比较结果。特别是，分析哪些类被更好地分类并尝试为观察到的行为找到合理的解释将是一个好主意。</p>
 
-			<div><div><p class="Information-Box--PACKT-">在某些框架中，如Keras，没有明确的层来定义atrous卷积。相反，标准卷积层通常有一个参数来定义膨胀率(在TensorFlow/Keras中，它被称为<code class="Code-In-Text--PACKT-">dilation_rate</code>)。当然，默认值是1，这意味着内核将被应用到与其大小相匹配的补丁上。</p>
+			<div><div><p class="Information-Box--PACKT-">在某些框架中，如 Keras，没有明确的层来定义 atrous 卷积。相反，标准卷积层通常有一个参数来定义膨胀率(在 TensorFlow/Keras 中，它被称为<code class="Code-In-Text--PACKT-">dilation_rate</code>)。当然，默认值是 1，这意味着内核将被应用到与其大小相匹配的补丁上。</p>
 
 				</div>
 
@@ -168,21 +168,21 @@
 
 			<h2 id="_idParaDest-299" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor312"/>可分离卷积</h2>
 
-			<p class="normal">如果我们考虑一个图像<img style="height: 1.2em! important;" src="img/B14713_19_013.png" alt=""/>(单通道)和一个内核<img style="height: 1.2em! important;" src="img/B14713_19_014.png" alt=""/>，运算次数就是<img style="height: 1em! important;" src="img/B14713_19_015.png" alt=""/>。当内核不是很小，图像很大的时候，这个<a id="_idIndexMarker1239"/>计算的代价可能会相当高，即使有GPU支持。通过考虑卷积的相关属性，可以实现一个<a id="_idIndexMarker1240"/>改进。特别地，如果原核可以拆分为两个向量核的点积，维数为(<em class="italics"> n </em> x 1)的<em class="italics"> k </em> <sup> (1) </sup>和维数为(1 x <em class="italics"> m </em>的<em class="italics"> k </em> <sup> (2) </sup>，则称卷积可分。这意味着我们可以用两个后续操作执行(<em class="italics"> n </em> x <em class="italics"> m </em>)卷积:</p>
+			<p class="normal">如果我们考虑一个图像<img style="height: 1.2em! important;" src="img/B14713_19_013.png" alt=""/>(单通道)和一个内核<img style="height: 1.2em! important;" src="img/B14713_19_014.png" alt=""/>，运算次数就是<img style="height: 1em! important;" src="img/B14713_19_015.png" alt=""/>。当内核不是很小，图像很大的时候，这个<a id="_idIndexMarker1239"/>计算的代价可能会相当高，即使有 GPU 支持。通过考虑卷积的相关属性，可以实现一个<a id="_idIndexMarker1240"/>改进。特别地，如果原核可以拆分为两个向量核的点积，维数为(<em class="italics"> n </em> x 1)的<em class="italics"> k </em> <sup> (1) </sup>和维数为(1 x <em class="italics"> m </em>的<em class="italics"> k </em> <sup> (2) </sup>，则称卷积可分。这意味着我们可以用两个后续操作执行(<em class="italics"> n </em> x <em class="italics"> m </em>)卷积:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_016.png" alt=""/></figure>
 
 			<p class="normal">优势很明显，因为现在操作数是<img style="height: 1.2em! important;" src="img/B14713_19_017.png" alt=""/>。特别是，当<em class="italics">nm</em>&gt;&gt;<em class="italics">n</em>+<em class="italics">m</em>时，可以避免大量的乘法运算，从而加快训练和预测过程。</p>
 
-			<p class="normal">在Chollet F .，exception:<em class="italics">具有深度方向可分离卷积的深度学习</em>，arXiv:1610.02357【cs。简历】。在这种情况下，它被恰当地称为深度方向可分离卷积，该过程被分成两个步骤。</p>
+			<p class="normal">在 Chollet F .，exception:<em class="italics">具有深度方向可分离卷积的深度学习</em>，arXiv:1610.02357【cs。简历】。在这种情况下，它被恰当地称为深度方向可分离卷积，该过程被分成两个步骤。</p>
 
-			<p class="normal">第一个沿着通道轴操作，将其转换为通道数可变的一维图(例如，如果原图为768 x 1024 x 3，则第一阶段的输出<a id="_idIndexMarker1241"/>将为<em class="italics"> n </em> x 768 x 1024 x 1)。然后，对单层应用标准卷积(实际上可以有<a id="_idIndexMarker1242"/>多个通道)。在大多数实现中，深度方向卷积的默认输出通道数是1(这通常通过说深度乘数是1来表示)。相对于标准卷积，这种方法可以显著降低参数。事实上，如果输入的通用特征映射是<img src="img/B14713_19_018.png" alt=""/>，并且我们想要与<em class="italics"> q </em>核<img src="img/B14713_19_019.png" alt=""/>执行标准卷积，我们需要学习<img style="height: 1em! important;" src="img/B14713_19_020.png" alt=""/>参数(每个核<em class="italics"> k </em> <sup> (i) </sup>应用于所有输入通道)。采用深度方向可分离卷积，第一步(仅处理通道)需要<em class="italics"> nmp </em>参数。由于输出仍然有<em class="italics"> p </em>个特征图，我们需要输出<em class="italics"> q </em>个通道，这个过程使用了一个技巧:用<em class="italics"> q </em> 1 x 1个内核处理每个特征图(这样，输出将有<em class="italics"> q </em>个层和相同的尺寸)。第二步需要的参数个数是<img style="height: 1em! important;" src="img/B14713_19_021.png" alt=""/>，所以参数总数变成<img style="height: 1.2em! important;" src="img/B14713_19_022.png" alt=""/>。将该值与标准卷积所需的值进行比较，我们得到了一个有趣的结果:</p>
+			<p class="normal">第一个沿着通道轴操作，将其转换为通道数可变的一维图(例如，如果原图为 768 x 1024 x 3，则第一阶段的输出<a id="_idIndexMarker1241"/>将为<em class="italics"> n </em> x 768 x 1024 x 1)。然后，对单层应用标准卷积(实际上可以有<a id="_idIndexMarker1242"/>多个通道)。在大多数实现中，深度方向卷积的默认输出通道数是 1(这通常通过说深度乘数是 1 来表示)。相对于标准卷积，这种方法可以显著降低参数。事实上，如果输入的通用特征映射是<img src="img/B14713_19_018.png" alt=""/>，并且我们想要与<em class="italics"> q </em>核<img src="img/B14713_19_019.png" alt=""/>执行标准卷积，我们需要学习<img style="height: 1em! important;" src="img/B14713_19_020.png" alt=""/>参数(每个核<em class="italics"> k </em> <sup> (i) </sup>应用于所有输入通道)。采用深度方向可分离卷积，第一步(仅处理通道)需要<em class="italics"> nmp </em>参数。由于输出仍然有<em class="italics"> p </em>个特征图，我们需要输出<em class="italics"> q </em>个通道，这个过程使用了一个技巧:用<em class="italics"> q </em> 1 x 1 个内核处理每个特征图(这样，输出将有<em class="italics"> q </em>个层和相同的尺寸)。第二步需要的参数个数是<img style="height: 1em! important;" src="img/B14713_19_021.png" alt=""/>，所以参数总数变成<img style="height: 1.2em! important;" src="img/B14713_19_022.png" alt=""/>。将该值与标准卷积所需的值进行比较，我们得到了一个有趣的结果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_023.png" alt=""/></figure>
 
-			<p class="normal">因为这个条件很容易成立，所以这种方法在优化训练和预测过程以及任何情况下的内存消耗方面非常有效。不足为奇的是，Xception模型已经立即在移动设备中实现，允许用非常有限的资源进行实时图像分类。当然，深度方向可分离卷积并不总是具有与标准卷积相同的精度，因为它们基于复合特征图的通道<a id="_idIndexMarker1243"/>内可观察到的几何特征相互独立的假设。这并不总是正确的，因为我们知道多个<a id="_idIndexMarker1244"/>层的效果也是基于它们的组合(这增加了网络的表现力)。然而，在许多情况下，最终结果的精确度可以与一些最先进的模型相媲美；因此，这种技术通常被认为是标准卷积的有效替代方法。</p>
+			<p class="normal">因为这个条件很容易成立，所以这种方法在优化训练和预测过程以及任何情况下的内存消耗方面非常有效。不足为奇的是，Xception 模型已经立即在移动设备中实现，允许用非常有限的资源进行实时图像分类。当然，深度方向可分离卷积并不总是具有与标准卷积相同的精度，因为它们基于复合特征图的通道<a id="_idIndexMarker1243"/>内可观察到的几何特征相互独立的假设。这并不总是正确的，因为我们知道多个<a id="_idIndexMarker1244"/>层的效果也是基于它们的组合(这增加了网络的表现力)。然而，在许多情况下，最终结果的精确度可以与一些最先进的模型相媲美；因此，这种技术通常被认为是标准卷积的有效替代方法。</p>
 
-			<div><div><p class="Information-Box--PACKT-">从版本2.1.5开始，Keras引入了一个名为DepthwiseConv2D的层，实现深度方向可分离卷积。该层扩展了现有的SeparableConv2D。</p>
+			<div><div><p class="Information-Box--PACKT-">从版本 2.1.5 开始，Keras 引入了一个名为 DepthwiseConv2D 的层，实现深度方向可分离卷积。该层扩展了现有的 SeparableConv2D。</p>
 
 				</div>
 
@@ -190,7 +190,7 @@
 
 			<h2 id="_idParaDest-300" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor313"/>转置卷积</h2>
 
-			<p class="normal">转置卷积(有时也称为去卷积，即使数学定义不同)与标准卷积没有太大区别，但其目标是重建一个与输入样本具有相同特征的<a id="_idIndexMarker1245"/>结构。假设一个卷积网络的输出是特征图<img src="img/B14713_19_024.png" alt=""/>，我们需要建立一个输出元素<img src="img/B14713_19_025.png" alt=""/>(假设w和h是原始维数)。我们可以通过对<em class="italics"> X </em>应用具有适当步长和填充的转置<a id="_idIndexMarker1246"/>卷积来实现这个结果。比如我们假设<img src="img/B14713_19_026.png" alt=""/>和我们的输出一定是512 x 512 x 3。最后一个转置卷积必须学习三个滤波器，步长设置为四，填充相同。我们将在下一章看到这种方法的一些实际例子。然而，就内部动力学而言，转置和标准卷积之间没有非常重要的区别。主要区别是成本函数，因为当转置卷积用作最后一层时，必须在目标图像和重建图像之间进行比较。在下一章中，我们还将分析一些技术来提高输出的质量，即使成本函数并不关注图像的特定区域。</p>
+			<p class="normal">转置卷积(有时也称为去卷积，即使数学定义不同)与标准卷积没有太大区别，但其目标是重建一个与输入样本具有相同特征的<a id="_idIndexMarker1245"/>结构。假设一个卷积网络的输出是特征图<img src="img/B14713_19_024.png" alt=""/>，我们需要建立一个输出元素<img src="img/B14713_19_025.png" alt=""/>(假设 w 和 h 是原始维数)。我们可以通过对<em class="italics"> X </em>应用具有适当步长和填充的转置<a id="_idIndexMarker1246"/>卷积来实现这个结果。比如我们假设<img src="img/B14713_19_026.png" alt=""/>和我们的输出一定是 512 x 512 x 3。最后一个转置卷积必须学习三个滤波器，步长设置为四，填充相同。我们将在下一章看到这种方法的一些实际例子。然而，就内部动力学而言，转置和标准卷积之间没有非常重要的区别。主要区别是成本函数，因为当转置卷积用作最后一层时，必须在目标图像和重建图像之间进行比较。在下一章中，我们还将分析一些技术来提高输出的质量，即使成本函数并不关注图像的特定区域。</p>
 
 			<h1 id="_idParaDest-301" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor314"/>汇集图层</h1>
 
@@ -202,7 +202,7 @@
 
 			<p class="normal">一般来说，池层试图将包含在一个小块中的信息总结成单个像素。这一想法得到了一种以感知为导向的方法的支持；事实上，当池不是很大时，在随后的移动中不太可能发现高变化(自然图像具有很少的孤立像素)。因此，所有的池化操作都允许我们设置一个以上的步长，降低了损害信息内容的风险。然而，考虑到几个实验和架构，我建议您在卷积层(特别是卷积序列的第一层)中设置更大的步幅，而不是在汇集层中。这样，就有可能以最小的损失应用变换，并充分利用下一个基本属性。</p>
 
-			<p class="normal">第二个(也可能是最重要的)原因是，它们略微增加了对转换的鲁棒性，并限制了失真，其效果与池大小成比例。让我们考虑下面的图表，代表一个十字架的原始图像和10像素对角线平移后的版本</p>
+			<p class="normal">第二个(也可能是最重要的)原因是，它们略微增加了对转换的鲁棒性，并限制了失真，其效果与池大小成比例。让我们考虑下面的图表，代表一个十字架的原始图像和 10 像素对角线平移后的版本</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_08.png" alt=""/></figure>
 
@@ -210,7 +210,7 @@
 
 			<p class="normal">这是一个非常<a id="_idIndexMarker1249"/>简单的例子，翻译出来的图像和原图差别不大。然而，在更复杂的情况下，分类器可能无法在相似的条件下正确地对对象进行分类。</p>
 
-			<p class="normal">对翻译后的图像应用最大池(池大小为2 x 2，步长为2像素)(而左边的图像始终是原始图像，代表我们的<em class="italics">基准</em>)，我们得到以下结果:</p>
+			<p class="normal">对翻译后的图像应用最大池(池大小为 2 x 2，步长为 2 像素)(而左边的图像始终是原始图像，代表我们的<em class="italics">基准</em>)，我们得到以下结果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_09.png" alt=""/></figure>
 
@@ -224,11 +224,11 @@
 
 			<p class="normal">在这种情况下，图片被部分平滑，但仍然有可能看到更好的对齐(主要归功于褪色效果)。此外，如果这些方法简单并且有些有效，那么对不变变换的鲁棒性<a id="_idIndexMarker1250"/>永远不会显著提高，并且只有通过增加池大小才有可能实现更高级别的不变性。这种选择导致粗粒度特征地图的信息量急剧减少；因此，每当有必要将分类扩展到可能被扭曲或旋转的样本时，使用数据扩充技术来生成人工图像并在其上训练分类器可能是一个好主意(这允许使用更好地表示真实数据生成过程的数据集)。</p>
 
-			<p class="normal">然而，正如Goodfellow I .、Bengio Y .、库维尔a .、<em class="italics">深度学习</em>(麻省理工学院出版社，2015年)中所指出的，当池图层与多重卷积图层或旋转图像堆栈的输出一起使用时，它们也可以提供对旋转的稳健不变性。事实上，在这些情况下，会引发单一模式响应，并且池层的效果变得类似于标准化输出的收集器。换句话说，在没有明确选择最佳匹配模式的情况下，它将产生相同的结果。因此，如果数据集包含足够多的样本，在网络的中间位置汇集图层可以为小旋转提供适度的鲁棒性，从而提高整个深度架构的泛化能力。</p>
+			<p class="normal">然而，正如 Goodfellow I .、Bengio Y .、库维尔 a .、<em class="italics">深度学习</em>(麻省理工学院出版社，2015 年)中所指出的，当池图层与多重卷积图层或旋转图像堆栈的输出一起使用时，它们也可以提供对旋转的稳健不变性。事实上，在这些情况下，会引发单一模式响应，并且池层的效果变得类似于标准化输出的收集器。换句话说，在没有明确选择最佳匹配模式的情况下，它将产生相同的结果。因此，如果数据集包含足够多的样本，在网络的中间位置汇集图层可以为小旋转提供适度的鲁棒性，从而提高整个深度架构的泛化能力。</p>
 
 			<p class="normal">正如在前面的例子中很容易看到的，两种变体之间的主要区别是最终结果。平均池执行一种非常简单的插值，平滑边界并避免突然变化。另一方面，当需要检测特征而不进行任何类型的平滑(这可能会改变它们的几何形状)时，最大池噪声更少，并且可以产生更好的<a id="_idIndexMarker1251"/>结果。我总是建议测试这两种技术，因为仅根据启发式考虑(尤其是当数据集不是由非常简单的图像组成时)，几乎不可能选择具有正确池大小的最佳方法。</p>
 
-			<p class="normal">显然，在一组卷积后使用这些层总是更可取的，这样可以避免非常大的池大小，因为这可能会不可逆转地破坏信息内容。在许多重要的深层架构中，池层总是基于(2，2)或(3，3)池，与其位置无关，并且跨度总是设置为1或2。在这两种情况下，信息损失与池大小/跨度成比例；因此，当小特征必须与较大特征(例如，前景和背景人脸)一起检测时，通常避免大池。</p>
+			<p class="normal">显然，在一组卷积后使用这些层总是更可取的，这样可以避免非常大的池大小，因为这可能会不可逆转地破坏信息内容。在许多重要的深层架构中，池层总是基于(2，2)或(3，3)池，与其位置无关，并且跨度总是设置为 1 或 2。在这两种情况下，信息损失与池大小/跨度成比例；因此，当小特征必须与较大特征(例如，前景和背景人脸)一起检测时，通常避免大池。</p>
 
 			<h2 id="_idParaDest-302" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor315"/>其他有用层</h2>
 
@@ -238,19 +238,19 @@
 
 			<ul>
 
-				<li class="list">填充层:这些可以<a id="_idIndexMarker1253"/>被用来增加一个特征地图的大小(例如，通过用一个空白框包围它(在每边的前后添加<em class="italics"> n </em>个黑色像素)来使它与另一个特征地图对齐)。有关Keras/TensorFlow实现的信息<a id="_idIndexMarker1254"/>，请参见<a href="https://keras.io/layers/convolutional/">https://keras.io/layers/convolutional/</a>。</li>
+				<li class="list">填充层:这些可以<a id="_idIndexMarker1253"/>被用来增加一个特征地图的大小(例如，通过用一个空白框包围它(在每边的前后添加<em class="italics"> n </em>个黑色像素)来使它与另一个特征地图对齐)。有关 Keras/TensorFlow 实现的信息<a id="_idIndexMarker1254"/>，请参见<a href="https://keras.io/layers/convolutional/">https://keras.io/layers/convolutional/</a>。</li>
 
 				<li class="list">上采样层:通过从单个像素创建更大的块来增加特征图的大小。在某种程度上，它们可以被视为与池化图层相反的变换，即使在这种情况下，上采样并不基于任何类型的插值。这些类型的层可用于为类似于用转置卷积获得的变换准备特征图，即使许多实验证实使用更大的步长可产生非常精确的结果而不需要额外的计算步骤。</li>
 
-				<li class="list">裁剪图层:这有助于选择图像/特征地图的特定矩形区域。它们在模块化架构中特别有用，其中<a id="_idIndexMarker1256"/>第一部分确定裁剪边界(例如，一张脸)，而第二部分在移除背景后，可以执行高级操作，如细节分割(标记眼睛、鼻子、嘴等区域)。将这些层直接插入深度神经模型的可能性避免了多次数据传输。不幸的是，许多框架(如TensorFlow/Keras)不允许我们使用可变边界，实际上限制了可能的用例数量。</li>
+				<li class="list">裁剪图层:这有助于选择图像/特征地图的特定矩形区域。它们在模块化架构中特别有用，其中<a id="_idIndexMarker1256"/>第一部分确定裁剪边界(例如，一张脸)，而第二部分在移除背景后，可以执行高级操作，如细节分割(标记眼睛、鼻子、嘴等区域)。将这些层直接插入深度神经模型的可能性避免了多次数据传输。不幸的是，许多框架(如 TensorFlow/Keras)不允许我们使用可变边界，实际上限制了可能的用例数量。</li>
 
-				<li class="list">扁平化图层:这些是要素地图和全连接图层之间的连接链接。通常，在处理<a id="_idIndexMarker1257"/>卷积块的输出之前使用单个展平层，少数密集层终止于最终的Softmax层(用于分类)。该操作在计算上非常便宜，因为它只处理元数据，不执行任何计算。</li>
+				<li class="list">扁平化图层:这些是要素地图和全连接图层之间的连接链接。通常，在处理<a id="_idIndexMarker1257"/>卷积块的输出之前使用单个展平层，少数密集层终止于最终的 Softmax 层(用于分类)。该操作在计算上非常便宜，因为它只处理元数据，不执行任何计算。</li>
 
 			</ul>
 
-			<h1 id="_idParaDest-303" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor316"/>具有TensorFlow和Keras的深度卷积网络示例</h1>
+			<h1 id="_idParaDest-303" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor316"/>具有 TensorFlow 和 Keras 的深度卷积网络示例</h1>
 
-			<p class="normal">在<a id="_idIndexMarker1258"/>第一个例子中，我们希望<a id="_idIndexMarker1259"/>再次考虑完整的MNIST手写数字数据集，但是我们将使用<a id="_idIndexMarker1260"/>小型深度卷积网络，而不是使用MLP。<a id="_idIndexMarker1261"/>第一步包括加载和标准化数据集:</p>
+			<p class="normal">在<a id="_idIndexMarker1258"/>第一个例子中，我们希望<a id="_idIndexMarker1259"/>再次考虑完整的 MNIST 手写数字数据集，但是我们将使用<a id="_idIndexMarker1260"/>小型深度卷积网络，而不是使用 MLP。<a id="_idIndexMarker1261"/>第一步包括加载和标准化数据集:</p>
 
 			<pre>import tensorflow as tf
 import numpy as np
@@ -268,53 +268,53 @@ Y_train = tf.keras.utils.to_categorical(
 Y_test = tf.keras.utils.to_categorical(
         Y_test, num_classes=10)</pre>
 
-			<p class="normal">我们现在可以定义模型架构了。数据点非常小(28 × 28)，因此使用小内核可能会有所帮助。这不是一个通用的规则，它对于评估<a id="_idIndexMarker1262"/>更大的内核(特别是在第一层)也是有用的；然而，许多最先进的架构证实了使用小映像的大内核会导致性能损失。在我们的个人实验中，当最大的<a id="_idIndexMarker1265"/>核比图像尺寸小8到10倍时，我们总是获得<a id="_idIndexMarker1264"/>最佳结果(例如，如果图像是100 x 100，最大的核应该小于10 x 10，即使在许多情况下，起始大小甚至更小，如5 x 5)。</p>
+			<p class="normal">我们现在可以定义模型架构了。数据点非常小(28 × 28)，因此使用小内核可能会有所帮助。这不是一个通用的规则，它对于评估<a id="_idIndexMarker1262"/>更大的内核(特别是在第一层)也是有用的；然而，许多最先进的架构证实了使用小映像的大内核会导致性能损失。在我们的个人实验中，当最大的<a id="_idIndexMarker1265"/>核比图像尺寸小 8 到 10 倍时，我们总是获得<a id="_idIndexMarker1264"/>最佳结果(例如，如果图像是 100 x 100，最大的核应该小于 10 x 10，即使在许多情况下，起始大小甚至更小，如 5 x 5)。</p>
 
 			<p class="normal">我们的模型由以下几层组成:</p>
 
 			<ol>
 
-				<li class="list">输入压差为25%，以防止过拟合。</li>
+				<li class="list">输入压差为 25%，以防止过拟合。</li>
 
-				<li class="list">与16个滤波器卷积，(3 × 3)内核，步长等于1，ReLU激活，相同的填充(默认权重初始值为Xavier)。TensorFlow/Keras实现了Conv2D类，它的主要参数很容易理解。</li>
+				<li class="list">与 16 个滤波器卷积，(3 × 3)内核，步长等于 1，ReLU 激活，相同的填充(默认权重初始值为 Xavier)。TensorFlow/Keras 实现了 Conv2D 类，它的主要参数很容易理解。</li>
 
-				<li class="list">退学50%。</li>
+				<li class="list">退学 50%。</li>
 
-				<li class="list">与32个滤波器卷积，(3 × 3)内核，步长等于1，ReLU激活，以及相同的填充。</li>
+				<li class="list">与 32 个滤波器卷积，(3 × 3)内核，步长等于 1，ReLU 激活，以及相同的填充。</li>
 
-				<li class="list">退学50%。</li>
+				<li class="list">退学 50%。</li>
 
-				<li class="list">(2 × 2)池大小和步长等于1的平均池(使用TensorFlow/Keras类<code class="Code-In-Text--PACKT-">AveragePooling2D</code>)。</li>
+				<li class="list">(2 × 2)池大小和步长等于 1 的平均池(使用 TensorFlow/Keras 类<code class="Code-In-Text--PACKT-">AveragePooling2D</code>)。</li>
 
-				<li class="list">与64个滤波器卷积，(3 × 3)内核，步长等于1，ReLU激活，以及相同的填充。</li>
+				<li class="list">与 64 个滤波器卷积，(3 × 3)内核，步长等于 1，ReLU 激活，以及相同的填充。</li>
 
-				<li class="list">(2 × 2)池大小和步长等于1的平均池。</li>
+				<li class="list">(2 × 2)池大小和步长等于 1 的平均池。</li>
 
-				<li class="list">与64个滤波器卷积，(3 × 3)内核，步长等于1，ReLU激活，以及相同的填充。</li>
+				<li class="list">与 64 个滤波器卷积，(3 × 3)内核，步长等于 1，ReLU 激活，以及相同的填充。</li>
 
-				<li class="list">退学50%。</li>
+				<li class="list">退学 50%。</li>
 
-				<li class="list">(2 × 2)池大小和步长等于1的平均池。</li>
+				<li class="list">(2 × 2)池大小和步长等于 1 的平均池。</li>
 
 				<li class="list">展平图层。</li>
 
-				<li class="list">具有1，024个ReLU单元的全连接层。</li>
+				<li class="list">具有 1，024 个 ReLU 单元的全连接层。</li>
 
-				<li class="list">退学50%。</li>
+				<li class="list">退学 50%。</li>
 
 			</ol>
 
 			<ol>
 
-				<li class="list" value="15">具有10个Softmax单元的全连接层。</li>
+				<li class="list" value="15">具有 10 个 Softmax 单元的全连接层。</li>
 
 			</ol>
 
-			<p class="normal">目标是捕获第一层中的低级特征(水平线和垂直线、交叉点等)，并使用汇集层和所有后续卷积来提高呈现失真样本时的准确性。考虑到模型的容量，引入缺失层(或者，<em class="italics"> L </em> <sub> 2 </sub>正则化)有助于防止过拟合。在这种情况和类似情况下，辍学的影响是双重的。事实上，正如Goodfellow等人(在Goodfellow I .，Bengio Y .，库维尔a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2015年)和<a id="_idIndexMarker1266"/>在上一章中解释的那样，dropout也有能力将单个模型转化为受约束的bagging系综(有关进一步的详细信息，请阅读<em class="italics">第9章，</em> <em class="italics">广义线性模型和回归</em>)。</p>
+			<p class="normal">目标是捕获第一层中的低级特征(水平线和垂直线、交叉点等)，并使用汇集层和所有后续卷积来提高呈现失真样本时的准确性。考虑到模型的容量，引入缺失层(或者，<em class="italics"> L </em> <sub> 2 </sub>正则化)有助于防止过拟合。在这种情况和类似情况下，辍学的影响是双重的。事实上，正如 Goodfellow 等人(在 Goodfellow I .，Bengio Y .，库维尔 a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2015 年)和<a id="_idIndexMarker1266"/>在上一章中解释的那样，dropout 也有能力将单个模型转化为受约束的 bagging 系综(有关进一步的详细信息，请阅读<em class="italics">第 9 章，</em> <em class="italics">广义线性模型和回归</em>)。</p>
 
-			<p class="normal">通过在批处理过程中关闭随机单元的激活<a id="_idIndexMarker1267"/>，全局模型被分割成大量独立的<a id="_idIndexMarker1268"/>子模型，这些子模型专门用于对特定样本进行分类。因此，dropout通过利用模型的所有容量来覆盖整个样本空间，而不会过度学习训练集的详细结构，从而避免了过度拟合。每一个子模型都被随机抽样小批量，并被迫修改权重以最小化全局成本函数。然而，对于激活已经被置零的单元，校正变得无效，因此，模型的一部分保持不变，而单元的子集经历更新。这个过程避免了全局模型的过度专门化，同时，通过采用类似于bagging的策略(除了子模型相互依赖的事实之外)，提高了分类器的性能。</p>
+			<p class="normal">通过在批处理过程中关闭随机单元的激活<a id="_idIndexMarker1267"/>，全局模型被分割成大量独立的<a id="_idIndexMarker1268"/>子模型，这些子模型专门用于对特定样本进行分类。因此，dropout 通过利用模型的所有容量来覆盖整个样本空间，而不会过度学习训练集的详细结构，从而避免了过度拟合。每一个子模型都被随机抽样小批量，并被迫修改权重以最小化全局成本函数。然而，对于激活已经被置零的单元，校正变得无效，因此，模型的一部分保持不变，而单元的子集经历更新。这个过程避免了全局模型的过度专门化，同时，通过采用类似于 bagging 的策略(除了子模型相互依赖的事实之外)，提高了分类器的性能。</p>
 
-			<p class="normal">此时，我们可以创建并编译模型(使用Adam优化器，其中<img style="height: 1em! important;" src="img/B14713_19_029.png" alt=""/>和衰减率等于10 <sup> -5 </sup>):</p>
+			<p class="normal">此时，我们可以创建并编译模型(使用 Adam 优化器，其中<img style="height: 1em! important;" src="img/B14713_19_029.png" alt=""/>和衰减率等于 10 <sup> -5 </sup>):</p>
 
 			<pre>model = tf.keras.models.Sequential([
         tf.keras.layers.Dropout(0.25,
@@ -356,9 +356,9 @@ Y_test = tf.keras.utils.to_categorical(
                               activation='softmax')
 ])</pre>
 
-			<p class="normal">最佳批量的选择几乎从不基于标准化标准，而是基于<a id="_idIndexMarker1269"/>实际考虑。原因是很难预测具有不同批量大小的深度模型的行为。然而，一些一般的考虑是可能的。随机梯度下降是一种近似的<a id="_idIndexMarker1271"/>算法，它是从梯度下降中派生出来的。在后一种情况下，整个训练集在<a id="_idIndexMarker1272"/>任何改变之前被处理。因此，较大的批次通常(但不总是)提高梯度估计的准确性，因为它们比较小的批次提供更多的信息，从而避免进一步的校正。另一方面，较小的批处理更适合内存(特别是在使用GPU时)，加上合理的小学习率，在收敛速度和硬件要求之间提供了一个完美的平衡。不幸的是，批量大小的选择没有黄金法则(可能除了与2的幂成比例，因为它更适合GPU的VRAM)，所以我邀请读者从最大可能的值(例如，与训练集的大约<img style="height: 1.4em! important;" src="img/B14713_19_030.png" alt=""/>成比例)开始，并将其减少到训练集的<img style="height: 1.2em! important;" src="img/B14713_19_031.png" alt=""/>到<img style="height: 1.2em! important;" src="img/B14713_19_032.png" alt=""/>之间的某个大小，直到性能令人满意。值得一提的是最近的研究(Masters D .，Luschi C .，<em class="italics">再谈深度神经网络的小批量训练</em>，arXiv:1804.07612【cs。LG])表明，平均而言，小批量是优选的。特别是，作者证明了批量大小的逐渐增加，以及<a id="_idIndexMarker1273"/>学习速率的正常衰减保证了更好的收敛速度和性能。不幸的是，这些建议往往是宝贵的，但它们很少具有普遍适用性。一些数据集(和神经架构)可能会受益，而另一些可能会表现得更差。因此，解决该问题的最佳方式<a id="_idIndexMarker1275"/>必然是<a id="_idIndexMarker1276"/>尝试和评估，可能遵循最常见的准则以避免已知错误。不言而喻，批量大小只是深度学习任务期间必须调整的超参数之一；因此，最优选择并不独立于其他值。正如许多研究人员所建议的，彻底的网格搜索是不可能的，因此他们建议从参数空间随机采样(给定精确的架构)，并通过放大性能更好的区域来进行。该过程可以继续，直到结果满足预期的要求。然而，如果这种改善可以忽略不计，那么最好对另一个随机区域进行采样，而不是不断放大到同一个子空间。</p>
+			<p class="normal">最佳批量的选择几乎从不基于标准化标准，而是基于<a id="_idIndexMarker1269"/>实际考虑。原因是很难预测具有不同批量大小的深度模型的行为。然而，一些一般的考虑是可能的。随机梯度下降是一种近似的<a id="_idIndexMarker1271"/>算法，它是从梯度下降中派生出来的。在后一种情况下，整个训练集在<a id="_idIndexMarker1272"/>任何改变之前被处理。因此，较大的批次通常(但不总是)提高梯度估计的准确性，因为它们比较小的批次提供更多的信息，从而避免进一步的校正。另一方面，较小的批处理更适合内存(特别是在使用 GPU 时)，加上合理的小学习率，在收敛速度和硬件要求之间提供了一个完美的平衡。不幸的是，批量大小的选择没有黄金法则(可能除了与 2 的幂成比例，因为它更适合 GPU 的 VRAM)，所以我邀请读者从最大可能的值(例如，与训练集的大约<img style="height: 1.4em! important;" src="img/B14713_19_030.png" alt=""/>成比例)开始，并将其减少到训练集的<img style="height: 1.2em! important;" src="img/B14713_19_031.png" alt=""/>到<img style="height: 1.2em! important;" src="img/B14713_19_032.png" alt=""/>之间的某个大小，直到性能令人满意。值得一提的是最近的研究(Masters D .，Luschi C .，<em class="italics">再谈深度神经网络的小批量训练</em>，arXiv:1804.07612【cs。LG])表明，平均而言，小批量是优选的。特别是，作者证明了批量大小的逐渐增加，以及<a id="_idIndexMarker1273"/>学习速率的正常衰减保证了更好的收敛速度和性能。不幸的是，这些建议往往是宝贵的，但它们很少具有普遍适用性。一些数据集(和神经架构)可能会受益，而另一些可能会表现得更差。因此，解决该问题的最佳方式<a id="_idIndexMarker1275"/>必然是<a id="_idIndexMarker1276"/>尝试和评估，可能遵循最常见的准则以避免已知错误。不言而喻，批量大小只是深度学习任务期间必须调整的超参数之一；因此，最优选择并不独立于其他值。正如许多研究人员所建议的，彻底的网格搜索是不可能的，因此他们建议从参数空间随机采样(给定精确的架构)，并通过放大性能更好的区域来进行。该过程可以继续，直到结果满足预期的要求。然而，如果这种改善可以忽略不计，那么最好对另一个随机区域进行采样，而不是不断放大到同一个子空间。</p>
 
-			<p class="normal">我们现在可以使用200个历元和256个数据点的批量大小来训练模型，这是一个在性能和计算成本之间提供良好平衡的值:</p>
+			<p class="normal">我们现在可以使用 200 个历元和 256 个数据点的批量大小来训练模型，这是一个在性能和计算成本之间提供良好平衡的值:</p>
 
 			<pre>model.compile(optimizer=
    tf.keras.optimizers.Adam(lr=0.001, decay=1e-5),
@@ -382,25 +382,25 @@ history = model.fit(X_train, Y_train,
 <strong class="screen-text">Epoch 200/200</strong>
 <strong class="screen-text">60000/60000 [==============================] - 18s 297us/sample - loss: 0.0082 - accuracy: 0.9972 - val_loss: 0.0172 - val_accuracy: 0.9941</strong></pre>
 
-			<p class="normal">最终的<a id="_idIndexMarker1277"/>验证准确度<a id="_idIndexMarker1278"/>现在是0.9940，这意味着<a id="_idIndexMarker1279"/>只有大约50个样本(10，000个中的)被错误分类。为了更好地理解这种行为，我们可以绘制精度图<a id="_idIndexMarker1280"/>和损耗图<a id="_idTextAnchor317"/>:</p>
+			<p class="normal">最终的<a id="_idIndexMarker1277"/>验证准确度<a id="_idIndexMarker1278"/>现在是 0.9940，这意味着<a id="_idIndexMarker1279"/>只有大约 50 个样本(10，000 个中的)被错误分类。为了更好地理解这种行为，我们可以绘制精度图<a id="_idIndexMarker1280"/>和损耗图<a id="_idTextAnchor317"/>:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_11.png" alt=""/></figure>
 
 			<p class="packt_figref">准确度图(左)；损失函数图(右)</p>
 
-			<p class="normal">正如我们所看到的，验证准确性和损失都很容易达到最佳值。特别是，初始验证精度约为0.97，需要剩余的历元来提高形状可能导致混淆的所有样本的性能(例如，类似于0的畸形8，或非常类似于1的7)。</p>
+			<p class="normal">正如我们所看到的，验证准确性和损失都很容易达到最佳值。特别是，初始验证精度约为 0.97，需要剩余的历元来提高形状可能导致混淆的所有样本的性能(例如，类似于 0 的畸形 8，或非常类似于 1 的 7)。</p>
 
 			<p class="normal">很明显，卷积采用的几何方法保证了比标准全连接网络更强的鲁棒性，这也要归功于池层的贡献，它减少了由噪声样本引起的差异。</p>
 
-			<h2 id="_idParaDest-304" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor318"/>具有TensorFlow/Keras和数据增强的深度卷积网络示例</h2>
+			<h2 id="_idParaDest-304" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor318"/>具有 TensorFlow/Keras 和数据增强的深度卷积网络示例</h2>
 
-			<p class="normal">在这个例子中，我们将使用时尚MNIST数据集，它是由Zalando免费提供的<a id="_idIndexMarker1281"/>作为标准MNIST数据集的更困难的<a id="_idIndexMarker1282"/>替代。在这种情况下，不同服装的微缩灰度<a id="_idIndexMarker1283"/>照片取代了手写数字。下面的屏幕截图显示了一些图像的示例:</p>
+			<p class="normal">在这个例子中，我们将使用时尚 MNIST 数据集，它是由 Zalando 免费提供的<a id="_idIndexMarker1281"/>作为标准 MNIST 数据集的更困难的<a id="_idIndexMarker1282"/>替代。在这种情况下，不同服装的微缩灰度<a id="_idIndexMarker1283"/>照片取代了手写数字。下面的屏幕截图显示了一些图像的示例:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_12.png" alt=""/></figure>
 
-			<p class="packt_figref">从时尚MNIST数据集中采样的图像示例</p>
+			<p class="packt_figref">从时尚 MNIST 数据集中采样的图像示例</p>
 
-			<p class="normal">然而，在这种情况下，我们希望使用TensorFlow/Keras ( <code class="Code-In-Text--PACKT-">ImageDataGenerator</code>)提供的实用程序类来创建数据扩充样本集，以提高深度卷积网络的泛化能力。这个类允许我们添加随机变换(如标准化、旋转、移动、翻转、缩放和剪切)并使用Python生成器(无限循环)输出样本。让我们开始加载数据集(我们不需要标准化它，因为这个转换是由生成器执行的):</p>
+			<p class="normal">然而，在这种情况下，我们希望使用 TensorFlow/Keras ( <code class="Code-In-Text--PACKT-">ImageDataGenerator</code>)提供的实用程序类来创建数据扩充样本集，以提高深度卷积网络的泛化能力。这个类允许我们添加随机变换(如标准化、旋转、移动、翻转、缩放和剪切)并使用 Python 生成器(无限循环)输出样本。让我们开始加载数据集(我们不需要标准化它，因为这个转换是由生成器执行的):</p>
 
 			<pre>import tensorflow as tf
 nb_classes = 10
@@ -413,7 +413,7 @@ steps_per_epoch = 1500
 
 			<p class="normal">此时，我们可以创建生成器，选择最适合我们情况的转换。由于数据集相当标准(所有样本仅在少数位置表示)，我们决定通过应用样本标准化(不依赖于整个数据集)、水平翻转、缩放、小旋转和小剪切来扩充数据集。</p>
 
-			<p class="normal">这一选择是根据客观分析做出的，但我建议读者用不同的参数重复实验(例如，添加白化、垂直翻转、水平/垂直移动和扩展旋转)。当然，增加增强可变性需要更大的处理集。在我们的例子中，我们将<a id="_idIndexMarker1284"/>使用384，000个训练<a id="_idIndexMarker1285"/>样本(原始大小为60，000)，但是可以使用更大的值来训练更深的网络:</p>
+			<p class="normal">这一选择是根据客观分析做出的，但我建议读者用不同的参数重复实验(例如，添加白化、垂直翻转、水平/垂直移动和扩展旋转)。当然，增加增强可变性需要更大的处理集。在我们的例子中，我们将<a id="_idIndexMarker1284"/>使用 384，000 个训练<a id="_idIndexMarker1285"/>样本(原始大小为 60，000)，但是可以使用更大的值来训练更深的网络:</p>
 
 			<pre>import numpy as np
 train_idg = tf.keras.preprocessing.image.\
@@ -445,7 +445,7 @@ test_dg = train_idg.flow(
         batch_size=test_batch_size,
         seed=1000)</pre>
 
-			<p class="normal">一旦初始化了图像<a id="_idIndexMarker1286"/>数据生成器，就必须安装它，指定输入数据集和所需的批量大小(该操作的输出是实际的Python生成器)。除了标准化和规范化之外，测试图像生成器自愿保持不进行转换，以避免对来自不同分布的数据集进行验证。此时，我们可以使用基于泄漏ReLU激活的2D卷积来创建和编译我们的网络(以提高<a id="_idIndexMarker1287"/>在<a id="_idIndexMarker1288"/>值略低于零<a id="_idIndexMarker1289"/>时执行校正的能力，此时ReLU梯度为零)、批量归一化和最大池化:</p>
+			<p class="normal">一旦初始化了图像<a id="_idIndexMarker1286"/>数据生成器，就必须安装它，指定输入数据集和所需的批量大小(该操作的输出是实际的 Python 生成器)。除了标准化和规范化之外，测试图像生成器自愿保持不进行转换，以避免对来自不同分布的数据集进行验证。此时，我们可以使用基于泄漏 ReLU 激活的 2D 卷积来创建和编译我们的网络(以提高<a id="_idIndexMarker1287"/>在<a id="_idIndexMarker1288"/>值略低于零<a id="_idIndexMarker1289"/>时执行校正的能力，此时 ReLU 梯度为零)、批量归一化和最大池化:</p>
 
 			<pre>model = tf.keras.models.Sequential([
         tf.keras.layers.Conv2D(32,
@@ -486,9 +486,9 @@ model.compile(loss='categorical_crossentropy',
                       lr=0.0001, decay=1e-5),
                   metrics=['accuracy'])</pre>
 
-			<p class="normal">在激活函数之前，所有的批量归一化总是应用于线性变换。考虑到额外的复杂性，我们还将使用回调，这是TensorFlow/Keras为了执行训练操作而使用的<a id="_idIndexMarker1290"/>类。在我们的例子中，当<a id="_idIndexMarker1292"/>验证损失停止改善时，我们希望降低<a id="_idIndexMarker1291"/>学习率。特定的回调被称为<code class="Code-In-Text--PACKT-">ReduceLROnPlateau</code>，它被调整以通过将它乘以0.1(在等于耐心参数值的时期数之后)来减少<img src="img/B14713_19_033.png" alt=""/>，冷却期(在恢复原始学习率之前等待的时期数)为1个时期，最小值为<img src="img/B14713_19_034.png" alt=""/>。</p>
+			<p class="normal">在激活函数之前，所有的批量归一化总是应用于线性变换。考虑到额外的复杂性，我们还将使用回调，这是 TensorFlow/Keras 为了执行训练操作而使用的<a id="_idIndexMarker1290"/>类。在我们的例子中，当<a id="_idIndexMarker1292"/>验证损失停止改善时，我们希望降低<a id="_idIndexMarker1291"/>学习率。特定的回调被称为<code class="Code-In-Text--PACKT-">ReduceLROnPlateau</code>，它被调整以通过将它乘以 0.1(在等于耐心参数值的时期数之后)来减少<img src="img/B14713_19_033.png" alt=""/>，冷却期(在恢复原始学习率之前等待的时期数)为 1 个时期，最小值为<img src="img/B14713_19_034.png" alt=""/>。</p>
 
-			<p class="normal">训练方法现在是<code class="Code-In-Text--PACKT-">fit_generator()</code>，它接受Python生成器而不是有限数据集和每个历元的迭代次数(所有其他参数与<code class="Code-In-Text--PACKT-">fit()</code>实现的相同)。在开始之前，重要的是要记住，这个模型比前一个模型更复杂，训练过程可能会在较慢的GPU上持续几个小时:</p>
+			<p class="normal">训练方法现在是<code class="Code-In-Text--PACKT-">fit_generator()</code>，它接受 Python 生成器而不是有限数据集和每个历元的迭代次数(所有其他参数与<code class="Code-In-Text--PACKT-">fit()</code>实现的相同)。在开始之前，重要的是要记住，这个模型比前一个模型更复杂，训练过程可能会在较慢的 GPU 上持续几个小时:</p>
 
 			<pre>history = model.fit_generator(
         generator=train_dg,
@@ -517,21 +517,21 @@ model.compile(loss='categorical_crossentropy',
 <strong class="screen-text">Epoch 100/100</strong>
 <strong class="screen-text">1500/1500 [==============================] - 449s 299ms/step - loss: 0.0443 - acc: 0.9857 - val_loss: 0.2136 - val_acc: 0.9339</strong></pre>
 
-			<p class="normal">在这种情况下，复杂性更大，并且结果不如使用标准MNIST数据集获得的结果准确。下图显示了验证和损失图:</p>
+			<p class="normal">在这种情况下，复杂性更大，并且结果不如使用标准 MNIST 数据集获得的结果准确。下图显示了验证和损失图:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_19_13.png" alt=""/></figure>
 
 			<p class="packt_figref">准确度图(左)；损失函数图(右)</p>
 
-			<p class="normal">损失<a id="_idIndexMarker1293"/>图没有显示出<em class="italics"> U型曲线</em>，但似乎从第20纪元开始就没有真正的改善。验证图也证实了这一点<a id="_idIndexMarker1294"/>，验证图在0.935和0.94之间波动。另一方面，训练<a id="_idIndexMarker1295"/>损失还没有达到最小值(训练精度也没有)，主要是因为批量标准化(如前一章所述，为了实现完全无偏性，必须有非常大的批量)。</p>
+			<p class="normal">损失<a id="_idIndexMarker1293"/>图没有显示出<em class="italics"> U 型曲线</em>，但似乎从第 20 纪元开始就没有真正的改善。验证图也证实了这一点<a id="_idIndexMarker1294"/>，验证图在 0.935 和 0.94 之间波动。另一方面，训练<a id="_idIndexMarker1295"/>损失还没有达到最小值(训练精度也没有)，主要是因为批量标准化(如前一章所述，为了实现完全无偏性，必须有非常大的批量)。</p>
 
-			<p class="normal">当这个条件不能完全满足时，结果一般会稍有偏差，但具有<a id="_idIndexMarker1296"/>相当快的收敛速度)。不过考虑到几个基准，结果还不错(即使<em class="italics">最先进的</em>模型也能达到0.96左右的验证精度)。我建议读者基于具有更大训练集的更深层次架构<a id="_idIndexMarker1297"/>尝试不同的配置(有和没有退出和其他激活)。这个<a id="_idIndexMarker1298"/>的例子提供了许多<a id="_idIndexMarker1299"/>的机会来实践这种模型，因为其复杂性并不像需要专用硬件那么大，但同时，有许多歧义(例如，衬衫和t恤之间的歧义)会降低泛化能力。</p>
+			<p class="normal">当这个条件不能完全满足时，结果一般会稍有偏差，但具有<a id="_idIndexMarker1296"/>相当快的收敛速度)。不过考虑到几个基准，结果还不错(即使<em class="italics">最先进的</em>模型也能达到 0.96 左右的验证精度)。我建议读者基于具有更大训练集的更深层次架构<a id="_idIndexMarker1297"/>尝试不同的配置(有和没有退出和其他激活)。这个<a id="_idIndexMarker1298"/>的例子提供了许多<a id="_idIndexMarker1299"/>的机会来实践这种模型，因为其复杂性并不像需要专用硬件那么大，但同时，有许多歧义(例如，衬衫和 t 恤之间的歧义)会降低泛化能力。</p>
 
 			<h1 id="_idParaDest-305" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor319"/>总结</h1>
 
 			<p class="normal">在这一章中，我们提出了深度卷积网络的概念，这是一种通用的架构，可以在任何视觉处理任务中使用。这种想法基于分层信息管理，旨在从低级元素开始提取特征，并向前移动到有助于实现特定目标的高级细节。</p>
 
-			<p class="normal">我们讨论了卷积的概念及其在离散和有限样本中的应用。接下来，我们定义了标准卷积的性质，然后分析了一些重要的变体，如无序(或扩张)卷积、可分离(和深度方向可分离)卷积，最后是转置卷积。所有这些方法都可以用于1D、2D和3D样本，即使最广泛的应用是基于表示静态图像的二维(不考虑通道)矩阵。在同一节中，我们还讨论了如何使用池层来减少维度并提高对小平移的鲁棒性。</p>
+			<p class="normal">我们讨论了卷积的概念及其在离散和有限样本中的应用。接下来，我们定义了标准卷积的性质，然后分析了一些重要的变体，如无序(或扩张)卷积、可分离(和深度方向可分离)卷积，最后是转置卷积。所有这些方法都可以用于 1D、2D 和 3D 样本，即使最广泛的应用是基于表示静态图像的二维(不考虑通道)矩阵。在同一节中，我们还讨论了如何使用池层来减少维度并提高对小平移的鲁棒性。</p>
 
 			<p class="normal">在下一章中，我们将讨论递归神经网络，它允许我们以比使用标准时间序列分析算法可获得的精确度高得多的精确度来模拟时间序列。</p>
 
@@ -539,17 +539,17 @@ model.compile(loss='categorical_crossentropy',
 
 			<ul>
 
-				<li class="list">斯通J. V .，<em class="italics">视觉和大脑:我们如何感知世界</em>，麻省理工学院出版社，2012年</li>
+				<li class="list">斯通 J. V .，<em class="italics">视觉和大脑:我们如何感知世界</em>，麻省理工学院出版社，2012 年</li>
 
-				<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版，2019</li>
+				<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0 快速入门指南</em>，Packt 出版，2019</li>
 
 				<li class="list">Sabour S .，Frosst N .，<em class="italics"> Hinton G. E .，</em>胶囊间动态路由，arXiv:1710.09829【cs。简历]</li>
 
 				<li class="list">Chollet F .，<em class="italics">例外:深度可分卷积深度学习</em>，arXiv:1610.02357【cs。简历]</li>
 
-				<li class="list">Goodfellow I .，Bengio Y .，库维尔a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2015年</li>
+				<li class="list">Goodfellow I .，Bengio Y .，库维尔 a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2015 年</li>
 
-				<li class="list">Zipser D .，<em class="italics">神经信息处理系统的进展</em>，II，1990年</li>
+				<li class="list">Zipser D .，<em class="italics">神经信息处理系统的进展</em>，II，1990 年</li>
 
 				<li class="list">Masters D .，Luschi C .，<em class="italics">再谈深度神经网络的小批量训练</em>，arXiv:1804.07612【cs .LG]</li>
 

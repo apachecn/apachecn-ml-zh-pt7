@@ -5,197 +5,197 @@
 </head>
 <body>
 <div><div><h1 class="chapter-number" id="_idParaDest-171"><a id="_idTextAnchor225"/> 12</h1>
-<h1 id="_idParaDest-172"><a id="_idTextAnchor226"/>与H2O汽车公司和Apache Spark合作</h1>
-<p>在<a href="B17298_10.xhtml#_idTextAnchor196"> <em class="italic">第10章</em> </a>、<em class="italic">使用普通旧Java对象(POJO)</em>和<a href="B17298_11.xhtml#_idTextAnchor210"> <em class="italic">第11章</em> </a>、<em class="italic">使用模型对象，优化(MOJO) </em>中，我们探索了如何在生产系统中构建和部署我们的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型作为POJO和MOJO，并使用它们进行预测。在大多数现实世界的问题中，您将经常需要在生产中部署您的整个ML管道，以便您可以动态地部署和训练模型。您的系统还将收集和存储新数据，您可以稍后使用这些数据来重新训练您的模型。在这种情况下，您最终需要将您的H2O服务器集成到您的业务产品中，并协调ML工作。</p>
-<p>Apache Spark是ML领域中最常用的技术之一。它是一个分析引擎，用于使用集群计算进行大规模数据处理。它是完全开源的，并得到了Apache软件基金会的广泛支持。</p>
-<p>考虑到Spark在数据处理领域的受欢迎程度，H2O.ai开发了一个优雅的软件解决方案，将Spark和AutoML的优势结合到一个用于ML管道的一站式解决方案中。这个软件产品叫做H2O苏打水。</p>
-<p>在这一章中，我们将了解更多关于H2O苏打水的知识。首先，我们将了解Spark是什么以及它是如何工作的，然后继续了解H2O苏打水是如何与Spark一起操作H2O AutoML来解决快速数据处理需求的。</p>
+<h1 id="_idParaDest-172"><a id="_idTextAnchor226"/>与 H2O 汽车公司和 Apache Spark 合作</h1>
+<p>在<a href="B17298_10.xhtml#_idTextAnchor196"> <em class="italic">第 10 章</em> </a>、<em class="italic">使用普通旧 Java 对象(POJO)</em>和<a href="B17298_11.xhtml#_idTextAnchor210"> <em class="italic">第 11 章</em> </a>、<em class="italic">使用模型对象，优化(MOJO) </em>中，我们探索了如何在生产系统中构建和部署我们的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型作为 POJO 和 MOJO，并使用它们进行预测。在大多数现实世界的问题中，您将经常需要在生产中部署您的整个 ML 管道，以便您可以动态地部署和训练模型。您的系统还将收集和存储新数据，您可以稍后使用这些数据来重新训练您的模型。在这种情况下，您最终需要将您的 H2O 服务器集成到您的业务产品中，并协调 ML 工作。</p>
+<p>Apache Spark 是 ML 领域中最常用的技术之一。它是一个分析引擎，用于使用集群计算进行大规模数据处理。它是完全开源的，并得到了 Apache 软件基金会的广泛支持。</p>
+<p>考虑到 Spark 在数据处理领域的受欢迎程度，H2O.ai 开发了一个优雅的软件解决方案，将 Spark 和 AutoML 的优势结合到一个用于 ML 管道的一站式解决方案中。这个软件产品叫做 H2O 苏打水。</p>
+<p>在这一章中，我们将了解更多关于 H2O 苏打水的知识。首先，我们将了解 Spark 是什么以及它是如何工作的，然后继续了解 H2O 苏打水是如何与 Spark 一起操作 H2O AutoML 来解决快速数据处理需求的。</p>
 <p>在本章中，我们将讨论以下主题:</p>
 <ul>
 <li>探索阿帕奇火花</li>
-<li>探索H2O苏打水</li>
+<li>探索 H2O 苏打水</li>
 </ul>
-<p>到本章结束时，你应该有一个总的想法，我们如何能够将H2O人工智能与使用H2O苏打水的Apache Spark结合起来，以及你如何能够从这两个世界中获益。</p>
+<p>到本章结束时，你应该有一个总的想法，我们如何能够将 H2O 人工智能与使用 H2O 苏打水的 Apache Spark 结合起来，以及你如何能够从这两个世界中获益。</p>
 <h1 id="_idParaDest-173"><a id="_idTextAnchor227"/>技术要求</h1>
 <p>对于本章，您将需要以下内容:</p>
 <ul>
-<li>您首选的web浏览器的最新版本。</li>
+<li>您首选的 web 浏览器的最新版本。</li>
 <li>您选择的<strong class="bold">集成开发环境</strong> ( <strong class="bold"> IDE </strong>)或终端。</li>
-<li>本章中进行的所有实验都是在终端上进行的。您可以自由地使用相同的设置，或者使用您选择的任何IDE执行相同的实验。</li>
+<li>本章中进行的所有实验都是在终端上进行的。您可以自由地使用相同的设置，或者使用您选择的任何 IDE 执行相同的实验。</li>
 </ul>
-<p>所以，让我们从了解Apache Spark到底是什么开始。</p>
+<p>所以，让我们从了解 Apache Spark 到底是什么开始。</p>
 <h1 id="_idParaDest-174"><a id="_idTextAnchor228"/>探索阿帕奇火花</h1>
-<p>Apache Spark <a id="_idIndexMarker1135"/>始于2009年加州大学伯克利分校AMPLab的一个项目。2010年，它在BSD许可下被开源。三年后的2013年，它被捐赠给Apache软件基金会，成为顶级项目。一年后，它被Databricks用于数据排序比赛，并创造了新的世界纪录。从那以后，它开始被广泛用于大数据行业的内存分布式数据分析。</p>
-<p>让我们看看Apache Spark的各个组件是什么，以及它们各自的功能。</p>
-<h2 id="_idParaDest-175"><a id="_idTextAnchor229"/>了解Apache Spark的组件</h2>
-<p><strong class="bold"> Apache Spark </strong>是一个开源数据处理引擎。它用于实时处理<a id="_idIndexMarker1136"/>数据，以及使用集群计算进行批处理。所有数据处理任务<a id="_idIndexMarker1137"/>都在内存中执行，使得任务执行速度非常快。Apache Spark的数据处理能力与H2O的AutoML功能相结合，可以使您的ML系统更加高效和强大。但是在我们深入研究H2O苏打水之前，让我们先了解一下Apache Spark是什么，它由什么组成。</p>
-<p>让我们先来了解一下Spark生态系统的<a id="_idIndexMarker1138"/>各种组件是什么:</p>
+<p>Apache Spark <a id="_idIndexMarker1135"/>始于 2009 年加州大学伯克利分校 AMPLab 的一个项目。2010 年，它在 BSD 许可下被开源。三年后的 2013 年，它被捐赠给 Apache 软件基金会，成为顶级项目。一年后，它被 Databricks 用于数据排序比赛，并创造了新的世界纪录。从那以后，它开始被广泛用于大数据行业的内存分布式数据分析。</p>
+<p>让我们看看 Apache Spark 的各个组件是什么，以及它们各自的功能。</p>
+<h2 id="_idParaDest-175"><a id="_idTextAnchor229"/>了解 Apache Spark 的组件</h2>
+<p><strong class="bold"> Apache Spark </strong>是一个开源数据处理引擎。它用于实时处理<a id="_idIndexMarker1136"/>数据，以及使用集群计算进行批处理。所有数据处理任务<a id="_idIndexMarker1137"/>都在内存中执行，使得任务执行速度非常快。Apache Spark 的数据处理能力与 H2O 的 AutoML 功能相结合，可以使您的 ML 系统更加高效和强大。但是在我们深入研究 H2O 苏打水之前，让我们先了解一下 Apache Spark 是什么，它由什么组成。</p>
+<p>让我们先来了解一下 Spark 生态系统的<a id="_idIndexMarker1138"/>各种组件是什么:</p>
 <div><div><img alt="Figure 12.1 – Apache Spark components  " height="402" src="img/B17298_12_001.jpg" width="845"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.1-Apache Spark组件</p>
-<p>Spark生态系统的各个组成部分如下:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.1-Apache Spark 组件</p>
+<p>Spark 生态系统的各个组成部分如下:</p>
 <ul>
-<li><strong class="bold">Spark Core</strong>:Spark Core<a id="_idIndexMarker1139"/>组件是Spark生态系统中最重要的组件。它负责基本功能，如输入输出操作、调度和监控作业。所有其他组件都构建在该组件之上。该组件使用特定的接口支持Scala、Java、Python和R编程语言。Spark核心组件本身是用Scala编程语言编写的。</li>
-<li><strong class="bold">Spark SQL</strong>:Spark SQL组件<a id="_idIndexMarker1140"/>用于利用SQL查询的能力对存储在Spark节点中的数据进行数据查询。</li>
+<li><strong class="bold">Spark Core</strong>:Spark Core<a id="_idIndexMarker1139"/>组件是 Spark 生态系统中最重要的组件。它负责基本功能，如输入输出操作、调度和监控作业。所有其他组件都构建在该组件之上。该组件使用特定的接口支持 Scala、Java、Python 和 R 编程语言。Spark 核心组件本身是用 Scala 编程语言编写的。</li>
+<li><strong class="bold">Spark SQL</strong>:Spark SQL 组件<a id="_idIndexMarker1140"/>用于利用 SQL 查询的能力对存储在 Spark 节点中的数据进行数据查询。</li>
 <li><strong class="bold">Spark Streaming</strong>:Spark Streaming<a id="_idIndexMarker1141"/>组件用于在同一个应用程序中批处理和流式传输数据。</li>
-<li><strong class="bold"> Spark MLlib </strong> : Spark MLlib是Spark <a id="_idIndexMarker1142"/>用来开发和部署可伸缩ML管道的ML库。它还用于执行ML分析任务，如特征提取、特征工程、维度缩减等。</li>
-<li><strong class="bold">GraphX</strong>:GraphX组件是一个库<a id="_idIndexMarker1143"/>，用于对基于图形的数据执行数据分析。它用于执行图形数据构造和遍历。</li>
-<li><strong class="bold">Spark R</strong>:Spark R组件是一个R包，提供了一个前端外壳，供用户通过R编程语言与Spark进行通信。R完成的所有数据处理都是在单个节点上进行的。这使得R不适合处理大量数据。Spark R组件通过使用底层的Spark集群，帮助用户以分布式的方式在巨大的数据集上执行这些数据操作。</li>
+<li><strong class="bold"> Spark MLlib </strong> : Spark MLlib 是 Spark <a id="_idIndexMarker1142"/>用来开发和部署可伸缩 ML 管道的 ML 库。它还用于执行 ML 分析任务，如特征提取、特征工程、维度缩减等。</li>
+<li><strong class="bold">GraphX</strong>:GraphX 组件是一个库<a id="_idIndexMarker1143"/>，用于对基于图形的数据执行数据分析。它用于执行图形数据构造和遍历。</li>
+<li><strong class="bold">Spark R</strong>:Spark R 组件是一个 R 包，提供了一个前端外壳，供用户通过 R 编程语言与 Spark 进行通信。R 完成的所有数据处理都是在单个节点上进行的。这使得 R 不适合处理大量数据。Spark R 组件通过使用底层的 Spark 集群，帮助用户以分布式的方式在巨大的数据集上执行这些数据操作。</li>
 </ul>
-<h2 id="_idParaDest-176"><a id="_idTextAnchor230"/>了解Apache Spark架构</h2>
-<p>Apache Spark拥有定义良好的<a id="_idIndexMarker1144"/>架构。如前所述，Spark运行在集群系统上。在这个集群中，将有一个节点被指定为主节点，而其他节点充当工作节点。所有这些工作都是由worker节点中的独立进程执行的，并且由Spark上下文来协调联合工作。</p>
-<p>参考下图，更好地理解Apache Spark架构:</p>
+<h2 id="_idParaDest-176"><a id="_idTextAnchor230"/>了解 Apache Spark 架构</h2>
+<p>Apache Spark 拥有定义良好的<a id="_idIndexMarker1144"/>架构。如前所述，Spark 运行在集群系统上。在这个集群中，将有一个节点被指定为主节点，而其他节点充当工作节点。所有这些工作都是由 worker 节点中的独立进程执行的，并且由 Spark 上下文来协调联合工作。</p>
+<p>参考下图，更好地理解 Apache Spark 架构:</p>
 <div><div><img alt="Figure 12.2 – Apache Spark architecture  " height="867" src="img/B17298_12_002.jpg" width="1650"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.2–Apache Spark架构</p>
-<p>Spark架构包括以下组件:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.2–Apache Spark 架构</p>
+<p>Spark 架构包括以下组件:</p>
 <ul>
-<li><strong class="bold"> Spark集群管理器</strong>:Spark集群管理器<a id="_idIndexMarker1145"/>负责管理<a id="_idIndexMarker1146"/>节点的资源分配，并监控它们的健康状况。它负责维护运行Spark应用程序的机器集群。当您启动Spark应用程序时，集群管理器将根据指定的配置启动集群中的不同节点，并重新启动在执行过程中失败的任何服务。</li>
+<li><strong class="bold"> Spark 集群管理器</strong>:Spark 集群管理器<a id="_idIndexMarker1145"/>负责管理<a id="_idIndexMarker1146"/>节点的资源分配，并监控它们的健康状况。它负责维护运行 Spark 应用程序的机器集群。当您启动 Spark 应用程序时，集群管理器将根据指定的配置启动集群中的不同节点，并重新启动在执行过程中失败的任何服务。</li>
 </ul>
-<p>Spark集群管理器有三种类型:</p>
+<p>Spark 集群管理器有三种类型:</p>
 <ul>
-<li>这是一个简单的集群管理器，与Spark捆绑在一起，非常容易设置和使用。</li>
-<li><strong class="bold"> Hadoop YARN </strong> : <strong class="bold">另一个资源协商者</strong> ( <strong class="bold"> YARN </strong>)是Hadoop生态系统自带的资源管理器<a id="_idIndexMarker1148"/>。Spark作为一个数据处理<a id="_idIndexMarker1150"/>系统，可以与许多数据存储系统集成。<strong class="bold"> Hadoop分布式文件系统</strong> ( <strong class="bold"> HDFS </strong>)是大数据行业中最常用的分布式文件系统之一，将Spark与HDFS一起使用已经成为公司中的常见设置。由于YARN附带了Hadoop生态系统，您可以使用相同的资源管理器来管理您的Spark资源。</li>
-<li><strong class="bold"> Kubernetes </strong> : Kubernetes是一个开源容器<a id="_idIndexMarker1151"/>编排系统，用于自动化<a id="_idIndexMarker1152"/>部署操作、扩展服务和其他形式的服务器管理。Kubernetes还能够管理Spark集群资源。</li>
+<li>这是一个简单的集群管理器，与 Spark 捆绑在一起，非常容易设置和使用。</li>
+<li><strong class="bold"> Hadoop YARN </strong> : <strong class="bold">另一个资源协商者</strong> ( <strong class="bold"> YARN </strong>)是 Hadoop 生态系统自带的资源管理器<a id="_idIndexMarker1148"/>。Spark 作为一个数据处理<a id="_idIndexMarker1150"/>系统，可以与许多数据存储系统集成。<strong class="bold"> Hadoop 分布式文件系统</strong> ( <strong class="bold"> HDFS </strong>)是大数据行业中最常用的分布式文件系统之一，将 Spark 与 HDFS 一起使用已经成为公司中的常见设置。由于 YARN 附带了 Hadoop 生态系统，您可以使用相同的资源管理器来管理您的 Spark 资源。</li>
+<li><strong class="bold"> Kubernetes </strong> : Kubernetes 是一个开源容器<a id="_idIndexMarker1151"/>编排系统，用于自动化<a id="_idIndexMarker1152"/>部署操作、扩展服务和其他形式的服务器管理。Kubernetes 还能够管理 Spark 集群资源。</li>
 </ul>
 <ul>
-<li><strong class="bold">火花驱动</strong>:火花驱动是火花<a id="_idIndexMarker1154"/>应用的主程序<a id="_idIndexMarker1153"/>。它负责控制应用程序的执行，跟踪节点的不同状态，以及分配给每个节点的任务。这个程序可以是你运行的任何脚本，甚至是Spark接口。</li>
-<li><strong class="bold"> Spark执行器</strong>:Spark执行器<a id="_idIndexMarker1155"/>是在worker节点上执行<a id="_idIndexMarker1156"/>计算任务的实际进程。它们是非常简单的过程，目的是接受分配的任务，计算它，然后将结果发送回Spark上下文。</li>
-<li><strong class="bold">Spark Context</strong>:Spark Context，顾名思义，跟踪执行的上下文<a id="_idIndexMarker1158"/>。Spark驱动程序执行的任何命令都要经过这个上下文。Spark上下文与Spark集群管理器通信，以便与正确的执行器协调执行活动。</li>
+<li><strong class="bold">火花驱动</strong>:火花驱动是火花<a id="_idIndexMarker1154"/>应用的主程序<a id="_idIndexMarker1153"/>。它负责控制应用程序的执行，跟踪节点的不同状态，以及分配给每个节点的任务。这个程序可以是你运行的任何脚本，甚至是 Spark 接口。</li>
+<li><strong class="bold"> Spark 执行器</strong>:Spark 执行器<a id="_idIndexMarker1155"/>是在 worker 节点上执行<a id="_idIndexMarker1156"/>计算任务的实际进程。它们是非常简单的过程，目的是接受分配的任务，计算它，然后将结果发送回 Spark 上下文。</li>
+<li><strong class="bold">Spark Context</strong>:Spark Context，顾名思义，跟踪执行的上下文<a id="_idIndexMarker1158"/>。Spark 驱动程序执行的任何命令都要经过这个上下文。Spark 上下文与 Spark 集群管理器通信，以便与正确的执行器协调执行活动。</li>
 </ul>
-<p>Spark驱动程序是管理集群上操作的并行执行的主要功能。驱动程序使用一种叫做<strong class="bold">弹性分布式数据集</strong> ( <strong class="bold"> RDD </strong>)的数据结构来实现这一点。</p>
+<p>Spark 驱动程序是管理集群上操作的并行执行的主要功能。驱动程序使用一种叫做<strong class="bold">弹性分布式数据集</strong> ( <strong class="bold"> RDD </strong>)的数据结构来实现这一点。</p>
 <h2 id="_idParaDest-177"><a id="_idTextAnchor232"/>了解什么是弹性分布式数据集</h2>
-<p>阿帕奇火花<a id="_idIndexMarker1159"/>是在<strong class="bold"> RDD </strong>的基础上打造的。它是驻留在多个节点上的数据的容错记录，并且是不可变的。你在Spark中所做的一切都是使用RDD完成的。因为它是不可变的，你做的任何转换最终都会创造一个新的RDD。rdd被划分成逻辑集，然后分布在Spark节点中执行。Spark在内部处理所有这些分配。</p>
-<p>让我们了解Spark如何使用rdd来大规模执行数据处理。请参考下图:</p>
+<p>阿帕奇火花<a id="_idIndexMarker1159"/>是在<strong class="bold"> RDD </strong>的基础上打造的。它是驻留在多个节点上的数据的容错记录，并且是不可变的。你在 Spark 中所做的一切都是使用 RDD 完成的。因为它是不可变的，你做的任何转换最终都会创造一个新的 RDD。rdd 被划分成逻辑集，然后分布在 Spark 节点中执行。Spark 在内部处理所有这些分配。</p>
+<p>让我们了解 Spark 如何使用 rdd 来大规模执行数据处理。请参考下图:</p>
 <div><div><img alt="Figure 12.3 – Linear RDD transformations  " height="825" src="img/B17298_12_003.jpg" width="1367"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.3–线性RDD变换</p>
-<p>因此，rdd是不可变的，这意味着一旦数据集被创建，就不能被修改。因此，如果您想要在数据集中进行更改，Spark将从现有的RDD创建一个新的RDD，并跟踪这些更改。这里，您的初始数据存储在<strong class="bold"> RDD 1 </strong>中，因此您必须假设您需要删除一列并将另一列的类型从字符串转换为数字。Spark将创建<strong class="bold"> RDD 2 </strong>，它将包含这些更改，并记录它所做的更改。最终，当您进一步转换数据时，Spark将包含许多rdd。</p>
-<p>您可能想知道如果需要对数据执行许多转换会发生什么；Spark会创建那么多RRD并最终耗尽内存吗？记住，RDD是弹性的和不可变的，所以如果你已经从<strong class="bold"> RDD 2、</strong>创建了<strong class="bold"> RDD 3、</strong>，那么你只需要保留<strong class="bold"> RDD2 </strong>和从<strong class="bold"> RDD 2 </strong>到<strong class="bold"> RDD 3的数据转换过程。你将不再需要<strong class="bold"> RDD 1 </strong>，这样就可以移除它以释放空间。Spark会为您完成所有的内存管理工作。它将删除任何不需要的rdd。</strong></p>
-<p>对于一个简单的问题，这是一个非常简单的解释。如果您从同一个RDD中创建多个包含不同转换的rdd会怎么样呢？这可以从下图中看出:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.3–线性 RDD 变换</p>
+<p>因此，rdd 是不可变的，这意味着一旦数据集被创建，就不能被修改。因此，如果您想要在数据集中进行更改，Spark 将从现有的 RDD 创建一个新的 RDD，并跟踪这些更改。这里，您的初始数据存储在<strong class="bold"> RDD 1 </strong>中，因此您必须假设您需要删除一列并将另一列的类型从字符串转换为数字。Spark 将创建<strong class="bold"> RDD 2 </strong>，它将包含这些更改，并记录它所做的更改。最终，当您进一步转换数据时，Spark 将包含许多 rdd。</p>
+<p>您可能想知道如果需要对数据执行许多转换会发生什么；Spark 会创建那么多 RRD 并最终耗尽内存吗？记住，RDD 是弹性的和不可变的，所以如果你已经从<strong class="bold"> RDD 2、</strong>创建了<strong class="bold"> RDD 3、</strong>，那么你只需要保留<strong class="bold"> RDD2 </strong>和从<strong class="bold"> RDD 2 </strong>到<strong class="bold"> RDD 3 的数据转换过程。你将不再需要<strong class="bold"> RDD 1 </strong>，这样就可以移除它以释放空间。Spark 会为您完成所有的内存管理工作。它将删除任何不需要的 rdd。</strong></p>
+<p>对于一个简单的问题，这是一个非常简单的解释。如果您从同一个 RDD 中创建多个包含不同转换的 rdd 会怎么样呢？这可以从下图中看出:</p>
 <div><div><img alt="Figure 12.4 – Branched RDD transformations  " height="996" src="img/B17298_12_004.jpg" width="1650"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.4–分支RDD变换</p>
-<p>在这种情况下，您将需要<a id="_idIndexMarker1161"/>来保存所有的rdd。这就是Spark的<strong class="bold">懒评</strong>发挥作用的地方。惰性求值是一种求值技术，其中求值表达式被延迟到需要结果值的时候。让我们通过研究RDD的运营来更好地理解这一点。有两种类型的操作:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.4–分支 RDD 变换</p>
+<p>在这种情况下，您将需要<a id="_idIndexMarker1161"/>来保存所有的 rdd。这就是 Spark 的<strong class="bold">懒评</strong>发挥作用的地方。惰性求值是一种求值技术，其中求值表达式被延迟到需要结果值的时候。让我们通过研究 RDD 的运营来更好地理解这一点。有两种类型的操作:</p>
 <ul>
-<li><strong class="bold">转换</strong>:转换<a id="_idIndexMarker1162"/>是从包含数据集中变化的现有RDD中产生<a id="_idIndexMarker1163"/>新RDD的操作。这些操作主要包括将原始数据集转换为可用于提取评估指标或其他流程的精确最终数据集。这主要涉及数据操作，如union操作或groupby操作。</li>
-<li><strong class="bold">动作</strong>:动作是以<a id="_idIndexMarker1164"/>一个RDD作为输入，但不产生<a id="_idIndexMarker1165"/>一个新的RDD作为输出的操作。从动作操作得到的输出值被发送回驱动程序。这主要涉及诸如count或aggregate之类的操作，count返回RDD中元素的数量，aggregate对RDD的内容执行聚合操作并将结果发送回来。</li>
+<li><strong class="bold">转换</strong>:转换<a id="_idIndexMarker1162"/>是从包含数据集中变化的现有 RDD 中产生<a id="_idIndexMarker1163"/>新 RDD 的操作。这些操作主要包括将原始数据集转换为可用于提取评估指标或其他流程的精确最终数据集。这主要涉及数据操作，如 union 操作或 groupby 操作。</li>
+<li><strong class="bold">动作</strong>:动作是以<a id="_idIndexMarker1164"/>一个 RDD 作为输入，但不产生<a id="_idIndexMarker1165"/>一个新的 RDD 作为输出的操作。从动作操作得到的输出值被发送回驱动程序。这主要涉及诸如 count 或 aggregate 之类的操作，count 返回 RDD 中元素的数量，aggregate 对 RDD 的内容执行聚合操作并将结果发送回来。</li>
 </ul>
-<p>转换操作很懒。当在RDD上执行转换操作时，Spark会记下需要做什么，但不会立即去做。它只会在得到一个动作操作的时候才开始转换过程，因此得名懒求值。</p>
-<p>我们用一个简单的例子来了解一下整个<a id="_idIndexMarker1166"/>的过程。假设您有一个RDD，其中包含一家公司所有员工的原始数据集，并且您想要计算所有高级ML工程师的平均工资。你的转换操作是将所有ML工程师过滤成<strong class="bold"> RDD 2 </strong>然后再按资历进一步过滤成<strong class="bold"> RDD 3 </strong>当你将这个转换操作传递给Spark时，它不会创建<strong class="bold"> RDD 3 </strong>它只会记录下来。当它得到动作操作时——也就是计算平均工资时——懒惰评估开始起作用，Spark开始执行转换，并最终执行动作。</p>
-<p>惰性求值有助于Spark理解执行动作操作所需的转换操作，并在记住空间复杂性的同时找到最有效的转换方式。</p>
+<p>转换操作很懒。当在 RDD 上执行转换操作时，Spark 会记下需要做什么，但不会立即去做。它只会在得到一个动作操作的时候才开始转换过程，因此得名懒求值。</p>
+<p>我们用一个简单的例子来了解一下整个<a id="_idIndexMarker1166"/>的过程。假设您有一个 RDD，其中包含一家公司所有员工的原始数据集，并且您想要计算所有高级 ML 工程师的平均工资。你的转换操作是将所有 ML 工程师过滤成<strong class="bold"> RDD 2 </strong>然后再按资历进一步过滤成<strong class="bold"> RDD 3 </strong>当你将这个转换操作传递给 Spark 时，它不会创建<strong class="bold"> RDD 3 </strong>它只会记录下来。当它得到动作操作时——也就是计算平均工资时——懒惰评估开始起作用，Spark 开始执行转换，并最终执行动作。</p>
+<p>惰性求值有助于 Spark 理解执行动作操作所需的转换操作，并在记住空间复杂性的同时找到最有效的转换方式。</p>
 <p class="callout-heading">小费</p>
-<p class="callout">Spark是一项非常复杂和强大的技术。它提供了很大的灵活性，可以配置为最适合不同类型的数据处理需求。在本章中，我们只是探索了Apache Spark的冰山一角。如果您有兴趣全面了解Spark的功能，我强烈建议您研究Apache Spark <a id="_idIndexMarker1167"/>文档，该文档可以在<a href="https://spark.apache.org/">https://spark.apache.org/</a>找到。</p>
-<p>现在我们对Spark的工作原理有了一个基本的概念，让我们来理解H2O苏打水是如何结合H2O和Spark的。</p>
-<h1 id="_idParaDest-178"><a id="_idTextAnchor233"/>探索H2O苏打水</h1>
-<p><strong class="bold">苏打水</strong>是一款H2O产品，结合了<a id="_idIndexMarker1168"/>H2O的快速和可扩展ML与Apache Spark的分析能力。这两种技术的结合允许用户对数据管理进行SQL查询，将结果提供给H2O进行模型训练，构建模型并将其部署到生产中，然后使用它们进行预测。</p>
-<p>H2O苏打水的设计可以让你在普通的火花应用中运行H2O。它在Spark executors内部运行H2O服务器，这样H2O服务器就可以访问executors中存储的所有数据，以执行任何基于ML的计算。</p>
-<p>H2O和Spark之间的透明整合<a id="_idIndexMarker1169"/>提供了以下好处:</p>
+<p class="callout">Spark 是一项非常复杂和强大的技术。它提供了很大的灵活性，可以配置为最适合不同类型的数据处理需求。在本章中，我们只是探索了 Apache Spark 的冰山一角。如果您有兴趣全面了解 Spark 的功能，我强烈建议您研究 Apache Spark <a id="_idIndexMarker1167"/>文档，该文档可以在<a href="https://spark.apache.org/">https://spark.apache.org/</a>找到。</p>
+<p>现在我们对 Spark 的工作原理有了一个基本的概念，让我们来理解 H2O 苏打水是如何结合 H2O 和 Spark 的。</p>
+<h1 id="_idParaDest-178"><a id="_idTextAnchor233"/>探索 H2O 苏打水</h1>
+<p><strong class="bold">苏打水</strong>是一款 H2O 产品，结合了<a id="_idIndexMarker1168"/>H2O 的快速和可扩展 ML 与 Apache Spark 的分析能力。这两种技术的结合允许用户对数据管理进行 SQL 查询，将结果提供给 H2O 进行模型训练，构建模型并将其部署到生产中，然后使用它们进行预测。</p>
+<p>H2O 苏打水的设计可以让你在普通的火花应用中运行 H2O。它在 Spark executors 内部运行 H2O 服务器，这样 H2O 服务器就可以访问 executors 中存储的所有数据，以执行任何基于 ML 的计算。</p>
+<p>H2O 和 Spark 之间的透明整合<a id="_idIndexMarker1169"/>提供了以下好处:</p>
 <ul>
-<li>包括AutoML在内的H2O算法可用于Spark工作流</li>
-<li>特定于应用程序的数据结构可以在H2O和Spark之间转换和支持</li>
-<li>您可以在H2O ML算法中使用Spark RDDs作为数据集</li>
+<li>包括 AutoML 在内的 H2O 算法可用于 Spark 工作流</li>
+<li>特定于应用程序的数据结构可以在 H2O 和 Spark 之间转换和支持</li>
+<li>您可以在 H2O ML 算法中使用 Spark RDDs 作为数据集</li>
 </ul>
 <p>苏打水支持两种类型的后端:</p>
 <ul>
-<li><strong class="bold">内部后端</strong>:在这种类型的设置中，一旦H2O上下文初始化，H2O <a id="_idIndexMarker1170"/>应用程序就会在Spark executor内部启动。然后，H2O通过初始化每个执行器内部的键值存储和内存管理器来启动它的服务。将H2O苏打水作为内部后端部署是很容易的，但是如果Spark的集群管理器决定关闭任何一个执行器，那么在执行器中运行的H2O服务器也会被关闭。内部后端是H2O苏打水使用的默认设置。内部运行的H2O苏打水的结构如下:</li>
+<li><strong class="bold">内部后端</strong>:在这种类型的设置中，一旦 H2O 上下文初始化，H2O <a id="_idIndexMarker1170"/>应用程序就会在 Spark executor 内部启动。然后，H2O 通过初始化每个执行器内部的键值存储和内存管理器来启动它的服务。将 H2O 苏打水作为内部后端部署是很容易的，但是如果 Spark 的集群管理器决定关闭任何一个执行器，那么在执行器中运行的 H2O 服务器也会被关闭。内部后端是 H2O 苏打水使用的默认设置。内部运行的 H2O 苏打水的结构如下:</li>
 </ul>
 <div><div><img alt="Figure 12.5 – Sparkling Water internal backend architecture  " height="1069" src="img/B17298_12_005.jpg" width="1650"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.5–苏打水内部后端架构</p>
-<p>如您所见，H2O服务<a id="_idIndexMarker1171"/>驻留在每个Spark执行器内部。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.5–苏打水内部后端架构</p>
+<p>如您所见，H2O 服务<a id="_idIndexMarker1171"/>驻留在每个 Spark 执行器内部。</p>
 <ol>
-<li><strong class="bold">外部后端</strong>:在这种类型的设置中，H2O服务<a id="_idIndexMarker1172"/>与Spark执行器分开部署，H2O服务器和Spark执行器之间的通信由Spark驱动程序处理。H2O苏打水作为外部后端的架构工作如下:</li>
+<li><strong class="bold">外部后端</strong>:在这种类型的设置中，H2O 服务<a id="_idIndexMarker1172"/>与 Spark 执行器分开部署，H2O 服务器和 Spark 执行器之间的通信由 Spark 驱动程序处理。H2O 苏打水作为外部后端的架构工作如下:</li>
 </ol>
 <div><div><img alt="Figure 12.6 – Sparkling Water external backend architecture  " height="1214" src="img/B17298_12_006.jpg" width="1650"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.6–苏打水外部后端架构</p>
-<p>如您所见，H2O集群<a id="_idIndexMarker1173"/>是与Spark executor分开运行的。这种分离有好处，因为H2O集群不再受Spark执行器关闭的影响。然而，这增加了H2O驱动程序的开销，它需要协调H2O集群和Spark执行器之间的通信。</p>
-<p>尽管苏打水是建立在Spark的<a id="_idIndexMarker1174"/>之上，但是在使用苏打水集群中的H2O服务器执行计算时，它使用了H2OFrame。因此，在Spark RDD和H2OFrame之间有大量的数据交换和互换。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.6–苏打水外部后端架构</p>
+<p>如您所见，H2O 集群<a id="_idIndexMarker1173"/>是与 Spark executor 分开运行的。这种分离有好处，因为 H2O 集群不再受 Spark 执行器关闭的影响。然而，这增加了 H2O 驱动程序的开销，它需要协调 H2O 集群和 Spark 执行器之间的通信。</p>
+<p>尽管苏打水是建立在 Spark 的<a id="_idIndexMarker1174"/>之上，但是在使用苏打水集群中的 H2O 服务器执行计算时，它使用了 H2OFrame。因此，在 Spark RDD 和 H2OFrame 之间有大量的数据交换和互换。</p>
 <p>数据帧在不同类型之间转换如下:</p>
 <ul>
-<li><strong class="bold"> H2OFrame转换成RDD </strong>:当将H2OFrame <a id="_idIndexMarker1175"/>转换成RDD时，Sparkling Water不是将数据重新创建成不同的类型，而是在H2OFrame周围创建一个包装器，其作用类似于RDD API。这个包装器将所有基于RDD的操作解释为相同的H2OFrame操作。</li>
-<li><strong class="bold"> RDD转换成H2OFrame </strong>:将RDD转换成H2OFrame <a id="_idIndexMarker1176"/>包括评估RDD中的数据，然后将其转换成H2OFrame。然而，H2OFrame中的数据被严重压缩。H2O和Spark之间共享的数据取决于用于部署的后端类型。</li>
-<li>内部Sparkling Water后端中的数据共享:在内部Sparkling <a id="_idIndexMarker1177"/> Water后端中，由于<a id="_idIndexMarker1178"/>H2O服务是在Spark Executor内部启动的，因此Spark服务<a id="_idIndexMarker1179"/>和Executor内部的H2O服务都使用相同的<strong class="bold"> Java虚拟机</strong> ( <strong class="bold"> JVM </strong>)，这样，数据可以被两个服务访问。下图显示了内部苏打水后端的数据共享过程:</li>
+<li><strong class="bold"> H2OFrame 转换成 RDD </strong>:当将 H2OFrame <a id="_idIndexMarker1175"/>转换成 RDD 时，Sparkling Water 不是将数据重新创建成不同的类型，而是在 H2OFrame 周围创建一个包装器，其作用类似于 RDD API。这个包装器将所有基于 RDD 的操作解释为相同的 H2OFrame 操作。</li>
+<li><strong class="bold"> RDD 转换成 H2OFrame </strong>:将 RDD 转换成 H2OFrame <a id="_idIndexMarker1176"/>包括评估 RDD 中的数据，然后将其转换成 H2OFrame。然而，H2OFrame 中的数据被严重压缩。H2O 和 Spark 之间共享的数据取决于用于部署的后端类型。</li>
+<li>内部 Sparkling Water 后端中的数据共享:在内部 Sparkling <a id="_idIndexMarker1177"/> Water 后端中，由于<a id="_idIndexMarker1178"/>H2O 服务是在 Spark Executor 内部启动的，因此 Spark 服务<a id="_idIndexMarker1179"/>和 Executor 内部的 H2O 服务都使用相同的<strong class="bold"> Java 虚拟机</strong> ( <strong class="bold"> JVM </strong>)，这样，数据可以被两个服务访问。下图显示了内部苏打水后端的数据共享过程:</li>
 </ul>
 <div><div><img alt="Figure 12.7 – Data sharing in the internal Sparkling Water backend  " height="940" src="img/B17298_12_007.jpg" width="1650"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.7–内部苏打水后端的数据共享</p>
-<p>因为两个服务<a id="_idIndexMarker1180"/>在同一个执行器上，所以在两种类型之间转换数据帧时，需要<a id="_idIndexMarker1181"/>考虑内存。您将需要为Spark和H2O分配足够的内存来执行它们各自的操作。Spark将需要数据集的最小内存，以及用于您希望执行的任何转换的额外内存。此外，将rdd转换为H2OFrames将导致数据重复，因此建议将4x大的数据集用于H2O。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.7–内部苏打水后端的数据共享</p>
+<p>因为两个服务<a id="_idIndexMarker1180"/>在同一个执行器上，所以在两种类型之间转换数据帧时，需要<a id="_idIndexMarker1181"/>考虑内存。您将需要为 Spark 和 H2O 分配足够的内存来执行它们各自的操作。Spark 将需要数据集的最小内存，以及用于您希望执行的任何转换的额外内存。此外，将 rdd 转换为 H2OFrames 将导致数据重复，因此建议将 4x 大的数据集用于 H2O。</p>
 <ul>
-<li><strong class="bold">外部苏打水后端</strong>中的数据共享:在外部<a id="_idIndexMarker1182"/>苏打水<a id="_idIndexMarker1183"/>后端中，H2O服务在一个独立于Spark Executor的集群中启动。因此，通过网络将数据从一个集群传输到另一个集群会产生额外的开销。下图应该有助于您理解这一点:</li>
+<li><strong class="bold">外部苏打水后端</strong>中的数据共享:在外部<a id="_idIndexMarker1182"/>苏打水<a id="_idIndexMarker1183"/>后端中，H2O 服务在一个独立于 Spark Executor 的集群中启动。因此，通过网络将数据从一个集群传输到另一个集群会产生额外的开销。下图应该有助于您理解这一点:</li>
 </ul>
 <div><div><img alt="Figure 12.8 – Data sharing in the external Sparkling Water backend  " height="284" src="img/B17298_12_008.jpg" width="570"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.8–外部苏打水后端的数据共享</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.8–外部苏打水后端的数据共享</p>
 <p>由于两个服务<a id="_idIndexMarker1184"/>都驻留在它们自己的<a id="_idIndexMarker1185"/>集群中(如果你已经为各自的集群分配了足够的内存)，你不需要担心内存限制。</p>
 <p class="callout-heading">小费</p>
-<p class="callout">H2O苏打水可以在不同类型的平台上以不同的方式运行。如果您有兴趣了解更多关于部署H2O苏打水的各种方法，以及获得更多关于其后端的信息，请随时查看<a href="https://docs.h2o.ai/sparkling-water/3.2/latest-stable/doc/design/supported_platforms.xhtml">https://docs . H2O . ai/Sparkling-Water/3.2/latest-stable/doc/design/supported _ platforms . XHTML</a>。</p>
-<p>现在我们知道了H2O苏打水是如何工作的，让我们看看如何下载和安装它。</p>
-<h2 id="_idParaDest-179"><a id="_idTextAnchor234"/>下载并安装H2O苏打水</h2>
-<p>H2O苏打水有一些特殊的要求，需要满足后才能安装到您的系统上。安装H2O汽水版本3.36的要求<a id="_idIndexMarker1187"/>如下:</p>
+<p class="callout">H2O 苏打水可以在不同类型的平台上以不同的方式运行。如果您有兴趣了解更多关于部署 H2O 苏打水的各种方法，以及获得更多关于其后端的信息，请随时查看<a href="https://docs.h2o.ai/sparkling-water/3.2/latest-stable/doc/design/supported_platforms.xhtml">https://docs . H2O . ai/Sparkling-Water/3.2/latest-stable/doc/design/supported _ platforms . XHTML</a>。</p>
+<p>现在我们知道了 H2O 苏打水是如何工作的，让我们看看如何下载和安装它。</p>
+<h2 id="_idParaDest-179"><a id="_idTextAnchor234"/>下载并安装 H2O 苏打水</h2>
+<p>H2O 苏打水有一些特殊的要求，需要满足后才能安装到您的系统上。安装 H2O 汽水版本 3.36 的要求<a id="_idIndexMarker1187"/>如下:</p>
 <ul>
-<li><strong class="bold">操作系统</strong> : H2O苏打水仅支持Linux、macOS和Windows。</li>
-<li><strong class="bold"> Java版本</strong> : H2O苏打水支持Java 1.8以上的所有Java版本。</li>
-<li><strong class="bold"> Python版本</strong>:如果你打算使用Python版本的Sparkling Water，也就是PySparkling，那么你需要在你的系统上安装一个Python版本<a id="_idIndexMarker1188"/>ABO<a id="_idTextAnchor235"/>ve 3.6。</li>
-<li><strong class="bold"> H2O版本</strong> : H2O汽水版本3.36.1要求您的系统上安装相同版本的H2O。然而，H2O苏打水预先包装了一个兼容的H2O版本，所以你不需要单独安装H2O来使用H2O苏打水。</li>
-<li><strong class="bold"> Spark版本</strong> : H2O苏打水3.36.1版本严格支持Spark 3.2。任何高于或低于3.2版本的火花可能会导致安装或H2O苏打水如何工作的问题。Spark 3.2有自己的依赖项，如下所示:<ul><li><strong class="bold"> Java版本</strong> : Spark 3.2严格支持Java 8和Java 11</li><li><strong class="bold"> Scala版本</strong> : Spark 3.2严格运行在Scala 2.12/2.13上</li><li><strong class="bold"> R版本</strong> : Spark 3.2支持3.5以上的任何R版本</li><li><strong class="bold"> Python版本</strong> : Spark 3.2支持3.6以上的任何Python版本</li></ul></li>
-<li><code>SPARK_HOME</code>指向本地Spark 3.2安装的环境变量。</li>
+<li><strong class="bold">操作系统</strong> : H2O 苏打水仅支持 Linux、macOS 和 Windows。</li>
+<li><strong class="bold"> Java 版本</strong> : H2O 苏打水支持 Java 1.8 以上的所有 Java 版本。</li>
+<li><strong class="bold"> Python 版本</strong>:如果你打算使用 Python 版本的 Sparkling Water，也就是 PySparkling，那么你需要在你的系统上安装一个 Python 版本<a id="_idIndexMarker1188"/>ABO<a id="_idTextAnchor235"/>ve 3.6。</li>
+<li><strong class="bold"> H2O 版本</strong> : H2O 汽水版本 3.36.1 要求您的系统上安装相同版本的 H2O。然而，H2O 苏打水预先包装了一个兼容的 H2O 版本，所以你不需要单独安装 H2O 来使用 H2O 苏打水。</li>
+<li><strong class="bold"> Spark 版本</strong> : H2O 苏打水 3.36.1 版本严格支持 Spark 3.2。任何高于或低于 3.2 版本的火花可能会导致安装或 H2O 苏打水如何工作的问题。Spark 3.2 有自己的依赖项，如下所示:<ul><li><strong class="bold"> Java 版本</strong> : Spark 3.2 严格支持 Java 8 和 Java 11</li><li><strong class="bold"> Scala 版本</strong> : Spark 3.2 严格运行在 Scala 2.12/2.13 上</li><li><strong class="bold"> R 版本</strong> : Spark 3.2 支持 3.5 以上的任何 R 版本</li><li><strong class="bold"> Python 版本</strong> : Spark 3.2 支持 3.6 以上的任何 Python 版本</li></ul></li>
+<li><code>SPARK_HOME</code>指向本地 Spark 3.2 安装的环境变量。</li>
 </ul>
-<p>现在，让我们设置我们的系统<a id="_idIndexMarker1189"/>，这样我们就可以下载<a id="_idIndexMarker1190"/>并安装H2O苏打水。按照以下步骤设置H2O苏打水:</p>
+<p>现在，让我们设置我们的系统<a id="_idIndexMarker1189"/>，这样我们就可以下载<a id="_idIndexMarker1190"/>并安装 H2O 苏打水。按照以下步骤设置 H2O 苏打水:</p>
 <ol>
-<li value="1">我们将从安装Java 11开始，Spark和H2O起泡<a id="_idIndexMarker1192"/>水都需要Java 11。尽管Spark也支持Java 8，但最好使用Java 11，因为它是更新的版本，有改进和安全补丁。您可以通过执行以下命令下载并安装Java 11:<pre><strong class="bold">sudo apt-get install openjdk-11-jdk</strong></pre></li>
-<li>或者，如果您希望使用PySparkling Python解释器，请安装Python 3.10版。您可以通过执行以下命令来实现这一点:<pre><strong class="bold">sudo apt install python3</strong></pre></li>
-<li>现在我们已经安装了基本语言，让我们继续下载并安装Spark版。您可以从Apache <a id="_idIndexMarker1193"/>软件基金会官方下载页面(https://www . Apache . org/dyn/closer . Lua/Spark/Spark-3 . 2 . 1/Spark-3 . 2 . 1-bin-Hadoop 3.2 . tgz)下载Spark的具体版本，或者直接在您的终端中运行以下命令:<pre><strong class="bold">wget https://downloads.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz</strong></pre></li>
+<li value="1">我们将从安装 Java 11 开始，Spark 和 H2O 起泡<a id="_idIndexMarker1192"/>水都需要 Java 11。尽管 Spark 也支持 Java 8，但最好使用 Java 11，因为它是更新的版本，有改进和安全补丁。您可以通过执行以下命令下载并安装 Java 11:<pre><strong class="bold">sudo apt-get install openjdk-11-jdk</strong></pre></li>
+<li>或者，如果您希望使用 PySparkling Python 解释器，请安装 Python 3.10 版。您可以通过执行以下命令来实现这一点:<pre><strong class="bold">sudo apt install python3</strong></pre></li>
+<li>现在我们已经安装了基本语言，让我们继续下载并安装 Spark 版。您可以从 Apache <a id="_idIndexMarker1193"/>软件基金会官方下载页面(https://www . Apache . org/dyn/closer . Lua/Spark/Spark-3 . 2 . 1/Spark-3 . 2 . 1-bin-Hadoop 3.2 . tgz)下载 Spark 的具体版本，或者直接在您的终端中运行以下命令:<pre><strong class="bold">wget https://downloads.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz</strong></pre></li>
 </ol>
-<p>如果你正在使用<strong class="bold"> Maven项目</strong>，那么你可以直接指定Spark <a id="_idIndexMarker1194"/>核心Maven依赖项，如下:</p>
+<p>如果你正在使用<strong class="bold"> Maven 项目</strong>，那么你可以直接指定 Spark <a id="_idIndexMarker1194"/>核心 Maven 依赖项，如下:</p>
 <pre>&lt;dependency&gt;
     &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;
     &lt;artifactId&gt;spark-core_2.13&lt;/artifactId&gt;
     &lt;version&gt;3.1.2&lt;/version&gt;
 &lt;/dependency&gt;</pre>
-<p>你可以在<a href="https://mvnrepository.com/artifact/org.apache.spark/spark-core">https://mvn repository . com/artifact/org . Apache . Spark/Spark-core</a>找到Spark的<a id="_idIndexMarker1195"/> Maven资源库。</p>
+<p>你可以在<a href="https://mvnrepository.com/artifact/org.apache.spark/spark-core">https://mvn repository . com/artifact/org . Apache . Spark/Spark-core</a>找到 Spark 的<a id="_idIndexMarker1195"/> Maven 资源库。</p>
 <ol>
 <li value="4">然后，您可以通过在终端中执行以下命令来提取<code>.tar</code>文件:<pre><strong class="bold">sudo tar xzvf spark-*</strong></pre></li>
-<li>现在我们已经提取了<a id="_idIndexMarker1196"/>Spark二进制文件，让我们设置我们的环境<a id="_idIndexMarker1197"/>变量，如下所示:<pre>export SPARK_HOME="/path/to/spark/installation"</pre></li>
-<li>我们还必须将<code>MASTER</code>环境变量设置为<code>local[*]</code>来启动一个本地Spark集群:<pre>export MASTER="local[*]"</pre></li>
-<li>现在我们已经安装并准备好了H2O苏打水的所有依赖项，让我们继续下载<a id="_idIndexMarker1198"/> H2O苏打水。你可以从https://h2o.ai/products/h2o-sparkling-water/下载最新版本。点击<strong class="bold">下载最新</strong>按钮，你会被重定向到H2O苏打水知识库网站，在那里你可以下载H2O苏打水版本<em class="italic"> 3.36 </em> ZIP文件。</li>
-<li>下载完成后，您可以在终端中执行以下命令来解压缩zip文件:<pre>unzip sparkling-water-*</pre></li>
-<li>您可以通过在您的苏打水安装文件夹中执行以下命令来启动H2O苏打水外壳，看看是否一切正常:<pre>bin/sparkling-shell</pre></li>
-<li>通过这样做，你可以通过在火花簇内启动一个H2O云来查看波光粼粼的水是否已经与火花结合。您可以通过在<code>sparkling-shell</code> : <pre>import ai.h2o.sparkling._ val h2oContext = H2OContext.getOrCreate()</pre>中执行以下命令来实现</li>
+<li>现在我们已经提取了<a id="_idIndexMarker1196"/>Spark 二进制文件，让我们设置我们的环境<a id="_idIndexMarker1197"/>变量，如下所示:<pre>export SPARK_HOME="/path/to/spark/installation"</pre></li>
+<li>我们还必须将<code>MASTER</code>环境变量设置为<code>local[*]</code>来启动一个本地 Spark 集群:<pre>export MASTER="local[*]"</pre></li>
+<li>现在我们已经安装并准备好了 H2O 苏打水的所有依赖项，让我们继续下载<a id="_idIndexMarker1198"/> H2O 苏打水。你可以从 https://h2o.ai/products/h2o-sparkling-water/下载最新版本。点击<strong class="bold">下载最新</strong>按钮，你会被重定向到 H2O 苏打水知识库网站，在那里你可以下载 H2O 苏打水版本<em class="italic"> 3.36 </em> ZIP 文件。</li>
+<li>下载完成后，您可以在终端中执行以下命令来解压缩 zip 文件:<pre>unzip sparkling-water-*</pre></li>
+<li>您可以通过在您的苏打水安装文件夹中执行以下命令来启动 H2O 苏打水外壳，看看是否一切正常:<pre>bin/sparkling-shell</pre></li>
+<li>通过这样做，你可以通过在火花簇内启动一个 H2O 云来查看波光粼粼的水是否已经与火花结合。您可以通过在<code>sparkling-shell</code> : <pre>import ai.h2o.sparkling._ val h2oContext = H2OContext.getOrCreate()</pre>中执行以下命令来实现</li>
 </ol>
 <p>您应该会得到类似如下的输出:</p>
 <div><div><img alt="Figure 12.9 – Successfully starting up H2O Sparkling Water  " height="441" src="img/B17298_12_009.jpg" width="622"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.9–成功启动H2O苏打水</p>
-<p>现在我们已经<a id="_idIndexMarker1199"/>成功下载并安装了Spark <a id="_idIndexMarker1200"/>和H2O苏打水，并确保两者都能正常工作，根据H2O.ai的文档，有一些通用的推荐调整<a id="_idIndexMarker1201"/>你必须做。让我们来看看:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.9–成功启动 H2O 苏打水</p>
+<p>现在我们已经<a id="_idIndexMarker1199"/>成功下载并安装了 Spark <a id="_idIndexMarker1200"/>和 H2O 苏打水，并确保两者都能正常工作，根据 H2O.ai 的文档，有一些通用的推荐调整<a id="_idIndexMarker1201"/>你必须做。让我们来看看:</p>
 <ul>
 <li>启动闪灵外壳时，从<code>config</code>参数的默认值增加火花驱动器和火花执行器的可用内存:<pre>bin/sparkling-shell --conf spark.executor.memory=4g spark.driver.memory=4g</pre></li>
 </ul>
-<p>如果你使用YARN或者你的集群管理器，那么使用<code>config spark.yarn.am.memory</code>而不是<code>spark.driver.memory</code>。您也可以通过设置<code>spark-defaults.conf</code>文件中的值，将这些值设置为默认配置属性。这可以在您的Spark安装文件中找到。</p>
+<p>如果你使用 YARN 或者你的集群管理器，那么使用<code>config spark.yarn.am.memory</code>而不是<code>spark.driver.memory</code>。您也可以通过设置<code>spark-defaults.conf</code>文件中的值，将这些值设置为默认配置属性。这可以在您的 Spark 安装文件中找到。</p>
 <ul>
-<li>除了集群<a id="_idIndexMarker1202"/>内存，还建议增加Spark节点的PermGen大小。默认的PermGen <a id="_idIndexMarker1203"/>大小通常很小，可能会导致<code>OutOfMemoryError</code>。<code>spark.driver.extraJavaOptions</code>和<code>spark.executor.extraJavaOptions</code>配置选项，如下:<pre>bin/sparkling-shell --conf spark.driver.extraJavaOptions -XX:MaxPermSize=384 -XX:PermSize=384m spark.executor.extraJavaOptions -XX:MaxPermSize=384 -XX:PermSize=384m</pre></li>
-<li>还建议保持集群的同质性——也就是说，Spark驱动程序和执行器分配了相同数量的资源。</li>
-<li>还建议使用以下配置来加速和稳定Spark集群上H2O服务的创建:<ul><li>增加等待以数据本地模式启动的任务的秒数，以便在本地使用数据处理H2O任务。您可以按如下方式进行设置:<pre>bin/sparkling-shell --conf spark.locality.wait=3000</pre></li><li>强制Spark仅在分配了100%的资源时才开始调度作业:<pre>bin/sparkling-shell --conf spark.scheduler.minRegisteredResourcesRatio=1</pre></li><li>不重试失败的任务:<pre>bin/sparkling-shell --conf spark.task.maxFailures=1</pre></li><li>将<a id="_idIndexMarker1204"/>每个执行器对驱动的心跳间隔设置为小于Spark的网络超时——即<code>spark.network.timeout</code>——默认值为<em class="italic"> 120秒</em>。因此，将心跳值设置为大约<em class="italic"> 10秒</em> : <pre>bin/sparkling-shell --conf spark.executor.heartbeatInterval=10s</pre></li></ul></li>
+<li>除了集群<a id="_idIndexMarker1202"/>内存，还建议增加 Spark 节点的 PermGen 大小。默认的 PermGen <a id="_idIndexMarker1203"/>大小通常很小，可能会导致<code>OutOfMemoryError</code>。<code>spark.driver.extraJavaOptions</code>和<code>spark.executor.extraJavaOptions</code>配置选项，如下:<pre>bin/sparkling-shell --conf spark.driver.extraJavaOptions -XX:MaxPermSize=384 -XX:PermSize=384m spark.executor.extraJavaOptions -XX:MaxPermSize=384 -XX:PermSize=384m</pre></li>
+<li>还建议保持集群的同质性——也就是说，Spark 驱动程序和执行器分配了相同数量的资源。</li>
+<li>还建议使用以下配置来加速和稳定 Spark 集群上 H2O 服务的创建:<ul><li>增加等待以数据本地模式启动的任务的秒数，以便在本地使用数据处理 H2O 任务。您可以按如下方式进行设置:<pre>bin/sparkling-shell --conf spark.locality.wait=3000</pre></li><li>强制 Spark 仅在分配了 100%的资源时才开始调度作业:<pre>bin/sparkling-shell --conf spark.scheduler.minRegisteredResourcesRatio=1</pre></li><li>不重试失败的任务:<pre>bin/sparkling-shell --conf spark.task.maxFailures=1</pre></li><li>将<a id="_idIndexMarker1204"/>每个执行器对驱动的心跳间隔设置为小于 Spark 的网络超时——即<code>spark.network.timeout</code>——默认值为<em class="italic"> 120 秒</em>。因此，将心跳值设置为大约<em class="italic"> 10 秒</em> : <pre>bin/sparkling-shell --conf spark.executor.heartbeatInterval=10s</pre></li></ul></li>
 </ul>
-<p>现在我们已经适当地配置了Spark和H2O苏打水，让我们看看如何使用这些技术来解决使用Spark和H2O AutoML的ML问题。</p>
-<h2 id="_idParaDest-180"><a id="_idTextAnchor236"/>使用H2O苏打水实施Spark和H2O AutoML</h2>
-<p>对于这个实验，我们将使用混凝土抗压强度数据集。你可以在https://archive . ics . UCI . edu/ml/datasets/Concrete+Compressive+Strength找到这个数据集。</p>
-<p>以下是关于数据集的更多详细信息:I-Cheng Yeh，<em class="italic">使用人工神经网络对高性能混凝土的强度进行建模</em>，水泥和混凝土研究，第28卷，第12期，第1797-1808页(1998年)。</p>
+<p>现在我们已经适当地配置了 Spark 和 H2O 苏打水，让我们看看如何使用这些技术来解决使用 Spark 和 H2O AutoML 的 ML 问题。</p>
+<h2 id="_idParaDest-180"><a id="_idTextAnchor236"/>使用 H2O 苏打水实施 Spark 和 H2O AutoML</h2>
+<p>对于这个实验，我们将使用混凝土抗压强度数据集。你可以在 https://archive . ics . UCI . edu/ml/datasets/Concrete+Compressive+Strength 找到这个数据集。</p>
+<p>以下是关于数据集的更多详细信息:I-Cheng Yeh，<em class="italic">使用人工神经网络对高性能混凝土的强度进行建模</em>，水泥和混凝土研究，第 28 卷，第 12 期，第 1797-1808 页(1998 年)。</p>
 <p>让我们从理解我们将使用的问题陈述开始。</p>
 <h3>理解问题陈述</h3>
 <p>混凝土抗压强度数据集<a id="_idIndexMarker1210"/>是一个由<em class="italic">1030</em>个数据点组成的数据集，包括以下特征:</p>
 <ul>
-<li><strong class="bold">水泥</strong>:该特征表示以kg为单位在m3混合物中加入的水泥量</li>
+<li><strong class="bold">水泥</strong>:该特征表示以 kg 为单位在 m3 混合物中加入的水泥量</li>
 <li><strong class="bold">高炉渣</strong>:该特征表示以千克为单位的混合物中加入的炉渣量</li>
 <li><strong class="bold">飞灰</strong>:此特征表示混合物中添加的飞灰量，单位为千克/立方米</li>
 <li><strong class="bold">水</strong>:该特性表示混合物中加入的水量，单位为千克/立方米</li>
@@ -205,75 +205,75 @@
 <li><strong class="bold">龄期</strong>:该特征表示水泥的龄期</li>
 <li><strong class="bold">混凝土抗压强度</strong>:该特征表示混凝土的抗压强度，单位为<strong class="bold">兆帕</strong> ( <strong class="bold">兆帕</strong>)</li>
 </ul>
-<p>ML问题<a id="_idIndexMarker1211"/>就是利用所有的特征来预测混凝土的抗压强度。</p>
+<p>ML 问题<a id="_idIndexMarker1211"/>就是利用所有的特征来预测混凝土的抗压强度。</p>
 <p>数据集的内容如下:</p>
 <div><div><img alt="Figure 12.10 – Concrete Compressive Strength dataset sample  " height="434" src="img/B17298_12_010.jpg" width="560"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.10-混凝土抗压强度数据集样本</p>
-<p>那么，让我们看看如何使用H2O苏打水来解决这个问题。首先，我们将学习如何使用H2O AutoML和Spark训练模型。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.10-混凝土抗压强度数据集样本</p>
+<p>那么，让我们看看如何使用 H2O 苏打水来解决这个问题。首先，我们将学习如何使用 H2O AutoML 和 Spark 训练模型。</p>
 <h3>在波光粼粼的水中跑步训练</h3>
-<p>一旦<a id="_idIndexMarker1213"/>成功安装了Spark 3.2和H2O苏打水，以及<a id="_idIndexMarker1214"/>设置了正确的环境变量(<code>SPARK_HOME</code>和<code>MASTER</code>，您就可以开始模型训练过程。</p>
+<p>一旦<a id="_idIndexMarker1213"/>成功安装了 Spark 3.2 和 H2O 苏打水，以及<a id="_idIndexMarker1214"/>设置了正确的环境变量(<code>SPARK_HOME</code>和<code>MASTER</code>，您就可以开始模型训练过程。</p>
 <p>请遵循以下步骤:</p>
 <ol>
-<li value="1">通过执行H2O汽水提取文件夹中的命令启动汽水外壳:<pre>./bin/sparkling-shell</pre></li>
+<li value="1">通过执行 H2O 汽水提取文件夹中的命令启动汽水外壳:<pre>./bin/sparkling-shell</pre></li>
 </ol>
-<p>这应该会在您的终端中启动一个Scala shell。输出应该如下所示:</p>
+<p>这应该会在您的终端中启动一个 Scala shell。输出应该如下所示:</p>
 <div><div><img alt="Figure 12.11 – Scala shell for H2O Sparkling Water  " height="751" src="img/B17298_12_011.jpg" width="1586"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.11–H2O苏打水的Scala外壳</p>
-<p>您还可以使用<code>PySparkling</code> shell在Python <a id="_idIndexMarker1216"/>中执行<a id="_idIndexMarker1215"/>相同的实验。您可以通过执行以下命令来启动<code>PySparkling</code> shell:</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.11–H2O 苏打水的 Scala 外壳</p>
+<p>您还可以使用<code>PySparkling</code> shell 在 Python <a id="_idIndexMarker1216"/>中执行<a id="_idIndexMarker1215"/>相同的实验。您可以通过执行以下命令来启动<code>PySparkling</code> shell:</p>
 <pre>./bin/PySparkling</pre>
 <p>您应该会得到类似如下的输出:</p>
 <div><div><img alt="Figure 12.12 – Python shell for H2O Sparkling Water  " height="239" src="img/B17298_12_012.jpg" width="683"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.12-H2O苏打水的Python外壳</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.12-H2O 苏打水的 Python 外壳</p>
 <ol>
-<li value="2">现在，我们需要在Spark环境中启动一个H2O集群<a id="_idIndexMarker1217"/>。我们可以<a id="_idIndexMarker1218"/>通过创建一个H2OContext，然后执行它的<code>getOrCreate()</code>函数来做到这一点。因此，在您闪亮的shell中执行以下代码，导入必要的依赖项并执行H2O上下文代码:<pre>import ai.h2o.sparkling._ import java.net.URI val h2oContext = H2OContext.getOrCreate()</pre></li>
+<li value="2">现在，我们需要在 Spark 环境中启动一个 H2O 集群<a id="_idIndexMarker1217"/>。我们可以<a id="_idIndexMarker1218"/>通过创建一个 H2OContext，然后执行它的<code>getOrCreate()</code>函数来做到这一点。因此，在您闪亮的 shell 中执行以下代码，导入必要的依赖项并执行 H2O 上下文代码:<pre>import ai.h2o.sparkling._ import java.net.URI val h2oContext = H2OContext.getOrCreate()</pre></li>
 </ol>
-<p>在PySparkling shell中，代码如下:</p>
+<p>在 PySparkling shell 中，代码如下:</p>
 <pre>from PySparkling import *
 h2oContext = H2OContext.getOrCreate()</pre>
-<p>您应该得到类似如下的输出，表明您的H2O上下文已经创建:</p>
+<p>您应该得到类似如下的输出，表明您的 H2O 上下文已经创建:</p>
 <div><div><img alt="Figure 12.13 – H2O context created successfully  " height="209" src="img/B17298_12_013.jpg" width="789"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.13–H2O上下文创建成功</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.13–H2O 上下文创建成功</p>
 <ol>
-<li value="3">现在，我们必须确保我们的混凝土抗压强度数据集可以在每个使用Spark内置文件I/O系统的节点上下载。因此，执行以下命令来导入数据集:<pre>import org.apache.spark.SparkFiles spark.sparkContext.addFile("/home/salil/Downloads/Concrete_Data.csv")</pre></li>
+<li value="3">现在，我们必须确保我们的混凝土抗压强度数据集可以在每个使用 Spark 内置文件 I/O 系统的节点上下载。因此，执行以下命令来导入数据集:<pre>import org.apache.spark.SparkFiles spark.sparkContext.addFile("/home/salil/Downloads/Concrete_Data.csv")</pre></li>
 </ol>
-<p>在PySparkling shell中，我们必须使用H2O的<code>import</code>函数<a id="_idIndexMarker1219"/>导入数据集<a id="_idIndexMarker1220"/>。Python代码如下所示:</p>
+<p>在 PySparkling shell 中，我们必须使用 H2O 的<code>import</code>函数<a id="_idIndexMarker1219"/>导入数据集<a id="_idIndexMarker1220"/>。Python 代码如下所示:</p>
 <pre>import h2o
 h2oFrame = h2o.import_file("/home/salil/Downloads/Concrete_Data.csv")</pre>
 <ol>
-<li value="4">添加之后，我们必须通过在Scala shell中执行以下命令将数据集解析成Spark数据帧:<pre>val sparkDataFrame = spark.read.option("header", "true").option("inferSchema", "true").csv(SparkFiles.get("Concrete_Data.csv"))</pre></li>
+<li value="4">添加之后，我们必须通过在 Scala shell 中执行以下命令将数据集解析成 Spark 数据帧:<pre>val sparkDataFrame = spark.read.option("header", "true").option("inferSchema", "true").csv(SparkFiles.get("Concrete_Data.csv"))</pre></li>
 </ol>
-<p>在PySparkling shell中，等效代码如下:</p>
+<p>在 PySparkling shell 中，等效代码如下:</p>
 <pre>sparkDataFrame = hc.asSparkFrame(h2oFrame)</pre>
 <ol>
-<li value="5">现在，<code>sparkDataFrame</code>包含了作为Spark数据框架的数据集。因此，让我们对其执行训练测试分割，将数据帧分割为测试和训练数据帧。您可以通过在Sparkling shell中执行以下命令来做到这一点:<pre>val Array(trainingDataFrame, testingDataFrame) = sparkDataFrame.randomSplit(Array(0.7, 0.3), seed=123)</pre></li>
+<li value="5">现在，<code>sparkDataFrame</code>包含了作为 Spark 数据框架的数据集。因此，让我们对其执行训练测试分割，将数据帧分割为测试和训练数据帧。您可以通过在 Sparkling shell 中执行以下命令来做到这一点:<pre>val Array(trainingDataFrame, testingDataFrame) = sparkDataFrame.randomSplit(Array(0.7, 0.3), seed=123)</pre></li>
 </ol>
-<p>在PySparkling shell中，执行以下命令:</p>
+<p>在 PySparkling shell 中，执行以下命令:</p>
 <pre>[trainingDataFrame, testingDataFrame] = sparkDataFrame.randomSplit([0.7, 0.3], seed=123)</pre>
 <ol>
-<li value="6">我们现在已经分别准备好<code>trainingDataFrame</code>和<code>testingDataFrame</code>进行训练和测试。让我们创建一个H2OAutoML实例来自动训练<code>trainingDataFrame</code>上的模型。执行以下命令来实例化一个H2O AutoML对象:<pre>import ai.h2o.sparkling.ml.algos.H2OAutoML val aml = new H2OAutoML()</pre></li>
+<li value="6">我们现在已经分别准备好<code>trainingDataFrame</code>和<code>testingDataFrame</code>进行训练和测试。让我们创建一个 H2OAutoML 实例来自动训练<code>trainingDataFrame</code>上的模型。执行以下命令来实例化一个 H2O AutoML 对象:<pre>import ai.h2o.sparkling.ml.algos.H2OAutoML val aml = new H2OAutoML()</pre></li>
 </ol>
-<p>在PySparkling中，当初始化H2O AutoML对象时，我们还设置了标签列。这方面的代码如下:</p>
+<p>在 PySparkling 中，当初始化 H2O AutoML 对象时，我们还设置了标签列。这方面的代码如下:</p>
 <pre>from PySparkling.ml import H2OAutoML
 aml = H2OAutoML(labelCol=" Concrete compressive strength ")</pre>
 <ol>
-<li value="7">让我们看看如何<a id="_idIndexMarker1221"/>设置数据集的标签<a id="_idIndexMarker1222"/>，以便AutoML对象知道数据帧中的哪些列将在Scala shell中被预测。执行以下命令:<pre>aml.setLabelCol("Concrete compressive strength")</pre></li>
+<li value="7">让我们看看如何<a id="_idIndexMarker1221"/>设置数据集的标签<a id="_idIndexMarker1222"/>，以便 AutoML 对象知道数据帧中的哪些列将在 Scala shell 中被预测。执行以下命令:<pre>aml.setLabelCol("Concrete compressive strength")</pre></li>
 </ol>
-<p>除非明确指定，否则H2O会将数据帧的所有列视为特征。但是，它将忽略设置为<strong class="bold">标签</strong>、<strong class="bold">折叠列</strong>、<strong class="bold">权重</strong>的列，或者任何其他显式设置的忽略列。</p>
-<p>H2O汽车公司根据回复<a id="_idIndexMarker1223"/>栏的类型区分回归和分类问题。如果响应列是一个字符串，那么H2O AutoML假定它是一个<code>ai.h2o.sparkling.ml.algos.classification.H2OAutoMLClassifier</code>对象或<code>ai.h2o.sparkling.ml.algos.regression.H2OAutoMLRegressor</code>对象而不是<code>ai.h2o.sparkling.ml.algos.H2OautoML</code>，正如我们在这个例子中所做的。</p>
+<p>除非明确指定，否则 H2O 会将数据帧的所有列视为特征。但是，它将忽略设置为<strong class="bold">标签</strong>、<strong class="bold">折叠列</strong>、<strong class="bold">权重</strong>的列，或者任何其他显式设置的忽略列。</p>
+<p>H2O 汽车公司根据回复<a id="_idIndexMarker1223"/>栏的类型区分回归和分类问题。如果响应列是一个字符串，那么 H2O AutoML 假定它是一个<code>ai.h2o.sparkling.ml.algos.classification.H2OAutoMLClassifier</code>对象或<code>ai.h2o.sparkling.ml.algos.regression.H2OAutoMLRegressor</code>对象而不是<code>ai.h2o.sparkling.ml.algos.H2OautoML</code>，正如我们在这个例子中所做的。</p>
 <ol>
-<li value="8">现在，让我们将AutoML模型训练限制到只有10个模型。执行以下命令:<pre>aml.setMaxModels(10)</pre></li>
+<li value="8">现在，让我们将 AutoML 模型训练限制到只有 10 个模型。执行以下命令:<pre>aml.setMaxModels(10)</pre></li>
 </ol>
-<p>这段代码的等效Python语法是相同的，所以在PySparkling shell中执行相同的命令。</p>
+<p>这段代码的等效 Python 语法是相同的，所以在 PySparkling shell 中执行相同的命令。</p>
 <ol>
-<li value="9">一旦我们设置好了AutoML对象，剩下的唯一事情就是触发训练。为此，执行以下命令:<pre>val model = aml.fit(trainingDataFrame)</pre></li>
+<li value="9">一旦我们设置好了 AutoML 对象，剩下的唯一事情就是触发训练。为此，执行以下命令:<pre>val model = aml.fit(trainingDataFrame)</pre></li>
 </ol>
 <p>Python <a id="_idIndexMarker1226"/>的等效代码<a id="_idIndexMarker1225"/>如下:</p>
 <pre>model = aml.fit(trainingDataFrame)</pre>
@@ -281,88 +281,88 @@ aml = H2OAutoML(labelCol=" Concrete compressive strength ")</pre>
 <div><div><img alt="Figure 12.14 – H2O AutoML result in H2O Sparkling Water  " height="445" src="img/B17298_12_014.jpg" width="552"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.14-H2O汽车公司在H2O汽水中的结果</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.14-H2O 汽车公司在 H2O 汽水中的结果</p>
 <p>如您所见，我们得到了一个堆叠的系综模型作为主模型，其下有模型关键字。在<strong class="bold">模型关键字</strong>下面是<strong class="bold">模型摘要</strong>，它包含培训和交叉验证指标。</p>
-<p>正如我们在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第2章</em> </a>、<em class="italic">使用H2O流(H2O的Web UI) </em>中所做的，我们没有为<code>aml</code>对象设置排序度量<a id="_idIndexMarker1227"/>，所以默认情况下，H2O AutoML将<a id="_idIndexMarker1228"/>使用默认度量。这将是<code>deviance</code>,因为它是一个<code>automl.setSortMetric()</code>,并传入您选择的排序度量。</p>
+<p>正如我们在<a href="B17298_02.xhtml#_idTextAnchor038"> <em class="italic">第 2 章</em> </a>、<em class="italic">使用 H2O 流(H2O 的 Web UI) </em>中所做的，我们没有为<code>aml</code>对象设置排序度量<a id="_idIndexMarker1227"/>，所以默认情况下，H2O AutoML 将<a id="_idIndexMarker1228"/>使用默认度量。这将是<code>deviance</code>,因为它是一个<code>automl.setSortMetric()</code>,并传入您选择的排序度量。</p>
 <ol>
 <li value="10">您还可以通过使用<code>getModelDetails()</code>功能获得模型的详细视图。执行以下命令:<pre>model.getModelDetails()</pre></li>
 </ol>
-<p>这个命令将在PySparkling和Scala shells上运行，并将输出关于模型元数据的非常详细的JSON。</p>
+<p>这个命令将在 PySparkling 和 Scala shells 上运行，并将输出关于模型元数据的非常详细的 JSON。</p>
 <ol>
-<li value="11">您也可以通过执行以下命令查看AutoML排行榜:<pre>val leaderboard = aml.getLeaderboard() leaderboard.show(false)</pre></li>
+<li value="11">您也可以通过执行以下命令查看 AutoML 排行榜:<pre>val leaderboard = aml.getLeaderboard() leaderboard.show(false)</pre></li>
 </ol>
-<p>PySparkling shell的等效Python代码如下:</p>
+<p>PySparkling shell 的等效 Python 代码如下:</p>
 <pre>leaderboard = aml.getLeaderboard("ALL")
 leaderboard.show(truncate = False)</pre>
 <p>您应该会得到类似如下的输出:</p>
 <div><div><img alt="Figure 12.15 – H2O AutoML leaderboard in H2O Sparkling Water  " height="290" src="img/B17298_12_015.jpg" width="1456"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.15-H2O苏打水H2O汽车排行榜</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.15-H2O 苏打水 H2O 汽车排行榜</p>
 <p>这将显示排行榜<a id="_idIndexMarker1230"/>,其中包含所有经过培训并根据分类标准进行排名的型号<a id="_idIndexMarker1231"/>。</p>
 <ol>
-<li value="12">用H2O苏打水做预测也很容易。预测功能被包装在一个简单易用的名为<code>transform</code>的包装函数中。执行以下代码，对测试数据帧进行预测:<pre>model.transform(testingDataFrame).show(false)</pre></li>
+<li value="12">用 H2O 苏打水做预测也很容易。预测功能被包装在一个简单易用的名为<code>transform</code>的包装函数中。执行以下代码，对测试数据帧进行预测:<pre>model.transform(testingDataFrame).show(false)</pre></li>
 </ol>
-<p>在PySparkling外壳中，略有不同。这里，您必须执行以下代码:</p>
+<p>在 PySparkling 外壳中，略有不同。这里，您必须执行以下代码:</p>
 <pre>model.transform(testingDataFrame).show(truncate = False)</pre>
 <p>您应该会得到类似如下的输出:</p>
 <div><div><img alt="Figure 12.16 – Prediction results combined with the testing DataFrame  " height="882" src="img/B17298_12_016.jpg" width="1596"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.16–预测结果与测试数据相结合</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.16–预测结果与测试数据相结合</p>
 <p><code>transform</code> <a id="_idIndexMarker1232"/>函数的输出显示了整个<strong class="bold">测试数据帧</strong>，在右侧<a id="_idIndexMarker1233"/>增加了两列，分别称为<strong class="bold">详细预测</strong>和<strong class="bold">预测</strong>。</p>
 <ol>
-<li value="13">现在，让我们下载这个模型作为一个MOJO，以便我们可以在下一个实验中使用它，在那里我们将看到H2O苏打水是如何加载和使用MOJO模型的。执行以下命令:<pre>model.write.save("model_dir")</pre></li>
+<li value="13">现在，让我们下载这个模型作为一个 MOJO，以便我们可以在下一个实验中使用它，在那里我们将看到 H2O 苏打水是如何加载和使用 MOJO 模型的。执行以下命令:<pre>model.write.save("model_dir")</pre></li>
 </ol>
-<p>这个命令对于Scala和Python shells都是一样的，应该在您指定的路径下下载model MOJO。如果您使用Hadoop文件系统作为Spark数据存储引擎，那么该命令默认使用HDFS。</p>
-<p>既然我们已经知道如何导入数据集、训练模型，并使用H2O苏打水进行预测，那么让我们更进一步，看看如何通过将现有的模型二进制文件(也称为MOJOs)加载到H2O苏打水并对其进行预测来重用它们。</p>
-<h3>在H2O汽水中使用模型魔咒做预测</h3>
-<p>当你用H2O苏打水训练模型<a id="_idIndexMarker1236"/>时，生成的模型<a id="_idIndexMarker1237"/>总是MOJO类型的。H2O苏打水可以加载由H2O-3生成的模型MOJOs，并且也向后兼容不同版本的H2O-3。您不需要创建H2O上下文来使用模型MOJOs进行预测，但是您需要一个评分环境。让我们通过完成一个实验来理解这一点。</p>
+<p>这个命令对于 Scala 和 Python shells 都是一样的，应该在您指定的路径下下载 model MOJO。如果您使用 Hadoop 文件系统作为 Spark 数据存储引擎，那么该命令默认使用 HDFS。</p>
+<p>既然我们已经知道如何导入数据集、训练模型，并使用 H2O 苏打水进行预测，那么让我们更进一步，看看如何通过将现有的模型二进制文件(也称为 MOJOs)加载到 H2O 苏打水并对其进行预测来重用它们。</p>
+<h3>在 H2O 汽水中使用模型魔咒做预测</h3>
+<p>当你用 H2O 苏打水训练模型<a id="_idIndexMarker1236"/>时，生成的模型<a id="_idIndexMarker1237"/>总是 MOJO 类型的。H2O 苏打水可以加载由 H2O-3 生成的模型 MOJOs，并且也向后兼容不同版本的 H2O-3。您不需要创建 H2O 上下文来使用模型 MOJOs 进行预测，但是您需要一个评分环境。让我们通过完成一个实验来理解这一点。</p>
 <p>请遵循以下步骤:</p>
 <ol>
-<li value="1">要使用导入的模型MOJOs进行预测，您需要一个评分环境。我们可以通过两种方式创造一个得分环境；让我们来看看:<ol><li>使用苏打水准备的脚本，它设置了加载MOJOs和在Spark类路径上进行预测所需的所有依赖项。请参考以下命令:</li></ol></li>
+<li value="1">要使用导入的模型 MOJOs 进行预测，您需要一个评分环境。我们可以通过两种方式创造一个得分环境；让我们来看看:<ol><li>使用苏打水准备的脚本，它设置了加载 MOJOs 和在 Spark 类路径上进行预测所需的所有依赖项。请参考以下命令:</li></ol></li>
 </ol>
-<p>以下命令适用于Scala shell:</p>
+<p>以下命令适用于 Scala shell:</p>
 <pre>./bin/spark-shell --jars jars/sparkling-water-assembly-scoring_2.12-3.36.1.3-1-3.2-all.jar</pre>
-<p>以下命令适用于Python shell:</p>
+<p>以下命令适用于 Python shell:</p>
 <pre>./bin/pyspark --py-files py/h2o_PySparkling_scoring_3.2-3.36.1.3-1-3.2.zip</pre>
 <ol>
-<li value="2">直接使用Spark，手动设置依赖关系。</li>
+<li value="2">直接使用 Spark，手动设置依赖关系。</li>
 </ol>
 <ol>
-<li value="2">一旦我们建立了评分环境，我们就可以加载模型MOJOs了。装入苏打水的模型魔咒是不可改变的。因此，一旦加载了模型，就不可能进行任何配置更改。但是，您可以在加载模型之前设置配置。您可以通过使用<code>H2OMOJOSettings()</code>功能来实现。参考下面的例子:<pre>import ai.h2o.sparkling.ml.models._ val modelConfigurationSettings = H2OMOJOSettings(convertInvalidNumbersToNa = true, convertUnknownCategoricalLevelsToNa = true)</pre></li>
+<li value="2">一旦我们建立了评分环境，我们就可以加载模型 MOJOs 了。装入苏打水的模型魔咒是不可改变的。因此，一旦加载了模型，就不可能进行任何配置更改。但是，您可以在加载模型之前设置配置。您可以通过使用<code>H2OMOJOSettings()</code>功能来实现。参考下面的例子:<pre>import ai.h2o.sparkling.ml.models._ val modelConfigurationSettings = H2OMOJOSettings(convertInvalidNumbersToNa = true, convertUnknownCategoricalLevelsToNa = true)</pre></li>
 </ol>
-<p>对于PySparkling，请参考以下<a id="_idIndexMarker1239"/>代码的<a id="_idIndexMarker1238"/>:</p>
+<p>对于 PySparkling，请参考以下<a id="_idIndexMarker1239"/>代码的<a id="_idIndexMarker1238"/>:</p>
 <pre>from PySparkling.ml import *
 val modelConfigurationSettings = H2OMOJOSettings(convertInvalidNumbersToNa = true, convertUnknownCategoricalLevelsToNa = true)</pre>
 <ol>
-<li value="3">一旦您设置了配置设置，您就可以使用<code>H2OMOJOModel</code>库中的<code>createFromMojo()</code>函数加载模型MOJO。因此，执行以下代码来加载您在<em class="italic">在苏打水中运行AutoML培训</em>部分中创建的模型MOJO，并传递配置设置:<pre>val loadedModel = H2OMOJOModel.createFromMojo("model_dir/model_mojo", modelConfigurationSettings)</pre></li>
+<li value="3">一旦您设置了配置设置，您就可以使用<code>H2OMOJOModel</code>库中的<code>createFromMojo()</code>函数加载模型 MOJO。因此，执行以下代码来加载您在<em class="italic">在苏打水中运行 AutoML 培训</em>部分中创建的模型 MOJO，并传递配置设置:<pre>val loadedModel = H2OMOJOModel.createFromMojo("model_dir/model_mojo", modelConfigurationSettings)</pre></li>
 </ol>
-<p>Python的对等用法如下:</p>
+<p>Python 的对等用法如下:</p>
 <pre>loadedModel = H2OMOJOModel.createFromMojo("model_dir/ model_mojo", modelConfigurationSettings)</pre>
-<p>如果您指定的模型MOJO路径作为一个相对路径，如果HDFS是启用的，苏打水将检查HDFS主目录；否则，它将从当前目录中搜索它。您还可以传递模型MOJO文件的绝对路径。</p>
-<p>您也可以手动指定您想要加载模型MOJO的位置。对于HDFS文件系统，您可以使用以下命令:</p>
+<p>如果您指定的模型 MOJO 路径作为一个相对路径，如果 HDFS 是启用的，苏打水将检查 HDFS 主目录；否则，它将从当前目录中搜索它。您还可以传递模型 MOJO 文件的绝对路径。</p>
+<p>您也可以手动指定您想要加载模型 MOJO 的位置。对于 HDFS 文件系统，您可以使用以下命令:</p>
 <pre>loadedModel = H2OMOJOModel.createFromMojo("hdfs:///user/salil/ model_mojo")</pre>
 <p>对于本地文件系统，您可以使用以下命令:</p>
 <pre>loadedModel = H2OMOJOModel.createFromMojo("file:///Users/salil/some_ model_mojo")</pre>
 <ol>
-<li value="4">一旦成功加载，您<a id="_idIndexMarker1240"/>可以简单地使用模型<a id="_idIndexMarker1241"/>进行预测，正如我们在<em class="italic">在气泡水中运行AutoML训练</em>部分所做的那样。因此，执行下面的命令，使用您最近加载的模型MOJO进行预测:<pre>val predictionResults = loadedModel.transform(testingDataframe)</pre></li>
+<li value="4">一旦成功加载，您<a id="_idIndexMarker1240"/>可以简单地使用模型<a id="_idIndexMarker1241"/>进行预测，正如我们在<em class="italic">在气泡水中运行 AutoML 训练</em>部分所做的那样。因此，执行下面的命令，使用您最近加载的模型 MOJO 进行预测:<pre>val predictionResults = loadedModel.transform(testingDataframe)</pre></li>
 <li>预测结果存储为另一个火花数据帧。因此，为了查看预测值，我们可以通过执行下面的命令来显示预测结果:<pre>predictionResults.show()</pre></li>
 </ol>
 <p>您应该会得到类似如下的输出:</p>
 <div><div><img alt="Figure 12.17 – Prediction results from the model MOJO  " height="452" src="img/B17298_12_017.jpg" width="1493"/>
 </div>
 </div>
-<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图12.17–来自模型MOJO的预测结果</p>
-<p>正如你所看到的，在加载MOJO时，我们特意将<code>withDetailedPredictionCol</code>设置为<code>False</code>。这就是为什么我们在预测结果中看不到详细的<code>_prediction_column</code>。</p>
+<p class="IMG---Caption" lang="en-US" xml:lang="en-US">图 12.17–来自模型 MOJO 的预测结果</p>
+<p>正如你所看到的，在加载 MOJO 时，我们特意将<code>withDetailedPredictionCol</code>设置为<code>False</code>。这就是为什么我们在预测结果中看不到详细的<code>_prediction_column</code>。</p>
 <p class="callout-heading">小费</p>
-<p class="callout">有很多配置，你可以设置加载H2O模型魔咒到苏打水。还有其他方法<a id="_idIndexMarker1242"/>可用于MOJO模型，有助于收集关于模型MOJO的更多信息。所有这些细节都可以在H2O的官方文档页面<a href="https://docs.h2o.ai/sparkling-water/3.2/latest-stable/doc/deployment/load_mojo.xhtml#loading-and-usage-of-h2o-3-mojo-model">https://docs . H2O . ai/sparkling-water/3.2/latest-stable/doc/deployment/load _ mojo . XHTML # loading-and-use-of-H2O-3-mojo-model</a>找到。</p>
-<p>祝贺你——你刚刚<a id="_idIndexMarker1243"/>学会了如何使用<a id="_idIndexMarker1244"/> Spark和H2O AutoML一起使用H2O苏打水。</p>
+<p class="callout">有很多配置，你可以设置加载 H2O 模型魔咒到苏打水。还有其他方法<a id="_idIndexMarker1242"/>可用于 MOJO 模型，有助于收集关于模型 MOJO 的更多信息。所有这些细节都可以在 H2O 的官方文档页面<a href="https://docs.h2o.ai/sparkling-water/3.2/latest-stable/doc/deployment/load_mojo.xhtml#loading-and-usage-of-h2o-3-mojo-model">https://docs . H2O . ai/sparkling-water/3.2/latest-stable/doc/deployment/load _ mojo . XHTML # loading-and-use-of-H2O-3-mojo-model</a>找到。</p>
+<p>祝贺你——你刚刚<a id="_idIndexMarker1243"/>学会了如何使用<a id="_idIndexMarker1244"/> Spark 和 H2O AutoML 一起使用 H2O 苏打水。</p>
 <h1 id="_idParaDest-181"><a id="_idTextAnchor238"/>总结</h1>
-<p>在这一章中，我们学习了如何使用H2O AutoML与阿帕奇火花使用H2O系统称为H2O苏打水。我们从了解什么是Apache Spark开始。我们研究了构成Spark软件的各种组件。然后，我们深入研究了它的架构，了解了它如何使用一组计算机来执行数据分析。我们研究了Spark集群管理器、Spark驱动程序、执行器以及Spark上下文。然后，我们深入研究rdd，了解Spark如何使用它们对数据集上的转换操作执行惰性评估。我们还知道Spark足够聪明，能够高效地管理其资源，并在运营期间删除任何未使用的rdd。</p>
-<p>基于对Spark的了解，我们开始探索H2O苏打水是什么，以及它如何在一个无缝集成的系统中使用Spark和H2O。然后，我们更深入地研究了它的架构，并理解了它的两种类型的后端，这两种后端可以用来部署系统。我们也了解它如何处理Spark和H2O之间的数据交换。</p>
-<p>一旦我们对什么是H2O苏打水有了一个清晰的概念，我们就开始实际使用这个系统。我们学习了如何下载和安装系统，以及平稳运行所需的严格依赖关系。我们还探讨了启动H2O苏打水时H2O.ai推荐的各种配置调整。系统启动并运行后，我们进行了一项实验，使用混凝土抗压强度数据集对使用H2O苏打水的混凝土抗压强度进行预测。我们将数据集导入Spark集群，使用H2O AutoML执行AutoML，并使用领先模型进行预测。最后，我们学习了如何将模型魔咒导入和导出到H2O苏打水，并使用它们进行预测。</p>
-<p>在下一章中，我们将探索由H2O.ai进行的一些案例研究，并了解企业在现实世界中实施H2O的情况，以及H2O如何帮助他们解决他们的ML问题。</p>
+<p>在这一章中，我们学习了如何使用 H2O AutoML 与阿帕奇火花使用 H2O 系统称为 H2O 苏打水。我们从了解什么是 Apache Spark 开始。我们研究了构成 Spark 软件的各种组件。然后，我们深入研究了它的架构，了解了它如何使用一组计算机来执行数据分析。我们研究了 Spark 集群管理器、Spark 驱动程序、执行器以及 Spark 上下文。然后，我们深入研究 rdd，了解 Spark 如何使用它们对数据集上的转换操作执行惰性评估。我们还知道 Spark 足够聪明，能够高效地管理其资源，并在运营期间删除任何未使用的 rdd。</p>
+<p>基于对 Spark 的了解，我们开始探索 H2O 苏打水是什么，以及它如何在一个无缝集成的系统中使用 Spark 和 H2O。然后，我们更深入地研究了它的架构，并理解了它的两种类型的后端，这两种后端可以用来部署系统。我们也了解它如何处理 Spark 和 H2O 之间的数据交换。</p>
+<p>一旦我们对什么是 H2O 苏打水有了一个清晰的概念，我们就开始实际使用这个系统。我们学习了如何下载和安装系统，以及平稳运行所需的严格依赖关系。我们还探讨了启动 H2O 苏打水时 H2O.ai 推荐的各种配置调整。系统启动并运行后，我们进行了一项实验，使用混凝土抗压强度数据集对使用 H2O 苏打水的混凝土抗压强度进行预测。我们将数据集导入 Spark 集群，使用 H2O AutoML 执行 AutoML，并使用领先模型进行预测。最后，我们学习了如何将模型魔咒导入和导出到 H2O 苏打水，并使用它们进行预测。</p>
+<p>在下一章中，我们将探索由 H2O.ai 进行的一些案例研究，并了解企业在现实世界中实施 H2O 的情况，以及 H2O 如何帮助他们解决他们的 ML 问题。</p>
 </div>
 <div><div/>
 </div>

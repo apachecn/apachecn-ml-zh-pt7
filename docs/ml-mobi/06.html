@@ -11,22 +11,22 @@
         
 
                             
-                    <h1 class="header-title">ML套件SDK</h1>
+                    <h1 class="header-title">ML 套件 SDK</h1>
                 
             
             
                 
-<p>在本章中，我们将讨论由Firebase在Google I/O 2018上公布的ML Kit。这个SDK将谷歌的移动机器学习产品打包在一个保护伞下。</p>
+<p>在本章中，我们将讨论由 Firebase 在 Google I/O 2018 上公布的 ML Kit。这个 SDK 将谷歌的移动机器学习产品打包在一个保护伞下。</p>
 <p>移动应用程序开发人员可能希望在他们的移动应用程序中实现需要机器学习功能的功能。然而，他们可能不知道机器学习概念以及哪些算法用于哪些场景，如何建立模型，训练模型等等。</p>
-<p>ML Kit试图通过识别移动设备环境中机器学习的所有潜在用例，并提供现成的API来解决这个问题。如果将正确的输入传递给它们，则接收到所需的输出，无需进一步编码。</p>
-<p>此外，该工具包支持将输入传递给离线工作的设备上的API，或者传递给云中托管的在线API。</p>
-<p>最重要的是，ML Kit还为具有机器学习专业知识的开发人员提供了选项，允许他们使用TensorFlow/TensorFlow Lite构建自己的模型，然后将它们导入到应用程序中，并使用ML Kit APIs调用它们。</p>
-<p>ML Kit还提供了更多有用的特性，比如模型升级和监控功能(如果使用Firebase托管的话)。</p>
+<p>ML Kit 试图通过识别移动设备环境中机器学习的所有潜在用例，并提供现成的 API 来解决这个问题。如果将正确的输入传递给它们，则接收到所需的输出，无需进一步编码。</p>
+<p>此外，该工具包支持将输入传递给离线工作的设备上的 API，或者传递给云中托管的在线 API。</p>
+<p>最重要的是，ML Kit 还为具有机器学习专业知识的开发人员提供了选项，允许他们使用 TensorFlow/TensorFlow Lite 构建自己的模型，然后将它们导入到应用程序中，并使用 ML Kit APIs 调用它们。</p>
+<p>ML Kit 还提供了更多有用的特性，比如模型升级和监控功能(如果使用 Firebase 托管的话)。</p>
 <p>我们将在本章中讨论以下主题:</p>
 <ul>
-<li>ML试剂盒及其特点</li>
-<li>使用ML试剂盒设备上API创建图像标签样本</li>
-<li>使用ML Kit cloud APIs创建相同的示例</li>
+<li>ML 试剂盒及其特点</li>
+<li>使用 ML 试剂盒设备上 API 创建图像标签样本</li>
+<li>使用 ML Kit cloud APIs 创建相同的示例</li>
 <li>创建人脸检测应用程序</li>
 </ul>
 
@@ -52,16 +52,16 @@
         
 
                             
-                    <h1 class="header-title">了解ML套件</h1>
+                    <h1 class="header-title">了解 ML 套件</h1>
                 
             
             
                 
-<p class="graf graf--p graf-after--figure">ML Kit包含了Google现有的所有在移动设备上进行机器学习的产品。它将Google Cloud Vision API、TensorFlow Lite和Android神经网络API捆绑在单个SDK中，如下所示:</p>
+<p class="graf graf--p graf-after--figure">ML Kit 包含了 Google 现有的所有在移动设备上进行机器学习的产品。它将 Google Cloud Vision API、TensorFlow Lite 和 Android 神经网络 API 捆绑在单个 SDK 中，如下所示:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-963 image-border" src="img/e34862b1-59df-45ab-acca-1aebfdb354b5.png" style="width:13.92em;height:13.75em;"/></p>
-<p class="graf graf--p graf-after--figure">ML Kit使开发人员能够以非常简单的方式在Android和iOS应用程序的移动应用程序中利用机器学习。可以通过调用设备上或云上的API来进行推断。</p>
-<p>设备上的API的优点是它们完全离线工作，并且更安全，因为没有数据被发送到云中。相比之下，云上API确实需要网络连接，并且确实将数据发送到设备之外，但是允许更高的准确性。</p>
-<p>ML Kit提供的API涵盖了移动应用程序开发人员可能需要的以下机器学习场景:</p>
+<p class="graf graf--p graf-after--figure">ML Kit 使开发人员能够以非常简单的方式在 Android 和 iOS 应用程序的移动应用程序中利用机器学习。可以通过调用设备上或云上的 API 来进行推断。</p>
+<p>设备上的 API 的优点是它们完全离线工作，并且更安全，因为没有数据被发送到云中。相比之下，云上 API 确实需要网络连接，并且确实将数据发送到设备之外，但是允许更高的准确性。</p>
+<p>ML Kit 提供的 API 涵盖了移动应用程序开发人员可能需要的以下机器学习场景:</p>
 <ul>
 <li>图像标注</li>
 <li>文本识别</li>
@@ -69,10 +69,10 @@
 <li>人脸检测</li>
 <li>条形码扫描</li>
 </ul>
-<p>所有这些API都是使用复杂的机器学习算法实现的。然而，这些细节被包装起来了。移动开发者不需要了解用于实现这些API的算法的细节；所有需要做的就是将所需的数据传递给SDK，作为回报，将接收到正确的输出，这取决于使用的是ML工具包的哪一部分。</p>
-<p>如果提供的API没有涵盖特定的用例，您可以构建自己的TensorFlow Lite模型。ML Kit将帮助托管该模型，并将其提供给移动应用程序。</p>
-<p>由于Firebase ML Kit提供了设备上和云上的功能，开发人员可以根据手头的具体问题，提出创新的解决方案来利用其中之一或两者。他们需要知道的是，设备上的API速度很快，可以离线工作，而云API利用谷歌云平台来提供更高精度的预测。</p>
-<p>下图描述了在选择基于设备还是基于云的API时需要考虑的问题:</p>
+<p>所有这些 API 都是使用复杂的机器学习算法实现的。然而，这些细节被包装起来了。移动开发者不需要了解用于实现这些 API 的算法的细节；所有需要做的就是将所需的数据传递给 SDK，作为回报，将接收到正确的输出，这取决于使用的是 ML 工具包的哪一部分。</p>
+<p>如果提供的 API 没有涵盖特定的用例，您可以构建自己的 TensorFlow Lite 模型。ML Kit 将帮助托管该模型，并将其提供给移动应用程序。</p>
+<p>由于 Firebase ML Kit 提供了设备上和云上的功能，开发人员可以根据手头的具体问题，提出创新的解决方案来利用其中之一或两者。他们需要知道的是，设备上的 API 速度很快，可以离线工作，而云 API 利用谷歌云平台来提供更高精度的预测。</p>
+<p>下图描述了在选择基于设备还是基于云的 API 时需要考虑的问题:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-914 image-border" src="img/7ad6b4d2-8c3b-420a-96ae-4d80d493b816.png" style="width:35.83em;height:22.83em;"/></p>
 
 
@@ -97,14 +97,14 @@
         
 
                             
-                    <h1 class="header-title">ML试剂盒API</h1>
+                    <h1 class="header-title">ML 试剂盒 API</h1>
                 
             
             
                 
-<p>并非ML Kit提供的所有API都在设备上和云模式下受支持。下表显示了每种模式下支持的API:</p>
+<p>并非 ML Kit 提供的所有 API 都在设备上和云模式下受支持。下表显示了每种模式下支持的 API:</p>
 <p class="aspectRatioPlaceholder-fill CDPAlignCenter CDPAlign"><img src="img/d35b8fc6-71dc-4e0d-ae3c-e28c568a0796.png" style="width:26.00em;height:13.58em;"/></p>
-<p>让我们来看看每个API的细节。</p>
+<p>让我们来看看每个 API 的细节。</p>
 
 
             
@@ -133,9 +133,9 @@
             
             
                 
-<p>ML Kit的文本识别API有助于使用移动设备摄像头识别任何基于拉丁语的语言的文本。它们在设备上和云上都可用。</p>
-<p>设备上的API允许识别稀疏文本或图像中存在的文本。cloud API做同样的事情，但是也允许识别大量文本，比如文档中的文本。云API还支持比设备API更多的语言识别。</p>
-<p>这些API的可能用例是识别图像中的文本，扫描图像中可能嵌入的字符，或者自动化繁琐的数据输入。</p>
+<p>ML Kit 的文本识别 API 有助于使用移动设备摄像头识别任何基于拉丁语的语言的文本。它们在设备上和云上都可用。</p>
+<p>设备上的 API 允许识别稀疏文本或图像中存在的文本。cloud API 做同样的事情，但是也允许识别大量文本，比如文档中的文本。云 API 还支持比设备 API 更多的语言识别。</p>
+<p>这些 API 的可能用例是识别图像中的文本，扫描图像中可能嵌入的字符，或者自动化繁琐的数据输入。</p>
 
 
             
@@ -164,7 +164,7 @@
             
             
                 
-<p>ML套件的人脸检测API允许检测图像或视频中的人脸。一旦检测到面部，我们可以应用以下改进:</p>
+<p>ML 套件的人脸检测 API 允许检测图像或视频中的人脸。一旦检测到面部，我们可以应用以下改进:</p>
 <ul>
 <li><strong>地标检测</strong>:确定人脸内的特定兴趣点(地标)，如眼睛</li>
 <li><strong>分类</strong>:根据某些特征对人脸进行分类，比如眼睛是睁着还是闭着</li>
@@ -199,8 +199,8 @@
             
             
                 
-<p>ML Kit的条形码扫描API有助于读取使用大多数标准条形码格式编码的数据。它支持Codabar、Code 39、Code 93、Code 128、EAN-8、EAN-13、ITF、UPC-A或UPC-E等线性格式，以及Aztec、Data Matrix、PDF417或QR码等二维格式。</p>
-<p>无论条形码的方向如何，API都可以识别和扫描条形码。任何存储为条形码的结构化数据都可以被识别。</p>
+<p>ML Kit 的条形码扫描 API 有助于读取使用大多数标准条形码格式编码的数据。它支持 Codabar、Code 39、Code 93、Code 128、EAN-8、EAN-13、ITF、UPC-A 或 UPC-E 等线性格式，以及 Aztec、Data Matrix、PDF417 或 QR 码等二维格式。</p>
+<p>无论条形码的方向如何，API 都可以识别和扫描条形码。任何存储为条形码的结构化数据都可以被识别。</p>
 
 
             
@@ -229,8 +229,8 @@
             
             
                 
-<p>ML Kit的图像标记API有助于识别图像中的实体。不需要为该实体识别提供任何其他元数据信息。图像标记让我们深入了解图像的内容。ML Kit API提供了图像中的实体，以及每个实体的置信度得分。</p>
-<p>图像标注在设备上和云上都可用，区别在于支持的标签数量。设备上的API支持大约400个标签，而基于云的API支持多达10，000个标签。</p>
+<p>ML Kit 的图像标记 API 有助于识别图像中的实体。不需要为该实体识别提供任何其他元数据信息。图像标记让我们深入了解图像的内容。ML Kit API 提供了图像中的实体，以及每个实体的置信度得分。</p>
+<p>图像标注在设备上和云上都可用，区别在于支持的标签数量。设备上的 API 支持大约 400 个标签，而基于云的 API 支持多达 10，000 个标签。</p>
 
 
             
@@ -259,8 +259,8 @@
             
             
                 
-<p>ML Kit的地标识别API有助于识别图像中众所周知的地标。</p>
-<p>当给定一个图像作为输入时，这个API将提供在图像中找到的地标以及地理坐标和区域信息。还为地标返回知识图实体ID。该ID是唯一标识被识别的地标的字符串。</p>
+<p>ML Kit 的地标识别 API 有助于识别图像中众所周知的地标。</p>
+<p>当给定一个图像作为输入时，这个 API 将提供在图像中找到的地标以及地理坐标和区域信息。还为地标返回知识图实体 ID。该 ID 是唯一标识被识别的地标的字符串。</p>
 
 
             
@@ -289,7 +289,7 @@
             
             
                 
-<div><p>如果现成提供的API不足以满足您的用例，ML Kit还提供了创建您自己的定制模型并通过ML Kit部署它的选项。</p>
+<div><p>如果现成提供的 API 不足以满足您的用例，ML Kit 还提供了创建您自己的定制模型并通过 ML Kit 部署它的选项。</p>
 </div>
 
 
@@ -314,44 +314,44 @@
         
 
                             
-                    <h1 class="header-title">使用Firebase on-device APIs创建文本识别应用程序</h1>
+                    <h1 class="header-title">使用 Firebase on-device APIs 创建文本识别应用程序</h1>
                 
             
             
                 
-<p>要开始使用ML Kit，您需要登录您的Google帐户，激活您的Firebase帐户，并创建一个Firebase项目。请遵循以下步骤:</p>
+<p>要开始使用 ML Kit，您需要登录您的 Google 帐户，激活您的 Firebase 帐户，并创建一个 Firebase 项目。请遵循以下步骤:</p>
 <ul>
-<li>去https://firebase.google.com/.<a href="https://firebase.google.com/"/></li>
-<li>如果您尚未登录，请登录您的Google帐户。</li>
+<li>去 https://firebase.google.com/.<a href="https://firebase.google.com/"/></li>
+<li>如果您尚未登录，请登录您的 Google 帐户。</li>
 <li>单击菜单栏中的转到控制台。</li>
 <li>单击“添加项目”创建一个项目并打开它。</li>
 </ul>
-<p>现在打开Android Studio，创建一个包含空活动的项目。记下您在创建项目时给出的应用程序包名称—例如，<kbd>com.packt.mlkit.textrecognizationondevice</kbd>。</p>
-<p>接下来，转到Firebase控制台。在项目概述菜单中，单击添加应用程序并提供所需信息。它会给你一个JSON文件来下载。在Android Studio的项目视图中添加到您的项目的app文件夹中，如以下截图所示:</p>
+<p>现在打开 Android Studio，创建一个包含空活动的项目。记下您在创建项目时给出的应用程序包名称—例如，<kbd>com.packt.mlkit.textrecognizationondevice</kbd>。</p>
+<p>接下来，转到 Firebase 控制台。在项目概述菜单中，单击添加应用程序并提供所需信息。它会给你一个 JSON 文件来下载。在 Android Studio 的项目视图中添加到您的项目的 app 文件夹中，如以下截图所示:</p>
 <p class="CDPAlignCenter CDPAlign"><img src="img/7e38470b-fdb7-42a7-a5ff-2880d1e01259.png" style="width:23.33em;height:28.92em;"/></p>
 <p>接下来，将以下代码行添加到清单文件中:</p>
 <pre>&lt;uses-feature android:name="android.hardware.camera2.full" /&lt;<br/>&lt;uses-permission android:name="android.permission.CAMERA" /&lt;<br/>&lt;uses-permission android:name="android.permission.INTERNET" /&lt;<br/>&lt;uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /&lt;<br/>&lt;uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /&lt;</pre>
-<p>我们需要这些权限才能让我们的应用程序工作。下一行告诉Firebase依赖项从Google服务器下载<strong>文本识别</strong> ( <strong> OCR </strong>)模型，并将其保存在设备中以供推断:</p>
+<p>我们需要这些权限才能让我们的应用程序工作。下一行告诉 Firebase 依赖项从 Google 服务器下载<strong>文本识别</strong> ( <strong> OCR </strong>)模型，并将其保存在设备中以供推断:</p>
 <pre>&lt;meta-data<br/>   android:name="com.google.firebase.ml.vision.DEPENDENCIES"<br/>    android:value="ocr" /&lt;</pre>
 <p>整个清单文件将如下所示:</p>
 <pre>&lt;?xml version="1.0" encoding="utf-8"?&lt;<br/>&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"<br/>    package="com.packt.mlkit.testrecognizationondevice"&lt;<br/><br/>    &lt;uses-feature android:name="android.hardware.camera2.full" /&lt;<br/>    &lt;uses-permission android:name="android.permission.CAMERA" /&lt;<br/>    &lt;uses-permission android:name="android.permission.INTERNET" /&lt;<br/>    &lt;uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /&lt;<br/>    &lt;uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /&lt;<br/>    &lt;application<br/>        android:allowBackup="true"<br/>        android:icon="@mipmap/ic_launcher"<br/>        android:label="@string/app_name"<br/>        android:roundIcon="@mipmap/ic_launcher_round"<br/>        android:supportsRtl="true"<br/>        android:theme="@style/AppTheme"&lt;<br/><br/>        &lt;meta-data<br/>            android:name="com.google.firebase.ml.vision.DEPENDENCIES"<br/>            android:value="ocr" /&lt;<br/><br/><br/>        &lt;activity android:name=".MainActivity"&lt;<br/>            &lt;intent-filter&lt;<br/>                &lt;action android:name="android.intent.action.MAIN" /&lt;<br/><br/>                &lt;category android:name="android.intent.category.LAUNCHER" /&lt;<br/>            &lt;/intent-filter&lt;<br/>        &lt;/activity&lt;<br/>    &lt;/application&lt;<br/><br/>&lt;/manifest&lt;</pre>
-<p>现在，我们需要将Firebase依赖项添加到项目中。为此，我们需要将下面几行添加到项目<kbd>build.gradle</kbd>文件中:</p>
+<p>现在，我们需要将 Firebase 依赖项添加到项目中。为此，我们需要将下面几行添加到项目<kbd>build.gradle</kbd>文件中:</p>
 <pre>buildscript {<br/>    <br/>    repositories {<br/>        google()<br/>        jcenter()<br/>    }<br/>    dependencies {<br/>        classpath 'com.android.tools.build:gradle:3.1.4' //this version will defer dependeds on your environment.<br/>        classpath 'com.google.gms:google-services:4.0.1'<br/><br/>        // NOTE: Do not place your application dependencies here; they belong<br/>        // in the individual module build.gradle files<br/>    }<br/>}</pre>
-<p>然后打开模块app <kbd>build.gradle</kbd>文件，并添加如下依赖项:</p>
+<p>然后打开模块 app <kbd>build.gradle</kbd>文件，并添加如下依赖项:</p>
 <pre>implementation 'com.google.firebase:firebase-ml-vision:17.0.0'<br/>implementation 'com.google.firebase:firebase-core:16.0.3'</pre>
 <p>另外，在该文件的底部添加以下行:</p>
 <pre>apply plugin: 'com.google.gms.google-services'</pre>
 <p>现在，在布局文件中，编写下面的<kbd>.xml</kbd>代码来定义元素:</p>
 <pre>&lt;?xml version="1.0" encoding="utf-8"?&lt;<br/>&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"<br/>    xmlns:tools="http://schemas.android.com/tools"<br/>    android:layout_width="match_parent"<br/>    android:layout_height="match_parent"<br/>    tools:context="(main activity)"&lt; &lt;!-- Here your fully qualified main activity class name will come. --&lt;<br/> <br/>    &lt;TextureView<br/>        android:id="@+id/preview"<br/>        android:layout_width="match_parent"<br/>        android:layout_height="wrap_content"<br/>        android:layout_above="@id/btn_takepic"<br/>        android:layout_alignParentTop="true"/&lt;<br/><br/>    &lt;Button<br/>        android:id="@+id/btn_takepic"<br/>        android:layout_width="wrap_content"<br/>        android:layout_height="wrap_content"<br/>        android:layout_alignParentBottom="true"<br/>        android:layout_centerHorizontal="true"<br/>        android:layout_marginBottom="16dp"<br/>        android:layout_marginTop="16dp"<br/>        android:text="Start Labeling"<br/>        /&lt;<br/>&lt;/RelativeLayout&lt;</pre>
 <p>现在，是时候编写应用程序的主活动类了。</p>
-<p>请从位于<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/mlkit">https://Github . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/ml kit</a>的Packt Github库下载应用程序代码。</p>
-<p>我们假设您已经熟悉Android——因此，我们正在讨论使用Firebase功能的代码:</p>
+<p>请从位于<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/mlkit">https://Github . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/ml kit</a>的 Packt Github 库下载应用程序代码。</p>
+<p>我们假设您已经熟悉 Android——因此，我们正在讨论使用 Firebase 功能的代码:</p>
 <pre>import com.google.firebase.FirebaseApp;<br/>import com.google.firebase.ml.vision.FirebaseVision;<br/>import com.google.firebase.ml.vision.common.FirebaseVisionImage;<br/>import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;<br/>import com.google.firebase.ml.vision.text.*;</pre>
-<p>前面的代码将导入firebase库。</p>
+<p>前面的代码将导入 firebase 库。</p>
 <pre>private FirebaseVisionTextRecognizer textRecognizer;</pre>
-<p><br/>前一行将声明firebase文本识别器。<br/></p>
+<p><br/>前一行将声明 firebase 文本识别器。<br/></p>
 <pre>FirebaseApp fapp= FirebaseApp.initializeApp(getBaseContext());</pre>
-<p>前面一行将初始化Firebase应用程序上下文。</p>
+<p>前面一行将初始化 Firebase 应用程序上下文。</p>
 <pre>        textRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();</pre>
 <p>前面一行将获取设备上的文本识别器。</p>
 <pre>       takePictureButton.setOnClickListener(new View.OnClickListener() {<br/>            @Override<br/>            public void onClick(View v) {<br/>                takePicture();<br/>                <strong>//In this function we are having the code to decode the characters in the picture</strong><br/>            }<br/>        });<br/>    }</pre>
@@ -360,16 +360,16 @@
 <pre>Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);</pre>
 <p>从字节数组创建位图。</p>
 <pre>FirebaseVisionImage firebase_image = FirebaseVisionImage.fromBitmap(bmp);</pre>
-<p>前面一行创建了一个firebase image对象来通过识别器。</p>
+<p>前面一行创建了一个 firebase image 对象来通过识别器。</p>
 <pre> textRecognizer.processImage(firebase_image)</pre>
 <p>前面一行将创建的图像对象传递给识别器进行处理。</p>
 <pre>.addOnSuccessListener(new OnSuccessListener&lt;FirebaseVisionText&lt;() {<br/>                                    @Override<br/>                                    public void onSuccess(FirebaseVisionText result) {<br/><strong>//On receiving the results displaying to the user.</strong>                                       Toast.makeText(getApplicationContext(),result.getText(),Toast.LENGTH_LONG).show();<br/>                                    }<br/>                                })</pre>
-<p>前面的代码块将添加成功时侦听器。它将接收一个firebase vision文本对象，然后以<kbd>Toast</kbd>消息的形式显示给用户。</p>
+<p>前面的代码块将添加成功时侦听器。它将接收一个 firebase vision 文本对象，然后以<kbd>Toast</kbd>消息的形式显示给用户。</p>
 <pre>.addOnFailureListener(<br/>            new OnFailureListener() {<br/>                @Override<br/>                public void onFailure(@NonNull Exception e) <br/>                    {<br/>                        Toast.makeText(getApplicationContext(),"Unable to read the text",Toast.LENGTH_LONG).show();<br/>                    }<br/>                  });</pre>
 <p>前面的代码块将添加<kbd>on-failure</kbd>监听器。它将接收一个异常对象，该对象又以<kbd>Toast</kbd>消息的形式向用户显示错误消息。</p>
 <p>当您运行上述代码时，您的设备中将会有以下输出:</p>
 <p class="CDPAlignCenter CDPAlign"><img src="img/70a9a836-c149-4fc8-88af-fc888459126f.png" style="width:24.08em;height:42.75em;"/></p>
-<p>请注意，安装此应用程序时，您必须连接到互联网，因为Firebase需要将模型下载到您的设备上。</p>
+<p>请注意，安装此应用程序时，您必须连接到互联网，因为 Firebase 需要将模型下载到您的设备上。</p>
 <p> </p>
 <p> </p>
 <p> </p>
@@ -396,7 +396,7 @@
         
 
                             
-                    <h1 class="header-title">使用Firebase on-cloud API创建文本识别应用程序</h1>
+                    <h1 class="header-title">使用 Firebase on-cloud API 创建文本识别应用程序</h1>
                 
             
             
@@ -404,20 +404,20 @@
 <p>在本节中，我们将把设备上的应用程序转换为云应用程序。不同之处在于，设备上的应用程序下载模型并将其存储在设备上。这使得推断时间更短，允许应用程序快速做出预测。</p>
 <p>相比之下，基于云的应用程序将图像上传到谷歌服务器，这意味着推理将在那里发生。如果你没有连接到互联网，它就不能工作。</p>
 <p>在这种情况下，为什么要使用基于云的模型？因为在设备上，这种模式的空间和处理硬件有限，而谷歌的服务器是可扩展的。谷歌云文本识别器模型也能够解码多种语言。</p>
-<p>要开始使用，您需要订阅Google Cloud。请遵循以下步骤:</p>
+<p>要开始使用，您需要订阅 Google Cloud。请遵循以下步骤:</p>
 <ul>
-<li class="CDPAlignLeft CDPAlign">转到您的Firebase项目控制台</li>
-<li>在左侧的菜单中，您将看到您当前在Spark计划中(自由层)</li>
-<li>点击升级，并按照说明升级到Blaze计划，即现收现付</li>
+<li class="CDPAlignLeft CDPAlign">转到您的 Firebase 项目控制台</li>
+<li>在左侧的菜单中，您将看到您当前在 Spark 计划中(自由层)</li>
+<li>点击升级，并按照说明升级到 Blaze 计划，即现收现付</li>
 <li>您需要提供信用卡或支付详情以进行验证，这些不会自动收费</li>
-<li>一旦您订阅，您将每月免费收到1，000个Cloud Vision API请求</li>
+<li>一旦您订阅，您将每月免费收到 1，000 个 Cloud Vision API 请求</li>
 </ul>
-<p>只有当您拥有升级的Blaze计划而非免费等级帐户时，才能尝试此计划。给出了创建升级帐户的步骤，请按照步骤让帐户尝试给定的程序。</p>
-<p>默认情况下，您的项目未启用云视野。要做到这一点，你需要去以下链接:<a href="https://console.cloud.google.com/apis/library/vision.googleapis.com/?authuser=0">https://console . cloud . Google . com/APIs/library/vision . Google APIs . com/？authuser=0 </a>。在顶部的下拉菜单中，选择包含您在上一节中添加的Android应用程序的Firebase项目。</p>
+<p>只有当您拥有升级的 Blaze 计划而非免费等级帐户时，才能尝试此计划。给出了创建升级帐户的步骤，请按照步骤让帐户尝试给定的程序。</p>
+<p>默认情况下，您的项目未启用云视野。要做到这一点，你需要去以下链接:<a href="https://console.cloud.google.com/apis/library/vision.googleapis.com/?authuser=0">https://console . cloud . Google . com/APIs/library/vision . Google APIs . com/？authuser=0 </a>。在顶部的下拉菜单中，选择包含您在上一节中添加的 Android 应用程序的 Firebase 项目。</p>
 <p>单击启用为您的应用启用此功能。该页面将类似于下面的屏幕截图:</p>
 <p class="CDPAlignCenter CDPAlign"><img src="img/aa14a5d0-5a6b-4135-bb4a-bd85d8a04f02.png"/></p>
 <p>现在返回到您的代码，并进行以下更改。</p>
-<p>您可以在我们的Packt Github存储库中找到应用程序代码:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/Testrecognizationoncloud">https://Github . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/testrecognitiononcloud</a>。</p>
+<p>您可以在我们的 Packt Github 存储库中找到应用程序代码:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/Testrecognizationoncloud">https://Github . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/testrecognitiononcloud</a>。</p>
 <p>除了主活动之外，所有其他文件都没有变化。</p>
 <p>这些变化如下:</p>
 <pre>import com.google.firebase.FirebaseApp;<br/>import com.google.firebase.ml.vision.FirebaseVision;<br/>import com.google.firebase.ml.vision.common.FirebaseVisionImage;<br/><strong>import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;<br/>import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;<br/></strong></pre>
@@ -431,11 +431,11 @@
 <pre>Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);</pre>
 <p>前面一行从字节数组创建了一个位图。</p>
 <pre>FirebaseVisionImage firebase_image = FirebaseVisionImage.fromBitmap(bmp);</pre>
-<p>前面一行创建了一个firebase image对象来通过识别器。</p>
+<p>前面一行创建了一个 firebase image 对象来通过识别器。</p>
 <pre> textRecognizer.processImage(firebase_image)</pre>
 <p>前面一行将创建的图像对象传递给识别器进行处理。</p>
 <pre>.addOnSuccessListener(new OnSuccessListener&lt;FirebaseVisionDocumentText&lt;() {<br/>                                    @Override<br/>                                    public void onSuccess(FirebaseVisionDocumentText result) {<br/>                                        Toast.makeText(getApplicationContext(),result.getText(),Toast.LENGTH_LONG).show();<br/>                                    }<br/>                                })</pre>
-<p>前面的代码块将添加成功时侦听器。它将接收一个FirebaseVision文档文本对象，然后以一条<kbd>Toast</kbd>消息的形式显示给用户。</p>
+<p>前面的代码块将添加成功时侦听器。它将接收一个 FirebaseVision 文档文本对象，然后以一条<kbd>Toast</kbd>消息的形式显示给用户。</p>
 <pre>.addOnFailureListener(<br/>            new OnFailureListener() {<br/>                @Override<br/>                public void onFailure(@NonNull Exception e) <br/>                    {<br/>                        Toast.makeText(getApplicationContext(),"Unable to read the text",Toast.LENGTH_LONG).show();<br/>                    }<br/>                  });</pre>
 <p>前面的代码块将添加失败时侦听器。它将接收一个异常对象，该异常对象又以<kbd>Toast</kbd>消息的形式向用户显示错误消息。</p>
 <pre>Once you run the code with the internet-connected device , you will get the same output as before, but from the cloud.</pre>
@@ -462,12 +462,12 @@
         
 
                             
-                    <h1 class="header-title">使用ML工具包进行人脸检测</h1>
+                    <h1 class="header-title">使用 ML 工具包进行人脸检测</h1>
                 
             
             
                 
-<p>现在，我们将尝试了解面部检测如何与ML Kit一起工作。人脸检测，以前是移动视觉API的一部分，现在已经移动到ML Kit。</p>
+<p>现在，我们将尝试了解面部检测如何与 ML Kit 一起工作。人脸检测，以前是移动视觉 API 的一部分，现在已经移动到 ML Kit。</p>
 
 
             
@@ -497,7 +497,7 @@
             
                 
 <p>谷歌开发者页面将人脸检测定义为在视觉媒体(数字图像或视频)中自动定位和检测人脸的过程。检测到的面部在具有相关尺寸和方向的位置被报告。在检测到面部之后，我们可以搜索面部中存在的标志，例如眼睛和鼻子。</p>
-<p>在我们继续使用ML Kit对人脸检测进行编程之前，需要了解一些重要术语:</p>
+<p>在我们继续使用 ML Kit 对人脸检测进行编程之前，需要了解一些重要术语:</p>
 <ul>
 <li><strong>面部朝向</strong>:检测不同角度范围内的面部。</li>
 <li><strong>人脸识别</strong>:判断两张脸是否可以属于同一个人。</li>
@@ -528,16 +528,16 @@
         
 
                             
-                    <h1 class="header-title">使用ML试剂盒进行面部检测的样品溶液</h1>
+                    <h1 class="header-title">使用 ML 试剂盒进行面部检测的样品溶液</h1>
                 
             
             
                 
-<p class="mce-root">现在打开Android Studio，创建一个包含空活动的项目。记下您在创建项目时给出的应用程序包名称—例如，<kbd>com.packt.mlkit.facerecognization</kbd>。</p>
+<p class="mce-root">现在打开 Android Studio，创建一个包含空活动的项目。记下您在创建项目时给出的应用程序包名称—例如，<kbd>com.packt.mlkit.facerecognization</kbd>。</p>
 <p class="mce-root">这里我们将修改文本识别代码来预测人脸。所以，我们不改变包名和其他东西。只是代码变了。项目结构与前面所示的相同:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-905 image-border" src="img/bfd38de1-3b33-45d5-b438-bc647837d680.png" style="width:27.08em;height:33.17em;"/></p>
-<p>是时候编写应用程序的主活动类了。首先，我们需要从位于<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/facerecognization">https://GitHub . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/face recognition</a>的Packt GitHub资源库下载应用程序代码。并在Android Studio中打开项目。</p>
-<p class="mce-root">然后，我们将把下面几行代码添加到Gradle依赖项中。打开模块app的<kbd>build.gradle</kbd>文件，添加以下依赖项:</p>
+<p>是时候编写应用程序的主活动类了。首先，我们需要从位于<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile/tree/master/facerecognization">https://GitHub . com/Packt publishing/Machine-Learning-for-Mobile/tree/master/face recognition</a>的 Packt GitHub 资源库下载应用程序代码。并在 Android Studio 中打开项目。</p>
+<p class="mce-root">然后，我们将把下面几行代码添加到 Gradle 依赖项中。打开模块 app 的<kbd>build.gradle</kbd>文件，添加以下依赖项:</p>
 <pre class="mce-root">implementation 'com.google.android.gms:play-services-vision:11.4.0'<br/>implementation 'com.android.support.constraint:constraint-layout:1.0.2'</pre>
 <p class="mce-root">现在，我们将添加导入语句来处理人脸检测:</p>
 <pre class="mce-root">import com.google.android.gms.vision.Frame;<br/>import com.google.android.gms.vision.face.Face;<br/>import com.google.android.gms.vision.face.FaceDetector;</pre>
@@ -545,7 +545,7 @@
 <pre class="mce-root">private FaceDetector detector;</pre>
 <p>现在我们将创建一个对象，并将其分配给声明的检测器:</p>
 <pre class="mce-root">detector = new FaceDetector.Builder(getApplicationContext())<br/> .setTrackingEnabled(false)<br/> .setLandmarkType(FaceDetector.ALL_LANDMARKS)<br/> .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)<br/> .build();</pre>
-<p>我们声明了一个string对象来保存给用户的预测消息:</p>
+<p>我们声明了一个 string 对象来保存给用户的预测消息:</p>
 <pre class="mce-root">String scanResults = "";</pre>
 <p class="mce-root">在这里，我们将检查检测器是否可操作；我们还有一个从相机中获得的位图对象:</p>
 <pre class="mce-root">if (detector.isOperational() &amp;&amp; bmp != null) {</pre>
@@ -589,7 +589,7 @@
             
             
                 
-<p class="mce-root">现在该运行应用程序了。为此，您必须通过手机中的USB调试选项将手机连接到桌面，并安装应用程序:</p>
+<p class="mce-root">现在该运行应用程序了。为此，您必须通过手机中的 USB 调试选项将手机连接到桌面，并安装应用程序:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-906 image-border" src="img/024b29f4-2d08-4cb6-9efd-7533311a3949.png" style="width:22.58em;height:40.17em;"/></p>
 <p class="mce-root">运行该应用程序时，您将获得以下输出:</p>
 <p class="mce-root CDPAlignCenter CDPAlign"><img src="img/766c66a2-276a-4889-8b0d-b89b66259545.jpg" style="width:18.08em;height:32.08em;"/></p>
@@ -621,7 +621,7 @@
             
             
                 
-<p>在本章中，我们讨论了Firebase在Google I/O 2018上公布的ML Kit SDK。我们讨论了ML Kit提供的不同API，比如图像标签、文本识别、地标检测等等。然后，我们使用设备上的API创建了一个文本识别应用程序，然后使用云上的API。我们还通过对文本识别应用程序进行微小的修改来创建一个人脸检测应用程序。在下一章，我们将学习垃圾邮件分类器，并为iOS构建一个这样的分类器的示例实现。</p>
+<p>在本章中，我们讨论了 Firebase 在 Google I/O 2018 上公布的 ML Kit SDK。我们讨论了 ML Kit 提供的不同 API，比如图像标签、文本识别、地标检测等等。然后，我们使用设备上的 API 创建了一个文本识别应用程序，然后使用云上的 API。我们还通过对文本识别应用程序进行微小的修改来创建一个人脸检测应用程序。在下一章，我们将学习垃圾邮件分类器，并为 iOS 构建一个这样的分类器的示例实现。</p>
 
 
             

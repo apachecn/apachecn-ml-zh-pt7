@@ -34,7 +34,7 @@
 
 <p>世界变化的速度有多快？嗯，技术和数据一直在快速变化。随着互联网和社交媒体的出现，我们对数据的整个看法已经改变。最初，大多数数据分析的范围都围绕着结构化数据。然而，由于如此多的非结构化数据通过互联网和社交媒体涌入，分析的范围已经扩大。每秒钟都会产生大量的文本数据、图像、声音和视频数据。它们包含大量需要为业务而综合的信息。自然语言处理是一种技术，通过它我们使机器能够理解文本或语音。虽然非结构化数据的范围很广，但本章的范围是让你接触文本分析。</p>
 
-<p>结构化数据通常由关系数据库或电子表格中设置的固定观察值和固定列组成，而非结构化数据没有任何结构，也不能在关系数据库中设置；相反，它需要一个NoSQL数据库，例如，视频，文本等等。</p>
+<p>结构化数据通常由关系数据库或电子表格中设置的固定观察值和固定列组成，而非结构化数据没有任何结构，也不能在关系数据库中设置；相反，它需要一个 NoSQL 数据库，例如，视频，文本等等。</p>
 
 <p>在本章中，您将了解以下主题:</p>
 
@@ -312,7 +312,7 @@
 
 <li>有</li>
 
-<li>be的过去分词</li>
+<li>be 的过去分词</li>
 
 <li>以前</li>
 
@@ -576,7 +576,7 @@
 
 <td>
 
-<p>be的过去分词</p>
+<p>be 的过去分词</p>
 
 </td>
 
@@ -610,7 +610,7 @@
 
 <p> </p>
 
-<p>文档中出现的所有单词都标记为1，其余的标记为0。</p>
+<p>文档中出现的所有单词都标记为 1，其余的标记为 0。</p>
 
 <p>因此，第一句的文档向量是<em>【1，1，1，1，1，0，0，0，0，0，0，0，0，0，0】</em>。</p>
 
@@ -626,7 +626,7 @@
 
 <ul>
 
-<li><strong> Count vector </strong>:还有一种方法可以创建文档向量，借助于文档中出现的单词的频率。假设有一个由N个文档组成的语料库，并且已经提取了T个标记(单词)。这些测试标记将构成我们词典。因此，计数向量矩阵的维数将变成N×t。每一行包含组成字典的相应文档中的记号(单词)的频率。</li>
+<li><strong> Count vector </strong>:还有一种方法可以创建文档向量，借助于文档中出现的单词的频率。假设有一个由 N 个文档组成的语料库，并且已经提取了 T 个标记(单词)。这些测试标记将构成我们词典。因此，计数向量矩阵的维数将变成 N×t。每一行包含组成字典的相应文档中的记号(单词)的频率。</li>
 
 </ul>
 
@@ -986,9 +986,9 @@
 
 <p> </p>
 
-<p>现在，仔细看看矩阵维数；因为<em> N=3 </em>和<em> T=12 </em>，所以这是一个3×12的矩阵。</p>
+<p>现在，仔细看看矩阵维数；因为<em> N=3 </em>和<em> T=12 </em>，所以这是一个 3×12 的矩阵。</p>
 
-<p>我们将看看矩阵的形成是如何发生的。对于文档N1，计数在其中出现的次数是2，向量出现的次数是1，依此类推。取这些频率，我们输入这些值。另外两份文件也完成了类似的程序。</p>
+<p>我们将看看矩阵的形成是如何发生的。对于文档 N1，计数在其中出现的次数是 2，向量出现的次数是 1，依此类推。取这些频率，我们输入这些值。另外两份文件也完成了类似的程序。</p>
 
 <p>然而，这有一个缺点。一个高频词可能开始支配文档和语料库，这将导致从特征中提取出有限的信息。为了解决这个问题，<strong>术语频率逆文档频率</strong> ( <strong> TF-IDF </strong>)被引入。</p>
 
@@ -1043,13 +1043,13 @@
 
                 
 
-<p>我们知道计数向量化的局限性，即一个高频词可能会破坏聚会。因此，我们的想法是通过为出现在大多数文档中的频繁出现的单词分配较低的权重并增加出现在文档子集中的单词的权重来惩罚它们。这是TF-IDF工作的原则。</p>
+<p>我们知道计数向量化的局限性，即一个高频词可能会破坏聚会。因此，我们的想法是通过为出现在大多数文档中的频繁出现的单词分配较低的权重并增加出现在文档子集中的单词的权重来惩罚它们。这是 TF-IDF 工作的原则。</p>
 
-<p>TF-IDF是术语对于文档和整个语料库(文档集合)的重要程度的度量:</p>
+<p>TF-IDF 是术语对于文档和整个语料库(文档集合)的重要程度的度量:</p>
 
 <p class="CDPAlignCenter CDPAlign"><em> TF-IDF(期限)= TF(期限)* IDF(期限)</em></p>
 
-<p><strong>词频</strong> ( <strong> TF </strong>)是该词在同一文档的所有词中出现的频率。例如，如果一个文档中有1000个单词，我们必须找出在该文档中出现了50次的单词<em> NLP </em>的<em> TF </em>，我们使用下面的语句:</p>
+<p><strong>词频</strong> ( <strong> TF </strong>)是该词在同一文档的所有词中出现的频率。例如，如果一个文档中有 1000 个单词，我们必须找出在该文档中出现了 50 次的单词<em> NLP </em>的<em> TF </em>，我们使用下面的语句:</p>
 
 <p class="CDPAlignCenter CDPAlign"><em> TF(NLP)= 50/1000=0.05 </em></p>
 
@@ -1065,27 +1065,27 @@
 
 <p>它表示单词对文档的贡献。</p>
 
-<p>然而，IDF是该术语对整个语料库的重要性的一个指标:</p>
+<p>然而，IDF 是该术语对整个语料库的重要性的一个指标:</p>
 
 <p class="CDPAlignCenter CDPAlign"><em> IDF("count") = log(文档总数/包含术语" count "的文档数)</em></p>
 
 <p class="CDPAlignCenter CDPAlign"><em> IDF("计数")= log(3/2)= 0.17 </em></p>
 
-<p>现在，让我们计算项<em>矢量</em>的IDF:</p>
+<p>现在，让我们计算项<em>矢量</em>的 IDF:</p>
 
 <p class="CDPAlignCenter CDPAlign"><em>IDF(" vector ")= log(3/3)= 0</em></p>
 
 <p>我们如何解读这一点？这意味着如果同一个单词出现在所有的文档中，那么它与特定的文档无关。但是，如果这个单词只出现在文档的一个子集中，这意味着它与它所在的那些文档有一定的相关性。</p>
 
-<p>让我们为<em>计数</em>和<em>向量</em>计算TF-IDF，如下所示:</p>
+<p>让我们为<em>计数</em>和<em>向量</em>计算 TF-IDF，如下所示:</p>
 
-<p class="CDPAlignCenter CDPAlign"><em>文件N1的TF-IDF(计数)= TF(计数)*IDF(计数)= 0.4 * 0.17 = 0.068 </em></p>
+<p class="CDPAlignCenter CDPAlign"><em>文件 N1 的 TF-IDF(计数)= TF(计数)*IDF(计数)= 0.4 * 0.17 = 0.068 </em></p>
 
-<p class="CDPAlignCenter CDPAlign"><em>文档N1的TF-IDF(向量)= TF(向量)* IDF(向量)= (1/5)*0 = 0 </em></p>
+<p class="CDPAlignCenter CDPAlign"><em>文档 N1 的 TF-IDF(向量)= TF(向量)* IDF(向量)= (1/5)*0 = 0 </em></p>
 
-<p>很明显，由于它给<em> N1 </em>中的<em>计数</em>分配了更多的权重，所以它比<em>向量</em>更重要。权重值越高，该术语越罕见。重量越小，该术语越常见。搜索引擎利用TF-IDF来检索与查询相关的文档。</p>
+<p>很明显，由于它给<em> N1 </em>中的<em>计数</em>分配了更多的权重，所以它比<em>向量</em>更重要。权重值越高，该术语越罕见。重量越小，该术语越常见。搜索引擎利用 TF-IDF 来检索与查询相关的文档。</p>
 
-<p class="mce-root">现在，我们将看看如何在Python中执行计数矢量器和TF-IDF矢量器。</p>
+<p class="mce-root">现在，我们将看看如何在 Python 中执行计数矢量器和 TF-IDF 矢量器。</p>
 
 
 
@@ -1241,7 +1241,7 @@
 
                             
 
-                    <h1 class="header-title">在Python中执行TF-IDF</h1>
+                    <h1 class="header-title">在 Python 中执行 TF-IDF</h1>
 
                 
 
@@ -1251,7 +1251,7 @@
 
                 
 
-<p>以下是在Python中执行TF-IDF的步骤:</p>
+<p>以下是在 Python 中执行 TF-IDF 的步骤:</p>
 
 <ol>
 
@@ -1303,7 +1303,7 @@
 
 <p class="mce-root">情感分析</p>
 
-<p class="mce-root">情感分析是自然语言处理的应用领域之一。它被广泛应用于各个行业和领域，行业内对它有很大的需求。每个组织都致力于关注客户及其需求。因此，要了解声音和情绪，客户是首要目标，因为了解客户的脉搏会带来收入。如今，顾客通过推特、脸书或博客来表达他们的观点。需要做一些工作来提炼文本数据，并使其可消费。让我们看看如何在Python中实现它。</p>
+<p class="mce-root">情感分析是自然语言处理的应用领域之一。它被广泛应用于各个行业和领域，行业内对它有很大的需求。每个组织都致力于关注客户及其需求。因此，要了解声音和情绪，客户是首要目标，因为了解客户的脉搏会带来收入。如今，顾客通过推特、脸书或博客来表达他们的观点。需要做一些工作来提炼文本数据，并使其可消费。让我们看看如何在 Python 中实现它。</p>
 
 
 
@@ -1346,7 +1346,7 @@
 
                             
 
-                    <h1 class="header-title">这里，影迷们的言辞来自IMDB。GitHub上也分享了这个。</h1>
+                    <h1 class="header-title">这里，影迷们的言辞来自 IMDB。GitHub 上也分享了这个。</h1>
 
                 
 
@@ -1551,11 +1551,11 @@
 
 <li>让我们看看哪个给我们更好的结果。</li>
 
-<li>TF-IDF特征提取</li>
+<li>TF-IDF 特征提取</li>
 
 </ul>
 
-<p>以下代码将为我们提供TF-IDF特征提取:</p>
+<p>以下代码将为我们提供 TF-IDF 特征提取:</p>
 
 
 
@@ -1726,7 +1726,7 @@
 
 <pre>from sklearn.linear_model import LogisticRegression<br/> from sklearn.model_selection import train_test_split<br/> from sklearn.metrics import f1_score,accuracy_score<br/> # splitting data into training and validation set<br/> xtrain, xtest, ytrain, ytest = train_test_split(bow, Newdata['label'], random_state=42, test_size=0.3)<br/> lreg = LogisticRegression()<br/> lreg.fit(xtrain, ytrain) # training the model<br/> prediction = lreg.predict_proba(xtest) # predicting on the validation set<br/> prediction_int = prediction[:,1] &gt;= 0.3 # if prediction is greater than or equal to 0.3 than 1 else 0<br/> prediction_int = prediction_int.astype(np.int)<br/> print("F1 Score-",f1_score(ytest, prediction_int))<br/> print("Accuracy-",accuracy_score(ytest,prediction_int))</pre>
 
-<p>在这里，我们达到了84%的准确率。让我们看看TF-IDF方法的效果如何:</p>
+<p>在这里，我们达到了 84%的准确率。让我们看看 TF-IDF 方法的效果如何:</p>
 
 <p class="CDPAlignCenter CDPAlign">输出如下所示:</p>
 
@@ -1734,7 +1734,7 @@
 
 <pre>from sklearn.linear_model import LogisticRegression<br/> # splitting data into training and validation set<br/> xtraintf, xtesttf, ytraintf, ytesttf = train_test_split(tfidfV, Newdata['label'], random_state=42, test_size=0.3)<br/> lreg = LogisticRegression()<br/> lreg.fit(xtraintf, ytraintf) # training the model<br/> prediction = lreg.predict_proba(xtesttf) # predicting on the test set<br/> prediction_int = prediction[:,1] &gt;= 0.3 # if prediction is greater than or equal to 0.3 than 1 else 0<br/> prediction_int = prediction_int.astype(np.int)<br/> print("F1 Score-",f1_score(ytest, prediction_int))<br/> print("Accuracy-",accuracy_score(ytest,prediction_int))</pre>
 
-<p>在这里，准确率为83.8%(比计数矢量器略低)。</p>
+<p>在这里，准确率为 83.8%(比计数矢量器略低)。</p>
 
 <p class="CDPAlignCenter CDPAlign">这就完成了情感分类模型的构建。</p>
 
@@ -1803,25 +1803,25 @@
 
 <li><strong>非负矩阵分解</strong>:基于线性代数</li>
 
-<li>我们将主要讨论LDA，它被认为是最受欢迎的。</li>
+<li>我们将主要讨论 LDA，它被认为是最受欢迎的。</li>
 
-<li>LDA是一种矩阵分解技术，它的工作原理是假设文档是由许多主题构成的，而主题又是由单词构成的。</li>
+<li>LDA 是一种矩阵分解技术，它的工作原理是假设文档是由许多主题构成的，而主题又是由单词构成的。</li>
 
 </ul>
 
-<p>阅读了前面的章节后，您应该知道任何语料库都可以表示为一个文档术语矩阵。下面的矩阵显示了一个由<strong> M </strong>个文档组成的语料库和一个由<strong> N </strong>个单词组成的<strong>M×N矩阵</strong>。该矩阵中的所有单元格都具有该特定文档中单词的频率:</p>
+<p>阅读了前面的章节后，您应该知道任何语料库都可以表示为一个文档术语矩阵。下面的矩阵显示了一个由<strong> M </strong>个文档组成的语料库和一个由<strong> N </strong>个单词组成的<strong>M×N 矩阵</strong>。该矩阵中的所有单元格都具有该特定文档中单词的频率:</p>
 
 <p><img class="alignnone size-full wp-image-578 image-border" src="img/a70489d5-5907-4d88-a0a1-4f5cbe7d3e8f.png" style="width:67.42em;height:34.75em;"/></p>
 
-<p>这个<strong> M x N矩阵的文档&amp;单词</strong>被LDA翻译成两个矩阵:<strong> M x X矩阵的文档&amp;主题</strong>和<strong> X x N矩阵的主题&amp;单词</strong>。</p>
+<p>这个<strong> M x N 矩阵的文档&amp;单词</strong>被 LDA 翻译成两个矩阵:<strong> M x X 矩阵的文档&amp;主题</strong>和<strong> X x N 矩阵的主题&amp;单词</strong>。</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-578 image-border" src="img/a70489d5-5907-4d88-a0a1-4f5cbe7d3e8f.png" style="width:67.42em;height:34.75em;"/></p>
 
 <p>This <strong>M x N matrix of Document &amp; Words</strong> gets translated into two matrices by LDA: <strong>M x X matrix of Documents &amp; Topics</strong> and <strong>X x N matrix of Topics &amp; Words</strong>.</p>
 
-<p class="mce-root">LDA架构</p>
+<p class="mce-root">LDA 架构</p>
 
-<p class="mce-root">在LDA架构中，有M个具有N个单词的文档，它们通过称为<strong> LDA </strong>的黑条进行处理。它传递带有<strong>单词簇</strong>的<strong> X主题</strong>。每个主题都有主题外单词的psi分布。最后，它还提出了文档中主题的分布，用phi表示。</p>
+<p class="mce-root">在 LDA 架构中，有 M 个具有 N 个单词的文档，它们通过称为<strong> LDA </strong>的黑条进行处理。它传递带有<strong>单词簇</strong>的<strong> X 主题</strong>。每个主题都有主题外单词的 psi 分布。最后，它还提出了文档中主题的分布，用 phi 表示。</p>
 
 
 
@@ -1864,7 +1864,7 @@
 
                             
 
-                    <h1 class="header-title">下图说明了LDA:</h1>
+                    <h1 class="header-title">下图说明了 LDA:</h1>
 
                 
 
@@ -1876,13 +1876,13 @@
 
 <p><img class="alignnone size-full wp-image-576 image-border" src="img/b9500217-80f6-44c9-b757-32062bde9987.png" style="width:61.83em;height:30.25em;"/></p>
 
-<p>关于<strong> Alpha </strong>和<strong> Beta </strong>超参数:Alpha代表文档-主题集中度，Beta代表主题-词集中度。alpha值越高，我们从文档中获得的主题就越多。另一方面，beta值越高，一个题目的字数越多。这些可以根据领域知识进行调整。</p>
+<p>关于<strong> Alpha </strong>和<strong> Beta </strong>超参数:Alpha 代表文档-主题集中度，Beta 代表主题-词集中度。alpha 值越高，我们从文档中获得的主题就越多。另一方面，beta 值越高，一个题目的字数越多。这些可以根据领域知识进行调整。</p>
 
-<p class="CDPAlignCenter CDPAlign">LDA遍历每个文档的每个单词，并为其分配和调整主题。基于两个概率的乘积，新的主题<em> X </em>被分配给它:<em> p1=(主题t/文档d)，</em>表示分配给主题t的文档单词的比例，<em> p2=(单词w/主题t)，</em>表示在所有文档中分配给主题<em> t </em>的比例，其具有与之关联的单词w。</p>
+<p class="CDPAlignCenter CDPAlign">LDA 遍历每个文档的每个单词，并为其分配和调整主题。基于两个概率的乘积，新的主题<em> X </em>被分配给它:<em> p1=(主题 t/文档 d)，</em>表示分配给主题 t 的文档单词的比例，<em> p2=(单词 w/主题 t)，</em>表示在所有文档中分配给主题<em> t </em>的比例，其具有与之关联的单词 w。</p>
 
 <p>随着通过次数的增加，主题词和主题文档得到了良好的分布。</p>
 
-<p>让我们看看它是如何在Python中执行的:</p>
+<p>让我们看看它是如何在 Python 中执行的:</p>
 
 <p>在这一步中，我们正在加载来自<kbd>sklearn</kbd>的<kbd>dataset = fetch_20newsgroups</kbd>:</p>
 
@@ -1906,7 +1906,7 @@
 
 <ol start="3">
 
-<li>现在，我们必须在<kbd>gensim</kbd>库的帮助下制作文档术语矩阵。该库还将使我们能够执行LDA:</li>
+<li>现在，我们必须在<kbd>gensim</kbd>库的帮助下制作文档术语矩阵。该库还将使我们能够执行 LDA:</li>
 
 </ol>
 
@@ -1922,7 +1922,7 @@
 
 <ol start="5">
 
-<li>在TF-IDF的帮助下，正在创建一个类似的矩阵:</li>
+<li>在 TF-IDF 的帮助下，正在创建一个类似的矩阵:</li>
 
 </ol>
 
@@ -1930,7 +1930,7 @@
 
 <ol start="6">
 
-<li>让我们用TF-IDF矩阵建立模型。主题的数量已经被给定为<kbd>10</kbd>:</li>
+<li>让我们用 TF-IDF 矩阵建立模型。主题的数量已经被给定为<kbd>10</kbd>:</li>
 
 </ol>
 
@@ -1974,7 +1974,7 @@
 
 <p style="padding-left: 60px">评估模型</p>
 
-<p class="CDPAlignCenter CDPAlign">对数困惑度是衡量LDA模型好坏的一个标准。困惑值越低，模型越好:</p>
+<p class="CDPAlignCenter CDPAlign">对数困惑度是衡量 LDA 模型好坏的一个标准。困惑值越低，模型越好:</p>
 
 
 
@@ -2031,7 +2031,7 @@
 
 <pre>print("lda_model 1- Perplexity:-",lda_model.log_perplexity(corpus_tfidf))<br/>print("lda_model 2- Perplexity:-",lda_model2.log_perplexity(doc_term_matrix))</pre>
 
-<p>可视化LDA</p>
+<p>可视化 LDA</p>
 
 <p class="CDPAlignCenter CDPAlign">为了可视化数据，我们可以使用下面的代码:</p>
 
@@ -2248,7 +2248,7 @@
 
 <li>朴素贝叶斯分类器的工作原理</li>
 
-<li>我们将通过泰坦尼克号的例子来理解这一切。当泰坦尼克号正在下沉时，就获救而言，有几个类别比其他类别优先。我们有以下数据集(它是一个Kaggle数据集):</li>
+<li>我们将通过泰坦尼克号的例子来理解这一切。当泰坦尼克号正在下沉时，就获救而言，有几个类别比其他类别优先。我们有以下数据集(它是一个 Kaggle 数据集):</li>
 
 </ul>
 
@@ -2979,7 +2979,7 @@
 
 <p class="CDPAlignCenter CDPAlign">摘要</p>
 
-<p>在这一章中，我们学习了由句子和单词组成的语料库建设技术，其中包括一个单词包，使文本可用于算法。您还了解了TF-IDF，以及一个术语对于文档和整个语料库的重要性。我们讨论了情感分析、分类和TF-IDF特征提取。</p>
+<p>在这一章中，我们学习了由句子和单词组成的语料库建设技术，其中包括一个单词包，使文本可用于算法。您还了解了 TF-IDF，以及一个术语对于文档和整个语料库的重要性。我们讨论了情感分析、分类和 TF-IDF 特征提取。</p>
 
 
 
@@ -3022,7 +3022,7 @@
 
                             
 
-                    <h1 class="header-title">还向您介绍了主题建模和评估模型，其中包括可视化LDA。我们讲述了贝叶斯定理和朴素贝叶斯分类器。在下一章，你将学习时态和序列模式发现。</h1>
+                    <h1 class="header-title">还向您介绍了主题建模和评估模型，其中包括可视化 LDA。我们讲述了贝叶斯定理和朴素贝叶斯分类器。在下一章，你将学习时态和序列模式发现。</h1>
 
                 
 

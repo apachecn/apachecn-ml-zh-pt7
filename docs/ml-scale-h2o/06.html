@@ -6,40 +6,40 @@
 		
 	
 	
-		<div><h1 id="_idParaDest-64"><em class="italic"> <a id="_idTextAnchor064"/>第四章</em> : H2O模型规模化建设——能力衔接</h1>
-			<p>到目前为止，我们已经了解了如何按比例建立H2O模型的基本工作流程，但这是使用H2O最少的情况下完成的。在这一章中，我们将按比例调查H2O模型建筑的极其广泛的能力集。然后，我们将使用本章的知识，继续第二部分，<em class="italic">使用H2O </em>在大数据量上构建最先进的模型，在这里，我们将进入正题，使用先进的技术来构建和解释大规模的高度预测模型。</p>
+		<div><h1 id="_idParaDest-64"><em class="italic"> <a id="_idTextAnchor064"/>第四章</em> : H2O 模型规模化建设——能力衔接</h1>
+			<p>到目前为止，我们已经了解了如何按比例建立 H2O 模型的基本工作流程，但这是使用 H2O 最少的情况下完成的。在这一章中，我们将按比例调查 H2O 模型建筑的极其广泛的能力集。然后，我们将使用本章的知识，继续第二部分，<em class="italic">使用 H2O </em>在大数据量上构建最先进的模型，在这里，我们将进入正题，使用先进的技术来构建和解释大规模的高度预测模型。</p>
 			<p>为了进行这项调查，我们将本章分为以下几个主题:</p>
 			<ul>
-				<li>在模型构建过程中阐明H2O数据功能</li>
-				<li>H2O机器学习算法综述</li>
-				<li>了解H2O建模功能</li>
+				<li>在模型构建过程中阐明 H2O 数据功能</li>
+				<li>H2O 机器学习算法综述</li>
+				<li>了解 H2O 建模功能</li>
 			</ul>
-			<h1 id="_idParaDest-65"><a id="_idTextAnchor065"/>建模期间的H2O数据功能</h1>
-			<p>回想一下，H2O模型建造<a id="_idIndexMarker170"/>的规模是通过使用H2O 3或它的扩展——苏打水来完成的，它用火花能力包裹了H2O 3。H2O 3 API在模型构建过程中使用了广泛的数据功能，而苏打水API继承了这些功能，并增加了Spark的额外功能。这些功能分为以下三大类:</p>
+			<h1 id="_idParaDest-65"><a id="_idTextAnchor065"/>建模期间的 H2O 数据功能</h1>
+			<p>回想一下，H2O 模型建造<a id="_idIndexMarker170"/>的规模是通过使用 H2O 3 或它的扩展——苏打水来完成的，它用火花能力包裹了 H2O 3。H2O 3 API 在模型构建过程中使用了广泛的数据功能，而苏打水 API 继承了这些功能，并增加了 Spark 的额外功能。这些功能分为以下三大类:</p>
 			<ul>
-				<li><strong class="bold">将数据从源系统摄取到H2O集群</strong></li>
-				<li><strong class="bold">在H2O集群上操作数据</strong></li>
-				<li><strong class="bold">将数据</strong>从H2O集群导出到外部目的地</li>
+				<li><strong class="bold">将数据从源系统摄取到 H2O 集群</strong></li>
+				<li><strong class="bold">在 H2O 集群上操作数据</strong></li>
+				<li><strong class="bold">将数据</strong>从 H2O 集群导出到外部目的地</li>
 			</ul>
-			<p>如前几章所强调的，H2O集群架构(H2O 3或苏打水)允许无限规模的模型构建，但它是从通过在IDE中编码H2O来构建模型的数据科学家那里抽象出来的。</p>
-			<p>H2O数据能力<a id="_idIndexMarker171"/>在下图中概述，随后详细说明:</p>
+			<p>如前几章所强调的，H2O 集群架构(H2O 3 或苏打水)允许无限规模的模型构建，但它是从通过在 IDE 中编码 H2O 来构建模型的数据科学家那里抽象出来的。</p>
+			<p>H2O 数据能力<a id="_idIndexMarker171"/>在下图中概述，随后详细说明:</p>
 			<div><div><img src="img/B17065_04_01.jpg" alt=""/>
 				</div>
 			</div>
-			<p class="figure-caption">图4.1–H2O数据功能</p>
+			<p class="figure-caption">图 4.1–H2O 数据功能</p>
 			<p>让我们从数据摄取开始。</p>
-			<h2 id="_idParaDest-66"><a id="_idTextAnchor066"/>将数据从源摄取到H2O集群</h2>
+			<h2 id="_idParaDest-66"><a id="_idTextAnchor066"/>将数据从源摄取到 H2O 集群</h2>
 			<p>支持以下<a id="_idIndexMarker172"/>数据源<a id="_idIndexMarker173"/>:</p>
 			<ul>
 				<li><strong class="bold">本地文件</strong></li>
 				<li><strong class="bold">远程文件</strong></li>
 				<li><strong class="bold"> AWS S3 </strong></li>
-				<li><strong class="bold"> MinIO云存储</strong></li>
+				<li><strong class="bold"> MinIO 云存储</strong></li>
 				<li><strong class="bold">天蓝色斑点和数据湖</strong></li>
 				<li><strong class="bold">谷歌云存储</strong></li>
 				<li><strong class="bold"> HDFS </strong></li>
-				<li><strong class="bold">类HDFS</strong>:Alluxio FS和IBM HDFS</li>
-				<li><strong class="bold">蜂巢</strong>(通过Metastore/HDFS或JDBC)</li>
+				<li><strong class="bold">类 HDFS</strong>:Alluxio FS 和 IBM HDFS</li>
+				<li><strong class="bold">蜂巢</strong>(通过 Metastore/HDFS 或 JDBC)</li>
 				<li><strong class="bold"> JDBC </strong></li>
 			</ul>
 			<p>支持的源数据<a id="_idIndexMarker174"/>文件格式<a id="_idIndexMarker175"/>如下<a id="_idIndexMarker176"/>:</p>
@@ -53,55 +53,55 @@
 				<li><strong class="bold"> ARFF </strong></li>
 				<li><strong class="bold"> SVMLight </strong></li>
 			</ul>
-			<p>H2O数据接收的一些重要特征<a id="_idIndexMarker177"/>如下:</p>
+			<p>H2O 数据接收的一些重要特征<a id="_idIndexMarker177"/>如下:</p>
 			<ul>
-				<li>数据直接从源接收到H2O群集内存，而不通过IDE客户端。</li>
-				<li>在所有情况下，数据都在内存中跨H2O集群进行分区。</li>
-				<li>除了本地文件、远程文件和JDBC源之外，数据被并行接收到每个分区。</li>
-				<li>H2O集群上的数据在IDE <a id="_idIndexMarker178"/>中以二维<strong class="bold">H2 of frame</strong>的形式呈现给用户。</li>
+				<li>数据直接从源接收到 H2O 群集内存，而不通过 IDE 客户端。</li>
+				<li>在所有情况下，数据都在内存中跨 H2O 集群进行分区。</li>
+				<li>除了本地文件、远程文件和 JDBC 源之外，数据被并行接收到每个分区。</li>
+				<li>H2O 集群上的数据在 IDE <a id="_idIndexMarker178"/>中以二维<strong class="bold">H2 of frame</strong>的形式呈现给用户。</li>
 			</ul>
-			<p>现在让我们看看，既然数据被输入到H2O，并被表示为H2OFrame，我们该如何操作数据。</p>
-			<h2 id="_idParaDest-67"><a id="_idTextAnchor067"/>操作H2O集群中的数据</h2>
-			<p>H2O 3 API提供了广泛的数据处理能力。正如前面的列表<a id="_idIndexMarker180"/>中提到的，内存中的数据集分布在H2O集群上，并在数据加载和后续数据操作后在IDE中具体表示为H2OFrame。</p>
-			<p>H2OFrames有一个广泛的方法列表，用于在值、列、行和完整数据集<a id="_idIndexMarker181"/>级别执行数学、逻辑和自省操作。一个h2of帧<a id="_idIndexMarker182"/>在体验上类似于<strong class="bold">熊猫数据帧</strong>或<strong class="bold"> R数据帧</strong>。</p>
-			<p>以下示例只是可以在H2Oframes上完成的一些数据操作:</p>
+			<p>现在让我们看看，既然数据被输入到 H2O，并被表示为 H2OFrame，我们该如何操作数据。</p>
+			<h2 id="_idParaDest-67"><a id="_idTextAnchor067"/>操作 H2O 集群中的数据</h2>
+			<p>H2O 3 API 提供了广泛的数据处理能力。正如前面的列表<a id="_idIndexMarker180"/>中提到的，内存中的数据集分布在 H2O 集群上，并在数据加载和后续数据操作后在 IDE 中具体表示为 H2OFrame。</p>
+			<p>H2OFrames 有一个广泛的方法列表，用于在值、列、行和完整数据集<a id="_idIndexMarker181"/>级别执行数学、逻辑和自省操作。一个 h2of 帧<a id="_idIndexMarker182"/>在体验上类似于<strong class="bold">熊猫数据帧</strong>或<strong class="bold"> R 数据帧</strong>。</p>
+			<p>以下示例只是可以在 H2Oframes 上完成的一些数据操作:</p>
 			<ul>
-				<li>对<strong class="bold">数据列</strong>的操作<a id="_idIndexMarker183"/>:<ul><li>更改数据类型(例如，从0到7的整数作为分类值)。</li><li>通过应用数学函数来聚合列(分组依据)。</li><li>显示列名并用作模型中的特征。</li></ul></li>
+				<li>对<strong class="bold">数据列</strong>的操作<a id="_idIndexMarker183"/>:<ul><li>更改数据类型(例如，从 0 到 7 的整数作为分类值)。</li><li>通过应用数学函数来聚合列(分组依据)。</li><li>显示列名并用作模型中的特征。</li></ul></li>
 				<li>对<strong class="bold">数据行</strong>的操作:<ul><li>组合一个或多个数据集中的行<a id="_idIndexMarker184"/>。</li><li>通过指定行索引、行范围或逻辑条件来分割(筛选)数据集的行。</li></ul></li>
 				<li>对<strong class="bold">数据集</strong>的操作<a id="_idIndexMarker185"/>:<ul><li>根据共享列名的公共值合并两个数据集。</li><li>通过在列上旋转来转换数据集。</li><li>将一个数据集拆分为两个或多个数据集(例如，定型、验证和测试)。</li></ul></li>
 				<li>对<strong class="bold">数据值</strong>的操作:<ul><li>用相邻的行或列值向前或向后填充缺失值<a id="_idIndexMarker186"/>。</li><li>通过用聚合结果进行估算来填充缺失值(例如，列的平均值)。</li><li>基于逻辑条件替换数值。</li><li>修剪值，操作字符串，返回数值符号，并测试值是否不适用。</li></ul></li>
-				<li><strong class="bold">功能工程</strong>操作:<ul><li>日期解析，例如，将<a id="_idIndexMarker187"/>一个日期列解析为年、月、日的单独列。</li><li>从其他列以数学方式和有条件地派生出一个新列，包括使用lambda表达式。</li><li>执行目标编码(即，用目标变量的平均值替换分类值)。</li><li>对于<strong class="bold">自然语言处理(NLP) </strong>问题，执行<strong class="bold">字符串标记化</strong>、<strong class="bold">词频-逆文档频率(TF-IDF) </strong>计算，<a id="_idIndexMarker188"/>将<strong class="bold"> Word2vec </strong>模型转换为<a id="_idIndexMarker189"/>H2OFrame<a id="_idIndexMarker190"/>进行数据<a id="_idIndexMarker191"/>操作。</li></ul></li>
+				<li><strong class="bold">功能工程</strong>操作:<ul><li>日期解析，例如，将<a id="_idIndexMarker187"/>一个日期列解析为年、月、日的单独列。</li><li>从其他列以数学方式和有条件地派生出一个新列，包括使用 lambda 表达式。</li><li>执行目标编码(即，用目标变量的平均值替换分类值)。</li><li>对于<strong class="bold">自然语言处理(NLP) </strong>问题，执行<strong class="bold">字符串标记化</strong>、<strong class="bold">词频-逆文档频率(TF-IDF) </strong>计算，<a id="_idIndexMarker188"/>将<strong class="bold"> Word2vec </strong>模型转换为<a id="_idIndexMarker189"/>H2OFrame<a id="_idIndexMarker190"/>进行数据<a id="_idIndexMarker191"/>操作。</li></ul></li>
 			</ul>
-			<p>有关H2O数据操作<a id="_idIndexMarker192"/>可能性的完整细节，请参见H2O Python文档(<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-py/docs/frame.html">http://docs.h2o.ai/h2o/latest-stable/h2o-py/docs/frame.html</a>)或R <a id="_idIndexMarker193"/>文档(<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/reference/index.html">http://docs . H2O . ai/H2O/latest-stable/H2O-R/docs/reference/index . html</a>)。另外，关于数据操作的例子<a id="_idIndexMarker194"/>请参考<em class="italic">用Python和H2O进行机器学习</em>(<a href="http://h2o-release.s3.amazonaws.com/h2o/rel-wheeler/2/docs-website/h2o-docs/booklets/PythonBooklet.pdf">http://H2O-release . S3 . Amazon AWS . com/H2O/rel-wheeler/2/docs-website/H2O-docs/booklets/Python booklet . pdf</a>)第四节。</p>
-			<p>处理数据<a id="_idIndexMarker195"/>是将其作为建模输入的关键。我们可能还想导出我们处理过的数据以备将来使用。下一节列出了H2O数据导出功能。</p>
-			<h2 id="_idParaDest-68"><a id="_idTextAnchor068"/>从H2O集群中导出数据</h2>
-			<p>内存中的H2OFrames<a id="_idIndexMarker197"/>可以导出到外部目标。这些目标<a id="_idIndexMarker198"/>系统如下:</p>
+			<p>有关 H2O 数据操作<a id="_idIndexMarker192"/>可能性的完整细节，请参见 H2O Python 文档(<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-py/docs/frame.html">http://docs.h2o.ai/h2o/latest-stable/h2o-py/docs/frame.html</a>)或 R <a id="_idIndexMarker193"/>文档(<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/reference/index.html">http://docs . H2O . ai/H2O/latest-stable/H2O-R/docs/reference/index . html</a>)。另外，关于数据操作的例子<a id="_idIndexMarker194"/>请参考<em class="italic">用 Python 和 H2O 进行机器学习</em>(<a href="http://h2o-release.s3.amazonaws.com/h2o/rel-wheeler/2/docs-website/h2o-docs/booklets/PythonBooklet.pdf">http://H2O-release . S3 . Amazon AWS . com/H2O/rel-wheeler/2/docs-website/H2O-docs/booklets/Python booklet . pdf</a>)第四节。</p>
+			<p>处理数据<a id="_idIndexMarker195"/>是将其作为建模输入的关键。我们可能还想导出我们处理过的数据以备将来使用。下一节列出了 H2O 数据导出功能。</p>
+			<h2 id="_idParaDest-68"><a id="_idTextAnchor068"/>从 H2O 集群中导出数据</h2>
+			<p>内存中的 H2OFrames<a id="_idIndexMarker197"/>可以导出到外部目标。这些目标<a id="_idIndexMarker198"/>系统如下:</p>
 			<ul>
 				<li><strong class="bold">本地客户端内存</strong></li>
 				<li><strong class="bold">本地文件系统</strong></li>
 				<li><strong class="bold"> AWS S3 </strong></li>
-				<li><strong class="bold"> MinIO云存储</strong></li>
-				<li><strong class="bold"> Azure Blob和数据湖</strong></li>
+				<li><strong class="bold"> MinIO 云存储</strong></li>
+				<li><strong class="bold"> Azure Blob 和数据湖</strong></li>
 				<li><strong class="bold">谷歌云存储</strong></li>
 				<li><strong class="bold"> HDFS </strong></li>
-				<li><strong class="bold">类似HDFS的</strong> : Alluxio FS和IBM HDFS</li>
-				<li><strong class="bold">蜂巢桌</strong> (CSV或拼花，经由JDBC)</li>
+				<li><strong class="bold">类似 HDFS 的</strong> : Alluxio FS 和 IBM HDFS</li>
+				<li><strong class="bold">蜂巢桌</strong> (CSV 或拼花，经由 JDBC)</li>
 			</ul>
 			<p>当然，必须考虑导出数据的数量。例如，大量数据不适合本地客户机内存或文件系统。</p>
 			<p>现在让我们看看苏打水增加了哪些额外的数据功能。</p>
 			<h2 id="_idParaDest-69"><a id="_idTextAnchor069"/>苏打水提供的附加数据功能</h2>
-			<p>苏打水继承了《H2O 3》的所有数据功能。重要的是，sparking Water<a id="_idIndexMarker200"/>通过利用Spark DataFrame和Spark SQL APIs增加了额外的数据功能，因此可以相应地导入、操作和导出数据。关于完整的<a id="_idIndexMarker202"/> Spark DataFrame和Spark SQL功能，请参见以下<a id="_idIndexMarker201"/>参考资料:<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html">https://Spark . Apache . org/docs/latest/SQL-programming-guide . html</a>。</p>
-			<p>使用苏打水的一个关键模式是利用Spark实现高级数据管理功能，然后将产生的Spark数据帧转换为H2Oframe，然后使用H2O的机器学习算法建立最先进的模型，这将在下一节中介绍。这些算法<a id="_idIndexMarker203"/>可以用在H2O 3号或者气泡<a id="_idIndexMarker204"/>水中。</p>
-			<h1 id="_idParaDest-70"><a id="_idTextAnchor070"/> H2O机器学习算法</h1>
-			<p>H2O有广泛的<strong class="bold">无监督</strong>和<strong class="bold">监督</strong>学习算法<a id="_idIndexMarker205"/>，具有相似的可重用<a id="_idIndexMarker206"/> API构造——例如，相似的方式<a id="_idIndexMarker207"/>来设置超参数或调用可解释能力。从H2O 3或苏打水的角度来看，这些算法是相同的，如下图所示:</p>
+			<p>苏打水继承了《H2O 3》的所有数据功能。重要的是，sparking Water<a id="_idIndexMarker200"/>通过利用 Spark DataFrame 和 Spark SQL APIs 增加了额外的数据功能，因此可以相应地导入、操作和导出数据。关于完整的<a id="_idIndexMarker202"/> Spark DataFrame 和 Spark SQL 功能，请参见以下<a id="_idIndexMarker201"/>参考资料:<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html">https://Spark . Apache . org/docs/latest/SQL-programming-guide . html</a>。</p>
+			<p>使用苏打水的一个关键模式是利用 Spark 实现高级数据管理功能，然后将产生的 Spark 数据帧转换为 H2Oframe，然后使用 H2O 的机器学习算法建立最先进的模型，这将在下一节中介绍。这些算法<a id="_idIndexMarker203"/>可以用在 H2O 3 号或者气泡<a id="_idIndexMarker204"/>水中。</p>
+			<h1 id="_idParaDest-70"><a id="_idTextAnchor070"/> H2O 机器学习算法</h1>
+			<p>H2O 有广泛的<strong class="bold">无监督</strong>和<strong class="bold">监督</strong>学习算法<a id="_idIndexMarker205"/>，具有相似的可重用<a id="_idIndexMarker206"/> API 构造——例如，相似的方式<a id="_idIndexMarker207"/>来设置超参数或调用可解释能力。从 H2O 3 或苏打水的角度来看，这些算法是相同的，如下图所示:</p>
 			<div><div><img src="img/B17065_04_02.jpg" alt=""/>
 				</div>
 			</div>
-			<p class="figure-caption">图4.2–H2O算法</p>
-			<p>每个算法都有一组广泛的参数和超参数可以设置或用作默认值。这些算法接受H2OFrames作为数据输入。请记住，H2OFrame只是IDE客户端上的一个句柄，它指向算法处理数据的远程H2O集群上的分布式内存数据。</p>
-			<p>让我们来看看H2O的分布式机器学习算法。</p>
-			<h2 id="_idParaDest-71"><a id="_idTextAnchor071"/> H2O无监督学习算法</h2>
-			<p>无监督算法<a id="_idIndexMarker208"/>不进行预测，而是试图<a id="_idIndexMarker209"/>发现数据中的聚类和异常，或者减少数据集的维度。H2O有以下无监督学习算法可以大规模运行:</p>
+			<p class="figure-caption">图 4.2–H2O 算法</p>
+			<p>每个算法都有一组广泛的参数和超参数可以设置或用作默认值。这些算法接受 H2OFrames 作为数据输入。请记住，H2OFrame 只是 IDE 客户端上的一个句柄，它指向算法处理数据的远程 H2O 集群上的分布式内存数据。</p>
+			<p>让我们来看看 H2O 的分布式机器学习算法。</p>
+			<h2 id="_idParaDest-71"><a id="_idTextAnchor071"/> H2O 无监督学习算法</h2>
+			<p>无监督算法<a id="_idIndexMarker208"/>不进行预测，而是试图<a id="_idIndexMarker209"/>发现数据中的聚类和异常，或者减少数据集的维度。H2O 有以下无监督学习算法可以大规模运行:</p>
 			<ul>
 				<li><strong class="bold">聚合器</strong></li>
 				<li><strong class="bold">广义低秩模型(GLRM) </strong></li>
@@ -110,16 +110,16 @@
 				<li><strong class="bold">K-均值聚类</strong></li>
 				<li><strong class="bold">主成分分析</strong></li>
 			</ul>
-			<h2 id="_idParaDest-72"><a id="_idTextAnchor072"/> H2O监督学习算法</h2>
-			<p>监督学习算法通过从标有结果的训练数据集中学习来预测结果。H2O有以下监督学习算法可以大规模运行:</p>
+			<h2 id="_idParaDest-72"><a id="_idTextAnchor072"/> H2O 监督学习算法</h2>
+			<p>监督学习算法通过从标有结果的训练数据集中学习来预测结果。H2O 有以下监督学习算法可以大规模运行:</p>
 			<ul>
-				<li><strong class="bold"> Cox比例风险(CoxPH) </strong></li>
-				<li><strong class="bold">深度学习(人工神经网络，或ANN) </strong></li>
+				<li><strong class="bold"> Cox 比例风险(CoxPH) </strong></li>
+				<li><strong class="bold">深度学习(人工神经网络，或 ANN) </strong></li>
 				<li><strong class="bold">分布式随机森林(DRF) </strong></li>
 				<li><strong class="bold">广义线性模型(GLM) </strong></li>
-				<li><strong class="bold">最大R平方改进(MAXR) </strong></li>
+				<li><strong class="bold">最大 R 平方改进(MAXR) </strong></li>
 				<li><strong class="bold">广义可加模型(GAM) </strong></li>
-				<li>方差分析GLM </li>
+				<li>方差分析 GLM </li>
 				<li><strong class="bold">梯度推进机(GBM) </strong></li>
 				<li><strong class="bold">朴素贝叶斯分类器</strong></li>
 				<li><strong class="bold">规则匹配</strong></li>
@@ -128,23 +128,23 @@
 			</ul>
 			<h2 id="_idParaDest-73"><a id="_idTextAnchor073"/>参数和超参数</h2>
 			<p>每个算法都有一组用于配置和调整的参数和超参数。指定大多数参数是可选的；如果未指定，将使用默认值。参数包括交叉验证参数、学习率、树深度、权重列、忽略列、早期停止参数、响应列的分布(例如，Bernoulli)、分类编码方案和许多其他规范。</p>
-			<p>你可以在<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science.html#algorithms">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science . html # algorithms</a>的H2O文档中深入了解H2O的算法<a id="_idIndexMarker210"/>及其参数。在http://docs.h2o.ai/#h2o，H2O网站还列出了其算法的教程和小册子。算法参数的完整列表，每一个都有描述、是否作为超参数的状态以及使用该参数的算法的映射，可在H2O的文档<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"> <em class="italic">附录</em> </a>中找到<a id="_idIndexMarker211"/>，网址为<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/parameters.html">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/parameters . html</a>。</p>
-			<h2 id="_idParaDest-74"><a id="_idTextAnchor074"/>监督学习的H2O扩展</h2>
-			<p>H2O通过提供<strong class="bold">自动机器学习(AutoML) </strong>和<strong class="bold">堆叠集成</strong>功能来扩展其监督学习算法。在下一节中，我们将进一步研究这些，我们将把H2O算法放在更大的模型能力环境中。</p>
+			<p>你可以在<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science.html#algorithms">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/data-science . html # algorithms</a>的 H2O 文档中深入了解 H2O 的算法<a id="_idIndexMarker210"/>及其参数。在 http://docs.h2o.ai/#h2o，H2O 网站还列出了其算法的教程和小册子。算法参数的完整列表，每一个都有描述、是否作为超参数的状态以及使用该参数的算法的映射，可在 H2O 的文档<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"> <em class="italic">附录</em> </a>中找到<a id="_idIndexMarker211"/>，网址为<a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/parameters.html">http://docs . H2O . ai/H2O/latest-stable/H2O-docs/parameters . html</a>。</p>
+			<h2 id="_idParaDest-74"><a id="_idTextAnchor074"/>监督学习的 H2O 扩展</h2>
+			<p>H2O 通过提供<strong class="bold">自动机器学习(AutoML) </strong>和<strong class="bold">堆叠集成</strong>功能来扩展其监督学习算法。在下一节中，我们将进一步研究这些，我们将把 H2O 算法放在更大的模型能力环境中。</p>
 			<h2 id="_idParaDest-75"><a id="_idTextAnchor075"/>杂项</h2>
-			<p>H2O提供了一些工具来增强其算法的工作。<strong class="bold">目标编码</strong>帮助您处理分类值<a id="_idIndexMarker213"/>，并且有许多可配置的<a id="_idIndexMarker214"/>参数来简化这一过程。<strong class="bold"> TF-IDF </strong>和<strong class="bold"> Word2vec </strong>是NLP问题中常用的<a id="_idIndexMarker215"/>，它们也是很好配置的。最后，<strong class="bold">排列变量重要性</strong>是一种帮助<a id="_idIndexMarker216"/>了解您的要素对模型的贡献有多大的方法，并且可以帮助评估在您的最终训练数据集中使用哪些要素。</p>
-			<h1 id="_idParaDest-76"><a id="_idTextAnchor076"/> H2O的建模能力</h1>
-			<p>H2O的监督学习算法<a id="_idIndexMarker217"/>用于根据训练数据训练模型，根据验证数据调整模型，并根据测试或现场生产数据进行评分或预测。H2O有广泛的能力来训练、评估、解释、评分和检查模型。下图对这些进行了总结:</p>
+			<p>H2O 提供了一些工具来增强其算法的工作。<strong class="bold">目标编码</strong>帮助您处理分类值<a id="_idIndexMarker213"/>，并且有许多可配置的<a id="_idIndexMarker214"/>参数来简化这一过程。<strong class="bold"> TF-IDF </strong>和<strong class="bold"> Word2vec </strong>是 NLP 问题中常用的<a id="_idIndexMarker215"/>，它们也是很好配置的。最后，<strong class="bold">排列变量重要性</strong>是一种帮助<a id="_idIndexMarker216"/>了解您的要素对模型的贡献有多大的方法，并且可以帮助评估在您的最终训练数据集中使用哪些要素。</p>
+			<h1 id="_idParaDest-76"><a id="_idTextAnchor076"/> H2O 的建模能力</h1>
+			<p>H2O 的监督学习算法<a id="_idIndexMarker217"/>用于根据训练数据训练模型，根据验证数据调整模型，并根据测试或现场生产数据进行评分或预测。H2O 有广泛的能力来训练、评估、解释、评分和检查模型。下图对这些进行了总结:</p>
 			<div><div><img src="img/B17065_04_03.jpg" alt="Figure 4.3 – The H2O supervised learning capabilities&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图4.3-H2O监督学习能力</p>
+			<p class="figure-caption">图 4.3-H2O 监督学习能力</p>
 			<p>让我们进一步了解一下模型训练功能。</p>
-			<h2 id="_idParaDest-77"><a id="_idTextAnchor077"/> H2O模特培训能力</h2>
-			<p>算法<a id="_idIndexMarker218"/>是模型训练的核心，但是除了算法本身之外，还有更大的一组功能需要考虑。H2O提供以下模型训练能力:</p>
+			<h2 id="_idParaDest-77"><a id="_idTextAnchor077"/> H2O 模特培训能力</h2>
+			<p>算法<a id="_idIndexMarker218"/>是模型训练的核心，但是除了算法本身之外，还有更大的一组功能需要考虑。H2O 提供以下模型训练能力:</p>
 			<ul>
 				<li><strong class="bold"> AutoML </strong>:一个易于使用的界面和参数集，使用多种算法，自动训练和调整许多不同的模型，在短时间内创建大量的模型。</li>
-				<li><strong class="bold">交叉验证</strong> : K-fold验证用于针对验证拆分的折叠生成性能指标，折叠数等参数可以在算法的训练参数中指定。</li>
+				<li><strong class="bold">交叉验证</strong> : K-fold 验证用于针对验证拆分的折叠生成性能指标，折叠数等参数可以在算法的训练参数中指定。</li>
 				<li>检查点:一个新的模型是从一个先前训练过的，有检查点的模型的延续，而不是从零开始建立模型；例如，这在用新数据重新训练模型时非常有用。</li>
 				<li><strong class="bold">提前停止</strong>:定义算法何时提前停止建模的参数，由指定的多个停止指标决定。</li>
 				<li><strong class="bold">网格搜索</strong>:为指定的一系列超参数的每个组合建立模型，并根据性能指标对结果模型进行排序。</li>
@@ -152,20 +152,20 @@
 				<li><strong class="bold">分段训练</strong>:根据相同的列值将训练数据划分成段，并为每个段建立单独的模型。</li>
 				<li><strong class="bold">堆叠集成</strong>:将使用相同或不同算法的多个基础模型的结果组合成一个性能更好的单一模型。</li>
 			</ul>
-			<p>在训练一个模型之后，我们<a id="_idIndexMarker219"/>想要评估它，以确定它的预测性能是否满足我们的需要。让我们看看H2O在这方面提供了什么。</p>
-			<h2 id="_idParaDest-78"><a id="_idTextAnchor078"/> H2O模型评估能力</h2>
-			<p>H2O公开了许多模型<a id="_idIndexMarker220"/>属性来评估模型性能。这些总结如下:</p>
+			<p>在训练一个模型之后，我们<a id="_idIndexMarker219"/>想要评估它，以确定它的预测性能是否满足我们的需要。让我们看看 H2O 在这方面提供了什么。</p>
+			<h2 id="_idParaDest-78"><a id="_idTextAnchor078"/> H2O 模型评估能力</h2>
+			<p>H2O 公开了许多模型<a id="_idIndexMarker220"/>属性来评估模型性能。这些总结如下:</p>
 			<ul>
-				<li><strong class="bold">AutoML排行榜</strong>:AutoML模型结果按配置的性能指标或其他属性(如平均预测速度)进行排名，并显示其他指标。</li>
-				<li><strong class="bold">分类问题的性能指标</strong>:对于分类问题，H2O计算<strong class="bold"> GINI系数</strong>、<strong class="bold">绝对马太相关系数(MCC) </strong>、<strong class="bold"> F1、</strong>、<strong class="bold"> F0.5 </strong>、<strong class="bold"> F2 </strong>、<strong class="bold">准确度</strong>、<strong class="bold"> Logloss </strong>、<strong class="bold">ROC曲线下面积(AUC) </strong>、<strong class="bold">精确召回下面积</strong></li>
-				<li><strong class="bold">回归问题的性能度量</strong>:对于回归问题，H2O计算<strong class="bold"> R平方(R ) </strong>、<strong class="bold">均方误差(MSE) </strong>、<strong class="bold">均方根误差(RMSE) </strong>、<strong class="bold">均方根对数误差(RMSLE) </strong>和<strong class="bold">平均绝对误差(MAE) </strong>度量。</li>
-				<li><strong class="bold">预测指标</strong>:模型建立后，H2O允许你预测叶节点分配(基于树的模型)、特征贡献、每个阶段的类概率(GBM模型)以及预测路径上的特征频率(GBM和DRF)。</li>
+				<li><strong class="bold">AutoML 排行榜</strong>:AutoML 模型结果按配置的性能指标或其他属性(如平均预测速度)进行排名，并显示其他指标。</li>
+				<li><strong class="bold">分类问题的性能指标</strong>:对于分类问题，H2O 计算<strong class="bold"> GINI 系数</strong>、<strong class="bold">绝对马太相关系数(MCC) </strong>、<strong class="bold"> F1、</strong>、<strong class="bold"> F0.5 </strong>、<strong class="bold"> F2 </strong>、<strong class="bold">准确度</strong>、<strong class="bold"> Logloss </strong>、<strong class="bold">ROC 曲线下面积(AUC) </strong>、<strong class="bold">精确召回下面积</strong></li>
+				<li><strong class="bold">回归问题的性能度量</strong>:对于回归问题，H2O 计算<strong class="bold"> R 平方(R ) </strong>、<strong class="bold">均方误差(MSE) </strong>、<strong class="bold">均方根误差(RMSE) </strong>、<strong class="bold">均方根对数误差(RMSLE) </strong>和<strong class="bold">平均绝对误差(MAE) </strong>度量。</li>
+				<li><strong class="bold">预测指标</strong>:模型建立后，H2O 允许你预测叶节点分配(基于树的模型)、特征贡献、每个阶段的类概率(GBM 模型)以及预测路径上的特征频率(GBM 和 DRF)。</li>
 				<li><strong class="bold">学习曲线图</strong>:这显示了学习过程中的模型性能指标，有助于诊断<a id="_idIndexMarker221"/>过拟合或欠拟合。</li>
 			</ul>
-			<p>现在让我们探索解释H2O模型的方法。</p>
-			<h2 id="_idParaDest-79"><a id="_idTextAnchor079"/> H2O模型的可解释能力</h2>
-			<p>H2O展示了一个简单统一的界面来解释单个模型或多个模型，这些模型可以是单独构建的模型列表，也可以是对AutoML生成的模型的引用。最重要的是，H2O允许你生成全局(即模型级)和局部(行或个体级)的解释。H2O的可解释能力可以根据你的需求进行配置。输出是表格、图形或两者兼有，这取决于解释。</p>
-			<p>我们将用全部的<em class="italic">第6章</em>、<em class="italic">高级模型构建-第二部分</em>来更详细地探讨这个重要的主题，但是现在，这里有一个能力的快速列表:</p>
+			<p>现在让我们探索解释 H2O 模型的方法。</p>
+			<h2 id="_idParaDest-79"><a id="_idTextAnchor079"/> H2O 模型的可解释能力</h2>
+			<p>H2O 展示了一个简单统一的界面来解释单个模型或多个模型，这些模型可以是单独构建的模型列表，也可以是对 AutoML 生成的模型的引用。最重要的是，H2O 允许你生成全局(即模型级)和局部(行或个体级)的解释。H2O 的可解释能力可以根据你的需求进行配置。输出是表格、图形或两者兼有，这取决于解释。</p>
+			<p>我们将用全部的<em class="italic">第 6 章</em>、<em class="italic">高级模型构建-第二部分</em>来更详细地探讨这个重要的主题，但是现在，这里有一个能力的快速列表:</p>
 			<ul>
 				<li><strong class="bold">回归残差分析</strong></li>
 				<li><strong class="bold">分类混淆矩阵</strong></li>
@@ -175,18 +175,18 @@
 				<li><strong class="bold">部分依赖图(PDP)</strong></li>
 				<li><strong class="bold">个体条件期望(ICE) </strong></li>
 			</ul>
-			<p>现在让我们来完成我们对H2O大规模建模能力的调查，看看一旦我们的模型<a id="_idIndexMarker223"/>被训练、评估和解释后我们能做什么。</p>
-			<h2 id="_idParaDest-80"><a id="_idTextAnchor080"/> H2O受训模特神器</h2>
-			<p>一旦模型被训练，它可以被导出<a id="_idIndexMarker224"/>并保存为评分工件。在<em class="italic">第3部分:将您的模型部署到生产环境中</em>中，我们将讨论为生产评分部署您的工件这个更大的主题。以下是导出的评分工件的基本功能:</p>
+			<p>现在让我们来完成我们对 H2O 大规模建模能力的调查，看看一旦我们的模型<a id="_idIndexMarker223"/>被训练、评估和解释后我们能做什么。</p>
+			<h2 id="_idParaDest-80"><a id="_idTextAnchor080"/> H2O 受训模特神器</h2>
+			<p>一旦模型被训练，它可以被导出<a id="_idIndexMarker224"/>并保存为评分工件。在<em class="italic">第 3 部分:将您的模型部署到生产环境中</em>中，我们将讨论为生产评分部署您的工件这个更大的主题。以下是导出的评分工件的基本功能:</p>
 			<ul>
-				<li><strong class="bold">使用MOJO </strong>进行预测:模型可以保存为称为MOJO<a id="_idIndexMarker225"/>的自包含二进制Java对象，这些对象可以灵活地实现为不同系统上的低延迟生产评分工件(例如，REST服务器、批处理数据库评分和Hive UDFs)。MOJOs也可以重新导入到H2O集群中，目的将在下一个要点中描述。</li>
-				<li><strong class="bold">使用MOJO检查模型</strong>:可以将导出的MOJO重新导入到H2O聚类中，并用于对数据集进行评分，检查用于训练原始模型的超参数，查看评分历史，以及显示功能重要性。</li>
-				<li>与POJO相比的MOJO:POJO是MOJO的前身，现在被H2O弃用，但是某些算法仍然需要<a id="_idIndexMarker226"/>。</li>
+				<li><strong class="bold">使用 MOJO </strong>进行预测:模型可以保存为称为 MOJO<a id="_idIndexMarker225"/>的自包含二进制 Java 对象，这些对象可以灵活地实现为不同系统上的低延迟生产评分工件(例如，REST 服务器、批处理数据库评分和 Hive UDFs)。MOJOs 也可以重新导入到 H2O 集群中，目的将在下一个要点中描述。</li>
+				<li><strong class="bold">使用 MOJO 检查模型</strong>:可以将导出的 MOJO 重新导入到 H2O 聚类中，并用于对数据集进行评分，检查用于训练原始模型的超参数，查看评分历史，以及显示功能重要性。</li>
+				<li>与 POJO 相比的 MOJO:POJO 是 MOJO 的前身，现在被 H2O 弃用，但是某些算法仍然需要<a id="_idIndexMarker226"/>。</li>
 			</ul>
 			<h1 id="_idParaDest-81"><a id="_idTextAnchor081"/>总结</h1>
-			<p>在这一章中，我们对H2O大规模建模的能力进行了广泛的调查。我们了解了可以导入H2O集群的数据源以及支持的文件格式。我们了解了这些数据如何从源集群移动到H2O集群，以及H2OFrame API如何在IDE中提供单个句柄来将H2O集群上的分布式内存数据表示为单个二维数据结构。然后，我们学习了通过H2OFrame API操纵数据的许多方法，以及如何在需要时将数据导出到外部系统。</p>
-			<p>然后，我们调查了大规模H2O模型构建的核心——H2O的许多最先进的分布式非监督和监督学习算法。然后，我们通过调查它们周围的模型能力，从训练、评估和解释模型，到使用模型工件重新训练、评分和检查模型，将它们放入上下文中。</p>
-			<p>有了这张地图，我们现在可以卷起袖子，开始按比例建造最先进的H2O模型。在下一章中，我们将从一个接一个地实现高级模型构建主题开始，然后将它们放在一个完全开发的用例中。</p>
+			<p>在这一章中，我们对 H2O 大规模建模的能力进行了广泛的调查。我们了解了可以导入 H2O 集群的数据源以及支持的文件格式。我们了解了这些数据如何从源集群移动到 H2O 集群，以及 H2OFrame API 如何在 IDE 中提供单个句柄来将 H2O 集群上的分布式内存数据表示为单个二维数据结构。然后，我们学习了通过 H2OFrame API 操纵数据的许多方法，以及如何在需要时将数据导出到外部系统。</p>
+			<p>然后，我们调查了大规模 H2O 模型构建的核心——H2O 的许多最先进的分布式非监督和监督学习算法。然后，我们通过调查它们周围的模型能力，从训练、评估和解释模型，到使用模型工件重新训练、评分和检查模型，将它们放入上下文中。</p>
+			<p>有了这张地图，我们现在可以卷起袖子，开始按比例建造最先进的 H2O 模型。在下一章中，我们将从一个接一个地实现高级模型构建主题开始，然后将它们放在一个完全开发的用例中。</p>
 		</div>
 	
 

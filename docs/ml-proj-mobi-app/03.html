@@ -32,7 +32,7 @@
 
                 
 
-<p class="graf graf--p graf-after--figure">在这一章中，我们将构建一个完整的iOS和Android应用程序，其中图像转换以类似于Instagram应用程序的方式应用于我们自己的图像。对于这个应用程序，我们将在TensorFlow的帮助下再次使用Core ML和TensorFlow模型。为了使这个工作，我们将不得不执行一些小的黑客。</p>
+<p class="graf graf--p graf-after--figure">在这一章中，我们将构建一个完整的 iOS 和 Android 应用程序，其中图像转换以类似于 Instagram 应用程序的方式应用于我们自己的图像。对于这个应用程序，我们将在 TensorFlow 的帮助下再次使用 Core ML 和 TensorFlow 模型。为了使这个工作，我们将不得不执行一些小的黑客。</p>
 
 <p class="graf graf--p graf-after--figure">本章的最佳用例是基于一个名为<strong> Prisma </strong>的照片编辑应用程序，通过它你可以使用神经网络将你的图像转换为绘画。你可以把你的图像转换成一种艺术形式，看起来像是毕加索或萨尔瓦多·达利画的。</p>
 
@@ -105,7 +105,7 @@
 
 <p>我们将在本章中创建的应用程序是基于一个类似于前面屏幕截图所示的系统的实现。已经有多篇论文发表，证明它在面部和物体识别方面的表现接近人类。深度神经网络有助于实现人工人类视觉。在这个应用中，我们使用的算法实现了一个深度神经网络，可以创建高视觉质量的图像。神经网络用于对输入图像的内容和风格进行分叉和重新排列。通过这种方式，它提供了一种创造艺术形象的神经逻辑。</p>
 
-<p>这个项目基于以下论文:<a href="https://arxiv.org/pdf/1508.06576.pdf" target="_blank">https://arxiv.org/pdf/1508.06576.pdf</a>和这里的GitHub项目:<a href="https://github.com/lengstrom/fast-style-transfer" target="_blank">https://github.com/lengstrom/fast-style-transfer</a>。另一篇关于近似人类面部识别的论文可以在以下链接找到:<a href="https://ieeexplore.ieee.org/document/6909616/" target="_blank">https://ieeexplore.ieee.org/document/6909616/</a>。</p>
+<p>这个项目基于以下论文:<a href="https://arxiv.org/pdf/1508.06576.pdf" target="_blank">https://arxiv.org/pdf/1508.06576.pdf</a>和这里的 GitHub 项目:<a href="https://github.com/lengstrom/fast-style-transfer" target="_blank">https://github.com/lengstrom/fast-style-transfer</a>。另一篇关于近似人类面部识别的论文可以在以下链接找到:<a href="https://ieeexplore.ieee.org/document/6909616/" target="_blank">https://ieeexplore.ieee.org/document/6909616/</a>。</p>
 
 
 
@@ -158,15 +158,15 @@
 
                 
 
-<p>在神经网络中，<strong>卷积神经网络</strong>(<strong>CNN</strong>)是一种被广泛用于图像分类、对象检测、面部识别等的主要技术。典型的CNN算法将图像作为数组格式的输入，并产生其分类作为输出，例如，256 * 256 * 3(高*宽*尺寸)的人的头像照片，RGB值的矩阵数组。这里的数字<em> 3 </em>指的是RGB值。</p>
+<p>在神经网络中，<strong>卷积神经网络</strong>(<strong>CNN</strong>)是一种被广泛用于图像分类、对象检测、面部识别等的主要技术。典型的 CNN 算法将图像作为数组格式的输入，并产生其分类作为输出，例如，256 * 256 * 3(高*宽*尺寸)的人的头像照片，RGB 值的矩阵数组。这里的数字<em> 3 </em>指的是 RGB 值。</p>
 
-<p>在典型的转移算法中，更多的焦点将被给予在对象识别上，并且CNN将被训练在对象识别上。在CNN处理层次中，当处理级别增加时，对象信息在更高层变得更加明确。每个处理层中的转换通过查找图像中的实际内容而不是计算详细的像素值来改进对象识别。在CNN的处理中，较高层总是表示所识别的对象及其排列，而较低层表示关于更深像素值的更多信息，以便再现图像。</p>
+<p>在典型的转移算法中，更多的焦点将被给予在对象识别上，并且 CNN 将被训练在对象识别上。在 CNN 处理层次中，当处理级别增加时，对象信息在更高层变得更加明确。每个处理层中的转换通过查找图像中的实际内容而不是计算详细的像素值来改进对象识别。在 CNN 的处理中，较高层总是表示所识别的对象及其排列，而较低层表示关于更深像素值的更多信息，以便再现图像。</p>
 
 <p>如下所示，为了找出输入图像的风格，我们设计了一个特征空间来帮助我们捕捉纹理相关的信息。该空间基于网络每层中的滤波器响应，而多层包含有助于在不同尺度上构建输入图像的多种变化的特征相关性。这样，它捕捉纹理信息，但不涉及对象的全局排列:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-413 image-border" src="img/51503cd8-43aa-48d1-9e54-ce5db017742a.png" style="width:57.42em;height:33.50em;"/></p>
 
-<p>在前面描述CNN流程的屏幕截图中，每个步骤都应用了过滤器。过滤器的数量随着过滤图像尺寸的减小而增加。大小的减小是通过下采样机制(如池化)实现的。在CNN层中，可以在特定阶段重建图像，这取决于网络的输入。该信息也可以在CNN的不同处理阶段被可视化。这是通过基于特定层中的网络响应重建输入图像来实现的。如前面的屏幕截图所示，可以在每一步重新创建内容，而不必等到最后一步。让我们仔细看看<strong>视觉几何组</strong> ( <strong> VGG </strong>)网络数据集。</p>
+<p>在前面描述 CNN 流程的屏幕截图中，每个步骤都应用了过滤器。过滤器的数量随着过滤图像尺寸的减小而增加。大小的减小是通过下采样机制(如池化)实现的。在 CNN 层中，可以在特定阶段重建图像，这取决于网络的输入。该信息也可以在 CNN 的不同处理阶段被可视化。这是通过基于特定层中的网络响应重建输入图像来实现的。如前面的屏幕截图所示，可以在每一步重新创建内容，而不必等到最后一步。让我们仔细看看<strong>视觉几何组</strong> ( <strong> VGG </strong>)网络数据集。</p>
 
 
 
@@ -209,7 +209,7 @@
 
                             
 
-                    <h1 class="header-title">VGG网络</h1>
+                    <h1 class="header-title">VGG 网络</h1>
 
                 
 
@@ -219,7 +219,7 @@
 
                 
 
-<p>一个VGG网络可以检测给定输入图像中的1000个对象。这需要224 * 244 * 3大小的图像输入(数字<em> 3 </em>代表RGB值)。这是使用总共16层的3×3大小的卷积层构建的。它还提供了70.5%的前1名准确度和90%的前5名准确度。</p>
+<p>一个 VGG 网络可以检测给定输入图像中的 1000 个对象。这需要 224 * 244 * 3 大小的图像输入(数字<em> 3 </em>代表 RGB 值)。这是使用总共 16 层的 3×3 大小的卷积层构建的。它还提供了 70.5%的前 1 名准确度和 90%的前 5 名准确度。</p>
 
 
 
@@ -262,7 +262,7 @@
 
                             
 
-                    <h1 class="header-title">VGG网络中的层</h1>
+                    <h1 class="header-title">VGG 网络中的层</h1>
 
                 
 
@@ -272,19 +272,19 @@
 
                 
 
-<p>VGG网络有16层，解释如下:</p>
+<p>VGG 网络有 16 层，解释如下:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/f22877f4-4ef0-4950-8bfb-64b0d1748384.png" style="width:13.42em;height:39.83em;"/></p>
 
-<p>前期培训的VGG TensorFlow模型链接可以在这里找到:<a href="https://www.cs.toronto.edu/~frossard/vgg16/vgg16_weights.npz" target="_blank">https://www . cs . Toronto . edu/~ frossard/vgg 16/vgg 16 _ weights . npz</a>。</p>
+<p>前期培训的 VGG TensorFlow 模型链接可以在这里找到:<a href="https://www.cs.toronto.edu/~frossard/vgg16/vgg16_weights.npz" target="_blank">https://www . cs . Toronto . edu/~ frossard/vgg 16/vgg 16 _ weights . npz</a>。</p>
 
 <p>我们可以用每一层上的样式特征输出所捕获的信息来可视化和构建图像。我们可以根据局部结构和颜色找到纹理化的图像。正如您在前面的图像中所看到的，本地化图像结构的复杂性和可视化程度随着层次的增加而增加，而像素清晰度却降低了。</p>
 
-<p>神经风格转移表明，CNN中的风格和内容是可以分离的，允许我们操纵和产生有意义的输出。它使用的示例是一张照片的内容表示，该照片显示了取自不同艺术时期的几幅著名画作，如下面的屏幕截图所示:</p>
+<p>神经风格转移表明，CNN 中的风格和内容是可以分离的，允许我们操纵和产生有意义的输出。它使用的示例是一张照片的内容表示，该照片显示了取自不同艺术时期的几幅著名画作，如下面的屏幕截图所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-414 image-border" src="img/5d0857f2-ff93-4ed8-be7a-e2f9588f13a6.png" style="width:45.50em;height:29.50em;"/></p>
 
-<p>当然，图像内容和风格不能完全相互独立。当应用CNN时，一个图像的内容用另一个图像的风格处理，我们不会看到一个完美的图像同时满足两个约束。我们可以在内容和风格之间进行权衡，以创建吸引人的输出图像。</p>
+<p>当然，图像内容和风格不能完全相互独立。当应用 CNN 时，一个图像的内容用另一个图像的风格处理，我们不会看到一个完美的图像同时满足两个约束。我们可以在内容和风格之间进行权衡，以创建吸引人的输出图像。</p>
 
 <p>在我们的例子中，我们用著名的绘画作品来渲染照片。这种方法叫做<strong>非照片真实感渲染</strong>。</p>
 
@@ -339,13 +339,13 @@
 
                 
 
-<div><p style="font-size: 16px">接下来是本章的应用程序构建部分。在构建这个应用程序时，我们将在预先训练好的模型上使用快速风格转换。我们还可以使用经过调整的定制模型，使应用程序在iOS平台上工作。</p>
+<div><p style="font-size: 16px">接下来是本章的应用程序构建部分。在构建这个应用程序时，我们将在预先训练好的模型上使用快速风格转换。我们还可以使用经过调整的定制模型，使应用程序在 iOS 平台上工作。</p>
 
 </div>
 
-<p>下面是两个使用TensorFlow实现风格转换的例子:<a href="https://github.com/titu1994/Neural-Style-Transfer" target="_blank">https://github.com/titu1994/Neural-Style-Transfer</a>和<a href="https://github.com/yining1023/fast_style_transfer_in_ML5/" target="_blank">https://github.com/yining1023/fast_style_transfer_in_ML5/</a>。</p>
+<p>下面是两个使用 TensorFlow 实现风格转换的例子:<a href="https://github.com/titu1994/Neural-Style-Transfer" target="_blank">https://github.com/titu1994/Neural-Style-Transfer</a>和<a href="https://github.com/yining1023/fast_style_transfer_in_ML5/" target="_blank">https://github.com/yining1023/fast_style_transfer_in_ML5/</a>。</p>
 
-<div><p class="graf graf--p graf-after--p">因此，我们将在本教程中使用TensorFlow-to-Core ML库1.1.0+。GitHub链接如下:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank">https://github.com/tf-coreml/tf-coreml</a>，依赖项如下:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank"/></p>
+<div><p class="graf graf--p graf-after--p">因此，我们将在本教程中使用 TensorFlow-to-Core ML 库 1.1.0+。GitHub 链接如下:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank">https://github.com/tf-coreml/tf-coreml</a>，依赖项如下:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank"/></p>
 
 <ul>
 
@@ -363,7 +363,7 @@
 
 </div>
 
-<p>要获得TensorFlow-to-Core ML转换器的最新版本，请克隆此存储库并从源安装它，如下所示:</p>
+<p>要获得 TensorFlow-to-Core ML 转换器的最新版本，请克隆此存储库并从源安装它，如下所示:</p>
 
 <div><pre><strong>git clone https://github.com/tf-coreml/tf-coreml.git
 
@@ -373,7 +373,7 @@ cd tf-coreml </strong><br/><strong>pip install -e</strong> </pre></div>
 
 <div><pre><strong>python setup.py bdist_wheel</strong></pre></div>
 
-<p>要安装PyPI包，请运行以下命令:</p>
+<p>要安装 PyPI 包，请运行以下命令:</p>
 
 <div><pre><strong>pip install -U tfcoreml</strong></pre></div>
 
@@ -383,7 +383,7 @@ cd tf-coreml </strong><br/><strong>pip install -e</strong> </pre></div>
 
 <ol>
 
-<li class="graf graf--p graf-after--p">作为第一步，我们需要为我们的图找出输出节点的名称。TensorFlow自动生成这个，我们可以通过打印<kbd>evaluate.py</kbd>脚本中的<kbd>net</kbd>来获得它。我们使用下面的块来获取输出节点名:</li>
+<li class="graf graf--p graf-after--p">作为第一步，我们需要为我们的图找出输出节点的名称。TensorFlow 自动生成这个，我们可以通过打印<kbd>evaluate.py</kbd>脚本中的<kbd>net</kbd>来获得它。我们使用下面的块来获取输出节点名:</li>
 
 </ol>
 
@@ -459,7 +459,7 @@ else:
 
 <pre class="graf graf--pre graf-after--p" style="padding-left: 60px"><strong>$ python evaluate.py --checkpoint wave/wave.ckpt --in-path inputs/ - </strong><br/><strong>         -out-path outputs/ --device "/cpu:0" --batch-size 1</strong></pre>
 
-<p class="graf graf--p graf-after--pre">我们将得到作为输出的<kbd>output_graph.pb</kbd>文件，然后我们可以继续进行核心的ML转换部分。</p>
+<p class="graf graf--p graf-after--pre">我们将得到作为输出的<kbd>output_graph.pb</kbd>文件，然后我们可以继续进行核心的 ML 转换部分。</p>
 
 
 
@@ -502,7 +502,7 @@ else:
 
                             
 
-                    <h1 class="header-title">张量流至核心ML转换</h1>
+                    <h1 class="header-title">张量流至核心 ML 转换</h1>
 
                 
 
@@ -512,15 +512,15 @@ else:
 
                 
 
-<p>TensorFlow到CoreML的转换是使用<kbd>tf-coreml</kbd>库完成的。</p>
+<p>TensorFlow 到 CoreML 的转换是使用<kbd>tf-coreml</kbd>库完成的。</p>
 
-<p>点击以下链接查看张量流至堆芯ML转换器库:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank">https://github.com/tf-coreml/tf-coreml</a>。</p>
+<p>点击以下链接查看张量流至堆芯 ML 转换器库:<a href="https://github.com/tf-coreml/tf-coreml" target="_blank">https://github.com/tf-coreml/tf-coreml</a>。</p>
 
-<p>我们有一个将张量流模型转换为核心ML的三步过程。</p>
+<p>我们有一个将张量流模型转换为核心 ML 的三步过程。</p>
 
 <ol>
 
-<li class="graf graf--p graf-after--p">我们在上一步中生成的模型(<kbd>output_graph.pb</kbd>)需要支持<em>能力。</em>苹果的核心ML工具提供了一元转换，支持<em>幂</em>。我们需要将这段代码添加到TensorFlow实现中，如下所示:</li>
+<li class="graf graf--p graf-after--p">我们在上一步中生成的模型(<kbd>output_graph.pb</kbd>)需要支持<em>能力。</em>苹果的核心 ML 工具提供了一元转换，支持<em>幂</em>。我们需要将这段代码添加到 TensorFlow 实现中，如下所示:</li>
 
 </ol>
 
@@ -602,7 +602,7 @@ def pow(op, context):
 
                      image_input_names = ['img_placeholder__0'])  <br/><br/>$ python convert.py</pre>
 
-<p>到目前为止，实际的Core ML转换器不提供从模型输出图像的能力。</p>
+<p>到目前为止，实际的 Core ML 转换器不提供从模型输出图像的能力。</p>
 
 <ol start="3">
 
@@ -628,7 +628,7 @@ def convert_multiarray_output_to_image(spec, feature_name,   <br/>              
 
 <pre class="graf graf--pre graf-after--figure"><strong>$ python output.py</strong></pre>
 
-<p>现在我们有了自己的ML模型。</p>
+<p>现在我们有了自己的 ML 模型。</p>
 
 
 
@@ -671,7 +671,7 @@ def convert_multiarray_output_to_image(spec, feature_name,   <br/>              
 
                             
 
-                    <h1 class="header-title">iOS应用程序</h1>
+                    <h1 class="header-title">iOS 应用程序</h1>
 
                 
 
@@ -681,11 +681,11 @@ def convert_multiarray_output_to_image(spec, feature_name,   <br/>              
 
                 
 
-<p class="graf graf--p graf-after--h3">在iOS应用程序中，我们将在此介绍重要的细节:</p>
+<p class="graf graf--p graf-after--h3">在 iOS 应用程序中，我们将在此介绍重要的细节:</p>
 
 <ol>
 
-<li>将模型导入到Xcode项目中。确保将它们添加到目标中。</li>
+<li>将模型导入到 Xcode 项目中。确保将它们添加到目标中。</li>
 
 <li class="graf graf--p graf-after--p">导入后，您将能够像这样实例化模型:</li>
 
@@ -803,7 +803,7 @@ class StyleTransferInput : MLFeatureProvider {
 
 </div>
 
-<p>您可以直接从GitHub资源库中提取代码，如下:<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter3" target="_blank">https://GitHub . com/intrepidkarthi/MLmobileapps/tree/master/chapter 3</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://GitHub . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter3" target="_blank"/></p>
+<p>您可以直接从 GitHub 资源库中提取代码，如下:<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter3" target="_blank">https://GitHub . com/intrepidkarthi/MLmobileapps/tree/master/chapter 3</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://GitHub . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter3" target="_blank"/></p>
 
 
 
@@ -846,7 +846,7 @@ class StyleTransferInput : MLFeatureProvider {
 
                             
 
-                    <h1 class="header-title">Android应用程序</h1>
+                    <h1 class="header-title">Android 应用程序</h1>
 
                 
 
@@ -856,9 +856,9 @@ class StyleTransferInput : MLFeatureProvider {
 
                 
 
-<p>让我们开始使用TensorFlow模型构建一个Android应用程序。在这种情况下，我们将使用预先建立的模型从谷歌特色的风格转移。</p>
+<p>让我们开始使用 TensorFlow 模型构建一个 Android 应用程序。在这种情况下，我们将使用预先建立的模型从谷歌特色的风格转移。</p>
 
-<p>该应用程序的基本功能将类似于在Instagram上应用过滤器。我们将使用相机拍摄一张照片，或者从移动画廊中选择一个文件，并在可用设计列表中的图像上应用艺术风格转移。</p>
+<p>该应用程序的基本功能将类似于在 Instagram 上应用过滤器。我们将使用相机拍摄一张照片，或者从移动画廊中选择一个文件，并在可用设计列表中的图像上应用艺术风格转移。</p>
 
 
 
@@ -911,7 +911,7 @@ class StyleTransferInput : MLFeatureProvider {
 
                 
 
-<p>该模型是名为<strong> Magenta </strong>的TensorFlow研究项目的一部分。它主要涉及将<strong>机器学习</strong> ( <strong> ML </strong>)应用到音乐和艺术创作的过程中，这涉及到使用强化学习和深度学习开发新的算法，这些算法可以应用在音乐文件和图像上，构建将帮助艺术家和音乐家的工具。</p>
+<p>该模型是名为<strong> Magenta </strong>的 TensorFlow 研究项目的一部分。它主要涉及将<strong>机器学习</strong> ( <strong> ML </strong>)应用到音乐和艺术创作的过程中，这涉及到使用强化学习和深度学习开发新的算法，这些算法可以应用在音乐文件和图像上，构建将帮助艺术家和音乐家的工具。</p>
 
 <p>张量流研究项目的资源库可以在这里找到:【https://github.com/tensorflow/magenta】T2。</p>
 
@@ -919,9 +919,9 @@ class StyleTransferInput : MLFeatureProvider {
 
 <p>风格转移是内容图像和风格图像的组合产生结果仿作图像的过程。这在文森特·杜默林、乔恩·史伦斯和曼朱纳斯·库德鲁尔(<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://arxiv.org/abs/1610.07629" target="_blank">https://arxiv.org/abs/1610.07629</a>)的论文《艺术风格的学术代表中有详细讨论。</p>
 
-<p>我们既可以使用现有的模型，也可以在我们的应用程序中建立自己的模型。为此，我们需要首先设置Magenta环境。使用自动化脚本在Mac上安装它很简单。如果您在另一个环境中设置，请检查Magenta项目中的手动安装细节。</p>
+<p>我们既可以使用现有的模型，也可以在我们的应用程序中建立自己的模型。为此，我们需要首先设置 Magenta 环境。使用自动化脚本在 Mac 上安装它很简单。如果您在另一个环境中设置，请检查 Magenta 项目中的手动安装细节。</p>
 
-<p>在终端上运行以下命令以安装Magenta:</p>
+<p>在终端上运行以下命令以安装 Magenta:</p>
 
 <pre><strong>curl <br/>  https://raw.githubusercontent.com/tensorflow/magenta/master/magenta/<br/>          too</strong><strong>ls/magenta-install.sh &gt; /tmp/magenta-install.sh<br/></strong><br/><strong>bash /tmp/magenta-install.sh</strong></pre>
 
@@ -1002,7 +1002,7 @@ class StyleTransferInput : MLFeatureProvider {
 
 <p>你可以用你自己的风格图像训练你的模型。这可以分三步完成。</p>
 
-<p>准备好自己风格的图片放在一个目录里，从这里下载训练好的VGG模型关卡:<a href="http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz" target="_blank">http://download . tensor flow . org/models/vgg _ 16 _ 2016 _ 08 _ 28 . tar . gz</a>:</p>
+<p>准备好自己风格的图片放在一个目录里，从这里下载训练好的 VGG 模型关卡:<a href="http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz" target="_blank">http://download . tensor flow . org/models/vgg _ 16 _ 2016 _ 08 _ 28 . tar . gz</a>:</p>
 
 <pre>//Setting up your own images<br/><strong>$ image_stylization_create_dataset \</strong><br/><strong> --vgg_checkpoint=/path/to/vgg_16.ckpt \</strong><br/><strong> --style_files=/path/to/style/images/*.jpg \</strong><br/><strong> --output_file=/tmp/image_stylization/style_images.tfrecord</strong></pre>
 
@@ -1092,7 +1092,7 @@ with tf.Graph().as_default(), tf.Session() as sess:
 
             counter += 1</pre>
 
-<p>现在，让我们开始构建Android应用程序。在本应用中，我们将使用TensorFlow模型，该模型使用Magenta项目中的以下网络代码构建:</p>
+<p>现在，让我们开始构建 Android 应用程序。在本应用中，我们将使用 TensorFlow 模型，该模型使用 Magenta 项目中的以下网络代码构建:</p>
 
 <pre>"""Style transfer network code."""
 
@@ -1212,7 +1212,7 @@ def transform(input_, normalizer_fn=ops.conditional_instance_norm,
 
 <pre>def residual_block(input_, kernel_size, scope, activation_fn=tf.nn.relu):<br/> """<br/> Args:<br/> input_: 4-D Tensor, the input.<br/> kernel_size: int (odd-valued) representing the kernel size.<br/> scope: str, scope under which to operate.<br/> activation_fn: activation function.<br/> Returns:<br/> 4-D Tensor, the output.<br/> Raises:<br/> ValueError: if `kernel_size` is even.<br/> """<br/> if kernel_size % 2 == 0:<br/> raise ValueError('kernel_size is expected to be odd.')<br/> with tf.variable_scope(scope):<br/> num_outputs = input_.get_shape()[-1].value<br/> h_1 = conv2d(input_, kernel_size, 1, num_outputs, 'conv1', activation_fn)<br/> h_2 = conv2d(h_1, kernel_size, 1, num_outputs, 'conv2', None)<br/> return input_ + h_2</pre>
 
-<p>现在，我们可以开始构建Android应用程序了。</p>
+<p>现在，我们可以开始构建 Android 应用程序了。</p>
 
 
 
@@ -1265,7 +1265,7 @@ def transform(input_, normalizer_fn=ops.conditional_instance_norm,
 
                 
 
-<p>此应用程序使用TensorFlow的以下依赖项进行编译，这将获取最新版本:</p>
+<p>此应用程序使用 TensorFlow 的以下依赖项进行编译，这将获取最新版本:</p>
 
 <pre>allprojects {<br/> repositories {<br/> jcenter()<br/> }<br/>}<br/>dependencies {<br/> compile 'org.tensorflow:tensorflow-android:+'<br/>}</pre>
 
@@ -1346,7 +1346,7 @@ def transform(input_, normalizer_fn=ops.conditional_instance_norm,
 
 <pre>@Override<br/>public void onActivityResult(int requestCode, int resultCode, Intent data) {<br/>    super.onActivityResult(requestCode, resultCode, data);<br/>    if (requestCode == 1 &amp;&amp; resultCode == Activity.RESULT_OK) {<br/>        if (data == null) {<br/>            //Display an error<br/>            return;<br/>        }<br/>        try {<br/>            InputStream inputStream =   <br/>                 getContentResolver().openInputStream(data.getData());<br/><br/>            byte[] buffer = new byte[inputStream.available()];<br/>            inputStream.read(buffer);<br/><br/>            // Get the dimensions of the bitmap<br/>            BitmapFactory.Options bmOptions = new <br/>                          BitmapFactory.Options();<br/><br/>            // Decode the image file into a Bitmap sized to fill the <br/>            // View<br/>            //bmOptions.inJustDecodeBounds = false;<br/>            bmOptions.inMutable = true;<br/><br/>            Bitmap bitmap = BitmapFactory.decodeByteArray(buffer, 0,   <br/>                                          buffer.length, bmOptions);<br/>            ResultHolder.dispose();<br/>            ResultHolder.setImage(bitmap);<br/>            Intent intent = new Intent(getApplicationContext(), <br/>                                       ShowImageActivity.class);<br/>            startActivity(intent);<br/>        } catch (FileNotFoundException e) {<br/>            e.printStackTrace();<br/>        } catch (IOException e) {<br/>            e.printStackTrace();<br/>        }<br/>        //Now you can do whatever you want with your inpustream, save       <br/>          it as file, upload to a server, decode a bitmap...<br/>    }<br/>    finish();<br/>}</pre>
 
-<p>在<kbd>.ShowImageActivity</kbd>中，内置了一个类似Instagram的用户界面，由此你可以从我们视图底部的横向列表中选择多种风格，并将其中一种应用到选中的图片上。这是用<kbd>RecyclerView</kbd>上的<kbd>HorizontalListAdapter</kbd>设置的。</p>
+<p>在<kbd>.ShowImageActivity</kbd>中，内置了一个类似 Instagram 的用户界面，由此你可以从我们视图底部的横向列表中选择多种风格，并将其中一种应用到选中的图片上。这是用<kbd>RecyclerView</kbd>上的<kbd>HorizontalListAdapter</kbd>设置的。</p>
 
 <p>从<kbd>Assets</kbd>文件夹加载每种风格的缩略图，如下所示:</p>
 
@@ -1427,9 +1427,9 @@ def transform(input_, normalizer_fn=ops.conditional_instance_norm,
 
                 
 
-<p>在这一章中，我们学习了从一种艺术形式构建一个风格转换应用程序。现在，我们非常熟悉CNN如何深入工作以及各层如何处理数据。我们也已经熟悉了构建iOS应用和Android应用的基础。</p>
+<p>在这一章中，我们学习了从一种艺术形式构建一个风格转换应用程序。现在，我们非常熟悉 CNN 如何深入工作以及各层如何处理数据。我们也已经熟悉了构建 iOS 应用和 Android 应用的基础。</p>
 
-<p>在下一章，我们将更详细地讨论使用Firebase的ML Kit框架应用机器学习。</p>
+<p>在下一章，我们将更详细地讨论使用 Firebase 的 ML Kit 框架应用机器学习。</p>
 
 
 

@@ -38,25 +38,25 @@
 
 <li class="Bullet-Within-Bullet--PACKT-">保序回归</li>
 
-<li class="Bullet-Within-Bullet-End--PACKT-">用lasso和逻辑回归进行风险建模</li>
+<li class="Bullet-Within-Bullet-End--PACKT-">用 lasso 和逻辑回归进行风险建模</li>
 
 </ul></li>
 
 			</ul>
 
-			<p class="normal">我们要讨论的第一个概念是本章分析的所有其他算法的核心，它基于将因变量描述为不同预测值的线性组合。更正式的说法是，这个概念被称为GLM。</p>
+			<p class="normal">我们要讨论的第一个概念是本章分析的所有其他算法的核心，它基于将因变量描述为不同预测值的线性组合。更正式的说法是，这个概念被称为 GLM。</p>
 
 			<h1 id="_idParaDest-143" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor152"/> GLMs</h1>
 
-			<p class="normal">让我们通过定义我们正在处理的上下文来开始我们对<a id="_idIndexMarker521"/>回归模型的分析。回归是一种将输入向量<img src="img/B14713_09_001.png" alt="" style="height: 0.8em !important;"/>与一个或多个连续因变量(为简单起见，我们称之为单输出)<img src="img/B14713_09_002.png" alt="" style="height: 1em !important;"/>相关联的模型。在一般情况下，不存在对时间的显式依赖，即使经常使用回归模型来建模时间序列。主要区别在于，在后者中，数据点的顺序不能改变，因为通常存在相互依赖性。另一方面，通用回归可用于建模<a id="_idIndexMarker522"/>与时间无关的现象，并且，在GLMs的上下文中，我们最初假设我们处理无状态关联，其中输出值仅取决于输入向量。在这种情况下，也可以在不改变最终结果的情况下混洗数据集(当然，如果时间<em class="italics"> t </em>的输出依赖于<em class="italics">y</em>T15】t-1，这是<img src="img/B14713_09_003.png" alt="" style="height: 1em !important;"/>的函数，依此类推，则不成立)。</p>
+			<p class="normal">让我们通过定义我们正在处理的上下文来开始我们对<a id="_idIndexMarker521"/>回归模型的分析。回归是一种将输入向量<img src="img/B14713_09_001.png" alt="" style="height: 0.8em !important;"/>与一个或多个连续因变量(为简单起见，我们称之为单输出)<img src="img/B14713_09_002.png" alt="" style="height: 1em !important;"/>相关联的模型。在一般情况下，不存在对时间的显式依赖，即使经常使用回归模型来建模时间序列。主要区别在于，在后者中，数据点的顺序不能改变，因为通常存在相互依赖性。另一方面，通用回归可用于建模<a id="_idIndexMarker522"/>与时间无关的现象，并且，在 GLMs 的上下文中，我们最初假设我们处理无状态关联，其中输出值仅取决于输入向量。在这种情况下，也可以在不改变最终结果的情况下混洗数据集(当然，如果时间<em class="italics"> t </em>的输出依赖于<em class="italics">y</em>T15】t-1，这是<img src="img/B14713_09_003.png" alt="" style="height: 1em !important;"/>的函数，依此类推，则不成立)。</p>
 
-			<p class="normal">假设有一个数据集<img src="img/B14713_09_004.png" alt="" style="height: 1em !important;"/>，它包含从相同的数据生成过程中得到的<em class="italics"> N </em> m维观察值，<em class="italics"> p </em>数据。每个观察与<img src="img/B14713_09_005.png" alt="" style="height: 1em !important;"/>中包含的相应连续标签相关联。GLM将<em class="italics"> y </em>和<img src="img/B14713_09_006.png" alt="" style="height: 0.8em !important;"/>之间的关系建模为:</p>
+			<p class="normal">假设有一个数据集<img src="img/B14713_09_004.png" alt="" style="height: 1em !important;"/>，它包含从相同的数据生成过程中得到的<em class="italics"> N </em> m 维观察值，<em class="italics"> p </em>数据。每个观察与<img src="img/B14713_09_005.png" alt="" style="height: 1em !important;"/>中包含的相应连续标签相关联。GLM 将<em class="italics"> y </em>和<img src="img/B14713_09_006.png" alt="" style="height: 0.8em !important;"/>之间的关系建模为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_007.png" alt=""/></figure>
 
 			<p class="normal">这些<img src="img/B14713_09_008.png" alt="" style="height: 0.8em !important;"/>值被称为回归量，我们说<em class="italics"> y </em>已经在<img src="img/B14713_09_009.png" alt="" style="height: 0.8em !important;"/>组变量上回归了。噪声项模拟了特定现象的内在不确定性，它是一个不能丢弃的基本元素，除非关系是纯线性的(换句话说，所有点<img src="img/B14713_09_010.png" alt="" style="height: 1em !important;"/>都位于同一超平面上)。然而，有两种可能的情况与噪声项<img src="img/B14713_09_011.png" alt="" style="height: 1em !important;"/>相关，我们总是认为它取决于<em class="italics"> X </em>，例如<img src="img/B14713_09_012.png" alt="" style="height: 1em !important;"/>，而我们通常不知道<img src="img/B14713_09_013.png" alt="" style="height: 1em !important;"/>的值。这意味着我们永远无法直接估计噪声的矩，而只能通过对输入样本进行调理来估计。</p>
 
-			<p class="normal">多亏了<a id="_idIndexMarker523"/>中心极限定理，我们通常可以使用正态分布来模拟噪声。均值可以保持等于0，因为其他值仅指示一个偏移，但是协方差矩阵<img src="img/B14713_09_014.png" alt="" style="height: 1em !important;"/>可以采用两种不同的形式:</p>
+			<p class="normal">多亏了<a id="_idIndexMarker523"/>中心极限定理，我们通常可以使用正态分布来模拟噪声。均值可以保持等于 0，因为其他值仅指示一个偏移，但是协方差矩阵<img src="img/B14713_09_014.png" alt="" style="height: 1em !important;"/>可以采用两种不同的形式:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_015.png" alt=""/></figure>
 
@@ -84,7 +84,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_028.png" alt=""/></figure>
 
-			<p class="normal">再次，我需要警告读者关于<em class="italics">e</em>T33】I的含义。这不是<img src="img/B14713_09_029.png" alt=""/>，因为我们使用的是<a id="_idIndexMarker531"/>真实参数向量的估计值；然而，它是真实噪声的良好代表，不失一般性，我们将它视为模型的主要干扰成分。</p>
+			<p class="normal">再次，我需要警告读者关于<em class="italics">e</em>T33】I 的含义。这不是<img src="img/B14713_09_029.png" alt=""/>，因为我们使用的是<a id="_idIndexMarker531"/>真实参数向量的估计值；然而，它是真实噪声的良好代表，不失一般性，我们将它视为模型的主要干扰成分。</p>
 
 			<p class="normal">使用向量符号，我们可以将<em class="italics"> L </em>的表达式重写为:</p>
 
@@ -98,7 +98,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_032.png" alt=""/></figure>
 
-			<p class="normal">很容易看出，当<img src="img/B14713_09_033.png" alt="" style="height: 1em !important;"/>时，一阶导数消失。而且，当我们寻找最小值时，<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>一定是一个正定矩阵。后者是GLMs的基本假设之一。我们将在以后讨论它，但是现在，可以说<em class="italics">X</em>T48】TT50】X一定是可逆的。因此，行列式不能为空。如果数据集<em class="italics"> X </em>具有满秩(相对于列)，这总是可能的。如果<em class="italics">rank</em>(<em class="italics">X</em>)=<em class="italics">m</em>，则回归量线性无关，并且<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>没有与其他成比例的列或行(导致det(<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>)= 0的条件)。其实我们来考虑一个简单的模型，有两个变量和两个观测值:y =<em class="italics">ax</em><sub style="font-style: italic;">1</sub>+<em class="italics">bx</em><sub style="font-style: italic;">2</sub>。矩阵<em class="italics"> X </em>为:</p>
+			<p class="normal">很容易看出，当<img src="img/B14713_09_033.png" alt="" style="height: 1em !important;"/>时，一阶导数消失。而且，当我们寻找最小值时，<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>一定是一个正定矩阵。后者是 GLMs 的基本假设之一。我们将在以后讨论它，但是现在，可以说<em class="italics">X</em>T48】TT50】X 一定是可逆的。因此，行列式不能为空。如果数据集<em class="italics"> X </em>具有满秩(相对于列)，这总是可能的。如果<em class="italics">rank</em>(<em class="italics">X</em>)=<em class="italics">m</em>，则回归量线性无关，并且<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>没有与其他成比例的列或行(导致 det(<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>)= 0 的条件)。其实我们来考虑一个简单的模型，有两个变量和两个观测值:y =<em class="italics">ax</em><sub style="font-style: italic;">1</sub>+<em class="italics">bx</em><sub style="font-style: italic;">2</sub>。矩阵<em class="italics"> X </em>为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_034.png" alt=""/></figure>
 
@@ -110,7 +110,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_036.png" alt=""/></figure>
 
-			<p class="normal">因此，<img src="img/B14713_09_037.png" alt="" style="height: 1.5em !important;"/>和<em class="italics">X</em>T17】TT19】X是不可逆的。这个<a id="_idIndexMarker532"/>原理对任何维度都有效，代表了一个需要最大关注的问题。我们将在分析正则化技术时讨论它。</p>
+			<p class="normal">因此，<img src="img/B14713_09_037.png" alt="" style="height: 1.5em !important;"/>和<em class="italics">X</em>T17】TT19】X 是不可逆的。这个<a id="_idIndexMarker532"/>原理对任何维度都有效，代表了一个需要最大关注的问题。我们将在分析正则化技术时讨论它。</p>
 
 			<p class="normal">在前面的讨论中，我们假设我们正在处理同方差噪声(换句话说，<img src="img/B14713_09_038.png" alt="" style="height: 1em !important;"/>)。在异方差噪声的情况下，表示为<img src="img/B14713_09_039.png" alt="" style="height: 1.2em !important;"/>，参数向量<a id="_idIndexMarker533"/>的估计非常相似，但是有必要采用<strong class="bold">加权最小二乘</strong> ( <strong class="bold"> WLS </strong>)过程。在这种情况下，成本函数变成:</p>
 
@@ -122,7 +122,7 @@
 
 			<p class="normal">矩阵<em class="italics"> Q </em>被假定为正定的，因此总是可逆的。</p>
 
-			<p class="normal">可视化线性回归的一个非常有启发性的方法是基于正交分解，假设<img src="img/B14713_09_042.png" alt="" style="height: 1em !important;"/>是具有<em class="italics"> m个</em>分量的矢量输出。我们先把回归表示为<img src="img/B14713_09_043.png" alt="" style="height: 1.2em !important;"/>。可以使用参数估计来计算残差:<img src="img/B14713_09_044.png" alt="" style="height: 1.2em !important;"/>。</p>
+			<p class="normal">可视化线性回归的一个非常有启发性的方法是基于正交分解，假设<img src="img/B14713_09_042.png" alt="" style="height: 1em !important;"/>是具有<em class="italics"> m 个</em>分量的矢量输出。我们先把回归表示为<img src="img/B14713_09_043.png" alt="" style="height: 1.2em !important;"/>。可以使用参数估计来计算残差:<img src="img/B14713_09_044.png" alt="" style="height: 1.2em !important;"/>。</p>
 
 			<p class="normal">因此，在代入不同的表达式后，我们得到如下:</p>
 
@@ -132,7 +132,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_046.png" alt=""/></figure>
 
-			<p class="normal">为了得出我们的结论，我们需要分析矩阵P和矩阵E的性质。首先，我们可以注意到:</p>
+			<p class="normal">为了得出我们的结论，我们需要分析矩阵 P 和矩阵 E 的性质。首先，我们可以注意到:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_047.png" alt=""/></figure>
 
@@ -164,15 +164,15 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_060.png" alt=""/></figure>
 
-			<p class="normal">在讨论假设的时候，我们已经说过矩阵，<em class="italics">X</em>T13】TT15】X一定是满秩的。我们现在可以添加另一个重要的要求，因为我们希望我们的估计量也是<em class="italics">渐近一致的</em>。换句话说，我们需要更大的样本来提高估计值。可以证明当<img src="img/B14713_09_061.png" alt="" style="height: 1em !important;"/>的序列总是满秩时，样本<a id="_idIndexMarker539"/>协方差矩阵，<img src="img/B14713_09_062.png" alt="" style="height: 1em !important;"/>以概率收敛于<img src="img/B14713_09_063.png" alt="" style="height: 1em !important;"/>，因此:</p>
+			<p class="normal">在讨论假设的时候，我们已经说过矩阵，<em class="italics">X</em>T13】TT15】X 一定是满秩的。我们现在可以添加另一个重要的要求，因为我们希望我们的估计量也是<em class="italics">渐近一致的</em>。换句话说，我们需要更大的样本来提高估计值。可以证明当<img src="img/B14713_09_061.png" alt="" style="height: 1em !important;"/>的序列总是满秩时，样本<a id="_idIndexMarker539"/>协方差矩阵，<img src="img/B14713_09_062.png" alt="" style="height: 1em !important;"/>以概率收敛于<img src="img/B14713_09_063.png" alt="" style="height: 1em !important;"/>，因此:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_064.png" alt=""/></figure>
 
 			<p class="normal">在上式中，<em class="italics"> EVar </em>表示协方差的估计。这一结果极其重要，因为它为我们提供了保证，即更多信息的样本总是会给估计带来积极的贡献，但同时，它也表明方差有一个无法克服的下限。</p>
 
-			<h2 id="_idParaDest-146" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor156"/>使用Python进行线性回归的示例</h2>
+			<h2 id="_idParaDest-146" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor156"/>使用 Python 进行线性回归的示例</h2>
 
-			<p class="normal">让我们从<a id="_idIndexMarker541"/>开始，用一个简单的例子展示之前获得的结果，这个例子基于一维数据集<em class="italics"> X </em>，包含100个点:</p>
+			<p class="normal">让我们从<a id="_idIndexMarker541"/>开始，用一个简单的例子展示之前获得的结果，这个例子基于一维数据集<em class="italics"> X </em>，包含 100 个点:</p>
 
 			<pre>import numpy as np</pre>
 
@@ -182,7 +182,7 @@
 y_ = 0.8*x_ + np.random.normal(0.0, 0.75, size=x_.shape)
 x = np.concatenate([x_, np.ones_like(x_)], axis=1)</pre>
 
-			<p class="normal">读者可以注意到，我们在<em class="italics"> X </em>中添加了一个包含(1，1，…，1)的列(换句话说，每个点用<img src="img/B14713_09_065.png" alt="" style="height: 1em !important;"/>表示)。原因是我们也想拟合截距(常数项)。像scikit-learn这样的包在默认情况下会这样做，并且允许禁用这个选项，但是，由于我们最初要执行手动计算，所以包含常量列是有帮助的。</p>
+			<p class="normal">读者可以注意到，我们在<em class="italics"> X </em>中添加了一个包含(1，1，…，1)的列(换句话说，每个点用<img src="img/B14713_09_065.png" alt="" style="height: 1em !important;"/>表示)。原因是我们也想拟合截距(常数项)。像 scikit-learn 这样的包在默认情况下会这样做，并且允许禁用这个选项，但是，由于我们最初要执行手动计算，所以包含常量列是有帮助的。</p>
 
 			<p class="normal">参数集的估计可以如下获得:</p>
 
@@ -197,7 +197,7 @@ x = np.concatenate([x_, np.ones_like(x_)], axis=1)</pre>
 
 			<pre>y = -0.04 + 0.82x</pre>
 
-			<p class="normal">真实斜率为0.8，并且<a id="_idIndexMarker542"/>截距为零。因此，估计值是完全有效的，均值<img src="img/B14713_09_066.png" alt="" style="height: 1.2em !important;"/>，而方差(不包括截距)可以计算为:</p>
+			<p class="normal">真实斜率为 0.8，并且<a id="_idIndexMarker542"/>截距为零。因此，估计值是完全有效的，均值<img src="img/B14713_09_066.png" alt="" style="height: 1.2em !important;"/>，而方差(不包括截距)可以计算为:</p>
 
 			<pre>sigma2 = (1. / float(x_.shape[0] - 1)) * \
      np.sum(np.power(np.squeeze(y_) -   np.squeeze(x_) *
@@ -220,19 +220,19 @@ variance = np.squeeze(
 
 			<p class="packt_figref">数据集和回归线</p>
 
-			<p class="normal">我们已经自愿选择了一个噪声数据集来显示残差对最终估计的影响。特别是，我们感兴趣的是测量估计的质量，以将其与其他线性回归进行比较，例如，基于更大的<a id="_idIndexMarker544"/>样本量。一个常见的度量是<em class="italics">R</em>T39】2系数(也称为<em class="italics">决定系数</em>，其定义为:</p>
+			<p class="normal">我们已经自愿选择了一个噪声数据集来显示残差对最终估计的影响。特别是，我们感兴趣的是测量估计的质量，以将其与其他线性回归进行比较，例如，基于更大的<a id="_idIndexMarker544"/>样本量。一个常见的度量是<em class="italics">R</em>T39】2 系数(也称为<em class="italics">决定系数</em>，其定义为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_067.png" alt=""/></figure>
 
 			<p class="normal">术语<em class="italics"> SSR </em>是残差平方和，对应于预测引起的变化。相反，术语<em class="italics"> SST </em>是<em class="italics"> Y </em>的属性，并且测量原始数据集中存在的总变化。差异<em class="italics">SST–SSR</em>，对应于模型能够解释的变化。因此，当<img src="img/B14713_09_068.png" alt="" style="height: 1em !important;"/>、<img src="img/B14713_09_069.png" alt="" style="height: 0.8em !important;"/>时。由于模型是线性的，实现这一条件的唯一方法是<em class="italics"> Y </em>中的平均值没有变化。当<img src="img/B14713_09_070.png" alt="" style="height: 1em !important;"/>时，其值与相对拟合优度成比例。事实上，如果<img src="img/B14713_09_071.png" alt="" style="height: 1em !important;"/>、<img src="img/B14713_09_072.png" alt="" style="height: 0.8em !important;"/>，因此，模型能够解释所有的变化。然而，<img src="img/B14713_09_073.png" alt="" style="height: 0.8em !important;"/>通常是没有意义的，因为它暗示了<img src="img/B14713_09_074.png" alt="" style="height: 1em !important;"/>，同样，这仅在点对齐且噪声为零时才有可能(这种情况显然不需要任何回归)。</p>
 
-			<p class="normal">另一个问题涉及到<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>的一个特殊特征(我们正在证明，但有兴趣的读者可以查看格林·w·h .<em class="italics">经济计量分析(第五版)</em>，普伦蒂斯霍尔出版社，2002年):它永远不会减少，并且有可能通过添加<a id="_idIndexMarker545"/>新的回归变量来获得更大的值。事实上，通过添加新的回归变量，拟合度提高，偏差降低。显然，这是一种有助于处罚的不良做法；因此，提出了<em class="italics">调整版</em>:</p>
+			<p class="normal">另一个问题涉及到<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>的一个特殊特征(我们正在证明，但有兴趣的读者可以查看格林·w·h .<em class="italics">经济计量分析(第五版)</em>，普伦蒂斯霍尔出版社，2002 年):它永远不会减少，并且有可能通过添加<a id="_idIndexMarker545"/>新的回归变量来获得更大的值。事实上，通过添加新的回归变量，拟合度提高，偏差降低。显然，这是一种有助于处罚的不良做法；因此，提出了<em class="italics">调整版</em>:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_075.png" alt=""/></figure>
 
-			<p class="normal">这个新的度量(当<em class="italics"> t </em> = 1时，相当于<em class="italics">R</em>T28】2)不再局限于0和1之间，并且考虑了模型的自由度<em class="italics"> t </em>。而且，当<em class="italics">N&gt;T76】1</em>和<em class="italics">t&lt;T78】N</em>，<img src="img/B14713_09_076.png" alt="" style="height: 1em !important;"/>时。因此，在处理小数据集和大量预测值时，<em class="italics"> AR </em> <sup style="font-style: italic;"> 2 </sup>会很有帮助。例如，如果一个模型在100个数据点和10个回归量的情况下达到了<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup> = 0.9，<img src="img/B14713_09_077.png" alt="" style="height: 2em !important;"/>。这个值非常接近于<em class="italics">R</em>T50】2并且，一般来说，它总是小于它。因此，惩罚在极少数情况下变得明显，但是总是可以使用它来代替<em class="italics">R</em>T54】2，以便也考虑模型的复杂性。</p>
+			<p class="normal">这个新的度量(当<em class="italics"> t </em> = 1 时，相当于<em class="italics">R</em>T28】2)不再局限于 0 和 1 之间，并且考虑了模型的自由度<em class="italics"> t </em>。而且，当<em class="italics">N&gt;T76】1</em>和<em class="italics">t&lt;T78】N</em>，<img src="img/B14713_09_076.png" alt="" style="height: 1em !important;"/>时。因此，在处理小数据集和大量预测值时，<em class="italics"> AR </em> <sup style="font-style: italic;"> 2 </sup>会很有帮助。例如，如果一个模型在 100 个数据点和 10 个回归量的情况下达到了<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup> = 0.9，<img src="img/B14713_09_077.png" alt="" style="height: 2em !important;"/>。这个值非常接近于<em class="italics">R</em>T50】2 并且，一般来说，它总是小于它。因此，惩罚在极少数情况下变得明显，但是总是可以使用它来代替<em class="italics">R</em>T54】2，以便也考虑模型的复杂性。</p>
 
-			<p class="normal">对于我们的示例，我们可以将<em class="italics">R</em>T58】2系数计算为:</p>
+			<p class="normal">对于我们的示例，我们可以将<em class="italics">R</em>T58】2 系数计算为:</p>
 
 			<pre>sst = np.sum(np.power(np.squeeze(y_) - 
                       np.mean(y_), 2))
@@ -244,19 +244,19 @@ print("R^2 = {:.3f}".format(1 - ssr / sst))</pre>
 
 			<pre><strong class="screen-text">R^2 = 0.899</strong></pre>
 
-			<p class="normal">在这种情况下，我们已经排除了截距，因为它等于0，其贡献为零。但是，一般来说，在包括截距的情况下，<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>和<em class="italics"> AR </em> <sup style="font-style: italic;"> 2 </sup>必须一直计算，否则这些值可能变得无意义和不可预测。我们省略了完整的解释，但这是系数的代数推导的结果。然而，不难理解截距的效果是沿着轴移动超平面(例如，在二维场景中，线向上或向后移动)，因此<em class="italics">均值</em> [ <em class="italics"> Y </em>可以大于或小于对应于<a id="_idIndexMarker546"/>零截距的值，并且如果估计项假设零截距，<em class="italics"> SSR </em>可以表示残差变化的有偏测量。</p>
+			<p class="normal">在这种情况下，我们已经排除了截距，因为它等于 0，其贡献为零。但是，一般来说，在包括截距的情况下，<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>和<em class="italics"> AR </em> <sup style="font-style: italic;"> 2 </sup>必须一直计算，否则这些值可能变得无意义和不可预测。我们省略了完整的解释，但这是系数的代数推导的结果。然而，不难理解截距的效果是沿着轴移动超平面(例如，在二维场景中，线向上或向后移动)，因此<em class="italics">均值</em> [ <em class="italics"> Y </em>可以大于或小于对应于<a id="_idIndexMarker546"/>零截距的值，并且如果估计项假设零截距，<em class="italics"> SSR </em>可以表示残差变化的有偏测量。</p>
 
-			<p class="normal">回到我们的例子，我们得到的<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>值肯定是可接受的，并且证实了拟合的良好性。但缺失的10%也是噪声项不可忽略的信号，部分残差相对幅度较大。由于这是一个线性模型，它是无偏的，所以没有什么可以改善性能。然而，对<em class="italics">R</em>T6】2的评估必须被视为决策工具。如果该值太小(例如，<img src="img/B14713_09_078.png" alt="" style="height: 1em !important;"/>)，模型的精度(就均方误差或绝对误差而言)可能是不可接受的，必须采用非线性解决方案。另一方面，正如所解释的，大的<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>不一定与完美的模型相关联，但至少我们保证它解释了数据集中包含的大部分变化。</p>
+			<p class="normal">回到我们的例子，我们得到的<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>值肯定是可接受的，并且证实了拟合的良好性。但缺失的 10%也是噪声项不可忽略的信号，部分残差相对幅度较大。由于这是一个线性模型，它是无偏的，所以没有什么可以改善性能。然而，对<em class="italics">R</em>T6】2 的评估必须被视为决策工具。如果该值太小(例如，<img src="img/B14713_09_078.png" alt="" style="height: 1em !important;"/>)，模型的精度(就均方误差或绝对误差而言)可能是不可接受的，必须采用非线性解决方案。另一方面，正如所解释的，大的<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>不一定与完美的模型相关联，但至少我们保证它解释了数据集中包含的大部分变化。</p>
 
 			<h2 id="_idParaDest-147" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor157"/>用统计模型计算线性回归置信区间</h2>
 
-			<p class="normal">使用OLS拟合线性<a id="_idIndexMarker547"/>模型时，估计每个参数的置信区间通常很有帮助。在<a id="_idIndexMarker548"/>向您展示如何做到这一点之前，我想提醒您，置信区间被定义为找到真实参数值的概率大于或等于预定义阈值(例如95%)的范围，而相反的说法是错误的(换句话说，估计位于区间内的概率)。</p>
+			<p class="normal">使用 OLS 拟合线性<a id="_idIndexMarker547"/>模型时，估计每个参数的置信区间通常很有帮助。在<a id="_idIndexMarker548"/>向您展示如何做到这一点之前，我想提醒您，置信区间被定义为找到真实参数值的概率大于或等于预定义阈值(例如 95%)的范围，而相反的说法是错误的(换句话说，估计位于区间内的概率)。</p>
 
 			<p class="normal">程序非常简单，主要取决于样本大小。给定一个估计参数<img src="img/B14713_09_079.png" alt="" style="height: 1em !important;"/>，对应真值<img src="img/B14713_09_080.png" alt="" style="height: 0.8em !important;"/>(为简单起见，我们考虑一个标量参数)，我们知道<img src="img/B14713_09_081.png" alt="" style="height: 1.2em !important;"/>。因此，我们可以将相关的<em class="italics"> z </em>分数定义为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_082.png" alt=""/></figure>
 
-			<p class="normal">新变量<em class="italics"> z </em>呈正态分布，<img src="img/B14713_09_083.png" alt="" style="height: 0.8em !important;"/>的95%置信区间为:</p>
+			<p class="normal">新变量<em class="italics"> z </em>呈正态分布，<img src="img/B14713_09_083.png" alt="" style="height: 0.8em !important;"/>的 95%置信区间为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_084.png" alt=""/></figure>
 
@@ -266,9 +266,9 @@ print("R^2 = {:.3f}".format(1 - ssr / sst))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_086.png" alt=""/></figure>
 
-			<p class="normal">手动计算这样的时间间隔非常容易。然而，我更喜欢展示如何使用Statsmodels(我们也将用于其他算法)来拟合模型并获得完整的摘要。</p>
+			<p class="normal">手动计算这样的时间间隔非常容易。然而，我更喜欢展示如何使用 Statsmodels(我们也将用于其他算法)来拟合模型并获得完整的摘要。</p>
 
-			<p class="normal">让我们从使用先前定义的数据集创建pandas数据帧开始，这简化了操作:</p>
+			<p class="normal">让我们从使用先前定义的数据集创建 pandas 数据帧开始，这简化了操作:</p>
 
 			<pre>import pandas as pd</pre>
 
@@ -277,17 +277,17 @@ print("R^2 = {:.3f}".format(1 - ssr / sst))</pre>
 <pre>df = pd.DataFrame(data=np.concatenate((x_, y_), axis=1),
                   columns=("x", "y"))</pre>
 
-			<p class="normal">我们排除了截距，因为Statsmodels会自动包含它。因此，我们希望符合线性模型:</p>
+			<p class="normal">我们排除了截距，因为 Statsmodels 会自动包含它。因此，我们希望符合线性模型:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_087.png" alt=""/></figure>
 
-			<p class="normal">使用Statsmodels支持的标准R公式语言(通过Patsy，这是一个实现类R公式的库)，前面的条件表示为:</p>
+			<p class="normal">使用 Statsmodels 支持的标准 R 公式语言(通过 Patsy，这是一个实现类 R 公式的库)，前面的条件表示为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_088.png" alt=""/></figure>
 
-			<p class="normal">在这种情况下，等号被转换为<img src="img/B14713_09_089.png" alt=""/>，这意味着左边是一个关系的依赖部分，而右边包含所有的自变量。关于公式语言的完整讨论超出了本书的范围(可以在官方的<a id="_idIndexMarker552"/> Patsy文档中找到)。然而，重要的是要记住字符+并不意味着算术加法。它允许将变量添加到依赖集，还支持基于NumPy的复杂表达式(例如，<img src="img/B14713_09_090.png" alt="" style="height: 1em !important;"/>用于二次回归)。</p>
+			<p class="normal">在这种情况下，等号被转换为<img src="img/B14713_09_089.png" alt=""/>，这意味着左边是一个关系的依赖部分，而右边包含所有的自变量。关于公式语言的完整讨论超出了本书的范围(可以在官方的<a id="_idIndexMarker552"/> Patsy 文档中找到)。然而，重要的是要记住字符+并不意味着算术加法。它允许将变量添加到依赖集，还支持基于 NumPy 的复杂表达式(例如，<img src="img/B14713_09_090.png" alt="" style="height: 1em !important;"/>用于二次回归)。</p>
 
-			<p class="normal">我们现在可以拟合一个OLS模型并打印一份完整的摘要:</p>
+			<p class="normal">我们现在可以拟合一个 OLS 模型并打印一份完整的摘要:</p>
 
 			<pre>import statsmodels.formula.api as smf</pre>
 
@@ -304,29 +304,29 @@ r = slr.fit()</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_03.png" alt=""/></figure>
 
-			<p class="packt_figref">OLS的统计模型拟合汇总</p>
+			<p class="packt_figref">OLS 的统计模型拟合汇总</p>
 
-			<p class="normal">摘要非常详细(一些度量将在后面的章节中讨论)，但是将注意力集中在包含参数估计的中心块是有帮助的。正如所料，截距的标准误差大于系数的标准误差，<em class="italics"> x </em>。原因是强噪声对垂直偏移的影响更大，而对斜率<a id="_idIndexMarker553"/>的影响不是太大(如果样本量足够大的话)。置信区间显示在最后两个<a id="_idIndexMarker554"/>栏中。同样，真实系数有95%的概率在范围(0.763，0.872)内，我们知道该范围包含实际的真实值(0.8)，并且具有等于大约0.817的平均值，对应于估计值。</p>
+			<p class="normal">摘要非常详细(一些度量将在后面的章节中讨论)，但是将注意力集中在包含参数估计的中心块是有帮助的。正如所料，截距的标准误差大于系数的标准误差，<em class="italics"> x </em>。原因是强噪声对垂直偏移的影响更大，而对斜率<a id="_idIndexMarker553"/>的影响不是太大(如果样本量足够大的话)。置信区间显示在最后两个<a id="_idIndexMarker554"/>栏中。同样，真实系数有 95%的概率在范围(0.763，0.872)内，我们知道该范围包含实际的真实值(0.8)，并且具有等于大约 0.817 的平均值，对应于估计值。</p>
 
 			<p class="normal">相反，截距的置信区间要大得多，即使估计是正确的(<img src="img/B14713_09_091.png" alt="" style="height: 1em !important;"/>)，它也告诉我们一个小的噪声变化可能导致垂直偏移。作为一个练习，我邀请读者改变噪声分布，并检查标准误差和置信区间的相应变化。</p>
 
-			<h2 id="_idParaDest-148" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor158"/>通过Huber损失提高对异常值的稳健性</h2>
+			<h2 id="_idParaDest-148" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor158"/>通过 Huber 损失提高对异常值的稳健性</h2>
 
 			<p class="normal">迄今为止，我们已经隐含地<a id="_idIndexMarker555"/>假设我们的数据集不包含任何离群值。这相当于说，估计的协方差矩阵反映了模型中包含的实际噪声，不允许有其他外部噪声源。然而，在现实中，许多样品包含受意外噪声影响的点(例如，仪器暂时出现故障)。不幸的是，最小二乘算法不能区分内值和界外值，而且，二次损失自然地给予较大的残差更大的权重，矛盾地增加了界外值的重要性。</p>
 
-			<p class="normal">Huber损失函数提供了这个问题的解决方案，它是均方误差的有效替代物。它被定义为:</p>
+			<p class="normal">Huber 损失函数提供了这个问题的解决方案，它是均方误差的有效替代物。它被定义为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_092.png" alt=""/></figure>
 
-			<p class="normal">这个损失函数有双重行为。当绝对残差小于预定义的阈值<img src="img/B14713_09_093.png" alt="" style="height: 0.8em !important;"/>时，损失是二次的，就像在OLS一样。然而，如果绝对残差大于<img src="img/B14713_07_070.png" alt=""/>，则该点被视为潜在的异常值，损失变为线性，从而降低了误差的权重。通过这种方式，靠近内标的异常值比远离其余总体的异常值提供了更强的贡献，因此更有可能是虚假数据点。常数<img src="img/B14713_09_095.png" alt=""/>的最佳值取决于<a id="_idIndexMarker556"/>特定的数据集。一个简单的策略是选择使<strong class="bold">平均绝对误差</strong> ( <strong class="bold"> MAE </strong>)最小的最大值(例如，从基线1.5开始，拟合模型，并计算MAE)。通过减少<img src="img/B14713_09_096.png" alt=""/>重复该过程，直到MAE稳定到其最小值。</p>
+			<p class="normal">这个损失函数有双重行为。当绝对残差小于预定义的阈值<img src="img/B14713_09_093.png" alt="" style="height: 0.8em !important;"/>时，损失是二次的，就像在 OLS 一样。然而，如果绝对残差大于<img src="img/B14713_07_070.png" alt=""/>，则该点被视为潜在的异常值，损失变为线性，从而降低了误差的权重。通过这种方式，靠近内标的异常值比远离其余总体的异常值提供了更强的贡献，因此更有可能是虚假数据点。常数<img src="img/B14713_09_095.png" alt=""/>的最佳值取决于<a id="_idIndexMarker556"/>特定的数据集。一个简单的策略是选择使<strong class="bold">平均绝对误差</strong> ( <strong class="bold"> MAE </strong>)最小的最大值(例如，从基线 1.5 开始，拟合模型，并计算 MAE)。通过减少<img src="img/B14713_09_096.png" alt=""/>重复该过程，直到 MAE 稳定到其最小值。</p>
 
-			<p class="normal">现在，我们可以使用之前定义的数据集的修改版本来测试Huber损失函数:</p>
+			<p class="normal">现在，我们可以使用之前定义的数据集的修改版本来测试 Huber 损失函数:</p>
 
 			<pre>x = np.expand_dims(np.arange(0, 10, 0.1), axis=1)
 y = 0.8 * x + np.random.normal(0.0, 0.75, size=x.shape)
 y[65:75] *= 5.0</pre>
 
-			<p class="normal">该数据集有一个影响指数范围(65，75)中的点的系统误差。由于我们并不完全清楚它们是内值还是界外值，让我们从拟合线性回归和<a id="_idIndexMarker557"/>评估MAE开始(当然，我们不能使用<em class="italics">R</em>T19】2，因为它受到界外值引起的无法解释的变化的强烈影响——在这种情况下，这样的变化不需要解释！):</p>
+			<p class="normal">该数据集有一个影响指数范围(65，75)中的点的系统误差。由于我们并不完全清楚它们是内值还是界外值，让我们从拟合线性回归和<a id="_idIndexMarker557"/>评估 MAE 开始(当然，我们不能使用<em class="italics">R</em>T19】2，因为它受到界外值引起的无法解释的变化的强烈影响——在这种情况下，这样的变化不需要解释！):</p>
 
 			<pre>from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
@@ -342,7 +342,7 @@ lr.fit(x, y)</pre>
 
 			<pre><strong class="screen-text">Linear: 3.66</strong></pre>
 
-			<p class="normal">如果我们分析前50个数据点的分布，假设线性拟合具有系数等于0.8的零截距，我们得到:</p>
+			<p class="normal">如果我们分析前 50 个数据点的分布，假设线性拟合具有系数等于 0.8 的零截距，我们得到:</p>
 
 			<pre>print("Mean Y[0:50] = {:.2f}".
        format(np.mean(y[0:50] - 0.8*x[0:50])))
@@ -354,7 +354,7 @@ print("Std Y[0:50] = {:.2f}".
 			<pre><strong class="screen-text">Mean Y[0:50] = 0.01</strong>
 <strong class="screen-text">Std Y[0:50] = 0.63</strong></pre>
 
-			<p class="normal">因此，假设一个零均值，范围<img src="img/B14713_09_097.png" alt="" style="height: 1em !important;"/>之外的所有值都可以被认为是异常值，因为在两个标准差之后，概率下降到5%以下(在正态分布下)。因此，我们可以设置<img src="img/B14713_09_098.png" alt="" style="height: 0.8em !important;"/>并训练一个Huber回归量:</p>
+			<p class="normal">因此，假设一个零均值，范围<img src="img/B14713_09_097.png" alt="" style="height: 1em !important;"/>之外的所有值都可以被认为是异常值，因为在两个标准差之后，概率下降到 5%以下(在正态分布下)。因此，我们可以设置<img src="img/B14713_09_098.png" alt="" style="height: 0.8em !important;"/>并训练一个 Huber 回归量:</p>
 
 			<pre>from sklearn.linear_model import HuberRegressor</pre>
 
@@ -372,15 +372,15 @@ hr.fit(x, y.ravel())</pre>
 
 			<pre><strong class="screen-text">Huber: 2.65</strong></pre>
 
-			<p class="normal">因此，Huber回归器将MAE降低了约72%，提高了对异常值的稳健性。下图显示了视觉确认:</p>
+			<p class="normal">因此，Huber 回归器将 MAE 降低了约 72%，提高了对异常值的稳健性。下图显示了视觉确认:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_04.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\F611990E.tmp"/></figure>
 
-			<p class="packt_figref">标准线性回归与Huber回归的比较</p>
+			<p class="packt_figref">标准线性回归与 Huber 回归的比较</p>
 
-			<p class="normal">该图显示了当采用简单的线性回归<a id="_idIndexMarker558"/>时，异常值的影响可能变得多么负面。相反，Huber loss使回归线非常接近平均值，具有比周围点大大约10倍的点的最小吸引力。当然，<img src="img/B14713_07_126.png" alt=""/>的作用是决定因素；因此，我邀请读者重复这个练习，改变这个值，并找出当离群值集较大时的最佳权衡。</p>
+			<p class="normal">该图显示了当采用简单的线性回归<a id="_idIndexMarker558"/>时，异常值的影响可能变得多么负面。相反，Huber loss 使回归线非常接近平均值，具有比周围点大大约 10 倍的点的最小吸引力。当然，<img src="img/B14713_07_126.png" alt=""/>的作用是决定因素；因此，我邀请读者重复这个练习，改变这个值，并找出当离群值集较大时的最佳权衡。</p>
 
-			<p class="normal">在继续之前，提醒我们自己在没有意识到的情况下使用<em class="italics">R</em>R<sup style="font-style: italic;">2</sup>会变得多么危险是很有帮助的。在这种情况下，其值对于线性回归来说更大，因为当斜率越接近异常值时<em class="italics"> SSR </em>越小。原因很简单:<em class="italics"> SSR </em>是一个二次测度，平均值为30的10个离群值做出的贡献可以轻松战胜平均值为5的70个内联值。在现实生活中，当数据集过于复杂而无法立即识别异常值时，我建议使用稳健缩放对要素进行预处理。这不会影响结果，但是避免了<em class="italics">隐藏的</em>异常值导致模型完全错误估计的情况。</p>
+			<p class="normal">在继续之前，提醒我们自己在没有意识到的情况下使用<em class="italics">R</em>R<sup style="font-style: italic;">2</sup>会变得多么危险是很有帮助的。在这种情况下，其值对于线性回归来说更大，因为当斜率越接近异常值时<em class="italics"> SSR </em>越小。原因很简单:<em class="italics"> SSR </em>是一个二次测度，平均值为 30 的 10 个离群值做出的贡献可以轻松战胜平均值为 5 的 70 个内联值。在现实生活中，当数据集过于复杂而无法立即识别异常值时，我建议使用稳健缩放对要素进行预处理。这不会影响结果，但是避免了<em class="italics">隐藏的</em>异常值导致模型完全错误估计的情况。</p>
 
 			<h1 id="_idParaDest-149" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor159"/>其他回归技术</h1>
 
@@ -388,7 +388,7 @@ hr.fit(x, y.ravel())</pre>
 
 			<ul>
 
-				<li class="list">岭回归，在scikit-learn中有一个实际例子</li>
+				<li class="list">岭回归，在 scikit-learn 中有一个实际例子</li>
 
 				<li class="list">套索和逻辑回归</li>
 
@@ -402,13 +402,13 @@ hr.fit(x, y.ravel())</pre>
 
 			<h2 id="_idParaDest-150" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor160"/>岭回归</h2>
 
-			<p class="normal">回归模型中一个非常常见的<a id="_idIndexMarker560"/>问题是由于<em class="italics">X</em>T18】TT20】X的结构而产生的。我们之前已经表明多重共线性的存在迫使T23，这意味着反演变得非常困难。检查多重共线性存在的一个简单方法是基于对<em class="italics">X</em>TT30 X的<em class="italics">条件号</em>的计算，定义为:</p>
+			<p class="normal">回归模型中一个非常常见的<a id="_idIndexMarker560"/>问题是由于<em class="italics">X</em>T18】TT20】X 的结构而产生的。我们之前已经表明多重共线性的存在迫使 T23，这意味着反演变得非常困难。检查多重共线性存在的一个简单方法是基于对<em class="italics">X</em>TT30 X 的<em class="italics">条件号</em>的计算，定义为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_101.png" alt=""/></figure>
 
-			<p class="normal">上式中，<img src="img/B14713_09_102.png" alt="" style="height: 1.1em !important;"/>和<img src="img/B14713_09_103.png" alt="" style="height: 1.2em !important;"/>)分别是<em class="italics">X</em>T36】TT38】X的最大和最小奇异值。由于<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>是正定的，其特征值<img src="img/B14713_09_104.png" alt="" style="height: 1.2em !important;"/>是正的，并且等于<img src="img/B14713_09_105.png" alt="" style="height: 1.2em !important;"/>的奇异值总是被定义。小的<img src="img/B14713_09_106.png" alt="" style="height: 1.1em !important;"/>与条件良好的问题相关，因此反演不成问题。相反，当<img src="img/B14713_09_107.png" alt="" style="height: 1.1em !important;"/>时，问题是不适定的，随着<em class="italics"> X </em>的微小变化，结果可能会发生巨大变化。</p>
+			<p class="normal">上式中，<img src="img/B14713_09_102.png" alt="" style="height: 1.1em !important;"/>和<img src="img/B14713_09_103.png" alt="" style="height: 1.2em !important;"/>)分别是<em class="italics">X</em>T36】TT38】X 的最大和最小奇异值。由于<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>是正定的，其特征值<img src="img/B14713_09_104.png" alt="" style="height: 1.2em !important;"/>是正的，并且等于<img src="img/B14713_09_105.png" alt="" style="height: 1.2em !important;"/>的奇异值总是被定义。小的<img src="img/B14713_09_106.png" alt="" style="height: 1.1em !important;"/>与条件良好的问题相关，因此反演不成问题。相反，当<img src="img/B14713_09_107.png" alt="" style="height: 1.1em !important;"/>时，问题是不适定的，随着<em class="italics"> X </em>的微小变化，结果可能会发生巨大变化。</p>
 
-			<p class="normal">解决这个问题的一个非常简单且<a id="_idIndexMarker562"/>有效的方法是基于参数向量的<em class="italics">L</em>T55】2范数，采用岭(或吉洪诺夫)正则化。考虑到同方差噪声，最小二乘成本函数等于:</p>
+			<p class="normal">解决这个问题的一个非常简单且<a id="_idIndexMarker562"/>有效的方法是基于参数向量的<em class="italics">L</em>T55】2 范数，采用岭(或吉洪诺夫)正则化。考虑到同方差噪声，最小二乘成本函数等于:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_108.png" alt=""/></figure>
 
@@ -416,11 +416,11 @@ hr.fit(x, y.ravel())</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_110.png" alt=""/></figure>
 
-			<p class="normal">在岭回归的上下文中，我们需要对<img src="img/B14713_09_111.png" alt="" style="height: 0.9em !important;"/>求逆，即使当<em class="italics">X</em>T3】TT5】X是奇异的，也可以使其非奇异。而且，随着<img src="img/B14713_09_112.png" alt=""/>被加到所有对角元素上，得到的系数会收缩(第一项就像除法中的分母)。<img src="img/B14713_05_068.png" alt=""/>越大，获得的收缩量越大。正如在<em class="italics">第1章</em>、<em class="italics">机器学习模型基础</em>中所讨论的，脊正则化在防止过度拟合方面起着重要作用，但是，在线性回归的情况下，它的主要作用是使模型产生偏差，以降低方差。我们在本章前面解释了偏差-方差权衡的概念，这是其必要性的一个明显例子。而且由于<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>与协方差矩阵成正比，<em class="italics"> Cov </em> [ <em class="italics"> X </em> ]，而<img src="img/B14713_09_109.png" alt=""/>是常数，所以它对低方差分量的作用会更强。因此，当系数与不太明确的特征相关联时，ridge通过进一步缩小系数来执行最小特征选择。</p>
+			<p class="normal">在岭回归的上下文中，我们需要对<img src="img/B14713_09_111.png" alt="" style="height: 0.9em !important;"/>求逆，即使当<em class="italics">X</em>T3】TT5】X 是奇异的，也可以使其非奇异。而且，随着<img src="img/B14713_09_112.png" alt=""/>被加到所有对角元素上，得到的系数会收缩(第一项就像除法中的分母)。<img src="img/B14713_05_068.png" alt=""/>越大，获得的收缩量越大。正如在<em class="italics">第 1 章</em>、<em class="italics">机器学习模型基础</em>中所讨论的，脊正则化在防止过度拟合方面起着重要作用，但是，在线性回归的情况下，它的主要作用是使模型产生偏差，以降低方差。我们在本章前面解释了偏差-方差权衡的概念，这是其必要性的一个明显例子。而且由于<em class="italics">X</em><sup style="font-style: italic;">T</sup><em class="italics">X</em>与协方差矩阵成正比，<em class="italics"> Cov </em> [ <em class="italics"> X </em> ]，而<img src="img/B14713_09_109.png" alt=""/>是常数，所以它对低方差分量的作用会更强。因此，当系数与不太明确的特征相关联时，ridge 通过进一步缩小系数来执行最小特征选择。</p>
 
-			<h3 id="_idParaDest-151" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor161"/>使用scikit-learn的岭回归示例</h3>
+			<h3 id="_idParaDest-151" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor161"/>使用 scikit-learn 的岭回归示例</h3>
 
-			<p class="normal">现在让我们利用scikit-learn中包含的糖尿病数据集来评估岭回归的效果。该数据集包含442名男性和女性糖尿病患者的观察结果，以及关于年龄、<strong class="bold">体重指数</strong> ( <strong class="bold">身体质量指数</strong>)和<a id="_idIndexMarker564"/>不同血压测量值(平均值和6个附加测量值)的信息。输出是关于疾病进展的数字指标。在没有任何进一步信息的情况下，我们可以假设条目代表不同的患者，并且不包括时间(例如，不同的数据集可能包含对应于不同时间段的相同患者的多个条目)。因此，我们想要检查线性回归是否能够成功地拟合数据。</p>
+			<p class="normal">现在让我们利用 scikit-learn 中包含的糖尿病数据集来评估岭回归的效果。该数据集包含 442 名男性和女性糖尿病患者的观察结果，以及关于年龄、<strong class="bold">体重指数</strong> ( <strong class="bold">身体质量指数</strong>)和<a id="_idIndexMarker564"/>不同血压测量值(平均值和 6 个附加测量值)的信息。输出是关于疾病进展的数字指标。在没有任何进一步信息的情况下，我们可以假设条目代表不同的患者，并且不包括时间(例如，不同的数据集可能包含对应于不同时间段的相同患者的多个条目)。因此，我们想要检查线性回归是否能够成功地拟合数据。</p>
 
 			<p class="normal">第一步是加载数据并计算条件数(列已经被规范化):</p>
 
@@ -461,7 +461,7 @@ print("k = {:.2f}".format(np.linalg.cond(XTX)))</pre>
 
 			</ul>
 
-			<p class="normal">当然，当绝对值| <em class="italics"> R </em> <sub style="font-style: italic;"> ij </sub> |接近1时，我们可以断定两个特征是相关的，因此问题是不适定的。合理的阈值取决于具体的环境。但是一个值|<em class="italics">R</em>T76】ij|&gt;0.5要慎重考虑。</p>
+			<p class="normal">当然，当绝对值| <em class="italics"> R </em> <sub style="font-style: italic;"> ij </sub> |接近 1 时，我们可以断定两个特征是相关的，因此问题是不适定的。合理的阈值取决于具体的环境。但是一个值|<em class="italics">R</em>T76】ij|&gt;0.5 要慎重考虑。</p>
 
 			<p class="normal">为了更好地理解，让我们来计算相关矩阵:</p>
 
@@ -485,9 +485,9 @@ print("k = {:.2f}".format(np.linalg.cond(XTX)))</pre>
 
 			</ul>
 
-			<p class="normal">正如我们将要看到的，简单的线性回归不是很有效。因此，有必要采用更复杂的方法。然而，评估使用一个<em class="italics">L</em>T3】2惩罚的好处是有帮助的。</p>
+			<p class="normal">正如我们将要看到的，简单的线性回归不是很有效。因此，有必要采用更复杂的方法。然而，评估使用一个<em class="italics">L</em>T3】2 惩罚的好处是有帮助的。</p>
 
-			<p class="normal">作为第一步，让我们使用<code class="Code-In-Text--PACKT-">RidgeCV</code>类和默认的<em class="italics">R</em>T7】2分数来执行CV，以找到范围(0.1，1.0)中的最佳<img src="img/B14713_05_060.png" alt=""/>系数:</p>
+			<p class="normal">作为第一步，让我们使用<code class="Code-In-Text--PACKT-">RidgeCV</code>类和默认的<em class="italics">R</em>T7】2 分数来执行 CV，以找到范围(0.1，1.0)中的最佳<img src="img/B14713_05_060.png" alt=""/>系数:</p>
 
 			<pre>from sklearn.linear_model import RidgeCV</pre>
 
@@ -505,7 +505,7 @@ rcv.fit(X, Y)</pre>
 
 			<pre><strong class="screen-text">Alpha: 0.10</strong></pre>
 
-			<p class="normal">CV网格搜索<a id="_idIndexMarker567"/>确定最小的<img src="img/B14713_04_005.png" alt="" style="height: 0.7em !important;"/>产生最好的<em class="italics">R</em>T14】2分数。然而，我们知道岭回归加剧了偏差；因此，我们可以检查与<img src="img/B14713_09_120.png" alt="" style="height: 1em !important;"/>相对应的条件编号:</p>
+			<p class="normal">CV 网格搜索<a id="_idIndexMarker567"/>确定最小的<img src="img/B14713_04_005.png" alt="" style="height: 0.7em !important;"/>产生最好的<em class="italics">R</em>T14】2 分数。然而，我们知道岭回归加剧了偏差；因此，我们可以检查与<img src="img/B14713_09_120.png" alt="" style="height: 1em !important;"/>相对应的条件编号:</p>
 
 			<pre>print("k(0.1): {:.2f}".format(
         np.linalg.cond(X.T @ X + 
@@ -523,7 +523,7 @@ print("k(0.5): {:.2f}".format(
 <strong class="screen-text">k(0.25): 16.53</strong>
 <strong class="screen-text">k(0.5): 8.90</strong></pre>
 
-			<p class="normal">条件数字肯定比以前好得多。由于对应于<img src="img/B14713_09_121.png" alt="" style="height: 0.8em !important;"/>的值是惩罚(换句话说，偏差)和方差之间的一个很好的权衡，我们可以选择这个选项而不是0.1，并使用<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>和MAE来评估岭回归:</p>
+			<p class="normal">条件数字肯定比以前好得多。由于对应于<img src="img/B14713_09_121.png" alt="" style="height: 0.8em !important;"/>的值是惩罚(换句话说，偏差)和方差之间的一个很好的权衡，我们可以选择这个选项而不是 0.1，并使用<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>和 MAE 来评估岭回归:</p>
 
 			<pre>from sklearn.linear_model import Ridge
 from sklearn.metrics import r2_score, mean_absolute_error</pre>
@@ -546,31 +546,31 @@ print("MAE = {:.2f}".format(
 			<pre><strong class="screen-text">R2 = 0.50</strong>
 <strong class="screen-text">MAE = 44.26</strong></pre>
 
-			<p class="normal">不幸的是，表演并不精彩。特别是输出<em class="italics"> Y </em>有<img src="img/B14713_09_122.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_09_123.png" alt="" style="height: 1em !important;"/>。因此，MAE等于约44可能是有问题的。<em class="italics">R</em>T28】2得分证实了<a id="_idIndexMarker568"/>回归只能解释总变化的一小部分，此外，不同的参数选择产生的变化最小。因此，在给定足够大的样本量的情况下，引入将非线性模型的能力引入GLMs的技巧是一个很好的观点。</p>
+			<p class="normal">不幸的是，表演并不精彩。特别是输出<em class="italics"> Y </em>有<img src="img/B14713_09_122.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_09_123.png" alt="" style="height: 1em !important;"/>。因此，MAE 等于约 44 可能是有问题的。<em class="italics">R</em>T28】2 得分证实了<a id="_idIndexMarker568"/>回归只能解释总变化的一小部分，此外，不同的参数选择产生的变化最小。因此，在给定足够大的样本量的情况下，引入将非线性模型的能力引入 GLMs 的技巧是一个很好的观点。</p>
 
-			<h2 id="_idParaDest-152" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor162"/>使用Lasso和逻辑回归进行风险建模</h2>
+			<h2 id="_idParaDest-152" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor162"/>使用 Lasso 和逻辑回归进行风险建模</h2>
 
 			<p class="normal">岭回归<a id="_idIndexMarker569"/>产生一个全局参数收缩，但是，如<em class="italics">第一章</em>、<em class="italics">机器学习模型基础</em>所示，约束曲面是一个以<a id="_idIndexMarker570"/>原点为中心的超球面。独立于<a id="_idIndexMarker571"/>维度，它是平滑的，这防止了参数变为零。</p>
 
-			<p class="normal">另一方面，<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>惩罚具有执行自动特征选择的优点，因为<a id="_idIndexMarker572"/>最小权重被推向约束超立方体的边缘。套索回归在形式上相当于脊线，但它使用了<em class="italics">L</em>T46】1而不是<em class="italics">L</em>T50】2:</p>
+			<p class="normal">另一方面，<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>惩罚具有执行自动特征选择的优点，因为<a id="_idIndexMarker572"/>最小权重被推向约束超立方体的边缘。套索回归在形式上相当于脊线，但它使用了<em class="italics">L</em>T46】1 而不是<em class="italics">L</em>T50】2:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_124.png" alt=""/></figure>
 
-			<p class="normal">参数<img src="img/B14713_09_125.png" alt="" style="height: 0.7em !important;"/>控制正则化的强度，在这种情况下，其对应于被强制变得等于零的参数的百分比。Lasso回归拥有ridge的许多属性，但它的主要应用是特征选择。特别是，假设线性模型有大量参数，我们可以考虑以下关联:</p>
+			<p class="normal">参数<img src="img/B14713_09_125.png" alt="" style="height: 0.7em !important;"/>控制正则化的强度，在这种情况下，其对应于被强制变得等于零的参数的百分比。Lasso 回归拥有 ridge 的许多属性，但它的主要应用是特征选择。特别是，假设线性模型有大量参数，我们可以考虑以下关联:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_126.png" alt=""/></figure>
 
-			<p class="normal">当<em class="italics"> m </em> &gt; &gt; 1并且所有系数都不为零时，很难理解哪些原因是主要的，以及一些贡献是否相互抵消。这种情况导致模型难以解释，因此，在需要研究原因的情况下(例如，医疗保健)帮助不大。Lasso回归有助于解决这个问题，不需要任何外部干预。事实上，一个简单的策略可能是手动删除一些领域专家认为次要的或者与效果无关的特性。然而，这个操作可能会很长，并且容易因人的信念而产生偏差。另一方面，自动特征选择在没有任何先验信息的情况下作用于单个参数，并且从领域的角度来看，检查结果是否合理要容易得多，因为参数集要小得多。</p>
+			<p class="normal">当<em class="italics"> m </em> &gt; &gt; 1 并且所有系数都不为零时，很难理解哪些原因是主要的，以及一些贡献是否相互抵消。这种情况导致模型难以解释，因此，在需要研究原因的情况下(例如，医疗保健)帮助不大。Lasso 回归有助于解决这个问题，不需要任何外部干预。事实上，一个简单的策略可能是手动删除一些领域专家认为次要的或者与效果无关的特性。然而，这个操作可能会很长，并且容易因人的信念而产生偏差。另一方面，自动特征选择在没有任何先验信息的情况下作用于单个参数，并且从领域的角度来看，检查结果是否合理要容易得多，因为参数集要小得多。</p>
 
-			<p class="normal">在这个例子中，我们想使用lasso逻辑回归来建立风险模型，同时确定主导因素。在讨论应用程序之前，让我们回顾一下逻辑回归背后的主要思想。假设我们有一个描述我们想要建模的风险的二元随机变量(结果<em class="italics">风险</em> = 1表示存在风险，类似地，<em class="italics">风险</em> = 0表示不存在风险)。该算法基于logit的线性描述，即奇数比的对数:</p>
+			<p class="normal">在这个例子中，我们想使用 lasso 逻辑回归来建立风险模型，同时确定主导因素。在讨论应用程序之前，让我们回顾一下逻辑回归背后的主要思想。假设我们有一个描述我们想要建模的风险的二元随机变量(结果<em class="italics">风险</em> = 1 表示存在风险，类似地，<em class="italics">风险</em> = 0 表示不存在风险)。该算法基于 logit 的线性描述，即奇数比的对数:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_127.png" alt=""/></figure>
 
-			<p class="normal">logit必须是非负的，并且单调递增。满足这一要求的函数是sigmoid，<img src="img/B14713_09_128.png" alt="" style="height: 1em !important;"/>。实际上，用<img src="img/B14713_09_129.png" alt="" style="height: 1em !important;"/>对<em class="italics"> P </em> ( <em class="italics">风险</em> = 1)建模，定义在<img src="img/B14713_09_130.png" alt="" style="height: 1em !important;"/>上，其值为<img src="img/B14713_09_131.png" alt="" style="height: 0.8em !important;"/>，我们得到如下:</p>
+			<p class="normal">logit 必须是非负的，并且单调递增。满足这一要求的函数是 sigmoid，<img src="img/B14713_09_128.png" alt="" style="height: 1em !important;"/>。实际上，用<img src="img/B14713_09_129.png" alt="" style="height: 1em !important;"/>对<em class="italics"> P </em> ( <em class="italics">风险</em> = 1)建模，定义在<img src="img/B14713_09_130.png" alt="" style="height: 1em !important;"/>上，其值为<img src="img/B14713_09_131.png" alt="" style="height: 0.8em !important;"/>，我们得到如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_132.png" alt=""/></figure>
 
-			<p class="normal">操作<a id="_idIndexMarker575"/>logit表达式，我们得到所需的确认:</p>
+			<p class="normal">操作<a id="_idIndexMarker575"/>logit 表达式，我们得到所需的确认:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_133.png" alt=""/></figure>
 
@@ -582,17 +582,17 @@ print("MAE = {:.2f}".format(
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_135.png" alt=""/></figure>
 
-			<p class="normal">如<img src="img/B14713_09_136.png" alt="" style="height: 1.2em !important;"/>，若<em class="italics">y</em>I= 0，则第一项<img src="img/B14713_09_137.png" alt="" style="height: 1.2em !important;"/>，而第二项变为等于<img src="img/B14713_09_138.png" alt="" style="height: 1.2em !important;"/>。反之，当<em class="italics">y</em>T30】I= 1时，第二项为空，第一项等于<img src="img/B14713_09_139.png" alt="" style="height: 1.2em !important;"/>。在这两种情况下，<em class="italics"> L </em>的最大化迫使模型学习实际分布<em class="italics"> p </em> ( <em class="italics"> y </em>)。如果我们明确参数向量的相关性并引入一般的惩罚项，<em class="italics"> L </em>变成:</p>
+			<p class="normal">如<img src="img/B14713_09_136.png" alt="" style="height: 1.2em !important;"/>，若<em class="italics">y</em>I= 0，则第一项<img src="img/B14713_09_137.png" alt="" style="height: 1.2em !important;"/>，而第二项变为等于<img src="img/B14713_09_138.png" alt="" style="height: 1.2em !important;"/>。反之，当<em class="italics">y</em>T30】I= 1 时，第二项为空，第一项等于<img src="img/B14713_09_139.png" alt="" style="height: 1.2em !important;"/>。在这两种情况下，<em class="italics"> L </em>的最大化迫使模型学习实际分布<em class="italics"> p </em> ( <em class="italics"> y </em>)。如果我们明确参数向量的相关性并引入一般的惩罚项，<em class="italics"> L </em>变成:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_140.png" alt=""/></figure>
 
-			<p class="normal">当p-norm为<em class="italics">L</em>T43】1时，模型<a id="_idIndexMarker576"/>会在建模奇数比时执行套索特征选择。</p>
+			<p class="normal">当 p-norm 为<em class="italics">L</em>T43】1 时，模型<a id="_idIndexMarker576"/>会在建模奇数比时执行套索特征选择。</p>
 
-			<p class="normal">我们现在可以使用Python和scikit-learn对乳腺癌的风险<a id="_idIndexMarker577"/>进行建模。</p>
+			<p class="normal">我们现在可以使用 Python 和 scikit-learn 对乳腺癌的风险<a id="_idIndexMarker577"/>进行建模。</p>
 
-			<h3 id="_idParaDest-153" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor163"/>使用Lasso和逻辑回归的风险建模示例</h3>
+			<h3 id="_idParaDest-153" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor163"/>使用 Lasso 和逻辑回归的风险建模示例</h3>
 
-			<p class="normal">现在让我们考虑一个基于乳腺癌数据集的玩具<a id="_idIndexMarker578"/>示例，该数据集包含569个数据点和30个生物特征。每个点都与一个<a id="_idIndexMarker579"/>二进制标签<img src="img/B14713_09_141.png" alt="" style="height: 1.2em !important;"/>相关联。由于这只是一个练习，我们不考虑此类研究的真正医学要求(对该主题感兴趣的读者应该阅读一本关于流行病学的书)。然而，由于真正的标签是由医学专家保证的，如果逻辑回归成功地对样本进行分类(具有合理的准确性)，风险的logit也将是正确的。</p>
+			<p class="normal">现在让我们考虑一个基于乳腺癌数据集的玩具<a id="_idIndexMarker578"/>示例，该数据集包含 569 个数据点和 30 个生物特征。每个点都与一个<a id="_idIndexMarker579"/>二进制标签<img src="img/B14713_09_141.png" alt="" style="height: 1.2em !important;"/>相关联。由于这只是一个练习，我们不考虑此类研究的真正医学要求(对该主题感兴趣的读者应该阅读一本关于流行病学的书)。然而，由于真正的标签是由医学专家保证的，如果逻辑回归成功地对样本进行分类(具有合理的准确性)，风险的 logit 也将是正确的。</p>
 
 			<p class="normal">让我们从使用一个健壮的缩放器和分位数范围(15，85)加载和<a id="_idIndexMarker580"/>归一化数据集开始(数据集基于<strong class="bold">真实世界的证据</strong> ( <strong class="bold"> RWE </strong>)并且不包含非常嘈杂的离群值):</p>
 
@@ -610,7 +610,7 @@ Y = data["target"]</pre>
 <pre>rs = RobustScaler(quantile_range=(15.0, 85.0))
 X = rs.fit_transform(X)</pre>
 
-			<p class="normal">在这一点上，我们可以用<img src="img/B14713_09_142.png" alt="" style="height: 1em !important;"/>评估lasso逻辑回归的性能(这个选择<a id="_idIndexMarker581"/>是通过测试对应于不同值的结果做出的。我邀请读者做同样的练习):</p>
+			<p class="normal">在这一点上，我们可以用<img src="img/B14713_09_142.png" alt="" style="height: 1em !important;"/>评估 lasso 逻辑回归的性能(这个选择<a id="_idIndexMarker581"/>是通过测试对应于不同值的结果做出的。我邀请读者做同样的练习):</p>
 
 			<pre>import joblib</pre>
 
@@ -627,11 +627,11 @@ cvs = cross_val_score(
 
 <pre>print(cvs)</pre>
 
-			<p class="normal">正如可能看到的，我们选择了施加一个<em class="italics">L</em>T60】1惩罚。因此，我们希望将参数的数量从31(截距和系数)减少到一个更小的值。前面代码片段的输出如下:</p>
+			<p class="normal">正如可能看到的，我们选择了施加一个<em class="italics">L</em>T60】1 惩罚。因此，我们希望将参数的数量从 31(截距和系数)减少到一个更小的值。前面代码片段的输出如下:</p>
 
 			<pre><strong class="screen-text">[0.98275862 0.94827586 0.94736842 0.98245614 0.96491228 0.98245614 0.92982456 0.98214286 0.98214286 0.94642857]</strong></pre>
 
-			<p class="normal">结果显然是积极的。最差准确率93%左右，最高98%。因此，我们<a id="_idIndexMarker582"/>可以用整个数据集训练模型，并将其用于未来的预测(当然，假设它们来自相同的数据生成过程——例如，使用相同类型的仪器进行测量)。</p>
+			<p class="normal">结果显然是积极的。最差准确率 93%左右，最高 98%。因此，我们<a id="_idIndexMarker582"/>可以用整个数据集训练模型，并将其用于未来的预测(当然，假设它们来自相同的数据生成过程——例如，使用相同类型的仪器进行测量)。</p>
 
 			<p class="normal">现在让我们训练模型并检查系数:</p>
 
@@ -679,7 +679,7 @@ lr.fit(X, Y)</pre>
 <strong class="screen-text">worst symmetry = -0.34</strong>
 <strong class="screen-text">worst fractal dimension = 0.00</strong></pre>
 
-			<p class="normal">只有<a id="_idIndexMarker583"/>九个非零系数(30个中的)可以被重新排列以定义完整的关系。由于风险是反转的(<em class="italics">恶性</em> = 0)，为了与标准含义一致<a id="_idIndexMarker584"/>，我们还反转了所有系数的符号(sigmoid是对称的；因此，这相当于交换标签):</p>
+			<p class="normal">只有<a id="_idIndexMarker583"/>九个非零系数(30 个中的)可以被重新排列以定义完整的关系。由于风险是反转的(<em class="italics">恶性</em> = 0)，为了与标准含义一致<a id="_idIndexMarker584"/>，我们还反转了所有系数的符号(sigmoid 是对称的；因此，这相当于交换标签):</p>
 
 			<pre>model = "logit(risk) = {:.2f}".format(-lr.intercept_[0])
 for i, p in enumerate(np.squeeze(lr.coef_)):
@@ -699,7 +699,7 @@ print(model)</pre>
 
 			<p class="normal">这样的表达式非常简单，并提供了对主导因素的直接洞察。正如可能看到的，一些<a id="_idIndexMarker585"/>冗余特征已经被丢弃，因为它们的贡献可能<a id="_idIndexMarker586"/>被其他特征部分吸收(换句话说，有混杂因素)。此时，该模型还应该由领域专家进行评估，以了解它是否有助于构建诊断算法。然而，读者应该清楚，当不需要较大模型提供的额外容量时，线性模型可以有多强大。</p>
 
-			<p class="normal">作为练习，我邀请读者更改<img src="img/B14713_04_005.png" alt=""/>(对于scikit-learn为<em class="italics"> C </em>)的值，直到非空参数的数量稳定下来。此外，读者还可以通过ElasticNet loss(参见<em class="italics">第1章</em>、<em class="italics">机器学习模型基础</em>)引入一个<em class="italics"> L </em>、T11】 2 惩罚，以减少多重共线性的影响。</p>
+			<p class="normal">作为练习，我邀请读者更改<img src="img/B14713_04_005.png" alt=""/>(对于 scikit-learn 为<em class="italics"> C </em>)的值，直到非空参数的数量稳定下来。此外，读者还可以通过 ElasticNet loss(参见<em class="italics">第 1 章</em>、<em class="italics">机器学习模型基础</em>)引入一个<em class="italics"> L </em>、T11】 2 惩罚，以减少多重共线性的影响。</p>
 
 			<h2 id="_idParaDest-154" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor164"/>多项式回归</h2>
 
@@ -725,11 +725,11 @@ print(model)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_154.png" alt=""/></figure>
 
-			<p class="normal">不幸的是，当初始维数较大时，这种变换容易爆炸。事实上，考虑到多项式和相互作用特征，由于每度的所有组合，总数呈指数增长。例如，用3度变换糖尿病数据集(13个原始特征)，我们获得560个特征，这超过了样本大小(506)。缺点显而易见:</p>
+			<p class="normal">不幸的是，当初始维数较大时，这种变换容易爆炸。事实上，考虑到多项式和相互作用特征，由于每度的所有组合，总数呈指数增长。例如，用 3 度变换糖尿病数据集(13 个原始特征)，我们获得 560 个特征，这超过了样本大小(506)。缺点显而易见:</p>
 
 			<ul>
 
-				<li class="list">由于维数灾难，样本大小可能会变得太小(例如，CV变得非常有问题，因为折叠太小，并且一些区域可以很容易地从训练集中切掉)。</li>
+				<li class="list">由于维数灾难，样本大小可能会变得太小(例如，CV 变得非常有问题，因为折叠太小，并且一些区域可以很容易地从训练集中切掉)。</li>
 
 				<li class="list">估计器现在可以过度拟合(因此，岭优于标准线性回归)。</li>
 
@@ -739,9 +739,9 @@ print(model)</pre>
 
 			<p class="normal">在这些情况下，我们可以通过仅选择相互作用特征来试图减轻问题，但是这种选择不会帮助我们捕获由于非线性引起的振荡。然而，在许多真实案例中，主要问题是由于无法管理相互作用(例如，在许多医疗保健研究中，共病——这意味着同时存在不同的、相关的病理——起着核心作用，并且不可能将相互作用的影响建模为线性组合)。因此，当数据集非常复杂时，我建议从生成仅交互要素开始，并检查结果是否可接受。如果性能不佳，可以提高等级或激活全部功能集。</p>
 
-			<p class="normal">另一个需要考虑的重要因素是CV的使用。如果样本量很小，折叠次数很少(例如，少于10次)会导致训练集可能无法覆盖整个数据生成过程。因此，验证结果通常很差。解决<a id="_idIndexMarker591"/>这个问题的唯一方法是使用<strong class="bold">留一法</strong> ( <strong class="bold"> LOO </strong>)(如果有可能评估单个数据点的指标)或<strong class="bold">留一法</strong> ( <strong class="bold"> LPO </strong>)。显然，两种<a id="_idIndexMarker592"/>策略都非常耗时，但这是在这些情况下有效管理CV的唯一可行方法。</p>
+			<p class="normal">另一个需要考虑的重要因素是 CV 的使用。如果样本量很小，折叠次数很少(例如，少于 10 次)会导致训练集可能无法覆盖整个数据生成过程。因此，验证结果通常很差。解决<a id="_idIndexMarker591"/>这个问题的唯一方法是使用<strong class="bold">留一法</strong> ( <strong class="bold"> LOO </strong>)(如果有可能评估单个数据点的指标)或<strong class="bold">留一法</strong> ( <strong class="bold"> LPO </strong>)。显然，两种<a id="_idIndexMarker592"/>策略都非常耗时，但这是在这些情况下有效管理 CV 的唯一可行方法。</p>
 
-			<p class="normal">在任何情况下，重要的是要记住K倍CV通常是最可靠的选择，因为它避免了LOO和LPO几乎不可避免的交叉相关。或者，也可以在适当打乱数据集后执行静态训练测试分割。显然，测试集的大小必须足够小，以允许训练集捕获<em class="italics">p</em>T13】数据的全部动态。如果回归是完全与时间无关的，那么一个小的训练集可能足以训练一个模型，但是当数据点是基于一段时间的演变时，这个问题可能变得非常难以管理。在这些情况下，由于参数的低估(或高估),排除某些点可能导致模型有偏差。</p>
+			<p class="normal">在任何情况下，重要的是要记住 K 倍 CV 通常是最可靠的选择，因为它避免了 LOO 和 LPO 几乎不可避免的交叉相关。或者，也可以在适当打乱数据集后执行静态训练测试分割。显然，测试集的大小必须足够小，以允许训练集捕获<em class="italics">p</em>T13】数据的全部动态。如果回归是完全与时间无关的，那么一个小的训练集可能足以训练一个模型，但是当数据点是基于一段时间的演变时，这个问题可能变得非常难以管理。在这些情况下，由于参数的低估(或高估),排除某些点可能导致模型有偏差。</p>
 
 			<p class="normal">因此，在处理时间序列时，通常最好采用特定的模型(我们将在下一章中介绍)，这些模型能够捕捉时间点之间的内部动态和相互依赖性。如果回归模型是首选，有必要<a id="_idIndexMarker593"/>检查训练集是否包含足够的数据点来描述数据生成过程。</p>
 
@@ -778,7 +778,7 @@ y = 0.1 * np.power(x +
 <pre>lr = Ridge(alpha=0.1, normalize=True, random_state=1000)
 lr.fit(x, y)</pre>
 
-			<p class="normal">在继续讨论和比较结果之前，评估一下<em class="italics">R</em>T30】2和MAE是有帮助的:</p>
+			<p class="normal">在继续讨论和比较结果之前，评估一下<em class="italics">R</em>T30】2 和 MAE 是有帮助的:</p>
 
 			<pre>from sklearn.metrics import r2_score, mean_absolute_error
 print("R2 = {:.2f}".format(
@@ -791,13 +791,13 @@ print("MAE = {:.2f}".format(
 			<pre><strong class="screen-text">R2 = 0.63</strong>
 <strong class="screen-text">MAE = 0.10</strong></pre>
 
-			<p class="normal">这个结果可能会令人惊讶，因为数据集是高度非线性的。的确，读者必须注意两个重要因素。<img src="img/B14713_09_158.png" alt="" style="height: 1em !important;"/>的价值观；因此，我们有大约10%的MAE，这对于这种数据集来说通常太大了。当比较结果时，原因将是清楚的，但是一般来说，误差的影响在斜率变化更突然的区域更大。在这种情况下，有两种这样的区域。最小二乘法通过选择一个斜率成功地将误差最小化，该斜率与第一个弯曲区域更加<em class="italics">兼容</em>，而对第二个弯曲区域无效。</p>
+			<p class="normal">这个结果可能会令人惊讶，因为数据集是高度非线性的。的确，读者必须注意两个重要因素。<img src="img/B14713_09_158.png" alt="" style="height: 1em !important;"/>的价值观；因此，我们有大约 10%的 MAE，这对于这种数据集来说通常太大了。当比较结果时，原因将是清楚的，但是一般来说，误差的影响在斜率变化更突然的区域更大。在这种情况下，有两种这样的区域。最小二乘法通过选择一个斜率成功地将误差最小化，该斜率与第一个弯曲区域更加<em class="italics">兼容</em>，而对第二个弯曲区域无效。</p>
 
-			<p class="normal">第二个要记住的是<em class="italics">R</em>T7】2的信息值。正如许多作者所证明的那样，这个分数非常依赖于上下文，有时，它也会产生不一致的结果。特别是，<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>必须始终用于模型兼容版本的比较(例如，相同的数据集和不同的多项式次数)，因为它不提供任何关于绝对拟合优度的信息。此外，它不编码关于多项式曲线转折点的信息。当处理线性回归时，这不是问题。然而，当使用多项式变换时，理解曲线是否在其非线性结构中正确地模拟数据是极其重要的。<em class="italics"> U </em>分数(也称为Theil分数)提供了一种更可靠的替代方法，其定义为:</p>
+			<p class="normal">第二个要记住的是<em class="italics">R</em>T7】2 的信息值。正如许多作者所证明的那样，这个分数非常依赖于上下文，有时，它也会产生不一致的结果。特别是，<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup>必须始终用于模型兼容版本的比较(例如，相同的数据集和不同的多项式次数)，因为它不提供任何关于绝对拟合优度的信息。此外，它不编码关于多项式曲线转折点的信息。当处理线性回归时，这不是问题。然而，当使用多项式变换时，理解曲线是否在其非线性结构中正确地模拟数据是极其重要的。<em class="italics"> U </em>分数(也称为 Theil 分数)提供了一种更可靠的替代方法，其定义为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_09_159.png" alt=""/></figure>
 
-			<p class="normal">标准的<em class="italics"> U </em>得分与<em class="italics">R</em>T19】2非常相似，并对模型能够描述的总变化信息进行编码。相反，<img src="img/B14713_09_160.png" alt="" style="height: 0.8em !important;"/>是基于逐步的差异，并使模型的能力能够在<em class="italics">开启时间</em>中被测量。看分子，第一项是两个连续输出的差，第二项是预测输出和真实前一项的差。一个理想的模型应该由<img src="img/B14713_09_161.png" alt="" style="height: 1.2em !important;"/>来表征，因此也应该由<img src="img/B14713_09_162.png" alt="" style="height: 0.8em !important;"/>来表征。</p>
+			<p class="normal">标准的<em class="italics"> U </em>得分与<em class="italics">R</em>T19】2 非常相似，并对模型能够描述的总变化信息进行编码。相反，<img src="img/B14713_09_160.png" alt="" style="height: 0.8em !important;"/>是基于逐步的差异，并使模型的能力能够在<em class="italics">开启时间</em>中被测量。看分子，第一项是两个连续输出的差，第二项是预测输出和真实前一项的差。一个理想的模型应该由<img src="img/B14713_09_161.png" alt="" style="height: 1.2em !important;"/>来表征，因此也应该由<img src="img/B14713_09_162.png" alt="" style="height: 0.8em !important;"/>来表征。</p>
 
 			<p class="normal">事实上，在这种情况下，转折点被成功预测，模型遵循数据的非线性结构。在实际案例中，我们寻找最小化两个<a id="_idIndexMarker596"/>分数的超参数集(可能还包括调整后的<em class="italics">R</em>T29】2，以便考虑自由度并惩罚更复杂的模型)。</p>
 
@@ -829,7 +829,7 @@ print("MAE = {:.2f}".format(
 
 			<pre><strong class="screen-text">U = 0.37, UD = 3.38</strong></pre>
 
-			<p class="normal">由于<em class="italics"> U </em>分数也是相对的衡量标准，我们无法在不与少数多项式回归比较结果的情况下得出任何结论。让我们基于5度、3度和2度创建三个备选数据集，包括使用<code class="Code-In-Text--PACKT-">PolynomialFeatures</code>类的交互:</p>
+			<p class="normal">由于<em class="italics"> U </em>分数也是相对的衡量标准，我们无法在不与少数多项式回归比较结果的情况下得出任何结论。让我们基于 5 度、3 度和 2 度创建三个备选数据集，包括使用<code class="Code-In-Text--PACKT-">PolynomialFeatures</code>类的交互:</p>
 
 			<pre>from sklearn.preprocessing import PolynomialFeatures</pre>
 
@@ -881,7 +881,7 @@ print("5. U = {:.2f}, UD = {:.2f}".
 <strong class="screen-text">3. U = 0.10, UD = 0.93</strong>
 <strong class="screen-text">5. U = 0.09, UD = 0.83</strong></pre>
 
-			<p class="normal">结果证实了我们的假设。如果我们看一下<img src="img/B14713_09_164.png" alt="" style="height: 0.8em !important;"/> s，当次数为2时，我们已经有了一个快速的下降，但是值似乎随着<em class="italics"> d </em> = 3而稳定下来。事实上，考虑到标准的<em class="italics"> U </em>分数，在2度和3度之间有50%的下降，而对于<em class="italics"> d </em> = 5，它几乎保持不变。这表明5度模型更容易过度拟合，并且额外的自由度不会以方差为代价来减少偏差。事实上，更复杂的模型可以解释同样的变化，但它有更多可能不必要的潜在转折点。</p>
+			<p class="normal">结果证实了我们的假设。如果我们看一下<img src="img/B14713_09_164.png" alt="" style="height: 0.8em !important;"/> s，当次数为 2 时，我们已经有了一个快速的下降，但是值似乎随着<em class="italics"> d </em> = 3 而稳定下来。事实上，考虑到标准的<em class="italics"> U </em>分数，在 2 度和 3 度之间有 50%的下降，而对于<em class="italics"> d </em> = 5，它几乎保持不变。这表明 5 度模型更容易过度拟合，并且额外的自由度不会以方差为代价来减少偏差。事实上，更复杂的模型可以解释同样的变化，但它有更多可能不必要的潜在转折点。</p>
 
 			<p class="normal">所有模型的曲线如下图所示:</p>
 
@@ -889,20 +889,20 @@ print("5. U = {:.2f}, UD = {:.2f}".
 
 			<p class="packt_figref">覆盖了线性回归和三次多项式回归的非线性噪声数据集</p>
 
-			<p class="normal">很明显，线性回归(虚线)是完全不准确的，应该立即排除。假设数据集的结构，2次多项式也不是一个好的选择，因为它不允许任何鞍点。查看数据集，<img src="img/B14713_09_165.png" alt="" style="height: 0.8em !important;"/>有一个鞍点(凹度改变方向)，抛物线回归只能捕捉曲线的一侧。3度和5度都是奇数；因此，它们允许凹度方向改变，实际上，两条曲线几乎重叠(对于<em class="italics"> d </em> = 5，具有稍微更精确的预测能力)。</p>
+			<p class="normal">很明显，线性回归(虚线)是完全不准确的，应该立即排除。假设数据集的结构，2 次多项式也不是一个好的选择，因为它不允许任何鞍点。查看数据集，<img src="img/B14713_09_165.png" alt="" style="height: 0.8em !important;"/>有一个鞍点(凹度改变方向)，抛物线回归只能捕捉曲线的一侧。3 度和 5 度都是奇数；因此，它们允许凹度方向改变，实际上，两条曲线几乎重叠(对于<em class="italics"> d </em> = 5，具有稍微更精确的预测能力)。</p>
 
-			<p class="normal">然而，额外复杂性的成本并没有得到结果的证实。因此，我们倾向于采用三级模型。此外，重要的是要记住数据集应该代表整个数据生成过程。在这种特殊情况下，这意味着当<em class="italics">x</em>T35】–40和<em class="italics">x</em>T36】60时，趋势保持不变。这暗示着<img src="img/B14713_09_166.png" alt="" style="height: 1em !important;"/>，这在大多数实际情况下显然是不现实的。因此，我们明确假设自变量<em class="italics"> x </em>有一个有限的定义域，这个定义域被训练样本完全捕获。</p>
+			<p class="normal">然而，额外复杂性的成本并没有得到结果的证实。因此，我们倾向于采用三级模型。此外，重要的是要记住数据集应该代表整个数据生成过程。在这种特殊情况下，这意味着当<em class="italics">x</em>T35】–40 和<em class="italics">x</em>T36】60 时，趋势保持不变。这暗示着<img src="img/B14713_09_166.png" alt="" style="height: 1em !important;"/>，这在大多数实际情况下显然是不现实的。因此，我们明确假设自变量<em class="italics"> x </em>有一个有限的定义域，这个定义域被训练样本完全捕获。</p>
 
 			<p class="normal">返回到糖尿病数据集，对应于具有<img src="img/B14713_09_167.png" alt="" style="height: 0.8em !important;"/>的岭回归的<em class="italics"> U </em>得分如下:</p>
 
 			<pre><strong class="screen-text">U = 0.32, UD = 0.51</strong></pre>
 
-			<p class="normal">这些值看起来不算太差，但是我们知道<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup> = 0.5，所以我们没有达到很高的拟合优度。我们可以测试使用多项式特征的效果，但也要注意样本大小。原始数据集包含具有13个特征的506个点；因此，必须限制<a id="_idIndexMarker599"/>的扩展，否则我们将面临系统不确定的风险。考虑到数据集的性质，有理由认为缺乏精确度主要是因为无法对因素之间的相互作用进行建模(这是医疗保健研究中的常见情况)。因此，我们可以将扩展限制为<em class="italics"> d </em> = 3，仅包括交互:</p>
+			<p class="normal">这些值看起来不算太差，但是我们知道<em class="italics"> R </em> <sup style="font-style: italic;"> 2 </sup> = 0.5，所以我们没有达到很高的拟合优度。我们可以测试使用多项式特征的效果，但也要注意样本大小。原始数据集包含具有 13 个特征的 506 个点；因此，必须限制<a id="_idIndexMarker599"/>的扩展，否则我们将面临系统不确定的风险。考虑到数据集的性质，有理由认为缺乏精确度主要是因为无法对因素之间的相互作用进行建模(这是医疗保健研究中的常见情况)。因此，我们可以将扩展限制为<em class="italics"> d </em> = 3，仅包括交互:</p>
 
 			<pre>pf = PolynomialFeatures(degree=3, interaction_only=True)
 Xp = pf.fit_transform(X)</pre>
 
-			<p class="normal">该变换生成了176个要素，少于样本量，但这仍然是一个非常大的数字，相当于506个点可能无法完全捕获的数据生成过程。但是，我们可以重新训练岭回归并计算新的度量:</p>
+			<p class="normal">该变换生成了 176 个要素，少于样本量，但这仍然是一个非常大的数字，相当于 506 个点可能无法完全捕获的数据生成过程。但是，我们可以重新训练岭回归并计算新的度量:</p>
 
 			<pre>lrr = Ridge(alpha=0.25, normalize=True,random_state=1000)
 lrr.fit(Xp, Y)</pre>
@@ -922,7 +922,7 @@ format(*u_scores(Y, lrr.predict(Xp))))</pre>
 <strong class="screen-text">MAE = 39.24</strong>
 <strong class="screen-text">U = 0.29, UD = 0.46</strong></pre>
 
-			<p class="normal">所有的测量都证实了一个进步，但是很明显，更大的样本量会产生更好的拟合。特别是，<img src="img/B14713_09_168.png" alt="" style="height: 0.8em !important;"/>的减少表明多项式模型现在捕捉到了更多的转折点(这一结果也被较低的MAE所证实)。不幸的是，所有其他具有更高程度的组合产生的特征总数大于训练样本；因此，它们是不可接受的。无论如何，必须清楚的是，多项式回归是一个非常强大的工具，用于管理自然非线性或具有相关特征的问题。</p>
+			<p class="normal">所有的测量都证实了一个进步，但是很明显，更大的样本量会产生更好的拟合。特别是，<img src="img/B14713_09_168.png" alt="" style="height: 0.8em !important;"/>的减少表明多项式模型现在捕捉到了更多的转折点(这一结果也被较低的 MAE 所证实)。不幸的是，所有其他具有更高程度的组合产生的特征总数大于训练样本；因此，它们是不可接受的。无论如何，必须清楚的是，多项式回归是一个非常强大的工具，用于管理自然非线性或具有相关特征的问题。</p>
 
 			<p class="normal">作为一项练习，我邀请读者用其他简单的回归数据集来测试这些模型，如波士顿<a id="_idIndexMarker600"/>房价数据集，试图在准确性、程度和生成要素的数量之间建立最佳平衡。</p>
 
@@ -936,7 +936,7 @@ format(*u_scores(Y, lrr.predict(Xp))))</pre>
 
 			<h3 id="_idParaDest-157" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor167"/>保序回归的例子</h3>
 
-			<p class="normal">作为一个<a id="_idIndexMarker603"/>的例子，让我们考虑一个包含600个点的数据集，其中<img src="img/B14713_09_173.png" alt="" style="height: 1em !important;"/>(这是保序回归所需的唯一条件):</p>
+			<p class="normal">作为一个<a id="_idIndexMarker603"/>的例子，让我们考虑一个包含 600 个点的数据集，其中<img src="img/B14713_09_173.png" alt="" style="height: 1em !important;"/>(这是保序回归所需的唯一条件):</p>
 
 			<pre>import numpy as np</pre>
 
@@ -979,23 +979,23 @@ ir.fit(x, y)</pre>
 
 			<h1 id="_idParaDest-158" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor168"/>总结</h1>
 
-			<p class="normal">在这一章中，我们已经向读者介绍了有关线性模型和回归的最重要的概念。在第一部分中，我们讨论了自动GLM的特性，重点关注如何拟合模型以及如何避免最常见的问题。</p>
+			<p class="normal">在这一章中，我们已经向读者介绍了有关线性模型和回归的最重要的概念。在第一部分中，我们讨论了自动 GLM 的特性，重点关注如何拟合模型以及如何避免最常见的问题。</p>
 
-			<p class="normal">我们还分析了如何通过岭回归和套索回归包含正则化惩罚，以及如何通过适当的多项式变换在数据集为非线性时利用线性框架。我们还将结果与使用保序回归获得的结果进行了比较，并分析了倾向于前者或后者的原因。本章讨论的另一个重要主题是使用带有lasso惩罚的逻辑回归进行自动特征选择的风险建模。</p>
+			<p class="normal">我们还分析了如何通过岭回归和套索回归包含正则化惩罚，以及如何通过适当的多项式变换在数据集为非线性时利用线性框架。我们还将结果与使用保序回归获得的结果进行了比较，并分析了倾向于前者或后者的原因。本章讨论的另一个重要主题是使用带有 lasso 惩罚的逻辑回归进行自动特征选择的风险建模。</p>
 
-			<p class="normal">在下一章中，我们开始讨论时间序列分析的基本概念，重点是计量经济学和金融预测中常用的最重要的模型(ARMA和ARIMA)的性质。</p>
+			<p class="normal">在下一章中，我们开始讨论时间序列分析的基本概念，重点是计量经济学和金融预测中常用的最重要的模型(ARMA 和 ARIMA)的性质。</p>
 
 			<h1 id="_idParaDest-159" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor169"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">格林·w·h .<em class="italics">计量经济学分析</em>(第五版)，普伦蒂斯霍尔，2002年</li>
+				<li class="list">格林·w·h .<em class="italics">计量经济学分析</em>(第五版)，普伦蒂斯霍尔，2002 年</li>
 
-				<li class="list">Belsley D. A .、Kuh E .、Welsch R .、<em class="italics">回归诊断:识别有影响的数据和共线性来源</em>，Wiley，1980年</li>
+				<li class="list">Belsley D. A .、Kuh E .、Welsch R .、<em class="italics">回归诊断:识别有影响的数据和共线性来源</em>，Wiley，1980 年</li>
 
 				<li class="list">Chakravarti N .，<em class="italics">保序中值回归:线性规划方法</em>，运筹学数学，14/2，1989</li>
 
-				<li class="list">Candanedo L. M .、Feldheim V .、Deramaix D .、<em class="italics">低能耗住宅中电器能源使用的数据驱动预测模型</em>，《能源与建筑》，第140卷，2017年4月</li>
+				<li class="list">Candanedo L. M .、Feldheim V .、Deramaix D .、<em class="italics">低能耗住宅中电器能源使用的数据驱动预测模型</em>，《能源与建筑》，第 140 卷，2017 年 4 月</li>
 
 			</ul>
 

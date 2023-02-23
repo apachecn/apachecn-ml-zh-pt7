@@ -11,13 +11,13 @@
         
 
                             
-                    <h1 class="header-title">Scala支持降维和聚类</h1>
+                    <h1 class="header-title">Scala 支持降维和聚类</h1>
                 
             
             
                 
-<p>在前面的章节中，我们看到了几个监督学习的例子，包括分类和回归。我们对结构化和标记的数据执行监督学习技术。然而，正如我们之前提到的，随着云计算、物联网和社交媒体的兴起，非结构化数据正以前所未有的速度增长。总的来说，这些数据中有80%以上是非结构化的，其中大部分是未标记的。</p>
-<p>无监督学习技术，如聚类分析和维数约简，是数据驱动的研究和行业设置中发现非结构化数据集中隐藏结构的两个关键应用。为此提出了许多聚类算法，例如k-means、平分k-means和高斯混合模型。然而，这些算法无法处理高维输入数据集，并且通常会遭遇<em>维数灾难</em>。因此，使用像<strong>主成分分析</strong> ( <strong> PCA </strong>)这样的算法来降低维度，并输入潜在数据，这是一种用于聚类数十亿个数据点的有用技术。</p>
+<p>在前面的章节中，我们看到了几个监督学习的例子，包括分类和回归。我们对结构化和标记的数据执行监督学习技术。然而，正如我们之前提到的，随着云计算、物联网和社交媒体的兴起，非结构化数据正以前所未有的速度增长。总的来说，这些数据中有 80%以上是非结构化的，其中大部分是未标记的。</p>
+<p>无监督学习技术，如聚类分析和维数约简，是数据驱动的研究和行业设置中发现非结构化数据集中隐藏结构的两个关键应用。为此提出了许多聚类算法，例如 k-means、平分 k-means 和高斯混合模型。然而，这些算法无法处理高维输入数据集，并且通常会遭遇<em>维数灾难</em>。因此，使用像<strong>主成分分析</strong> ( <strong> PCA </strong>)这样的算法来降低维度，并输入潜在数据，这是一种用于聚类数十亿个数据点的有用技术。</p>
 <p>在这一章中，我们将使用一种遗传变异(一种基因组数据)来根据他们的主要祖先(也称为地理种族)对人群进行聚类。我们将评估聚类分析的结果，随后是降维技术，以避免维数灾难。</p>
 <p>我们将在本章中讨论以下主题:</p>
 <ul>
@@ -54,8 +54,8 @@
             
             
                 
-<p>确保在您的机器上安装并配置了Scala 2.11.x和Java 1.8.x。</p>
-<p>这几章的代码文件可以在GitHub上找到:</p>
+<p>确保在您的机器上安装并配置了 Scala 2.11.x 和 Java 1.8.x。</p>
+<p>这几章的代码文件可以在 GitHub 上找到:</p>
 <p><a href="https://github.com/PacktPublishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/Chapter05" target="_blank">https://github . com/packt publishing/Machine-Learning-with-Scala-Quick-Start-Guide/tree/master/chapter 05</a></p>
 <p>看看下面的视频，看看代码是如何运行的:<br/><a href="http://bit.ly/2ISwb3o" target="_blank">http://bit.ly/2ISwb3o</a></p>
 
@@ -86,12 +86,12 @@
             
             
                 
-<p>在无监督学习中，输入集在训练阶段被提供给系统。与监督学习相比，输入对象没有用它们的类别来标记。虽然在分类分析中，训练数据集是有标签的，但当我们在现实世界中收集数据时，我们并不总是有这种优势，但我们仍然希望找到数据的重要值或隐藏结构。在NeuralIPS' 2016中，脸书人工智能首席执行官Yann LeCun介绍了<em>蛋糕类比</em>:</p>
+<p>在无监督学习中，输入集在训练阶段被提供给系统。与监督学习相比，输入对象没有用它们的类别来标记。虽然在分类分析中，训练数据集是有标签的，但当我们在现实世界中收集数据时，我们并不总是有这种优势，但我们仍然希望找到数据的重要值或隐藏结构。在 NeuralIPS' 2016 中，脸书人工智能首席执行官 Yann LeCun 介绍了<em>蛋糕类比</em>:</p>
 <p>“如果智能是一块蛋糕，无监督学习就是蛋糕，监督学习就是蛋糕上的糖衣，强化学习就是蛋糕上的樱桃。我们知道如何制作糖衣和樱桃，但我们不知道如何制作蛋糕。”</p>
 <p>为了创建这样的蛋糕，使用了几个无监督的学习任务，包括聚类、降维、异常检测和关联规则挖掘。如果无监督学习算法有助于在数据集中找到以前未知的模式，而不需要标签，我们可以为本章学习以下类比:</p>
 <ul>
-<li>K-means是一种流行的聚类分析算法，用于将相似的数据点分组在一起</li>
-<li>PCA等降维算法有助于在数据集中找到最相关的特征</li>
+<li>K-means 是一种流行的聚类分析算法，用于将相似的数据点分组在一起</li>
+<li>PCA 等降维算法有助于在数据集中找到最相关的特征</li>
 </ul>
 <p>在本章中，我们将通过一个实例来讨论这两种聚类分析技术。</p>
 
@@ -122,12 +122,12 @@
             
             
                 
-<p>聚类分析和降维是无监督学习的两个最流行的例子，我们将在本章中通过例子来讨论。假设你的电脑或智能手机里有大量合法的MP3文件。在这种情况下，如果您不能直接访问歌曲的元数据，您怎么可能将歌曲分组在一起呢？</p>
-<p>一种可能的方法是混合各种ML技术，但是集群通常是最好的解决方案。这是因为我们可以开发一个聚类模型，以便自动对相似的歌曲进行分组，并将其组织到您最喜欢的类别中，如乡村、说唱或摇滚。</p>
+<p>聚类分析和降维是无监督学习的两个最流行的例子，我们将在本章中通过例子来讨论。假设你的电脑或智能手机里有大量合法的 MP3 文件。在这种情况下，如果您不能直接访问歌曲的元数据，您怎么可能将歌曲分组在一起呢？</p>
+<p>一种可能的方法是混合各种 ML 技术，但是集群通常是最好的解决方案。这是因为我们可以开发一个聚类模型，以便自动对相似的歌曲进行分组，并将其组织到您最喜欢的类别中，如乡村、说唱或摇滚。</p>
 <p>虽然数据点没有被标注，但是我们仍然可以进行必要的特征工程，将相似的对象分组在一起，这就是通常所说的聚类。</p>
 <p>聚类是指基于某些相似性度量分组在一起的数据点的集合。</p>
-<p>然而，这对一个人类来说并不容易。取而代之的是，标准方法是定义两个对象之间的相似性度量，然后寻找彼此之间比与其他聚类中的对象更相似的任何对象聚类。一旦我们完成了数据点(即MP3文件)的聚类并完成了验证，我们就知道了数据的模式(即哪种类型的MP3文件属于哪个组)。</p>
-<p>左手边的示意图显示了一个播放列表中的所有<strong> MP3曲目，这些曲目是分散的。右侧部分显示了MP3是如何基于流派进行分组的:</strong></p>
+<p>然而，这对一个人类来说并不容易。取而代之的是，标准方法是定义两个对象之间的相似性度量，然后寻找彼此之间比与其他聚类中的对象更相似的任何对象聚类。一旦我们完成了数据点(即 MP3 文件)的聚类并完成了验证，我们就知道了数据的模式(即哪种类型的 MP3 文件属于哪个组)。</p>
+<p>左手边的示意图显示了一个播放列表中的所有<strong> MP3 曲目，这些曲目是分散的。右侧部分显示了 MP3 是如何基于流派进行分组的:</strong></p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-571 image-border" src="img/5a19db36-cb05-4e82-92d5-44ed0b747360.png" style="width:34.58em;height:19.42em;"/></p>
 
 
@@ -159,14 +159,14 @@
                 
 <p>聚类算法的目标是将一组相似的未标记数据点组合在一起，以发现潜在的模式。以下是一些已经提出并用于聚类分析的算法:</p>
 <ul>
-<li>k均值</li>
-<li>平分k-均值</li>
+<li>k 均值</li>
+<li>平分 k-均值</li>
 <li><strong>高斯混合模型</strong> ( <strong> GMM </strong>)</li>
 <li><strong>幂迭代聚类</strong> ( <strong> PIC </strong>)</li>
 <li><strong>潜狄氏分配</strong> ( <strong> LDA </strong>)</li>
-<li>流式k均值算法</li>
+<li>流式 k 均值算法</li>
 </ul>
-<p class="mce-root">K-means，平分k-means和GMM是最广泛使用的。我们将详细介绍它们，以展示快速开始的聚类分析。然而，我们还将看一个仅基于k均值的例子。</p>
+<p class="mce-root">K-means，平分 k-means 和 GMM 是最广泛使用的。我们将详细介绍它们，以展示快速开始的聚类分析。然而，我们还将看一个仅基于 k 均值的例子。</p>
 <p class="mce-root"/>
 <p class="mce-root"/>
 <p class="mce-root"/>
@@ -194,21 +194,21 @@
         
 
                             
-                    <h1 class="header-title">聚类分析的k-均值方法</h1>
+                    <h1 class="header-title">聚类分析的 k-均值方法</h1>
                 
             
             
                 
-<p>K-means寻找固定数量<em> k </em>的聚类(即质心的数量)，将数据点划分为<em> k </em>个聚类，并通过保持质心尽可能小来将每个数据点分配到最近的聚类。</p>
+<p>K-means 寻找固定数量<em> k </em>的聚类(即质心的数量)，将数据点划分为<em> k </em>个聚类，并通过保持质心尽可能小来将每个数据点分配到最近的聚类。</p>
 <p>质心是代表群集中心的虚拟或真实位置。</p>
-<p>K-means通过最小化代价函数来计算数据点和k个聚类中心之间的距离(通常是欧几里德距离)，代价函数称为<strong>聚类内平方和</strong> ( <strong> WCSS </strong>)。k-means算法通过在两个步骤之间交替进行:</p>
+<p>K-means 通过最小化代价函数来计算数据点和 k 个聚类中心之间的距离(通常是欧几里德距离)，代价函数称为<strong>聚类内平方和</strong> ( <strong> WCSS </strong>)。k-means 算法通过在两个步骤之间交替进行:</p>
 <ul>
-<li><strong>聚类分配步骤</strong>:将每个数据点分配给其平均值具有最小平方欧几里德距离的聚类，产生最低的WCSS</li>
+<li><strong>聚类分配步骤</strong>:将每个数据点分配给其平均值具有最小平方欧几里德距离的聚类，产生最低的 WCSS</li>
 <li><strong>质心更新步骤</strong>:计算新聚类中观察值的新平均值，并将其用作新的质心</li>
 </ul>
 <p>上述步骤可以用下图表示:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-572 image-border" src="img/df03a615-1cf4-4351-b4b6-7939864b274e.png" style="width:69.67em;height:24.17em;"/></p>
-<p>当质心已经稳定或者当预定义的迭代次数已经被迭代时，k-means算法完成。虽然k-means使用欧几里德距离，但也有其他方法来计算距离，例如:</p>
+<p>当质心已经稳定或者当预定义的迭代次数已经被迭代时，k-means 算法完成。虽然 k-means 使用欧几里德距离，但也有其他方法来计算距离，例如:</p>
 <ul>
 <li><strong>切比雪夫距离</strong>可用于仅考虑最显著的尺寸来测量距离</li>
 <li><strong>汉明距离</strong>算法可以识别两个字符串之间的差异</li>
@@ -240,14 +240,14 @@
         
 
                             
-                    <h1 class="header-title">平分k-均值</h1>
+                    <h1 class="header-title">平分 k-均值</h1>
                 
             
             
                 
-<p>平分k-means可以被认为是k-means和层次聚类的组合，它从单个聚类中的所有数据点开始。然后，它随机选取一个聚类进行分割，使用基本k-means返回两个子聚类。这被称为<strong>二等分步骤</strong>。</p>
-<p>二分k-means算法基于一篇名为<em>的论文，该论文由<em> Michael Steinbach等人</em>，<em> KDD文本挖掘研讨会，2000年</em>撰写，已经被扩展以适合Spark MLlib。</em></p>
-<p>然后，对分步骤迭代预定次数(通常由用户/开发者设置)，并且收集产生具有最高相似性的聚类的所有分裂。继续这些步骤，直到达到期望的集群数量。虽然平分k-means比常规k-means更快，但它会产生不同的聚类，因为平分k-means会随机初始化聚类。</p>
+<p>平分 k-means 可以被认为是 k-means 和层次聚类的组合，它从单个聚类中的所有数据点开始。然后，它随机选取一个聚类进行分割，使用基本 k-means 返回两个子聚类。这被称为<strong>二等分步骤</strong>。</p>
+<p>二分 k-means 算法基于一篇名为<em>的论文，该论文由<em> Michael Steinbach 等人</em>，<em> KDD 文本挖掘研讨会，2000 年</em>撰写，已经被扩展以适合 Spark MLlib。</em></p>
+<p>然后，对分步骤迭代预定次数(通常由用户/开发者设置)，并且收集产生具有最高相似性的聚类的所有分裂。继续这些步骤，直到达到期望的集群数量。虽然平分 k-means 比常规 k-means 更快，但它会产生不同的聚类，因为平分 k-means 会随机初始化聚类。</p>
 
 
             
@@ -276,17 +276,17 @@
             
             
                 
-<p>GMM是一个概率模型，它强烈假设所有的数据点都是由有限个参数未知的高斯分布混合生成的。因此，它也是一种基于分布的聚类算法，它基于一种期望最大化方法。</p>
+<p>GMM 是一个概率模型，它强烈假设所有的数据点都是由有限个参数未知的高斯分布混合生成的。因此，它也是一种基于分布的聚类算法，它基于一种期望最大化方法。</p>
 <p class="mce-root"/>
-<p>GMM也可以被认为是广义的k-均值，其中模型参数被迭代地优化以使模型更好地适合训练数据集。整个过程可以写成一个三步伪代码:</p>
+<p>GMM 也可以被认为是广义的 k-均值，其中模型参数被迭代地优化以使模型更好地适合训练数据集。整个过程可以写成一个三步伪代码:</p>
 <ul>
 <li><strong>目标函数</strong>:使用<strong>期望最大化</strong> ( <strong> EM </strong>)计算并最大化对数似然</li>
-<li><strong> EM步骤</strong>:该EM步骤由两个子步骤组成，称为期望和最大化:<br/><ul>
-<li><strong>步骤E </strong>:计算较近数据点的后验概率</li>
-<li><strong>步骤M </strong>:更新优化模型参数，拟合混合高斯模型</li>
+<li><strong> EM 步骤</strong>:该 EM 步骤由两个子步骤组成，称为期望和最大化:<br/><ul>
+<li><strong>步骤 E </strong>:计算较近数据点的后验概率</li>
+<li><strong>步骤 M </strong>:更新优化模型参数，拟合混合高斯模型</li>
 </ul>
 </li>
-<li><strong>分配</strong>:在<em>步骤E </em>中执行软分配</li>
+<li><strong>分配</strong>:在<em>步骤 E </em>中执行软分配</li>
 </ul>
 <p>前面的步骤可以非常简单地想象如下:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-573 image-border" src="img/6e09fc2f-8686-40aa-acb1-18c837d64212.png" style="width:162.50em;height:56.00em;"/></p>
@@ -318,13 +318,13 @@
             
             
                 
-<p>其他聚类算法包括PIC，它用于根据给定的成对相似性(如边)对图中的节点进行聚类。LDA经常用于文本聚类用例，例如主题建模。</p>
+<p>其他聚类算法包括 PIC，它用于根据给定的成对相似性(如边)对图中的节点进行聚类。LDA 经常用于文本聚类用例，例如主题建模。</p>
 <p class="mce-root"/>
 <p class="mce-root"/>
-<p>另一方面，流式k-means类似于k-means，但适用于流式数据。例如，当我们希望动态地估计聚类，以便在新数据到达时更新聚类分配时，使用流式k-means是一个很好的选择。有关示例的更详细讨论，感兴趣的读者可以参考以下链接:</p>
+<p>另一方面，流式 k-means 类似于 k-means，但适用于流式数据。例如，当我们希望动态地估计聚类，以便在新数据到达时更新聚类分配时，使用流式 k-means 是一个很好的选择。有关示例的更详细讨论，感兴趣的读者可以参考以下链接:</p>
 <ul>
-<li>基于Spark ML的聚类算法(<a href="https://spark.apache.org/docs/latest/ml-clustering.html">https://spark.apache.org/docs/latest/ml-clustering.html</a>)<a href="https://spark.apache.org/docs/latest/ml-clustering.html"/></li>
-<li>基于Spark MLlib的聚类算法(<a href="https://spark.apache.org/docs/latest/mllib-clustering.html">https://spark.apache.org/docs/latest/mllib-clustering.html</a>)<a href="https://spark.apache.org/docs/latest/mllib-clustering.html"/></li>
+<li>基于 Spark ML 的聚类算法(<a href="https://spark.apache.org/docs/latest/ml-clustering.html">https://spark.apache.org/docs/latest/ml-clustering.html</a>)<a href="https://spark.apache.org/docs/latest/ml-clustering.html"/></li>
+<li>基于 Spark MLlib 的聚类算法(<a href="https://spark.apache.org/docs/latest/mllib-clustering.html">https://spark.apache.org/docs/latest/mllib-clustering.html</a>)<a href="https://spark.apache.org/docs/latest/mllib-clustering.html"/></li>
 </ul>
 
 
@@ -354,7 +354,7 @@
             
             
                 
-<p>聚类分析中最重要的任务之一是分析基因组图谱以将个体归属于特定的种族群体，或者分析疾病易感性的核苷酸单倍型。来自亚洲、欧洲、非洲和美洲的人类祖先可以根据他们的基因组数据来区分。研究表明，Y染色体谱系可以进行地理定位，这为人类基因型的人类等位基因聚类提供了证据。根据国家癌症研究所(<a href="https://www.cancer.gov/publications/dictionaries/genetics-dictionary/def/genetic-variant">https://www . Cancer . gov/publications/dictionary/genetics-dictionary/def/genetic-variant</a>):<br/></p>
+<p>聚类分析中最重要的任务之一是分析基因组图谱以将个体归属于特定的种族群体，或者分析疾病易感性的核苷酸单倍型。来自亚洲、欧洲、非洲和美洲的人类祖先可以根据他们的基因组数据来区分。研究表明，Y 染色体谱系可以进行地理定位，这为人类基因型的人类等位基因聚类提供了证据。根据国家癌症研究所(<a href="https://www.cancer.gov/publications/dictionaries/genetics-dictionary/def/genetic-variant">https://www . Cancer . gov/publications/dictionary/genetics-dictionary/def/genetic-variant</a>):<br/></p>
 <div><br/>
 "Genetic variants are an alteration in the most common DNA nucleotide sequence. The term variant can be used to describe an alteration that may be benign, pathogenic, or of unknown significance. The term variant is increasingly being used in place of the term mutation."</div>
 <p>更好地理解遗传变异有助于我们找到相关的人群，识别易患常见病的患者，并解决罕见疾病。简而言之，这个想法是基于他们的基因变异来聚集地理上的种族群体。然而，在进一步深入之前，让我们先了解一下数据。</p>
@@ -386,15 +386,15 @@
             
             
                 
-<p>来自1000个基因组项目的数据是人类基因变异的一个大目录。该项目旨在确定被研究人群中频率超过1%的遗传变异。1000个基因组项目的第三阶段于2014年9月完成，涵盖了来自26个群体的2504个个体和844亿个遗传变异体。根据优势祖先，种群样本分为五个超种群组:</p>
+<p>来自 1000 个基因组项目的数据是人类基因变异的一个大目录。该项目旨在确定被研究人群中频率超过 1%的遗传变异。1000 个基因组项目的第三阶段于 2014 年 9 月完成，涵盖了来自 26 个群体的 2504 个个体和 844 亿个遗传变异体。根据优势祖先，种群样本分为五个超种群组:</p>
 <ul>
-<li>东亚(CHB、JPT、CHS、CDX和KHV)</li>
-<li>欧洲(CEU、TSI、FIN、GBR和IBS)</li>
-<li>非洲(YRI、LWK、GWD、MSL、ESN、ASW和ACB)</li>
-<li>美国(MXL、PUR、CLM和PEL)</li>
+<li>东亚(CHB、JPT、CHS、CDX 和 KHV)</li>
+<li>欧洲(CEU、TSI、FIN、GBR 和 IBS)</li>
+<li>非洲(YRI、LWK、GWD、MSL、ESN、ASW 和 ACB)</li>
+<li>美国(MXL、PUR、CLM 和 PEL)</li>
 <li>南亚(GIH、PJL、BEB、斯图和国际电联)</li>
 </ul>
-<p>每个基因型包含23条染色体和一个包含样本和群体信息的独立面板文件。<strong>变体调用格式</strong> ( <strong> VCF </strong>)中的数据以及面板文件可以从<a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/</a>下载。</p>
+<p>每个基因型包含 23 条染色体和一个包含样本和群体信息的独立面板文件。<strong>变体调用格式</strong> ( <strong> VCF </strong>)中的数据以及面板文件可以从<a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/</a>下载。</p>
 
 
             
@@ -423,16 +423,16 @@
             
             
                 
-<p>由于1，000基因组计划的第三版贡献了大约820 GB的数据，因此需要使用可扩展的软件和硬件来处理它们。为此，我们将使用由以下组件组成的软件堆栈:</p>
+<p>由于 1，000 基因组计划的第三版贡献了大约 820 GB 的数据，因此需要使用可扩展的软件和硬件来处理它们。为此，我们将使用由以下组件组成的软件堆栈:</p>
 <ul>
-<li><strong> ADAM </strong>:这可以用来实现支持VCF文件格式的可扩展基因组数据分析平台，这样我们就可以将基于基因型的RDD转换成Spark数据框架。</li>
-<li><strong>苏打水</strong> : <strong> </strong> H20是一个机器学习的AI平台，是一个基于web的数据处理UI，支持Java、Python、r等编程语言，简而言之，苏打水等于H2O加火花。</li>
-<li>基于Spark-ML的k-means被训练用于聚类分析。</li>
+<li><strong> ADAM </strong>:这可以用来实现支持 VCF 文件格式的可扩展基因组数据分析平台，这样我们就可以将基于基因型的 RDD 转换成 Spark 数据框架。</li>
+<li><strong>苏打水</strong> : <strong> </strong> H20 是一个机器学习的 AI 平台，是一个基于 web 的数据处理 UI，支持 Java、Python、r 等编程语言，简而言之，苏打水等于 H2O 加火花。</li>
+<li>基于 Spark-ML 的 k-means 被训练用于聚类分析。</li>
 </ul>
-<p>对于这个例子，我们需要使用多种技术和软件栈，比如Spark、H2O和Adam。在使用H20之前，请确保您的笔记本电脑至少有16 GB内存和足够的存储空间。我将把这个解决方案作为一个Maven项目来开发。</p>
-<p>让我们为Maven友好的项目定义<kbd>pom.xml</kbd>文件上的属性标签:</p>
+<p>对于这个例子，我们需要使用多种技术和软件栈，比如 Spark、H2O 和 Adam。在使用 H20 之前，请确保您的笔记本电脑至少有 16 GB 内存和足够的存储空间。我将把这个解决方案作为一个 Maven 项目来开发。</p>
+<p>让我们为 Maven 友好的项目定义<kbd>pom.xml</kbd>文件上的属性标签:</p>
 <pre class="mce-root"><strong>&lt;properties&gt;</strong><br/>        &lt;spark.version&gt;2.4.0&lt;/spark.version&gt;<br/>        &lt;scala.version&gt;2.11.7&lt;/scala.version&gt;<br/>        &lt;h2o.version&gt;3.22.1.1&lt;/h2o.version&gt;<br/>        &lt;sparklingwater.version&gt;2.4.1&lt;/sparklingwater.version&gt;<br/>        &lt;adam.version&gt;0.23.0&lt;/adam.version&gt;<br/><strong>&lt;/properties&gt;</strong></pre>
-<p class="mce-root">一旦您在Eclipse上创建了一个Maven项目(从IDE或者使用<kbd>mvn install</kbd>命令),所有需要的依赖项都将被下载！</p>
+<p class="mce-root">一旦您在 Eclipse 上创建了一个 Maven 项目(从 IDE 或者使用<kbd>mvn install</kbd>命令),所有需要的依赖项都将被下载！</p>
 
 
             
@@ -461,24 +461,24 @@
             
             
                 
-<p>24个VCF文件贡献了大约820 GB的数据，这将带来巨大的计算挑战。为了克服这一点，使用最小染色体y的遗传变异。VCF文件的大小约为160 MB。让我们从创建<kbd>SparkSession</kbd>开始:</p>
+<p>24 个 VCF 文件贡献了大约 820 GB 的数据，这将带来巨大的计算挑战。为了克服这一点，使用最小染色体 y 的遗传变异。VCF 文件的大小约为 160 MB。让我们从创建<kbd>SparkSession</kbd>开始:</p>
 <pre class="mce-root"><strong>val</strong> spark:SparkSession = SparkSession<br/>           .builder()<br/>            .appName("PopStrat")<br/>             .master("local[*]")<br/>              .config("spark.sql.warehouse.dir", "temp/") <br/>               .getOrCreate()</pre>
-<p>现在，让我们向Spark展示VCF和面板文件的路径:</p>
+<p>现在，让我们向 Spark 展示 VCF 和面板文件的路径:</p>
 <pre><strong>val</strong> genotypeFile = "Downloads/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf"<br/><strong>val</strong> panelFile = "Downloads/integrated_call_samples_v3.20130502.ALL.panel"</pre>
-<p>我们使用Spark处理面板文件，以访问目标人群数据并识别人群。首先，我们创建一组我们想要形成集群的<kbd>populations</kbd>:</p>
+<p>我们使用 Spark 处理面板文件，以访问目标人群数据并识别人群。首先，我们创建一组我们想要形成集群的<kbd>populations</kbd>:</p>
 <pre><strong>val</strong> populations = Set("FIN", "GBR", "ASW", "CHB", "CLM")</pre>
-<p>然后，我们需要在样本ID和给定总体之间创建一个映射，以便我们可以过滤掉我们不感兴趣的样本:</p>
+<p>然后，我们需要在样本 ID 和给定总体之间创建一个映射，以便我们可以过滤掉我们不感兴趣的样本:</p>
 <pre><strong>def</strong> extract(file: String, filter: (String, String) =&gt; Boolean): Map[String, String] = {<br/>      Source<br/>        .fromFile(file)<br/>        .getLines()<br/>        .map(line =&gt; {<br/>          val tokens = line.split(Array('\t', ' ')).toList<br/>          tokens(0) -&gt; tokens(1)<br/>        })<br/>        .toMap<br/>        .filter(tuple =&gt; filter(tuple._1, tuple._2))<br/>    }<br/><br/><strong>val</strong> panel: Map[String, String] = extract(<br/>      panelFile,(sampleID: String, pop: String) =&gt; populations.contains(pop))</pre>
-<p>面板文件生成所有个人、人群、种族、超人群和性别的样本ID:</p>
+<p>面板文件生成所有个人、人群、种族、超人群和性别的样本 ID:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-574 image-border" src="img/5d3126f4-ea27-4581-8734-c56bb5f15441.png" style="width:41.75em;height:6.58em;"/></p>
 <div><p>在<a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel">FTP://FTP . 1000 genomes . ebi . AC . uk/vol 1/FTP/release/2013 05 02/integrated _ call _ samples _ v 3.2013 05 02 . all . panel</a>查看面板文件详情。</p>
 </div>
-<p>然后，加载ADAM基因型并过滤基因型，以便只留下我们感兴趣的群体中的那些基因型:</p>
+<p>然后，加载 ADAM 基因型并过滤基因型，以便只留下我们感兴趣的群体中的那些基因型:</p>
 <pre><strong>val</strong> allGenotypes: RDD[Genotype] = sc.loadGenotypes(genotypeFile).rdd<br/><strong>val</strong> genotypes: RDD[Genotype] = allGenotypes.filter(genotype =&gt; {<br/>      panel.contains(genotype.getSampleId)<br/>    })</pre>
 <p>接下来，将<kbd>Genotype</kbd>对象转换成我们自己的<kbd>SampleVariant</kbd>对象以节省内存。然后，<kbd>genotype</kbd>对象被转换成包含需要进一步处理的数据的<kbd>SampleVariant</kbd>对象:</p>
 <ul>
-<li><strong>样品ID </strong>:唯一标识特定样品</li>
-<li><strong>变体ID </strong>:唯一识别特定的遗传变体</li>
+<li><strong>样品 ID </strong>:唯一标识特定样品</li>
+<li><strong>变体 ID </strong>:唯一识别特定的遗传变体</li>
 <li><strong>备选等位基因计数</strong>:当样本不同于参考基因组时需要</li>
 </ul>
 <p class="mce-root"/>
@@ -488,24 +488,24 @@
 <pre class="mce-root"><strong>def</strong> variantId(genotype: Genotype): String = {<br/>      val name = genotype.getVariant.getContigName<br/>      val start = genotype.getVariant.getStart<br/>      val end = genotype.getVariant.getEnd<br/>      s"$name:$start:$end"<br/>    }</pre>
 <p>一旦我们有了<kbd>variantID</kbd>，我们就应该寻找<kbd>alternateCount</kbd>。在基因型文件中，存在等位基因参考的对象将是基因替代:</p>
 <pre class="mce-root"><strong>def</strong> alternateCount(genotype: Genotype): Int = {<br/>        genotype.getAlleles.asScala.count(_ != GenotypeAllele.REF)<br/>    }</pre>
-<p>最后，我们将构造一个<kbd>SampleVariant</kbd>对象。为此，我们需要实习样品id，因为它们会在VCF文件中重复出现:</p>
+<p>最后，我们将构造一个<kbd>SampleVariant</kbd>对象。为此，我们需要实习样品 id，因为它们会在 VCF 文件中重复出现:</p>
 <pre class="mce-root"><strong>def</strong> toVariant(genotype: Genotype): SampleVariant = {<br/>      new SampleVariant(genotype.getSampleId.intern(),<br/>        variantId(genotype).hashCode(),<br/>        alternateCount(genotype))<br/>    }</pre>
-<p>现在，我们需要的是准备<kbd>variantsRDD</kbd>。首先，我们必须按样本ID对变量进行分组，以便我们可以逐个样本地处理变量。然后，我们可以得到样本的总数，用于查找某些样本中缺失的变体。最后，我们必须按变体ID对变体进行分组，并过滤掉一些样本中缺失的变体:</p>
+<p>现在，我们需要的是准备<kbd>variantsRDD</kbd>。首先，我们必须按样本 ID 对变量进行分组，以便我们可以逐个样本地处理变量。然后，我们可以得到样本的总数，用于查找某些样本中缺失的变体。最后，我们必须按变体 ID 对变体进行分组，并过滤掉一些样本中缺失的变体:</p>
 <pre><strong>val</strong> variantsRDD: RDD[SampleVariant] = genotypes.map(toVariant)<br/><strong>val</strong> variantsBySampleId: RDD[(String, Iterable[SampleVariant])] = variantsRDD.groupBy(_.sampleId)<br/><strong>val</strong> sampleCount: <strong>Long</strong> = variantsBySampleId.count()<br/><br/>println("Found " + sampleCount + " samples")<br/><strong>val</strong> variantsByVariantId: RDD[(Int, Iterable[SampleVariant])] =<br/>      variantsRDD.groupBy(_.variantId).filter {<br/>        case (_, sampleVariants) =&gt; sampleVariants.size == sampleCount<br/>      }<strong><br/></strong></pre>
 <p>现在，让我们用交替计数大于零的样本计数来映射<kbd>variantId</kbd>。然后，我们过滤掉不在我们期望的频率范围内的变体。这里的目标是减少数据集中的维数，以便更容易地训练模型:</p>
 <pre><strong>val</strong> variantFrequencies: collection.Map[Int, Int] = variantsByVariantId<br/>      .<strong>map</strong> {<br/>        <strong>case</strong> (variantId, sampleVariants) =&gt;<br/>          (variantId, sampleVariants.count(_.alternateCount &gt; 0))<br/>      }<br/>      .collectAsMap()</pre>
-<p>样本(或个体)总数已经确定。现在，在使用变量id对它们进行分组之前，我们可以过滤掉不太重要的变量。由于我们有超过8400万种基因变异，过滤将有助于我们应对维数灾难。</p>
-<p>指定的范围是任意的，选择它是因为它包括合理数量的变量，但不会太多。更具体地说，对于每个变体，已经计算了交替等位基因的频率，并且排除了具有少于12个交替等位基因的变体，在分析中留下大约3，000，000个变体(对于23个染色体文件):</p>
+<p>样本(或个体)总数已经确定。现在，在使用变量 id 对它们进行分组之前，我们可以过滤掉不太重要的变量。由于我们有超过 8400 万种基因变异，过滤将有助于我们应对维数灾难。</p>
+<p>指定的范围是任意的，选择它是因为它包括合理数量的变量，但不会太多。更具体地说，对于每个变体，已经计算了交替等位基因的频率，并且排除了具有少于 12 个交替等位基因的变体，在分析中留下大约 3，000，000 个变体(对于 23 个染色体文件):</p>
 <pre class="mce-root"><strong>val</strong> permittedRange = inclusive(11, 11) // variants with less than 12 alternate alleles <br/><strong>val</strong> filteredVariantsBySampleId: RDD[(String, Iterable[SampleVariant])] =<br/>      variantsBySampleId.map {<br/>        <strong>case</strong> (sampleId, sampleVariants) =&gt;<br/>          <strong>val</strong> filteredSampleVariants = sampleVariants.filter(<br/>            variant =&gt;<br/>              permittedRange.contains(<br/>                variantFrequencies.getOrElse(variant.variantId, -1)))<br/>          (sampleId, filteredSampleVariants)<br/>      }</pre>
 <p class="mce-root"/>
 <p class="mce-root"/>
-<p>一旦我们有了<kbd>filteredVariantsBySampleId</kbd>，我们需要对每个样本ID的变量进行排序。每个样本现在应该有相同数量的排序变量:</p>
+<p>一旦我们有了<kbd>filteredVariantsBySampleId</kbd>，我们需要对每个样本 ID 的变量进行排序。每个样本现在应该有相同数量的排序变量:</p>
 <pre class="mce-root"><strong>val</strong> sortedVariantsBySampleId: RDD[(String, Array[SampleVariant])] =<br/>      filteredVariantsBySampleId.map {<br/>        <strong>case</strong> (sampleId, variants) =&gt;<br/>          (sampleId, variants.toArray.sortBy(_.variantId))<br/>      }<br/>    println(s"Sorted by Sample ID RDD: " + sortedVariantsBySampleId.first())</pre>
-<p>RDD中的所有项目现在应该在相同的订单中具有相同的变体。最后一项任务是使用<kbd>sortedVariantsBySampleId</kbd>构建包含区域和备选计数的行的RDD:</p>
+<p>RDD 中的所有项目现在应该在相同的订单中具有相同的变体。最后一项任务是使用<kbd>sortedVariantsBySampleId</kbd>构建包含区域和备选计数的行的 RDD:</p>
 <pre><strong>val</strong> rowRDD: RDD[Row] = sortedVariantsBySampleId.map {<br/>      <strong>case</strong> (sampleId, sortedVariants) =&gt;<br/>        <strong>val</strong> region: Array[String] = Array(panel.getOrElse(sampleId, "Unknown"))<br/>        <strong>val</strong> alternateCounts: Array[Int] = sortedVariants.map(_.alternateCount)<br/>        Row.fromSeq(region ++ alternateCounts)<br/>    }<strong><br/></strong></pre>
 <p>因此，我们可以只使用第一个来构造训练数据帧的头:</p>
 <pre><strong>val</strong> header = StructType(<br/>      Array(StructField("Region", StringType)) ++<br/>        sortedVariantsBySampleId<br/>        .first()<br/>        ._2<br/>        .map(variant =&gt; {<br/>          StructField(variant.variantId.toString, IntegerType)<br/>        }))<strong><br/></strong></pre>
-<p>干得好！我们有我们的RDD和<kbd>StructType</kbd>头。现在，我们可以通过最小的调整/转换来玩Spark机器学习算法。</p>
+<p>干得好！我们有我们的 RDD 和<kbd>StructType</kbd>头。现在，我们可以通过最小的调整/转换来玩 Spark 机器学习算法。</p>
 
 
             
@@ -529,7 +529,7 @@
         
 
                             
-                    <h1 class="header-title">训练k-means算法</h1>
+                    <h1 class="header-title">训练 k-means 算法</h1>
                 
             
             
@@ -540,22 +540,22 @@
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-575 image-border" src="img/b82f5318-3021-49a0-b8ed-ba8d1cdc66cc.png" style="width:39.83em;height:16.50em;"/></p>
 <p>在前面的数据帧中，只显示了几个<kbd>feature</kbd>列和<kbd>label</kbd>列，以便适合页面。由于训练是无人监督的，我们需要删除<kbd>label</kbd>列(即<kbd>Region</kbd>):</p>
 <pre>schemaDF = sqlContext.createDataFrame(rowRDD, header).drop("Region")<br/>schemaDF.show(10)<br/>&gt;&gt;&gt; </pre>
-<p>前面的<kbd>show()</kbd>方法显示了k-means的训练数据集的快照。注意没有<kbd>label</kbd>列(即<kbd>Region</kbd>):</p>
+<p>前面的<kbd>show()</kbd>方法显示了 k-means 的训练数据集的快照。注意没有<kbd>label</kbd>列(即<kbd>Region</kbd>):</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-576 image-border" src="img/084d8df1-14cb-450a-a607-23c68c8d0adc.png" style="width:47.67em;height:15.58em;"/></p>
-<p>在<a href="33fe7442-ce44-4a18-bac6-0e08e9b1ae1e.xhtml" target="_blank">第一章</a>、<em>Scala机器学习简介</em>和<a href="f649db9f-aea9-4509-b9b8-e0b7d5fb726a.xhtml" target="_blank">第二章</a>、<em> Scala进行回归分析</em>中，我们看到Spark期望有两栏(<kbd>features</kbd>和<kbd>label</kbd>)进行监督训练。然而，对于无监督训练，只需要包含特征的单个列。由于我们删除了<kbd>label</kbd>列，现在我们需要将整个<kbd>variable</kbd>列合并成一个单独的<kbd>features</kbd>列。为此，我们将使用<kbd>VectorAssembler()</kbd>变压器。让我们选择要嵌入向量空间的列:</p>
+<p>在<a href="33fe7442-ce44-4a18-bac6-0e08e9b1ae1e.xhtml" target="_blank">第一章</a>、<em>Scala 机器学习简介</em>和<a href="f649db9f-aea9-4509-b9b8-e0b7d5fb726a.xhtml" target="_blank">第二章</a>、<em> Scala 进行回归分析</em>中，我们看到 Spark 期望有两栏(<kbd>features</kbd>和<kbd>label</kbd>)进行监督训练。然而，对于无监督训练，只需要包含特征的单个列。由于我们删除了<kbd>label</kbd>列，现在我们需要将整个<kbd>variable</kbd>列合并成一个单独的<kbd>features</kbd>列。为此，我们将使用<kbd>VectorAssembler()</kbd>变压器。让我们选择要嵌入向量空间的列:</p>
 <pre><strong>val</strong> featureCols = schemaDF.columns</pre>
 <p>然后，我们将通过指定输入列和输出列来实例化<kbd>VectorAssembler()</kbd>转换器:</p>
 <pre class="mce-root">// Using vector assembler to create feature vector <br/><strong>val</strong> featureCols = schemaDF.columns<br/><strong>val</strong> assembler = new VectorAssembler()<br/>    .setInputCols(featureCols)<br/>    .setOutputCol("features")<br/><strong><br/>val</strong> assembleDF = assembler.transform(schemaDF).select("features")</pre>
-<p class="mce-root">现在，让我们看看k均值的特征向量是什么样的:</p>
+<p class="mce-root">现在，让我们看看 k 均值的特征向量是什么样的:</p>
 <pre>assembleDF.show()</pre>
-<p>前面一行显示了组合的向量，它们可以用作k-means模型的特征向量:</p>
+<p>前面一行显示了组合的向量，它们可以用作 k-means 模型的特征向量:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-577 image-border" src="img/7e18458d-a0b4-4da2-8f8e-212bd5351897.png" style="width:9.75em;height:21.75em;"/></p>
-<p>最后，我们准备训练k-means算法，并通过计算<strong> WCSS </strong>来评估聚类:</p>
+<p>最后，我们准备训练 k-means 算法，并通过计算<strong> WCSS </strong>来评估聚类:</p>
 <pre><strong>val</strong> kmeans = new KMeans().setK(5).setSeed(12345L)<br/><strong>val</strong> model = kmeans.fit(assembleDF)<br/><strong><br/>val</strong> WCSS = model.computeCost(assembleDF)<br/>println("Within Set Sum of Squared Errors for k = 5 is " + WCSS)<br/> }</pre>
 <p>以下是<kbd>k = 5</kbd>的<strong> WCSS </strong>值:</p>
 <pre><strong>Within Set Sum of Squared Errors for k = 5 is 59.34564329865</strong></pre>
-<p>我们成功地将k-means应用于聚类遗传变异。然而，我们看到WCSS很高，因为k-means无法分离不同相关和高维特征之间的非线性。这是因为基因组测序数据集由于大量的遗传变异而非常高维。</p>
-<p>在下一节中，我们将了解如何使用降维技术(如PCA)在将输入数据输入k-means之前降低其维数，以获得更好的聚类质量。</p>
+<p>我们成功地将 k-means 应用于聚类遗传变异。然而，我们看到 WCSS 很高，因为 k-means 无法分离不同相关和高维特征之间的非线性。这是因为基因组测序数据集由于大量的遗传变异而非常高维。</p>
+<p>在下一节中，我们将了解如何使用降维技术(如 PCA)在将输入数据输入 k-means 之前降低其维数，以获得更好的聚类质量。</p>
 
 
             
@@ -586,9 +586,9 @@
                 
 <p>由于人类是视觉动物，理解高维数据集(甚至超过三维)是不可能的。即使对于机器(或者说，我们的机器学习算法)，也很难从相关和高维特征中建模非线性。在这里，降维技术是一个救星。</p>
 <p>从统计学上来说，降维是减少随机变量的数量，以找到数据的低维表示，同时保留尽可能多的信息的过程<strong>。</strong></p>
-<p>在下图中可以直观地看到PCA的整个步骤:</p>
+<p>在下图中可以直观地看到 PCA 的整个步骤:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-578 image-border" src="img/02ea50cd-5589-46e8-8bf3-388c3ed9c326.png" style="width:52.58em;height:17.17em;"/></p>
-<p>PCA和<strong>奇异值分解</strong> ( <strong> SVD </strong>)是最流行的降维算法。从技术上讲，PCA是一种统计技术，用于强调变化并从数据集中提取最重要的模式(即特征)，这不仅对聚类有用，而且对分类和可视化也有用。</p>
+<p>PCA 和<strong>奇异值分解</strong> ( <strong> SVD </strong>)是最流行的降维算法。从技术上讲，PCA 是一种统计技术，用于强调变化并从数据集中提取最重要的模式(即特征)，这不仅对聚类有用，而且对分类和可视化也有用。</p>
 
 
             
@@ -612,33 +612,33 @@
         
 
                             
-                    <h1 class="header-title">基于Spark ML的主成分分析</h1>
+                    <h1 class="header-title">基于 Spark ML 的主成分分析</h1>
                 
             
             
                 
-<p>基于Spark-ML的PCA可用于将向量投影到低维空间，以在将遗传变异特征输入k-means模型之前降低其维数。以下示例显示了如何将6D特征向量从以下特征向量投影到4D主分量中:</p>
+<p>基于 Spark-ML 的 PCA 可用于将向量投影到低维空间，以在将遗传变异特征输入 k-means 模型之前降低其维数。以下示例显示了如何将 6D 特征向量从以下特征向量投影到 4D 主分量中:</p>
 <pre class="mce-root"><strong>val</strong> data = Array(<br/>      Vectors.dense(1.2, 3.57, 6.8, 4.5, 2.25, 3.4),<br/>      Vectors.dense(4.60, 4.10, 9.0, 5.0, 1.67, 4.75),<br/>      Vectors.dense(5.60, 6.75, 1.11, 4.5, 2.25, 6.80))<br/><br/><strong>val</strong> df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")<br/>df.show(false)</pre>
-<p>现在我们有了一个带有6D特征向量的特征数据帧，它可以被输入PCA模型:</p>
+<p>现在我们有了一个带有 6D 特征向量的特征数据帧，它可以被输入 PCA 模型:</p>
 <p class="mce-root CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-579 image-border" src="img/0069126d-2e94-400f-a8e4-9bf63f6f3ab0.png" style="width:16.50em;height:8.08em;"/></p>
-<p>首先，我们必须通过设置必要的参数来实例化PCA模型，如下所示:</p>
+<p>首先，我们必须通过设置必要的参数来实例化 PCA 模型，如下所示:</p>
 <pre class="mce-root"><strong>val</strong> pca = new PCA()<br/>      .setInputCol("features")<br/>      .setOutputCol("pcaFeatures")<br/>      .setK(4)<br/>      .fit(df)</pre>
-<p>为了区分原始特征和基于主成分的特征，我们使用<kbd>setOutputCol()</kbd>方法将输出列名设置为<kbd>pcaFeatures</kbd>。然后，我们设置PCA的维数(即主成分数)。最后，我们拟合数据帧进行转换。一个模型可以从旧的数据中加载，但是对于<kbd>explainedVariance</kbd>将会有一个空的向量。现在，让我们展示由此产生的特性:</p>
+<p>为了区分原始特征和基于主成分的特征，我们使用<kbd>setOutputCol()</kbd>方法将输出列名设置为<kbd>pcaFeatures</kbd>。然后，我们设置 PCA 的维数(即主成分数)。最后，我们拟合数据帧进行转换。一个模型可以从旧的数据中加载，但是对于<kbd>explainedVariance</kbd>将会有一个空的向量。现在，让我们展示由此产生的特性:</p>
 <pre><strong>val</strong> result = pca.transform(df).select("features", "pcaFeatures")<br/>result.show(<strong>false</strong>)</pre>
-<p>前面的代码使用PCA产生一个以4D特征向量作为主要成分的特征数据帧:</p>
+<p>前面的代码使用 PCA 产生一个以 4D 特征向量作为主要成分的特征数据帧:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-580 image-border" src="img/7b6c797c-957d-49ee-a048-f66fd3b659e2.png" style="width:37.75em;height:7.83em;"/></p>
 <p>同样，我们可以将上一步组装好的数据帧(即<kbd>assembleDF</kbd>)和前五个主成分进行变换。不过，您可以调整主成分的数量。</p>
 <p class="mce-root"/>
 <p class="mce-root"/>
 <p>最后，为了避免任何歧义，我们将<kbd>pcaFeatures</kbd>列重命名为<kbd>features</kbd>:</p>
 <pre class="mce-root"><strong>val</strong> pcaDF = pca.transform(assembleDF)<br/>           .select("pcaFeatures")<br/>           .withColumnRenamed("pcaFeatures", "features")<br/>pcaDF.show()</pre>
-<p>前面的代码行显示了嵌入的向量，这些向量可以用作k-means模型的特征向量:</p>
+<p>前面的代码行显示了嵌入的向量，这些向量可以用作 k-means 模型的特征向量:</p>
 <p class="mce-root CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-581 image-border" src="img/79031b6c-40ce-4ec1-b5cc-a8369cfc143c.png" style="width:14.08em;height:31.42em;"/></p>
-<p>前面的屏幕截图显示了作为最重要功能的前五个主要组件。太好了——一切进展顺利。最后，我们准备训练k-means算法，并通过计算WCSS来评估聚类:</p>
+<p>前面的屏幕截图显示了作为最重要功能的前五个主要组件。太好了——一切进展顺利。最后，我们准备训练 k-means 算法，并通过计算 WCSS 来评估聚类:</p>
 <pre><strong>val</strong> kmeans = new KMeans().setK(5).setSeed(12345L)<br/><strong>val</strong> model = kmeans.fit(pcaDF)<br/><strong><br/>val</strong> WCSS = model.computeCost(pcaDF)<br/>println("Within Set Sum of Squared Errors for k = 5 is " + WCSS)<br/>    }</pre>
-<p>这一次，WCSS略低(与之前的值<kbd>59.34564329865</kbd>相比):</p>
+<p>这一次，WCSS 略低(与之前的值<kbd>59.34564329865</kbd>相比):</p>
 <pre><strong>Within Set Sum of Squared Errors for k = 5 is 52.712937492025276</strong></pre>
-<p>通常，我们随机设置<kbd>k</kbd>(即<kbd>5</kbd>)的数量，并计算WCSS。然而，通过这种方式，我们不能总是设置最佳的集群数量。为了找到一个最佳值，研究人员提出了两种技术，称为肘方法和轮廓分析，我们将在下面的小节中讨论。</p>
+<p>通常，我们随机设置<kbd>k</kbd>(即<kbd>5</kbd>)的数量，并计算 WCSS。然而，通过这种方式，我们不能总是设置最佳的集群数量。为了找到一个最佳值，研究人员提出了两种技术，称为肘方法和轮廓分析，我们将在下面的小节中讨论。</p>
 
 
             
@@ -700,7 +700,7 @@
             
             
                 
-<p class="mce-root">我们首先将<kbd>k</kbd>的值设置为<kbd>2</kbd>，并通过增加<kbd>k</kbd>和观察WCSS的值在相同的数据集上运行k-means算法。正如所预料的那样，在某个时刻，成本函数(即WCSS值)会出现急剧下降。然而，在大幅下跌后，随着<kbd>k</kbd>值的增加，WCSS的值变得微不足道。正如肘法所建议的，我们可以在WCSS最后一次大跌后，挑选出<kbd>k</kbd>的最优值:</p>
+<p class="mce-root">我们首先将<kbd>k</kbd>的值设置为<kbd>2</kbd>，并通过增加<kbd>k</kbd>和观察 WCSS 的值在相同的数据集上运行 k-means 算法。正如所预料的那样，在某个时刻，成本函数(即 WCSS 值)会出现急剧下降。然而，在大幅下跌后，随着<kbd>k</kbd>值的增加，WCSS 的值变得微不足道。正如肘法所建议的，我们可以在 WCSS 最后一次大跌后，挑选出<kbd>k</kbd>的最优值:</p>
 <pre class="mce-root"><strong>val</strong> iterations = 20<br/>    <strong>for</strong> (k &lt;- 2 to iterations) {<br/>      // Trains a k-means model.<br/>      <strong>val</strong> kmeans = new KMeans().setK(k).setSeed(12345L)<br/>      <strong>val</strong> model = kmeans.fit(pcaDF)<br/><br/>// Evaluate clustering by computing Within Set Sum of Squared Errors.<br/><strong>val</strong> WCSS = model.computeCost(pcaDF)<br/>println("Within Set Sum of Squared Errors for k = " + k + " is " + WCSS)<br/>    }</pre>
 <p class="mce-root"/>
 <p class="mce-root"/>
@@ -710,9 +710,9 @@
 <p class="mceNonEditable"/>
 <p class="mceNonEditable"/>
 <p class="mceNonEditable"/>
-<p>现在，让我们看看不同数量的集群的WCSS值，例如在<kbd>2</kbd>和<kbd>20</kbd>之间:</p>
+<p>现在，让我们看看不同数量的集群的 WCSS 值，例如在<kbd>2</kbd>和<kbd>20</kbd>之间:</p>
 <pre><strong>Within Set Sum of Squared Errors for k = 2 is 135.0048361804504</strong><br/><strong>Within Set Sum of Squared Errors for k = 3 is 90.95271589232344</strong><br/><strong>...</strong><br/><strong>Within Set Sum of Squared Errors for k = 19 is 11.505990055606803</strong><br/><strong>Within Set Sum of Squared Errors for k = 20 is 12.26634441065655</strong></pre>
-<p>如前面的代码所示，我们计算了成本函数WCSS，作为k-means算法的聚类数的函数，并将其应用于所选人群的Y染色体遗传变异。可以观察到，当<kbd>k = 5</kbd>时出现大的下降(尽管这不是剧烈的下降)。因此，我们选择的集群数量为10。</p>
+<p>如前面的代码所示，我们计算了成本函数 WCSS，作为 k-means 算法的聚类数的函数，并将其应用于所选人群的 Y 染色体遗传变异。可以观察到，当<kbd>k = 5</kbd>时出现大的下降(尽管这不是剧烈的下降)。因此，我们选择的集群数量为 10。</p>
 
 
             
@@ -748,13 +748,13 @@
 <pre class="mce-root"><strong>Silhouette with squared Euclidean distance for k = 2 is 0.9175803927739566</strong><br/><strong>Silhouette with squared Euclidean distance for k = 3 is 0.8288633816548874</strong><br/><strong>....</strong><br/><strong>Silhouette with squared Euclidean distance for k = 19 is 0.5327466913746908</strong><br/><strong>Silhouette with squared Euclidean distance for k = 20 is 0.45336547054142284</strong></pre>
 <p class="mce-root">如前面代码所示，剪影的高度值是用<kbd>k = 2</kbd>生成的，也就是<kbd>0.9175803927739566</kbd>。然而，这表明遗传变异应该分为两组。肘法建议<kbd>k = 5</kbd>为最佳聚类数。<br/>让我们使用平方欧几里德距离找出轮廓，如下面的代码块所示:</p>
 <p class="mce-root"><kbd>k = 2</kbd>的平方欧几里德距离的轮廓是<kbd>0.9175803927739566</kbd>。</p>
-<p class="mce-root">已经发现，对分k-means算法可以为数据点产生更好的聚类分配，收敛到全局最小值。另一方面，k-means经常陷入局部极小值。请注意，根据机器的硬件配置和数据集的随机性，您可能会观察到上述参数的不同值。</p>
-<p class="mceNonEditable">感兴趣的读者也应该参考https://spark.apache.org/docs/latest/mllib-clustering.html<a href="https://spark.apache.org/docs/latest/mllib-clustering.html">的基于Spark-MLlib的聚类技术，以获得更多的见解。</a></p>
+<p class="mce-root">已经发现，对分 k-means 算法可以为数据点产生更好的聚类分配，收敛到全局最小值。另一方面，k-means 经常陷入局部极小值。请注意，根据机器的硬件配置和数据集的随机性，您可能会观察到上述参数的不同值。</p>
+<p class="mceNonEditable">感兴趣的读者也应该参考 https://spark.apache.org/docs/latest/mllib-clustering.html<a href="https://spark.apache.org/docs/latest/mllib-clustering.html">的基于 Spark-MLlib 的聚类技术，以获得更多的见解。</a></p>
 <p class="mce-root">摘要</p>
 <pre class="mce-root"><strong>val</strong> kmeansOptimal = new KMeans().setK(2).setSeed(12345L)<br/><strong>val</strong> modelOptimal = kmeansOptimal.fit(pcaDF)<br/><br/>// Making predictions<br/><strong>val</strong> predictionsOptimalDF = modelOptimal.transform(pcaDF)<br/>predictionsOptimalDF.show()    <br/><br/>// Evaluate clustering by computing Silhouette score<br/><strong>val</strong> evaluatorOptimal = new ClusteringEvaluator()<br/><strong>val</strong> silhouette = evaluatorOptimal.evaluate(predictionsOptimalDF)<br/>println(s"Silhouette with squared Euclidean distance = $silhouette")</pre>
-<p>在这一章中，我们讨论了一些聚类分析技术，如k-均值、二分k-均值和GMM。我们看到了一个循序渐进的例子，展示了如何根据基因变异对种族进行分类。特别是，我们使用主成分分析进行降维，使用k-means进行聚类，使用H2O和亚当处理大规模基因组数据集。最后，我们学习了寻找最佳聚类数的肘方法和剪影方法。</p>
+<p>在这一章中，我们讨论了一些聚类分析技术，如 k-均值、二分 k-均值和 GMM。我们看到了一个循序渐进的例子，展示了如何根据基因变异对种族进行分类。特别是，我们使用主成分分析进行降维，使用 k-means 进行聚类，使用 H2O 和亚当处理大规模基因组数据集。最后，我们学习了寻找最佳聚类数的肘方法和剪影方法。</p>
 <p>It has been found that the bisecting k-means algorithm can result in better cluster assignment for data points, converging to the global minima. On the other hand, k-means often gets stuck in the local minima. Please note that you might observe different values of the preceding parameters depending on your machine's hardware configuration and the random nature of the dataset.</p>
-<div><p>集群是大多数数据驱动应用的关键。读者可以尝试在更高维的数据集上应用聚类算法，如基因表达或miRNA表达，以聚类相似和相关的基因。一个很好的资源是基因表达癌症RNA-Seq数据集，它是开源的。该数据集可以从UCI机器学习知识库下载，网址为<a href="https://archive.ics.uci.edu/ml/datasets/gene+expression+cancer+RNA-Seq" target="_blank">https://archive . ics . UCI . edu/ml/datasets/gene+expression+cancer+RNA-Seq</a>。</p>
+<div><p>集群是大多数数据驱动应用的关键。读者可以尝试在更高维的数据集上应用聚类算法，如基因表达或 miRNA 表达，以聚类相似和相关的基因。一个很好的资源是基因表达癌症 RNA-Seq 数据集，它是开源的。该数据集可以从 UCI 机器学习知识库下载，网址为<a href="https://archive.ics.uci.edu/ml/datasets/gene+expression+cancer+RNA-Seq" target="_blank">https://archive . ics . UCI . edu/ml/datasets/gene+expression+cancer+RNA-Seq</a>。</p>
 </div>
 
 
@@ -779,7 +779,7 @@
         
 
                             
-                    <h1 class="header-title">在下一章，我们将讨论推荐系统中基于项目的协同过滤方法。我们将学习如何开发图书推荐系统。技术上，它将是一个基于模型的推荐引擎，有Scala和Spark。我们将看到如何在ALS和矩阵分解之间进行互操作。</h1>
+                    <h1 class="header-title">在下一章，我们将讨论推荐系统中基于项目的协同过滤方法。我们将学习如何开发图书推荐系统。技术上，它将是一个基于模型的推荐引擎，有 Scala 和 Spark。我们将看到如何在 ALS 和矩阵分解之间进行互操作。</h1>
                 
             
             

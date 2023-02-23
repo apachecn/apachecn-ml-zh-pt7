@@ -11,18 +11,18 @@
 		<div><h1 id="_idParaDest-14">1.<a id="_idTextAnchor014"/>人工智能简介</h1>
 		</div>
 		<div><p class="callout-heading">概观</p>
-			<p class="callout">在这一章中，你将被介绍到人工智能(AI)的基础，这是AI各个领域的基础。通过使用Python编程语言的简单编码练习，您还会遇到不同的算法，包括MinMax和A*。你还将通过一个简单的井字游戏来实现你的第一个人工智能，在这个游戏中，你将教程序如何战胜一个人类玩家。到本章结束时，你将学会如何使用流行的Python库来开发智能AI驱动的程序。</p>
+			<p class="callout">在这一章中，你将被介绍到人工智能(AI)的基础，这是 AI 各个领域的基础。通过使用 Python 编程语言的简单编码练习，您还会遇到不同的算法，包括 MinMax 和 A*。你还将通过一个简单的井字游戏来实现你的第一个人工智能，在这个游戏中，你将教程序如何战胜一个人类玩家。到本章结束时，你将学会如何使用流行的 Python 库来开发智能 AI 驱动的程序。</p>
 			<h1 id="_idParaDest-15"><a id="_idTextAnchor015"/>简介</h1>
-			<p>在讨论不同的人工智能技术和算法之前，我们将看看人工智能和机器学习的基础知识，并浏览一些基本定义。将使用真实世界的例子，以易于消化的方式呈现AI的基本概念。</p>
-			<p>人工智能试图使用硬件和软件解决方案来复制人类智能。它基于逆向工程。例如，人工神经网络是模仿人脑的工作方式而建立的。除了神经网络，神经科学中还有许多其他模型可以用来利用人工智能解决现实世界的问题。已知在各自领域使用人工智能的公司包括谷歌，谷歌翻译，苹果，Face ID，亚马逊，Alexa产品，甚至优步和特斯拉，他们仍在致力于制造自动驾驶汽车。</p>
-			<p>另一方面，机器学习是一个经常与人工智能混淆的术语。它起源于20世纪50年代，由阿瑟·李·塞缪尔于1959年首次定义。</p>
-			<p>在他名为<em class="italic">机器学习</em>的书中，Tom Mitchell对它提出了一个简单的定义:“<em class="italic">机器学习领域关注的是如何构建随着经验自动改进的计算机程序的问题。</em></p>
+			<p>在讨论不同的人工智能技术和算法之前，我们将看看人工智能和机器学习的基础知识，并浏览一些基本定义。将使用真实世界的例子，以易于消化的方式呈现 AI 的基本概念。</p>
+			<p>人工智能试图使用硬件和软件解决方案来复制人类智能。它基于逆向工程。例如，人工神经网络是模仿人脑的工作方式而建立的。除了神经网络，神经科学中还有许多其他模型可以用来利用人工智能解决现实世界的问题。已知在各自领域使用人工智能的公司包括谷歌，谷歌翻译，苹果，Face ID，亚马逊，Alexa 产品，甚至优步和特斯拉，他们仍在致力于制造自动驾驶汽车。</p>
+			<p>另一方面，机器学习是一个经常与人工智能混淆的术语。它起源于 20 世纪 50 年代，由阿瑟·李·塞缪尔于 1959 年首次定义。</p>
+			<p>在他名为<em class="italic">机器学习</em>的书中，Tom Mitchell 对它提出了一个简单的定义:“<em class="italic">机器学习领域关注的是如何构建随着经验自动改进的计算机程序的问题。</em></p>
 			<p>我们可以将此理解为机器学习是这样一个领域，其目标是构建一个能够从数据中学习模式的计算机程序，并利用更多数据提高其学习能力。</p>
 			<p>他还提出了一个更正式的定义，即计算机程序被称为从经验中学习，<strong class="bold"> E </strong>，关于一个任务，<strong class="bold"> T </strong>，和一个性能度量，<strong class="bold"> P </strong>，如果它在<strong class="bold"> T </strong>上的性能，由<strong class="bold"> P </strong>度量，随着经验而提高，<strong class="bold"> E </strong>。这可以解释为计算机程序学习所需要的东西。我们可以将<strong class="bold"> E </strong>(经验)视为需要提供给机器的数据，<strong class="bold"> T </strong>视为机器需要执行的决策类型，而<strong class="bold"> P </strong>则是对其性能的衡量。</p>
-			<p>从这两个定义可以得出结论，机器学习是实现AI的一种方式。但是，没有机器学习也可以有AI。例如，如果你硬编码规则和决策树，或者你应用搜索技术，你可以创建一个人工智能代理，即使你的方法与机器学习没有什么关系。</p>
+			<p>从这两个定义可以得出结论，机器学习是实现 AI 的一种方式。但是，没有机器学习也可以有 AI。例如，如果你硬编码规则和决策树，或者你应用搜索技术，你可以创建一个人工智能代理，即使你的方法与机器学习没有什么关系。</p>
 			<p>随着每秒钟越来越多的数据被创建，人工智能和机器学习已经帮助科学界利用大数据的爆炸。借助人工智能和机器学习，科学家可以在这些庞大的数据集上提取人眼无法足够快速处理的信息。</p>
-			<p>既然已经介绍了AI和机器学习，那我们就把重点放在AI上。</p>
-			<h2 id="_idParaDest-16"><a id="_idTextAnchor016"/>AI如何解决问题？</h2>
+			<p>既然已经介绍了 AI 和机器学习，那我们就把重点放在 AI 上。</p>
+			<h2 id="_idParaDest-16"><a id="_idTextAnchor016"/>AI 如何解决问题？</h2>
 			<p>人工智能根据人脑处理信息的方式实现了人类智能的自动化。</p>
 			<p>每当我们解决一个问题或与人互动时，我们都会经历一个过程。通过这样做，我们限制了问题或交互的范围。这个过程通常可以在人工智能中建模和自动化。</p>
 			<p>人工智能使计算机看起来像人类一样思考。</p>
@@ -31,10 +31,10 @@
 			<p>即使一个解决方案可能看起来很智能，我们还是要编写代码，就像人工智能中的任何其他软件解决方案一样。即使我们在模拟神经元，简单的机器代码和计算机硬件执行<em class="italic">思维</em>过程。</p>
 			<p>大多数人工智能应用都有一个主要目标。当我们与人工智能应用程序交互时，它看起来像人类，因为它可以将问题域限制在主要目标上。因此，人工智能实现目标的过程可以分解成更小更简单的低级指令。</p>
 			<p>人工智能可以刺激人类的感官和专业领域的思维过程。</p>
-			<p>你必须能够模拟人类的感官和思想，有时欺骗AI相信我们正在与另一个人类互动。在某些特殊情况下，我们甚至可以增强自己的感官。</p>
+			<p>你必须能够模拟人类的感官和思想，有时欺骗 AI 相信我们正在与另一个人类互动。在某些特殊情况下，我们甚至可以增强自己的感官。</p>
 			<p>类似地，例如，当我们与聊天机器人互动时，我们希望机器人能理解我们。我们希望聊天机器人甚至语音识别系统能够提供符合我们期望的人机界面。为了满足这些期望，计算机需要模拟人类的思维过程。</p>
 			<h2 id="_idParaDest-17"><a id="_idTextAnchor017"/>人工智能学科的多样性</h2>
-			<p>一辆无法感知同一条高速公路上行驶的其他汽车的自动驾驶汽车将非常危险。AI智能体需要处理和感知周围的事物，以便驾驶汽车。然而，这还不够，因为如果不了解移动物体的物理特性，在正常环境下驾驶汽车几乎是不可能的，更不用说是致命的任务了。</p>
+			<p>一辆无法感知同一条高速公路上行驶的其他汽车的自动驾驶汽车将非常危险。AI 智能体需要处理和感知周围的事物，以便驾驶汽车。然而，这还不够，因为如果不了解移动物体的物理特性，在正常环境下驾驶汽车几乎是不可能的，更不用说是致命的任务了。</p>
 			<p>为了创建一个可用的人工智能解决方案，涉及到不同的学科，例如:</p>
 			<ul>
 				<li><strong class="bold">机器人</strong>:在太空中移动物体</li>
@@ -66,7 +66,7 @@
 			<p>其中一些超出了我们的范围，因为本章的目的是理解基本原理。例如，为了移动机械臂，我们将不得不学习复杂的大学水平的数学来理解发生了什么，但在本书中我们将只关注实用方面:</p>
 			<ul>
 				<li><strong class="bold">Listening and speaking</strong>: Using a speech recognition system, AI can collect information from a user. Using speech synthesis, it can turn internal data into understandable sounds. Speech recognition and speech synthesis techniques deal with the recognition and construction of human sounds that are emitted or that humans can understand.<p>例如，想象你正在去一个你不会说当地语言的国家旅行。你可以对着手机的麦克风说话，期望它能理解你说的话，然后翻译成另一种语言。同样的情况也可以反过来发生，当地人说话，人工智能将声音翻译成你能理解的语言。语音识别和语音合成使这成为可能。</p><p class="callout-heading">注意</p><p class="callout">语音合成的一个例子是谷歌翻译。您可以导航到<a href="https://translate.google.com/">https://translate.google.com/</a>，通过点击翻译单词下方的扬声器按钮，让翻译说出非英语单词。</p></li>
-				<li><strong class="bold">Understanding language</strong>: We can understand natural language by processing it. This field is called natural language processing, or NLP. <p>说到NLP，我们倾向于通过学习音节之间的统计关系来学习基于统计学习的语言。</p></li>
+				<li><strong class="bold">Understanding language</strong>: We can understand natural language by processing it. This field is called natural language processing, or NLP. <p>说到 NLP，我们倾向于通过学习音节之间的统计关系来学习基于统计学习的语言。</p></li>
 				<li>记住事物:我们需要表现我们对世界的了解。这就是创建称为<strong class="bold">本体</strong>的知识库和分层表示发挥作用的地方。本体对我们世界中的事物和想法进行分类，并包含这些类别之间的关系。</li>
 				<li><strong class="bold">Thinking</strong>: Our AI system has to be an expert in a certain domain by using an expert system. An expert system can be based on mathematical logic in a deterministic way, as well as in a fuzzy, non-deterministic way. <p>专家系统的知识库用不同的技术来表示。随着问题领域的增长，我们创建了层次化的本体。</p><p>我们可以通过在大脑的构建模块上模拟网络来复制这种结构。这些构建模块被称为神经元，网络本身被称为神经网络。</p></li>
 				<li><strong class="bold">Seeing</strong>: We have to interact with the real world through our senses. We have only touched upon auditory senses so far, in regard to speech recognition and synthesis. What if we had to see things? If that was the case, we would have to create computer vision techniques to learn about our environment. After all, recognizing faces is useful, and most humans are experts at that.<p>计算机视觉依赖于图像处理。虽然图像处理不是直接的人工智能学科，但它是人工智能的必修学科。</p></li>
@@ -78,12 +78,12 @@
 			<h3 id="_idParaDest-21"><a id="_idTextAnchor021"/>我们需要通过哪些学科的图灵测试？</h3>
 			<p>首先，我们需要理解一种口语来知道审讯者在说什么。我们通过使用<strong class="bold">自然语言处理</strong> ( <strong class="bold"> NLP </strong>)来做到这一点。我们还必须通过使用人工智能模型从以前的问题和答案中学习，以可信的方式回应询问者。</p>
 			<p>我们需要成为人类思维感兴趣的事物的专家。我们需要建立一个人类的专家系统，涉及我们世界中的物体和抽象思想的分类，以及历史事件甚至情感。</p>
-			<p>通过图灵测试非常困难。目前的预测表明，在21世纪20年代末之前，我们无法创建一个足够好的系统来通过图灵测试。更进一步，如果这还不够，我们可以推进到总图灵测试，它也包括运动和视觉。</p>
+			<p>通过图灵测试非常困难。目前的预测表明，在 21 世纪 20 年代末之前，我们无法创建一个足够好的系统来通过图灵测试。更进一步，如果这还不够，我们可以推进到总图灵测试，它也包括运动和视觉。</p>
 			<p>接下来，我们将继续前进，看看人工智能中的工具和学习模型。</p>
 			<h1 id="_idParaDest-22"><a id="_idTextAnchor022"/>人工智能工具和学习模型</h1>
-			<p>在前面的章节中，我们发现了人工智能的基础。AI的核心任务之一就是学习。这就是智能代理发挥作用的地方。</p>
+			<p>在前面的章节中，我们发现了人工智能的基础。AI 的核心任务之一就是学习。这就是智能代理发挥作用的地方。</p>
 			<h2 id="_idParaDest-23"><a id="_idTextAnchor023"/>智能代理</h2>
-			<p>在解决AI问题时，我们在环境中创建一个可以从其周围收集数据并影响其周围环境的参与者。这个演员叫做<strong class="bold">智能代理</strong>。</p>
+			<p>在解决 AI 问题时，我们在环境中创建一个可以从其周围收集数据并影响其周围环境的参与者。这个演员叫做<strong class="bold">智能代理</strong>。</p>
 			<p>智能代理如下所示:</p>
 			<ul>
 				<li>是自主的</li>
@@ -94,39 +94,39 @@
 			<p>代理还可以学习并访问知识库。</p>
 			<p>我们可以把代理看作是一个将感知映射到行动的函数。如果代理有一个内部知识库，那么感知、动作和反应也可能改变知识库。</p>
 			<p>行动可能会受到奖励或惩罚。设定正确的目标并实施胡萝卜加大棒的情境有助于代理学习。如果目标设定正确，智能体有机会击败通常更复杂的人脑。这是因为无论我们在玩什么游戏，人类大脑的首要目标都是生存。代理的主要动机是达到目标本身。因此，智能代理在没有任何知识的情况下进行随机移动时不会感到尴尬。</p>
-			<h1 id="_idParaDest-24"><a id="_idTextAnchor024"/>Python在人工智能中的作用</h1>
-			<p>为了将基本的人工智能概念付诸实践，我们需要一种支持人工智能的编程语言。在本书中，我们选择了Python。Python是人工智能如此好的选择有几个原因:</p>
+			<h1 id="_idParaDest-24"><a id="_idTextAnchor024"/>Python 在人工智能中的作用</h1>
+			<p>为了将基本的人工智能概念付诸实践，我们需要一种支持人工智能的编程语言。在本书中，我们选择了 Python。Python 是人工智能如此好的选择有几个原因:</p>
 			<ul>
-				<li><strong class="bold">便利性和兼容性:</strong> Python是一种高级编程语言。这意味着您不必担心内存分配、指针或一般的机器码。您可以用一种方便的方式编写代码，并依赖Python的健壮性。Python也是跨平台兼容的。</li>
-				<li><strong class="bold">受欢迎程度:</strong>对开发者体验的强烈强调使得Python成为软件开发者中非常受欢迎的选择。事实上，根据<a href="https://www.hackerrank.com">https://www.hackerrank.com</a>的2018年开发者调查，在所有年龄段中，Python都是软件开发者的首选语言。这是因为Python易读且简单。因此，Python非常适合快速应用程序开发。</li>
-				<li><strong class="bold">Efficiency:</strong> Despite being an interpreted language, Python is comparable to other languages that are used in data science, such as R. Its main advantage is memory efficiency, since Python can handle large, in-memory databases.<p class="callout-heading">注意</p><p class="callout">Python是一种多用途语言。它可以用来创建桌面应用程序、数据库应用程序、移动应用程序和游戏。Python的网络编程特性也值得一提。此外，Python是一个优秀的原型工具。</p></li>
+				<li><strong class="bold">便利性和兼容性:</strong> Python 是一种高级编程语言。这意味着您不必担心内存分配、指针或一般的机器码。您可以用一种方便的方式编写代码，并依赖 Python 的健壮性。Python 也是跨平台兼容的。</li>
+				<li><strong class="bold">受欢迎程度:</strong>对开发者体验的强烈强调使得 Python 成为软件开发者中非常受欢迎的选择。事实上，根据<a href="https://www.hackerrank.com">https://www.hackerrank.com</a>的 2018 年开发者调查，在所有年龄段中，Python 都是软件开发者的首选语言。这是因为 Python 易读且简单。因此，Python 非常适合快速应用程序开发。</li>
+				<li><strong class="bold">Efficiency:</strong> Despite being an interpreted language, Python is comparable to other languages that are used in data science, such as R. Its main advantage is memory efficiency, since Python can handle large, in-memory databases.<p class="callout-heading">注意</p><p class="callout">Python 是一种多用途语言。它可以用来创建桌面应用程序、数据库应用程序、移动应用程序和游戏。Python 的网络编程特性也值得一提。此外，Python 是一个优秀的原型工具。</p></li>
 			</ul>
-			<h2 id="_idParaDest-25"><a id="_idTextAnchor025"/>为什么Python在机器学习、数据科学、AI领域占优势？</h2>
-			<p>为了理解Python在机器学习、数据科学和人工智能中的主导性质，我们必须将Python与这些领域中使用的其他语言进行比较。</p>
-			<p>与为统计学家构建的编程语言R相比，Python更加通用和简单，因为它允许程序员构建从游戏到人工智能应用的多样化应用。</p>
-			<p>与Java和C++相比，用Python写程序要快得多。Python还提供了高度的灵活性。</p>
-			<p>谈到灵活性和便利性，有一些语言在本质上是相似的:Ruby和JavaScript。Python比这些语言更有优势，因为Python拥有人工智能生态系统。在任何领域，开源、第三方库的支持极大地决定了该语言的成功。Python的第三方AI库支持非常优秀。</p>
+			<h2 id="_idParaDest-25"><a id="_idTextAnchor025"/>为什么 Python 在机器学习、数据科学、AI 领域占优势？</h2>
+			<p>为了理解 Python 在机器学习、数据科学和人工智能中的主导性质，我们必须将 Python 与这些领域中使用的其他语言进行比较。</p>
+			<p>与为统计学家构建的编程语言 R 相比，Python 更加通用和简单，因为它允许程序员构建从游戏到人工智能应用的多样化应用。</p>
+			<p>与 Java 和 C++相比，用 Python 写程序要快得多。Python 还提供了高度的灵活性。</p>
+			<p>谈到灵活性和便利性，有一些语言在本质上是相似的:Ruby 和 JavaScript。Python 比这些语言更有优势，因为 Python 拥有人工智能生态系统。在任何领域，开源、第三方库的支持极大地决定了该语言的成功。Python 的第三方 AI 库支持非常优秀。</p>
 			<h2 id="_idParaDest-26"><a id="_idTextAnchor026"/>蟒蛇中的蟒蛇</h2>
-			<p>我们在<em class="italic">序言</em>中安装了Anaconda。当涉及到人工智能的实验时，Anaconda将是我们的头号工具。</p>
-			<p>Anaconda在一个地方提供了包、ide、数据可视化库和高性能并行计算工具。Anaconda隐藏了配置问题和维护数据科学、机器学习和人工智能堆栈的复杂性。这个特性在Windows中特别有用，因为版本不匹配和配置问题在Windows中最容易出现。</p>
-			<p>Anaconda附带了Jupyter Notebook，您可以在其中以文档风格编写代码和注释。当你尝试人工智能的特性时，你的想法就像一个交互式的教程，在这里你运行你代码的每一步。</p>
+			<p>我们在<em class="italic">序言</em>中安装了 Anaconda。当涉及到人工智能的实验时，Anaconda 将是我们的头号工具。</p>
+			<p>Anaconda 在一个地方提供了包、ide、数据可视化库和高性能并行计算工具。Anaconda 隐藏了配置问题和维护数据科学、机器学习和人工智能堆栈的复杂性。这个特性在 Windows 中特别有用，因为版本不匹配和配置问题在 Windows 中最容易出现。</p>
+			<p>Anaconda 附带了 Jupyter Notebook，您可以在其中以文档风格编写代码和注释。当你尝试人工智能的特性时，你的想法就像一个交互式的教程，在这里你运行你代码的每一步。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout"><strong class="bold"> IDE </strong>代表<strong class="bold">集成开发环境</strong>。虽然文本编辑器提供了一些突出显示和格式化代码的功能，但IDE通过提供自动重构、测试、调试、打包、运行和部署代码的工具，超越了文本编辑器的功能。</p>
-			<h2 id="_idParaDest-27"><a id="_idTextAnchor027"/>面向人工智能的Python库</h2>
-			<p>这里提供的库列表并不完整，因为Anaconda中有700多个可用的库。然而，这些特定的算法将让您有一个良好的开端，因为它们将为您能够用Python实现基本的人工智能算法打下良好的基础:</p>
+			<p class="callout"><strong class="bold"> IDE </strong>代表<strong class="bold">集成开发环境</strong>。虽然文本编辑器提供了一些突出显示和格式化代码的功能，但 IDE 通过提供自动重构、测试、调试、打包、运行和部署代码的工具，超越了文本编辑器的功能。</p>
+			<h2 id="_idParaDest-27"><a id="_idTextAnchor027"/>面向人工智能的 Python 库</h2>
+			<p>这里提供的库列表并不完整，因为 Anaconda 中有 700 多个可用的库。然而，这些特定的算法将让您有一个良好的开端，因为它们将为您能够用 Python 实现基本的人工智能算法打下良好的基础:</p>
 			<ul>
-				<li><strong class="bold"> NumPy </strong> : NumPy是Python的计算库。由于Python没有内置的数组数据结构，我们必须使用一个库来有效地建模向量和矩阵。在数据科学中，我们需要这些数据结构来执行简单的数学运算。我们将在以后的章节中广泛使用NumPy。</li>
-				<li>SciPy是一个包含用于数据科学的算法的高级库。它是NumPy的一个很好的补充库，因为它提供了您需要的所有高级算法，无论是线性代数算法、图像处理工具还是矩阵运算。</li>
-				<li><strong class="bold"> pandas </strong> : pandas提供快速、灵活、富于表现力的数据结构，比如一维序列和二维数据帧。它有效地加载、格式化和处理不同类型的复杂表格。</li>
-				<li><strong class="bold">sci kit-learn</strong>:sci kit-learn是Python主要的机器学习库。它基于NumPy和SciPy库。scikit-learn为您提供了执行分类和回归、数据预处理以及监督和非监督学习所需的功能。</li>
-				<li><strong class="bold"> NLTK </strong>:本书我们不会涉及NLP，但是NLTK还是值得一提的，因为这个库是Python主要的自然语言工具包。您可以使用这个库执行分类、标记化、词干化、标记、解析、语义推理和许多其他操作。</li>
-				<li><strong class="bold"> TensorFlow </strong> : TensorFlow是Google的神经网络库，非常适合实现深度学习AI。TensorFlow的柔性核心可用于解决各种各样的数值计算问题。TensorFlow的一些现实应用包括谷歌语音识别和物体识别。</li>
+				<li><strong class="bold"> NumPy </strong> : NumPy 是 Python 的计算库。由于 Python 没有内置的数组数据结构，我们必须使用一个库来有效地建模向量和矩阵。在数据科学中，我们需要这些数据结构来执行简单的数学运算。我们将在以后的章节中广泛使用 NumPy。</li>
+				<li>SciPy 是一个包含用于数据科学的算法的高级库。它是 NumPy 的一个很好的补充库，因为它提供了您需要的所有高级算法，无论是线性代数算法、图像处理工具还是矩阵运算。</li>
+				<li><strong class="bold"> pandas </strong> : pandas 提供快速、灵活、富于表现力的数据结构，比如一维序列和二维数据帧。它有效地加载、格式化和处理不同类型的复杂表格。</li>
+				<li><strong class="bold">sci kit-learn</strong>:sci kit-learn 是 Python 主要的机器学习库。它基于 NumPy 和 SciPy 库。scikit-learn 为您提供了执行分类和回归、数据预处理以及监督和非监督学习所需的功能。</li>
+				<li><strong class="bold"> NLTK </strong>:本书我们不会涉及 NLP，但是 NLTK 还是值得一提的，因为这个库是 Python 主要的自然语言工具包。您可以使用这个库执行分类、标记化、词干化、标记、解析、语义推理和许多其他操作。</li>
+				<li><strong class="bold"> TensorFlow </strong> : TensorFlow 是 Google 的神经网络库，非常适合实现深度学习 AI。TensorFlow 的柔性核心可用于解决各种各样的数值计算问题。TensorFlow 的一些现实应用包括谷歌语音识别和物体识别。</li>
 			</ul>
-			<h2 id="_idParaDest-28"><a id="_idTextAnchor028"/>NumPy库简介</h2>
-			<p>NumPy库将在本书中扮演主要角色，因此值得进一步探索。</p>
-			<p>启动Jupyter笔记本后，您可以简单地导入<code>numpy</code>如下:</p>
+			<h2 id="_idParaDest-28"><a id="_idTextAnchor028"/>NumPy 库简介</h2>
+			<p>NumPy 库将在本书中扮演主要角色，因此值得进一步探索。</p>
+			<p>启动 Jupyter 笔记本后，您可以简单地导入<code>numpy</code>如下:</p>
 			<pre>import numpy as np</pre>
-			<p>一旦<code>numpy</code>被导入，您可以使用它的别名<code>np</code>来访问它。NumPy包含一些数据结构的有效实现，比如向量和矩阵。</p>
+			<p>一旦<code>numpy</code>被导入，您可以使用它的别名<code>np</code>来访问它。NumPy 包含一些数据结构的有效实现，比如向量和矩阵。</p>
 			<p>让我们看看如何定义向量和矩阵:</p>
 			<pre>np.array([1,3,5,7])</pre>
 			<p>预期输出如下:</p>
@@ -159,30 +159,30 @@ A</pre>
 			<div><div><img src="img/B16060_01_01.jpg" alt="Figure 1.1: Multiplication calculation with two matrices&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.1:两个矩阵的乘法计算</p>
+			<p class="figure-caption">图 1.1:两个矩阵的乘法计算</p>
 			<p>要获得矩阵的第<em class="italic"> (i，j) </em>个元素，需要计算矩阵的第<em class="italic"> i </em>行与第<em class="italic"> j </em>列的点(标量)积。两个向量的标量积是它们对应坐标的乘积之和。</p>
-			<p>另一种常见的矩阵运算是矩阵的行列式。行列式是与方阵有关的数。使用NumPy的<code>linalg</code>函数(线性代数算法)计算行列式可以在下面一行代码中看到:</p>
+			<p>另一种常见的矩阵运算是矩阵的行列式。行列式是与方阵有关的数。使用 NumPy 的<code>linalg</code>函数(线性代数算法)计算行列式可以在下面一行代码中看到:</p>
 			<pre>np.linalg.det( A )</pre>
 			<p>预期输出如下:</p>
 			<pre>-3.0000000000000004</pre>
-			<p>技术上，行列式可以计算为<code>1*3 – 2*3 = -3</code>。请注意，NumPy使用浮点运算来计算行列式，因此结果的准确性并不完美。该错误是由于大多数编程语言中浮点的表示方式造成的。</p>
+			<p>技术上，行列式可以计算为<code>1*3 – 2*3 = -3</code>。请注意，NumPy 使用浮点运算来计算行列式，因此结果的准确性并不完美。该错误是由于大多数编程语言中浮点的表示方式造成的。</p>
 			<p>我们还可以转置一个矩阵，如下面一行代码所示:</p>
 			<pre>np.matrix.transpose(A)</pre>
 			<p>预期输出如下:</p>
 			<pre>matrix([[1, 3],
         [2, 3]])</pre>
 			<p>当计算一个矩阵的转置时，我们将它的值翻转到主对角线上。</p>
-			<p>NumPy还有许多其他重要的特性，所以我们将在本书的大部分章节中使用它。</p>
-			<h2 id="_idParaDest-29"><a id="_idTextAnchor029"/>练习1.01:使用NumPy进行矩阵运算</h2>
-			<p>我们将使用Jupyter笔记本和下面的矩阵来解决这个问题。</p>
-			<p>我们将使用NumPy计算矩阵的平方，即矩阵的行列式和下图所示的矩阵的转置:</p>
+			<p>NumPy 还有许多其他重要的特性，所以我们将在本书的大部分章节中使用它。</p>
+			<h2 id="_idParaDest-29"><a id="_idTextAnchor029"/>练习 1.01:使用 NumPy 进行矩阵运算</h2>
+			<p>我们将使用 Jupyter 笔记本和下面的矩阵来解决这个问题。</p>
+			<p>我们将使用 NumPy 计算矩阵的平方，即矩阵的行列式和下图所示的矩阵的转置:</p>
 			<div><div><img src="img/B16060_01_02.jpg" alt="Figure 1.2: A simple matrix representation&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.2:一个简单的矩阵表示</p>
+			<p class="figure-caption">图 1.2:一个简单的矩阵表示</p>
 			<p>以下步骤将帮助您完成本练习:</p>
 			<ol>
-				<li>打开新的Jupyter笔记本文件。</li>
+				<li>打开新的 Jupyter 笔记本文件。</li>
 				<li>将<code>numpy</code>库导入为<code>np</code> : <pre>import numpy as np</pre></li>
 				<li>Create a two-dimensional array called <code>A</code> for storing the <code>[[1,2,3],[4,5,6],[7,8,9]]</code> matrix using <code>np.mat</code>:<pre>A = np.mat([[1,2,3],[4,5,6],[7,8,9]])
 A</pre><p>预期输出如下:</p><pre>matrix([[1, 2, 3],
@@ -198,23 +198,23 @@ det</pre><p>预期输出(可能略有不同)如下:</p><pre>0.0</pre></li>
 				<li>Use <code>np.matrix.transpose</code> to get the transpose of the matrix and save the result in a variable called <code>transpose</code>:<pre>transpose = np.matrix.transpose(A)
 transpose</pre><p>预期输出如下:</p><pre>matrix([[1, 4, 7],
         [2, 5, 8],
-        [3, 6, 9]])</pre><p>如果<code>T</code>是矩阵<code>A</code>的转置，那么<code>T[j][i]</code>等于<code>A[i][j]</code>。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/316Vd6Z">https://packt.live/316Vd6Z</a>。</p><p class="callout">你也可以在https://packt.live/2BrogHL在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+        [3, 6, 9]])</pre><p>如果<code>T</code>是矩阵<code>A</code>的转置，那么<code>T[j][i]</code>等于<code>A[i][j]</code>。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/316Vd6Z">https://packt.live/316Vd6Z</a>。</p><p class="callout">你也可以在 https://packt.live/2BrogHL 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>通过完成这个练习，您已经看到NumPy附带了许多对向量、矩阵和其他数学结构有用的特性。</p>
-			<p>在接下来的部分，我们将使用Python在一个有趣的井字游戏中实现AI。</p>
-			<h1 id="_idParaDest-30">游戏人工智能的Python</h1>
+			<p>通过完成这个练习，您已经看到 NumPy 附带了许多对向量、矩阵和其他数学结构有用的特性。</p>
+			<p>在接下来的部分，我们将使用 Python 在一个有趣的井字游戏中实现 AI。</p>
+			<h1 id="_idParaDest-30">游戏人工智能的 Python</h1>
 			<p>一个人工智能游戏玩家只不过是一个有着明确目标的智能代理:赢得游戏并击败所有其他玩家。在游戏方面，人工智能实验取得了令人惊讶的结果。今天，没有人能在国际象棋比赛中打败人工智能。</p>
-			<p>围棋游戏是人类玩家能够持续击败电脑玩家的最后一个游戏。然而，在2017年，谷歌的游戏人工智能AlphaGo击败了世界排名第一的围棋选手。</p>
+			<p>围棋游戏是人类玩家能够持续击败电脑玩家的最后一个游戏。然而，在 2017 年，谷歌的游戏人工智能 AlphaGo 击败了世界排名第一的围棋选手。</p>
 			<h2 id="_idParaDest-31"><a id="_idTextAnchor031"/>游戏中的智能代理</h2>
 			<p>智能代理根据游戏规则进行游戏。代理可以通过其传感器感知游戏的当前状态，并可以评估潜在的步骤。一旦代理找到最佳可能的步骤，它就使用其执行器执行动作。代理根据它所拥有的信息找到达到目标的最佳可能行动。行动不是奖励就是惩罚。胡萝卜加大棒是奖励和惩罚的极好例子。想象一只驴子在你的手推车前面。你把一根胡萝卜放在驴的眼前，于是驴开始向它走去。驴子一停下来，骑手可能会用棍子进行惩罚。这不是人类的运动方式，而是奖惩在一定程度上控制了生命体。同样的事情也发生在学校、工作和日常生活中。我们有收入和法律惩罚来塑造我们的行为，而不是胡萝卜和大棒。</p>
 			<p>在大多数游戏中，一系列好的动作会带来奖励。当一个人类玩家感到被奖励时，那会让人感到快乐。人类倾向于以最大化幸福的方式行动。另一方面，聪明的代理人只对他们的目标感兴趣，即最大化他们的奖励，最小化影响他们表现得分的惩罚。</p>
 			<p>在对游戏建模时，我们必须确定它们的状态空间。一个动作导致一个状态转换。当我们探究所有可能行为的后果时，我们得到了一个决策树。随着我们开始探索所有玩家可能的未来行动，直到游戏结束，这棵树变得更深。</p>
-			<p>人工智能的优势在于每秒执行数百万个可能的步骤。所以游戏AI往往归结为一个搜索练习。当探索博弈中所有可能的移动顺序时，我们得到了博弈的状态树。</p>
+			<p>人工智能的优势在于每秒执行数百万个可能的步骤。所以游戏 AI 往往归结为一个搜索练习。当探索博弈中所有可能的移动顺序时，我们得到了博弈的状态树。</p>
 			<p>考虑一个象棋人工智能。通过构建由所有可能的移动序列组成的状态树来评估所有可能的移动有什么问题？</p>
 			<p>就复杂性而言，国际象棋是一种精彩的游戏。可能的移动数量以组合方式爆炸。</p>
-			<p>白棋以20种可能的移动开始:八个兵可以移动一步或两步，两个骑士可以向上向左移动，或者向上向右移动。然后，黑棋可以进行这20步棋中的任何一步。每个玩家只需走一步，就已经有20*20 = 400种可能的组合。</p>
-			<p>在第二步棋之后，我们得到了8902个可能的棋盘星座，这个数字还在继续增长。只要走七步，你就要搜索10921506个可能的星座。</p>
-			<p>一盘棋的平均长度大约是40步。一些特殊的游戏需要超过200步才能完成。</p>
+			<p>白棋以 20 种可能的移动开始:八个兵可以移动一步或两步，两个骑士可以向上向左移动，或者向上向右移动。然后，黑棋可以进行这 20 步棋中的任何一步。每个玩家只需走一步，就已经有 20*20 = 400 种可能的组合。</p>
+			<p>在第二步棋之后，我们得到了 8902 个可能的棋盘星座，这个数字还在继续增长。只要走七步，你就要搜索 10921506 个可能的星座。</p>
+			<p>一盘棋的平均长度大约是 40 步。一些特殊的游戏需要超过 200 步才能完成。</p>
 			<p>结果，计算机玩家根本没有时间探索整个状态空间。因此，搜索活动必须以适当的奖励、惩罚和规则的简化来引导。</p>
 			<h2 id="_idParaDest-32"><a id="_idTextAnchor032"/>广度优先搜索和深度优先搜索</h2>
 			<p>创造一个游戏人工智能通常是一个搜索练习。因此，我们需要熟悉两种主要的搜索技术:</p>
@@ -227,23 +227,23 @@ transpose</pre><p>预期输出如下:</p><pre>matrix([[1, 4, 7],
 			<div><div><img src="img/B16060_01_03.jpg" alt="Figure 1.3: A directed rooted tree&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.3:有向根树</p>
+			<p class="figure-caption">图 1.3:有向根树</p>
 			<p>当树有根时，树中有一个特殊的节点叫做<strong class="bold">根</strong>，这是我们开始遍历的地方。有向树是这样一种树，它的边只能在一个方向上遍历。节点可以是内部节点或叶子。<strong class="bold">内部节点</strong>至少有一条边，通过这条边我们可以离开节点。一个<strong class="bold">叶</strong>没有从该节点伸出的边。</p>
-			<p>在AI搜索中，树根是起始状态。我们通过生成搜索树的后继节点从这个状态开始遍历。搜索技术有所不同，这取决于我们访问这些后继节点的顺序。</p>
+			<p>在 AI 搜索中，树根是起始状态。我们通过生成搜索树的后继节点从这个状态开始遍历。搜索技术有所不同，这取决于我们访问这些后继节点的顺序。</p>
 			<h3 id="_idParaDest-33"><a id="_idTextAnchor033"/>广度优先搜索(BFS)</h3>
-			<p>BFS是一种搜索技术，它从根节点(节点1)开始，在移动到下一个深度之前，将开始探索同一深度(或级别)上最近的节点:</p>
+			<p>BFS 是一种搜索技术，它从根节点(节点 1)开始，在移动到下一个深度之前，将开始探索同一深度(或级别)上最近的节点:</p>
 			<div><div><img src="img/B16060_01_04.jpg" alt="Figure 1.4: A BFS tree&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.4:BFS树</p>
-			<p>在上图中，你可以看到BFS技术的搜索顺序。从根节点(<code>1</code>)开始，BFS将进入下一层并探索最近的节点(<code>2</code>)，然后查看同一层上的其他节点(<code>3</code>和<code>4</code>)。然后，它将移动到下一个级别，并探索彼此靠近的<code>5</code>和<code>6</code>，然后返回到节点<code>3</code>，在最后一个节点<code>7</code>结束，依此类推。</p>
+			<p class="figure-caption">图 1.4:BFS 树</p>
+			<p>在上图中，你可以看到 BFS 技术的搜索顺序。从根节点(<code>1</code>)开始，BFS 将进入下一层并探索最近的节点(<code>2</code>)，然后查看同一层上的其他节点(<code>3</code>和<code>4</code>)。然后，它将移动到下一个级别，并探索彼此靠近的<code>5</code>和<code>6</code>，然后返回到节点<code>3</code>，在最后一个节点<code>7</code>结束，依此类推。</p>
 			<h3 id="_idParaDest-34"><a id="_idTextAnchor034"/>深度优先搜索(DFS)</h3>
-			<p>DFS是一种搜索技术，从根节点(节点1)开始，在移动到下一个最近的分支之前，将开始尽可能多地探索同一分支:</p>
+			<p>DFS 是一种搜索技术，从根节点(节点 1)开始，在移动到下一个最近的分支之前，将开始尽可能多地探索同一分支:</p>
 			<div><div><img src="img/B16060_01_05.jpg" alt="Figure 1.5: A DFS tree&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.5:一个DFS树</p>
-			<p>在上图中，您可以看到DFS技术的搜索顺序。从根节点(<code>1</code>)开始，DFS将到达最近的节点(<code>2</code>)，并在返回到节点(<code>2</code>)之前一路探索到第三深度上的分支(<code>3</code>)的末端，并通过探索其第二个分支(<code>4</code>)结束。然后，它将移回第二深度，并在结束最后一个分支(<code>7</code>)之前，开始下一个分支(<code>6</code>)的相同过程。</p>
+			<p class="figure-caption">图 1.5:一个 DFS 树</p>
+			<p>在上图中，您可以看到 DFS 技术的搜索顺序。从根节点(<code>1</code>)开始，DFS 将到达最近的节点(<code>2</code>)，并在返回到节点(<code>2</code>)之前一路探索到第三深度上的分支(<code>3</code>)的末端，并通过探索其第二个分支(<code>4</code>)结束。然后，它将移回第二深度，并在结束最后一个分支(<code>7</code>)之前，开始下一个分支(<code>6</code>)的相同过程。</p>
 			<p>现在，假设我们有一个由根定义的树和一个从根生成所有后继节点的函数。在下面的示例中，每个节点都有一个值和一个深度。我们从<code>1</code>开始，并可能增加<code>1</code>或<code>2</code>的值。我们的目标是达到值<code>5</code>:</p>
 			<p class="callout-heading">注意</p>
 			<pre>\ ) to split the logic across multiple lines. When the code is executed, Python will ignore the backslash, and treat the code on the next line as a direct continuation of the current line.
@@ -258,13 +258,13 @@ def succ(node):
                  'depth':node['depth']+1}, \
                 {'value': node['value']+2, \
                  'depth':node['depth']+1}]</pre>
-			<p>在前面的代码片段中，我们将根节点初始化为具有值和深度<code>1</code>。然后，我们创建了一个名为<code>succ</code>的函数，它将一个节点作为输入。该功能有3种不同的情况:</p>
+			<p>在前面的代码片段中，我们将根节点初始化为具有值和深度<code>1</code>。然后，我们创建了一个名为<code>succ</code>的函数，它将一个节点作为输入。该功能有 3 种不同的情况:</p>
 			<ul>
 				<li>如果输入节点值是<code>5</code>，那么不返回任何值，因为我们已经达到了我们的目标(<code>5</code>)。</li>
 				<li>如果输入节点值是<code>4</code>，则返回值<code>5</code>并将<code>1</code>加到当前深度。</li>
 				<li>如果该值为其他值，则将<code>1</code>添加到深度，并为该值创建两个案例<code>+1</code>和<code>+2</code>。</li>
 			</ul>
-			<p>首先，我们将执行BFS，如下所示:</p>
+			<p>首先，我们将执行 BFS，如下所示:</p>
 			<pre>def bfs_tree(node):
     nodes_to_visit = [node]
     visited_nodes = []
@@ -276,7 +276,7 @@ def succ(node):
 bfs_tree(root)</pre>
 			<p>在前面的代码片段中，我们通过将一个节点作为输入实现了<code>bfs_tree</code>函数。该功能可分为三个部分:</p>
 			<p><code>nodes_to_visit</code>和<code>visited_nodes</code>变量。</p>
-			<p><strong class="bold">第二部分</strong>是实现BFS的地方；</p>
+			<p><strong class="bold">第二部分</strong>是实现 BFS 的地方；</p>
 			<ul>
 				<li><code>current_node</code>变量带走了<code>nodes_to_visit</code>变量的第一个元素。</li>
 				<li><code>visited_nodes</code>变量将这个元素添加到它的列表中。</li>
@@ -297,10 +297,10 @@ bfs_tree(root)</pre>
  {'value': 5, 'depth': 4},
  {'value': 5, 'depth': 4},
  {'value': 5, 'depth': 5}]</pre>
-			<p>正如你所看到的，BFS是通过相同深度的值进行搜索，然后移动到下一个深度级别并探索它的值。请注意深度和值是如何依次增加的。外勤支助部不会出现这种情况。</p>
-			<p>如果我们必须遍历一个图，而不是一个有向的有根树，BFS看起来会有所不同:每当我们访问一个节点，我们都必须检查这个节点以前是否被访问过。如果该节点以前被访问过，我们可以简单地忽略它。</p>
-			<p>在本章中，我们将只在树上使用广度优先遍历。DFS与BFS惊人地相似。DFS和BFS的区别在于访问节点的顺序。BFS在访问任何其他节点之前会先访问一个节点的所有子节点，而DFS则会深入到树中。</p>
-			<p>看一下下面的例子，我们正在实施DFS:</p>
+			<p>正如你所看到的，BFS 是通过相同深度的值进行搜索，然后移动到下一个深度级别并探索它的值。请注意深度和值是如何依次增加的。外勤支助部不会出现这种情况。</p>
+			<p>如果我们必须遍历一个图，而不是一个有向的有根树，BFS 看起来会有所不同:每当我们访问一个节点，我们都必须检查这个节点以前是否被访问过。如果该节点以前被访问过，我们可以简单地忽略它。</p>
+			<p>在本章中，我们将只在树上使用广度优先遍历。DFS 与 BFS 惊人地相似。DFS 和 BFS 的区别在于访问节点的顺序。BFS 在访问任何其他节点之前会先访问一个节点的所有子节点，而 DFS 则会深入到树中。</p>
+			<p>看一下下面的例子，我们正在实施 DFS:</p>
 			<pre>def dfs_tree(node):
     nodes_to_visit = [node]
     visited_nodes = []
@@ -312,7 +312,7 @@ bfs_tree(root)</pre>
 dfs_tree(root)</pre>
 			<p>在前面的代码片段中，我们通过将一个节点作为输入实现了<code>dfs_tree</code>函数。该功能可分为三个部分:</p>
 			<p><code>nodes_to_visit</code>和<code>visited_nodes</code>变量。</p>
-			<p><strong class="bold">第二部分</strong>是实现DFS的地方:</p>
+			<p><strong class="bold">第二部分</strong>是实现 DFS 的地方:</p>
 			<ul>
 				<li><code>current_node</code>变量带走了<code>nodes_to_visit</code>变量的最后一个元素。</li>
 				<li>变量<code>visited_nodes</code>将这个元素添加到它的列表中。</li>
@@ -320,7 +320,7 @@ dfs_tree(root)</pre>
 			</ul>
 			<p>前面的三条指令被打包成一个由<code>nodes_to_visit</code>变量中的元素数量定义的循环。只要<code>nodes_to_visit</code>至少有一个元素，那么循环就会一直进行下去。</p>
 			<p>在终点，也就是在<code>visited_nodes</code>处。</p>
-			<p>如你所见，BFS和DFS的主要区别在于我们从<code>nodes_to_visit</code>中取出元素的顺序。对于BFS，我们采用第一个要素，而对于外勤支助部，我们采用最后一个要素。</p>
+			<p>如你所见，BFS 和 DFS 的主要区别在于我们从<code>nodes_to_visit</code>中取出元素的顺序。对于 BFS，我们采用第一个要素，而对于外勤支助部，我们采用最后一个要素。</p>
 			<p>预期输出如下:</p>
 			<pre>[{'value': 1, 'depth': 1},
  {'value': 3, 'depth': 2},
@@ -334,54 +334,54 @@ dfs_tree(root)</pre>
  {'value': 5, 'depth': 4},
  {'value': 4, 'depth': 4},
  {'value': 5, 'depth': 5}]</pre>
-			<p>请注意DFS算法如何快速挖掘深度(深度达到更高值的速度比BFS快)。它不一定首先找到最短的路径，但是它保证在探索第二条路径之前找到一片叶子。</p>
-			<p>在游戏AI中，BFS算法通常更适合评估游戏状态，因为DFS可能会丢失。想象开始一个国际象棋游戏，其中DFS算法可能很容易在探索一步棋的选项时迷失。</p>
+			<p>请注意 DFS 算法如何快速挖掘深度(深度达到更高值的速度比 BFS 快)。它不一定首先找到最短的路径，但是它保证在探索第二条路径之前找到一片叶子。</p>
+			<p>在游戏 AI 中，BFS 算法通常更适合评估游戏状态，因为 DFS 可能会丢失。想象开始一个国际象棋游戏，其中 DFS 算法可能很容易在探索一步棋的选项时迷失。</p>
 			<h2 id="_idParaDest-35"><a id="_idTextAnchor035"/>探索游戏的状态空间</h2>
 			<p>我们来探讨一个简单游戏的状态空间:井字游戏。状态空间是一个博弈的所有可能配置的集合，在这种情况下，意味着所有可能的移动。</p>
-			<p>井字游戏中，给出一个3x3的游戏板。两个玩家玩这个游戏。一个玩符号X，另一个玩符号o。X开始游戏，每个玩家一个接一个地移动。游戏的目标是得到三个你自己的水平、垂直或对角的标志。</p>
+			<p>井字游戏中，给出一个 3x3 的游戏板。两个玩家玩这个游戏。一个玩符号 X，另一个玩符号 o。X 开始游戏，每个玩家一个接一个地移动。游戏的目标是得到三个你自己的水平、垂直或对角的标志。</p>
 			<p>让我们将井字游戏棋盘的单元格表示如下:</p>
 			<div><div><img src="img/B16060_01_06.jpg" alt="Figure 1.6: Tic-tac-toe board&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.6:井字游戏板</p>
+			<p class="figure-caption">图 1.6:井字游戏板</p>
 			<p>在下面的例子中，<code>X</code>从位置<code>1</code>开始。<code>O</code>在<code>5</code>位置报复性，<code>X</code>在<code>9</code>位置移动，然后<code>O</code>移动到<code>3</code>位置:</p>
 			<div><div><img src="img/B16060_01_07.jpg" alt="Figure 1.7: Tic-tac-toe board with noughts and crosses&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.7:带有零号和十字号的井字游戏棋盘</p>
+			<p class="figure-caption">图 1.7:带有零号和十字号的井字游戏棋盘</p>
 			<p>这是第二个玩家的一个错误，因为现在<code>X</code>被迫在单元格<code>7</code>上放置一个标记，为赢得游戏创造了两个未来场景。无论是<code>O</code>通过移动到单元格<code>4</code>进行防守，还是<code>8</code>–<code>X</code>通过选择另一个未被占用的单元格赢得游戏，都无关紧要。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">你可以在http://www.half-real.net/tictactoe/试玩这个游戏。</p>
-			<p>为了简单起见，我们将只探索AI播放器启动时属于案例的状态空间。我们将从一个随机游戏的人工智能玩家开始，在一个空的单元格中放置一个标志。用这个AI播放器玩了之后，我们会创建一个完整的决策树。一旦我们生成了所有可能的游戏状态，你将体验它们的组合爆炸。由于我们的目标是使这些复杂性变得简单，我们将使用几种不同的技术来使AI玩家更加智能，并减少决策树的大小。</p>
-			<p>到这个实验结束时，我们将有一个不到200种不同游戏结局的决策树，作为奖励，人工智能玩家将永远不会输掉一场游戏。</p>
-			<p>要进行随机移动，您必须知道如何使用Python从列表中选择随机元素。我们将使用<code>random</code>库的<code>choice</code>函数来实现:</p>
+			<p class="callout">你可以在 http://www.half-real.net/tictactoe/试玩这个游戏。</p>
+			<p>为了简单起见，我们将只探索 AI 播放器启动时属于案例的状态空间。我们将从一个随机游戏的人工智能玩家开始，在一个空的单元格中放置一个标志。用这个 AI 播放器玩了之后，我们会创建一个完整的决策树。一旦我们生成了所有可能的游戏状态，你将体验它们的组合爆炸。由于我们的目标是使这些复杂性变得简单，我们将使用几种不同的技术来使 AI 玩家更加智能，并减少决策树的大小。</p>
+			<p>到这个实验结束时，我们将有一个不到 200 种不同游戏结局的决策树，作为奖励，人工智能玩家将永远不会输掉一场游戏。</p>
+			<p>要进行随机移动，您必须知道如何使用 Python 从列表中选择随机元素。我们将使用<code>random</code>库的<code>choice</code>函数来实现:</p>
 			<pre>from random import choice
 choice([2, 4, 6, 8])</pre>
 			<p>这次输出的是<code>6</code>，但是对于你来说，可以是列表中的任意数字。</p>
 			<p><code>choice</code>函数的输出是列表中的一个随机元素。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">我们将在下一节中使用阶乘符号。阶乘用“！”表示感叹号。根据定义，0！= 1，而n！= n*(n-1)！。在我们的例子中，是9！= 9* 8!= 9*8*7!= … = 9*8*7*6*5*4*3*2*1.</p>
+			<p class="callout">我们将在下一节中使用阶乘符号。阶乘用“！”表示感叹号。根据定义，0！= 1，而 n！= n*(n-1)！。在我们的例子中，是 9！= 9* 8!= 9*8*7!= … = 9*8*7*6*5*4*3*2*1.</p>
 			<h2 id="_idParaDest-36"><a id="_idTextAnchor036"/>估计井字游戏中可能状态的数量</h2>
 			<p>粗略估计井字游戏状态空间的每个级别上可能的状态数:</p>
 			<ul>
 				<li>据我们估计，我们不会停止，直到所有的细胞董事会已被填满。一个玩家可能会在游戏结束前获胜，但是为了统一起见，我们将继续游戏。</li>
 				<li>第一个玩家将选择九个单元格中的一个。第二个玩家将从剩下的八个单元格中选择一个。然后，第一个玩家可以从剩下的七个单元格中选择一个。这种情况一直持续到任何一个玩家赢得游戏，或者第一个玩家被迫走第九步，也就是最后一步。</li>
-				<li>因此，可能的决策序列的数量是9！= 362,880.这些序列中的一些是无效的，因为玩家可能在少于九步的棋中赢得游戏。至少要走五步才能赢一局，因为第一个玩家需要走三步。</li>
-				<li>To calculate the exact size of the state space, we have to calculate the number of games that are won in five, six, seven, and eight steps. This calculation is simple, but due to its brute-force nature, it is beyond our scope. Therefore, we will settle on the magnitude of the state space.<p class="callout-heading">注意</p><p class="callout">在生成所有可能的井字游戏后，研究人员统计出255，168种可能的游戏。在这些游戏中，第一名玩家赢得了131，184场，第二名玩家赢得了77，904场，46，080场游戏以平局结束。访问<a href="http://www.half-real.net/tictactoe/allgamesoftictactoe.zip">http://www.half-real.net/tictactoe/allgamesoftictactoe.zip</a>下载所有可能的井字游戏。</p></li>
+				<li>因此，可能的决策序列的数量是 9！= 362,880.这些序列中的一些是无效的，因为玩家可能在少于九步的棋中赢得游戏。至少要走五步才能赢一局，因为第一个玩家需要走三步。</li>
+				<li>To calculate the exact size of the state space, we have to calculate the number of games that are won in five, six, seven, and eight steps. This calculation is simple, but due to its brute-force nature, it is beyond our scope. Therefore, we will settle on the magnitude of the state space.<p class="callout-heading">注意</p><p class="callout">在生成所有可能的井字游戏后，研究人员统计出 255，168 种可能的游戏。在这些游戏中，第一名玩家赢得了 131，184 场，第二名玩家赢得了 77，904 场，46，080 场游戏以平局结束。访问<a href="http://www.half-real.net/tictactoe/allgamesoftictactoe.zip">http://www.half-real.net/tictactoe/allgamesoftictactoe.zip</a>下载所有可能的井字游戏。</p></li>
 			</ul>
 			<p>即使是井字游戏这样简单的游戏也有很多状态。想象一下开始探索所有可能的国际象棋游戏有多难。因此，我们可以得出结论，暴力搜索很少是理想的。</p>
-			<h2 id="_idParaDest-37"><a id="_idTextAnchor037"/>练习1.02:为井字游戏创建一个具有随机行为的人工智能</h2>
-			<p>在本练习中，我们将为井字游戏创建一个实验框架。我们将在假设AI玩家总是开始游戏的基础上对游戏建模。您将创建一个函数来打印您的内部表示，允许您的对手随机进入一个移动，并确定一个玩家是否已经赢了。</p>
+			<h2 id="_idParaDest-37"><a id="_idTextAnchor037"/>练习 1.02:为井字游戏创建一个具有随机行为的人工智能</h2>
+			<p>在本练习中，我们将为井字游戏创建一个实验框架。我们将在假设 AI 玩家总是开始游戏的基础上对游戏建模。您将创建一个函数来打印您的内部表示，允许您的对手随机进入一个移动，并确定一个玩家是否已经赢了。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">为了确保这种情况正确发生，您需要完成前面的练习。</p>
 			<p>以下步骤将帮助您完成本练习:</p>
 			<ol>
-				<li value="1">首先打开一个新的Jupyter笔记本文件。</li>
+				<li value="1">首先打开一个新的 Jupyter 笔记本文件。</li>
 				<li>我们将从<code>random</code>库中导入<code>choice</code>函数:<pre>from random import choice</pre></li>
-				<li>现在，为了简单起见，在一个简单的字符串中模拟九个单元格。一个九字符长的Python字符串按照以下顺序存储这些单元格:“<code>123456789</code>”。让我们确定必须包含匹配符号的索引三元组，以便玩家赢得游戏:<pre>combo_indices = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], \                  [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]</pre></li>
+				<li>现在，为了简单起见，在一个简单的字符串中模拟九个单元格。一个九字符长的 Python 字符串按照以下顺序存储这些单元格:“<code>123456789</code>”。让我们确定必须包含匹配符号的索引三元组，以便玩家赢得游戏:<pre>combo_indices = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], \                  [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]</pre></li>
 				<li>Define the sign constants for empty cells, the AI, and the opponent player:<pre>EMPTY_SIGN = '.'
 AI_SIGN = 'X'
-OPPONENT_SIGN = 'O'</pre><p>在前面的代码片段中，我们为AI和玩家分配了不同的符号。</p></li>
+OPPONENT_SIGN = 'O'</pre><p>在前面的代码片段中，我们为 AI 和玩家分配了不同的符号。</p></li>
 				<li>创建一个打印电路板的函数。我们将在棋盘前后添加一个空行，以便我们可以轻松地读取游戏状态:<pre>def print_board(board):     print(" ")     print(' '.join(board[:3]))     print(' '.join(board[3:6]))     print(' '.join(board[6:]))     print(" ")</pre></li>
 				<li>Describe a move of the human player. The input arguments are the boards, the row numbers from <code>1</code> to <code>3</code>, and the column numbers from <code>1</code> to <code>3</code>. The return value of this function is a board containing the new move:<pre>def opponent_move(board, row, column):
     index = 3 * (row - 1) + (column - 1)
@@ -417,24 +417,24 @@ def ai_move(board):
         is_game_ended = game_won_by(board) != EMPTY_SIGN
         empty_cell_count = sum(1 for cell in board \
                                if cell == EMPTY_SIGN)
-    print('Game has been ended.')</pre><p>在前面的代码片段中，我们定义了函数，它可以分解成不同的部分。</p><p>第一部分是初始化板子，用空符号填充(<code>board = EMPTY_SIGN * 9</code>)。然后，我们创建一个空单元格的计数器，这将帮助我们创建一个循环并确定AI的回合。</p><p>第二部分是为玩家和AI引擎创建一个功能来进行游戏对抗。只要一个玩家走一步，<code>empty_cell_count</code>变量就会减1。循环将继续下去，直到<code>game_won_by</code>函数找到赢家，或者棋盘上不再有可能的移动。</p></li>
+    print('Game has been ended.')</pre><p>在前面的代码片段中，我们定义了函数，它可以分解成不同的部分。</p><p>第一部分是初始化板子，用空符号填充(<code>board = EMPTY_SIGN * 9</code>)。然后，我们创建一个空单元格的计数器，这将帮助我们创建一个循环并确定 AI 的回合。</p><p>第二部分是为玩家和 AI 引擎创建一个功能来进行游戏对抗。只要一个玩家走一步，<code>empty_cell_count</code>变量就会减 1。循环将继续下去，直到<code>game_won_by</code>函数找到赢家，或者棋盘上不再有可能的移动。</p></li>
 				<li>Use the <code>game_loop</code> function to run the game:<pre>game_loop()</pre><p>预期输出(部分显示)如下:</p><div><img src="img/B16060_01_08.jpg" alt="Figure 1.8: Final output (partially shown) of the game&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图1.8:游戏的最终输出(部分显示)</p>
+			<p class="figure-caption">图 1.8:游戏的最终输出(部分显示)</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3fUws2l">https://packt.live/3fUws2l</a>。</p>
 			<p class="callout">你也可以在<a href="https://packt.live/3hVzjcT">https://packt.live/3hVzjcT</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>通过完成这个练习，你已经看到，即使是一个随机出牌的对手，如果他的对手犯了一个错误，他也可能时不时地赢。</p>
-			<h2 id="_idParaDest-38"><a id="_idTextAnchor038"/>活动1.01:在井字游戏中生成所有可能的步骤序列</h2>
+			<h2 id="_idParaDest-38"><a id="_idTextAnchor038"/>活动 1.01:在井字游戏中生成所有可能的步骤序列</h2>
 			<p>这项活动将探索两个玩家随机游戏时可能出现的组合爆炸。我们将使用一个程序，在先前结果的基础上，生成计算机玩家和人类玩家之间所有可能的移动序列。</p>
 			<p>让我们假设人类玩家可以做出任何可能的举动。在本例中，假设计算机玩家随机游戏，我们将检查属于两个随机游戏玩家的赢、输和平局:</p>
 			<p>以下步骤将帮助您完成此活动:</p>
 			<ol>
-				<li value="1">重用之前<em class="italic">练习1.02 </em>、<em class="italic">中<em class="italic">步骤2–9</em>的所有功能代码，为井字游戏</em>创建一个具有随机行为的AI。</li>
+				<li value="1">重用之前<em class="italic">练习 1.02 </em>、<em class="italic">中<em class="italic">步骤 2–9</em>的所有功能代码，为井字游戏</em>创建一个具有随机行为的 AI。</li>
 				<li>创建一个函数，将<code>all_moves_from_board</code>函数映射到棋盘空间/方格列表的每个元素上。这样，我们将拥有决策树的所有节点。决策树从<code>[ EMPTY_SIGN * 9 ]</code>开始，并在每次移动后扩展。</li>
-				<li>创建一个<code>filter_wins</code>函数，将已完成的游戏从移动列表中取出，并将它们附加到一个数组中，该数组包含AI玩家和对手玩家赢得的棋盘状态。</li>
+				<li>创建一个<code>filter_wins</code>函数，将已完成的游戏从移动列表中取出，并将它们附加到一个数组中，该数组包含 AI 玩家和对手玩家赢得的棋盘状态。</li>
 				<li>创建一个<code>count_possibilities</code>函数，打印并返回以平局结束、第一个玩家获胜和第二个玩家获胜的决策树叶子的数量:</li>
-				<li>在每个状态中，我们有多达九个步骤。在第0、第2、第4、第6和第8次迭代中，AI玩家移动。在所有其他迭代中，对手移动。我们在所有步骤中创建所有可能的移动，并从移动列表中取出完成的游戏。</li>
+				<li>在每个状态中，我们有多达九个步骤。在第 0、第 2、第 4、第 6 和第 8 次迭代中，AI 玩家移动。在所有其他迭代中，对手移动。我们在所有步骤中创建所有可能的移动，并从移动列表中取出完成的游戏。</li>
 				<li>最后，执行可能性的数量来体验组合爆炸。</li>
 			</ol>
 			<p>预期输出如下:</p>
@@ -452,23 +452,23 @@ Second player wins: 68644
 Draw 91150
 Total 266073</pre>
 			<p class="callout-heading">注意</p>
-			<p class="callout">这项活动的解决方案可在第322页找到。</p>
-			<p>到目前为止，我们已经理解了智能代理的重要性。我们还检查了游戏AI的游戏状态。现在，我们将集中讨论如何创建智能并将智能引入代理。</p>
+			<p class="callout">这项活动的解决方案可在第 322 页找到。</p>
+			<p>到目前为止，我们已经理解了智能代理的重要性。我们还检查了游戏 AI 的游戏状态。现在，我们将集中讨论如何创建智能并将智能引入代理。</p>
 			<p>我们将着眼于减少状态空间中的状态数量，分析游戏棋盘可能经历的阶段，并使环境以我们获胜的方式工作。</p>
 			<p>看看下面的练习，我们将教一个聪明的代理人如何获胜。</p>
-			<h2 id="_idParaDest-39"><a id="_idTextAnchor039"/>练习1.03:教导代理人赢得胜利</h2>
+			<h2 id="_idParaDest-39"><a id="_idTextAnchor039"/>练习 1.03:教导代理人赢得胜利</h2>
 			<p>在本练习中，我们将了解如何减少获胜所需的步骤。我们将让我们在上一节活动中开发的代理检测它可以赢得游戏的情况。</p>
 			<p>以下步骤将帮助您完成本练习:</p>
 			<ol>
-				<li value="1">打开新的Jupyter笔记本文件。</li>
-				<li>重用来自<em class="italic">活动1 </em>、<em class="italic">的<em class="italic">步骤2–6</em>的先前代码，生成井字游戏</em>中所有可能的步骤序列。</li>
+				<li value="1">打开新的 Jupyter 笔记本文件。</li>
+				<li>重用来自<em class="italic">活动 1 </em>、<em class="italic">的<em class="italic">步骤 2–6</em>的先前代码，生成井字游戏</em>中所有可能的步骤序列。</li>
 				<li>Define two functions, <code>ai_move</code> and <code>all_moves_from_board</code>. <p>我们创建<code>ai_move</code>,以便它返回一个将考虑其先前移动的移动。如果这步棋可以赢得游戏，<code>ai_move</code>将选择这步棋:</p><pre>def ai_move(board):
     new_boards = all_moves_from_board(board, AI_SIGN)
     for new_board in new_boards:
         if game_won_by(new_board) == AI_SIGN:
             return new_board
-    return choice(new_boards)</pre><p>在前面的代码片段中，我们定义了<code>ai_move</code>函数，它将使AI从游戏当前状态的所有可能走法列表中选择一个获胜的走法(如果适用的话)。如果没有，它仍然会选择随机移动。</p></li>
-				<li>Next, test the code snippet with a game loop. Whenever the AI has the opportunity to win the game, it will always place the <code>X</code> in the correct cell:<pre>game_loop()</pre><p>预期输出如下:</p><div><img src="img/B16060_01_09.jpg" alt="Figure 1.9: The agent winning the game&#13;&#10;"/></div><p class="figure-caption">图1.9:赢得游戏的代理</p></li>
+    return choice(new_boards)</pre><p>在前面的代码片段中，我们定义了<code>ai_move</code>函数，它将使 AI 从游戏当前状态的所有可能走法列表中选择一个获胜的走法(如果适用的话)。如果没有，它仍然会选择随机移动。</p></li>
+				<li>Next, test the code snippet with a game loop. Whenever the AI has the opportunity to win the game, it will always place the <code>X</code> in the correct cell:<pre>game_loop()</pre><p>预期输出如下:</p><div><img src="img/B16060_01_09.jpg" alt="Figure 1.9: The agent winning the game&#13;&#10;"/></div><p class="figure-caption">图 1.9:赢得游戏的代理</p></li>
 				<li>Now, count all the possible moves. To do this, we must change the <code>all_moves_from_board </code>function to include this improvement. We must do this so that, if the game is won by <code>AI_SIGN</code>, it will return that value:<pre>def all_moves_from_board(board, sign):
     move_list = []
     for i, v in enumerate(board):
@@ -496,10 +496,10 @@ draw, total = count_possibilities()</pre><p>预期输出如下:</p><pre>step 0. 
 			<p>因此，我们已经看到，人工智能在大多数情况下仍然没有获胜。这意味着我们需要向人工智能引入更多的概念，让它变得更强大。为了教会人工智能如何获胜，我们需要教会它如何针对失败采取防御措施。</p>
 			<h2 id="_idParaDest-40"><a id="_idTextAnchor040"/>保护人工智能免受损失</h2>
 			<p>在下一个活动中，我们将使人工智能电脑玩家比我们之前的练习玩得更好，以便我们可以减少状态空间和损失的数量。</p>
-			<h2 id="_idParaDest-41"><a id="_idTextAnchor041"/>活动1.02:教导代理认识到其防范损失的情况</h2>
+			<h2 id="_idParaDest-41"><a id="_idTextAnchor041"/>活动 1.02:教导代理认识到其防范损失的情况</h2>
 			<p>在本练习中，如果玩家将第三个符号放在一行、一列或一条对角线上，我们将强制计算机防御损失:</p>
 			<ol>
-				<li value="1">重用前面的<em class="italic">步骤2–6</em>、<em class="italic">练习1.03 </em>、<em class="italic">教导代理赢得</em>中的所有代码。</li>
+				<li value="1">重用前面的<em class="italic">步骤 2–6</em>、<em class="italic">练习 1.03 </em>、<em class="italic">教导代理赢得</em>中的所有代码。</li>
 				<li>创建一个名为<code>player_can_win</code>的函数，它使用<code>all_moves_from_board</code>函数从棋盘中取出所有的棋步，并使用一个名为<code>next_move</code>的变量对其进行迭代。在每一次迭代中，它检查游戏是否可以通过符号获胜，然后返回<code>true</code>或<code>false</code>。</li>
 				<li>扩展人工智能的移动，使它更喜欢安全的移动。如果对手不能在下一步赢得比赛，这一步棋是安全的。</li>
 				<li>测试新的应用程序。你会发现人工智能已经做出了正确的举动。</li>
@@ -520,15 +520,15 @@ Second player wins: 962
 Draw 20243
 Total 42048</pre>
 			<p class="callout-heading">注意</p>
-			<p class="callout">这项活动的解决方案可在第325页找到。</p>
+			<p class="callout">这项活动的解决方案可在第 325 页找到。</p>
 			<p>一旦我们完成这个活动，我们注意到尽管我们努力使人工智能变得更好，它仍然会以各种方式失败。我们将在下次活动中消除所有这些损失。</p>
-			<h2 id="_idParaDest-42"><a id="_idTextAnchor042"/>活动1.03:修正AI的第一招和第二招，使其无敌</h2>
+			<h2 id="_idParaDest-42"><a id="_idTextAnchor042"/>活动 1.03:修正 AI 的第一招和第二招，使其无敌</h2>
 			<p>在这个活动中，我们将结合我们以前的活动，教人工智能如何识别输赢，以便它可以专注于找到比其他人更有用的移动。我们将通过硬编码第一步和第二步来减少可能的游戏:</p>
 			<ol>
-				<li value="1">重复使用前面的<em class="italic">步骤2–4</em>、<em class="italic">活动1.02 </em>、<em class="italic">中的代码，教导代理人认识其防御损失的情况</em>。</li>
-				<li>计算棋盘上空白区域的数量，如果有9或7个空白区域，进行硬编码移动。你可以尝试不同的硬编码动作。</li>
+				<li value="1">重复使用前面的<em class="italic">步骤 2–4</em>、<em class="italic">活动 1.02 </em>、<em class="italic">中的代码，教导代理人认识其防御损失的情况</em>。</li>
+				<li>计算棋盘上空白区域的数量，如果有 9 或 7 个空白区域，进行硬编码移动。你可以尝试不同的硬编码动作。</li>
 				<li>占领任何一个角落，然后占领对面的角落，导致没有损失。如果对手占据对角，在中间移动不会造成损失。</li>
-				<li>修正了前两步后，我们只需要处理8种可能性，而不是504种。我们还需要引导人工智能进入一种状态，在这种状态下，硬编码的规则就足够了，这样它就永远不会输掉一场比赛。</li>
+				<li>修正了前两步后，我们只需要处理 8 种可能性，而不是 504 种。我们还需要引导人工智能进入一种状态，在这种状态下，硬编码的规则就足够了，这样它就永远不会输掉一场比赛。</li>
 			</ol>
 			<p>预期输出如下:</p>
 			<pre>step 0. Moves: 1
@@ -545,12 +545,12 @@ Second player wins: 0
 Draw 60
 Total 188</pre>
 			<p class="callout-heading">注意</p>
-			<p class="callout">这项活动的解决方案可在第328页找到。</p>
+			<p class="callout">这项活动的解决方案可在第 328 页找到。</p>
 			<p>让我们总结一下到目前为止我们用来缩减状态空间的重要技术:</p>
 			<ul>
 				<li><strong class="bold">经验简化</strong>:我们认为最佳的第一步是拐角移动。我们只是硬编码了一步棋，而不是考虑其他的选择来关注游戏的其他方面。在更复杂的游戏中，经验性的移动经常会误导人。最著名的国际象棋人工智能胜利往往包含违反国际象棋大师的常识。</li>
-				<li><strong class="bold">对称</strong>:我们从角球移动开始后，注意到位置1、3、7、9相当于赢得比赛的视角。尽管我们没有进一步发展这个想法，但我们注意到，我们甚至可以旋转桌子，以进一步缩小状态空间，并将所有四个角的移动视为完全相同的移动。</li>
-				<li><strong class="bold">归约不同的排列导致相同的状态</strong>:假设我们可以出招A或B，假设我们的对手出招X，其中X既不等于出招A也不等于出招B .如果我们探索序列A，X，B，我们开始探索序列B，X，那么我们就不必考虑序列B，X，A .这是因为两个序列导致完全相同的博弈状态 我们之前已经探索了包含这三个移动的状态，即A、X和b。序列的顺序并不重要，因为它会导致相同的结果。 这使我们能够大大减少可能的移动次数。</li>
+				<li><strong class="bold">对称</strong>:我们从角球移动开始后，注意到位置 1、3、7、9 相当于赢得比赛的视角。尽管我们没有进一步发展这个想法，但我们注意到，我们甚至可以旋转桌子，以进一步缩小状态空间，并将所有四个角的移动视为完全相同的移动。</li>
+				<li><strong class="bold">归约不同的排列导致相同的状态</strong>:假设我们可以出招 A 或 B，假设我们的对手出招 X，其中 X 既不等于出招 A 也不等于出招 B .如果我们探索序列 A，X，B，我们开始探索序列 B，X，那么我们就不必考虑序列 B，X，A .这是因为两个序列导致完全相同的博弈状态 我们之前已经探索了包含这三个移动的状态，即 A、X 和 b。序列的顺序并不重要，因为它会导致相同的结果。 这使我们能够大大减少可能的移动次数。</li>
 				<li><strong class="bold">玩家的强制移动</strong>:当玩家水平、垂直或对角收集到两个符号，并且该行中的第三个单元格是空的，我们被迫占据那个空单元格，要么赢得游戏，要么阻止对手赢得游戏。强制移动可能意味着其他强制移动，这进一步缩小了状态空间。</li>
 				<li><strong class="bold">对手的被迫移动</strong>:当对手的移动明显是最优时，考虑对手没有做出最优移动的情况是没有意义的。当对手可以通过占据一个单元格来赢得游戏时，我们是否继续对对手错过最佳移动的情况进行长时间的探索并不重要。当对手未能阻止我们赢得比赛时，我们通过不探究案例节省了很多。这是因为在对手犯错之后，我们会简单地赢得比赛。</li>
 				<li><strong class="bold">随机移动</strong>:当我们无法决定，也没有能力去搜索的时候，我们就随机移动。随机移动几乎总是不如基于搜索的有根据的猜测，但有时，我们没有其他选择。</li>
@@ -559,7 +559,7 @@ Total 188</pre>
 			<p>在这一节中，我们将通过定义和应用启发法来指导我们的搜索，从而使信息搜索技术形式化。在前面的章节中，我们将会看到试探法并创建它们。</p>
 			<h2 id="_idParaDest-44"><a id="_idTextAnchor044"/>不知情和知情的搜索</h2>
 			<p>在井字游戏的例子中，我们实现了一个贪婪的算法，它首先专注于赢，然后专注于不输。当谈到立即赢得游戏时，贪婪算法是最优的，因为没有比赢得游戏更好的步骤了。说到不损失，重要的是我们如何避免损失。我们的算法只是选择一个随机的安全棋步，而不考虑我们创造了多少获胜的机会。</p>
-			<p>BFS和DFS是不知情搜索的一部分，因为它们考虑了游戏中所有可能的状态，这可能非常耗时。另一方面，启发式信息搜索将智能地探索可用状态的空间，以便更快地达到目标。</p>
+			<p>BFS 和 DFS 是不知情搜索的一部分，因为它们考虑了游戏中所有可能的状态，这可能非常耗时。另一方面，启发式信息搜索将智能地探索可用状态的空间，以便更快地达到目标。</p>
 			<h2 id="_idParaDest-45"><a id="_idTextAnchor045"/>创建启发法</h2>
 			<p>如果我们想做出更好的决策，我们会通过考虑长期利益，应用启发式方法来引导搜索向正确的方向发展。这样，我们就可以根据未来可能发生的事情做出更明智的决策。这样也可以帮助我们更快的解决问题。</p>
 			<p>我们可以按如下方式构建试探法:</p>
@@ -571,66 +571,66 @@ Total 188</pre>
 			<p>试探法是基于其效用来评估游戏状态或向新游戏状态过渡的功能。启发式是使搜索问题知情的基石。</p>
 			<p>在本书中，我们将使用效用和成本作为否定的术语。效用最大化和搬迁成本最小化被认为是同义词。</p>
 			<p>启发式评估函数的一个常用示例出现在寻路问题中。假设我们想要到达一个目的地或目标。每一步都有一个相关联的成本来表示行进距离。我们的目标是最小化到达目的地或目标的成本(最小化旅行距离)。</p>
-			<p>用于解决该寻路问题的启发式评估的一个例子是获取当前状态(位置)和目标(目的地)之间的坐标，并计算这两点之间的距离。两点之间的距离是连接两点的直线的长度。这种启发式被称为<strong class="bold">欧几里德距离</strong>(如图<em class="italic">图1.10 </em>)。</p>
+			<p>用于解决该寻路问题的启发式评估的一个例子是获取当前状态(位置)和目标(目的地)之间的坐标，并计算这两点之间的距离。两点之间的距离是连接两点的直线的长度。这种启发式被称为<strong class="bold">欧几里德距离</strong>(如图<em class="italic">图 1.10 </em>)。</p>
 			<p>现在，假设我们在一个迷宫中定义我们的寻路问题，在那里我们只能向上、向下、向左或向右移动。迷宫中有一些障碍物阻碍了我们的移动，因此使用欧几里德距离并不理想。更好的启发式方法是使用曼哈顿距离，它可以被定义为当前状态和目标之间的水平和垂直距离的总和。</p>
 			<h2 id="_idParaDest-46"><a id="_idTextAnchor046"/>可容许的和不可容许的启发式</h2>
 			<p>我们刚刚定义的关于寻路问题的两种试探法，当它们用于给定的问题域时，被称为容许试探法。</p>
 			<p>容许意味着我们可能会低估达到最终状态的代价，但我们绝不会高估它。稍后，我们将探索在当前状态和目标状态之间寻找最短路径的算法。这个算法的最优性质取决于我们是否能定义一个可接受的启发式函数。</p>
 			<p>一个不可接受的启发式示例是应用于现实世界地图的欧几里德距离。</p>
-			<p>假设我们想从曼哈顿的A点移动到B点。在这里，欧几里德距离将是两点之间的直线，但是，正如我们所知，我们不能只是在曼哈顿这样的城市直走(<em class="italic">除非我们能飞</em>)。在这种情况下，欧几里德距离低估了达到目标的成本。更好的启发是曼哈顿距离:</p>
+			<p>假设我们想从曼哈顿的 A 点移动到 B 点。在这里，欧几里德距离将是两点之间的直线，但是，正如我们所知，我们不能只是在曼哈顿这样的城市直走(<em class="italic">除非我们能飞</em>)。在这种情况下，欧几里德距离低估了达到目标的成本。更好的启发是曼哈顿距离:</p>
 			<div><div><img src="img/B16060_01_10.jpg" alt="Figure 1.10: Euclidian (blue line) distance and Manhattan (red line) distance in the city of Manhattan&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.10:曼哈顿市的欧几里德距离(蓝线)和曼哈顿距离(红线)</p>
+			<p class="figure-caption">图 1.10:曼哈顿市的欧几里德距离(蓝线)和曼哈顿距离(红线)</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">前面的曼哈顿地图来源于谷歌地图。</p>
 			<p>由于我们高估了从当前节点到目标的旅行成本，当我们不能对角移动时，欧几里德距离是不可接受的。</p>
 			<h2 id="_idParaDest-47"><a id="_idTextAnchor047"/>启发式评估</h2>
 			<p>通过定义一步棋的效用，我们可以从开始玩家的角度为我们的井字游戏状态创建一个启发式评估。</p>
-			<h3 id="_idParaDest-48"><a id="_idTextAnchor048"/>启发式1:残局的简单评估</h3>
+			<h3 id="_idParaDest-48"><a id="_idTextAnchor048"/>启发式 1:残局的简单评估</h3>
 			<p>让我们通过评估电路板来定义一个简单的启发。我们可以将游戏的效用设置为以下之一:</p>
 			<ul>
-				<li>+1，如果状态暗示AI玩家将赢得游戏</li>
-				<li>-1，如果状态暗示AI玩家将输掉游戏</li>
+				<li>+1，如果状态暗示 AI 玩家将赢得游戏</li>
+				<li>-1，如果状态暗示 AI 玩家将输掉游戏</li>
 				<li>0，如果已经达到平局或者从当前状态不能确定明显的获胜者</li>
 			</ul>
 			<p>这个启发很简单，因为任何人都可以看着棋盘，分析一个玩家是否会赢。</p>
-			<p>这个启发式的效用取决于我们是否能提前下很多棋。请注意，我们甚至无法在五步之内赢得游戏。在<em class="italic">活动1.01 </em>、<em class="italic">生成井字游戏中所有可能的步骤序列</em>中，我们看到，当我们到达第五步时，我们有13，680种可能的组合。在这13，680个案例中的大多数情况下，我们的启发式方法返回零，因为我们还不能确定一个明确的赢家。</p>
+			<p>这个启发式的效用取决于我们是否能提前下很多棋。请注意，我们甚至无法在五步之内赢得游戏。在<em class="italic">活动 1.01 </em>、<em class="italic">生成井字游戏中所有可能的步骤序列</em>中，我们看到，当我们到达第五步时，我们有 13，680 种可能的组合。在这 13，680 个案例中的大多数情况下，我们的启发式方法返回零，因为我们还不能确定一个明确的赢家。</p>
 			<p>如果我们的算法不深入这五个步骤，我们完全不知道如何开始游戏。因此，我们应该发明一种更好的启发式。</p>
-			<h3 id="_idParaDest-49"><a id="_idTextAnchor050"/>启发2:移动的效用</h3>
+			<h3 id="_idParaDest-49"><a id="_idTextAnchor050"/>启发 2:移动的效用</h3>
 			<p>让我们改变游戏的效用如下:</p>
 			<ul>
-				<li>两个AI符号排成一行、一列或对角线，第三个单元格为空:+1000为空单元格。</li>
-				<li>对手有两个符号在行、列或对角线上，第三个单元格是空的:+100为空单元格。</li>
-				<li>一个AI符号在行、列或对角线上，其他两个单元格为空:空单元格为+10。</li>
-				<li>没有AI或对手在行、列或对角线上签名:空单元格+1。</li>
-				<li>被占用的单元格的值为负无穷大。实际上，由于规则的性质，-1也可以。</li>
+				<li>两个 AI 符号排成一行、一列或对角线，第三个单元格为空:+1000 为空单元格。</li>
+				<li>对手有两个符号在行、列或对角线上，第三个单元格是空的:+100 为空单元格。</li>
+				<li>一个 AI 符号在行、列或对角线上，其他两个单元格为空:空单元格为+10。</li>
+				<li>没有 AI 或对手在行、列或对角线上签名:空单元格+1。</li>
+				<li>被占用的单元格的值为负无穷大。实际上，由于规则的性质，-1 也可以。</li>
 			</ul>
-			<p>为什么我们对前三条规则使用乘法因子10，而不是第四条？我们这样做是因为在行、列和对角线上有八种可能的方法。因此，即使我们对游戏一无所知，我们也可以肯定，一个较低级别的规则可能不会累积到覆盖一个较高级别的规则。换句话说，如果我们能赢得比赛，我们将永远不会防御对手的举动。</p>
+			<p>为什么我们对前三条规则使用乘法因子 10，而不是第四条？我们这样做是因为在行、列和对角线上有八种可能的方法。因此，即使我们对游戏一无所知，我们也可以肯定，一个较低级别的规则可能不会累积到覆盖一个较高级别的规则。换句话说，如果我们能赢得比赛，我们将永远不会防御对手的举动。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">因为我们对手的工作也是获胜，我们可以从对手的角度来计算这个启发。我们的任务也是最大化这一价值，这样我们就可以抵御对手的最优策略。这也是最小最大算法背后的思想，这将在本章后面讨论。如果我们想把这个启发转换成描述当前棋盘的启发，我们可以计算所有打开的单元格的启发值，并取AI角色的最大值，这样我们就可以最大化我们的效用。</p>
+			<p class="callout">因为我们对手的工作也是获胜，我们可以从对手的角度来计算这个启发。我们的任务也是最大化这一价值，这样我们就可以抵御对手的最优策略。这也是最小最大算法背后的思想，这将在本章后面讨论。如果我们想把这个启发转换成描述当前棋盘的启发，我们可以计算所有打开的单元格的启发值，并取 AI 角色的最大值，这样我们就可以最大化我们的效用。</p>
 			<p>对于每个板，我们将创建一个效用矩阵。</p>
-			<p>例如，考虑下面的棋盘，用<code>O</code>符号作为玩家，用<code>X</code>符号作为AI:</p>
+			<p>例如，考虑下面的棋盘，用<code>O</code>符号作为玩家，用<code>X</code>符号作为 AI:</p>
 			<div><div><img src="img/B16060_01_11.jpg" alt="Figure 1.11: Tic-tac-toe game state&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.11:井字游戏状态</p>
+			<p class="figure-caption">图 1.11:井字游戏状态</p>
 			<p>从这里，我们可以构造下图所示的效用矩阵:</p>
 			<div><div><img src="img/B16060_01_12.jpg" alt="Figure 1.12: Tic-tac-toe game utility matrix&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.12:井字游戏效用矩阵</p>
+			<p class="figure-caption">图 1.12:井字游戏效用矩阵</p>
 			<p>在第二行，如果我们选择左边的单元格，它是没有用的。注意，如果我们有一个更优的效用函数，我们会奖励阻挡对手。</p>
 			<p>第三列的两个单元格都连续两次获得了<code>10</code>点的提升。</p>
 			<p>右上的单元格也因为防守对手的对角线而获得<code>100</code>分。</p>
 			<p>从这个矩阵中，显然，我们应该选择右上方的移动。在游戏的任何阶段，我们都能够定义每个单元的效用；这是对启发式函数的静态评估。</p>
 			<p>我们可以使用这种启发法来指导我们走向最佳的下一步棋，或者通过取这些值的最大值来给出当前棋盘上更有根据的分数。我们在技术上以硬编码规则的形式使用了这种启发式的部分。不过，请注意，试探法的真正效用不是对电路板的静态评估，而是它为限制搜索空间提供的指导。</p>
-			<h2 id="_idParaDest-50"><a id="_idTextAnchor051"/>练习1.04:使用启发式函数进行井字游戏静态评估</h2>
+			<h2 id="_idParaDest-50"><a id="_idTextAnchor051"/>练习 1.04:使用启发式函数进行井字游戏静态评估</h2>
 			<p>在本练习中，您将使用启发式函数对井字游戏进行静态评估。</p>
 			<p>以下步骤将帮助您完成本练习:</p>
 			<ol>
-				<li value="1">打开新的Jupyter笔记本文件。</li>
-				<li>重用<em class="italic">活动1.01 </em>、<em class="italic">中<em class="italic">步骤2–6</em>的代码，生成井字游戏</em>中所有可能的步骤序列。</li>
+				<li value="1">打开新的 Jupyter 笔记本文件。</li>
+				<li>重用<em class="italic">活动 1.01 </em>、<em class="italic">中<em class="italic">步骤 2–6</em>的代码，生成井字游戏</em>中所有可能的步骤序列。</li>
 				<li>创建一个函数，将棋盘作为输入，如果单元格为空，则返回<code>0</code>，如果不为空，则返回<code>-1</code>:<pre>def init_utility_matrix(board):     return [0 if cell == EMPTY_SIGN \             else -1 for cell in board]</pre></li>
 				<li>Next, create a function that takes the utility vector of possible moves, takes three indices inside the utility vector representing a triple, and returns a function, as shown in the following code snippet:<pre>def generate_add_score(utilities, i, j, k):
     def add_score(points):
@@ -641,7 +641,7 @@ Total 188</pre>
         if utilities[k] &gt;= 0:
             utilities[k] += points
     return add_score</pre><p>在前面的代码片段中，返回的函数将期待一个<code>points</code>参数和<code>utilities </code>向量作为输入，并将向(<code>i</code>、<code>j</code>、<code>k</code>)中的每个单元格添加点数，只要该单元格的原始值为非负(<code>&gt;=0</code>)。换句话说，我们只增加了空细胞的效用。</p></li>
-				<li>Now, create the utility matrix belonging to any board constellation where you will add the <code>generate_add_score</code> function defined previously to update the score. You will also implement the rules that we discussed prior to this activity. These rules are as follows:<p>两个AI符号排成一行、一列或对角线，第三个单元格为空:+1000为空单元格。</p><p>对手有两个符号在行、列或对角线上，第三个单元格是空的:+100为空单元格。</p><p>一个AI符号在行、列或对角线上，其他两个单元格为空:空单元格为+10。</p><p>没有AI或对手在行、列或对角线上签名:空单元格+1。</p><p>现在让我们创建效用矩阵:</p><pre>def utility_matrix(board):
+				<li>Now, create the utility matrix belonging to any board constellation where you will add the <code>generate_add_score</code> function defined previously to update the score. You will also implement the rules that we discussed prior to this activity. These rules are as follows:<p>两个 AI 符号排成一行、一列或对角线，第三个单元格为空:+1000 为空单元格。</p><p>对手有两个符号在行、列或对角线上，第三个单元格是空的:+100 为空单元格。</p><p>一个 AI 符号在行、列或对角线上，其他两个单元格为空:空单元格为+10。</p><p>没有 AI 或对手在行、列或对角线上签名:空单元格+1。</p><p>现在让我们创建效用矩阵:</p><pre>def utility_matrix(board):
     utilities = init_utility_matrix(board)
     for [i, j, k] in combo_indices:
         add_score = generate_add_score(utilities, i, j, k)
@@ -671,45 +671,45 @@ step 8. Moves: 172
 First player wins: 504
 Second player wins: 12
 Draw 91
-Total 607</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考https://packt.live/2VpGyAv的<a href="https://packt.live/2VpGyAv"/>。</p><p class="callout">你也可以在https://packt.live/2YnyO3K在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+Total 607</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考 https://packt.live/2VpGyAv 的<a href="https://packt.live/2VpGyAv"/>。</p><p class="callout">你也可以在 https://packt.live/2YnyO3K 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>通过完成这个练习，我们观察到与我们之前的活动<em class="italic">活动1.03 </em>，<em class="italic">相比，人工智能表现不佳，修正了人工智能的第一步和第二步，使其不可战胜</em>。在这种情况下，硬编码前两步比设置启发式更好，但这是因为我们没有正确设置启发式。</p>
+			<p>通过完成这个练习，我们观察到与我们之前的活动<em class="italic">活动 1.03 </em>，<em class="italic">相比，人工智能表现不佳，修正了人工智能的第一步和第二步，使其不可战胜</em>。在这种情况下，硬编码前两步比设置启发式更好，但这是因为我们没有正确设置启发式。</p>
 			<h2 id="_idParaDest-51"><a id="_idTextAnchor052"/>使用试探法进行知情搜索</h2>
 			<p>我们还没有体验到启发式的真正力量，因为我们在不知道未来行动的影响的情况下采取了行动，从而影响了对手的合理发挥。</p>
 			<p>因此，更准确的启发式比简单地硬编码游戏中的前两步棋会导致更多的损失。请注意，在上一节中，我们选择了这两个步骤，这是基于我们在固定第一步的情况下运行游戏所产生的统计数据。这种方法本质上是启发式搜索应该有的。</p>
 			<h2 id="_idParaDest-52"><a id="_idTextAnchor053"/>启发式的类型</h2>
 			<p>静态评估无法与生成成千上万的未来状态和选择一个使我们的回报最大化的游戏相竞争。这是因为我们的试探法不精确，也可能不被接受。</p>
 			<p>我们在前面的练习中看到，启发式并不总是最佳的。我们想出了让人工智能总是赢得比赛或以平局结束的规则。这些试探法允许人工智能经常获胜，代价是在少数情况下失败。如果我们低估了一个博弈状态的效用，可以说一个启发式是可接受的，但是我们永远不会高估它。</p>
-			<p>在井字游戏的例子中，我们可能高估了一些游戏状态下的效用，这是为什么呢？因为我们最终亏损了12次。一些导致失败的游戏状态有一个最大启发式得分。为了证明我们的启发式方法是不可接受的，我们需要做的就是找到一个我们在选择一个导致失败的游戏状态时忽略的可能获胜的游戏状态。</p>
+			<p>在井字游戏的例子中，我们可能高估了一些游戏状态下的效用，这是为什么呢？因为我们最终亏损了 12 次。一些导致失败的游戏状态有一个最大启发式得分。为了证明我们的启发式方法是不可接受的，我们需要做的就是找到一个我们在选择一个导致失败的游戏状态时忽略的可能获胜的游戏状态。</p>
 			<p>还有两个描述启发式的特征，即最优和完整:</p>
 			<ul>
 				<li>最优试探法总是能找到最好的解决方案。</li>
 				<li>完全启发式有两种定义，取决于我们如何定义问题域。从广义上说，如果一个启发式算法总能找到一个解，那么它就是完备的。严格地说，如果一个启发式算法找到了所有可能的解，那么它就是完整的。我们的井字游戏试探法并不完整，因为我们故意忽略了许多可能获胜的州，而偏向于失败的州。</li>
 			</ul>
-			<p>正如你所看到的，定义一个精确的启发式算法需要很多细节和思考，以便获得一个完美的AI智能体。如果你没有正确地估计游戏状态的效用，那么你最终会得到一个表现不如硬编码规则的人工智能。</p>
+			<p>正如你所看到的，定义一个精确的启发式算法需要很多细节和思考，以便获得一个完美的 AI 智能体。如果你没有正确地估计游戏状态的效用，那么你最终会得到一个表现不如硬编码规则的人工智能。</p>
 			<p>在下一节中，我们将研究一种更好的方法来执行当前状态和目标状态之间的最短路径搜索。</p>
-			<h1 id="_idParaDest-53"><a id="_idTextAnchor054"/>用A*算法寻路</h1>
+			<h1 id="_idParaDest-53"><a id="_idTextAnchor054"/>用 A*算法寻路</h1>
 			<p>在前两部分中，我们学习了如何定义智能代理，以及如何创建一个启发式规则来引导代理达到期望的状态。我们知道这并不完美，因为有时我们忽略了几个获胜的州，而偏爱几个失败的州。</p>
-			<p>现在，我们将了解一种结构化的最佳方法，以便我们可以通过使用A* (" <em class="italic"> A星号</em>)而不是"<em class="italic"> A星号</em>")算法来执行搜索，以找到当前状态和目标状态之间的最短路径。</p>
+			<p>现在，我们将了解一种结构化的最佳方法，以便我们可以通过使用 A* (" <em class="italic"> A 星号</em>)而不是"<em class="italic"> A 星号</em>")算法来执行搜索，以找到当前状态和目标状态之间的最短路径。</p>
 			<p>请看下图:</p>
 			<div><div><img src="img/B16060_01_13.jpg" alt="Figure 1.13: Finding the shortest path in a maze&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.13:在迷宫中寻找最短路径</p>
+			<p class="figure-caption">图 1.13:在迷宫中寻找最短路径</p>
 			<p>对于一个人来说，仅仅通过看图形就可以很容易地找到最短的路径。我们可以得出结论，最短路径有两个潜在的候选路径:路线一开始向上，路线二开始向左。然而，人工智能不知道这些选项。事实上，对电脑玩家来说，最合理的第一步是移动到下图中数字<code>3</code>所代表的方块。</p>
 			<p>为什么？因为这是减少起始状态和目标状态之间距离的唯一步骤。所有其他步骤最初远离目标状态:</p>
 			<div><div><img src="img/B16060_01_14.jpg" alt="Figure 1.14: Shortest pathfinding game board with utilities&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.14:带实用程序的最短寻路游戏板</p>
-			<p>在下一个练习中，在向您介绍A*算法之前，我们将看到BFS算法在寻路问题上的表现。</p>
-			<h2 id="_idParaDest-54"><a id="_idTextAnchor055"/>练习1.05:使用BFS寻找最短路径</h2>
-			<p>在本练习中，我们将使用BFS算法寻找到达目标的最短路径。</p>
+			<p class="figure-caption">图 1.14:带实用程序的最短寻路游戏板</p>
+			<p>在下一个练习中，在向您介绍 A*算法之前，我们将看到 BFS 算法在寻路问题上的表现。</p>
+			<h2 id="_idParaDest-54"><a id="_idTextAnchor055"/>练习 1.05:使用 BFS 寻找最短路径</h2>
+			<p>在本练习中，我们将使用 BFS 算法寻找到达目标的最短路径。</p>
 			<p>以下步骤将帮助您完成本练习:</p>
 			<ol>
-				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li value="1">打开新的 Jupyter 笔记本文件。</li>
 				<li>首先导入<code>math</code>库:<pre>import math</pre></li>
-				<li>接下来，使用Python描述板、初始状态和最终状态。创建一个返回可能继任者列表的函数。使用元组，其中第一个坐标表示从<code>1</code>到<code>7</code>的行号，第二个坐标表示从<code>1</code>到<code>9</code> : <pre>size = (7, 9) start = (5, 3) end = (6, 9) obstacles = {(3, 4), (3, 5), (3, 6), (3, 7), (3, 8), \              (4, 5), (5, 5), (5, 7), (5, 9), (6, 2), \              (6, 3), (6, 4), (6, 5), (6, 7),(7, 7)}</pre>的列号</li>
+				<li>接下来，使用 Python 描述板、初始状态和最终状态。创建一个返回可能继任者列表的函数。使用元组，其中第一个坐标表示从<code>1</code>到<code>7</code>的行号，第二个坐标表示从<code>1</code>到<code>9</code> : <pre>size = (7, 9) start = (5, 3) end = (6, 9) obstacles = {(3, 4), (3, 5), (3, 6), (3, 7), (3, 8), \              (4, 5), (5, 5), (5, 7), (5, 9), (6, 2), \              (6, 3), (6, 4), (6, 5), (6, 7),(7, 7)}</pre>的列号</li>
 				<li>Next, use array comprehension to generate the successor states, as shown in the following code: <pre>def successors(state, visited_nodes):
     (row, col) = state
     (max_row, max_col) = size
@@ -745,7 +745,7 @@ bfs</pre><p>在前面的代码片段中，我们重用了我们在本书的<em c
  [3, 2, 1, 2, inf, 12, 13, 12, 11],
  [2, 1, 0, 1, inf, 11, inf, 13, inf],
  [3, inf, inf, inf, inf, 10, inf, 14, 15],
- [4, 5, 6, 7, 8, 9, inf, 15, 16]]</pre><p>在这里，您可以看到一个简单的BFS算法成功地确定了从起始节点到任何节点(包括目标节点)的成本。</p></li>
+ [4, 5, 6, 7, 8, 9, inf, 15, 16]]</pre><p>在这里，您可以看到一个简单的 BFS 算法成功地确定了从起始节点到任何节点(包括目标节点)的成本。</p></li>
 				<li>Now, measure the number of steps required to find the goal node and save the result in the <code>bfs_v</code> variable, as shown in the following code snippet:<pre>def bfs_tree_verbose(node):
     nodes_to_visit = [node]
     visited_nodes = []
@@ -774,21 +774,21 @@ bfs_v</pre><p>在前面的代码片段中，我们添加了一个步骤计数器
  [3, inf, inf, inf, inf, 10, inf, 14, 15],
  [4, 5, 6, 7, 8, 9, inf, 15, 16]]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3fMYwEt">https://packt.live/3fMYwEt</a>。</p><p class="callout">你也可以在<a href="https://packt.live/3duuLqp">https://packt.live/3duuLqp</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>在这个练习中，我们使用了BFS算法来寻找到达目标的最短路径。BFS花了<code>110</code>步才达到目标。现在，我们将学习一种可以找到从起始节点到目标节点的最短路径的算法:A*算法。</p>
-			<h1 id="_idParaDest-55"><a id="_idTextAnchor056"/>介绍A*算法</h1>
+			<p>在这个练习中，我们使用了 BFS 算法来寻找到达目标的最短路径。BFS 花了<code>110</code>步才达到目标。现在，我们将学习一种可以找到从起始节点到目标节点的最短路径的算法:A*算法。</p>
+			<h1 id="_idParaDest-55"><a id="_idTextAnchor056"/>介绍 A*算法</h1>
 			<p>A*是一个完整且最优的启发式搜索算法，在当前游戏状态和获胜状态之间找到最短的可能路径。在这种状态下完整和最优的定义如下:</p>
 			<ul>
-				<li>完全意味着A*总会找到解。</li>
-				<li>最优意味着A*会找到最佳解。</li>
+				<li>完全意味着 A*总会找到解。</li>
+				<li>最优意味着 A*会找到最佳解。</li>
 			</ul>
-			<p>要设置A*算法，我们需要以下内容:</p>
+			<p>要设置 A*算法，我们需要以下内容:</p>
 			<ul>
 				<li>初始状态</li>
 				<li>目标状态的描述</li>
 				<li>衡量目标状态进展的可接受的启发法</li>
 				<li>制定实现目标的后续步骤的方法</li>
 			</ul>
-			<p>设置完成后，我们在初始状态下使用以下步骤执行A*算法:</p>
+			<p>设置完成后，我们在初始状态下使用以下步骤执行 A*算法:</p>
 			<ol>
 				<li value="1">我们生成所有可能的后续步骤。</li>
 				<li>我们按照这些孩子离目标的距离来存储他们。</li>
@@ -798,12 +798,12 @@ bfs_v</pre><p>在前面的代码片段中，我们添加了一个步骤计数器
 			<div><div><img src="img/B16060_01_15.jpg" alt="Figure 1.15: Tree with heuristic distance&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.15:带有启发式距离的树</p>
+			<p class="figure-caption">图 1.15:带有启发式距离的树</p>
 			<p>第一步是从原点<code>A</code>生成所有可能的移动，即从<code>A</code>移动到<code>B (A,B)</code>或<code>C (A,C)</code>。</p>
 			<p>第二步是使用启发式算法(距离)排序两个可能的移动，<code>(A,B)</code>和<code>10</code>，这比<code>(A,C)</code>和<code>100</code>要短。</p>
 			<p>第三步，选择最短的启发式，也就是<code>(A,B)</code>，移至<code>B</code>。</p>
 			<p>现在，我们将以<code>B</code>为原点重复相同的步骤。</p>
-			<p>最后，我们将通过累积启发值为24的路径(<code>A,B,D,F</code>)到达目标<code>F</code>。如果我们遵循另一条路径，比如(<code>A,B,E,F</code>)，累积启发将是30，这高于最短路径。</p>
+			<p>最后，我们将通过累积启发值为 24 的路径(<code>A,B,D,F</code>)到达目标<code>F</code>。如果我们遵循另一条路径，比如(<code>A,B,E,F</code>)，累积启发将是 30，这高于最短路径。</p>
 			<p>我们甚至没有看(<code>A,C,F</code>)，因为已经过了最短路径。</p>
 			<p>在寻路中，欧几里德距离是一个很好的启发。如果当前节点是(x，y ),目标节点是(u，v ),那么我们得到如下结果:</p>
 			<p><em class="italic">distance _ from _ end(node)= sqrt(ABS(x–u)* * 2+ABS(y–v)* * 2)</em></p>
@@ -856,7 +856,7 @@ while the distance of the last element in the path is not 0:
 return path</pre>
 			<p>当我们有一个起始状态和一个目标状态时，A*会发光。A*算法的复杂度是<code>O( E )</code>，其中<code>E</code>代表该场中所有可能的边。在我们的例子中，我们有多达四条边离开任何节点:上、下、左、右。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">为了按照正确的顺序对边界列表进行排序，我们必须使用一种特殊的Python数据结构:优先级队列。</p>
+			<p class="callout">为了按照正确的顺序对边界列表进行排序，我们必须使用一种特殊的 Python 数据结构:优先级队列。</p>
 			<p>看看下面的例子:</p>
 			<pre># Import heapq to access the priority queue
 import heapq
@@ -887,18 +887,18 @@ heapq.heappop(data)</pre>
 			<p>为什么算法使用的启发式算法是可接受的很重要？</p>
 			<p>因为这是我们保证算法最优性质的方法。对于任何节点<code>x</code>，我们测量从开始节点到<code>x</code>的距离之和。这是从<code>x</code>到末端节点的估计距离。如果估计永远不会高估从<code>x</code>到末端节点的距离，我们就永远不会高估总距离。一旦到了目标节点，我们的估计为零，从起点到终点的总距离就变成了一个精确的数字。</p>
 			<p>我们可以肯定我们的解决方案是最优的，因为在优先级队列中没有其他项目具有更低的估计成本。假设我们从不高估我们的成本，我们可以确定算法边界中的所有节点都具有与我们找到的路径相似的总成本或更高的总成本。</p>
-			<p>在下面的示例中，我们可以看到如何实现A*算法来查找成本最低的路径:</p>
+			<p>在下面的示例中，我们可以看到如何实现 A*算法来查找成本最低的路径:</p>
 			<div><div><img src="img/B16060_01_16.jpg" alt=" Figure 1.16: Shortest pathfinding game board&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.16:最短的寻路游戏板</p>
+			<p class="figure-caption">图 1.16:最短的寻路游戏板</p>
 			<p>我们导入<code>math</code>和<code>heapq</code>:</p>
 			<pre>import math
 import heapq</pre>
-			<p>接下来，我们将重用前面的<em class="italic">步骤2–5</em>、<em class="italic">练习1.05 </em>、<em class="italic">使用BFS </em>寻找最短路径中的初始化代码。</p>
+			<p>接下来，我们将重用前面的<em class="italic">步骤 2–5</em>、<em class="italic">练习 1.05 </em>、<em class="italic">使用 BFS </em>寻找最短路径中的初始化代码。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">我们省略了更新成本的函数，因为我们将在A*算法中这样做:</p>
-			<p>接下来，我们需要初始化A*算法的边界和内部列表。对于<code>frontier</code>，我们将使用一个Python <code>PriorityQueue</code>。不要直接执行这段代码；我们将在A*搜索函数中使用这四行代码:</p>
+			<p class="callout">我们省略了更新成本的函数，因为我们将在 A*算法中这样做:</p>
+			<p>接下来，我们需要初始化 A*算法的边界和内部列表。对于<code>frontier</code>，我们将使用一个 Python <code>PriorityQueue</code>。不要直接执行这段代码；我们将在 A*搜索函数中使用这四行代码:</p>
 			<pre>frontier = []
 internal = set()
 heapq.heappush(frontier, (0, start))
@@ -908,7 +908,7 @@ costs = initialize_costs(size, start)</pre>
     (x, y) = node
     (u, v) = goal
     return math.sqrt(abs(x - u) ** 2 + abs(y - v) ** 2)</pre>
-			<p>最后一步是将A*算法翻译成功能代码:</p>
+			<p>最后一步是将 A*算法翻译成功能代码:</p>
 			<pre>def astar(start, end):
     frontier = []
     internal = set()
@@ -937,12 +937,12 @@ astar(start, end)</pre>
 			<p>预期输出如下:</p>
 			<pre>15.0</pre>
 			<p>我们的实现和原始算法之间有一些差异。</p>
-			<p>我们定义了一个<code>distance_from_start</code>函数，使访问<code>costs</code>矩阵变得更容易，也更有语义。注意，我们从1开始对节点索引进行编号，而在矩阵中，索引从0开始。因此，我们从节点值中减去1来获得索引。</p>
+			<p>我们定义了一个<code>distance_from_start</code>函数，使访问<code>costs</code>矩阵变得更容易，也更有语义。注意，我们从 1 开始对节点索引进行编号，而在矩阵中，索引从 0 开始。因此，我们从节点值中减去 1 来获得索引。</p>
 			<p>在生成后继节点时，我们自动排除了内部集中的节点。<code>successors = succ(node, internal)</code>确保我们只获得检查尚未结束的邻居，这意味着他们的分数不一定是最优的。</p>
 			<p>因此，我们可以跳过步骤检查，因为内部节点永远不会在<code>succ(n)</code>中结束。</p>
 			<p>因为我们使用的是优先级队列，所以在插入节点之前，我们必须确定节点的估计优先级。但是，如果我们知道该节点没有分数较低的条目，我们将只在边界中插入该节点。</p>
 			<p>可能发生的情况是，节点已经在具有较高分数的前沿队列中。在这种情况下，我们在将这个条目插入优先级队列的正确位置之前删除它。当我们找到结束节点时，我们简单地返回最短路径的长度，而不是路径本身。</p>
-			<p>要了解A*算法的功能，请执行以下示例代码并观察日志:</p>
+			<p>要了解 A*算法的功能，请执行以下示例代码并观察日志:</p>
 			<pre>def astar_verbose(start, end):
     frontier = []
     internal = set()
@@ -990,9 +990,9 @@ astar_verbose(start, end)</pre>
 			<div><div><img src="img/B16060_01_17.jpg" alt="Figure 1.17: Astar function logs&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.17: Astar函数日志</p>
-			<p>我们已经看到A*搜索返回正确的值。问题是，我们如何重建整个路径？</p>
-			<p>为此，为了清楚起见，我们从代码中删除了<code>print</code>语句，并继续使用我们在上一步中实现的A*算法。我们不返回最短路径的长度，而是返回路径本身。我们将编写一个函数，通过从结束节点往回走，分析<code>costs </code>矩阵来提取这条路径。暂时不要全局定义这个函数。我们在之前创建的A*算法中将它定义为局部函数:</p>
+			<p class="figure-caption">图 1.17: Astar 函数日志</p>
+			<p>我们已经看到 A*搜索返回正确的值。问题是，我们如何重建整个路径？</p>
+			<p>为此，为了清楚起见，我们从代码中删除了<code>print</code>语句，并继续使用我们在上一步中实现的 A*算法。我们不返回最短路径的长度，而是返回路径本身。我们将编写一个函数，通过从结束节点往回走，分析<code>costs </code>矩阵来提取这条路径。暂时不要全局定义这个函数。我们在之前创建的 A*算法中将它定义为局部函数:</p>
 			<pre>def get_shortest_path(end_node):
     path = [end_node]
     distance = get_distance_from_start(end_node)
@@ -1004,7 +1004,7 @@ astar_verbose(start, end)</pre>
                 distance = new_distance
                 break  # for
     return path</pre>
-			<p>现在我们已经看到了如何解构路径，让我们将它返回到A*算法中:</p>
+			<p>现在我们已经看到了如何解构路径，让我们将它返回到 A*算法中:</p>
 			<pre>def astar_with_path(start, end):
     frontier = []
     internal = set()
@@ -1046,18 +1046,18 @@ astar_with_path( start, end )</pre>
 			<div><div><img src="img/B16060_01_18.jpg" alt="Figure 1.18: Output showing the priority queue&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.18:显示优先级队列的输出</p>
+			<p class="figure-caption">图 1.18:显示优先级队列的输出</p>
 			<p>从技术上讲，我们不需要从<code>costs</code>矩阵中重建路径。我们可以记录矩阵中每个节点的父节点，并简单地检索坐标以节省一点搜索。</p>
 			<p>我们不期望你理解所有前面的脚本，因为它是相当先进的，所以我们将使用一个库来简化它。</p>
-			<h2 id="_idParaDest-56"><a id="_idTextAnchor057"/>使用simpleai库进行实际搜索</h2>
-			<p>GitHub上提供了<code>simpleai</code>库，其中包含了许多流行的AI工具和技术。</p>
+			<h2 id="_idParaDest-56"><a id="_idTextAnchor057"/>使用 simpleai 库进行实际搜索</h2>
+			<p>GitHub 上提供了<code>simpleai</code>库，其中包含了许多流行的 AI 工具和技术。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">你可以在https://github.com/simpleai-team/simpleai参观这个图书馆。<code>simpleai</code>库的文档可以在这里获得:<a href="http://simpleai.readthedocs.io/en/latest/">http://simpleai.readthedocs.io/en/latest/</a>。要访问<code>simpleai</code>库，首先，您必须安装它。</p>
+			<p class="callout">你可以在 https://github.com/simpleai-team/simpleai 参观这个图书馆。<code>simpleai</code>库的文档可以在这里获得:<a href="http://simpleai.readthedocs.io/en/latest/">http://simpleai.readthedocs.io/en/latest/</a>。要访问<code>simpleai</code>库，首先，您必须安装它。</p>
 			<p><code>simpleai</code>库可以按如下方式安装:</p>
 			<pre>pip install simpleai</pre>
-			<p>一旦安装了<code>simpleai</code>，您就可以将<code>simpleai</code>库中的类和函数导入到Jupyter笔记本中:</p>
+			<p>一旦安装了<code>simpleai</code>，您就可以将<code>simpleai</code>库中的类和函数导入到 Jupyter 笔记本中:</p>
 			<pre>from simpleai.search import SearchProblem, astar</pre>
-			<p><code>SearchProblem</code>给你一个定义任何搜索问题的框架。<code>astar</code>导入负责执行搜索问题内部的A*算法。</p>
+			<p><code>SearchProblem</code>给你一个定义任何搜索问题的框架。<code>astar</code>导入负责执行搜索问题内部的 A*算法。</p>
 			<p>为了简单起见，我们没有在前面的代码示例中使用类，而是以一种简单的老式方式关注算法，没有任何混乱。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">记住<code>simpleai</code>库会强迫我们使用类。</p>
@@ -1067,7 +1067,7 @@ astar_with_path( start, end )</pre>
 				<li><code>actions( state )</code>:这将返回我们可以从给定状态执行的动作列表。我们将使用这个函数来生成新的状态。从语义上来说，创建诸如上、下、左和右这样的动作常量，然后将这些动作常量解释为结果，会更有意义。然而，在这个实现中，我们将简单地将一个动作解释为“移动到<code>(x, y)</code>”，并将这个命令表示为<code>(x, y)</code>。这个函数或多或少包含了我们之前在<code>succ</code>函数中实现的逻辑，只是我们不会根据一组访问过的节点过滤结果。</li>
 				<li><code>result( state0, action)</code>:返回应用于<code>state0</code>的新动作状态。</li>
 				<li><code>is_goal( state )</code>:如果状态是目标状态，则返回<code>true</code>。在我们的实现中，我们必须将状态与结束状态坐标进行比较。</li>
-				<li><code>cost( self, state, action, newState )</code>:这是从<code>state</code>经过<code>action</code>到<code>newState</code>的费用。在我们的例子中，移动的成本都是1。</li>
+				<li><code>cost( self, state, action, newState )</code>:这是从<code>state</code>经过<code>action</code>到<code>newState</code>的费用。在我们的例子中，移动的成本都是 1。</li>
 			</ul>
 			<p>看看下面的例子:</p>
 			<pre>import math
@@ -1118,11 +1118,11 @@ result.path()</pre>
 			<div><div><img src="img/B16060_01_19.jpg" alt="Figure 1.19: Output showing the queue using the simpleai library&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.19:显示使用simpleai库的队列的输出</p>
+			<p class="figure-caption">图 1.19:显示使用 simpleai 库的队列的输出</p>
 			<p><code>simpleai</code>库使得搜索描述比手工实现容易得多。我们所需要做的就是定义一些基本的方法，然后我们就可以访问一个有效的搜索实现。</p>
 			<p>在下一节中，我们将看看最小最大算法，以及修剪。</p>
 			<h1 id="_idParaDest-57"><a id="_idTextAnchor058"/>用最小最大算法和阿尔法-贝塔剪枝的游戏人工智能</h1>
-			<p>在前两节中，我们看到了为像井字游戏这样的简单游戏创造一个成功的策略是多么困难。上一节介绍了一些用A*算法解决搜索问题的结构。我们还看到像<code>simpleai</code>库这样的工具帮助我们减少了用代码描述任务的工作量。</p>
+			<p>在前两节中，我们看到了为像井字游戏这样的简单游戏创造一个成功的策略是多么困难。上一节介绍了一些用 A*算法解决搜索问题的结构。我们还看到像<code>simpleai</code>库这样的工具帮助我们减少了用代码描述任务的工作量。</p>
 			<p>我们将利用所有这些知识来增强我们的游戏人工智能技能，并解决更复杂的问题。</p>
 			<h2 id="_idParaDest-58"><a id="_idTextAnchor059"/>回合制多人游戏的搜索算法</h2>
 			<p>回合制多人游戏如井字游戏类似于寻路问题。我们有一个初始状态，也有一系列的最终状态，在这些状态下我们赢得了游戏。</p>
@@ -1132,18 +1132,18 @@ result.path()</pre>
 			<div><div><img src="img/B16060_01_20.jpg" alt="Figure 1.20: Tree diagram denoting the successor states of the function&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.20:表示函数后继状态的树形图</p>
+			<p class="figure-caption">图 1.20:表示函数后继状态的树形图</p>
 			<p>然后，对手也采取行动，这意味着从每个可能的状态，我们必须检查更多的状态:</p>
 			<div><div><img src="img/B16060_01_21.jpg" alt="Figure 1.21: Tree diagram denoting parent-successor relationships&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.21:表示父子关系的树形图</p>
+			<p class="figure-caption">图 1.21:表示父子关系的树形图</p>
 			<p>未来可能状态的扩展在以下两种情况下停止:</p>
 			<ul>
 				<li>游戏结束。</li>
 				<li>由于资源的限制，对于某个实用程序的状态，不值得解释任何超出某个深度的移动。</li>
 			</ul>
-			<p>一旦停止扩展，我们必须对状态进行静态启发式评估。这正是我们之前用A*算法选择最佳移动时所做的；然而，我们从未考虑过未来的状态。</p>
+			<p>一旦停止扩展，我们必须对状态进行静态启发式评估。这正是我们之前用 A*算法选择最佳移动时所做的；然而，我们从未考虑过未来的状态。</p>
 			<p>因此，即使我们的算法变得越来越复杂，在没有使用可能的未来状态的知识的情况下，我们也很难检测出我们当前的举措可能是赢还是输。</p>
 			<p>我们控制未来的唯一方法是改变我们的启发式方法，同时知道我们在未来会赢、输或平多少场比赛。我们要么最大化我们的胜利，要么最小化我们的损失。我们仍然没有足够深入地研究，看看我们的损失是否可以通过人工智能更聪明的发挥来避免。</p>
 			<p>所有这些问题都可以通过深入挖掘未来状态并递归评估分支的效用来避免。</p>
@@ -1151,38 +1151,38 @@ result.path()</pre>
 			<h1 id="_idParaDest-59"><a id="_idTextAnchor060"/>最小最大算法</h1>
 			<p>假设有一个游戏，其中一个启发式函数可以从人工智能玩家的角度评估游戏状态。例如，我们对井字游戏练习使用了特定的评估:</p>
 			<ul>
-				<li>赢得比赛的一步棋+1，000分</li>
-				<li>阻止对手赢得比赛的一步棋加100分</li>
-				<li>在一行、一列或对角线上创造两个的移动+10分</li>
-				<li>在行、列或对角线上创建一个移动的+1点</li>
+				<li>赢得比赛的一步棋+1，000 分</li>
+				<li>阻止对手赢得比赛的一步棋加 100 分</li>
+				<li>在一行、一列或对角线上创造两个的移动+10 分</li>
+				<li>在行、列或对角线上创建一个移动的+1 点</li>
 			</ul>
 			<p>这种静态评估很容易在任何节点上实现。问题是，当我们深入到所有可能的未来状态的树中时，我们还不知道如何处理这些分数。这就是最小最大算法发挥作用的地方。</p>
 			<p>假设我们构建了一个树，其中包含了每个玩家在一定深度内可能进行的每一步棋。在树的底部，我们评估每个选项。为了简单起见，让我们假设我们有一个搜索树，如下所示:</p>
 			<div><div><img src="img/B16060_01_22.jpg" alt="Figure 1.22: Example of a search tree up to a certain depth&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.22:特定深度的搜索树示例</p>
-			<p>AI玩<code>X</code>，玩家玩<code>O</code>。带有<code>X</code>的节点表示轮到<code>X</code>移动。带有<code>O</code>的节点意味着该轮到<code>O</code>行动了。</p>
+			<p class="figure-caption">图 1.22:特定深度的搜索树示例</p>
+			<p>AI 玩<code>X</code>，玩家玩<code>O</code>。带有<code>X</code>的节点表示轮到<code>X</code>移动。带有<code>O</code>的节点意味着该轮到<code>O</code>行动了。</p>
 			<p>假设在树的底部有所有的<code>O</code>叶子，由于资源限制，我们没有计算更多的值。我们的任务是评估树叶的效用:</p>
 			<div><div><img src="img/B16060_01_23.jpg" alt="Figure 1.23: Example of a search tree with possible moves&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.23:可能移动的搜索树示例</p>
+			<p class="figure-caption">图 1.23:可能移动的搜索树示例</p>
 			<p>从我们的角度来看，我们必须选择最好的行动，因为我们的目标是最大化我们行动的效用。这种最大化收益的愿望代表了最小最大算法中的最大部分:</p>
 			<div><div><img src="img/B16060_01_24.jpg" alt="Figure 1.24: Example of a search tree with the best possible move&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.24:具有最佳可能移动的搜索树示例</p>
+			<p class="figure-caption">图 1.24:具有最佳可能移动的搜索树示例</p>
 			<p>如果我们向上移动一级，就轮到我们的对手行动了。我们的对手选择了对我们最不利的价值观。这是因为我们对手的工作就是尽量减少我们赢得比赛的机会。这是最小最大算法的最小部分:</p>
 			<div><div><img src="img/B16060_01_25.jpg" alt="Figure 1.25: Minimizing the chances of winning the game&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.25:最小化赢得游戏的机会</p>
+			<p class="figure-caption">图 1.25:最小化赢得游戏的机会</p>
 			<p>在顶部，我们可以在效用为<code>101</code>的移动和效用为<code>21</code>的移动之间进行选择。既然我们在最大化我们的价值，我们应该选择<code>101</code>:</p>
 			<div><div><img src="img/B16060_01_26.jpg" alt="Figure 1.26: Maximizing the chances of winning the game&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.26:最大化赢得游戏的机会</p>
+			<p class="figure-caption">图 1.26:最大化赢得游戏的机会</p>
 			<p>让我们看看如何实现这个想法:</p>
 			<pre>def min_max( state, depth, is_maximizing):
     if depth == 0 or is_end_state( state ):
@@ -1206,10 +1206,10 @@ result.path()</pre>
 			</ul>
 			<p>为了理解最小最大算法在井字游戏中的应用，我们还需要一些东西:</p>
 			<ul>
-				<li><code>is_end_state</code>是一个决定是否应该评估状态而不是深入挖掘的函数，要么是因为游戏已经结束，要么是因为游戏即将使用强制移动结束。使用我们的效用函数，可以肯定地说，只要我们达到1000或更高的分数，我们就有效地赢得了游戏。因此，<code>is_end_state</code>可以简单地检查一个节点的得分，并确定我们是否需要深入挖掘。</li>
+				<li><code>is_end_state</code>是一个决定是否应该评估状态而不是深入挖掘的函数，要么是因为游戏已经结束，要么是因为游戏即将使用强制移动结束。使用我们的效用函数，可以肯定地说，只要我们达到 1000 或更高的分数，我们就有效地赢得了游戏。因此，<code>is_end_state</code>可以简单地检查一个节点的得分，并确定我们是否需要深入挖掘。</li>
 				<li>虽然<code>successors</code>功能仅取决于状态，但传递轮到谁走棋的信息是实用的。因此，如果需要，可以毫不犹豫地添加一个参数；你不必遵循伪代码。</li>
 				<li>我们希望在实现最小最大算法时尽可能减少工作量。为此，我们将评估该算法的现有实现。在本节的剩余部分，我们还将简化算法描述的二元性。</li>
-				<li>与我们可以在该算法中使用的效用函数相比，建议的效用函数相当精确。一般来说，我们越深入，我们的效用函数就越不精确。例如，如果我们可以对井字游戏进行九步深入，我们需要做的就是对赢的一方奖励1分，对平的一方奖励0分，对输的一方奖励-1分，假设在九步中，棋盘是完整的，并且我们拥有进行评估所需的所有信息。如果我们只看四步深，这个效用函数在游戏开始时将完全无用，因为我们至少需要五步才能赢得游戏。</li>
+				<li>与我们可以在该算法中使用的效用函数相比，建议的效用函数相当精确。一般来说，我们越深入，我们的效用函数就越不精确。例如，如果我们可以对井字游戏进行九步深入，我们需要做的就是对赢的一方奖励 1 分，对平的一方奖励 0 分，对输的一方奖励-1 分，假设在九步中，棋盘是完整的，并且我们拥有进行评估所需的所有信息。如果我们只看四步深，这个效用函数在游戏开始时将完全无用，因为我们至少需要五步才能赢得游戏。</li>
 				<li>通过修剪该树，可以进一步优化最小最大算法。修剪是一种行为，我们除去那些对结果没有贡献的树枝。通过消除不必要的计算，我们节省了宝贵的资源，这些资源可以用于更深入地研究树。</li>
 			</ul>
 			<h2 id="_idParaDest-60"><a id="_idTextAnchor061"/>用α-β剪枝优化最小最大算法</h2>
@@ -1219,23 +1219,23 @@ result.path()</pre>
 			<div><div><img src="img/B16060_01_27.jpg" alt="Figure 1.27: Search tree demonstrating pruning nodes&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.27:展示修剪节点的搜索树</p>
+			<p class="figure-caption">图 1.27:展示修剪节点的搜索树</p>
 			<p>在计算了值为<code>101</code>、<code>23</code>和<code>110</code>的节点后，我们可以得出结论，在上面两层，将选择值<code>101</code>。为什么？</p>
 			<ul>
-				<li>假设X &lt;= 110. Here, the maximum of  【T10】  and X will be chosen, which is  【T11】 , and X will be omitted.</li>
-				<li>Suppose X &gt; 110。此处，<code>110</code>和X的最大值为X，再高一级，算法将选择两者中的最小值。<code>101</code>和X的最小值永远是<code>101</code>，因为X &gt; 110。因此，X将被省略一级以上。</li>
+				<li>假设 X &lt;= 110. Here, the maximum of  【T10】  and X will be chosen, which is  【T11】 , and X will be omitted.</li>
+				<li>Suppose X &gt; 110。此处，<code>110</code>和 X 的最大值为 X，再高一级，算法将选择两者中的最小值。<code>101</code>和 X 的最小值永远是<code>101</code>，因为 X &gt; 110。因此，X 将被省略一级以上。</li>
 			</ul>
 			<p>这就是我们如何修剪这棵树。</p>
-			<p>在右边，假设我们计算分支<code>10</code>和<code>21</code>。他们的最大值是<code>21</code>。计算这些值的含义是，我们可以省略节点Y1、Y2、Y3的计算，我们知道Y4的值小于等于<code>21</code>。为什么？</p>
-			<p><code>21</code>和Y3的最小值不会大于<code>21</code>。因此，Y4永远不会大于<code>21</code>。</p>
+			<p>在右边，假设我们计算分支<code>10</code>和<code>21</code>。他们的最大值是<code>21</code>。计算这些值的含义是，我们可以省略节点 Y1、Y2、Y3 的计算，我们知道 Y4 的值小于等于<code>21</code>。为什么？</p>
+			<p><code>21</code>和 Y3 的最小值不会大于<code>21</code>。因此，Y4 永远不会大于<code>21</code>。</p>
 			<p>我们现在可以在一个效用为<code>101</code>的节点和另一个效用最大的节点<code>21</code>之间进行选择。很明显，我们必须选择具有效用的节点<code>101</code>:</p>
 			<div><div><img src="img/B16060_01_28.jpg" alt="Figure 1.28: Example of pruning a tree&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.28:修剪一棵树的例子</p>
+			<p class="figure-caption">图 1.28:修剪一棵树的例子</p>
 			<p>这就是阿尔法-贝塔剪枝背后的思想。我们修剪那些我们知道不需要的子树。</p>
 			<p>让我们看看如何在最小最大算法中实现阿尔法-贝塔剪枝。</p>
-			<p>首先，我们将在Minmax的参数列表中添加一个alpha和一个beta参数:</p>
+			<p>首先，我们将在 Minmax 的参数列表中添加一个 alpha 和一个 beta 参数:</p>
 			<pre>def min_max(state, depth, is_maximizing, alpha, beta):
     if depth == 0 or is_end_state(state):
         return utility(state)
@@ -1254,7 +1254,7 @@ result.path()</pre>
             score = MinMax(s, depth - 1, true, alpha, beta)
             utility = min(utility, score)
         return utility</pre>
-			<p>在前面的代码片段中，我们将<code>alpha</code>和<code>beta</code>参数添加到<code>MinMax</code>函数中，以便计算新的alpha得分，作为最大化分支中<code>alpha</code>和<code>beta</code>之间的最大值。</p>
+			<p>在前面的代码片段中，我们将<code>alpha</code>和<code>beta</code>参数添加到<code>MinMax</code>函数中，以便计算新的 alpha 得分，作为最大化分支中<code>alpha</code>和<code>beta</code>之间的最大值。</p>
 			<p>现在，我们需要对最小化分支做同样的事情:</p>
 			<pre>def min_max(state, depth, is_maximizing, alpha, beta):
     if depth == 0 or is_end_state( state ):
@@ -1275,18 +1275,18 @@ result.path()</pre>
             beta = min(beta, score)
             if beta &lt;= alpha: break
         return utility</pre>
-			<p>在前面的代码片段中，我们在<code>else</code>分支中添加了新的beta分数，它是最小化分支中<code>alpha</code>和<code>beta</code>之间的最小值。</p>
+			<p>在前面的代码片段中，我们在<code>else</code>分支中添加了新的 beta 分数，它是最小化分支中<code>alpha</code>和<code>beta</code>之间的最小值。</p>
 			<p>我们已经完成了实现。建议您在脑海中一步一步地执行我们的示例树上的算法，以获得实现的感觉。</p>
 			<p>缺少了一个重要的部分，这使得我们无法正确地执行:<code>alpha</code>和<code>beta</code>的初始值。任何超出效用值可能范围的数字都可以。我们将使用正无穷大和负无穷大作为初始值来调用最小最大算法:</p>
 			<pre>alpha = infinity
 beta = -infinity</pre>
-			<p>在下一节中，我们将研究使用NegaMax算法时的干燥技术。</p>
-			<h1 id="_idParaDest-61"><a id="_idTextAnchor062"/>干涸的最小最大算法NegaMax算法</h1>
-			<p>最小最大算法非常有效，尤其是在alpha-beta剪枝的情况下。唯一的问题是我们在算法中有<code>if</code>和<code>else</code>分支，这两个分支本质上是互相否定的。</p>
+			<p>在下一节中，我们将研究使用 NegaMax 算法时的干燥技术。</p>
+			<h1 id="_idParaDest-61"><a id="_idTextAnchor062"/>干涸的最小最大算法 NegaMax 算法</h1>
+			<p>最小最大算法非常有效，尤其是在 alpha-beta 剪枝的情况下。唯一的问题是我们在算法中有<code>if</code>和<code>else</code>分支，这两个分支本质上是互相否定的。</p>
 			<p>我们知道，在计算机科学中，有干代码和湿代码。<strong class="bold">干</strong>代表<strong class="bold">不要重复自己</strong>。<strong class="bold">湿</strong>代表<strong class="bold">什么都写两遍</strong>。当我们写同样的代码两次时，我们写的时候出错的几率会加倍。我们也加倍了未来执行每次维护工作的机会。因此，最好重用我们的代码。</p>
 			<p>当实现最小最大算法时，我们总是从人工智能玩家的角度计算节点的效用。这就是为什么我们必须在实现中有一个效用最大化分支和一个效用最小化分支，这在本质上是双重的。由于我们更喜欢只描述问题一次的干净代码，我们可以通过改变评估的角度来摆脱这种二元性。</p>
 			<p>每当轮到人工智能玩家时，算法都不会改变。</p>
-			<p>每当轮到对手的时候，我们就否定视角。把AI玩家的效用最小化，就相当于把对手的效用最大化。</p>
+			<p>每当轮到对手的时候，我们就否定视角。把 AI 玩家的效用最小化，就相当于把对手的效用最大化。</p>
 			<p>这简化了最小最大算法:</p>
 			<pre>def Negamax(state, depth, is_players_point_of_view):
     if depth == 0 or is_end_state(state):
@@ -1295,36 +1295,36 @@ beta = -infinity</pre>
     for s in successors(state):
         score = Negamax(s,depth-1,not is_players_point_of_view)
     return score</pre>
-			<p>使用NegaMax算法有必要的条件；例如，对董事会状态的评估必须是对称的。如果一个游戏状态从第一个玩家的角度来看值+20，那么从第二个玩家的角度来看值-20。所以我们经常把分数归一化到零左右。</p>
-			<h2 id="_idParaDest-62"><a id="_idTextAnchor063"/>使用EasyAI库</h2>
-			<p>我们已经看过了<code>simpleai</code>库，它帮助我们搜索寻路问题。现在，我们将使用<code>EasyAI</code>库，它可以轻松地处理双人游戏的AI搜索，将井字游戏问题的实现简化为编写几个关于评估棋盘效用和确定游戏何时结束的函数。</p>
-			<p>要安装<code>EasyAI</code>，请在Jupyter笔记本中键入以下命令:</p>
+			<p>使用 NegaMax 算法有必要的条件；例如，对董事会状态的评估必须是对称的。如果一个游戏状态从第一个玩家的角度来看值+20，那么从第二个玩家的角度来看值-20。所以我们经常把分数归一化到零左右。</p>
+			<h2 id="_idParaDest-62"><a id="_idTextAnchor063"/>使用 EasyAI 库</h2>
+			<p>我们已经看过了<code>simpleai</code>库，它帮助我们搜索寻路问题。现在，我们将使用<code>EasyAI</code>库，它可以轻松地处理双人游戏的 AI 搜索，将井字游戏问题的实现简化为编写几个关于评估棋盘效用和确定游戏何时结束的函数。</p>
+			<p>要安装<code>EasyAI</code>，请在 Jupyter 笔记本中键入以下命令:</p>
 			<pre>!pip install easyAI</pre>
 			<p class="callout-heading">注意</p>
-			<p class="callout">你可以在https://github.com/Zulko/easyAI的GitHub上阅读这个库的文档。</p>
-			<h2 id="_idParaDest-63"><a id="_idTextAnchor064"/>活动1.04:连接四个</h2>
+			<p class="callout">你可以在 https://github.com/Zulko/easyAI 的 GitHub 上阅读这个库的文档。</p>
+			<h2 id="_idParaDest-63"><a id="_idTextAnchor064"/>活动 1.04:连接四个</h2>
 			<p>在本活动中，我们将练习使用<code>EasyAI</code>库并开发一种启发式方法。为此，我们将使用游戏<em class="italic">连接四个</em>。游戏棋盘有七格宽，七格高。移动时，您只能选择要放置令牌的列。然后，重力将令牌拉下到尽可能低的空单元格中。你的目标是在你的对手或你用完空位之前，水平、垂直或对角地连接你自己的四个标记。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">游戏规则可以在https://en.wikipedia.org/wiki/Connect_Four找到。</p>
+			<p class="callout">游戏规则可以在 https://en.wikipedia.org/wiki/Connect_Four 找到。</p>
 			<ol>
-				<li value="1">打开新的Jupyter笔记本文件。</li>
+				<li value="1">打开新的 Jupyter 笔记本文件。</li>
 				<li>编写<code>init</code>方法，生成游戏中所有可能的获胜组合，并保存以备将来使用。</li>
 				<li>写一个函数来列举所有可能的移动。然后，对于每一列，检查是否有未被占用的字段。如果有一个，使列成为可能的移动。</li>
 				<li>创建一个函数进行移动(它将类似于可能的移动函数)，然后检查移动的列并找到第一个空单元格，从底部开始。</li>
-				<li>重用井字游戏示例中的lose函数。</li>
-				<li>Implement the show method that prints the board and try out the game. <p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第330页找到。</p></li>
+				<li>重用井字游戏示例中的 lose 函数。</li>
+				<li>Implement the show method that prints the board and try out the game. <p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第 330 页找到。</p></li>
 			</ol>
 			<p>预期输出如下:</p>
 			<p> </p>
 			<div><div><img src="img/B16060_01_29.jpg" alt="Figure 1.29: Expected output for the game Connect Four&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图1.29:游戏Connect Four的预期输出</p>
+			<p class="figure-caption">图 1.29:游戏 Connect Four 的预期输出</p>
 			<h1 id="_idParaDest-64"><a id="_idTextAnchor065"/>总结</h1>
 			<p>在这一章中，我们已经看到了人工智能如何被用来增强或替代人类的能力，如听、说、理解语言、存储和检索信息、思考、看和移动。</p>
 			<p>然后，我们继续学习智能代理以及它们与环境交互的方式，以看似智能的方式解决问题以追求目标。</p>
-			<p>然后，我们介绍了Python，了解了它在AI中的作用。我们查看了一些用于开发人工智能的重要Python库，并为智能代理准备了数据。然后，我们根据预定义的规则创建了一个井字游戏。我们将这些规则量化成一个数字，这个过程我们称之为启发式。我们学习了如何在A*搜索算法中使用试探法来找到问题的最优解。</p>
-			<p>最后，我们开始了解Minmax和NegaMax算法，以便人工智能可以赢得双人游戏。在下一章，你将被介绍到回归。</p>
+			<p>然后，我们介绍了 Python，了解了它在 AI 中的作用。我们查看了一些用于开发人工智能的重要 Python 库，并为智能代理准备了数据。然后，我们根据预定义的规则创建了一个井字游戏。我们将这些规则量化成一个数字，这个过程我们称之为启发式。我们学习了如何在 A*搜索算法中使用试探法来找到问题的最优解。</p>
+			<p>最后，我们开始了解 Minmax 和 NegaMax 算法，以便人工智能可以赢得双人游戏。在下一章，你将被介绍到回归。</p>
 		</div>
 		<div><div/>
 		</div>

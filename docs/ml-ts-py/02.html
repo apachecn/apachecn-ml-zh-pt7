@@ -24,13 +24,13 @@
 
   <div><h1 class="chapterNumber">2</h1>
 
-    <h1 id="_idParaDest-31" class="chapterTitle">用Python进行时间序列分析</h1>
+    <h1 id="_idParaDest-31" class="chapterTitle">用 Python 进行时间序列分析</h1>
 
     <p class="normal">时间序列分析围绕着熟悉一个数据集，并提出想法和假设。它可以被认为是“为数据科学家讲故事”，是机器学习中的一个关键步骤，因为它可以在训练机器学习模型时告知并帮助形成试验性结论以进行测试。粗略来说，时间序列分析和机器学习的主要区别在于，时间序列分析不包括正式的统计建模和推理。</p>
 
-    <p class="normal">虽然这可能令人望而生畏，看起来很复杂，但它通常是一个非常结构化的过程。在本章中，我们将学习Python中处理时序模式的基础知识。在Python中，我们可以通过使用手边的许多工具交互式查询数据来进行时间序列分析。这从创建和加载时间序列数据集到识别趋势和季节性开始。我们将通过示例概述时间序列分析的结构，以及Python中理论和实践的组成部分。</p>
+    <p class="normal">虽然这可能令人望而生畏，看起来很复杂，但它通常是一个非常结构化的过程。在本章中，我们将学习 Python 中处理时序模式的基础知识。在 Python 中，我们可以通过使用手边的许多工具交互式查询数据来进行时间序列分析。这从创建和加载时间序列数据集到识别趋势和季节性开始。我们将通过示例概述时间序列分析的结构，以及 Python 中理论和实践的组成部分。</p>
 
-    <p class="normal">主要的例子将使用伦敦和德里的空气污染数据集。您可以在本书的GitHub资源库中找到这个Jupyter笔记本的例子。</p>
+    <p class="normal">主要的例子将使用伦敦和德里的空气污染数据集。您可以在本书的 GitHub 资源库中找到这个 Jupyter 笔记本的例子。</p>
 
     <p class="normal">我们将讨论以下主题:</p>
 
@@ -38,7 +38,7 @@
 
       <li class="bullet">什么是时间序列分析？</li>
 
-      <li class="bullet">在Python中处理时间序列</li>
+      <li class="bullet">在 Python 中处理时间序列</li>
 
       <li class="bullet">理解变量</li>
 
@@ -54,7 +54,7 @@
 
     <p class="normal"><strong class="keyword">时间序列分析</strong> ( <strong class="keyword"> TSA </strong>)是指时间序列的统计方法或趋势<a id="_idIndexMarker068"/>和季节性的分析。这通常是一种临时的<em class="italic">探索和分析，通常包括可视化分布、趋势、循环模式以及特征之间和特征与目标之间的关系。</em></p>
 
-    <p class="normal">更一般地说，我们<a id="_idIndexMarker069"/>可以说TSA大致是<strong class="keyword">探索性数据分析</strong> ( <strong class="keyword"> EDA </strong>)也就是针对时序数据的特定<a id="_idIndexMarker070"/>。然而，这种比较可能会产生误导，因为TSA可能包括描述性和探索性元素。</p>
+    <p class="normal">更一般地说，我们<a id="_idIndexMarker069"/>可以说 TSA 大致是<strong class="keyword">探索性数据分析</strong> ( <strong class="keyword"> EDA </strong>)也就是针对时序数据的特定<a id="_idIndexMarker070"/>。然而，这种比较可能会产生误导，因为 TSA 可能包括描述性和探索性元素。</p>
 
     <p class="normal">让我们快速看看描述性分析和探索性分析之间的区别:</p>
 
@@ -66,15 +66,15 @@
 
     </ul>
 
-    <p class="normal">因此，TSA是对数据集的初步调查，目标是发现模式，特别是趋势和季节性，并获得初步见解，测试假设，提取有意义的汇总统计数据。</p>
+    <p class="normal">因此，TSA 是对数据集的初步调查，目标是发现模式，特别是趋势和季节性，并获得初步见解，测试假设，提取有意义的汇总统计数据。</p>
 
     <div><p class="Tip--PACKT-">定义:时间序列分析(TSA)是从时间序列中提取摘要和其他统计信息的过程，最重要的是趋势和季节性分析。</p>
 
     </div>
 
-    <p class="normal">由于TSA的一个重要部分是收集统计数据，并通过可视化以图形方式表示数据集，因此我们将在本章中绘制大量图表。本章中描述的许多统计数据和图表都是针对TSA的，所以即使你熟悉EDA，你也会发现一些新的东西。</p>
+    <p class="normal">由于 TSA 的一个重要部分是收集统计数据，并通过可视化以图形方式表示数据集，因此我们将在本章中绘制大量图表。本章中描述的许多统计数据和图表都是针对 TSA 的，所以即使你熟悉 EDA，你也会发现一些新的东西。</p>
 
-    <p class="normal">TSA的一部分是收集和审查数据，检查变量(和变量类型)的分布，并检查错误、异常值和缺失值。一些错误、变量类型和异常可以被纠正，因此EDA经常与预处理和特征工程一起进行，其中选择和转换列和字段。从数据加载到机器学习的整个过程是高度迭代的，可能涉及不同点的多个TSA实例。</p>
+    <p class="normal">TSA 的一部分是收集和审查数据，检查变量(和变量类型)的分布，并检查错误、异常值和缺失值。一些错误、变量类型和异常可以被纠正，因此 EDA 经常与预处理和特征工程一起进行，其中选择和转换列和字段。从数据加载到机器学习的整个过程是高度迭代的，可能涉及不同点的多个 TSA 实例。</p>
 
     <p class="normal">以下是处理时间序列的几个关键步骤:</p>
 
@@ -96,17 +96,17 @@
 
     </ul>
 
-    <p class="normal">可以在TSA之前考虑导入数据，数据清理、特征工程和训练机器学习模型严格来说不是TSA的一部分。</p>
+    <p class="normal">可以在 TSA 之前考虑导入数据，数据清理、特征工程和训练机器学习模型严格来说不是 TSA 的一部分。</p>
 
-    <p class="normal">导入数据包括解析，例如提取日期。TSA的三个核心步骤是<a id="_idIndexMarker074"/>理解变量，揭示变量之间的关系，识别趋势和季节性。关于它们中的每一个都有很多要说的，在这一章中，我们将在它们的专门章节中更详细地讨论它们。</p>
+    <p class="normal">导入数据包括解析，例如提取日期。TSA 的三个核心步骤是<a id="_idIndexMarker074"/>理解变量，揭示变量之间的关系，识别趋势和季节性。关于它们中的每一个都有很多要说的，在这一章中，我们将在它们的专门章节中更详细地讨论它们。</p>
 
-    <p class="normal">属于TSA并导致预处理(特征工程)和机器学习的步骤是高度迭代的，并且可以在下面的时序机器学习飞轮中直观地理解:</p>
+    <p class="normal">属于 TSA 并导致预处理(特征工程)和机器学习的步骤是高度迭代的，并且可以在下面的时序机器学习飞轮中直观地理解:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_01.png" alt="Flywheel%20-%20page%201.png"/></figure>
 
-    <p class="packt_figref">图2.1:时序机器学习飞轮</p>
+    <p class="packt_figref">图 2.1:时序机器学习飞轮</p>
 
-    <p class="normal">这个飞轮强调工作的迭代性质。例如，数据清理通常发生在<a id="_idIndexMarker075"/>加载数据之后，但是在我们对变量有了新的发现之后又会出现。我用黑色突出显示了TSA，而严格来说不属于TSA的步骤是灰色的。</p>
+    <p class="normal">这个飞轮强调工作的迭代性质。例如，数据清理通常发生在<a id="_idIndexMarker075"/>加载数据之后，但是在我们对变量有了新的发现之后又会出现。我用黑色突出显示了 TSA，而严格来说不属于 TSA 的步骤是灰色的。</p>
 
     <p class="normal">来过<a id="_idIndexMarker076"/>点实际的吧！我们将从加载数据集开始。在导入数据之后，我们会问这样的问题，数据集的大小是多少(观察的数量)？我们有多少功能或栏目？列的类型有哪些？</p>
 
@@ -114,37 +114,37 @@
 
     <p class="normal">我们会寻找丢失的值——在电子表格中，这些将是空的单元格——我们会清理并纠正这些不规则的地方。</p>
 
-    <p class="normal">我们将分析变量之间的关系，在TSA中，它的一个特点是我们需要研究每个变量与时间的关系。</p>
+    <p class="normal">我们将分析变量之间的关系，在 TSA 中，它的一个特点是我们需要研究每个变量与时间的关系。</p>
 
     <p class="normal">一般来说，区分不同类型技术的一个有用的方法是单变量和多变量分析，以及图形和非图形技术。<strong class="keyword">单变量分析</strong>意味着我们关注单个变量。这意味着我们可以检查<a id="_idIndexMarker078"/>值以获得平均值和方差，或者——对于图形方面——绘制分布图。我们在<em class="italic">理解变量</em>部分总结了这些技巧。</p>
 
     <p class="normal">另一方面，<strong class="keyword">多变量分析</strong>意味着我们正在计算变量之间的相关性，或者——对于<a id="_idIndexMarker079"/>图形侧——例如，绘制散点图。我们将在<em class="italic">揭示变量之间的关系</em>一节中深入研究这些技术。</p>
 
-    <p class="normal">在我们继续之前，让我们先了解一下Python时间序列的一些基础知识。这将包括时间序列数据作为介绍的基本操作。之后，我们将通过一个实际的数据集来研究Python命令。</p>
+    <p class="normal">在我们继续之前，让我们先了解一下 Python 时间序列的一些基础知识。这将包括时间序列数据作为介绍的基本操作。之后，我们将通过一个实际的数据集来研究 Python 命令。</p>
 
-    <h1 id="_idParaDest-33" class="title">在Python中处理时间序列</h1>
+    <h1 id="_idParaDest-33" class="title">在 Python 中处理时间序列</h1>
 
-    <p class="normal">Python有很多针对时间序列的库和包，比如<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">time</code>、<code class="Code-In-Text--PACKT-">calendar</code>、<code class="Code-In-Text--PACKT-">dateutil</code>、<code class="Code-In-Text--PACKT-">pytz</code>，对于初学者来说可能非常混乱。同时，还有许多不同的<a id="_idIndexMarker080"/>数据类型，如<code class="Code-In-Text--PACKT-">date</code>、<code class="Code-In-Text--PACKT-">time</code>、<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">tzinfo</code>、<code class="Code-In-Text--PACKT-">timedelta</code>、<code class="Code-In-Text--PACKT-">relativedelta</code>等等。</p>
+    <p class="normal">Python 有很多针对时间序列的库和包，比如<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">time</code>、<code class="Code-In-Text--PACKT-">calendar</code>、<code class="Code-In-Text--PACKT-">dateutil</code>、<code class="Code-In-Text--PACKT-">pytz</code>，对于初学者来说可能非常混乱。同时，还有许多不同的<a id="_idIndexMarker080"/>数据类型，如<code class="Code-In-Text--PACKT-">date</code>、<code class="Code-In-Text--PACKT-">time</code>、<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">tzinfo</code>、<code class="Code-In-Text--PACKT-">timedelta</code>、<code class="Code-In-Text--PACKT-">relativedelta</code>等等。</p>
 
     <p class="normal">当谈到使用它们的时候，问题就出在细节上。仅举一个例子:许多类型对时区不敏感。不过，您应该放心，知道要开始，熟悉这些库和数据类型的一小部分就足够了。</p>
 
     <h2 id="_idParaDest-34" class="title">要求</h2>
 
-    <p class="normal">在本章中，我们将使用几个库，我们可以从终端(或者类似地从Anaconda Navigator)快速安装它们:</p>
+    <p class="normal">在本章中，我们将使用几个库，我们可以从终端(或者类似地从 Anaconda Navigator)快速安装它们:</p>
 
     <pre class="programlisting con"><code class="hljs-con">pip install -U dython scipy numpy pandas seaborn scikit-learn
 
 </code></pre>
 
-    <p class="normal">我们将从Python(或IPython)终端执行<a id="_idIndexMarker081"/>命令，但同样我们也可以从Jupyter笔记本(或不同的环境)执行它们。</p>
+    <p class="normal">我们将从 Python(或 IPython)终端执行<a id="_idIndexMarker081"/>命令，但同样我们也可以从 Jupyter 笔记本(或不同的环境)执行它们。</p>
 
-    <p class="normal">如果我们至少知道datetime和pandas这两个非常著名的库，这将是一个好的开始，我们将在接下来的两节中介绍这两个库。我们将创建基本的对象，并对它们进行简单的操作。</p>
+    <p class="normal">如果我们至少知道 datetime 和 pandas 这两个非常著名的库，这将是一个好的开始，我们将在接下来的两节中介绍这两个库。我们将创建基本的对象，并对它们进行简单的操作。</p>
 
     <h2 id="_idParaDest-35" class="title">日期时间</h2>
 
-    <p class="normal">在Python中，<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>数据<a id="_idIndexMarker082"/>类型并不像数字(<code class="Code-In-Text--PACKT-">float</code>和<code class="Code-In-Text--PACKT-">int</code>、<code class="Code-In-Text--PACKT-">string</code>、<code class="Code-In-Text--PACKT-">list</code>、<code class="Code-In-Text--PACKT-">dictionary</code>、<code class="Code-In-Text--PACKT-">tuple</code>或<code class="Code-In-Text--PACKT-">file</code>那样是原始类型。为了使用<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>对象，我们必须导入datetime，这是Python标准库的一部分，以及CPython和其他主要Python发行版默认提供的库<a id="_idIndexMarker083"/>。</p>
+    <p class="normal">在 Python 中，<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>数据<a id="_idIndexMarker082"/>类型并不像数字(<code class="Code-In-Text--PACKT-">float</code>和<code class="Code-In-Text--PACKT-">int</code>、<code class="Code-In-Text--PACKT-">string</code>、<code class="Code-In-Text--PACKT-">list</code>、<code class="Code-In-Text--PACKT-">dictionary</code>、<code class="Code-In-Text--PACKT-">tuple</code>或<code class="Code-In-Text--PACKT-">file</code>那样是原始类型。为了使用<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>对象，我们必须导入 datetime，这是 Python 标准库的一部分，以及 CPython 和其他主要 Python 发行版默认提供的库<a id="_idIndexMarker083"/>。</p>
 
-    <p class="normal">datetime带有诸如<code class="Code-In-Text--PACKT-">date</code>、<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">time</code>和<code class="Code-In-Text--PACKT-">timedelta</code>等对象。<code class="Code-In-Text--PACKT-">datetime</code>和<code class="Code-In-Text--PACKT-">date</code>对象的区别在于<code class="Code-In-Text--PACKT-">datetime</code>对象除了日期还包括时间信息。</p>
+    <p class="normal">datetime 带有诸如<code class="Code-In-Text--PACKT-">date</code>、<code class="Code-In-Text--PACKT-">datetime</code>、<code class="Code-In-Text--PACKT-">time</code>和<code class="Code-In-Text--PACKT-">timedelta</code>等对象。<code class="Code-In-Text--PACKT-">datetime</code>和<code class="Code-In-Text--PACKT-">date</code>对象的区别在于<code class="Code-In-Text--PACKT-">datetime</code>对象除了日期还包括时间信息。</p>
 
     <p class="normal">要约会，我们可以这样做:</p>
 
@@ -186,7 +186,7 @@ some_date.isoformat()
 
 </code></pre>
 
-    <p class="normal">isoformat是ISO 8601格式的缩写，是表示日期和时间的国际标准。</p>
+    <p class="normal">isoformat 是 ISO 8601 格式的缩写，是表示日期和时间的国际标准。</p>
 
     <p class="normal">我们还可以使用<code class="Code-In-Text--PACKT-">timedelta</code>处理时差:</p>
 
@@ -208,7 +208,7 @@ year = timedelta(days=365)
 
 </code></pre>
 
-    <p class="normal">datetime库可以将字符串输入解析为<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>类型，并将这些对象输出为<code class="Code-In-Text--PACKT-">string</code>:</p>
+    <p class="normal">datetime 库可以将字符串输入解析为<code class="Code-In-Text--PACKT-">date</code>和<code class="Code-In-Text--PACKT-">datetime</code>类型，并将这些对象输出为<code class="Code-In-Text--PACKT-">string</code>:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from datetime import date
 
@@ -284,7 +284,7 @@ dt = datetime.strptime('24/03/21 15:48', '%d/%m/%y %H:%M')
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">4位数的年份</p>
+            <p class="Table-Column-Content--PACKT-">4 位数的年份</p>
 
           </td>
 
@@ -348,7 +348,7 @@ dt = datetime.strptime('24/03/21 15:48', '%d/%m/%y %H:%M')
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">2位数的小时</p>
+            <p class="Table-Column-Content--PACKT-">2 位数的小时</p>
 
           </td>
 
@@ -364,7 +364,7 @@ dt = datetime.strptime('24/03/21 15:48', '%d/%m/%y %H:%M')
 
           <td class="No-Table-Style">
 
-            <p class="Table-Column-Content--PACKT-">分钟为2位数</p>
+            <p class="Table-Column-Content--PACKT-">分钟为 2 位数</p>
 
           </td>
 
@@ -374,7 +374,7 @@ dt = datetime.strptime('24/03/21 15:48', '%d/%m/%y %H:%M')
 
     </table>
 
-    <p class="packt_figref">图2.2:日期的格式字符串</p>
+    <p class="packt_figref">图 2.2:日期的格式字符串</p>
 
     <p class="normal">记住这些带格式选项的字符串<a id="_idIndexMarker088"/>很有用。例如，用斜线分隔的美国日期的格式字符串如下所示:</p>
 
@@ -384,9 +384,9 @@ dt = datetime.strptime('24/03/21 15:48', '%d/%m/%y %H:%M')
 
     <h2 id="_idParaDest-36" class="title">熊猫</h2>
 
-    <p class="normal">我们在前一章介绍了<a id="_idIndexMarker089"/> pandas库。pandas是Python数据科学生态系统中最重要的库之一，用于数据操作和分析。最初于2008年发布，它是Python成功的主要驱动力。</p>
+    <p class="normal">我们在前一章介绍了<a id="_idIndexMarker089"/> pandas 库。pandas 是 Python 数据科学生态系统中最重要的库之一，用于数据操作和分析。最初于 2008 年发布，它是 Python 成功的主要驱动力。</p>
 
-    <p class="normal">pandas具有重要的时间序列功能，如日期范围生成、频率转换、移动窗口统计、日期移动和滞后。</p>
+    <p class="normal">pandas 具有重要的时间序列功能，如日期范围生成、频率转换、移动窗口统计、日期移动和滞后。</p>
 
     <p class="normal">让我们来看一下这些基础知识。我们可以创建如下时间序列:</p>
 
@@ -464,7 +464,7 @@ s.rolling(3).sum()
 
 </code></pre>
 
-    <p class="normal">你能猜出这的结果吗？如果没有，为什么不把这个放到你的Python解释器里呢？</p>
+    <p class="normal">你能猜出这的结果吗？如果没有，为什么不把这个放到你的 Python 解释器里呢？</p>
 
     <p class="normal">时间序列通常是一个索引，包含一个时间对象和一个或多个数字或其他类型的列，如下所示:</p>
 
@@ -554,11 +554,11 @@ Freq: D, dtype: float64
 
     <figure class="mediaobject"><img src="img/B17577_02_002.png" alt="" style="height: 4em;"/></figure>
 
-    <p class="normal"><strong class="keyword">标准误差</strong> ( <strong class="keyword"> SE </strong>)是采样数据标准偏差的近似值。它测量样本均值<a id="_idIndexMarker099"/>在总体均值周围的离差，但通过样本大小的根进行标准化。计算中涉及的数据点越多，标准误差就越小。SE等于标准偏差<a id="_idIndexMarker100"/>除以样本大小的平方根:</p>
+    <p class="normal"><strong class="keyword">标准误差</strong> ( <strong class="keyword"> SE </strong>)是采样数据标准偏差的近似值。它测量样本均值<a id="_idIndexMarker099"/>在总体均值周围的离差，但通过样本大小的根进行标准化。计算中涉及的数据点越多，标准误差就越小。SE 等于标准偏差<a id="_idIndexMarker100"/>除以样本大小的平方根:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_003.png" alt="" style="height: 2.5em;"/></figure>
 
-    <p class="normal">SE的一个重要应用是估计均值的置信区间。<strong class="keyword">置信区间</strong>给出了参数值的范围。例如，第95 <sup class="Superscript--PACKT-">个</sup>百分位上<a id="_idIndexMarker101"/>置信限<img src="img/B17577_02_004.png" alt="" style="height: 0.9em;"/>定义为:</p>
+    <p class="normal">SE 的一个重要应用是估计均值的置信区间。<strong class="keyword">置信区间</strong>给出了参数值的范围。例如，第 95 <sup class="Superscript--PACKT-">个</sup>百分位上<a id="_idIndexMarker101"/>置信限<img src="img/B17577_02_004.png" alt="" style="height: 0.9em;"/>定义为:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_005.png" alt="" style="height: 1.9em;"/></figure>
 
@@ -570,13 +570,13 @@ Freq: D, dtype: float64
 
     <figure class="mediaobject"><img src="img/B17577_02_007.png" alt="" style="height: 2em;"/></figure>
 
-    <p class="normal">这里假设<em class="italic"> X </em>是按升序或降序排列的。然后，位于中间的值，正好在<img src="img/B17577_02_008.png" alt="" style="height: 1em;"/>处，就是中值。中间值是第50 <sup class="Superscript--PACKT-">个</sup>个<strong class="keyword">百分位</strong>，这意味着它比<em class="italic"> X </em>中的点的一半或50%要高。其他重要的<a id="_idIndexMarker103"/>百分位数是第25个<sup class="Superscript--PACKT-">第</sup>和第75个<sup class="Superscript--PACKT-">第</sup>，这也是第一个<strong class="keyword">四分位数</strong>和第三个<a id="_idIndexMarker104"/>四分位数。这两者之间的差异是<a id="_idIndexMarker105"/>，称为<strong class="keyword">四分位距</strong>。</p>
+    <p class="normal">这里假设<em class="italic"> X </em>是按升序或降序排列的。然后，位于中间的值，正好在<img src="img/B17577_02_008.png" alt="" style="height: 1em;"/>处，就是中值。中间值是第 50 <sup class="Superscript--PACKT-">个</sup>个<strong class="keyword">百分位</strong>，这意味着它比<em class="italic"> X </em>中的点的一半或 50%要高。其他重要的<a id="_idIndexMarker103"/>百分位数是第 25 个<sup class="Superscript--PACKT-">第</sup>和第 75 个<sup class="Superscript--PACKT-">第</sup>，这也是第一个<strong class="keyword">四分位数</strong>和第三个<a id="_idIndexMarker104"/>四分位数。这两者之间的差异是<a id="_idIndexMarker105"/>，称为<strong class="keyword">四分位距</strong>。</p>
 
     <p class="normal">这些是最常见的描述符，但绝不是唯一的描述符。我们不会在这里深入讨论更多细节，但是稍后我们会看到更多的描述符。</p>
 
     <p class="normal">让我们用一些代码来弄脏我们的手吧！</p>
 
-    <p class="normal">稍后我们将导入datetime、pandas、matplotlib和seaborn来使用它们。Matplotlib和seaborn是用于绘图的库。这是这样的:</p>
+    <p class="normal">稍后我们将导入 datetime、pandas、matplotlib 和 seaborn 来使用它们。Matplotlib 和 seaborn 是用于绘图的库。这是这样的:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import datetime
 
@@ -586,9 +586,9 @@ import matplotlib.pyplot as plt
 
 </code></pre>
 
-    <p class="normal">然后我们将读入一个CSV文件。这些数据来自“我们的数据世界”网站，这是一个关于世界现状的统计数据和文章的集合，由牛津大学经济学研究主任Max Roser维护。</p>
+    <p class="normal">然后我们将读入一个 CSV 文件。这些数据来自“我们的数据世界”网站，这是一个关于世界现状的统计数据和文章的集合，由牛津大学经济学研究主任 Max Roser 维护。</p>
 
-    <p class="normal">我们可以加载本地文件或互联网上的文件。在这种情况下，我们将从GitHub加载一个数据集。这是一个空气污染物的数据集。在pandas中，您可以将URL直接传递给<code class="Code-In-Text--PACKT-">read_csv()</code>方法:</p>
+    <p class="normal">我们可以加载本地文件或互联网上的文件。在这种情况下，我们将从 GitHub 加载一个数据集。这是一个空气污染物的数据集。在 pandas 中，您可以将 URL 直接传递给<code class="Code-In-Text--PACKT-">read_csv()</code>方法:</p>
 
     <pre class="programlisting code"><code class="hljs-code">pollution = pd.read_csv(
 
@@ -616,9 +616,9 @@ len(pollution)
 
 </code></pre>
 
-    <p class="normal">如果下载文件有问题，可以从图书的GitHub <a id="_idIndexMarker108"/>库的<code class="Code-In-Text--PACKT-">chapter2</code>文件夹手动下载。</p>
+    <p class="normal">如果下载文件有问题，可以从图书的 GitHub <a id="_idIndexMarker108"/>库的<code class="Code-In-Text--PACKT-">chapter2</code>文件夹手动下载。</p>
 
-    <p class="normal">现在我们知道了数据集的大小(331行)和列名。列名有点长，让我们通过重命名来简化它，然后继续:</p>
+    <p class="normal">现在我们知道了数据集的大小(331 行)和列名。列名有点长，让我们通过重命名来简化它，然后继续:</p>
 
     <pre class="programlisting code"><code class="hljs-code">pollution = pollution.rename(
 
@@ -670,9 +670,9 @@ dtype: object
 
 </code></pre>
 
-    <p class="normal">pandas提供了许多方法来探索和发现您的数据集—<code class="Code-In-Text--PACKT-">min()</code>、<code class="Code-In-Text--PACKT-">max()</code>、<code class="Code-In-Text--PACKT-">mean()</code>、<code class="Code-In-Text--PACKT-">count()</code>和<code class="Code-In-Text--PACKT-">describe()</code>都非常方便。</p>
+    <p class="normal">pandas 提供了许多方法来探索和发现您的数据集—<code class="Code-In-Text--PACKT-">min()</code>、<code class="Code-In-Text--PACKT-">max()</code>、<code class="Code-In-Text--PACKT-">mean()</code>、<code class="Code-In-Text--PACKT-">count()</code>和<code class="Code-In-Text--PACKT-">describe()</code>都非常方便。</p>
 
-    <p class="normal">城市、烟雾和SPM是变量的更清晰的名称。我们了解到，我们的数据集涵盖了伦敦和德里两个城市，时间跨度为1700年至2016年。</p>
+    <p class="normal">城市、烟雾和 SPM 是变量的更清晰的名称。我们了解到，我们的数据集涵盖了伦敦和德里两个城市，时间跨度为 1700 年至 2016 年。</p>
 
     <p class="normal">我们将把我们的年份列从<code class="Code-In-Text--PACKT-">int64</code>转换为<code class="Code-In-Text--PACKT-">datetime</code>。这将有助于绘图:</p>
 
@@ -698,7 +698,7 @@ dtype: object
 
 </code></pre>
 
-    <p class="normal">Year现在是一个<code class="Code-In-Text--PACKT-">datetime64[ns]</code>类型。是64位的<code class="Code-In-Text--PACKT-">datetime</code>。每个值描述一纳秒，默认单位。</p>
+    <p class="normal">Year 现在是一个<code class="Code-In-Text--PACKT-">datetime64[ns]</code>类型。是 64 位的<code class="Code-In-Text--PACKT-">datetime</code>。每个值描述一纳秒，默认单位。</p>
 
     <p class="normal">让我们检查缺少的值，并获得列的描述性汇总统计信息:</p>
 
@@ -742,13 +742,13 @@ max      342.857143    623.376623
 
 </code></pre>
 
-    <p class="normal">烟雾变量有9%的缺失值。现在，我们可以只关注SPM变量，它没有任何缺失值。</p>
+    <p class="normal">烟雾变量有 9%的缺失值。现在，我们可以只关注 SPM 变量，它没有任何缺失值。</p>
 
-    <p class="normal">pandas <code class="Code-In-Text--PACKT-">describe()</code>方法为我们提供了非空值、平均值和标准偏差、第25、50和75个百分点的计数，以及最小值和最大值的范围。</p>
+    <p class="normal">pandas <code class="Code-In-Text--PACKT-">describe()</code>方法为我们提供了非空值、平均值和标准偏差、第 25、50 和 75 个百分点的计数，以及最小值和最大值的范围。</p>
 
-    <p class="normal">由卡尔·皮尔逊首先提出的<strong class="keyword">直方图</strong>是对一系列被称为区间(或桶)的范围内的值的计数。首先将变量划分为一系列区间，然后对<a id="_idIndexMarker110"/>落入每个区间的所有点进行计数(bin计数)。我们可以用柱状图直观地展示这些计数。</p>
+    <p class="normal">由卡尔·皮尔逊首先提出的<strong class="keyword">直方图</strong>是对一系列被称为区间(或桶)的范围内的值的计数。首先将变量划分为一系列区间，然后对<a id="_idIndexMarker110"/>落入每个区间的所有点进行计数(bin 计数)。我们可以用柱状图直观地展示这些计数。</p>
 
-    <p class="normal">让我们绘制SPM变量的直方图:</p>
+    <p class="normal">让我们绘制 SPM 变量的直方图:</p>
 
     <pre class="programlisting code"><code class="hljs-code">n, bins, patches = plt.hist(
 
@@ -770,11 +770,11 @@ plt.ylabel('Frequency')
 
     <figure class="mediaobject"><img src="img/B17577_02_02.png" alt="pollution_hist.png"/></figure>
 
-    <p class="packt_figref">图2.3:SPM变量的直方图</p>
+    <p class="packt_figref">图 2.3:SPM 变量的直方图</p>
 
     <p class="normal">如果您有连续的测量，并且想要了解数值的分布，直方图会有所帮助。此外，直方图可以指示是否存在异常值。</p>
 
-    <p class="normal">我们的TSA的第一部分到此结束。稍后我们将回到我们的空气污染数据集。</p>
+    <p class="normal">我们的 TSA 的第一部分到此结束。稍后我们将回到我们的空气污染数据集。</p>
 
     <h1 id="_idParaDest-38" class="title">揭示变量之间的关系</h1>
 
@@ -800,17 +800,17 @@ plt.ylabel('Frequency')
 
     <p class="normal">有三种类型的相关性:正相关性、负相关性和无相关性。正相关意味着<a id="_idIndexMarker117"/>当一个变量增加时，另一个变量也会增加。在皮尔逊相关系数的情况下，一个变量对另一个变量的增加应该是线性的。</p>
 
-    <p class="normal">如果我们观察从1800年开始的全球预期寿命图，我们会发现时间轴上的寿命增加了。你可以看到基于OWID数据的全球预期寿命图:</p>
+    <p class="normal">如果我们观察从 1800 年开始的全球预期寿命图，我们会发现时间轴上的寿命增加了。你可以看到基于 OWID 数据的全球预期寿命图:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_03.png" alt="life_expectancy.png"/></figure>
 
-    <p class="packt_figref">图2.4:从1800年到今天的预期寿命</p>
+    <p class="packt_figref">图 2.4:从 1800 年到今天的预期寿命</p>
 
-    <p class="normal">我们可以看到，从19世纪末到今天，预期寿命一直在稳步增长。</p>
+    <p class="normal">我们可以看到，从 19 世纪末到今天，预期寿命一直在稳步增长。</p>
 
     <p class="normal">这个图<a id="_idIndexMarker119"/>被称为<strong class="keyword">运行图</strong>或时间<strong class="keyword">线图</strong>。</p>
 
-    <p class="normal">为了计算Pearson相关性，我们可以使用SciPy中的一个函数:</p>
+    <p class="normal">为了计算 Pearson 相关性，我们可以使用 SciPy 中的一个函数:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from scipy import stats
 
@@ -824,39 +824,39 @@ stats.pearsonr(*ignore_nans(pollution['Smoke'], pollution['SPM']))
 
 </code></pre>
 
-    <p class="normal">这是皮尔逊相关和表示显著性的p值(越低，越显著)</p>
+    <p class="normal">这是皮尔逊相关和表示显著性的 p 值(越低，越显著)</p>
 
     <pre class="programlisting con"><code class="hljs-con">(0.9454809183096181, 3.313283689287137e-10
 
 </code></pre>
 
-    <p class="normal">我们看到时间与预期寿命有非常强的正相关性，0.94，具有非常高的显著性(回报中的第二个数字)。您可以在OWID网站上找到有关数据集的更多详细信息。</p>
+    <p class="normal">我们看到时间与预期寿命有非常强的正相关性，0.94，具有非常高的显著性(回报中的第二个数字)。您可以在 OWID 网站上找到有关数据集的更多详细信息。</p>
 
-    <p class="normal">相反，我们会看到时间与儿童死亡率呈负相关——随着年份的增加，儿童死亡率下降。该图显示了来自OWID的数据中每1000名儿童的死亡率:</p>
+    <p class="normal">相反，我们会看到时间与儿童死亡率呈负相关——随着年份的增加，儿童死亡率下降。该图显示了来自 OWID 的数据中每 1000 名儿童的死亡率:</p>
 
     <p class="packt_figref"><img src="img/B17577_02_04.png" alt="child_mortality.png"/></p>
 
-    <p class="packt_figref">图2.5:英国、法国和美国从1800年至今的儿童死亡率</p>
+    <p class="packt_figref">图 2.5:英国、法国和美国从 1800 年至今的儿童死亡率</p>
 
-    <p class="normal">在这张图中，我们可以看到从19世纪开始到今天，这三个国家的儿童死亡率都在下降。</p>
+    <p class="normal">在这张图中，我们可以看到从 19 世纪开始到今天，这三个国家的儿童死亡率都在下降。</p>
 
     <p class="normal">以美国为例，我们会发现儿童死亡率和时间之间的负相关系数为-0.95。</p>
 
     <p class="normal">我们还可以将<a id="_idIndexMarker123"/>国家相互比较。我们可以计算每个特征之间的相关性。在这种情况下，每个要素都包含三个国家的值。</p>
 
-    <p class="normal">这给出了一个3x3的<strong class="keyword">相关矩阵</strong>，我们可以将其可视化为热图:</p>
+    <p class="normal">这给出了一个 3x3 的<strong class="keyword">相关矩阵</strong>，我们可以将其可视化为热图:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_05.png" alt="correlation_heatmap.png"/></figure>
 
-    <p class="packt_figref">图2.6:英国、法国和美国儿童死亡率的相关热图</p>
+    <p class="packt_figref">图 2.6:英国、法国和美国儿童死亡率的相关热图</p>
 
-    <p class="normal">在这张相关性热图中，我们可以看到国家之间的相关性很高(例如，法国和英国之间的相关性为0.78)。</p>
+    <p class="normal">在这张相关性热图中，我们可以看到国家之间的相关性很高(例如，法国和英国之间的相关性为 0.78)。</p>
 
-    <p class="normal">相关矩阵的对角线始终为1.0，矩阵沿对角线对称。因此，有时我们只显示对角线下方的下三角形(或有时显示上三角形)。我们可以看到英国的儿童死亡率比法国更接近美国。</p>
+    <p class="normal">相关矩阵的对角线始终为 1.0，矩阵沿对角线对称。因此，有时我们只显示对角线下方的下三角形(或有时显示上三角形)。我们可以看到英国的儿童死亡率比法国更接近美国。</p>
 
     <p class="normal">这是否意味着英国经历了与美国相似的发展？这些统计数据和可视化数据通常会产生需要回答的问题，或者我们可以测试的假设。</p>
 
-    <p class="normal">如前所述，GitHub上提供了不同数据集的完整笔记本，但是，以下是热图的片段:</p>
+    <p class="normal">如前所述，GitHub 上提供了不同数据集的完整笔记本，但是，以下是热图的片段:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import dython
 
@@ -864,7 +864,7 @@ dython.nominal.associations(child_mortality[countries], figsize=(12, 6));
 
 </code></pre>
 
-    <p class="normal">相关系数与非线性或非连续增长的情况，或者(由于平方项)存在异常值的情况相抗争。例如，如果我们看看18世纪以来的空气污染，我们会看到来自煤炭的空气污染物急剧增加，而随着蒸汽机的引入，污染物减少了。</p>
+    <p class="normal">相关系数与非线性或非连续增长的情况，或者(由于平方项)存在异常值的情况相抗争。例如，如果我们看看 18 世纪以来的空气污染，我们会看到来自煤炭的空气污染物急剧增加，而随着蒸汽机的引入，污染物减少了。</p>
 
     <p class="normal"><strong class="keyword">散点图</strong>可用于显示和比较数值。它绘制了两个变量的值。通常，变量是数字——否则，我们称之为表格。散点图在某些区域可能会很拥挤，因此，如果不能从视觉上欣赏，散点图就具有欺骗性。添加抖动和透明度在一定程度上有所帮助，但是，我们可以将散点图与我们绘制的变量直方图结合起来，这样我们就可以看到一个或另一个变量上显示了多少个点。散点图通常会叠加一条最佳拟合线，以直观显示一个变量是另一个变量的函数。</p>
 
@@ -892,11 +892,11 @@ plt.ylabel("SPM");
 
     <figure class="mediaobject"><img src="img/B17577_02_06.png" alt="Machine-Learning%20for%20Time-Series%20with%20Python/spm_scatter.png"/></figure>
 
-    <p class="packt_figref">图2.7:烟雾与SPM的边缘直方图散点图</p>
+    <p class="packt_figref">图 2.7:烟雾与 SPM 的边缘直方图散点图</p>
 
     <p class="normal">在散点图中，我们可以看到这两个变量非常相似——值都在对角线上。这两个变量之间的相关性是完美的，1.0，这意味着它们实际上是相同的。</p>
 
-    <p class="normal">我们之前看过<strong class="keyword">悬浮颗粒物</strong> ( <strong class="keyword"> SPM </strong>)的数据集。让我们在<a id="_idIndexMarker126"/>时间上绘制SPM:</p>
+    <p class="normal">我们之前看过<strong class="keyword">悬浮颗粒物</strong> ( <strong class="keyword"> SPM </strong>)的数据集。让我们在<a id="_idIndexMarker126"/>时间上绘制 SPM:</p>
 
     <pre class="programlisting code"><code class="hljs-code">pollution = pollution.pivot("Year", "City", "SPM")
 
@@ -912,13 +912,13 @@ plt.ylabel('SPM');
 
     <figure class="mediaobject"><img src="img/B17577_02_07.png" alt="Machine-Learning%20for%20Time-Series%20with%20Python/spm_1700_to_today.png"/></figure>
 
-    <p class="packt_figref">图2.8:从18世纪至今的悬浮颗粒物质</p>
+    <p class="packt_figref">图 2.8:从 18 世纪至今的悬浮颗粒物质</p>
 
-    <p class="normal">我们可以在图中看到，直到1880年左右，伦敦的空气质量(以悬浮颗粒物质衡量)一直在恶化(大概是因为木材和煤炭等取暖材料)，但此后一直在改善。</p>
+    <p class="normal">我们可以在图中看到，直到 1880 年左右，伦敦的空气质量(以悬浮颗粒物质衡量)一直在恶化(大概是因为木材和煤炭等取暖材料)，但此后一直在改善。</p>
 
-    <p class="normal">我们发现相关系数为-0.36，具有很高的显著性。污染物从1880年开始急剧下降，主导了180年的缓慢增长。如果我们分别从1700年到1880年和从1880年到现在，我们会分别发现0.97和-0.97，这是非常强的相关性和非常强的反相关性的例子。</p>
+    <p class="normal">我们发现相关系数为-0.36，具有很高的显著性。污染物从 1880 年开始急剧下降，主导了 180 年的缓慢增长。如果我们分别从 1700 年到 1880 年和从 1880 年到现在，我们会分别发现 0.97 和-0.97，这是非常强的相关性和非常强的反相关性的例子。</p>
 
-    <p class="normal">与皮尔森相关系数相比，<strong class="keyword">斯皮尔曼等级相关</strong>可以更好地处理异常值和非线性关系——尽管它不能处理如上所述的非连续情况。Spearman相关性是Pearson相关性，只对变量值的等级应用<a id="_idIndexMarker127"/>，而不是直接应用变量值。空气污染时间序列的Spearman相关系数为-0.19，而对于1880年前后的两个时间段，我们分别得到0.99和-0.99。</p>
+    <p class="normal">与皮尔森相关系数相比，<strong class="keyword">斯皮尔曼等级相关</strong>可以更好地处理异常值和非线性关系——尽管它不能处理如上所述的非连续情况。Spearman 相关性是 Pearson 相关性，只对变量值的等级应用<a id="_idIndexMarker127"/>，而不是直接应用变量值。空气污染时间序列的 Spearman 相关系数为-0.19，而对于 1880 年前后的两个时间段，我们分别得到 0.99 和-0.99。</p>
 
     <p class="normal">在斯皮尔曼相关系数的情况下，数值差异被忽略，重要的是点的顺序。在这种情况下，两个<a id="_idIndexMarker128"/>时间段内的点的顺序几乎完全一致。</p>
 
@@ -930,11 +930,11 @@ plt.ylabel('SPM');
 
     <p class="normal">时间序列的一个重要特征是<strong class="keyword">平稳性</strong>。这是指时间序列的一个特性，即<a id="_idIndexMarker133"/>不会随时间改变分布，或者换句话说，产生时间序列的过程不会随时间改变。不随时间变化的时间序列称为<strong class="keyword">平稳</strong>(或<strong class="keyword">平稳过程</strong>)。许多模型或测量方法<a id="_idIndexMarker134"/>假设平稳性，如果数据不是平稳的，可能无法正常工作。因此，使用这些算法，时间序列应首先分解成<a id="_idIndexMarker135"/>主信号，然后是季节和趋势分量。在这种分解中，我们将从原始时间序列中减去趋势和季节成分。</p>
 
-    <p class="normal">在本节中，我们将首先通过一个示例来了解如何使用曲线拟合来估计趋势和季节性。然后，我们将看看有助于发现趋势、季节性和周期性变化的其他工具。这些包括统计，如自相关和扩展的Dickey-Fuller检验，以及可视化，如自相关图(也称为:滞后图)和周期图。</p>
+    <p class="normal">在本节中，我们将首先通过一个示例来了解如何使用曲线拟合来估计趋势和季节性。然后，我们将看看有助于发现趋势、季节性和周期性变化的其他工具。这些包括统计，如自相关和扩展的 Dickey-Fuller 检验，以及可视化，如自相关图(也称为:滞后图)和周期图。</p>
 
-    <p class="normal">让我们从一个简单明了的例子开始，用几行Python代码就可以估计出季节性和趋势。为此，我们将回到美国宇航局发布的GISS地表温度分析数据集。我们将加载数据集，并进行曲线拟合，这在NumPy中是现成的。</p>
+    <p class="normal">让我们从一个简单明了的例子开始，用几行 Python 代码就可以估计出季节性和趋势。为此，我们将回到美国宇航局发布的 GISS 地表温度分析数据集。我们将加载数据集，并进行曲线拟合，这在 NumPy 中是现成的。</p>
 
-    <p class="normal">我们将从Datahub(<a href="https://datahub.io/core/global-temp">https://datahub.io/core/global-temp</a>)下载数据集，或者你可以从这本书的GitHub资源库中找到<a id="_idIndexMarker136"/>(在<code class="Code-In-Text--PACKT-">chapter2</code>文件夹中)。</p>
+    <p class="normal">我们将从 Datahub(<a href="https://datahub.io/core/global-temp">https://datahub.io/core/global-temp</a>)下载数据集，或者你可以从这本书的 GitHub 资源库中找到<a id="_idIndexMarker136"/>(在<code class="Code-In-Text--PACKT-">chapter2</code>文件夹中)。</p>
 
     <p class="normal">然后，我们可以把它装起来，然后旋转它:</p>
 
@@ -946,13 +946,13 @@ temperatures = temperatures.pivot('Date', 'Source', 'Mean')
 
 </code></pre>
 
-    <p class="normal">现在我们可以<a id="_idIndexMarker137"/>使用NumPy的polyfit功能。它符合以下形式的多项式<a id="_idIndexMarker138"/>:</p>
+    <p class="normal">现在我们可以<a id="_idIndexMarker137"/>使用 NumPy 的 polyfit 功能。它符合以下形式的多项式<a id="_idIndexMarker138"/>:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_014.png" alt="" style="height: 3.5em;"/></figure>
 
     <p class="normal">在这个公式中，<em class="italic"> k </em>是多项式的次数，<em class="italic"> b </em>是我们要寻找的系数。</p>
 
-    <p class="normal">它只是NumPy中的一个函数来拟合系数。我们可以使用相同的函数来拟合季节变化和趋势。由于趋势可以支配季节性，在估计季节性之前，我们去除趋势:</p>
+    <p class="normal">它只是 NumPy 中的一个函数来拟合系数。我们可以使用相同的函数来拟合季节变化和趋势。由于趋势可以支配季节性，在估计季节性之前，我们去除趋势:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from numpy import polyfit
 
@@ -1002,11 +1002,11 @@ plt.ylabel('Temperature change');
 
     <figure class="mediaobject"><img src="img/B17577_02_08.png" alt="temperatures_trend_seasonality.png"/></figure>
 
-    <p class="packt_figref">图2.9:从19世纪末到今天的气温变化</p>
+    <p class="packt_figref">图 2.9:从 19 世纪末到今天的气温变化</p>
 
-    <p class="normal">这是为了说明您可以使用NumPy中的插件功能进行曲线拟合，以便找到趋势和季节性。如果你想做进一步的实验，你可以试试<a id="_idIndexMarker141"/>多项式的次数或者季节性成分，看看你是否能得到更好的拟合，或者找到另一个季节性成分。我们可以使用其他库中的<a id="_idIndexMarker142"/>功能，比如<code class="Code-In-Text--PACKT-">statsmodels</code>中的<code class="Code-In-Text--PACKT-">seasonal.seasonal_decompose()</code>，或者脸书的Prophet，它使用傅立叶系数分解季节成分。</p>
+    <p class="normal">这是为了说明您可以使用 NumPy 中的插件功能进行曲线拟合，以便找到趋势和季节性。如果你想做进一步的实验，你可以试试<a id="_idIndexMarker141"/>多项式的次数或者季节性成分，看看你是否能得到更好的拟合，或者找到另一个季节性成分。我们可以使用其他库中的<a id="_idIndexMarker142"/>功能，比如<code class="Code-In-Text--PACKT-">statsmodels</code>中的<code class="Code-In-Text--PACKT-">seasonal.seasonal_decompose()</code>，或者脸书的 Prophet，它使用傅立叶系数分解季节成分。</p>
 
-    <p class="normal">现在我们已经看到了如何估计季节性和趋势，让我们继续其他统计和可视化。继续污染数据集，并选取我们在<em class="italic">第一章</em>中看到的脑电图数据集，我们将用Python实际展示如何获得这些统计数据和图表，以及如何识别趋势和季节性。</p>
+    <p class="normal">现在我们已经看到了如何估计季节性和趋势，让我们继续其他统计和可视化。继续污染数据集，并选取我们在<em class="italic">第一章</em>中看到的脑电图数据集，我们将用 Python 实际展示如何获得这些统计数据和图表，以及如何识别趋势和季节性。</p>
 
     <p class="normal"><strong class="keyword">自相关</strong>是信号与其自身滞后版本的相关性。自相关图<a id="_idIndexMarker143"/>将自相关绘制为滞后的函数。自相关图有助于找到重复模式，常用于信号处理。自相关可以帮助发现周期信号。让我们画出污染数据的自相关图:</p>
 
@@ -1020,13 +1020,13 @@ pd.plotting.autocorrelation_plot(pollution['London'])
 
     <figure class="mediaobject"><img src="img/B17577_02_09.png" alt="autocorrelation.png"/></figure>
 
-    <p class="packt_figref">图2.10:伦敦污染的自相关图</p>
+    <p class="packt_figref">图 2.10:伦敦污染的自相关图</p>
 
-    <p class="normal">我们可以看到仅滞后几年的高度自相关。在大约100年时有一个负自相关<a id="_idIndexMarker145"/>，此后自相关保持在0左右。</p>
+    <p class="normal">我们可以看到仅滞后几年的高度自相关。在大约 100 年时有一个负自相关<a id="_idIndexMarker145"/>，此后自相关保持在 0 左右。</p>
 
-    <p class="normal">SPM的曲线图清楚地表明<a id="_idIndexMarker146"/>空气污染不是一个稳定的过程，因为自相关不是平坦的。你也可以比较污染的运行，显示有一个<strong class="keyword">趋势</strong>，因此平均值也发生变化——这是该系列不稳定的另一个迹象。</p>
+    <p class="normal">SPM 的曲线图清楚地表明<a id="_idIndexMarker146"/>空气污染不是一个稳定的过程，因为自相关不是平坦的。你也可以比较污染的运行，显示有一个<strong class="keyword">趋势</strong>，因此平均值也发生变化——这是该系列不稳定的另一个迹象。</p>
 
-    <p class="normal">我们也可以用统计数据来检验这一点。对平稳性的测试是增强的Dickey-Fuller测试:</p>
+    <p class="normal">我们也可以用统计数据来检验这一点。对平稳性的测试是增强的 Dickey-Fuller 测试:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from statsmodels.tsa import stattools
 
@@ -1052,11 +1052,11 @@ stattools.adfuller(pollution['London'])
 
 </code></pre>
 
-    <p class="normal">第二个返回值<a id="_idIndexMarker147"/>是p值，其给出的显著性或获得测试结果的概率至少与给定零假设的观察值<a id="_idIndexMarker148"/>一样极端。当p值低于5%或0.05时，我们通常会拒绝零假设，我们可以假设我们的时间序列是平稳的。在我们的例子中，我们不能假设级数是平稳的。</p>
+    <p class="normal">第二个返回值<a id="_idIndexMarker147"/>是 p 值，其给出的显著性或获得测试结果的概率至少与给定零假设的观察值<a id="_idIndexMarker148"/>一样极端。当 p 值低于 5%或 0.05 时，我们通常会拒绝零假设，我们可以假设我们的时间序列是平稳的。在我们的例子中，我们不能假设级数是平稳的。</p>
 
-    <p class="normal">我们在<em class="italic">第一章</em>、<em class="italic">用Python </em>介绍时间序列中看到<strong class="keyword">脑电图</strong> ( <strong class="keyword"> EEG </strong>)信号的图形，我们提到过EEG信号在几个频率范围显示<a id="_idIndexMarker149"/>脑电波。</p>
+    <p class="normal">我们在<em class="italic">第一章</em>、<em class="italic">用 Python </em>介绍时间序列中看到<strong class="keyword">脑电图</strong> ( <strong class="keyword"> EEG </strong>)信号的图形，我们提到过 EEG 信号在几个频率范围显示<a id="_idIndexMarker149"/>脑电波。</p>
 
-    <p class="normal">我们可以很好地想象这个。让我们用Python一步步来。我们首先需要做一些导入工作:</p>
+    <p class="normal">我们可以很好地想象这个。让我们用 Python 一步步来。我们首先需要做一些导入工作:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import pandas as pd
 
@@ -1070,7 +1070,7 @@ from sklearn.datasets import fetch_openml
 
 </code></pre>
 
-    <p class="normal">OpenML是一个提供基准数据集和比较机器学习算法的网站的项目。scikit-learn库提供了一个OpenML接口，允许我们从OpenML中获取数据。整个测量<a id="_idIndexMarker151"/>跨越117秒。因此，我们需要在熊猫中正确设置这个索引:</p>
+    <p class="normal">OpenML 是一个提供基准数据集和比较机器学习算法的网站的项目。scikit-learn 库提供了一个 OpenML 接口，允许我们从 OpenML 中获取数据。整个测量<a id="_idIndexMarker151"/>跨越 117 秒。因此，我们需要在熊猫中正确设置这个索引:</p>
 
     <pre class="programlisting code"><code class="hljs-code">eeg = fetch_openml(data_id=1471, as_frame=True)
 
@@ -1094,7 +1094,7 @@ v1 = pd.Series(name='V1', data=eeg['data']['V1'].values, index=ts_index)
 
 </code></pre>
 
-    <p class="normal">我们可以直接分割数据集。请注意<code class="Code-In-Text--PACKT-">DatetimeIndex</code>是在1970年锚定的，但是我们在这里可以安全地忽略这一点:</p>
+    <p class="normal">我们可以直接分割数据集。请注意<code class="Code-In-Text--PACKT-">DatetimeIndex</code>是在 1970 年锚定的，但是我们在这里可以安全地忽略这一点:</p>
 
     <pre class="programlisting code"><code class="hljs-code">slicing = (v1.index &gt;= '1970-01-01 00:00:08') &amp; (v1.index &lt;='1970-01-01 00:01:10.000000000')
 
@@ -1130,7 +1130,7 @@ Name: V1, Length: 7937, dtype: float64
 
 </code></pre>
 
-    <p class="normal">这种切片避免了<a id="_idIndexMarker152"/>在1:20左右出现的伪影，即强尖峰。</p>
+    <p class="normal">这种切片避免了<a id="_idIndexMarker152"/>在 1:20 左右出现的伪影，即强尖峰。</p>
 
     <p class="normal">我们<a id="_idIndexMarker153"/>在<em class="italic">第一章</em>中看到的图表，我们可以绘制如下:</p>
 
@@ -1148,7 +1148,7 @@ plt.ylabel('voltage')
 
     <figure class="mediaobject"><img src="img/B17577_02_10.png" alt="Machine-Learning%20for%20Time-Series%20with%20Python/voltage_over_time.png"/></figure>
 
-    <p class="packt_figref">图2.11:脑电图信号中电压随时间的变化</p>
+    <p class="packt_figref">图 2.11:脑电图信号中电压随时间的变化</p>
 
     <p class="normal">这是脑电图信号随时间变化的曲线图。</p>
 
@@ -1176,15 +1176,15 @@ plt.xlabel('seconds');
 
 </code></pre>
 
-    <p class="normal">这是一个图表，其中有三个子曲线，我们分别从1秒、2秒和5秒的频率重采样中获得:</p>
+    <p class="normal">这是一个图表，其中有三个子曲线，我们分别从 1 秒、2 秒和 5 秒的频率重采样中获得:</p>
 
     <figure class="mediaobject"><img src="img/B17577_02_11.png" alt="eeg_resampled.png"/></figure>
 
-    <p class="packt_figref">图2.12:重新采样的EEG信号</p>
+    <p class="packt_figref">图 2.12:重新采样的 EEG 信号</p>
 
     <p class="normal">根据应用，图中每个重采样的<a id="_idIndexMarker155"/>信号对分析可能或多或少有用。对于高频分析，我们根本不应该进行重采样，而如果我们试图尽可能多地消除噪声，我们应该以更粗的时间分辨率进行重采样。</p>
 
-    <p class="normal">我们可以在光谱密度图上看到周期性活动。我们可以通过傅立叶变换来实现。这里，我们使用Welch方法<a id="_idIndexMarker156"/>,该方法在应用离散傅里叶变换之前对时间进行平均:</p>
+    <p class="normal">我们可以在光谱密度图上看到周期性活动。我们可以通过傅立叶变换来实现。这里，我们使用 Welch 方法<a id="_idIndexMarker156"/>,该方法在应用离散傅里叶变换之前对时间进行平均:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from scipy import signal
 
@@ -1214,7 +1214,7 @@ plt.ylabel('PSD [V**2/Hz]')
 
     <figure class="mediaobject"><img src="img/B17577_02_12.png" alt="spectral_eeg.png"/></figure>
 
-    <p class="packt_figref">图2.13:脑电图信号的周期图</p>
+    <p class="packt_figref">图 2.13:脑电图信号的周期图</p>
 
     <p class="normal">此图中的信息类似于我们为污染绘制的自相关图，然而，它给了我们关于某些频率有多突出的信息。在这种情况下，我们看到低频特别强大。换句话说，信号显示出缓慢的振荡。</p>
 
@@ -1224,11 +1224,11 @@ plt.ylabel('PSD [V**2/Hz]')
 
     <p class="normal">在这一章中，我们介绍了从时间序列中提取摘要和其他统计信息的过程。我们将这一过程分解为理解变量、揭示变量之间的关系以及识别趋势和季节性。</p>
 
-    <p class="normal">我们介绍了datetime和pandas，TSA中的必要条件库<em class="italic">和它们的时间序列功能；比如重采样。在本章中，我们列出并定义了许多汇总统计数据，包括均值、标准差、中位数、SE、置信区间、皮尔逊相关和协方差。</em></p>
+    <p class="normal">我们介绍了 datetime 和 pandas，TSA 中的必要条件库<em class="italic">和它们的时间序列功能；比如重采样。在本章中，我们列出并定义了许多汇总统计数据，包括均值、标准差、中位数、SE、置信区间、皮尔逊相关和协方差。</em></p>
 
     <p class="normal">我们还谈到了季节性、周期性变化和平稳性的概念。我们讨论了为什么平稳性很重要，以及如何测试平稳性。</p>
 
-    <p class="normal">我们还展示了Matplotlib和Seaborn的绘图功能，以及如何生成不同的图，如运行图、时间线图、相关热图、直方图、散点图、自相关图和周期图。在实际例子中，我们使用了自相关图和周期图，前者显示了不同时间步长之间的相关性，后者显示了功率谱密度。</p>
+    <p class="normal">我们还展示了 Matplotlib 和 Seaborn 的绘图功能，以及如何生成不同的图，如运行图、时间线图、相关热图、直方图、散点图、自相关图和周期图。在实际例子中，我们使用了自相关图和周期图，前者显示了不同时间步长之间的相关性，后者显示了功率谱密度。</p>
 
   </div>
 

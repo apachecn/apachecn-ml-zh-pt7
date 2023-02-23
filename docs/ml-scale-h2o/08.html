@@ -7,86 +7,86 @@
 	
 	
 		<div><h1 id="_idParaDest-106"><em class="italic"> <a id="_idTextAnchor106"/>第六章</em>:先进样板建筑——第二部分</h1>
-			<p>在前一章<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em></a><em class="italic">高级模型构建——第一部分</em>中，我们详细介绍了在H2O平台上构建企业级<strong class="bold">监督学习</strong>模型的过程。在本章中，我们通过执行以下操作来完善我们的高级模型构建主题:</p>
+			<p>在前一章<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em></a><em class="italic">高级模型构建——第一部分</em>中，我们详细介绍了在 H2O 平台上构建企业级<strong class="bold">监督学习</strong>模型的过程。在本章中，我们通过执行以下操作来完善我们的高级模型构建主题:</p>
 			<ul>
-				<li>演示如何在Apache Spark管道中构建H2O监督学习模型</li>
-				<li>介绍H2O的<strong class="bold">无监督学习</strong>方法</li>
-				<li>讨论更新H2O模型的最佳实践</li>
-				<li>记录要求以确保H2O模型的再现性</li>
+				<li>演示如何在 Apache Spark 管道中构建 H2O 监督学习模型</li>
+				<li>介绍 H2O 的<strong class="bold">无监督学习</strong>方法</li>
+				<li>讨论更新 H2O 模型的最佳实践</li>
+				<li>记录要求以确保 H2O 模型的再现性</li>
 			</ul>
-			<p>我们从介绍Sparkling Water pipelines开始这一章，这是一种在Spark管道中嵌入H2O模型的方法。在大量使用Spark的企业环境中，我们发现这是一种构建和部署H2O模型的流行方法。我们通过使用亚马逊食品在线评论的数据，为<strong class="bold">情感分析</strong>建立一个苏打水管道来进行演示。</p>
-			<p>然后，我们介绍了H2O可用的无监督学习方法。使用信用卡交易数据，我们建立了一个使用隔离森林的异常检测模型。在这种情况下，无人监管的模型将用于标记可疑的信用卡交易，以防止金融欺诈。</p>
-			<p>我们通过解决与本章以及第5章  <em class="italic">“高级模型构建-第一部分</em>”中构建的模型相关的问题来结束本章。这些是更新H2O模型和确保H2O模型结果可再现性的最佳实践。</p>
+			<p>我们从介绍 Sparkling Water pipelines 开始这一章，这是一种在 Spark 管道中嵌入 H2O 模型的方法。在大量使用 Spark 的企业环境中，我们发现这是一种构建和部署 H2O 模型的流行方法。我们通过使用亚马逊食品在线评论的数据，为<strong class="bold">情感分析</strong>建立一个苏打水管道来进行演示。</p>
+			<p>然后，我们介绍了 H2O 可用的无监督学习方法。使用信用卡交易数据，我们建立了一个使用隔离森林的异常检测模型。在这种情况下，无人监管的模型将用于标记可疑的信用卡交易，以防止金融欺诈。</p>
+			<p>我们通过解决与本章以及第 5 章  <em class="italic">“高级模型构建-第一部分</em>”中构建的模型相关的问题来结束本章。这些是更新 H2O 模型和确保 H2O 模型结果可再现性的最佳实践。</p>
 			<p>本章将涵盖以下主题:</p>
 			<ul>
 				<li>在波光粼粼的水中建模</li>
-				<li>H2O的UL方法</li>
-				<li>更新H2O模型的最佳实践</li>
-				<li>确保H2O模型的再现性</li>
+				<li>H2O 的 UL 方法</li>
+				<li>更新 H2O 模型的最佳实践</li>
+				<li>确保 H2O 模型的再现性</li>
 			</ul>
 			<h1 id="_idParaDest-107"><a id="_idTextAnchor107"/>技术要求</h1>
-			<p>我们在本章介绍的代码和数据集可以在GitHub知识库中找到，网址是<a href="https://github.com/PacktPublishing/Machine-Learning-at-Scale-with-H2O">https://GitHub . com/packt publishing/Machine-Learning-at-Scale-with-H2O</a>。如果此时您还没有设置您的H2O环境，请参见本书的<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"> <em class="italic">附录</em></a><em class="italic">-启动H2O集群的替代方法，</em>来进行设置。</p>
+			<p>我们在本章介绍的代码和数据集可以在 GitHub 知识库中找到，网址是<a href="https://github.com/PacktPublishing/Machine-Learning-at-Scale-with-H2O">https://GitHub . com/packt publishing/Machine-Learning-at-Scale-with-H2O</a>。如果此时您还没有设置您的 H2O 环境，请参见本书的<a href="B16721_Appendix_Final_SK_ePub.xhtml#_idTextAnchor268"> <em class="italic">附录</em></a><em class="italic">-启动 H2O 集群的替代方法，</em>来进行设置。</p>
 			<h1 id="_idParaDest-108"><a id="_idTextAnchor108"/>在波光粼粼的水中造型</h1>
-			<p>我们在<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第二章</em> </a>、<em class="italic">平台组件和关键概念、</em>中看到，波光粼粼的水简直就是阿帕奇Spark环境下的H2O-3。从Python程序员的角度来看，H2O-3代码实际上与苏打水代码是一样的。如果<a id="_idIndexMarker419"/>代码是一样的，为什么有一个单独的部分用于在苏打水建模？这里有两个重要的原因，如<a id="_idIndexMarker420"/>所述:</p>
+			<p>我们在<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第二章</em> </a>、<em class="italic">平台组件和关键概念、</em>中看到，波光粼粼的水简直就是阿帕奇 Spark 环境下的 H2O-3。从 Python 程序员的角度来看，H2O-3 代码实际上与苏打水代码是一样的。如果<a id="_idIndexMarker419"/>代码是一样的，为什么有一个单独的部分用于在苏打水建模？这里有两个重要的原因，如<a id="_idIndexMarker420"/>所述:</p>
 			<ul>
-				<li>苏打水使数据科学家能够利用Spark广泛的数据处理能力。</li>
+				<li>苏打水使数据科学家能够利用 Spark 广泛的数据处理能力。</li>
 				<li>苏打水提供了生产火花管道。接下来我们将详述这些原因。</li>
 			</ul>
-			<p>Spark的数据操作随着数据量的增加而毫不费力地扩展，这是众所周知的。由于Spark在企业环境中的存在现在几乎是必然的，数据科学家应该将Spark添加到他们的技能工具箱中。这并不像看起来那么难，因为Spark可以通过Python(使用PySpark)操作，数据操作主要用Spark SQL编写。对于<a id="_idIndexMarker421"/>经验丰富的Python和<strong class="bold">结构化查询语言</strong> ( <strong class="bold"> SQL </strong>)编码员来说，这确实是一个非常容易的过渡。</p>
-			<p>在第五章 、<em class="italic">高级模型构建-第一部分</em>、数据管理和<strong class="bold">特征工程</strong>的Lending Club示例中，在H2O集群上使用本地H2O命令执行任务。这些H2O数据命令<a id="_idIndexMarker422"/>也适用于苏打水。然而，在一个已经投资了Spark数据基础设施的企业中，用Spark的对等命令替换H2O数据命令是非常有意义的。然后，它会将清理后的数据集传递给H2O，以处理后续的建模步骤。这是我们推荐的苏打水工作流程。</p>
-			<p>此外，Spark管道经常用于企业生产设置中的<strong class="bold">提取、转换和加载</strong> ( <strong class="bold"> ETL </strong>)以及其他数据处理任务<a id="_idIndexMarker423"/>。苏打水将H2O算法集成到Spark管道中，可以在Spark环境中无缝训练和部署H2O模型<a id="_idIndexMarker424"/>。在本节的剩余部分，我们将展示如何将Spark管道与H2O建模相结合来创建一个闪闪发光的水管。这种<a id="_idIndexMarker425"/>管道很容易投入生产，我们将在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第10章</em> </a>、<em class="italic"> H2O模型部署模式</em>中详细讨论这个话题。</p>
+			<p>Spark 的数据操作随着数据量的增加而毫不费力地扩展，这是众所周知的。由于 Spark 在企业环境中的存在现在几乎是必然的，数据科学家应该将 Spark 添加到他们的技能工具箱中。这并不像看起来那么难，因为 Spark 可以通过 Python(使用 PySpark)操作，数据操作主要用 Spark SQL 编写。对于<a id="_idIndexMarker421"/>经验丰富的 Python 和<strong class="bold">结构化查询语言</strong> ( <strong class="bold"> SQL </strong>)编码员来说，这确实是一个非常容易的过渡。</p>
+			<p>在第五章 、<em class="italic">高级模型构建-第一部分</em>、数据管理和<strong class="bold">特征工程</strong>的 Lending Club 示例中，在 H2O 集群上使用本地 H2O 命令执行任务。这些 H2O 数据命令<a id="_idIndexMarker422"/>也适用于苏打水。然而，在一个已经投资了 Spark 数据基础设施的企业中，用 Spark 的对等命令替换 H2O 数据命令是非常有意义的。然后，它会将清理后的数据集传递给 H2O，以处理后续的建模步骤。这是我们推荐的苏打水工作流程。</p>
+			<p>此外，Spark 管道经常用于企业生产设置中的<strong class="bold">提取、转换和加载</strong> ( <strong class="bold"> ETL </strong>)以及其他数据处理任务<a id="_idIndexMarker423"/>。苏打水将 H2O 算法集成到 Spark 管道中，可以在 Spark 环境中无缝训练和部署 H2O 模型<a id="_idIndexMarker424"/>。在本节的剩余部分，我们将展示如何将 Spark 管道与 H2O 建模相结合来创建一个闪闪发光的水管。这种<a id="_idIndexMarker425"/>管道很容易投入生产，我们将在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第 10 章</em> </a>、<em class="italic"> H2O 模型部署模式</em>中详细讨论这个话题。</p>
 			<h2 id="_idParaDest-109"><a id="_idTextAnchor109"/>引入汽水管道</h2>
-			<p><em class="italic">图6.1 </em>说明了<a id="_idIndexMarker426"/>汽水管道训练和部署过程。管道从用于模型训练的输入数据源开始。数据清理和特征工程步骤是从火花变压器按顺序构建的，一个变压器的输出成为后续变压器的输入。一旦数据集处于建模就绪的格式，H2O就接管指定和构建模型的工作。我们将所有的转换器和模型步骤包装到一个管道中，该管道被训练，然后被导出用于生产。</p>
-			<p>在生产环境中，我们导入管道并向其引入新数据(在下图中，我们假设这是通过数据流发生的，但数据也可能成批到达)。管道输出H2O模型预测:</p>
+			<p><em class="italic">图 6.1 </em>说明了<a id="_idIndexMarker426"/>汽水管道训练和部署过程。管道从用于模型训练的输入数据源开始。数据清理和特征工程步骤是从火花变压器按顺序构建的，一个变压器的输出成为后续变压器的输入。一旦数据集处于建模就绪的格式，H2O 就接管指定和构建模型的工作。我们将所有的转换器和模型步骤包装到一个管道中，该管道被训练，然后被导出用于生产。</p>
+			<p>在生产环境中，我们导入管道并向其引入新数据(在下图中，我们假设这是通过数据流发生的，但数据也可能成批到达)。管道输出 H2O 模型预测:</p>
 			<div><div><img src="img/B16721_06_01.jpg" alt="Figure 6.1 – Sparkling Water pipeline train and deploy illustration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.1–汽水管道系列和部署图</p>
+			<p class="figure-caption">图 6.1–汽水管道系列和部署图</p>
 			<p>接下来，让我们创建一个管道来实现情感分析。</p>
 			<h2 id="_idParaDest-110"><a id="_idTextAnchor110"/>实施情感分析管道</h2>
 			<p>我们接下来为一个情感分析分类问题创建一个闪闪发光的<a id="_idIndexMarker427"/>水管。情绪分析用于模拟客户对产品或公司是正面还是负面的感觉<a id="_idIndexMarker429"/>。它通常需要<strong class="bold">自然语言处理</strong> ( <strong class="bold"> NLP </strong>)从文本中创建预测器。对于我们的例子，我们使用来自斯坦福网络分析平台<strong class="bold"/>(<strong class="bold">SNAP</strong>)存储库的<em class="italic">亚马逊美食评论</em>数据集<a id="_idIndexMarker430"/>的预处理版本。(原始数据见<a href="https://snap.stanford.edu/data/web-FineFoods.html">https://snap.stanford.edu/data/web-FineFoods.html</a>。)</p>
-			<p>让我们首先验证Spark在我们的系统上是可用的。</p>
+			<p>让我们首先验证 Spark 在我们的系统上是可用的。</p>
 			<pre class="source-code">spark</pre>
 			<p>以下屏幕截图显示了输出:</p>
 			<div><div><img src="img/B16721_06_02.jpg" alt="Figure 6.2 – Spark startup in Jupyter notebook with PySparkling kernel&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.2–在Jupyter笔记本电脑中使用PySparkling内核启动Spark</p>
-			<p>你可以在Spark输出中看到<strong class="bold"> SparkSession </strong>已经启动，并且<strong class="bold"> SparkContext </strong>已经启动。</p>
-			<p class="callout-heading">PySpark和PySparkling</p>
-			<p class="callout"><strong class="bold"> PySpark </strong>是Apache针对<a id="_idIndexMarker431"/> Spark的Python接口。它为交互式Spark会话和对Spark组件(如Spark SQL、数据帧和流)的访问提供了一个外壳。<strong class="bold">py sparking</strong>是<strong class="bold"> PySpark </strong>的<a id="_idIndexMarker432"/> H2O扩展，支持在Python的Spark集群上启动H2O服务。我们的Jupyter笔记本使用PySpark外壳。</p>
-			<p>在Sparkling <a id="_idIndexMarker433"/> Water的<em class="italic">内部后端</em>模式中，H2O资源捎带着它们的Spark同行，都在同一个<strong class="bold"> Java虚拟机</strong> ( <strong class="bold"> JVM </strong>)内。如<em class="italic"> </em>下图<a id="_idIndexMarker434"/>所示，位于<strong class="bold"> SparkContext </strong>顶部的<strong class="bold"> H2OContext </strong>被启动<a id="_idIndexMarker435"/>，H2O在<a id="_idIndexMarker437"/> Spark cluster的每个worker节点被初始化<a id="_idIndexMarker436"/>:</p>
+			<p class="figure-caption">图 6.2–在 Jupyter 笔记本电脑中使用 PySparkling 内核启动 Spark</p>
+			<p>你可以在 Spark 输出中看到<strong class="bold"> SparkSession </strong>已经启动，并且<strong class="bold"> SparkContext </strong>已经启动。</p>
+			<p class="callout-heading">PySpark 和 PySparkling</p>
+			<p class="callout"><strong class="bold"> PySpark </strong>是 Apache 针对<a id="_idIndexMarker431"/> Spark 的 Python 接口。它为交互式 Spark 会话和对 Spark 组件(如 Spark SQL、数据帧和流)的访问提供了一个外壳。<strong class="bold">py sparking</strong>是<strong class="bold"> PySpark </strong>的<a id="_idIndexMarker432"/> H2O 扩展，支持在 Python 的 Spark 集群上启动 H2O 服务。我们的 Jupyter 笔记本使用 PySpark 外壳。</p>
+			<p>在 Sparkling <a id="_idIndexMarker433"/> Water 的<em class="italic">内部后端</em>模式中，H2O 资源捎带着它们的 Spark 同行，都在同一个<strong class="bold"> Java 虚拟机</strong> ( <strong class="bold"> JVM </strong>)内。如<em class="italic"> </em>下图<a id="_idIndexMarker434"/>所示，位于<strong class="bold"> SparkContext </strong>顶部的<strong class="bold"> H2OContext </strong>被启动<a id="_idIndexMarker435"/>，H2O 在<a id="_idIndexMarker437"/> Spark cluster 的每个 worker 节点被初始化<a id="_idIndexMarker436"/>:</p>
 			<div><div><img src="img/B16721_06_03.jpg" alt="Figure 6.3 – Sparkling Water internal backend mode&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.3–苏打水内部后端模式</p>
-			<p>PySparkling用于创建一个H2OContext并初始化工作节点，如下所示:</p>
+			<p class="figure-caption">图 6.3–苏打水内部后端模式</p>
+			<p>PySparkling 用于创建一个 H2OContext 并初始化工作节点，如下所示:</p>
 			<pre class="source-code">from pysparkling import *</pre>
 			<pre class="source-code">hc = H2OContext.getOrCreate()</pre>
 			<p>这会产生以下输出:</p>
 			<div><div><img src="img/B16721_06_04.jpg" alt="Figure 6.4 – Sparkling Water cluster immediately after launch&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.4–发射后立即出现的气泡水簇</p>
-			<p>在H2O <a id="_idIndexMarker438"/>服务器启动后，我们使用Python命令与它进行交互。我们将从导入<a id="_idIndexMarker439"/>原始数据开始。</p>
+			<p class="figure-caption">图 6.4–发射后立即出现的气泡水簇</p>
+			<p>在 H2O <a id="_idIndexMarker438"/>服务器启动后，我们使用 Python 命令与它进行交互。我们将从导入<a id="_idIndexMarker439"/>原始数据开始。</p>
 			<h2 id="_idParaDest-111"><a id="_idTextAnchor111"/>导入原始亚马逊数据</h2>
-			<p>我们将<a id="_idIndexMarker440"/>亚马逊培训<a id="_idIndexMarker441"/>数据导入到<code>reviews_spark</code> Spark数据框架中，如下所示:</p>
+			<p>我们将<a id="_idIndexMarker440"/>亚马逊培训<a id="_idIndexMarker441"/>数据导入到<code>reviews_spark</code> Spark 数据框架中，如下所示:</p>
 			<pre class="source-code">datafile = "AmazonReviews_Train.csv"</pre>
 			<pre class="source-code">reviews_spark = spark.read.load(datafile, format="csv",</pre>
 			<pre class="source-code">    sep=",", inferSchema="true", header="true")</pre>
-			<p>或者，我们可以使用H2O导入数据，然后将<code>reviews_h2o</code> H2O帧转换为<code>reviews_spark</code>火花数据帧，如下所示:</p>
+			<p>或者，我们可以使用 H2O 导入数据，然后将<code>reviews_h2o</code> H2O 帧转换为<code>reviews_spark</code>火花数据帧，如下所示:</p>
 			<pre class="source-code">import h2o</pre>
 			<pre class="source-code">reviews_h2o = h2o.upload_file(datafile)</pre>
 			<pre class="source-code">reviews_spark = hc.as_spark_frame(reviews_h2o)</pre>
-			<p>这种方法的优点是允许我们在转换为Spark数据框架之前，使用H2O流进行交互式数据探索，如第5章 、<em class="italic">高级模型构建-第一部分</em>所示。</p>
+			<p>这种方法的优点是允许我们在转换为 Spark 数据框架之前，使用 H2O 流进行交互式数据探索，如第 5 章 、<em class="italic">高级模型构建-第一部分</em>所示。</p>
 			<p>接下来，我们打印出数据<a id="_idIndexMarker442"/>模式来显示输入变量和变量类型。这是通过以下代码完成的:</p>
 			<pre class="source-code">reviews_spark.printSchema()</pre>
 			<p>产生的数据模式<a id="_idIndexMarker443"/>如下面的屏幕截图所示:</p>
 			<div><div><img src="img/B16721_06_05.jpg" alt="Figure 6.5 – Schema for Amazon Fine Food raw data&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.5-亚马逊美食原始数据模式</p>
-			<p>为了简单起见，我们在这个分析中只使用了<code>Time</code>、<code>Summary</code>和总体<code>Score</code>列。<code>Time</code>是日期时间字符串，<code>Score</code>是1到5之间的整数值，从中导出情感，<code>Summary</code>是产品评论的简短文本摘要。请注意，<code>Text</code>列包含实际的产品评论。一个更好的模型选择应该包括<code>Text</code>来代替<code>Summary</code>，或者可能是对<code>Summary</code>的补充。</p>
+			<p class="figure-caption">图 6.5-亚马逊美食原始数据模式</p>
+			<p>为了简单起见，我们在这个分析中只使用了<code>Time</code>、<code>Summary</code>和总体<code>Score</code>列。<code>Time</code>是日期时间字符串，<code>Score</code>是 1 到 5 之间的整数值，从中导出情感，<code>Summary</code>是产品评论的简短文本摘要。请注意，<code>Text</code>列包含实际的产品评论。一个更好的模型选择应该包括<code>Text</code>来代替<code>Summary</code>，或者可能是对<code>Summary</code>的补充。</p>
 			<p>使用以下代码将输入数据模式保存到<code>schema.json</code>文件中:</p>
 			<pre class="source-code">with open('schema.json','w') as f:</pre>
 			<pre class="source-code">    f.write(str(reviews_spark.schema.json()))</pre>
@@ -94,11 +94,11 @@
 			<p class="callout-heading">输入数据和生产数据结构</p>
 			<p class="callout">保存用于部署的数据模式假定生产数据将使用相同的模式。作为一名构建汽水管道的数据科学家，我们强烈建议您的培训输入数据完全遵循生产数据模式。值得付出额外的努力，在模型构建之前跟踪这些信息，而不是在部署阶段重新设计。</p>
 			<h2 id="_idParaDest-112"><a id="_idTextAnchor112"/>定义火花管道阶段</h2>
-			<p>Spark流水线是通过将单独的数据操作或变压器串在一起而产生的。每个转换器将来自<a id="_idIndexMarker446"/>前一级的输出数据作为其输入，这使得数据科学家的开发非常简单。一个大的任务可以分解成几个独立的任务，这些任务以菊花链的形式连接在一起。</p>
-			<p>Apache Spark通过懒惰评估运行。这意味着计算不会立即执行；相反，当某种动作被触发时，操作被缓存并执行。这种方法有很多优点，包括允许Spark优化其计算。</p>
-			<p>在我们的例子中，所有的数据清理和特征工程步骤都将通过Spark transformers创建。通过训练H2O XGBoost模型来完成流水线。为了清楚起见，在构建管道的过程中，我们将为每个转换器定义一个阶段号。</p>
-			<h3>阶段1–创建一个转换器来选择所需的列</h3>
-			<p>Spark <code>SQLTransformer</code>类允许我们使用SQL来管理数据。事实上，大多数数据科学家已经对SQL有了丰富的经验，这有助于Spark在数据操作中的顺利应用。<code>SQLTransformer</code>将广泛应用于该管道。运行以下代码导入该类:</p>
+			<p>Spark 流水线是通过将单独的数据操作或变压器串在一起而产生的。每个转换器将来自<a id="_idIndexMarker446"/>前一级的输出数据作为其输入，这使得数据科学家的开发非常简单。一个大的任务可以分解成几个独立的任务，这些任务以菊花链的形式连接在一起。</p>
+			<p>Apache Spark 通过懒惰评估运行。这意味着计算不会立即执行；相反，当某种动作被触发时，操作被缓存并执行。这种方法有很多优点，包括允许 Spark 优化其计算。</p>
+			<p>在我们的例子中，所有的数据清理和特征工程步骤都将通过 Spark transformers 创建。通过训练 H2O XGBoost 模型来完成流水线。为了清楚起见，在构建管道的过程中，我们将为每个转换器定义一个阶段号。</p>
+			<h3>阶段 1–创建一个转换器来选择所需的列</h3>
+			<p>Spark <code>SQLTransformer</code>类允许我们使用 SQL 来管理数据。事实上，大多数数据科学家已经对 SQL 有了丰富的经验，这有助于 Spark 在数据操作中的顺利应用。<code>SQLTransformer</code>将广泛应用于该管道。运行以下代码导入该类:</p>
 			<pre class="source-code">from pyspark.ml.feature import SQLTransformer</pre>
 			<p>定义一个<code>colSelect</code>变压器，像这样:</p>
 			<pre class="source-code">colSelect = SQLTransformer(</pre>
@@ -108,18 +108,18 @@
 			<pre class="source-code">           Summary </pre>
 			<pre class="source-code">    FROM __THIS__""")</pre>
 			<p>在前面的代码中，我们选择了<code>Score</code>、<code>Time</code>和<code>Summary</code>列，将时间戳转换为可读的日期时间字符串。<code>FROM</code>语句中的<code>__THIS__</code>引用前一级变压器的输出。由于这是第一阶段，<code>__THIS__</code>是指输入数据。</p>
-			<p>在开发过程中，通过直接调用转换器来检查每个阶段的结果是很有帮助的。这使得调试变压器代码和理解下一阶段哪些输入<a id="_idIndexMarker448"/>可用变得容易。调用transformer将导致Spark执行它以及所有未赋值的上游代码。以下代码片段说明了如何调用转换器:</p>
+			<p>在开发过程中，通过直接调用转换器来检查每个阶段的结果是很有帮助的。这使得调试变压器代码和理解下一阶段哪些输入<a id="_idIndexMarker448"/>可用变得容易。调用 transformer 将导致 Spark 执行它以及所有未赋值的上游代码。以下代码片段说明了如何调用转换器:</p>
 			<pre class="source-code">selected = colSelect.transform(reviews_spark)</pre>
 			<pre class="source-code">selected.show(n=10, truncate=False)</pre>
 			<p>下面的屏幕截图显示了前几行:</p>
 			<div><div><img src="img/B16721_06_06.jpg" alt="Figure 6.6 – Results from the colSelect stage 1 transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.6–colSelect 1级变压器的结果</p>
+			<p class="figure-caption">图 6.6–colSelect 1 级变压器的结果</p>
 			<p>第一个转换器获取原始数据，并将其简化为三列。我们将分别对每一列进行操作，以创建我们的建模就绪数据集。让我们从<code>Time</code>栏开始。</p>
-			<h3>阶段2–定义转换器以创建多个时间特征</h3>
+			<h3>阶段 2–定义转换器以创建多个时间特征</h3>
 			<p>这个模型的目标是<a id="_idIndexMarker449"/>预测情绪:评论是正面的还是负面的？日期和时间可能是影响情绪的因素。也许人们在周五晚上给出更好的评论，因为周末即将到来。</p>
-			<p><code>Time</code>列作为时间戳存储在内部。为了在建模中有用，我们需要以我们使用的预测算法可以理解的格式提取日期和时间信息。我们使用SparkSQL数据方法(例如<code>hour</code>、<code>month</code>和<code>year</code>)定义了一个<code>expandTime</code>转换器，以便从原始时间戳信息中设计多个新特性，如下所示:</p>
+			<p><code>Time</code>列作为时间戳存储在内部。为了在建模中有用，我们需要以我们使用的预测算法可以理解的格式提取日期和时间信息。我们使用 SparkSQL 数据方法(例如<code>hour</code>、<code>month</code>和<code>year</code>)定义了一个<code>expandTime</code>转换器，以便从原始时间戳信息中设计多个新特性，如下所示:</p>
 			<pre class="source-code">expandTime = SQLTransformer(</pre>
 			<pre class="source-code">    statement="""</pre>
 			<pre class="source-code">    SELECT Score,</pre>
@@ -148,9 +148,9 @@
 			<div><div><img src="img/B16721_06_07.jpg" alt="Figure 6.7 – Results from the expandTime stage 2 transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.7–扩展时间阶段2变压器的结果</p>
+			<p class="figure-caption">图 6.7–扩展时间阶段 2 变压器的结果</p>
 			<p>输出确认我们已经成功地用一组新创建的特征替换了<code>Time</code>列。</p>
-			<h3>第3阶段-根据分数创建回应，同时删除中性评论</h3>
+			<h3>第 3 阶段-根据分数创建回应，同时删除中性评论</h3>
 			<p>在这个阶段，我们使用来自<code>Score</code>列的值创建我们的<code>Sentiment</code>响应变量。我们可以<a id="_idIndexMarker451"/>模拟<em class="italic">正面</em>对<em class="italic">不正面</em>作为回应，但是我们选择删除中性评论(<code>Score=3</code>)并将<code>Positive</code>与<code>Negative</code>进行比较。这是<strong class="bold">净推介值</strong> ( <strong class="bold"> NPS </strong>)分析<a id="_idIndexMarker452"/>中的标准方法，在情绪分析中也很常见。这是有意义的，因为我们假设具有中性响应的记录几乎不包含模型可以学习的信息。</p>
 			<p>我们像这样创建我们的<code>createResponse</code>变压器:</p>
 			<pre class="source-code">createResponse = SQLTransformer(</pre>
@@ -159,17 +159,17 @@
 			<pre class="source-code">           Day, Month, Year, WeekNum, Weekday, HourOfDay, </pre>
 			<pre class="source-code">           Weekend, Season, Summary</pre>
 			<pre class="source-code">    FROM __THIS__ WHERE Score != 3""")</pre>
-			<p><code>IF</code>语句给<code>Negative</code>情绪分配1或2分，给<code>Positive</code>分配所有其他分数，用<code>WHERE</code>子句过滤掉中性评论。现在，通过运行以下代码来检查这个中间步骤的结果:</p>
+			<p><code>IF</code>语句给<code>Negative</code>情绪分配 1 或 2 分，给<code>Positive</code>分配所有其他分数，用<code>WHERE</code>子句过滤掉中性评论。现在，通过运行以下代码来检查这个中间步骤的结果:</p>
 			<pre class="source-code">created = createResponse.transform(expanded)</pre>
 			<pre class="source-code">created.show(n=10)</pre>
 			<p>这会产生以下输出:</p>
 			<div><div><img src="img/B16721_06_08.jpg" alt="Figure 6.8 – Results from the createResponse stage 3 transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.8–创建响应阶段3变压器的结果</p>
-			<p>唯一剩下的特征工程步骤是用适当的<a id="_idIndexMarker453"/>代表数值替换<code>Summary</code>栏中的文本。第4到第8阶段将利用Spark内置的NLP数据转换功能，基于<code>Summary</code>中的文本创建特性。虽然这不是对NLP的正式深入研究，但我们将足够详细地描述每个转换步骤，以使我们的模型易于理解。</p>
-			<h3>第4阶段–对摘要进行标记</h3>
-			<p>标记化将一个文本序列分解成单独的术语。Spark提供了一个简单的<code>Tokenizer</code>类和一个更灵活的<code>RegexTokenizer</code>类，我们在这里使用。<code>pattern</code>参数指定了正则表达式中的一个<code>"[!,\" ]"</code> <code>\"</code>转义<a id="_idIndexMarker456"/>引号)，我们指定<code>This</code>和<code>this</code>在后面的处理中将被视为相同的术语。代码如下面的代码片段所示:</p>
+			<p class="figure-caption">图 6.8–创建响应阶段 3 变压器的结果</p>
+			<p>唯一剩下的特征工程步骤是用适当的<a id="_idIndexMarker453"/>代表数值替换<code>Summary</code>栏中的文本。第 4 到第 8 阶段将利用 Spark 内置的 NLP 数据转换功能，基于<code>Summary</code>中的文本创建特性。虽然这不是对 NLP 的正式深入研究，但我们将足够详细地描述每个转换步骤，以使我们的模型易于理解。</p>
+			<h3>第 4 阶段–对摘要进行标记</h3>
+			<p>标记化将一个文本序列分解成单独的术语。Spark 提供了一个简单的<code>Tokenizer</code>类和一个更灵活的<code>RegexTokenizer</code>类，我们在这里使用。<code>pattern</code>参数指定了正则表达式中的一个<code>"[!,\" ]"</code> <code>\"</code>转义<a id="_idIndexMarker456"/>引号)，我们指定<code>This</code>和<code>this</code>在后面的处理中将被视为相同的术语。代码如下面的代码片段所示:</p>
 			<pre class="source-code">from pyspark.ml.feature import RegexTokenizer</pre>
 			<pre class="source-code">regexTokenizer = RegexTokenizer(inputCol = "Summary",</pre>
 			<pre class="source-code">                                outputCol = "Tokenized",</pre>
@@ -183,10 +183,10 @@
 			<div><div><img src="img/B16721_06_09.jpg" alt="Figure 6.9 – Results from the regexTokenizer stage 4 transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.9-来自再脱氧气塔4级变压器的结果</p>
+			<p class="figure-caption">图 6.9-来自再脱氧气塔 4 级变压器的结果</p>
 			<p>短语现在已经被分解成单个术语或标记的列表。由于我们的目标是从这些标记中提取信息，我们接下来过滤掉携带少量信息的单词。</p>
-			<h3>阶段5–删除停用词</h3>
-			<p>有些词在语言中出现得如此频繁，以至于它们几乎没有预测价值。这些被称为<em class="italic">停用词</em>，我们使用Spark的<code>StopWordsRemover</code>转换器来删除它们，如下面的<a id="_idIndexMarker458"/>截图所示:</p>
+			<h3>阶段 5–删除停用词</h3>
+			<p>有些词在语言中出现得如此频繁，以至于它们几乎没有预测价值。这些被称为<em class="italic">停用词</em>，我们使用 Spark 的<code>StopWordsRemover</code>转换器来删除它们，如下面的<a id="_idIndexMarker458"/>截图所示:</p>
 			<pre class="source-code">removeStopWords = StopWordsRemover(</pre>
 			<pre class="source-code">    inputCol = regexTokenizer.getOutputCol(),</pre>
 			<pre class="source-code">    outputCol = "CleanedSummary", </pre>
@@ -201,25 +201,25 @@
 				</div>
 			</div>
 			<p class="figure-caption"> </p>
-			<p class="figure-caption">图6.10–removestopworts阶段5转换器的结果</p>
-			<p>检查<em class="italic">图6.10 </em>中的结果是说明性的。在很大程度上，删除诸如<code>as</code>、<code>it</code>或<code>the</code>这样的停用词对意思几乎没有影响:太棒了！和那些昂贵的品牌一样好！语句被简化为令牌<code>[great, good, expensive, brands]</code>似乎是合理的。但是<em class="italic">不像宣传的那样呢！</em>被降为<code>[advertised]</code>？语句中的<code>not</code>似乎携带了重要信息，但删除后这些信息就丢失了。这是一个有效的关注点，可以通过n-grams(二元模型、三元模型等)等NLP概念来解决。对于演示汽水管道的示例，我们将承认这是一个潜在的问题，但为了简单起见，我们将继续讨论。</p>
-			<p>预测建模中的NLP将文本中的信息表示为数字。一种流行的方法是<strong class="bold">词频-逆文档频</strong> ( <strong class="bold"> TF-IDF </strong>)。TF就是一个术语在文档中出现的次数<a id="_idIndexMarker459"/>除以文档中的字数。在语料库(文档集合)中，IDF测量一个术语在其组成文档中的稀有程度。诸如<em class="italic"> linear </em>的术语可能具有高频率，但是其信息价值随着其出现在文档中的数量的增加而降低。另一方面，诸如<em class="italic">摩托车</em>的单词可能具有较低的频率，但是也在语料库中较少的文档中被发现，使得其信息含量较高。将TF乘以IDF得到一个经重新调整的TF值，该值已被证明非常有用。当一个术语频繁出现但只出现在一个文档中时，TF-IDF值最大化(<em class="italic">哪篇文章评论了摩托车？</em>)。</p>
-			<p>TF-IDF广泛用于<a id="_idIndexMarker460"/>信息检索、文本挖掘、推荐系统和搜索引擎，以及预测建模。接下来的两个流水线阶段将分别计算TF和IDF值。</p>
-			<h3>阶段6–为TF散列单词</h3>
-			<p>我们在Spark中用<a id="_idIndexMarker461"/>计算TF的首选方法是<code>CountVectorizer</code>，它使用内部词汇表保留了从索引到单词的映射。也就是说，<code>countVectorizerModel.vocabulary[5]</code>查找存储在索引5中的单词。</p>
-			<p>构建更好的TF-IDF模型的一个技巧是通过将<code>minDF</code>参数设置为整数或比例来删除不常用的术语，如下所示:</p>
+			<p class="figure-caption">图 6.10–removestopworts 阶段 5 转换器的结果</p>
+			<p>检查<em class="italic">图 6.10 </em>中的结果是说明性的。在很大程度上，删除诸如<code>as</code>、<code>it</code>或<code>the</code>这样的停用词对意思几乎没有影响:太棒了！和那些昂贵的品牌一样好！语句被简化为令牌<code>[great, good, expensive, brands]</code>似乎是合理的。但是<em class="italic">不像宣传的那样呢！</em>被降为<code>[advertised]</code>？语句中的<code>not</code>似乎携带了重要信息，但删除后这些信息就丢失了。这是一个有效的关注点，可以通过 n-grams(二元模型、三元模型等)等 NLP 概念来解决。对于演示汽水管道的示例，我们将承认这是一个潜在的问题，但为了简单起见，我们将继续讨论。</p>
+			<p>预测建模中的 NLP 将文本中的信息表示为数字。一种流行的方法是<strong class="bold">词频-逆文档频</strong> ( <strong class="bold"> TF-IDF </strong>)。TF 就是一个术语在文档中出现的次数<a id="_idIndexMarker459"/>除以文档中的字数。在语料库(文档集合)中，IDF 测量一个术语在其组成文档中的稀有程度。诸如<em class="italic"> linear </em>的术语可能具有高频率，但是其信息价值随着其出现在文档中的数量的增加而降低。另一方面，诸如<em class="italic">摩托车</em>的单词可能具有较低的频率，但是也在语料库中较少的文档中被发现，使得其信息含量较高。将 TF 乘以 IDF 得到一个经重新调整的 TF 值，该值已被证明非常有用。当一个术语频繁出现但只出现在一个文档中时，TF-IDF 值最大化(<em class="italic">哪篇文章评论了摩托车？</em>)。</p>
+			<p>TF-IDF 广泛用于<a id="_idIndexMarker460"/>信息检索、文本挖掘、推荐系统和搜索引擎，以及预测建模。接下来的两个流水线阶段将分别计算 TF 和 IDF 值。</p>
+			<h3>阶段 6–为 TF 散列单词</h3>
+			<p>我们在 Spark 中用<a id="_idIndexMarker461"/>计算 TF 的首选方法是<code>CountVectorizer</code>，它使用内部词汇表保留了从索引到单词的映射。也就是说，<code>countVectorizerModel.vocabulary[5]</code>查找存储在索引 5 中的单词。</p>
+			<p>构建更好的 TF-IDF 模型的一个技巧是通过将<code>minDF</code>参数设置为整数或比例来删除不常用的术语，如下所示:</p>
 			<ul>
-				<li><code>minDF = 100</code>:省略出现在少于100个文档中的术语</li>
-				<li><code>minDF = 0.05</code>:省略出现在少于5%的文档中的术语</li>
+				<li><code>minDF = 100</code>:省略出现在少于 100 个文档中的术语</li>
+				<li><code>minDF = 0.05</code>:省略出现在少于 5%的文档中的术语</li>
 			</ul>
-			<p>还有一个<code>maxDF</code>参数可用于删除语料库中出现频率过高的术语。例如，在NLP中为文档检索设置<code>maxDF = 0.95</code>可能会提高模型性能。</p>
+			<p>还有一个<code>maxDF</code>参数可用于删除语料库中出现频率过高的术语。例如，在 NLP 中为文档检索设置<code>maxDF = 0.95</code>可能会提高模型性能。</p>
 			<p>我们创建一个<code>countVectorizer</code>转换器，如下所示:</p>
 			<pre class="source-code">from pyspark.ml.feature import CountVectorizer </pre>
 			<pre class="source-code">countVectorizer = CountVectorizer(</pre>
 			<pre class="source-code">    inputCol = removeStopWords.getOutputCol(),</pre>
 			<pre class="source-code">    outputCol = "frequencies",</pre>
 			<pre class="source-code">    minDF = 100 )</pre>
-			<p>注意，我们的语料库是<code>removeStopWords</code>转换器的输出列，每行作为一个文档。我们输出频率并将<code>minDF</code>设置为100。因为<code>countVectorizer</code>是一个模型，所以在管道中执行之前，手动训练它是一个好主意。对于任何作为管道组件的模型来说，这都是一个很好的实践，因为它允许我们在管道执行开始之前确定它的行为，并可能对它进行微调。代码如下面的代码片段所示:</p>
+			<p>注意，我们的语料库是<code>removeStopWords</code>转换器的输出列，每行作为一个文档。我们输出频率并将<code>minDF</code>设置为 100。因为<code>countVectorizer</code>是一个模型，所以在管道中执行之前，手动训练它是一个好主意。对于任何作为管道组件的模型来说，这都是一个很好的实践，因为它允许我们在管道执行开始之前确定它的行为，并可能对它进行微调。代码如下面的代码片段所示:</p>
 			<pre class="source-code">countVecModel = countVectorizer.fit(stopWordsRemoved)</pre>
 			<p>我们可以通过<a id="_idIndexMarker462"/>检查它的词汇量和单个术语，以及任何其他适当的尽职调查来探索这个模型。下面是我们需要完成的代码:</p>
 			<pre class="source-code">print("Vocabulary size is " +</pre>
@@ -229,8 +229,8 @@
 			<div><div><img src="img/B16721_06_11.jpg" alt="Figure 6.11 – Vocabulary size and vocabulary of the countVecModel transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.11–countVecModel转换器的词汇大小和词汇</p>
-			<p>图6.11 所示的总词汇量为1431个词汇。使用以下代码检查数据:</p>
+			<p class="figure-caption">图 6.11–countVecModel 转换器的词汇大小和词汇</p>
+			<p>图 6.11 所示的总词汇量为 1431 个词汇。使用以下代码检查数据:</p>
 			<pre class="source-code">vectorized = countVecModel.transform(stopWordsRemoved)</pre>
 			<pre class="source-code">vectorized.select(["CleanedSummary", "frequencies"]).show(</pre>
 			<pre class="source-code">                  n = 10, truncate = False)</pre>
@@ -238,40 +238,40 @@
 			<div><div><img src="img/B16721_06_12.jpg" alt="Figure 6.12 – Intermediate results from the countVecModel transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.12–countVecModel转换器的中间结果</p>
-			<p><em class="italic">图6.12 </em>显示了清理后的<a id="_idIndexMarker463"/>汇总令牌，每行并排带有TF向量。为了描述第一行的输出，1431值是词汇大小。下一个值序列—<code>[1,10,11,38]</code>—指词汇向量中的<code>[good, quality, dog, food]</code>项的索引。最后一系列值——<code>[1.0,1.0,1.0,1.0]</code>——是它们各自术语的TF。因此，<code>dog</code>被索引<code>11</code>引用，并且在<code>CleanedSummary</code>列中出现一次。</p>
-			<h3>第7阶段–创建IDF模型</h3>
-			<p>我们使用Spark的<code>IDF</code>估计器来缩放<code>countVectorizer</code>的频率，产生TF-IDF值。我们执行下面的<a id="_idIndexMarker464"/>代码来完成这个任务:</p>
+			<p class="figure-caption">图 6.12–countVecModel 转换器的中间结果</p>
+			<p><em class="italic">图 6.12 </em>显示了清理后的<a id="_idIndexMarker463"/>汇总令牌，每行并排带有 TF 向量。为了描述第一行的输出，1431 值是词汇大小。下一个值序列—<code>[1,10,11,38]</code>—指词汇向量中的<code>[good, quality, dog, food]</code>项的索引。最后一系列值——<code>[1.0,1.0,1.0,1.0]</code>——是它们各自术语的 TF。因此，<code>dog</code>被索引<code>11</code>引用，并且在<code>CleanedSummary</code>列中出现一次。</p>
+			<h3>第 7 阶段–创建 IDF 模型</h3>
+			<p>我们使用 Spark 的<code>IDF</code>估计器来缩放<code>countVectorizer</code>的频率，产生 TF-IDF 值。我们执行下面的<a id="_idIndexMarker464"/>代码来完成这个任务:</p>
 			<pre class="source-code">from pyspark.ml.feature import IDF</pre>
 			<pre class="source-code">idf = IDF(inputCol = countVectorizer.getOutputCol(),</pre>
 			<pre class="source-code">          outputCol = "TFIDF",</pre>
 			<pre class="source-code">          minDocFreq = 1)</pre>
-			<p>在我们执行管道之前，手动训练IDF模型以查看结果，如下所示:</p>
+			<p>在我们执行管道之前，手动训练 IDF 模型以查看结果，如下所示:</p>
 			<pre class="source-code">idfModel = idf.fit(vectorized)</pre>
-			<p>再次检查数据，特别注意换算的TF-IDF频率，如下所示:</p>
+			<p>再次检查数据，特别注意换算的 TF-IDF 频率，如下所示:</p>
 			<pre class="source-code">afterIdf = idfModel.transform(vectorized)</pre>
 			<pre class="source-code">afterIdf.select(["Sentiment", "CleanedSummary",</pre>
 			<pre class="source-code">    "TFIDF"]).show(n = 5, truncate = False, vertical = True)</pre>
-			<p>下面的截图显示了<a id="_idIndexMarker465"/>生成的TF-IDF模型的前五行:</p>
+			<p>下面的截图显示了<a id="_idIndexMarker465"/>生成的 TF-IDF 模型的前五行:</p>
 			<div><div><img src="img/B16721_06_13.jpg" alt="Figure 6.13 – TF-IDF frequencies from the Spark transformer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.13–火花变压器的TF-IDF频率</p>
-			<h3>阶段8–选择建模数据集列</h3>
+			<p class="figure-caption">图 6.13–火花变压器的 TF-IDF 频率</p>
+			<h3>阶段 8–选择建模数据集列</h3>
 			<p>除了<code>Sentiment</code>响应<a id="_idIndexMarker466"/>变量和从<code>Time</code>变量设计的所有特征之外，<code>idf</code>的输出包括原始的<code>Summary</code>列以及<code>Tokenized</code>、<code>CleanedSummary</code>、<code>frequencies</code>和<code>TFIDF</code>。其中，我们希望只保留<code>TFIDF</code>。以下代码选择所需的列:</p>
 			<pre class="source-code">finalSelect = SQLTransformer(</pre>
 			<pre class="source-code">    statement="""</pre>
 			<pre class="source-code">    SELECT Sentiment, Day, Month, Year, WeekNum, Weekday,</pre>
 			<pre class="source-code">           HourOfDay, Weekend, Season, TFIDF</pre>
 			<pre class="source-code">    FROM __THIS__ """)</pre>
-			<p>现在，我们已经完成了模型就绪数据的构建，下一步是使用H2O的监督学习算法之一来构建预测模型。</p>
-			<h3>阶段9——使用H2O创建XGBoost模型</h3>
-			<p>到目前为止，我们所有的数据争论和特性工程工作都只使用了Spark方法。现在，我们转向H2O，在<code>Sentiment</code>列上训练一个XGBoost模型。为简单起见，我们使用默认设置进行训练。代码如下面的代码片段所示:</p>
+			<p>现在，我们已经完成了模型就绪数据的构建，下一步是使用 H2O 的监督学习算法之一来构建预测模型。</p>
+			<h3>阶段 9——使用 H2O 创建 XGBoost 模型</h3>
+			<p>到目前为止，我们所有的数据争论和特性工程工作都只使用了 Spark 方法。现在，我们转向 H2O，在<code>Sentiment</code>列上训练一个 XGBoost 模型。为简单起见，我们使用默认设置进行训练。代码如下面的代码片段所示:</p>
 			<pre class="source-code">import h2o</pre>
 			<pre class="source-code">from pysparkling.ml import ColumnPruner, H2OXGBoost</pre>
 			<pre class="source-code">xgboost = H2OXGBoost(splitRatio = 0.8, labelCol = "Sentiment")</pre>
 			<p class="callout-heading">注意——在波光粼粼的水中训练模型</p>
-			<p class="callout">在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型构建—第一部分</em>中，我们详细演示了一个构建和调优高质量XGBoost模型的过程。我们在这里停留在一个简单的基线模型，以强调整个管道的效用。在实际的应用程序中，应该在这个管道的建模组件上花费更多的精力。</p>
+			<p class="callout">在<a href="B16721_05_Final_SK_ePub.xhtml#_idTextAnchor082"> <em class="italic">第五章</em> </a>、<em class="italic">高级模型构建—第一部分</em>中，我们详细演示了一个构建和调优高质量 XGBoost 模型的过程。我们在这里停留在一个简单的基线模型，以强调整个管道的效用。在实际的应用程序中，应该在这个管道的建模组件上花费更多的精力。</p>
 			<h2 id="_idParaDest-113"><a id="_idTextAnchor113"/>打造闪闪发光的输水管道</h2>
 			<p>现在我们已经定义了所有的<a id="_idIndexMarker468"/>转换器，我们准备创建一个管道。这样做很简单——我们只需在<code>Pipeline</code>的<code>stages</code>列表参数中按顺序命名每个变压器，如下所示:</p>
 			<pre class="source-code">from pyspark.ml import Pipeline</pre>
@@ -279,29 +279,29 @@
 			<pre class="source-code">    colSelect, expandTime, createResponse, regexTokenizer,</pre>
 			<pre class="source-code">    removeStopWords, countVectorizer, idf, finalSelect,</pre>
 			<pre class="source-code">    xgboost])</pre>
-			<p>通过使用<code>fit</code>方法，训练管道模型变得简单。我们将包含原始数据的Spark数据帧作为参数传递，如下所示:</p>
+			<p>通过使用<code>fit</code>方法，训练管道模型变得简单。我们将包含原始数据的 Spark 数据帧作为参数传递，如下所示:</p>
 			<pre class="source-code">model = pipeline.fit(reviews_spark)</pre>
-			<p>在<code>pipeline.fit</code>过程中，数据管理和特征工程阶段都是在XGBoost模型拟合之前按照<a id="_idIndexMarker469"/>顺序应用于原始数据。这些管道阶段在与XGBoost阶段一起部署到生产中后，以相同的方式运行，生成预测。</p>
+			<p>在<code>pipeline.fit</code>过程中，数据管理和特征工程阶段都是在 XGBoost 模型拟合之前按照<a id="_idIndexMarker469"/>顺序应用于原始数据。这些管道阶段在与 XGBoost 阶段一起部署到生产中后，以相同的方式运行，生成预测。</p>
 			<h2 id="_idParaDest-114"><a id="_idTextAnchor114"/>展望未来——产品预览</h2>
 			<p>将汽水管道<a id="_idIndexMarker470"/>投入生产仅仅是<em class="italic">保存</em>T4【模型，<em class="italic">将</em>装载到生产系统中，然后调用以下代码:</p>
 			<pre class="source-code">predictions = model.transform(input_data)</pre>
-			<p>在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第10章</em> </a>、<em class="italic"> H2O模型部署模式</em>中，我们展示了如何将此管道部署为Spark流应用程序，管道接收原始流数据并实时输出预测。</p>
-			<h1 id="_idParaDest-115"><a id="_idTextAnchor115"/> UL在H2O的方法</h1>
-			<p>H2O包括几个无监督学习<a id="_idIndexMarker471"/>算法，包括<strong class="bold">广义低秩模型</strong>(<strong class="bold">GLRM</strong>)<strong class="bold">主成分分析</strong> ( <strong class="bold"> PCA </strong>)，以及一个用于降维的聚合器。聚类用例可以利用k-means <a id="_idIndexMarker472"/>聚类、H2O聚合器、GLRM或PCA。无监督学习也是预测建模应用中使用的一组有用的特征转换器<a id="_idIndexMarker473"/>的基础，例如<a id="_idIndexMarker474"/>通过无监督方法识别的观察到特定数据聚类的距离。此外，H2O为异常检测提供了隔离森林算法。</p>
+			<p>在<a href="B16721_10_Final_SK_ePub.xhtml#_idTextAnchor178"> <em class="italic">第 10 章</em> </a>、<em class="italic"> H2O 模型部署模式</em>中，我们展示了如何将此管道部署为 Spark 流应用程序，管道接收原始流数据并实时输出预测。</p>
+			<h1 id="_idParaDest-115"><a id="_idTextAnchor115"/> UL 在 H2O 的方法</h1>
+			<p>H2O 包括几个无监督学习<a id="_idIndexMarker471"/>算法，包括<strong class="bold">广义低秩模型</strong>(<strong class="bold">GLRM</strong>)<strong class="bold">主成分分析</strong> ( <strong class="bold"> PCA </strong>)，以及一个用于降维的聚合器。聚类用例可以利用 k-means <a id="_idIndexMarker472"/>聚类、H2O 聚合器、GLRM 或 PCA。无监督学习也是预测建模应用中使用的一组有用的特征转换器<a id="_idIndexMarker473"/>的基础，例如<a id="_idIndexMarker474"/>通过无监督方法识别的观察到特定数据聚类的距离。此外，H2O 为异常检测提供了隔离森林算法。</p>
 			<h2 id="_idParaDest-116"><a id="_idTextAnchor116"/>什么是异常检测？</h2>
 			<p>大多数<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)算法试图以某种方式在数据中寻找模式。这些<a id="_idIndexMarker476"/>模式被用来在监督学习模型中进行预测。许多无监督学习算法试图通过聚类相似数据或估计数据段之间的边界来揭示模式。无监督异常检测算法采取相反的方法:不遵循已知模式的数据点是我们想要发现的。</p>
 			<p>在这种情况下，术语<em class="italic">异常</em>是没有价值的。它可能指不寻常的观察，因为它是同类中的第一次；更多的数据可以产生更多类似的观察结果。异常可能预示着意外事件，并作为一种诊断。例如，<a id="_idIndexMarker477"/>制造数据收集应用中的故障传感器可能会产生非典型的测量结果。异常还可能表明恶意行为者或动作:安全漏洞和欺诈是导致异常数据点的两个典型例子。</p>
 			<p>异常检测方法可以包括监督、半监督或无监督方法。监督模型是欺诈检测的黄金标准。然而，获得每个观察的标签可能是昂贵的，并且通常是不可行的。当没有标签时，需要无监督的方法。半监督方法指的是只有一些数据记录被标记的情况，通常是一小部分记录。</p>
 			<p>隔离森林是一种用于异常检测的无监督学习算法，我们将在接下来介绍这一点。</p>
-			<h2 id="_idParaDest-117"><a id="_idTextAnchor117"/>H2O的隔离林</h2>
+			<h2 id="_idParaDest-117"><a id="_idTextAnchor117"/>H2O 的隔离林</h2>
 			<p>隔离森林算法基于<a id="_idIndexMarker478"/>决策树和一个巧妙的观察:离群值往往在构建决策树的早期就被分离出来。但是决策树是一种有监督的方法，那么这怎么可能是无监督的呢？诀窍是创建一个随机值的目标列，并在其上训练一个决策树。我们重复这一过程很多次，并记录观察结果分裂成自己的叶子的平均深度。观察越早被隔离，就越有可能是异常的。根据使用案例，这些异常点可能会被过滤掉或升级，以便进一步调查。</p>
 			<p>您可以在下面的屏幕截图中看到隔离林的示意图:</p>
 			<div><div><img src="img/B16721_06_14.jpg" alt="Figure 6.14 – An isolation forest&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.14–隔离林</p>
-			<p>我们展示了如何使用Kaggle信用卡交易数据(<a href="https://www.kaggle.com/mlg-ulb/creditcardfraud">https://www.kaggle.com/mlg-ulb/creditcardfraud</a>)在H2O构建一个隔离林。在这个数据集中有492个欺诈性交易和284，807个非欺诈性交易，这使得目标类高度不平衡。因为<a id="_idIndexMarker480"/>我们正在演示一种无监督的异常检测<a id="_idIndexMarker481"/>方法，我们将在模型构建过程中丢弃标记的目标。</p>
-			<p>加载数据的H2O代码如下所示:</p>
+			<p class="figure-caption">图 6.14–隔离林</p>
+			<p>我们展示了如何使用 Kaggle 信用卡交易数据(<a href="https://www.kaggle.com/mlg-ulb/creditcardfraud">https://www.kaggle.com/mlg-ulb/creditcardfraud</a>)在 H2O 构建一个隔离林。在这个数据集中有 492 个欺诈性交易和 284，807 个非欺诈性交易，这使得目标类高度不平衡。因为<a id="_idIndexMarker480"/>我们正在演示一种无监督的异常检测<a id="_idIndexMarker481"/>方法，我们将在模型构建过程中丢弃标记的目标。</p>
+			<p>加载数据的 H2O 代码如下所示:</p>
 			<pre class="source-code">df = h2o.import_file("creditcardfraud.csv")</pre>
 			<p>我们使用<code>H2OIsolationForestEstimator</code>方法来拟合隔离林。我们将树的数量设置为<code>100</code>，并省略最后一列，它包含目标类标签，如下面的代码片段所示:</p>
 			<pre class="source-code">iso = h2o.estimators.H2OIsolationForestEstimator(</pre>
@@ -314,9 +314,9 @@
 			<div><div><img src="img/B16721_06_15.jpg" alt="Figure 6.15 – Isolation forest predictions&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.15–隔离林预测</p>
-			<p><em class="italic">图6.15 </em>中的预测由两列组成:标准化异常分数和所有树的平均分裂数，以隔离观察值。请注意，异常分数与平均长度完全相关<a id="_idIndexMarker482"/>，随着平均长度的减少而增加。</p>
-			<p>我们如何从异常分数或平均长度到实际预测？最好的方法之一是通过基于分位数的阈值。如果我们对欺诈的普遍程度有所了解，我们可以找到分数的相应分位数值，并将其用作我们预测的阈值。假设我们知道5%的交易是欺诈性的。然后，我们使用下面的H2O码估计正确的分位数:</p>
+			<p class="figure-caption">图 6.15–隔离林预测</p>
+			<p><em class="italic">图 6.15 </em>中的预测由两列组成:标准化异常分数和所有树的平均分裂数，以隔离观察值。请注意，异常分数与平均长度完全相关<a id="_idIndexMarker482"/>，随着平均长度的减少而增加。</p>
+			<p>我们如何从异常分数或平均长度到实际预测？最好的方法之一是通过基于分位数的阈值。如果我们对欺诈的普遍程度有所了解，我们可以找到分数的相应分位数值，并将其用作我们预测的阈值。假设我们知道 5%的交易是欺诈性的。然后，我们使用下面的 H2O 码估计正确的分位数:</p>
 			<pre class="source-code">quantile = 0.95</pre>
 			<pre class="source-code">quantile_frame = predictions.quantile([quantile])</pre>
 			<pre class="source-code">quantile_frame</pre>
@@ -324,22 +324,22 @@
 			<div><div><img src="img/B16721_06_16.jpg" alt="Figure 6.16 – Choosing a quantile-based threshold&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.16–选择基于分位数的阈值</p>
+			<p class="figure-caption">图 6.16–选择基于分位数的阈值</p>
 			<p>我们现在可以使用下面的代码使用阈值来预测异常类:</p>
 			<pre class="source-code">threshold = quantile_frame[0, "predictQuantiles"]</pre>
 			<pre class="source-code">predictions["predicted_class"] = \</pre>
 			<pre class="source-code">    predictions["predict"] &gt; threshold</pre>
 			<pre class="source-code">predictions["class"] = df["class"]</pre>
 			<pre class="source-code">predictions</pre>
-			<p><code>predictions</code>帧的前10个<a id="_idIndexMarker484"/>观察如下面的截图所示:</p>
+			<p><code>predictions</code>帧的前 10 个<a id="_idIndexMarker484"/>观察如下面的截图所示:</p>
 			<div><div><img src="img/B16721_06_17.jpg" alt="Figure 6.17 – Identifying anomalous values &#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.17–识别异常值</p>
-			<p><em class="italic">图6.17 </em>中的<code>predict</code>列只有一个观察值大于0.198324，即<em class="italic">图6.16 </em>中所示的第95百分位的阈值。<code>predicted_class</code>栏用值<code>1</code>表示这个<a id="_idIndexMarker485"/>。另外，请注意<code>6.14</code>的这个观察值的<code>mean_length</code>值小于其他九个观察值的平均长度值。</p>
+			<p class="figure-caption">图 6.17–识别异常值</p>
+			<p><em class="italic">图 6.17 </em>中的<code>predict</code>列只有一个观察值大于 0.198324，即<em class="italic">图 6.16 </em>中所示的第 95 百分位的阈值。<code>predicted_class</code>栏用值<code>1</code>表示这个<a id="_idIndexMarker485"/>。另外，请注意<code>6.14</code>的这个观察值的<code>mean_length</code>值小于其他九个观察值的平均长度值。</p>
 			<p><code>class</code>列包含我们在构建无监督隔离林模型时忽略的交易欺诈指示器。对于异常观察，类别值<code>0</code>指示交易不是欺诈性的。当我们可以像本例中一样访问实际目标值时，我们可以使用<code>predicted_class</code>和<code>class</code>列来研究异常检测算法在检测欺诈方面的有效性。我们应该注意到，在这个上下文中，欺诈和异常的定义是不等价的。换句话说，不是所有的欺诈都是异常的，也不是所有的异常都表明是欺诈。这两个<a id="_idIndexMarker487"/>模型有不同的目的，尽管是互补的。</p>
 			<p>我们现在将注意力转向更新模型。</p>
-			<h1 id="_idParaDest-118"><a id="_idTextAnchor118"/>更新H2O模型的最佳实践</h1>
+			<h1 id="_idParaDest-118"><a id="_idTextAnchor118"/>更新 H2O 模型的最佳实践</h1>
 			<p>正如著名的英国统计学家乔治·博克斯所说的那样，<em class="italic">所有的模型都是错误的，但有些是有用的</em>。优秀的建模者知道他们模型的目的和局限性。对于那些构建投入生产的企业模型的人来说，尤其如此。</p>
 			<p>其中一个限制是预测模型通常会随着时间的推移而退化。这在很大程度上是因为，在现实世界中，事情会发生变化。也许我们正在建模的东西(例如，客户行为)本身会发生变化，而我们收集的数据会反映这种变化。即使客户行为是静态的，但我们的业务组合发生了变化(想想更多的青少年和更少的退休人员)，我们的模型的预测可能会下降。在这两种情况下，但出于不同的原因，为创建我们的预测模型而采样的人口现在与以前不同。</p>
 			<p>检测模型退化并寻找其根本原因是诊断和模型监控的主题，我们在这里不讨论。而是一旦一个模型不再令人满意，一个数据科学家该怎么办？我们将在下面的章节中讨论再训练和检查点模型。</p>
@@ -352,8 +352,8 @@
 			<p>然而，如果基础过程以某种方式改变，意味着模型的结构形式不再有效，那么建模包括发现模型的正确形式和估计参数。这和从头开始差不多，但不完全一样。<em class="italic">重建</em>或<em class="italic">更新模型</em>(相对于<em class="italic">更新参数估计</em>)是这个更大活动的更好术语。</p>
 			<p>在最大似然或其他非参数模型的情况下，模型的结构形式由数据和任何参数估计决定。这是非参数<a id="_idIndexMarker491"/>模型的卖点之一:它们是难以置信的数据驱动的，并且几乎没有假设。改装或再培训和重建之间的区别在这种情况下没有什么意义；实际上，这些术语变成了同义词。</p>
 			<h2 id="_idParaDest-120"><a id="_idTextAnchor120"/>检查点模型</h2>
-			<p>H2O的<strong class="bold">检查点</strong>选项允许你保存一个模型构建的<a id="_idIndexMarker492"/>状态，允许一个新的模型被构建为一个先前生成的模型的<em class="italic">延续</em>，而不是从头开始构建。这可用于使用额外的、更新的数据来更新生产中的模型。</p>
-			<p>检查点<a id="_idIndexMarker493"/>选项可供<strong class="bold">分布式随机森林</strong> ( <strong class="bold"> DRF </strong>)、<strong class="bold">梯度推进机</strong> ( <strong class="bold"> GBM </strong>)、XGBoost、<strong class="bold">深度学习</strong> ( <strong class="bold"> DL </strong>)算法使用。对于基于<a id="_idIndexMarker494"/>树的算法，指定的<a id="_idIndexMarker495"/>树的数量必须大于参考模型中的树的数量。也就是说，如果原始模型包括20棵树，而您指定了30棵树，那么将构建10棵新树。同样的概念也适用于使用历元而不是树的DL。</p>
+			<p>H2O 的<strong class="bold">检查点</strong>选项允许你保存一个模型构建的<a id="_idIndexMarker492"/>状态，允许一个新的模型被构建为一个先前生成的模型的<em class="italic">延续</em>，而不是从头开始构建。这可用于使用额外的、更新的数据来更新生产中的模型。</p>
+			<p>检查点<a id="_idIndexMarker493"/>选项可供<strong class="bold">分布式随机森林</strong> ( <strong class="bold"> DRF </strong>)、<strong class="bold">梯度推进机</strong> ( <strong class="bold"> GBM </strong>)、XGBoost、<strong class="bold">深度学习</strong> ( <strong class="bold"> DL </strong>)算法使用。对于基于<a id="_idIndexMarker494"/>树的算法，指定的<a id="_idIndexMarker495"/>树的数量必须大于参考模型中的树的数量。也就是说，如果原始模型包括 20 棵树，而您指定了 30 棵树，那么将构建 10 棵新树。同样的概念也适用于使用历元而不是树的 DL。</p>
 			<p>当以下内容与检查点模型相同时，检查点对于这些算法<em class="italic">仅</em>是可行的:</p>
 			<ul>
 				<li>训练数据模型类型、响应类型、列、分类因子级别和预测因子总数</li>
@@ -361,51 +361,51 @@
 			</ul>
 			<p>您可以使用检查点指定的其他参数会根据用于模型定型的算法而有所不同。</p>
 			<p class="callout-heading">检查点警告</p>
-			<p class="callout">尽管技术上可行，但我们不建议对GBM或XGBoost算法的新数据进行检查点操作。回想一下，boosting的工作原理是将序列模型与先前模型的残差进行拟合。因此，早期分裂是最重要的。当新的数据被引入时，模型的结构在很大程度上是在没有数据的情况下确定的。</p>
+			<p class="callout">尽管技术上可行，但我们不建议对 GBM 或 XGBoost 算法的新数据进行检查点操作。回想一下，boosting 的工作原理是将序列模型与先前模型的残差进行拟合。因此，早期分裂是最重要的。当新的数据被引入时，模型的结构在很大程度上是在没有数据的情况下确定的。</p>
 			<p class="callout">检查点<strong class="bold">随机森林</strong>模型<a id="_idIndexMarker496"/>不会因为增压和装袋之间的差异而遭受这些问题。</p>
-			<h1 id="_idParaDest-121"><a id="_idTextAnchor121"/>确保H2O模型的再现性</h1>
+			<h1 id="_idParaDest-121"><a id="_idTextAnchor121"/>确保 H2O 模型的再现性</h1>
 			<p>在实验室或<a id="_idIndexMarker497"/>实验环境中，在相同的方案和条件下重复一个过程应该会得到相似的结果。自然变化当然可能发生，但这是可以衡量的，并归因于适当的因素。这被称为<em class="italic">重复性</em>。企业数据科学家应该确保他们的模型构建得到良好的编码和充分的文档记录，以使过程可重复。</p>
 			<p>在建立模型的背景下，再现性是一个更强的条件:当一个过程被重复时，结果必须是相同的。从法规或合规的角度来看，可能需要再现性。</p>
-			<p>在高水平上，再现性需要相同的硬件、软件、数据和设置。让我们专门回顾一下H2O的设置。我们从两个案例开始，这两个案例取决于H2O集群的类型。</p>
-			<h2 id="_idParaDest-122"><a id="_idTextAnchor122"/>案例1——单节点集群中的再现性</h2>
-			<p>单节点集群是最简单的H2O硬件配置。如果满足以下条件，可获得再现性:</p>
+			<p>在高水平上，再现性需要相同的硬件、软件、数据和设置。让我们专门回顾一下 H2O 的设置。我们从两个案例开始，这两个案例取决于 H2O 集群的类型。</p>
+			<h2 id="_idParaDest-122"><a id="_idTextAnchor122"/>案例 1——单节点集群中的再现性</h2>
+			<p>单节点集群是最简单的 H2O 硬件配置。如果满足以下条件，可获得再现性:</p>
 			<ul>
-				<li><strong class="bold">软件要求</strong>:使用相同版本的H2O-3或苏打水。</li>
-				<li><strong class="bold">数据要求</strong>:使用相同的训练数据(注意，H2O要求单独导入文件，而不是作为整个目录导入，以保证再现性)。</li>
+				<li><strong class="bold">软件要求</strong>:使用相同版本的 H2O-3 或苏打水。</li>
+				<li><strong class="bold">数据要求</strong>:使用相同的训练数据(注意，H2O 要求单独导入文件，而不是作为整个目录导入，以保证再现性)。</li>
 				<li><code>sample_rate</code>、<code>sample_rate_per_class</code>、<code>col_sample_rate</code>、<code>col_sample_rate_per_level</code>、<code>col_sample_rate_per_tree</code>。</li><li>如果启用了提前停止，只有在明确设置了<code>score_tree_interval</code>参数并使用相同的验证数据集时，才能保证再现性。</li></ul>
 			
-			<h2 id="_idParaDest-123"><a id="_idTextAnchor123"/>案例2——多节点集群中的再现性</h2>
-			<p>向<a id="_idIndexMarker501"/>集群添加节点会产生额外的硬件条件，必须满足这些条件才能实现再现性。软件、数据和设置要求与之前在<em class="italic">案例1 </em>中详述的单节点集群相同。这些要求概述如下:</p>
+			<h2 id="_idParaDest-123"><a id="_idTextAnchor123"/>案例 2——多节点集群中的再现性</h2>
+			<p>向<a id="_idIndexMarker501"/>集群添加节点会产生额外的硬件条件，必须满足这些条件才能实现再现性。软件、数据和设置要求与之前在<em class="italic">案例 1 </em>中详述的单节点集群相同。这些要求概述如下:</p>
 			<ul>
-				<li>硬件集群的配置必须相同。具体来说，集群必须具有相同数量的节点，每个节点具有相同数量的CPU核心，或者对线程数量有相同的限制。</li>
-				<li>群集的领导者节点必须启动模型训练。在Hadoop中，leader节点自动返回给用户。在独立部署中，必须手动识别主节点。有关更多详细信息，请参见H2O文档。</li>
+				<li>硬件集群的配置必须相同。具体来说，集群必须具有相同数量的节点，每个节点具有相同数量的 CPU 核心，或者对线程数量有相同的限制。</li>
+				<li>群集的领导者节点必须启动模型训练。在 Hadoop 中，leader 节点自动返回给用户。在独立部署中，必须手动识别主节点。有关更多详细信息，请参见 H2O 文档。</li>
 			</ul>
-			<p>为了再现性，您必须确保集群配置是相同的。并行化级别(节点和CPU内核/线程的数量)控制着数据集在内存中的分区方式。H2O在这些分区上以可预测的顺序运行它的任务。如果分区数量不同，结果将无法重现。</p>
-			<p>在集群配置不相同的情况下，可以限制正在复制的计算资源。这个过程包括在原始环境中复制数据分区。我们建议您参考H2O文档以获取更多信息。</p>
+			<p>为了再现性，您必须确保集群配置是相同的。并行化级别(节点和 CPU 内核/线程的数量)控制着数据集在内存中的分区方式。H2O 在这些分区上以可预测的顺序运行它的任务。如果分区数量不同，结果将无法重现。</p>
+			<p>在集群配置不相同的情况下，可以限制正在复制的计算资源。这个过程包括在原始环境中复制数据分区。我们建议您参考 H2O 文档以获取更多信息。</p>
 			<h2 id="_idParaDest-124"><a id="_idTextAnchor124"/>特定算法的再现性</h2>
-			<p>DL、GBM和<strong class="bold">自动化ML </strong> ( <strong class="bold"> AutoML </strong>)算法的复杂性引入了额外的<a id="_idIndexMarker502"/>约束，必须满足这些约束才能确保再现性。我们将在这一部分回顾这些要求。</p>
+			<p>DL、GBM 和<strong class="bold">自动化 ML </strong> ( <strong class="bold"> AutoML </strong>)算法的复杂性引入了额外的<a id="_idIndexMarker502"/>约束，必须满足这些约束才能确保再现性。我们将在这一部分回顾这些要求。</p>
 			<h3>分升</h3>
-			<p>出于性能原因，H2O DL型号在默认情况下不可<a id="_idIndexMarker503"/>复制。有一个<code>reproducible</code>选项可以启用，但是我们建议只对小数据这样做。因为只有一个线程用于计算，所以模型的生成时间要长得多。</p>
+			<p>出于性能原因，H2O DL 型号在默认情况下不可<a id="_idIndexMarker503"/>复制。有一个<code>reproducible</code>选项可以启用，但是我们建议只对小数据这样做。因为只有一个线程用于计算，所以模型的生成时间要长得多。</p>
 			<h3>马恩岛</h3>
-			<p>当满足单节点或多节点集群的再现性标准时，GBM在浮点舍入误差方面具有决定性<a id="_idIndexMarker504"/>。</p>
+			<p>当满足单节点或多节点集群的再现性标准时，GBM 在浮点舍入误差方面具有决定性<a id="_idIndexMarker504"/>。</p>
 			<h3>AutoML</h3>
-			<p>为了确保AutoML中的<a id="_idIndexMarker505"/>再现性，必须满足以下标准:</p>
+			<p>为了确保 AutoML 中的<a id="_idIndexMarker505"/>再现性，必须满足以下标准:</p>
 			<ul>
-				<li>必须排除DL。</li>
+				<li>必须排除 DL。</li>
 				<li>必须使用<code>max_models</code>约束而不是<code>max_runtime_secs</code>。</li>
 			</ul>
-			<p>通常，基于时间的约束是受资源限制的。这意味着，如果两次运行之间的可用计算资源不同，AutoML可能能够在一次运行中训练比另一次运行更多的模型。指定要构建的模型数量将确保可重复性。</p>
+			<p>通常，基于时间的约束是受资源限制的。这意味着，如果两次运行之间的可用计算资源不同，AutoML 可能能够在一次运行中训练比另一次运行更多的模型。指定要构建的模型数量将确保可重复性。</p>
 			<h2 id="_idParaDest-125"><a id="_idTextAnchor125"/>再现性的最佳实践</h2>
 			<p>为了确保可再现性，考虑前面强调的四个需求类别的<a id="_idIndexMarker506"/>:硬件、软件、数据和设置。以下是这些类别的详细解释:</p>
 			<ul>
-				<li><strong class="bold">硬件</strong>:您应该始终记录运行H2O集群的硬件资源——这包括节点、CPU内核和线程的数量。(此信息可以在日志文件中找到。)</li>
-				<li>软件<strong class="bold"/>:你应该记录H2O-3的版本或者使用的苏打水。(此信息可以在日志文件中找到。)</li>
+				<li><strong class="bold">硬件</strong>:您应该始终记录运行 H2O 集群的硬件资源——这包括节点、CPU 内核和线程的数量。(此信息可以在日志文件中找到。)</li>
+				<li>软件<strong class="bold"/>:你应该记录 H2O-3 的版本或者使用的苏打水。(此信息可以在日志文件中找到。)</li>
 				<li><strong class="bold">数据</strong>:显然，必须使用相同的输入数据。您应该在模型定型之前保存所有用于处理数据的脚本。应该记录所有数据列的修改(例如，如果您将数字列转换为分类列)。</li>
-				<li><strong class="bold">设置</strong>:保存H2O <a id="_idIndexMarker507"/>日志和H2O二进制模型。日志包含大量信息。更重要的是，二进制模型包含H2O版本(软件)和用于训练模型的参数(设置)。</li>
+				<li><strong class="bold">设置</strong>:保存 H2O <a id="_idIndexMarker507"/>日志和 H2O 二进制模型。日志包含大量信息。更重要的是，二进制模型包含 H2O 版本(软件)和用于训练模型的参数(设置)。</li>
 			</ul>
 			<h1 id="_idParaDest-126"><a id="_idTextAnchor126"/>总结</h1>
-			<p>在这一章中，我们通过展示如何在Spark pipelines中构建H2O模型以及一个实际的情感分析建模示例，完善了我们的高级建模主题。我们总结了H2O可用的无监督学习方法，并展示了如何使用隔离森林算法为信用卡欺诈交易用例构建异常检测模型。我们还回顾了如何更新模型，包括改装和检查点，并展示了确保模型再现性的要求。</p>
-			<p>在<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第7章</em> </a>、<em class="italic">理解ML模型、</em>中，我们讨论了理解和回顾我们的ML模型的方法。</p>
+			<p>在这一章中，我们通过展示如何在 Spark pipelines 中构建 H2O 模型以及一个实际的情感分析建模示例，完善了我们的高级建模主题。我们总结了 H2O 可用的无监督学习方法，并展示了如何使用隔离森林算法为信用卡欺诈交易用例构建异常检测模型。我们还回顾了如何更新模型，包括改装和检查点，并展示了确保模型再现性的要求。</p>
+			<p>在<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第 7 章</em> </a>、<em class="italic">理解 ML 模型、</em>中，我们讨论了理解和回顾我们的 ML 模型的方法。</p>
 		</div>
 	
 

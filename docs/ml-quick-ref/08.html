@@ -32,9 +32,9 @@
 
                 
 
-<p>在我们进入<strong>贝叶斯网络</strong> ( <strong> BN </strong>)概念之前，我们应该了解概率论。因此，我们将努力触及这些问题，并为BNs奠定基础。</p>
+<p>在我们进入<strong>贝叶斯网络</strong> ( <strong> BN </strong>)概念之前，我们应该了解概率论。因此，我们将努力触及这些问题，并为 BNs 奠定基础。</p>
 
-<p>我们已经知道概率是事件发生的确定/不确定程度。然而，它也可以被称为信任度，当我们谈论BN时，它更常用。</p>
+<p>我们已经知道概率是事件发生的确定/不确定程度。然而，它也可以被称为信任度，当我们谈论 BN 时，它更常用。</p>
 
 <p>当我们掷一枚公平硬币时，我们说围绕正面/反面事件发生的信任度是<em> 0.5 </em>。这意味着我们对正面发生的信念和反面一样坚定。概率可以看如下:</p>
 
@@ -113,7 +113,7 @@
 
 <ul>
 
-<li>条件概率就是理解这一点，一场板球比赛可以是完美的例子。假设有一场印度和澳大利亚之间的比赛，我们试图传递我们的信念，印度获胜。你认为概率会受到印度选的队的冲击吗？如果<em> Virat Kohli </em>和<em> Rohit Sharma </em>是团队的一员，印度赢得比赛的概率会受到影响吗？所以，<em> p(印度赢|Rohit和Virat在打)</em>表示印度赢的概率，给定<em> Rohit </em>和<em> Virat </em>在打。本质上，它意味着一个事件的概率依赖于另一个事件的概率。叫做<strong>条件概率</strong>。</li>
+<li>条件概率就是理解这一点，一场板球比赛可以是完美的例子。假设有一场印度和澳大利亚之间的比赛，我们试图传递我们的信念，印度获胜。你认为概率会受到印度选的队的冲击吗？如果<em> Virat Kohli </em>和<em> Rohit Sharma </em>是团队的一员，印度赢得比赛的概率会受到影响吗？所以，<em> p(印度赢|Rohit 和 Virat 在打)</em>表示印度赢的概率，给定<em> Rohit </em>和<em> Virat </em>在打。本质上，它意味着一个事件的概率依赖于另一个事件的概率。叫做<strong>条件概率</strong>。</li>
 
 </ul>
 
@@ -188,7 +188,7 @@
 
 <p>我们将通过举一个板球的例子来简单地解释这一点。在板球运动中，场地条件随着你从一个地方到另一个地方而变化，这是决定球队的重要因素之一。结果也可能取决于它。</p>
 
-<p>假设印度队去澳大利亚比赛，我们要预测一个印度球员在比赛中得一百分(100分)的信念。如果那个球员有在那个国家踢球的经验，我们可以坚定地说，他可能会得一百分。但是，还有一个球员是这个国家的第一次。他的优先信念是什么？当然，许多人不太相信他能得一百分。</p>
+<p>假设印度队去澳大利亚比赛，我们要预测一个印度球员在比赛中得一百分(100 分)的信念。如果那个球员有在那个国家踢球的经验，我们可以坚定地说，他可能会得一百分。但是，还有一个球员是这个国家的第一次。他的优先信念是什么？当然，许多人不太相信他能得一百分。</p>
 
 <p>然而，当我们看到球员的表现时，我们之前的想法会改变。也就是说，随着玩家玩的游戏越来越多，关于玩家的更多数据将由我们支配。基于此，后验信念将不断更新。它变化很大，很大程度上是由于观察或更多的数据(这被称为<strong>可能性</strong>)。贝叶斯法则就是基于这些概念。</p>
 
@@ -200,7 +200,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/dc060e81-1231-4d98-9a89-0ea9f32c00dc.png" style="width:11.75em;height:3.50em;"/></p>
 
-<p>我们从条件概率中得到B的概率，如下所示:</p>
+<p>我们从条件概率中得到 B 的概率，如下所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/47e9c056-9487-4eef-8f0a-4b9e52d70eee.png" style="width:14.50em;height:1.42em;"/></p>
 
@@ -210,7 +210,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/49120dc1-9adc-4b5c-9077-4d270ce66994.png" style="width:12.75em;height:2.75em;"/></p>
 
-<p class="CDPAlignLeft CDPAlign">现在，从等式2中提取<img class="fm-editor-equation" src="img/263394a6-45d1-4214-aa22-754050d46121.png" style="width:5.42em;height:1.42em;"/> <strong> </strong>的值，并将其放入等式1，我们得到:</p>
+<p class="CDPAlignLeft CDPAlign">现在，从等式 2 中提取<img class="fm-editor-equation" src="img/263394a6-45d1-4214-aa22-754050d46121.png" style="width:5.42em;height:1.42em;"/> <strong> </strong>的值，并将其放入等式 1，我们得到:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/c5f4ca75-60d9-4d37-9aed-e8230fa8d3a8.png" style="width:13.75em;height:2.42em;"/></p>
 
@@ -218,11 +218,11 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/ea3cba87-2548-4ee7-a977-c03b76bd40c1.png" style="width:15.58em;height:2.75em;"/></p>
 
-<p>先看一下方程3。这叫做<strong>贝叶斯法则</strong>。</p>
+<p>先看一下方程 3。这叫做<strong>贝叶斯法则</strong>。</p>
 
 <p><em> P(A|B) </em>称为<strong>后验</strong>，需要估计。在前面的例子中，这将是一个世纪得分的概率，假设玩家已经有了早期在那里玩的经验。</p>
 
-<p><em> P(B|A) </em>称为<strong>似然</strong>，是在给定我们初始假设的情况下，观察到新证据的概率。例如，一个以前有过板球比赛经验的运动员得分100分的概率。</p>
+<p><em> P(B|A) </em>称为<strong>似然</strong>，是在给定我们初始假设的情况下，观察到新证据的概率。例如，一个以前有过板球比赛经验的运动员得分 100 分的概率。</p>
 
 <p><em> P(A) </em>称为<strong>先验</strong>，是我们假设没有任何额外先验信息的概率。</p>
 
@@ -295,7 +295,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/dc8df9c5-ea52-4fe6-a967-8a6cbe2d18fa.png" style="width:9.42em;height:2.83em;"/></p>
 
-<p>借助节点和边，展示变量之间的关系。可以是条件独立关系，也可以是条件依赖关系。BN是一种可以在变量之间引入因果关系的技术。虽然因果关系并不是其中必不可少的一部分，但是在网络中拥有这个(因果关系)可以让结构变得相当紧凑。</p>
+<p>借助节点和边，展示变量之间的关系。可以是条件独立关系，也可以是条件依赖关系。BN 是一种可以在变量之间引入因果关系的技术。虽然因果关系并不是其中必不可少的一部分，但是在网络中拥有这个(因果关系)可以让结构变得相当紧凑。</p>
 
 <p>我们通过一个例子来看。有许多可变因素，如醒来晚了，高速公路上的事故，下雨天，交通堵塞，他们上班会迟到，开会会迟到。如果一个人起床晚了，就意味着上班迟到。高速公路上的事故会造成交通堵塞，反过来，这会导致上班迟到。在雨天，道路更容易发生事故，此外，缓慢行驶的车辆会造成交通堵塞，从而导致上班迟到。下图解释了该示例:</p>
 
@@ -305,9 +305,9 @@
 
 <p>此外，晚起似乎与高速公路上的事故没有联系和关系。也就是说，它们可能看起来相互独立。但是，如果你知道上班迟到的价值，那么这两个可以称为有条件独立。</p>
 
-<p>因此，BN允许节点之间的条件独立性。同时，它是联合概率分布的有效表示，这是由链式规则实现的。</p>
+<p>因此，BN 允许节点之间的条件独立性。同时，它是联合概率分布的有效表示，这是由链式规则实现的。</p>
 
-<p>假设X代表n个独立变量或节点。弧线或有向箭头表示变量之间的概率相关性或独立性。没有弧线意味着概率上的独立性。网络是一个有向无环图，其中每个节点都保持着局部概率分布，也称为<strong>条件概率表</strong> ( <strong> CPT </strong>)。</p>
+<p>假设 X 代表 n 个独立变量或节点。弧线或有向箭头表示变量之间的概率相关性或独立性。没有弧线意味着概率上的独立性。网络是一个有向无环图，其中每个节点都保持着局部概率分布，也称为<strong>条件概率表</strong> ( <strong> CPT </strong>)。</p>
 
 <p>如果我们说的是之前的网络，那么我们需要寻址整个网络所需的概率分布。为了简单起见，我们将所有节点保持为布尔型。</p>
 
@@ -368,23 +368,23 @@
 
 <ol>
 
-<li><strong>节点(晚起)</strong>:作为父节点之一，我们将寻找晚起的概率。因此，这里被发现的概率计数是1。</li>
+<li><strong>节点(晚起)</strong>:作为父节点之一，我们将寻找晚起的概率。因此，这里被发现的概率计数是 1。</li>
 
-<li><strong>节点(雨天)</strong>:和晚起节点一样，这里概率的计数也是1。</li>
+<li><strong>节点(雨天)</strong>:和晚起节点一样，这里概率的计数也是 1。</li>
 
-<li><strong>节点(公路上的事故)</strong>:由于是雨天的子节点，所以讲的是雨天发生事故的概率和非雨天发生事故的概率。所以，这里的概率是2。</li>
+<li><strong>节点(公路上的事故)</strong>:由于是雨天的子节点，所以讲的是雨天发生事故的概率和非雨天发生事故的概率。所以，这里的概率是 2。</li>
 
-<li><strong>节点(堵车)</strong>:它有两个双亲(雨天和事故)。雨天有两个值，真和假，和事故一样。将两者结合将产生四种不同的组合。因此，概率计数将是4。</li>
+<li><strong>节点(堵车)</strong>:它有两个双亲(雨天和事故)。雨天有两个值，真和假，和事故一样。将两者结合将产生四种不同的组合。因此，概率计数将是 4。</li>
 
-<li><strong>节点(上班迟到)和节点(开会迟到)</strong>:类似的解释也适用于这两个节点。这些事件发生的概率是4:</li>
+<li><strong>节点(上班迟到)和节点(开会迟到)</strong>:类似的解释也适用于这两个节点。这些事件发生的概率是 4:</li>
 
 </ol>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-901 image-border" src="img/4ed44c12-fbe1-4882-b3c3-8e62ccabe38a.png" style="width:32.75em;height:31.08em;"/></p>
 
-<p>概率总数是1 + 2 + 1 + 4 + 4 + 4 = 16。</p>
+<p>概率总数是 1 + 2 + 1 + 4 + 4 + 4 = 16。</p>
 
-<p>如果它只是一个正常的联合概率分布而不是BN，我们将有2 <sup> 6 </sup> -1个概率。因此，BN使网络相当紧凑。此外，我们必须注意的另一个更基本的假设是，给定每个节点的直接父节点，每个节点都有条件地独立于非子节点。例如，在<strong>上班迟到</strong>也在的情况下，晚起和开会迟到是有条件独立的。一般来说，我们可以用下面的方式来表示BN，这显示了联合分布是如何被转化为紧凑结构的:</p>
+<p>如果它只是一个正常的联合概率分布而不是 BN，我们将有 2 <sup> 6 </sup> -1 个概率。因此，BN 使网络相当紧凑。此外，我们必须注意的另一个更基本的假设是，给定每个节点的直接父节点，每个节点都有条件地独立于非子节点。例如，在<strong>上班迟到</strong>也在的情况下，晚起和开会迟到是有条件独立的。一般来说，我们可以用下面的方式来表示 BN，这显示了联合分布是如何被转化为紧凑结构的:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/422192d3-e973-47a9-a21d-db60c6679cf0.png" style="width:24.92em;height:2.75em;"/></p>
 
@@ -404,7 +404,7 @@
 
 </ul>
 
-<p>现在，让我们用一个简单的场景来展示CPT。以下是三个事件的组合，如下所示:</p>
+<p>现在，让我们用一个简单的场景来展示 CPT。以下是三个事件的组合，如下所示:</p>
 
 <p>如果下雨，狗会开始叫，男人会翘班:</p>
 
@@ -422,9 +422,9 @@
 
 <ul>
 
-<li>连接器1指示下雨时狗叫的可能性</li>
+<li>连接器 1 指示下雨时狗叫的可能性</li>
 
-<li>连接器2指示如果狗叫，该人跳过他的工作的概率</li>
+<li>连接器 2 指示如果狗叫，该人跳过他的工作的概率</li>
 
 </ul>
 
@@ -487,7 +487,7 @@
 
                 
 
-<p>让我们为连接器1进行CPT:</p>
+<p>让我们为连接器 1 进行 CPT:</p>
 
 <table border="1" style="border-collapse: collapse;width: 100%">
 
@@ -711,7 +711,7 @@
 
 <p class="mce-root"/>
 
-<p>让我们说，男子旷工的CPT如下:</p>
+<p>让我们说，男子旷工的 CPT 如下:</p>
 
 <table border="1" style="border-collapse: collapse;width: 100%">
 
@@ -848,7 +848,7 @@
 
                 
 
-<p>让我们用Python来解决一个用例。我们将使用Kaggle的泰坦尼克号数据。<br/>数据被分成两组:</p>
+<p>让我们用 Python 来解决一个用例。我们将使用 Kaggle 的泰坦尼克号数据。<br/>数据被分成两组:</p>
 
 <ul>
 
@@ -862,7 +862,7 @@
 
 <ul>
 
-<li><kbd>pclass</kbd>:机票等级1 =第一，2 =第二，3 =第三</li>
+<li><kbd>pclass</kbd>:机票等级 1 =第一，2 =第二，3 =第三</li>
 
 <li><kbd>gender</kbd>:性别</li>
 
@@ -894,7 +894,7 @@
 
 <pre>traindf= pd.read_csv("train.csv")<br/>testdf= pd.read_csv("test.csv")</pre>
 
-<p>我们必须寻找每个变量的唯一值的数量，因为bn是离散模型:</p>
+<p>我们必须寻找每个变量的唯一值的数量，因为 bn 是离散模型:</p>
 
 <pre>for k in traindf.keys():<br/> print('{0}: {1}'.format(k, len(traindf[k].unique())))</pre>
 
@@ -974,7 +974,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-670 image-border" src="img/8cc11cf8-4fbc-4674-af45-8c6f08f34bdc.png" style="width:33.92em;height:34.58em;"/></p>
 
-<p>变量的熵意味着值越大，变量的边际概率分布越不确定。熵值越低，不确定性越低。<kbd>Decade</kbd>变量有最高的熵，这意味着它是均匀分布的。Parch具有低熵且分布不均匀。</p>
+<p>变量的熵意味着值越大，变量的边际概率分布越不确定。熵值越低，不确定性越低。<kbd>Decade</kbd>变量有最高的熵，这意味着它是均匀分布的。Parch 具有低熵且分布不均匀。</p>
 
 <p>熵如何计算的一个结果是，如果随机变量有许多模态，熵往往会变得更大。</p>
 
@@ -994,7 +994,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-900 image-border" src="img/fb4a872f-7093-4004-b45e-6da27d41c44e.png" style="width:12.08em;height:6.50em;"/></p>
 
-<p>超过40%的乘客在这里幸存。但是，我们没有提出任何条件。</p>
+<p>超过 40%的乘客在这里幸存。但是，我们没有提出任何条件。</p>
 
 <p>假设我们想知道年轻男性存活的几率有多大:</p>
 
@@ -1004,7 +1004,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-906 image-border" src="img/8485e3f0-faa9-4022-ac86-f8121bf48189.png" style="width:11.25em;height:6.08em;"/></p>
 
-<p>所以，几率是20.6%。</p>
+<p>所以，几率是 20.6%。</p>
 
 <p>如果我们必须找出一个老太太存活的机会，我们会这样做:</p>
 
@@ -1014,7 +1014,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-904 image-border" src="img/0ff5217b-890f-4ca3-aee7-e437280a3e31.png" style="width:13.50em;height:7.33em;"/></p>
 
-<p>现在，为了评估模型以发现它有多好，我们将绘制ROC曲线:</p>
+<p>现在，为了评估模型以发现它有多好，我们将绘制 ROC 曲线:</p>
 
 <pre>from pyAgrum.lib.bn2roc import showROC<br/> showROC(bn, 'post_train.csv','Survived',"1",True,True)</pre>
 
@@ -1024,7 +1024,7 @@
 
 <p>在这里，<strong> AUC </strong>出来是<strong> 0.893508 </strong>相当体面。</p>
 
-<p>我们已经完成了建模部分。此外，我们还学习了概率论、贝叶斯网络、CPT的计算以及如何在Python中执行它。</p>
+<p>我们已经完成了建模部分。此外，我们还学习了概率论、贝叶斯网络、CPT 的计算以及如何在 Python 中执行它。</p>
 
 
 
@@ -1077,7 +1077,7 @@
 
                 
 
-<p>这一章让我们了解了概率论。还有，概率论的应用已经投入使用。我们了解了贝叶斯规则和贝叶斯网络以及它是如何形成的。我们被CPT的计算弄脏了手。最后，我们通过一个用例来理解如何在BNs的帮助下进行分类。读者现在将有技能有一个贝叶斯规则和BNs的深入知识。</p>
+<p>这一章让我们了解了概率论。还有，概率论的应用已经投入使用。我们了解了贝叶斯规则和贝叶斯网络以及它是如何形成的。我们被 CPT 的计算弄脏了手。最后，我们通过一个用例来理解如何在 BNs 的帮助下进行分类。读者现在将有技能有一个贝叶斯规则和 BNs 的深入知识。</p>
 
 <p>在下一章中，我们将研究深度学习中的选定主题。</p>
 

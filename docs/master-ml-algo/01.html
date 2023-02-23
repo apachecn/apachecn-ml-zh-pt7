@@ -42,7 +42,7 @@
 
 				<li class="list">可学性</li>
 
-				<li class="list">容量，包括Vapnik-Chervonenkis容量</li>
+				<li class="list">容量，包括 Vapnik-Chervonenkis 容量</li>
 
 				<li class="list">偏差，包括欠拟合</li>
 
@@ -52,7 +52,7 @@
 
 			<h1 id="_idParaDest-14" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor015"/>型号和数据</h1>
 
-			<p class="normal">机器学习模型与数据一起工作<a id="_idIndexMarker000"/>。他们创建关联、找出关系、发现模式、生成新样本等等，使用定义良好的数据集，这些数据集是与特定场景(例如，每5分钟采样一次的房间温度，或一群人的体重)相关的数据点(例如，观察值、图像或测量值)的同质集合</p>
+			<p class="normal">机器学习模型与数据一起工作<a id="_idIndexMarker000"/>。他们创建关联、找出关系、发现模式、生成新样本等等，使用定义良好的数据集，这些数据集是与特定场景(例如，每 5 分钟采样一次的房间温度，或一群人的体重)相关的数据点(例如，观察值、图像或测量值)的同质集合</p>
 
 			<p class="normal">不幸的是，有时<a id="_idIndexMarker001"/>强加在机器学习模型上的假设或条件并不明确，漫长的训练过程可能会导致完全的验证失败。我们可以将模型想象成一个灰箱(许多常见算法的简单性保证了一定的透明度)，其中从数据集提取的矢量输入<em class="italics"> X </em>被转换成矢量输出<em class="italics"> Y </em>:</p>
 
@@ -74,11 +74,11 @@
 
 			</ul>
 
-			<p class="normal">第一点是人工智能辩论中的一个关键因素。正如达威奇所指出的(在达威奇a .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》(Communications of the ACM)第61卷10/2018)，现代机器学习的成功主要得益于深度神经网络能够<a id="_idIndexMarker002"/>重现特定的认知功能(例如，视觉或语音识别)。很明显，这种模型的结果必须基于真实世界的数据，此外，它们必须拥有我们试图复制的动物的认知功能所产生的结果的所有特征。</p>
+			<p class="normal">第一点是人工智能辩论中的一个关键因素。正如达威奇所指出的(在达威奇 a .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》(Communications of the ACM)第 61 卷 10/2018)，现代机器学习的成功主要得益于深度神经网络能够<a id="_idIndexMarker002"/>重现特定的认知功能(例如，视觉或语音识别)。很明显，这种模型的结果必须基于真实世界的数据，此外，它们必须拥有我们试图复制的动物的认知功能所产生的结果的所有特征。</p>
 
 			<p class="normal">我们将详细分析这些属性。重要的是要记住，它们不是简单的需求，而是保证人工智能应用在生产环境中成功或失败的支柱(也就是说，在有限和定义良好的数据集的<em class="italics">黄金世界</em>之外)。</p>
 
-			<p class="normal">在本节中，我们只考虑<a id="_idIndexMarker003"/>参数<strong class="bold">T21模型，尽管有一系列<a id="_idIndexMarker004"/>算法被称为<strong class="bold">非参数</strong>，因为它们只基于数据的结构；我们将在接下来的章节中讨论其中的一些。</strong></p>
+			<p class="normal">在本节中，我们只考虑<a id="_idIndexMarker003"/>参数<strong class="bold">T21 模型，尽管有一系列<a id="_idIndexMarker004"/>算法被称为<strong class="bold">非参数</strong>，因为它们只基于数据的结构；我们将在接下来的章节中讨论其中的一些。</strong></p>
 
 			<p class="normal"><strong class="bold">参数学习过程</strong>的任务是在给定特定输入<em class="italics"> X </em>和输出<em class="italics"> Y </em>数据集(或者与误差成比例，如果我们试图最小化误差)的情况下，找到最大化目标函数的最佳<a id="_idIndexMarker005"/>参数集，其值与模型的精度成比例。这个定义不是很严格，我们将在下面的部分中改进它；然而，在机器学习的背景下，这是一种介绍我们正在使用的数据的结构和属性的有用方式。</p>
 
@@ -102,11 +102,11 @@
 
 			<p class="normal">当然，当我们考虑样本总体时，我们总是需要假设它们来自原始的数据生成分布。这不是一个纯理论的假设——正如我们将要看到的，如果我们的样本数据元素来自不同的分布，我们的模型的准确性会大大降低。</p>
 
-			<p class="normal">例如，如果我们使用1000万像素的图像训练<a id="_idIndexMarker011"/>一个人像分类器，然后我们在一个配有100万像素摄像头的旧智能手机上使用它，我们可以很容易地开始发现我们预测准确性的差异。</p>
+			<p class="normal">例如，如果我们使用 1000 万像素的图像训练<a id="_idIndexMarker011"/>一个人像分类器，然后我们在一个配有 100 万像素摄像头的旧智能手机上使用它，我们可以很容易地开始发现我们预测准确性的差异。</p>
 
 			<p class="normal">这并不奇怪；低分辨率图像捕捉不到许多细节。通过向模型提供非常嘈杂的数据源，可以得到类似的结果，这些数据源的信息内容只能部分恢复。</p>
 
-			<p class="normal"><em class="italics"> N </em>值<a id="_idIndexMarker012"/>是<strong class="bold">独立同分布</strong> ( <strong class="bold"> i.i.d. </strong>)如果从同一个分布中抽样，两个不同的抽样步骤产生统计上独立的值(即<em class="italics"> p(a，b) = p(a)p(b) </em>)。如果我们从<em class="italics">p</em>T13】数据中采样<em class="italics"> N </em> i.i.d .值，我们可以创建由k维实向量组成的有限数据集<em class="italics"> X </em>:</p>
+			<p class="normal"><em class="italics"> N </em>值<a id="_idIndexMarker012"/>是<strong class="bold">独立同分布</strong> ( <strong class="bold"> i.i.d. </strong>)如果从同一个分布中抽样，两个不同的抽样步骤产生统计上独立的值(即<em class="italics"> p(a，b) = p(a)p(b) </em>)。如果我们从<em class="italics">p</em>T13】数据中采样<em class="italics"> N </em> i.i.d .值，我们可以创建由 k 维实向量组成的有限数据集<em class="italics"> X </em>:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_003.png" alt="" style="height: 1.5em !important;"/></figure>
 
@@ -114,11 +114,11 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_004.png" alt="" style="height: 1.5em !important;"/></figure>
 
-			<p class="normal">当输出有两个以上的类时，有不同的可能策略来处理这个问题。在经典的机器学习中，最常见的方法之一是<strong class="bold">一对一</strong>，这是基于<a id="_idIndexMarker013"/>训练<em class="italics"> N </em>个不同的二元分类器，其中每个标签都根据所有剩余的标签进行评估。以这种方式，执行<em class="italics"> N-1 </em>个分类以确定正确的类别。相反，对于浅层和深层神经模型，最好使用<strong class="bold"> softmax函数</strong>来表示所有类别的<a id="_idIndexMarker014"/>输出概率分布:</p>
+			<p class="normal">当输出有两个以上的类时，有不同的可能策略来处理这个问题。在经典的机器学习中，最常见的方法之一是<strong class="bold">一对一</strong>，这是基于<a id="_idIndexMarker013"/>训练<em class="italics"> N </em>个不同的二元分类器，其中每个标签都根据所有剩余的标签进行评估。以这种方式，执行<em class="italics"> N-1 </em>个分类以确定正确的类别。相反，对于浅层和深层神经模型，最好使用<strong class="bold"> softmax 函数</strong>来表示所有类别的<a id="_idIndexMarker014"/>输出概率分布:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_005.png" alt="" style="height: 3em !important;"/></figure>
 
-			<p class="normal">这种输出，其中<em class="italics"> z </em> <sub style="font-style: italic;"> i </sub>表示中间值，各项之和归一化为1，可以使用交叉熵成本函数轻松管理，我们将在<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>中讨论。眼尖的读者可能会注意到，计算总体的softmax输出可以获得数据生成过程的近似值。</p>
+			<p class="normal">这种输出，其中<em class="italics"> z </em> <sub style="font-style: italic;"> i </sub>表示中间值，各项之和归一化为 1，可以使用交叉熵成本函数轻松管理，我们将在<em class="italics">第 2 章</em>、<em class="italics">损失函数和正则化</em>中讨论。眼尖的读者可能会注意到，计算总体的 softmax 输出可以获得数据生成过程的近似值。</p>
 
 			<p class="normal">这太棒了，因为一旦模型被成功地训练并得到了肯定的结果，就可以合理地假设与从未见过的样本相对应的输出反映了真实世界的联合概率分布。这意味着模型已经开发了相关抽象的最小误差的内部表示；这是整个机器学习过程的最终目标。</p>
 
@@ -130,7 +130,7 @@
 
 			<p class="normal">在这种情况下，很容易理解变换<em class="italics"> f(z) </em>实际上负责增加车辆的大小、它们的相对比例、车轮的数量等等。在这一点上，我们的模型<em class="italics"> M </em>是否也可以通过利用类比的方式对从<em class="italics">p</em><sub style="font-style: italic;">2</sub><em class="italics">【x，y】</em>中抽取的样本进行正确分类？总的来说，答案是否定的。观察到的准确性下降，达到纯粹随机猜测的极限。</p>
 
-			<p class="normal">这个问题背后的原因与模型的数学本质严格相关，在本书中不予讨论(有兴趣的读者可以查看严谨的论文Crammer K .、Kearns M .、Wortman J .、<em class="italics">从多个来源学习</em>《机器学习研究杂志》9/2008)。然而，考虑这样的场景是有帮助的。领域自适应的目标是找到最佳方法，让模型从<em class="italics"> M </em>转换到<em class="italics">M’</em>，反之亦然，以便最大化其处理特定数据生成过程的能力。</p>
+			<p class="normal">这个问题背后的原因与模型的数学本质严格相关，在本书中不予讨论(有兴趣的读者可以查看严谨的论文 Crammer K .、Kearns M .、Wortman J .、<em class="italics">从多个来源学习</em>《机器学习研究杂志》9/2008)。然而，考虑这样的场景是有帮助的。领域自适应的目标是找到最佳方法，让模型从<em class="italics"> M </em>转换到<em class="italics">M’</em>，反之亦然，以便最大化其处理特定数据生成过程的能力。</p>
 
 			<p class="normal">这是在合理变化的范围内，例如，模型的组件识别轿车和卡车之间的相似性(例如，它们都有挡风玻璃和散热器)，并强制一些参数从其初始配置(其目标是轿车)转移到基于卡车的新配置。这类方法显然更适合于描述认知过程。此外，它还具有巨大的优势，允许出于不同的目的重用相同的模型，而不需要从头开始重新训练它们，这通常是实现可接受的性能的必要条件。</p>
 
@@ -148,7 +148,7 @@
 
 			<p class="normal">零居中并不总是足以保证所有算法都正确运行。不同的要素可能具有非常不同的标准偏差，因此，考虑参数向量范数的优化(请参见正则化部分)将倾向于以相同的方式处理所有要素。这种平等的待遇可以产生完全不同的最终效果；方差较小的要素比方差较大的要素受影响更大。</p>
 
-			<p class="normal">同样，当单个要素有助于找到最佳参数时，具有较大方差的要素可以控制其他要素，迫使它们在问题的上下文中变得类似于常数值。这样，那些变化较小的特性就失去了影响最终解决方案的能力(例如，当涉及回归和神经网络时，这个问题是一个常见的限制因素)。因此，如果考虑整个数据集的每个单个特征来计算<img src="img/B14713_01_008.png" alt="" style="height: 1em !important;"/>、<img src="img/B14713_01_009.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_01_010.png" alt="" style="height: 1em !important;"/>，那么用以零为中心的样本除以基于特征的标准偏差通常会有所帮助，从而获得所谓的<a id="_idIndexMarker021"/> z得分:</p>
+			<p class="normal">同样，当单个要素有助于找到最佳参数时，具有较大方差的要素可以控制其他要素，迫使它们在问题的上下文中变得类似于常数值。这样，那些变化较小的特性就失去了影响最终解决方案的能力(例如，当涉及回归和神经网络时，这个问题是一个常见的限制因素)。因此，如果考虑整个数据集的每个单个特征来计算<img src="img/B14713_01_008.png" alt="" style="height: 1em !important;"/>、<img src="img/B14713_01_009.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_01_010.png" alt="" style="height: 1em !important;"/>，那么用以零为中心的样本除以基于特征的标准偏差通常会有所帮助，从而获得所谓的<a id="_idIndexMarker021"/> z 得分:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_007.png" alt="" style="height: 5em !important;"/></figure>
 
@@ -168,13 +168,13 @@
 
 			<h4 class="title" lang="en-GB" xml:lang="en-GB">稳健缩放</h4>
 
-			<p class="normal">前两种方法有一个共同的缺点:它们对异常值非常敏感。事实上，当数据集包含异常值时，它们的存在将影响均值和标准差的计算，使值向异常值移动。另一种可靠的方法是基于分位数的使用。给定一个范围[ <em class="italics"> a，b </em> ]上的分布<em class="italics"> p </em>，最常见的分位数，称为中位数，第50个百分位数或第二个四分位数(<em class="italics"> Q </em> <sub style="font-style: italic;"> 2 </sub>)，是将范围[ <em class="italics"> a，b </em>分成两个子集的值，以便<img src="img/B14713_01_015.png" alt="" style="height: 1em !important;"/>。也就是说，在有限的总体中，中位数就是在中心位置的值。</p>
+			<p class="normal">前两种方法有一个共同的缺点:它们对异常值非常敏感。事实上，当数据集包含异常值时，它们的存在将影响均值和标准差的计算，使值向异常值移动。另一种可靠的方法是基于分位数的使用。给定一个范围[ <em class="italics"> a，b </em> ]上的分布<em class="italics"> p </em>，最常见的分位数，称为中位数，第 50 个百分位数或第二个四分位数(<em class="italics"> Q </em> <sub style="font-style: italic;"> 2 </sub>)，是将范围[ <em class="italics"> a，b </em>分成两个子集的值，以便<img src="img/B14713_01_015.png" alt="" style="height: 1em !important;"/>。也就是说，在有限的总体中，中位数就是在中心位置的值。</p>
 
 			<p class="normal">例如，考虑集合<em class="italics"> A </em> = {1，2，3，5，7，9}，我们有:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_016.png" alt="" style="height: 1.5em !important;"/></figure>
 
-			<p class="normal">如果我们把值10加上集合<em class="italics"> A </em>，我们得到<img src="img/B14713_01_017.png" alt="" style="height: 1em !important;"/>:</p>
+			<p class="normal">如果我们把值 10 加上集合<em class="italics"> A </em>，我们得到<img src="img/B14713_01_017.png" alt="" style="height: 1em !important;"/>:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_018.png" alt="" style="height: 1.5em !important;"/></figure>
 
@@ -182,13 +182,13 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_019.png" alt="" style="height: 1.7em !important;"/></figure>
 
-			<p class="normal">在前面的公式中，<em class="italics"> Q </em> <sub style="font-style: italic;"> 1 </sub>是分割范围[ <em class="italics"> a，b </em> ]的分界点，因此25%的值位于子集[ <em class="italics"> a，Q </em> <sub style="font-style: italic;"> 1 </sub> ]中，而<em class="italics"> Q </em> <sub style="font-style: italic;"> 2 </sub>分割范围，因此75%的值位于子集[ <em class="italics"> a，Q</em><sub style="font-style: italic;">2]中考虑到前面设定的<em class="italics">A’</em>，我们得到:</sub></p>
+			<p class="normal">在前面的公式中，<em class="italics"> Q </em> <sub style="font-style: italic;"> 1 </sub>是分割范围[ <em class="italics"> a，b </em> ]的分界点，因此 25%的值位于子集[ <em class="italics"> a，Q </em> <sub style="font-style: italic;"> 1 </sub> ]中，而<em class="italics"> Q </em> <sub style="font-style: italic;"> 2 </sub>分割范围，因此 75%的值位于子集[ <em class="italics"> a，Q</em><sub style="font-style: italic;">2]中考虑到前面设定的<em class="italics">A’</em>，我们得到:</sub></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_020.png" alt="" style="height: 1.7em !important;"/></figure>
 
-			<p class="normal">根据这些定义，很容易理解IQR对异常值的敏感度很低。实际上，让我们假设一个特征位于范围[-1，1]内，没有异常值。在更大的数据集中，我们观察区间[-2，3]。如果该效应是由于异常值的存在(例如，新值10加到<em class="italics"> A </em>上)，它们的数量比正常点的数量小得多，否则它们就是实际分布的一部分。因此，我们可以通过设置适当的分位数将它们从计算中剔除。例如，我们可能希望从计算中排除所有概率低于10%的特征。在这种情况下，我们需要考虑双尾分布中的第5个<sup>第</sup>和第95个<sup>第</sup>百分位数，并使用它们的差值<em class="italics"> QR </em> = 95个<sup>第</sup>–5个<sup>第</sup>。</p>
+			<p class="normal">根据这些定义，很容易理解 IQR 对异常值的敏感度很低。实际上，让我们假设一个特征位于范围[-1，1]内，没有异常值。在更大的数据集中，我们观察区间[-2，3]。如果该效应是由于异常值的存在(例如，新值 10 加到<em class="italics"> A </em>上)，它们的数量比正常点的数量小得多，否则它们就是实际分布的一部分。因此，我们可以通过设置适当的分位数将它们从计算中剔除。例如，我们可能希望从计算中排除所有概率低于 10%的特征。在这种情况下，我们需要考虑双尾分布中的第 5 个<sup>第</sup>和第 95 个<sup>第</sup>百分位数，并使用它们的差值<em class="italics"> QR </em> = 95 个<sup>第</sup>–5 个<sup>第</sup>。</p>
 
-			<p class="normal">考虑集合<em class="italics">A’</em>，我们得到<em class="italics"> IQR </em> = 5.5，而标准差为3.24。这意味着标准缩放对值的压缩小于鲁棒缩放。随着我们增加分位数范围，这种影响会变得越来越大(例如，使用第95个<sup>和第5个<sup>百分位数，<img src="img/B14713_01_021.png" alt="" style="height: 1em !important;"/>)。然而，重要的是要记住，这种技术不是一种离群值过滤方法。包括异常值在内的所有现有值都将被缩放。唯一的区别是异常值被排除在参数的计算之外，因此它们的影响减少了，或者完全消除了。</sup></sup></p>
+			<p class="normal">考虑集合<em class="italics">A’</em>，我们得到<em class="italics"> IQR </em> = 5.5，而标准差为 3.24。这意味着标准缩放对值的压缩小于鲁棒缩放。随着我们增加分位数范围，这种影响会变得越来越大(例如，使用第 95 个<sup>和第 5 个<sup>百分位数，<img src="img/B14713_01_021.png" alt="" style="height: 1em !important;"/>)。然而，重要的是要记住，这种技术不是一种离群值过滤方法。包括异常值在内的所有现有值都将被缩放。唯一的区别是异常值被排除在参数的计算之外，因此它们的影响减少了，或者完全消除了。</sup></sup></p>
 
 			<p class="normal">鲁棒缩放<a id="_idIndexMarker033"/>程序与标准程序非常相似，转换值使用特征公式获得:</p>
 
@@ -196,7 +196,7 @@
 
 			<p class="normal">其中<em class="italics"> m </em>是中位数<a id="_idIndexMarker034"/>，而<em class="italics"> QR </em>是分位数范围(例如，IQR)。</p>
 
-			<p class="normal">在我们讨论其他技术之前，让我们使用包含200个点的数据集来比较这些方法，这些点是用<img src="img/B14713_01_023.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_01_024.png" alt="" style="height: 1em !important;"/>从多元高斯分布中采样的:</p>
+			<p class="normal">在我们讨论其他技术之前，让我们使用包含 200 个点的数据集来比较这些方法，这些点是用<img src="img/B14713_01_023.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_01_024.png" alt="" style="height: 1em !important;"/>从多元高斯分布中采样的:</p>
 
 			<pre>import numpy as np
 nb_samples = 200
@@ -204,7 +204,7 @@ mu = [1.0, 1.0]
 covm = [[2.0, 0.0], [0.0, 0.8]]
 X = np.random.multivariate_normal(mean=mu, cov=covm, size=nb_samples)</pre>
 
-			<p class="normal">此时，我们采用以下scikit-learn类:</p>
+			<p class="normal">此时，我们采用以下 scikit-learn 类:</p>
 
 			<ul>
 
@@ -212,7 +212,7 @@ X = np.random.multivariate_normal(mean=mu, cov=covm, size=nb_samples)</pre>
 
 				<li class="list"><code class="Code-In-Text--PACKT-">MinMaxScaler</code>，其主要的<a id="_idIndexMarker036"/>参数是<code class="Code-In-Text--PACKT-">feature_range</code>，需要一个元组或者两个元素的列表(<em class="italics"> a，b </em>)使得<em class="italics"> a &lt; b </em>。默认值为(0，1)。</li>
 
-				<li class="list"><code class="Code-In-Text--PACKT-">RobustScaler</code>，主要是基于参数<code class="Code-In-Text--PACKT-">quantile_range</code>的<a id="_idIndexMarker037"/>。默认值为(25，75)对应于IQR。与<code class="Code-In-Text--PACKT-">StandardScaler</code>类似，该类接受参数<code class="Code-In-Text--PACKT-">with_centering</code>和<code class="Code-In-Text--PACKT-">with_scaling</code>，它们有选择地激活/停用这两个函数。</li>
+				<li class="list"><code class="Code-In-Text--PACKT-">RobustScaler</code>，主要是基于参数<code class="Code-In-Text--PACKT-">quantile_range</code>的<a id="_idIndexMarker037"/>。默认值为(25，75)对应于 IQR。与<code class="Code-In-Text--PACKT-">StandardScaler</code>类似，该类接受参数<code class="Code-In-Text--PACKT-">with_centering</code>和<code class="Code-In-Text--PACKT-">with_scaling</code>，它们有选择地激活/停用这两个函数。</li>
 
 			</ul>
 
@@ -246,7 +246,7 @@ X_mms = mms.fit_transform(X)</pre>
 
 			<p class="normal">给定一个以零为中心的数据集<em class="italics"> X </em>，包含点<img src="img/B14713_01_026.png" alt="" style="height: 1em !important;"/>，使用<em class="italics">L</em>T57】2(或欧几里德)范数的归一化将每个值转换为位于具有单位半径的超球表面上的点，并以<img src="img/B14713_01_027.png" alt="" style="height: 1em !important;"/>为中心(根据定义，表面上的所有点都具有<img src="img/B14713_01_028.png" alt="" style="height: 1em !important;"/>)。</p>
 
-			<p class="normal">与其他方法相反，归一化数据集会导致投影中现有关系仅根据角距离保持不变。为了理解这个概念，让我们使用带有参数<code class="Code-In-Text--PACKT-">norm='l2'</code>的scikit-learn类<code class="Code-In-Text--PACKT-">Normalizer</code>对上一个示例中定义的数据集进行规范化:</p>
+			<p class="normal">与其他方法相反，归一化数据集会导致投影中现有关系仅根据角距离保持不变。为了理解这个概念，让我们使用带有参数<code class="Code-In-Text--PACKT-">norm='l2'</code>的 scikit-learn 类<code class="Code-In-Text--PACKT-">Normalizer</code>对上一个示例中定义的数据集进行规范化:</p>
 
 			<pre>from sklearn.preprocessing import Normalizer
 nz = Normalizer(norm='l2')
@@ -275,7 +275,7 @@ print(np.arccos(np.dot(Y_test[0], Y_test[1])))</pre>
 
 			<pre>1.2490457723982544</pre>
 
-			<p class="normal">两个向量<em class="italics">x</em>T14】1和<em class="italics">x</em>T18】2的点积等于:</p>
+			<p class="normal">两个向量<em class="italics">x</em>T14】1 和<em class="italics">x</em>T18】2 的点积等于:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_030.png" alt="" style="height: 1.5em !important;"/></figure>
 
@@ -311,7 +311,7 @@ print(np.arccos(np.dot(Y_test[0], Y_test[1])))</pre>
 
 			<p class="normal">而且，许多需要估计与输入协方差矩阵严格相关的参数的<a id="_idIndexMarker050"/>算法可以从白化中受益，因为它减少了独立变量的实际数量。一般来说，这些算法处理在应用白化后变得对称的矩阵。</p>
 
-			<p class="normal">深度学习领域的另一个重要优势是，梯度通常在原点周围较高，在激活函数(例如，双曲正切或sigmoid)饱和的那些区域降低(<img src="img/B14713_01_040.png" alt="" style="height: 1em !important;"/>)。这就是为什么白化数据集(以零为中心)的收敛速度通常更快。</p>
+			<p class="normal">深度学习领域的另一个重要优势是，梯度通常在原点周围较高，在激活函数(例如，双曲正切或 sigmoid)饱和的那些区域降低(<img src="img/B14713_01_040.png" alt="" style="height: 1em !important;"/>)。这就是为什么白化数据集(以零为中心)的收敛速度通常更快。</p>
 
 			<p class="normal">在下图中，<a id="_idIndexMarker051"/>可以比较<strong class="bold">原始数据集</strong>和<strong class="bold">白化</strong>的结果，在这种情况下，这两个数据集都是以零为中心的，并且具有相同的协方差矩阵:</p>
 
@@ -319,9 +319,9 @@ print(np.arccos(np.dot(Y_test[0], Y_test[1])))</pre>
 
 			<p class="packt_figref">原始数据集(左)和白化版本(右)</p>
 
-			<p class="normal">当需要美白的时候，考虑一些重要的细节是很重要的。第一种是真实样本协方差与估计值<img src="img/B14713_01_041.png" alt="" style="height: 1em !important;"/>之间存在尺度差异，通常采用<a id="_idIndexMarker052"/>与<strong class="bold">奇异值分解</strong> ( <strong class="bold"> SVD </strong>)。第二个问题涉及许多框架实现的一些公共类，比如scikit-learn的<code class="Code-In-Text--PACKT-">StandardScaler</code>。事实上，虽然零居中是基于特征的操作，但是需要考虑整个协方差矩阵来计算白化滤波器<a id="_idIndexMarker053"/>;<code class="Code-In-Text--PACKT-">StandardScaler</code>仅实现单位方差和特征缩放。</p>
+			<p class="normal">当需要美白的时候，考虑一些重要的细节是很重要的。第一种是真实样本协方差与估计值<img src="img/B14713_01_041.png" alt="" style="height: 1em !important;"/>之间存在尺度差异，通常采用<a id="_idIndexMarker052"/>与<strong class="bold">奇异值分解</strong> ( <strong class="bold"> SVD </strong>)。第二个问题涉及许多框架实现的一些公共类，比如 scikit-learn 的<code class="Code-In-Text--PACKT-">StandardScaler</code>。事实上，虽然零居中是基于特征的操作，但是需要考虑整个协方差矩阵来计算白化滤波器<a id="_idIndexMarker053"/>;<code class="Code-In-Text--PACKT-">StandardScaler</code>仅实现单位方差和特征缩放。</p>
 
-			<p class="normal">幸运的是，所有能够受益于白化预处理步骤的scikit-learn算法都提供了一个内置特性，因此通常不需要进一步的操作。然而，对于所有想直接实现一些算法的读者，我写了两个Python函数，可以用于零中心和白化。他们假设一个矩阵<em class="italics"> X </em>具有一个形状(<em class="italics"> N </em> <sub style="font-style: italic;">个样本</sub> <em class="italics"> × n </em>)。此外，<code class="Code-In-Text--PACKT-">whiten()</code>函数接受参数<code class="Code-In-Text--PACKT-">correct</code>，这允许我们应用缩放校正。<code class="Code-In-Text--PACKT-">correct</code>的默认值为<code class="Code-In-Text--PACKT-">True</code>:</p>
+			<p class="normal">幸运的是，所有能够受益于白化预处理步骤的 scikit-learn 算法都提供了一个内置特性，因此通常不需要进一步的操作。然而，对于所有想直接实现一些算法的读者，我写了两个 Python 函数，可以用于零中心和白化。他们假设一个矩阵<em class="italics"> X </em>具有一个形状(<em class="italics"> N </em> <sub style="font-style: italic;">个样本</sub> <em class="italics"> × n </em>)。此外，<code class="Code-In-Text--PACKT-">whiten()</code>函数接受参数<code class="Code-In-Text--PACKT-">correct</code>，这允许我们应用缩放校正。<code class="Code-In-Text--PACKT-">correct</code>的默认值为<code class="Code-In-Text--PACKT-">True</code>:</p>
 
 			<pre>import numpy as np
 def zero_center(X):
@@ -356,7 +356,7 @@ def whiten(X, correct=True):
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_042.png" alt=""/></figure>
 
-			<p class="normal">样本是潜在完整人群的子集<a id="_idIndexMarker058"/>，部分不可及。因此，我们需要将我们的分析限制在包含N个元素的样本上。<a id="_idIndexMarker059"/>训练集和验证/测试集是不相交的(也就是说，使用训练阶段从未见过的样本进行评估)。</p>
+			<p class="normal">样本是潜在完整人群的子集<a id="_idIndexMarker058"/>，部分不可及。因此，我们需要将我们的分析限制在包含 N 个元素的样本上。<a id="_idIndexMarker059"/>训练集和验证/测试集是不相交的(也就是说，使用训练阶段从未见过的样本进行评估)。</p>
 
 			<p class="normal">测试集通常通过从初始验证集中移除<em class="italics"> N </em> <sub style="font-style: italic;">测试</sub>样本并在最终评估前将它们分开来获得。这个过程非常简单:</p>
 
@@ -372,26 +372,26 @@ def whiten(X, correct=True):
 
 			</ol>
 
-			<p class="normal">由于模型<a id="_idIndexMarker060"/>总是对训练过程中未采用的样本进行评估，因此Score()函数可以确定模型开发的泛化能力的质量。相反，使用训练样本执行的评估可以帮助我们了解模型是否基本上能够学习数据集的结构。我们将在接下来的几节中进一步讨论这些概念。</p>
+			<p class="normal">由于模型<a id="_idIndexMarker060"/>总是对训练过程中未采用的样本进行评估，因此 Score()函数可以确定模型开发的泛化能力的质量。相反，使用训练样本执行的评估可以帮助我们了解模型是否基本上能够学习数据集的结构。我们将在接下来的几节中进一步讨论这些概念。</p>
 
-			<p class="normal">使用两个(训练和验证)或三个(训练、验证和测试)集合的选择通常与具体环境有关。在许多情况下，在整个过程中使用一个单独的验证集，通常称为测试集。这通常是因为最终目标是获得一组可靠的i.i.d .元素，这些元素永远不会用于训练，因此，它们的预测结果反映了模型的无偏准确性。在本书中，我们将总是采用这种策略，使用表达式<em class="italics">测试集</em>而不是<em class="italics">验证集</em>。</p>
+			<p class="normal">使用两个(训练和验证)或三个(训练、验证和测试)集合的选择通常与具体环境有关。在许多情况下，在整个过程中使用一个单独的验证集，通常称为测试集。这通常是因为最终目标是获得一组可靠的 i.i.d .元素，这些元素永远不会用于训练，因此，它们的预测结果反映了模型的无偏准确性。在本书中，我们将总是采用这种策略，使用表达式<em class="italics">测试集</em>而不是<em class="italics">验证集</em>。</p>
 
-			<p class="normal">根据问题的<a id="_idIndexMarker062"/>性质，可以选择70%–30%的分割百分比，这在数据集相对较小的机器学习中是一种很好的做法，或者对于样本数量非常多的深度学习任务，可以选择80%、90%或高达99%的更高训练百分比。在这两种情况下，我们都假设训练集包含我们进行一致归纳所需的所有信息。</p>
+			<p class="normal">根据问题的<a id="_idIndexMarker062"/>性质，可以选择 70%–30%的分割百分比，这在数据集相对较小的机器学习中是一种很好的做法，或者对于样本数量非常多的深度学习任务，可以选择 80%、90%或高达 99%的更高训练百分比。在这两种情况下，我们都假设训练集包含我们进行一致归纳所需的所有信息。</p>
 
 			<p class="normal">在许多简单的情况下，这是真的，很容易被验证；但是对于更复杂的数据集，这个问题变得更加困难。即使我们从同一分布中抽取所有样本，随机选择的测试集也可能包含其他训练样本中不存在的特征。当这种情况发生时，它会对全局准确性产生非常负面的影响，并且在没有其他方法的情况下，它也很难识别。</p>
 
 			<p class="normal">这就是为什么在深度学习中，训练集非常庞大的原因之一:考虑到生成分布的数据的特征和结构的复杂性，选择大型测试集可能会限制学习特定关联的可能性。这是过度拟合效应的结果，我们将在本章后面讨论。</p>
 
-			<p class="normal">在scikit-learn中，可以使用<code class="Code-In-Text--PACKT-">train_test_split()</code>函数分割原始数据集，该函数允许指定训练/测试大小，以及我们是否期望随机洗牌(这是默认设置)。例如，如果我们想将<code class="Code-In-Text--PACKT-">X</code>和<code class="Code-In-Text--PACKT-">Y</code>分开，70%训练，30%测试，我们可以使用:</p>
+			<p class="normal">在 scikit-learn 中，可以使用<code class="Code-In-Text--PACKT-">train_test_split()</code>函数分割原始数据集，该函数允许指定训练/测试大小，以及我们是否期望随机洗牌(这是默认设置)。例如，如果我们想将<code class="Code-In-Text--PACKT-">X</code>和<code class="Code-In-Text--PACKT-">Y</code>分开，70%训练，30%测试，我们可以使用:</p>
 
 			<pre>from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, train_size=0.7, random_state=1000)</pre>
 
-			<p class="normal">为了减少样本之间的相关性，打乱集合总是一种好的做法(方法train_test_split有一个名为shuffle的参数，它允许自动完成这个操作)。事实上，我们已经假设<code class="Code-In-Text--PACKT-">X</code>由i.i.d .样本组成，但往往两个<a id="_idIndexMarker063"/>后续样本具有很强的相关性，这降低了训练性能。在某些情况下，在每个训练时段之后重新洗牌也是有用的；然而，在我们的大多数例子中，我们将在整个过程中使用同一个混洗的<a id="_idIndexMarker064"/>数据集。</p>
+			<p class="normal">为了减少样本之间的相关性，打乱集合总是一种好的做法(方法 train_test_split 有一个名为 shuffle 的参数，它允许自动完成这个操作)。事实上，我们已经假设<code class="Code-In-Text--PACKT-">X</code>由 i.i.d .样本组成，但往往两个<a id="_idIndexMarker063"/>后续样本具有很强的相关性，这降低了训练性能。在某些情况下，在每个训练时段之后重新洗牌也是有用的；然而，在我们的大多数例子中，我们将在整个过程中使用同一个混洗的<a id="_idIndexMarker064"/>数据集。</p>
 
 			<p class="normal">在处理有记忆的序列和模型时，必须避免混排。在所有这些情况下，我们需要利用现有的相关性来确定未来的样本是如何分布的。每当需要额外的测试集时，总是可以重用相同的功能:将原始测试集分割成一个更大的组件，它成为实际的<em class="italics">验证集</em>，以及一个更小的组件，新的<em class="italics">测试集</em>，它将用于最终的性能检查。</p>
 
-			<div><div><p class="Information-Box--PACKT-">当使用NumPy和scikit-learn时，将随机种子设置为一个常量值总是一个好的做法，以便允许其他人使用相同的初始条件来重现实验。这可以通过调用<code class="Code-In-Text--PACKT-">np.random.seed(...)</code>并使用许多scikit-learn方法中的<code class="Code-In-Text--PACKT-">random-state</code>参数来实现。</p>
+			<div><div><p class="Information-Box--PACKT-">当使用 NumPy 和 scikit-learn 时，将随机种子设置为一个常量值总是一个好的做法，以便允许其他人使用相同的初始条件来重现实验。这可以通过调用<code class="Code-In-Text--PACKT-">np.random.seed(...)</code>并使用许多 scikit-learn 方法中的<code class="Code-In-Text--PACKT-">random-state</code>参数来实现。</p>
 
 				</div>
 
@@ -399,35 +399,35 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, train_size=0.7, random
 
 			<h3 id="_idParaDest-20" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor021"/>交叉验证</h3>
 
-			<p class="normal"><strong class="bold">交叉验证</strong> ( <strong class="bold"> CV </strong>)技术提供了一种检测错误选择测试集<a id="_idIndexMarker066"/>问题的有效方法。特别是，我们将使用<strong class="bold"> K倍</strong>交叉验证方法。想法是将整个数据集<em class="italics"> X </em>分成一个移动的<a id="_idIndexMarker067"/>测试集和一个由剩余部分组成的训练集。测试集的大小由折叠数决定，因此在<em class="italics"> k </em>次迭代期间，测试集覆盖整个原始数据集。</p>
+			<p class="normal"><strong class="bold">交叉验证</strong> ( <strong class="bold"> CV </strong>)技术提供了一种检测错误选择测试集<a id="_idIndexMarker066"/>问题的有效方法。特别是，我们将使用<strong class="bold"> K 倍</strong>交叉验证方法。想法是将整个数据集<em class="italics"> X </em>分成一个移动的<a id="_idIndexMarker067"/>测试集和一个由剩余部分组成的训练集。测试集的大小由折叠数决定，因此在<em class="italics"> k </em>次迭代期间，测试集覆盖整个原始数据集。</p>
 
 			<p class="normal">在下图中，我们看到了该流程的示意图:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_07.png" alt="https://packt-type-cloud.s3.amazonaws.com/uploads/sites/3717/2019/04/2606b083-5b97-455b-ba9a-cbfd0c2e13d4.png"/></figure>
 
-			<p class="packt_figref">k重交叉验证模式</p>
+			<p class="packt_figref">k 重交叉验证模式</p>
 
-			<p class="normal">这样，我们可以使用不同的采样分裂来评估模型的准确性，并且可以在更大的数据集上执行训练<a id="_idIndexMarker068"/>过程；特别是在<em class="italics"> (k-1)N个</em>样本上。在理想的情况下，所有迭代中的精度应该非常相似；但在大多数真实案例中，准确率却远低于平均水平。</p>
+			<p class="normal">这样，我们可以使用不同的采样分裂来评估模型的准确性，并且可以在更大的数据集上执行训练<a id="_idIndexMarker068"/>过程；特别是在<em class="italics"> (k-1)N 个</em>样本上。在理想的情况下，所有迭代中的精度应该非常相似；但在大多数真实案例中，准确率却远低于平均水平。</p>
 
-			<p class="normal">这意味着已经建立了训练集，排除了包含所有必要示例的样本，以使模型适合考虑真实<em class="italics">p</em>T5】数据的分离超曲面。我们将在本章后面讨论这些问题。然而，如果精确度的标准偏差太大，必须根据问题/模型的性质设置阈值，这可能意味着<em class="italics"> X </em>没有从<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>中统一提取，在预处理阶段评估异常值的影响是有用的。在下图中，我们看到了对逻辑回归进行的15倍CV图:</p>
+			<p class="normal">这意味着已经建立了训练集，排除了包含所有必要示例的样本，以使模型适合考虑真实<em class="italics">p</em>T5】数据的分离超曲面。我们将在本章后面讨论这些问题。然而，如果精确度的标准偏差太大，必须根据问题/模型的性质设置阈值，这可能意味着<em class="italics"> X </em>没有从<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>中统一提取，在预处理阶段评估异常值的影响是有用的。在下图中，我们看到了对逻辑回归进行的 15 倍 CV 图:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_08.png" alt="https://packt-type-cloud.s3.amazonaws.com/uploads/sites/3717/2019/04/004c354c-eba1-45d2-8dda-681671e81000.png"/></figure>
 
 			<p class="packt_figref">交叉验证准确度</p>
 
-			<p class="normal">数值<a id="_idIndexMarker069"/>在0.84到0.95之间波动，平均值为0.91，在图表上标记为水平实线。在这种特殊情况下，考虑到最初的目的是使用线性分类器，我们可以说所有的折叠都产生高精度，从而确认数据集是线性可分的；然而，有一些在第九次折叠中被排除的样本，是达到大约0.88的最低精度所必需的。</p>
+			<p class="normal">数值<a id="_idIndexMarker069"/>在 0.84 到 0.95 之间波动，平均值为 0.91，在图表上标记为水平实线。在这种特殊情况下，考虑到最初的目的是使用线性分类器，我们可以说所有的折叠都产生高精度，从而确认数据集是线性可分的；然而，有一些在第九次折叠中被排除的样本，是达到大约 0.88 的最低精度所必需的。</p>
 
 			<p class="normal"><strong class="bold"> K-Fold </strong>交叉验证有<a id="_idIndexMarker070"/>不同的变体，可以用来解决特定的问题:</p>
 
 			<ul>
 
-				<li class="list"><strong class="bold">分层K-Fold </strong>:标准K-Fold方法分割数据集时不考虑概率<a id="_idIndexMarker071"/>分布<img src="img/B14713_01_043.png" alt="" style="height: 1em !important;"/>，因此<a id="_idIndexMarker072"/>一些Fold理论上可能只包含有限数量的标签。相反，分层K-Fold试图分割<em class="italics"> X </em>，以便所有的标签被同等地表示。</li>
+				<li class="list"><strong class="bold">分层 K-Fold </strong>:标准 K-Fold 方法分割数据集时不考虑概率<a id="_idIndexMarker071"/>分布<img src="img/B14713_01_043.png" alt="" style="height: 1em !important;"/>，因此<a id="_idIndexMarker072"/>一些 Fold 理论上可能只包含有限数量的标签。相反，分层 K-Fold 试图分割<em class="italics"> X </em>，以便所有的标签被同等地表示。</li>
 
-				<li class="list"><strong class="bold">留一法</strong> ( <strong class="bold"> LOO </strong>):这种方法<a id="_idIndexMarker073"/>是最<a id="_idIndexMarker074"/>激烈的，因为它创建了<em class="italics"> N个</em>折叠，每个折叠包含<em class="italics"> N-1个</em>训练样本，并且只有一个测试样本。这样，最大可能数量的样本被用于训练，并且很容易检测算法是否能够以足够的精度学习，或者是否采用另一种策略更好。</li>
+				<li class="list"><strong class="bold">留一法</strong> ( <strong class="bold"> LOO </strong>):这种方法<a id="_idIndexMarker073"/>是最<a id="_idIndexMarker074"/>激烈的，因为它创建了<em class="italics"> N 个</em>折叠，每个折叠包含<em class="italics"> N-1 个</em>训练样本，并且只有一个测试样本。这样，最大可能数量的样本被用于训练，并且很容易检测算法是否能够以足够的精度学习，或者是否采用另一种策略更好。</li>
 
-				<li class="list">这种方法的主要缺点是必须训练<em class="italics"> N </em>模型，当<em class="italics"> N </em>非常大时，这可能会导致性能问题。还有一个问题是，对于大量的样本，两个随机值相似的概率会增加，因此许多折叠将产生几乎相同的结果。同时，LOO限制了评估模型泛化能力的可能性，因为单个测试样本不足以进行合理的估计。</li>
+				<li class="list">这种方法的主要缺点是必须训练<em class="italics"> N </em>模型，当<em class="italics"> N </em>非常大时，这可能会导致性能问题。还有一个问题是，对于大量的样本，两个随机值相似的概率会增加，因此许多折叠将产生几乎相同的结果。同时，LOO 限制了评估模型泛化能力的可能性，因为单个测试样本不足以进行合理的估计。</li>
 
-				<li class="list"><strong class="bold">剔除</strong> ( <strong class="bold"> LPO </strong>):在这种情况下，测试样本的数量<a id="_idIndexMarker076"/>被设置为<em class="italics"> p </em>不相交集合，因此折叠数等于<em class="italics"> n </em>除以<em class="italics"> p </em>的<a id="_idIndexMarker077"/>二项式系数。这种方法<a id="_idIndexMarker078"/>减轻了LOO的缺点，它是K-Fold和LOO之间的一种权衡。折叠次数可以很高，但是可以通过调整测试样品的数量<em class="italics"> p </em>来控制；但是如果<em class="italics"> p </em>不够小或者不够大，二项式系数会指数式的<em class="italics">爆发</em>，如下图<em class="italics"> n=20 </em>和<img src="img/B14713_01_044.png" alt="" style="height: 1em !important;"/>的情况:</li>
+				<li class="list"><strong class="bold">剔除</strong> ( <strong class="bold"> LPO </strong>):在这种情况下，测试样本的数量<a id="_idIndexMarker076"/>被设置为<em class="italics"> p </em>不相交集合，因此折叠数等于<em class="italics"> n </em>除以<em class="italics"> p </em>的<a id="_idIndexMarker077"/>二项式系数。这种方法<a id="_idIndexMarker078"/>减轻了 LOO 的缺点，它是 K-Fold 和 LOO 之间的一种权衡。折叠次数可以很高，但是可以通过调整测试样品的数量<em class="italics"> p </em>来控制；但是如果<em class="italics"> p </em>不够小或者不够大，二项式系数会指数式的<em class="italics">爆发</em>，如下图<em class="italics"> n=20 </em>和<img src="img/B14713_01_044.png" alt="" style="height: 1em !important;"/>的情况:</li>
 
 			</ul>
 
@@ -435,7 +435,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, train_size=0.7, random
 
 			<p class="packt_figref">当<em class="italics"> p </em>约为<em class="italics"> n </em>的一半时二项式系数的爆炸效应</p>
 
-			<p class="normal">Scikit-learn实现了所有这些方法，还有一些其他的变化，但是我建议总是使用<code class="Code-In-Text--PACKT-">cross_val_score()</code>函数，它是一个助手，允许将不同的方法应用于特定的问题。它使用<strong class="bold">分层K倍</strong>进行分类，使用<strong class="bold">标准K倍</strong>进行所有其他情况。现在让我们尝试确定<a id="_idIndexMarker079"/>折叠的最佳数量，给定包含500个点<img src="img/B14713_01_045.png" alt="" style="height: 1em !important;"/>的数据集，具有冗余、内部非线性，并且属于5个类别:</p>
+			<p class="normal">Scikit-learn 实现了所有这些方法，还有一些其他的变化，但是我建议总是使用<code class="Code-In-Text--PACKT-">cross_val_score()</code>函数，它是一个助手，允许将不同的方法应用于特定的问题。它使用<strong class="bold">分层 K 倍</strong>进行分类，使用<strong class="bold">标准 K 倍</strong>进行所有其他情况。现在让我们尝试确定<a id="_idIndexMarker079"/>折叠的最佳数量，给定包含 500 个点<img src="img/B14713_01_045.png" alt="" style="height: 1em !important;"/>的数据集，具有冗余、内部非线性，并且属于 5 个类别:</p>
 
 			<pre>from sklearn.datasets import make_classification
 from sklearn.preprocessing import StandardScaler
@@ -446,7 +446,7 @@ X, Y = make_classification(n_samples=500, n_classes=5,
 ss = StandardScaler()
 X = ss.fit_transform(X)</pre>
 
-			<p class="normal">作为探索性的第一步，让我们用一个有10个分裂的分层K折叠来绘制学习曲线；这保证了我们将在每个文件夹中有一个统一的类分布:</p>
+			<p class="normal">作为探索性的第一步，让我们用一个有 10 个分裂的分层 K 折叠来绘制学习曲线；这保证了我们将在每个文件夹中有一个统一的类分布:</p>
 
 			<pre>import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -465,13 +465,13 @@ lr_train_sizes, lr_train_scores, lr_test_scores = \
 
 			<p class="packt_figref">逻辑回归分类的学习曲线</p>
 
-			<p class="normal">当训练集大小达到其最大值时，训练曲线<a id="_idIndexMarker080"/>衰减，并收敛到略大于0.6的值。这种行为表明该模型无法完全捕获<code class="Code-In-Text--PACKT-">X</code>的动态，并且仅当训练集规模非常小时(即，实际数据生成过程未被完全覆盖)才具有良好的性能。相反，当训练集较大时，测试性能会提高。这是分类器在使用越来越多的点时获得的<em class="italics">更广泛经验</em>的明显结果。</p>
+			<p class="normal">当训练集大小达到其最大值时，训练曲线<a id="_idIndexMarker080"/>衰减，并收敛到略大于 0.6 的值。这种行为表明该模型无法完全捕获<code class="Code-In-Text--PACKT-">X</code>的动态，并且仅当训练集规模非常小时(即，实际数据生成过程未被完全覆盖)才具有良好的性能。相反，当训练集较大时，测试性能会提高。这是分类器在使用越来越多的点时获得的<em class="italics">更广泛经验</em>的明显结果。</p>
 
-			<p class="normal">考虑到训练和测试准确性趋势，我们可以得出结论，在这种情况下，大于约270点的训练集不会产生任何明显的好处。另一方面，由于测试精度极其重要，所以最好使用最大点数。正如我们将在本章后面讨论的，它表明了模型的泛化能力。在这种情况下，平均训练精度更差，但测试精度有一点好处。我选择这个例子是因为这是一个需要权衡的特殊例子。在许多情况下，曲线成比例增长，确定最佳折叠数很简单。</p>
+			<p class="normal">考虑到训练和测试准确性趋势，我们可以得出结论，在这种情况下，大于约 270 点的训练集不会产生任何明显的好处。另一方面，由于测试精度极其重要，所以最好使用最大点数。正如我们将在本章后面讨论的，它表明了模型的泛化能力。在这种情况下，平均训练精度更差，但测试精度有一点好处。我选择这个例子是因为这是一个需要权衡的特殊例子。在许多情况下，曲线成比例增长，确定最佳折叠数很简单。</p>
 
 			<p class="normal">然而，当问题更难时，就像在这种情况下——考虑到分类器的性质——选择并不明显，分析学习曲线成为不可或缺的步骤。在继续之前，我们可以试着总结一下规律。我们需要找到最佳的折叠数，这样交叉验证可以保证性能的无偏测量。</p>
 
-			<p class="normal">由于数据集<em class="italics"> X </em>是从底层数据生成过程中提取的，因此<em class="italics"> X </em>携带的信息量受到<em class="italics">p</em>T17】数据的限制。这意味着数据集大小的增加超过某个<a id="_idIndexMarker081"/>阈值只会引入冗余，而不会提高模型的性能。通过考虑训练和测试平均精度稳定的点，可以确定最佳折叠数或折叠大小。相应的训练集大小允许我们使用最大可能的测试样本大小进行性能评估。现在让我们计算不同折叠数的平均CV精度:</p>
+			<p class="normal">由于数据集<em class="italics"> X </em>是从底层数据生成过程中提取的，因此<em class="italics"> X </em>携带的信息量受到<em class="italics">p</em>T17】数据的限制。这意味着数据集大小的增加超过某个<a id="_idIndexMarker081"/>阈值只会引入冗余，而不会提高模型的性能。通过考虑训练和测试平均精度稳定的点，可以确定最佳折叠数或折叠大小。相应的训练集大小允许我们使用最大可能的测试样本大小进行性能评估。现在让我们计算不同折叠数的平均 CV 精度:</p>
 
 			<pre>import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -491,15 +491,15 @@ for cv in cvs:
 
 			<p class="packt_figref">不同折叠数的平均交叉验证准确度</p>
 
-			<p class="normal">该曲线具有对应于15倍CV的峰值，这对应于466个点的训练集大小。在我们之前的分析中，我们发现这个值接近最佳值。另一方面，更多的折叠意味着更小的测试集。</p>
+			<p class="normal">该曲线具有对应于 15 倍 CV 的峰值，这对应于 466 个点的训练集大小。在我们之前的分析中，我们发现这个值接近最佳值。另一方面，更多的折叠意味着更小的测试集。</p>
 
-			<p class="normal">我们已经看到，平均CV准确性取决于训练集和测试集大小之间的权衡。因此，当折叠次数增加时，我们应该期待性能的改善。这个结果在85次折叠后变得清晰。在这种情况下，只有6个样本用于测试目的(1.2%)，这意味着验证不是特别可靠，平均值与非常大的方差相关(即，在一些<em class="italics">幸运</em>的情况下，CV准确度可以很大，而在其余的情况下，CV准确度可以接近0)。</p>
+			<p class="normal">我们已经看到，平均 CV 准确性取决于训练集和测试集大小之间的权衡。因此，当折叠次数增加时，我们应该期待性能的改善。这个结果在 85 次折叠后变得清晰。在这种情况下，只有 6 个样本用于测试目的(1.2%)，这意味着验证不是特别可靠，平均值与非常大的方差相关(即，在一些<em class="italics">幸运</em>的情况下，CV 准确度可以很大，而在其余的情况下，CV 准确度可以接近 0)。</p>
 
-			<p class="normal">考虑到所有因素，最佳选择仍然是<em class="italics"> k=15 </em>，这意味着使用34个测试样本(6.8%)。我希望很清楚对<em class="italics"> k </em>的正确选择本身就是一个问题；然而，在实践中,[5，15]范围内的值通常是最合理的缺省选择。一个好的选择的目标也是最大化CV的随机性，从而减少估计值之间的互相关。非常小的褶皱意味着许多模型高度相关，而过大的褶皱会降低模型的学习能力。因此，一个好的折衷方案不应该选择非常小的值(仅当数据集非常小时才可接受)或过大的值。</p>
+			<p class="normal">考虑到所有因素，最佳选择仍然是<em class="italics"> k=15 </em>，这意味着使用 34 个测试样本(6.8%)。我希望很清楚对<em class="italics"> k </em>的正确选择本身就是一个问题；然而，在实践中,[5，15]范围内的值通常是最合理的缺省选择。一个好的选择的目标也是最大化 CV 的随机性，从而减少估计值之间的互相关。非常小的褶皱意味着许多模型高度相关，而过大的褶皱会降低模型的学习能力。因此，一个好的折衷方案不应该选择非常小的值(仅当数据集非常小时才可接受)或过大的值。</p>
 
-			<p class="normal">当然，这个值与任务的性质和数据集的结构密切相关。在某些情况下，仅仅3-5%的测试点就足以进行正确的评估；在许多其他情况下，需要一个更大的数据集来捕捉所有区域的动态。</p>
+			<p class="normal">当然，这个值与任务的性质和数据集的结构密切相关。在某些情况下，仅仅 3-5%的测试点就足以进行正确的评估；在许多其他情况下，需要一个更大的数据集来捕捉所有区域的动态。</p>
 
-			<p class="normal">一般来说，我总是鼓励使用CV来衡量绩效。这种方法的主要缺点是计算复杂。例如，在深度学习的背景下，训练过程可能需要几个小时或几天，并且在不对超参数进行任何修改的情况下重复它可能是不可接受的。在所有这些情况下，将使用标准的训练-测试集分解，假设两个集的数量足够大，以保证<em class="italics">完全覆盖底层数据生成过程</em>。</p>
+			<p class="normal">一般来说，我总是鼓励使用 CV 来衡量绩效。这种方法的主要缺点是计算复杂。例如，在深度学习的背景下，训练过程可能需要几个小时或几天，并且在不对超参数进行任何修改的情况下重复它可能是不可接受的。在所有这些情况下，将使用标准的训练-测试集分解，假设两个集的数量足够大，以保证<em class="italics">完全覆盖底层数据生成过程</em>。</p>
 
 			<h1 id="_idParaDest-21" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor022"/>机器学习模型的特征</h1>
 
@@ -513,7 +513,7 @@ for cv in cvs:
 
 			<h2 id="_idParaDest-22" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor023"/>可学性</h2>
 
-			<p class="normal">在开始讨论模型的特征之前，介绍一些与可学习性概念相关的基本元素是有帮助的，这与一般可计算函数的数学定义没有太大的不同。关于这一点的第一部正式著作由Valiant发表(在Valiant L .，<em class="italics">A theory of the learnible，Communications of the ACM，27，1984 </em>)，并且主要是对<strong class="bold">的概念的介绍，可能是近似正确的</strong> ( <strong class="bold"> PAC </strong>)学习。我们不会在本书中讨论PAC学习的非常技术性的数学细节，但了解找到一种描述学习过程的合适方法的可能性是有用的，无需参考具体的模型。</p>
+			<p class="normal">在开始讨论模型的特征之前，介绍一些与可学习性概念相关的基本元素是有帮助的，这与一般可计算函数的数学定义没有太大的不同。关于这一点的第一部正式著作由 Valiant 发表(在 Valiant L .，<em class="italics">A theory of the learnible，Communications of the ACM，27，1984 </em>)，并且主要是对<strong class="bold">的概念的介绍，可能是近似正确的</strong> ( <strong class="bold"> PAC </strong>)学习。我们不会在本书中讨论 PAC 学习的非常技术性的数学细节，但了解找到一种描述学习过程的合适方法的可能性是有用的，无需参考具体的模型。</p>
 
 			<p class="normal">为了简单起见，让我们假设我们有一个选择器算法，可以在集合<em class="italics"> H </em>中搜索假设<em class="italics">H</em>T27】I。根据上下文，该元素可以有多种解释。例如，<strong class="bold">组假设</strong>可能对应于一个模型的一组合理参数，或者，在另一个场景中，对应于为解决特定问题而调整的一组有限的算法。由于定义是通用的，我们不必担心它的结构。</p>
 
@@ -521,25 +521,25 @@ for cv in cvs:
 
 			<p class="normal">出于我们的目的，有必要定义一个误差度量的结构(我们将在稍后讨论成本和损失函数时进行)。如果您不熟悉这个概念，可以考虑错误分类数据点的归一化平均数。</p>
 
-			<p class="normal">如果样本大小为<em class="italics"> N </em>，误差等于0意味着没有错误分类，而误差等于1意味着所有样本都被错误分类。正如AUC图一样，在二元分类器中，我们将阈值0.5视为下限，因为它对应于标签的随机选择。</p>
+			<p class="normal">如果样本大小为<em class="italics"> N </em>，误差等于 0 意味着没有错误分类，而误差等于 1 意味着所有样本都被错误分类。正如 AUC 图一样，在二元分类器中，我们将阈值 0.5 视为下限，因为它对应于标签的随机选择。</p>
 
-			<p class="normal">一个非正式的定义是，如果给定一个期望的最大误差<img src="img/B14713_01_047.png" alt="" style="height: 1em !important;"/>和概率<img src="img/B14713_01_048.png" alt="" style="height: 1em !important;"/>，有可能为每个概念<img src="img/B14713_01_049.png" alt=""/>设置一个最小样本大小<em class="italics"> N </em>，那么一个选择器算法可以找到一个假设<img src="img/B14713_01_050.png" alt="" style="height: 1em !important;"/>，使得误差被<img src="img/B14713_01_051.png" alt="" style="height: 1em !important;"/>上界的概率大于<img src="img/B14713_01_052.png" alt="" style="height: 1em !important;"/>，那么这个问题就是PAC可学习的。</p>
+			<p class="normal">一个非正式的定义是，如果给定一个期望的最大误差<img src="img/B14713_01_047.png" alt="" style="height: 1em !important;"/>和概率<img src="img/B14713_01_048.png" alt="" style="height: 1em !important;"/>，有可能为每个概念<img src="img/B14713_01_049.png" alt=""/>设置一个最小样本大小<em class="italics"> N </em>，那么一个选择器算法可以找到一个假设<img src="img/B14713_01_050.png" alt="" style="height: 1em !important;"/>，使得误差被<img src="img/B14713_01_051.png" alt="" style="height: 1em !important;"/>上界的概率大于<img src="img/B14713_01_052.png" alt="" style="height: 1em !important;"/>，那么这个问题就是 PAC 可学习的。</p>
 
-			<p class="normal">由于问题通常是随机的，结果必须用概率来表示。这意味着我们可以总结前面的定义，说对于一个PAC可学习的问题，<img src="img/B14713_01_053.png" alt="" style="height: 1em !important;"/>。我们还需要补充的是，我们期望样本具有多项式增长，作为<img src="img/B14713_01_054.png" alt="" style="height: 0.8em !important;"/>和<img src="img/B14713_01_055.png" alt="" style="height: 1em !important;"/>的函数。相对于原来的条件，这个条件可以放宽，但是只要理解一个需要无限样本量来达到大于0的误差的问题是PAC不可学习的就足够了。</p>
+			<p class="normal">由于问题通常是随机的，结果必须用概率来表示。这意味着我们可以总结前面的定义，说对于一个 PAC 可学习的问题，<img src="img/B14713_01_053.png" alt="" style="height: 1em !important;"/>。我们还需要补充的是，我们期望样本具有多项式增长，作为<img src="img/B14713_01_054.png" alt="" style="height: 0.8em !important;"/>和<img src="img/B14713_01_055.png" alt="" style="height: 1em !important;"/>的函数。相对于原来的条件，这个条件可以放宽，但是只要理解一个需要无限样本量来达到大于 0 的误差的问题是 PAC 不可学习的就足够了。</p>
 
-			<p class="normal">这一特征证明了在定义中使用单词<em class="italics">近似</em>的合理性，如果没有完全数学定义，这可能会导致误解。在我们的背景下，事实上，我们很少处理确定性问题，它们一般不需要机器学习算法。更有帮助的是知道获得小误差的概率总是大于预定义的阈值。即使理论要复杂和严谨得多，我们也可以避开所有的理论细节(在前面提到的Valiant的论文中可以找到)，把我们的分析限制在这个概念的具体意义上。</p>
+			<p class="normal">这一特征证明了在定义中使用单词<em class="italics">近似</em>的合理性，如果没有完全数学定义，这可能会导致误解。在我们的背景下，事实上，我们很少处理确定性问题，它们一般不需要机器学习算法。更有帮助的是知道获得小误差的概率总是大于预定义的阈值。即使理论要复杂和严谨得多，我们也可以避开所有的理论细节(在前面提到的 Valiant 的论文中可以找到)，把我们的分析限制在这个概念的具体意义上。</p>
 
-			<p class="normal">给定一个问题，我们通常可以找到一个模型，它可以学习相关的概念，并保持精确度高于最小可接受值。这相当于说这个概念是PAC可学习的，这是一个我们尚未证明的条件，但可以合理地假设这在大多数现实生活中是正确的。因此，将PAC的可学性视为理所当然，我们知道我们可以达到特定场景的期望精度。</p>
+			<p class="normal">给定一个问题，我们通常可以找到一个模型，它可以学习相关的概念，并保持精确度高于最小可接受值。这相当于说这个概念是 PAC 可学习的，这是一个我们尚未证明的条件，但可以合理地假设这在大多数现实生活中是正确的。因此，将 PAC 的可学性视为理所当然，我们知道我们可以达到特定场景的期望精度。</p>
 
 			<p class="normal">然而，为此付出的代价并不容易评估。当然，当需求变得越来越强时，我们也需要更大的训练集和更强大的模型，但这足以实现最佳结果吗？此外，是否有可能用一个单一的衡量标准来量化结果的最优程度？在接下来的部分中，我们将介绍在定义或评估每个机器学习模型时必须评估的元素。</p>
 
 			<h2 id="_idParaDest-23" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor024"/>模型的容量</h2>
 
-			<p class="normal">如果我们将监督的<a id="_idIndexMarker086"/>模型视为一组参数化的函数，我们可以将<strong class="bold">表示能力</strong>定义为某个<a id="_idIndexMarker087"/>通用函数映射相对大量的数据分布的内在能力。为了理解这个概念，让我们考虑一个承认无穷导数的函数<em class="italics"> f(x) </em>，并将其重写为围绕一个起点<em class="italics">x</em>T24】0的泰勒展开式:</p>
+			<p class="normal">如果我们将监督的<a id="_idIndexMarker086"/>模型视为一组参数化的函数，我们可以将<strong class="bold">表示能力</strong>定义为某个<a id="_idIndexMarker087"/>通用函数映射相对大量的数据分布的内在能力。为了理解这个概念，让我们考虑一个承认无穷导数的函数<em class="italics"> f(x) </em>，并将其重写为围绕一个起点<em class="italics">x</em>T24】0 的泰勒展开式:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_056.png" alt="" style="height: 3.5em !important;"/></figure>
 
-			<p class="normal">我们可以决定只取前<em class="italics"> n </em>项，这样就有一个围绕起始点<em class="italics">x</em>T32】0T34】= 0的<em class="italics"> n </em>次多项式函数:</p>
+			<p class="normal">我们可以决定只取前<em class="italics"> n </em>项，这样就有一个围绕起始点<em class="italics">x</em>T32】0T34】= 0 的<em class="italics"> n </em>次多项式函数:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_057.png" alt="" style="height: 1.8em !important;"/></figure>
 
@@ -557,9 +557,9 @@ for cv in cvs:
 
 			<p class="normal">幸运的是，引入具有非线性功能的<strong class="bold">多层感知器</strong> ( <strong class="bold"> MLP </strong>)，使我们能够<a id="_idIndexMarker091"/>克服这个问题，以及许多其他问题，这些问题的复杂性超出了任何经典机器学习模型的可能性。为了更好地理解这个概念，引入一种形式主义是有帮助的，它允许我们理解不同的模型族如何处理同一类问题，实现更好或更差的准确性。</p>
 
-			<h3 id="_idParaDest-24" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor025"/> Vapnik-Chervonenkis容量</h3>
+			<h3 id="_idParaDest-24" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor025"/> Vapnik-Chervonenkis 容量</h3>
 
-			<p class="normal"><strong class="bold"> Vapnik-Chervonenkis理论</strong>提供了分类器容量的通用数学形式。为了介绍<a id="_idIndexMarker092"/>的定义，首先需要定义<strong class="bold">粉碎</strong>的<a id="_idIndexMarker093"/>概念。如果我们有一个<a id="_idIndexMarker094"/>类集合<em class="italics"> C </em>和一个集合<em class="italics"> M </em>，我们说<em class="italics"> C </em>粉碎<em class="italics"> M </em>，如果:</p>
+			<p class="normal"><strong class="bold"> Vapnik-Chervonenkis 理论</strong>提供了分类器容量的通用数学形式。为了介绍<a id="_idIndexMarker092"/>的定义，首先需要定义<strong class="bold">粉碎</strong>的<a id="_idIndexMarker093"/>概念。如果我们有一个<a id="_idIndexMarker094"/>类集合<em class="italics"> C </em>和一个集合<em class="italics"> M </em>，我们说<em class="italics"> C </em>粉碎<em class="italics"> M </em>，如果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_058.png" alt="" style="height: 2em !important;"/></figure>
 
@@ -575,17 +575,17 @@ for cv in cvs:
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_062.png" alt="" style="height: 1.8em !important;"/></figure>
 
-			<p class="normal">根据<a id="_idIndexMarker095"/> Vapnik-Chervonenkis理论，如果每个可能的标签<a id="_idIndexMarker096"/>分配都没有分类错误，我们可以说模型族<em class="italics"> C </em>分解<em class="italics"> X </em>。因此，我们可以将<strong class="bold">VAP Nik-Chervonenkis-capacity</strong>或<strong class="bold">VC-capacity</strong>——有时也称为<strong class="bold">VC-dimension</strong>——定义为<em class="italics"> X </em>的一个子集的<a id="_idIndexMarker097"/>最大基数，这样任何一个<img src="img/B14713_01_063.png" alt="" style="height: 1.1em !important;"/>都可以粉碎它(即<img src="img/B14713_01_064.png" alt=""/>可以粉碎的最大点数)。</p>
+			<p class="normal">根据<a id="_idIndexMarker095"/> Vapnik-Chervonenkis 理论，如果每个可能的标签<a id="_idIndexMarker096"/>分配都没有分类错误，我们可以说模型族<em class="italics"> C </em>分解<em class="italics"> X </em>。因此，我们可以将<strong class="bold">VAP Nik-Chervonenkis-capacity</strong>或<strong class="bold">VC-capacity</strong>——有时也称为<strong class="bold">VC-dimension</strong>——定义为<em class="italics"> X </em>的一个子集的<a id="_idIndexMarker097"/>最大基数，这样任何一个<img src="img/B14713_01_063.png" alt="" style="height: 1.1em !important;"/>都可以粉碎它(即<img src="img/B14713_01_064.png" alt=""/>可以粉碎的最大点数)。</p>
 
-			<p class="normal">例如，如果我们考虑二维空间中的线性分类器，VC容量等于3，因为总是有可能标记三个样本，以便<img src="img/B14713_01_065.png" alt="" style="height: 1em !important;"/>粉碎它们。但是，不可能在所有情况下都做到<em class="italics"> N &gt; 3 </em>。XOR问题就是一个需要大于3的VC容量的例子。下面我们来探讨一下剧情:</p>
+			<p class="normal">例如，如果我们考虑二维空间中的线性分类器，VC 容量等于 3，因为总是有可能标记三个样本，以便<img src="img/B14713_01_065.png" alt="" style="height: 1em !important;"/>粉碎它们。但是，不可能在所有情况下都做到<em class="italics"> N &gt; 3 </em>。XOR 问题就是一个需要大于 3 的 VC 容量的例子。下面我们来探讨一下剧情:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_13.png" alt="https://packt-type-cloud.s3.amazonaws.com/uploads/sites/3717/2019/04/9418a408-26ac-4c74-9a7c-b0a3c379d3fa.png"/></figure>
 
 			<p class="packt_figref">不同分离曲线的异或问题</p>
 
-			<p class="normal">这种特殊的标签选择使得该集合是非线性可分的。克服这个问题的唯一方法是使用高阶函数，或者非线性函数。曲线——属于VC容量大于3的分类器——可以将左上和<a id="_idIndexMarker098"/>右下区域与剩余空间分开，但没有直线可以做到这一点，尽管它总是可以将一个点与其他三个点分开。</p>
+			<p class="normal">这种特殊的标签选择使得该集合是非线性可分的。克服这个问题的唯一方法是使用高阶函数，或者非线性函数。曲线——属于 VC 容量大于 3 的分类器——可以将左上和<a id="_idIndexMarker098"/>右下区域与剩余空间分开，但没有直线可以做到这一点，尽管它总是可以将一个点与其他三个点分开。</p>
 
-			<p class="normal">这个容量定义相当严格(对所有理论方面感兴趣的读者可以阅读Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础</em>，第二版，麻省理工学院出版社，2018)，但它可以帮助理解数据集的复杂性和合适的模型族之间的关系。根据<strong class="bold">奥卡姆剃刀</strong>原理，必须选择获得最优精度的<a id="_idIndexMarker099"/>最简单模型(即量化算法性能的最优测度集)，在本书中，我们将多次重复这一原理。然而，这一建议的原因与PAC学习的非正式定义密切相关，在介绍了估计量的偏差和方差的概念后将变得显而易见。</p>
+			<p class="normal">这个容量定义相当严格(对所有理论方面感兴趣的读者可以阅读 Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础</em>，第二版，麻省理工学院出版社，2018)，但它可以帮助理解数据集的复杂性和合适的模型族之间的关系。根据<strong class="bold">奥卡姆剃刀</strong>原理，必须选择获得最优精度的<a id="_idIndexMarker099"/>最简单模型(即量化算法性能的最优测度集)，在本书中，我们将多次重复这一原理。然而，这一建议的原因与 PAC 学习的非正式定义密切相关，在介绍了估计量的偏差和方差的概念后将变得显而易见。</p>
 
 			<h2 id="_idParaDest-25" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor026"/>估计量的偏差</h2>
 
@@ -607,7 +607,7 @@ for cv in cvs:
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_075.png" alt="" style="height: 1.8em !important;"/></figure>
 
-			<p class="normal">很明显，这个定义比前一个弱，因为在这种情况下，如果样本大小变得无限大，我们只能确定<a id="_idIndexMarker104"/>达到无偏性。然而，在实践中，当<em class="italics">k&gt;N</em>T29】k时，许多渐近无偏估计量可以被认为是无偏的。换句话说，利用至少包含<em class="italics">N</em>T33】k个点的样本，结果具有可以忽略的误差，并且可以认为估计是正确的。根据理论，我们知道一些模型族是无偏的(例如，使用普通最小二乘法优化的线性回归)，但是当模型非常复杂时，确认模型是无偏的是非常不同的测试。</p>
+			<p class="normal">很明显，这个定义比前一个弱，因为在这种情况下，如果样本大小变得无限大，我们只能确定<a id="_idIndexMarker104"/>达到无偏性。然而，在实践中，当<em class="italics">k&gt;N</em>T29】k 时，许多渐近无偏估计量可以被认为是无偏的。换句话说，利用至少包含<em class="italics">N</em>T33】k 个点的样本，结果具有可以忽略的误差，并且可以认为估计是正确的。根据理论，我们知道一些模型族是无偏的(例如，使用普通最小二乘法优化的线性回归)，但是当模型非常复杂时，确认模型是无偏的是非常不同的测试。</p>
 
 			<p class="normal">例如，我们可以假设深度神经网络倾向于无偏，但正如我们将在整本书中讨论的那样，样本大小是实现良好结果的一个基本参数。给定一个数据集<em class="italics"> X </em>，其样本取自<em class="italics">p</em>T39】数据，估计器的精度与其偏差成反比。低偏差(或无偏)估计器能够以高精度水平映射数据集<em class="italics"> X </em>，而高偏差估计器很可能对问题的解决能力太低，因此它们检测整个动态的能力很差。</p>
 
@@ -623,13 +623,13 @@ for cv in cvs:
 
 			<p class="packt_figref">分类器不足:曲线无法正确区分两个类别</p>
 
-			<p class="normal">即使问题很难，我们也可以尝试采用线性模型，在训练过程结束时，分离线的斜率和截距约为1和-1，如图所示。然而，如果我们测量准确度，我们会发现它并不像预期的那样大，实际上，它大约是0.65，因为在分配给类别1的区域中有太多类别2样本。</p>
+			<p class="normal">即使问题很难，我们也可以尝试采用线性模型，在训练过程结束时，分离线的斜率和截距约为 1 和-1，如图所示。然而，如果我们测量准确度，我们会发现它并不像预期的那样大，实际上，它大约是 0.65，因为在分配给类别 1 的区域中有太多类别 2 样本。</p>
 
-			<p class="normal">此外，200个点的样本量非常小，因此，<em class="italics"> X </em>不能真正代表基础数据生成过程。考虑到在区域<em class="italics">x</em>T22】0<em class="italics">T53】0</em>和<em class="italics">1&lt;x</em>T28】1<em class="italics">T55】2</em>中观察到的第二类的密度，有理由认为，由于错误分类的第二类点的数量增加，更大的样本量可能导致更差的精度。独立于迭代次数，该模型将永远无法学习到<em class="italics"> X </em>和<em class="italics"> Y </em>之间的良好关联。</p>
+			<p class="normal">此外，200 个点的样本量非常小，因此，<em class="italics"> X </em>不能真正代表基础数据生成过程。考虑到在区域<em class="italics">x</em>T22】0<em class="italics">T53】0</em>和<em class="italics">1&lt;x</em>T28】1<em class="italics">T55】2</em>中观察到的第二类的密度，有理由认为，由于错误分类的第二类点的数量增加，更大的样本量可能导致更差的精度。独立于迭代次数，该模型将永远无法学习到<em class="italics"> X </em>和<em class="italics"> Y </em>之间的良好关联。</p>
 
 			<p class="normal">这种情况<a id="_idIndexMarker108"/>称为<strong class="bold">欠拟合</strong>，欠拟合的主要指标是训练精度非常低。不幸的是，即使一些数据预处理步骤可以提高准确性，当模型不适合时，唯一有效的解决方案是采用更高容量的模型。事实上，当参数的估计有偏差时，其期望值总是与真实值不同。这种差异导致无法纠正的系统性预测误差。</p>
 
-			<p class="normal">考虑到<a id="_idIndexMarker109"/>前面的例子，线性模型(例如，逻辑回归)只能修改分离线的斜率和截距。读者可以容易地看到，自由度的数量太小，以至于无法实现例如大于0.95的精度。相反，使用多项式分类器(例如，抛物线分类器)，这个问题可以很容易地解决。另一个参数的引入。平方项的系数允许定义一条曲线分隔线，这肯定会导致更好的拟合。当然，要付出的代价是双重的:</p>
+			<p class="normal">考虑到<a id="_idIndexMarker109"/>前面的例子，线性模型(例如，逻辑回归)只能修改分离线的斜率和截距。读者可以容易地看到，自由度的数量太小，以至于无法实现例如大于 0.95 的精度。相反，使用多项式分类器(例如，抛物线分类器)，这个问题可以很容易地解决。另一个参数的引入。平方项的系数允许定义一条曲线分隔线，这肯定会导致更好的拟合。当然，要付出的代价是双重的:</p>
 
 			<ul>
 
@@ -659,9 +659,9 @@ for cv in cvs:
 
 			<p class="normal">方差也可以定义为标准误差的平方，类似于标准差。较大的方差意味着当选择新的子集时，精确度会发生巨大的变化。事实上，即使模型是无偏的，并且参数的估计值围绕真实均值<a id="_idIndexMarker115"/>分布，它们也可以显示出高度的可变性。</p>
 
-			<p class="normal">例如，假设估计参数<img src="img/B14713_01_077.png" alt="" style="height: 1em !important;"/>和真实均值实际上是0。我们知道概率<img src="img/B14713_01_078.png" alt="" style="height: 1em !important;"/>；因此，如果对<img src="img/B14713_01_079.png" alt="" style="height: 0.9em !important;"/>的错误估计会导致重大错误，那么大多数验证样本的错误分类风险非常高。这种影响与模型很可能通过过度学习有限的一组关系达到了非常高的训练精度有关，它几乎完全失去了泛化能力(即在测试从未见过的样本时，平均验证精度会衰减)。</p>
+			<p class="normal">例如，假设估计参数<img src="img/B14713_01_077.png" alt="" style="height: 1em !important;"/>和真实均值实际上是 0。我们知道概率<img src="img/B14713_01_078.png" alt="" style="height: 1em !important;"/>；因此，如果对<img src="img/B14713_01_079.png" alt="" style="height: 0.9em !important;"/>的错误估计会导致重大错误，那么大多数验证样本的错误分类风险非常高。这种影响与模型很可能通过过度学习有限的一组关系达到了非常高的训练精度有关，它几乎完全失去了泛化能力(即在测试从未见过的样本时，平均验证精度会衰减)。</p>
 
-			<p class="normal">然而，如果有可能获得无偏估计量，就几乎不可能将方差降低到一个明确定义的阈值之下(参见后面与Cramér-Rao界相关的部分)。在讨论方差的含义之前，我们需要引入与拟合不足相反的极端情况:过度拟合模型。</p>
+			<p class="normal">然而，如果有可能获得无偏估计量，就几乎不可能将方差降低到一个明确定义的阈值之下(参见后面与 Cramér-Rao 界相关的部分)。在讨论方差的含义之前，我们需要引入与拟合不足相反的极端情况:过度拟合模型。</p>
 
 			<h3 id="_idParaDest-28" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor029"/>过度拟合</h3>
 
@@ -673,7 +673,7 @@ for cv in cvs:
 
 			<p class="packt_figref">可接受的拟合(左)，过度拟合的分类器(右)</p>
 
-			<p class="normal">左图是使用逻辑回归获得的，而右图是使用具有六次多项式内核的SVM算法获得的。如果我们考虑第二个模型，决策边界似乎更精确，一些样本正好在它们上面。考虑到两个子集的形状，可以说非线性SVM可以更好地捕捉动态；然而，如果我们从<em class="italics">p</em>T33】数据中采样另一个数据集，并且对角线<em class="italics">尾部</em>变宽，则逻辑回归继续对点进行正确分类，而SVM精度显著下降。</p>
+			<p class="normal">左图是使用逻辑回归获得的，而右图是使用具有六次多项式内核的 SVM 算法获得的。如果我们考虑第二个模型，决策边界似乎更精确，一些样本正好在它们上面。考虑到两个子集的形状，可以说非线性 SVM 可以更好地捕捉动态；然而，如果我们从<em class="italics">p</em>T33】数据中采样另一个数据集，并且对角线<em class="italics">尾部</em>变宽，则逻辑回归继续对点进行正确分类，而 SVM 精度显著下降。</p>
 
 			<p class="normal">第二个模型极有可能过拟合，需要做一些修正。当验证精度远低于训练精度时，一个好的策略是增加训练样本的数量，考虑真实的<em class="italics">p</em>T39】数据。事实上，可能会发生这样的情况:训练集是从不反映真实分布的假设分布开始构建的，或者用于验证的样本数量过多，从而减少了剩余样本携带的信息量。</p>
 
@@ -683,7 +683,7 @@ for cv in cvs:
 
 			<h3 id="_idParaDest-29" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor030"/>克拉美-拉奥界</h3>
 
-			<p class="normal">如果理论上有可能创建一个<a id="_idIndexMarker121"/>无偏模型，甚至是<a id="_idIndexMarker122"/>渐近地，这对于方差是不成立的。为了理解这个概念，有必要<a id="_idIndexMarker123"/>介绍一个重要的定义:Fisher信息<strong class="bold">。如果我们有一个参数化模型和一个数据生成过程<em class="italics">p</em>t【16】data，我们可以通过考虑以下参数来定义一个似然函数:</strong></p>
+			<p class="normal">如果理论上有可能创建一个<a id="_idIndexMarker121"/>无偏模型，甚至是<a id="_idIndexMarker122"/>渐近地，这对于方差是不成立的。为了理解这个概念，有必要<a id="_idIndexMarker123"/>介绍一个重要的定义:Fisher 信息<strong class="bold">。如果我们有一个参数化模型和一个数据生成过程<em class="italics">p</em>t【16】data，我们可以通过考虑以下参数来定义一个似然函数:</strong></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_080.png" alt="" style="height: 1.8em !important;"/></figure>
 
@@ -713,7 +713,7 @@ for cv in cvs:
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_086.png" alt="" style="height: 3em !important;"/></figure>
 
-			<p class="normal">事实上，如果我们最初考虑一个一般的估计量，并利用方差和Fisher信息的柯西-施瓦茨不等式，这两者都表示为期望值，我们得到:</p>
+			<p class="normal">事实上，如果我们最初考虑一个一般的估计量，并利用方差和 Fisher 信息的柯西-施瓦茨不等式，这两者都表示为期望值，我们得到:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_01_087.png" alt="" style="height: 3.5em !important;"/></figure>
 
@@ -745,27 +745,27 @@ for cv in cvs:
 
 			<p class="normal">在第一部分中，我们介绍了作为有限数据集的推广的数据生成过程，并讨论了好的数据集的结构和属性。我们讨论了一些常见的预处理策略及其特性，如缩放、归一化和白化。我们解释了将有限数据集分割成训练块和验证集的最常见策略，并介绍了交叉验证，以及一些最重要的变体，作为避免静态分割局限性的最佳方法之一。</p>
 
-			<p class="normal">在第二部分，我们讨论了机器学习模型的特征，以及可学习性的概念。我们讨论了估计量的主要性质:容量、偏差和方差。我们还介绍了Vapnik-Chervonenkis理论，这是表征能力概念的数学形式化，我们分析了高偏差和高方差的影响。特别是，我们讨论了称为欠拟合和过拟合的效应，定义了高偏差和高方差之间的关系。</p>
+			<p class="normal">在第二部分，我们讨论了机器学习模型的特征，以及可学习性的概念。我们讨论了估计量的主要性质:容量、偏差和方差。我们还介绍了 Vapnik-Chervonenkis 理论，这是表征能力概念的数学形式化，我们分析了高偏差和高方差的影响。特别是，我们讨论了称为欠拟合和过拟合的效应，定义了高偏差和高方差之间的关系。</p>
 
-			<p class="normal">在下一章<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>中，我们将介绍损失函数和成本函数，它们通过最小化误差度量或最大化特定目标来提供简单有效的工具来拟合机器学习模型。</p>
+			<p class="normal">在下一章<em class="italics">第 2 章</em>、<em class="italics">损失函数和正则化</em>中，我们将介绍损失函数和成本函数，它们通过最小化误差度量或最大化特定目标来提供简单有效的工具来拟合机器学习模型。</p>
 
 			<h1 id="_idParaDest-31" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor032"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">Darwiche A .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》，第61卷，2018年10月</li>
+				<li class="list">Darwiche A .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》，第 61 卷，2018 年 10 月</li>
 
-				<li class="list">Crammer K .，Kearns M .，Wortman J .，<em class="italics">从多个来源学习</em>，机器学习研究杂志，2008年9月</li>
+				<li class="list">Crammer K .，Kearns M .，Wortman J .，<em class="italics">从多个来源学习</em>，机器学习研究杂志，2008 年 9 月</li>
 
-				<li class="list">Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础，第二版</em>，麻省理工学院出版社，2018年</li>
+				<li class="list">Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础，第二版</em>，麻省理工学院出版社，2018 年</li>
 
-				<li class="list">瓦兰特·l .，<em class="italics">一种可学的理论</em>，《美国计算机学会通讯》，第27期，1984年</li>
+				<li class="list">瓦兰特·l .，<em class="italics">一种可学的理论</em>，《美国计算机学会通讯》，第 27 期，1984 年</li>
 
-				<li class="list">Ng A. Y .，<em class="italics">特征选择，L1与L2正则化，以及旋转不变性</em>，ICML，2004</li>
+				<li class="list">Ng A. Y .，<em class="italics">特征选择，L1 与 L2 正则化，以及旋转不变性</em>，ICML，2004</li>
 
 				<li class="list">Dube S .，<em class="italics">高维空间，深度学习和对抗性例子</em>，arXiv:1801.00634【cs。简历]</li>
 
-				<li class="list">Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习的优化</em>，麻省理工学院出版社，2011年</li>
+				<li class="list">Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习的优化</em>，麻省理工学院出版社，2011 年</li>
 
 				<li class="list">Bonaccorso G .，<em class="italics">机器学习算法，第二版</em>，Packt，2018 <a id="_idTextAnchor033"/></li>
 

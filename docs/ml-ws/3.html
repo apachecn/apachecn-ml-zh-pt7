@@ -38,7 +38,7 @@
 			<div><div><img src="img/B15781_03_01.jpg" alt="Figure 3.1: Dataset partition purposes&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.1:数据集分区的目的</p>
+			<p class="figure-caption">图 3.1:数据集分区的目的</p>
 			<p>上图所示的<code>A</code>–<code>D</code>段描述如下:</p>
 			<ul>
 				<li><code>A</code>部分是指使用训练集中包含的数据为所需算法训练模型的过程。</li>
@@ -52,7 +52,7 @@
 			<h2 id="_idParaDest-86"><a id="_idTextAnchor088"/>分割比例</h2>
 			<p>既然各种集合的目的已经很清楚了，那么澄清需要划分数据的分割比例就很重要了。尽管没有精确的科学方法来计算分流比，但在计算时需要考虑几个因素:</p>
 			<ul>
-				<li><strong class="bold">Size of the dataset</strong>: Previously, when data was not easily available, datasets contained between 100 and 100,000 instances, and the conventionally accepted split ratio was 60/20/20% for the training, validation, and testing sets, respectively. <p>随着软件和硬件每天都在改进，研究人员可以将包含超过一百万个实例的数据集放在一起。这种收集大量数据的能力允许分割比率分别为98/1/1%。这主要是因为数据集越大，可以用于训练模型的数据就越多，而不会影响留给验证集和测试集的数据量。</p></li>
+				<li><strong class="bold">Size of the dataset</strong>: Previously, when data was not easily available, datasets contained between 100 and 100,000 instances, and the conventionally accepted split ratio was 60/20/20% for the training, validation, and testing sets, respectively. <p>随着软件和硬件每天都在改进，研究人员可以将包含超过一百万个实例的数据集放在一起。这种收集大量数据的能力允许分割比率分别为 98/1/1%。这主要是因为数据集越大，可以用于训练模型的数据就越多，而不会影响留给验证集和测试集的数据量。</p></li>
 				<li><strong class="bold">The algorithm</strong>: It is important to consider that some algorithms may require higher amounts of data to train a model, as is the case with neural networks. In this case, as with the preceding approaches, you should always opt for a larger training set. <p>另一方面，一些算法不要求验证集和测试集被平均分割。例如，具有较少超参数的模型可以很容易地被调整，这允许验证集小于测试集。但是，如果一个模型有许多超参数，您将需要一个更大的验证集。</p></li>
 			</ul>
 			<p>尽管如此，尽管上述测量方法可作为分割数据集的指导，但考虑数据集的分布和研究目的始终很重要。例如，一个用于预测数据结果的模型，其数据分布与用于训练该模型的数据分布不同，真实数据即使有限，也必须至少是测试集的一部分，以确保该模型能够达到预期目的。</p>
@@ -60,59 +60,59 @@
 			<div><div><img src="img/B15781_03_02.jpg" alt="Figure 3.2: Visualization of the split ratio&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.2:分流比的可视化</p>
-			<h2 id="_idParaDest-87"><a id="_idTextAnchor089"/>练习3.01:在样本数据集上执行数据分区</h2>
+			<p class="figure-caption">图 3.2:分流比的可视化</p>
+			<h2 id="_idParaDest-87"><a id="_idTextAnchor089"/>练习 3.01:在样本数据集上执行数据分区</h2>
 			<p>在本练习中，我们将使用分割比方法对<code>wine</code>数据集执行数据分区。本练习中的分区将使用三分法来完成。按照以下步骤完成本练习:</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">对于本章中的练习和活动，您需要在系统上安装Python 3.7、NumPy、Jupyter、Pandas和scikit-learn。</p>
+			<p class="callout">对于本章中的练习和活动，您需要在系统上安装 Python 3.7、NumPy、Jupyter、Pandas 和 scikit-learn。</p>
 			<ol>
 				<li>Open a Jupyter Notebook to implement this exercise. Import the required elements, as well as the <code>load_wine</code> function from scikit-learn's <code>datasets</code> package:<pre>from sklearn.datasets import load_wine
 import pandas as pd
-from sklearn.model_selection import train_test_split</pre><p>第一行导入将用于从scikit-learn加载数据集的函数。接下来，<code>pandas</code>库被导入。最后，导入<code>train_test_split</code>函数，它将负责对数据集进行分区。该函数将数据划分为两个子集(一个训练集和一个测试集)。由于本练习的目标是将数据划分为三个子集，因此将使用该函数两次来达到预期的结果。</p></li>
-				<li>Load the <code>wine</code> toy dataset and store it in a variable named <code>data</code>. Use the following code snippet to do so:<pre>data = load_wine()</pre><p><code>load_wine</code>函数加载scikit-learn提供的玩具数据集。</p><p class="callout-heading">注意</p><p class="callout">要检查数据集的特征，请访问以下链接:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">https://sci kit-learn . org/stable/modules/generated/sk learn . datasets . load _ wine . html</a>。</p><p>前面函数的输出是一个类似字典的对象，它将特征(可作为数据调用)和目标(可作为目标调用)分成两个属性。</p></li>
+from sklearn.model_selection import train_test_split</pre><p>第一行导入将用于从 scikit-learn 加载数据集的函数。接下来，<code>pandas</code>库被导入。最后，导入<code>train_test_split</code>函数，它将负责对数据集进行分区。该函数将数据划分为两个子集(一个训练集和一个测试集)。由于本练习的目标是将数据划分为三个子集，因此将使用该函数两次来达到预期的结果。</p></li>
+				<li>Load the <code>wine</code> toy dataset and store it in a variable named <code>data</code>. Use the following code snippet to do so:<pre>data = load_wine()</pre><p><code>load_wine</code>函数加载 scikit-learn 提供的玩具数据集。</p><p class="callout-heading">注意</p><p class="callout">要检查数据集的特征，请访问以下链接:<a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">https://sci kit-learn . org/stable/modules/generated/sk learn . datasets . load _ wine . html</a>。</p><p>前面函数的输出是一个类似字典的对象，它将特征(可作为数据调用)和目标(可作为目标调用)分成两个属性。</p></li>
 				<li>Convert each attribute (data and target) into a Pandas DataFrame to facilitate data manipulation. Print the shape of both DataFrames:<pre>X = pd.DataFrame(data.data)
 Y = pd.DataFrame(data.target)
 print(X.shape,Y.shape)</pre><p><code>print</code>功能的输出应该如下:</p><pre>(178, 13) (178, 1)</pre><p>这里，第一个括号中的值代表数据帧<code>X</code>(称为特征矩阵)的形状，而第二个括号中的值指的是数据帧<code>Y</code>(称为目标矩阵)的形状。</p></li>
-				<li>Perform your first split of the data using the <code>train_test_split</code> function. Use the following code snippet to do so:<pre>X, X_test, Y, Y_test = train_test_split(X, Y, test_size = 0.2)</pre><p><code>train_test_split</code>函数的输入是两个矩阵<code>(X,Y)</code>和测试集的大小，值在0和1之间，代表比例。</p><pre>print(X.shape, X_test.shape, Y.shape, Y_test.shape)</pre><p>按照前面的代码片段，通过打印所有四个矩阵的形状，可以确认测试子集的大小(包括<code>X</code>和<code>Y</code>)是原始数据集总大小的20%(150 * 0.2 = 35.6)四舍五入为整数，而训练集的大小是剩余的80%:</p><pre>(142, 13) (36, 13) (142, 1) (36, 1)</pre></li>
+				<li>Perform your first split of the data using the <code>train_test_split</code> function. Use the following code snippet to do so:<pre>X, X_test, Y, Y_test = train_test_split(X, Y, test_size = 0.2)</pre><p><code>train_test_split</code>函数的输入是两个矩阵<code>(X,Y)</code>和测试集的大小，值在 0 和 1 之间，代表比例。</p><pre>print(X.shape, X_test.shape, Y.shape, Y_test.shape)</pre><p>按照前面的代码片段，通过打印所有四个矩阵的形状，可以确认测试子集的大小(包括<code>X</code>和<code>Y</code>)是原始数据集总大小的 20%(150 * 0.2 = 35.6)四舍五入为整数，而训练集的大小是剩余的 80%:</p><pre>(142, 13) (36, 13) (142, 1) (36, 1)</pre></li>
 				<li>To create a validation set (dev set), we will use the <code>train_test_split</code> function to divide the train sets we obtained in the previous step. However, to obtain a dev set that's the same shape as the test set, it is necessary to calculate the proportion of the size of the test set over the size of the train set before creating a validation set. This value will be used as the <code>test_size</code> for the next step:<pre>dev_size = 36/142
 print(dev_size)</pre><p>这里，<code>36</code>是我们在上一步中创建的测试集的大小，而<code>142</code>是将被进一步拆分的训练集的大小。该操作的结果在<code>0.25</code>附近，可以使用<code>print</code>功能进行验证。</p></li>
 				<li>Use the <code>train_test_split</code> function to divide the train set into two subsets (train and dev sets). Use the result from the operation in the previous step as the <code>test_size</code>:<pre>X_train, X_dev, Y_train, Y_dev = train_test_split(X, Y, \
                                  test_size = dev_size)
 print(X_train.shape, Y_train.shape, X_dev.shape, \
-      Y_dev.shape, X_test.shape, Y_test.shape)</pre><p><code>print</code>功能的输出如下:</p><pre>(106, 13) (106, 1) (36, 13) (36, 1) (36, 13) (36, 1)</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2AtXAWS">https://packt.live/2AtXAWS</a>。</p><p class="callout">你也可以在https://packt.live/2YECtsG<a href="https://packt.live/2YECtsG">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p></li>
+      Y_dev.shape, X_test.shape, Y_test.shape)</pre><p><code>print</code>功能的输出如下:</p><pre>(106, 13) (106, 1) (36, 13) (36, 1) (36, 13) (36, 1)</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2AtXAWS">https://packt.live/2AtXAWS</a>。</p><p class="callout">你也可以在 https://packt.live/2YECtsG<a href="https://packt.live/2YECtsG">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p></li>
 			</ol>
 			<p>您已经成功地将数据集分成三个子集，以开发高效的机器学习项目。随意测试不同的分流比。</p>
 			<p>总之，分区数据的分割比不是固定的，应该根据可用数据量、要使用的算法类型和数据分布来决定。</p>
 			<h2 id="_idParaDest-88"><a id="_idTextAnchor090"/>交叉验证</h2>
 			<p><strong class="bold">交叉验证</strong>也是一个通过对用于训练和验证模型的数据进行重采样来划分数据的过程。它包含一个参数，<em class="italic"> K，</em>，表示数据集将被分成的组的数量。</p>
-			<p>由于这个原因，这个过程也被称为K-fold交叉验证，其中<em class="italic"> K </em>通常由你选择的数字代替。例如，使用10重交叉验证过程创建的模型表示数据被分成10个子组的模型。交叉验证的过程如下图所示:</p>
+			<p>由于这个原因，这个过程也被称为 K-fold 交叉验证，其中<em class="italic"> K </em>通常由你选择的数字代替。例如，使用 10 重交叉验证过程创建的模型表示数据被分成 10 个子组的模型。交叉验证的过程如下图所示:</p>
 			<div><div><img src="img/B15781_03_03.jpg" alt="Figure 3.3: Cross-validation procedure&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.3:交叉验证程序</p>
+			<p class="figure-caption">图 3.3:交叉验证程序</p>
 			<p>上图显示了交叉验证过程中遵循的一般程序:</p>
 			<ol>
 				<li value="1">考虑到重复的交叉验证过程，数据被随机打乱。</li>
-				<li>数据被分成K个子组。</li>
+				<li>数据被分成 K 个子组。</li>
 				<li>确认/测试集被选为所创建的子组之一。其余的子组成为训练集。</li>
 				<li>像往常一样，在训练集上训练模型。使用验证/测试集评估模型。</li>
-				<li>保存该迭代的结果。根据结果调整参数，并通过重新排列数据重新开始这个过程。这个过程重复K次。</li>
+				<li>保存该迭代的结果。根据结果调整参数，并通过重新排列数据重新开始这个过程。这个过程重复 K 次。</li>
 			</ol>
 			<p>根据前面的步骤，数据集被分成<em class="italic"> K </em>个集合，模型被训练<em class="italic"> K </em>次。每次都选择一个集合作为验证集合，其余的集合用于训练过程。</p>
 			<p>交叉验证可以使用三分法或二分法来完成。对于前者，数据集最初分为训练集和测试集，之后使用交叉验证来划分训练集，以创建训练集和验证集的不同配置。另一方面，后一种方法对整个数据集使用交叉验证。</p>
 			<p>交叉验证的流行是因为它能够构建“无偏”的模型，因为它允许我们在数据集的不同部分上测量算法的性能，这也为我们提供了对未知数据的性能的想法。它也很受欢迎，因为它允许您从一个小数据集构建高效的模型。</p>
-			<p>选择<em class="italic"> K </em>的值没有精确的科学依据，但重要的是要考虑到较低的<em class="italic"> K </em>值会减少方差并增加偏差，而较高的<em class="italic"> K </em>值会导致相反的行为。此外，K值越低，工艺成本越低，运行时间也就越快。</p>
+			<p>选择<em class="italic"> K </em>的值没有精确的科学依据，但重要的是要考虑到较低的<em class="italic"> K </em>值会减少方差并增加偏差，而较高的<em class="italic"> K </em>值会导致相反的行为。此外，K 值越低，工艺成本越低，运行时间也就越快。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">方差和偏差的概念将在<em class="italic">偏差、方差和数据不匹配</em>部分解释。</p>
-			<h2 id="_idParaDest-89"><a id="_idTextAnchor091"/>练习3.02:使用交叉验证将训练集划分为训练集和验证集</h2>
+			<h2 id="_idParaDest-89"><a id="_idTextAnchor091"/>练习 3.02:使用交叉验证将训练集划分为训练集和验证集</h2>
 			<p>在本练习中，我们将使用交叉验证方法对<code>wine</code>数据集执行数据分区。按照以下步骤完成本练习:</p>
 			<ol>
 				<li value="1">Open a Jupyter Notebook to implement this exercise and import all the required elements:<pre>from sklearn.datasets import load_wine
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行从scikit-learn导入了<code>KFold</code>类，它将用于对数据集进行分区。</p></li>
+from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行从 scikit-learn 导入了<code>KFold</code>类，它将用于对数据集进行分区。</p></li>
 				<li>按照之前的练习加载<code>wine</code>数据集，并创建包含特征和目标矩阵的熊猫数据帧:<pre>data = load_wine() X = pd.DataFrame(data.data) Y = pd.DataFrame(data.target)</pre></li>
-				<li>使用<code>train_test_split</code>函数将数据分成训练集和测试集，您在前面的练习中已经了解到，使用0.10的<code>test_size</code>:<pre>X, X_test, Y, Y_test = train_test_split(X, Y, \                                         test_size = 0.10)</pre></li>
+				<li>使用<code>train_test_split</code>函数将数据分成训练集和测试集，您在前面的练习中已经了解到，使用 0.10 的<code>test_size</code>:<pre>X, X_test, Y, Y_test = train_test_split(X, Y, \                                         test_size = 0.10)</pre></li>
 				<li>Instantiate the <code>KFold</code> class with a 10-fold configuration: <pre>kf = KFold(n_splits = 10)</pre><p class="callout-heading">注意</p><p class="callout">随意试验<code>K</code>的值，看看这个练习的输出形状如何变化。</p></li>
 				<li>Apply the <code>split</code> method to the data in <code>X</code>. This method will output the index of the instances to be used as training and validation sets. This method creates 10 different split configurations. Save the output in a variable named <code>splits</code>:<pre>splits = kf.split(X)</pre><p>注意，没有必要对<code>Y</code>中的数据运行<code>split</code>方法，因为该方法只保存索引号，这对于<code>X</code>和<code>Y</code>是相同的。接下来处理实际的拆分。</p></li>
 				<li>Perform a <code>for</code> loop that will go through the different split configurations. In the loop body, create the variables that will hold the data for the training and validation sets. Use the following code snippet to do so:<pre>for train_index, test_index in splits:
@@ -127,17 +127,17 @@ from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2N0lPi0">https://packt.live/2N0lPi0</a>。</p>
 			<p class="callout">你也可以在<a href="https://packt.live/2Y290tK">https://packt.live/2Y290tK</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>总之，交叉验证是一种用于将数据混洗并分割成训练集和验证集的过程，以便每次对不同的数据集进行训练和验证，从而实现低偏差的模型。</p>
-			<h2 id="_idParaDest-90"><a id="_idTextAnchor092"/>活动3.01:手写数字数据集的数据划分</h2>
-			<p>贵公司专门识别手写字符。它希望提高数字的识别能力，这就是为什么他们收集了从0到9的1797个手写数字的数据集。这些图像已经被转换成它们的数字表示，因此它们为您提供了数据集，以便将其分成训练/验证/测试集。您可以选择执行常规分割或交叉验证。按照以下步骤完成本活动:</p>
+			<h2 id="_idParaDest-90"><a id="_idTextAnchor092"/>活动 3.01:手写数字数据集的数据划分</h2>
+			<p>贵公司专门识别手写字符。它希望提高数字的识别能力，这就是为什么他们收集了从 0 到 9 的 1797 个手写数字的数据集。这些图像已经被转换成它们的数字表示，因此它们为您提供了数据集，以便将其分成训练/验证/测试集。您可以选择执行常规分割或交叉验证。按照以下步骤完成本活动:</p>
 			<ol>
-				<li value="1">导入分割数据集所需的所有元素，以及scikit-learn中的<code>load_digits</code>函数来加载<code>digits</code>数据集。</li>
-				<li>加载<code>digits</code>数据集并创建包含特征和目标矩阵的Pandas数据框架。</li>
-				<li>以传统的拆分方法为例，使用60/20/20%的拆分比率。</li>
-				<li>Using the same DataFrames, perform a 10-fold cross-validation split.<p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第228页找到。请随意尝试不同的参数以获得不同的结果。</p></li>
+				<li value="1">导入分割数据集所需的所有元素，以及 scikit-learn 中的<code>load_digits</code>函数来加载<code>digits</code>数据集。</li>
+				<li>加载<code>digits</code>数据集并创建包含特征和目标矩阵的 Pandas 数据框架。</li>
+				<li>以传统的拆分方法为例，使用 60/20/20%的拆分比率。</li>
+				<li>Using the same DataFrames, perform a 10-fold cross-validation split.<p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第 228 页找到。请随意尝试不同的参数以获得不同的结果。</p></li>
 			</ol>
 			<h1 id="_idParaDest-91"><a id="_idTextAnchor093"/>评估指标</h1>
 			<p>模型评估对于创建有效的模型是必不可少的，这些模型不仅在用于训练模型的数据上表现良好，而且在看不见的数据上也表现良好。当处理监督学习问题时，评估模型的任务特别容易，其中存在可以与模型的预测进行比较的基础事实。</p>
-			<p>确定模型的精度百分比对于将模型应用于没有标注分类可供比较的不可见数据至关重要。例如，准确度为98%的模型可能允许用户假设获得准确预测的可能性很高，因此该模型应该是可信的。</p>
+			<p>确定模型的精度百分比对于将模型应用于没有标注分类可供比较的不可见数据至关重要。例如，准确度为 98%的模型可能允许用户假设获得准确预测的可能性很高，因此该模型应该是可信的。</p>
 			<p>如前所述，性能评估应该在验证集(开发集)上进行，以微调模型，并在测试集上进行，以确定所选模型对未知数据的预期性能。</p>
 			<h2 id="_idParaDest-92"><a id="_idTextAnchor094"/>分类任务的评估指标</h2>
 			<p>如前所述，分类任务指的是类别标签是离散值的模型。考虑到这一点，评估此类任务性能的最常见的方法是计算模型的准确性，这涉及到将实际预测值与真实值进行比较。尽管在许多情况下这可能是一个合适的指标，但在选择之前还有其他几个指标需要考虑。</p>
@@ -152,11 +152,11 @@ from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行
 			<div><div><img src="img/B15781_03_04.jpg" alt="Figure 3.4: A confusion matrix of a classifier that predicts whether a woman is pregnant&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.4:预测女性是否怀孕的分类器的混淆矩阵</p>
+			<p class="figure-caption">图 3.4:预测女性是否怀孕的分类器的混淆矩阵</p>
 			<p>从上表中可以观察到以下情况:</p>
 			<ul>
-				<li>通过对第一行的值求和，可以知道有600个孕妇的观察值。然而，从这600次观察中，该模型预测556次为怀孕，44次为未怀孕。因此，该模型预测妇女怀孕的能力的正确率为92.6%。</li>
-				<li>关于第二行，也有600个非孕妇的观察值。在这600人中，模型预测其中123人怀孕，477人没有怀孕。该模型在79.5%的情况下成功预测了非孕妇。</li>
+				<li>通过对第一行的值求和，可以知道有 600 个孕妇的观察值。然而，从这 600 次观察中，该模型预测 556 次为怀孕，44 次为未怀孕。因此，该模型预测妇女怀孕的能力的正确率为 92.6%。</li>
+				<li>关于第二行，也有 600 个非孕妇的观察值。在这 600 人中，模型预测其中 123 人怀孕，477 人没有怀孕。该模型在 79.5%的情况下成功预测了非孕妇。</li>
 			</ul>
 			<p>基于这些陈述，可以得出结论，当对未怀孕的观察结果进行分类时，该模型表现最差。</p>
 			<p>考虑到混淆矩阵中的行表示事件的发生或不发生，而列表示模型的预测，混淆矩阵中的值可以解释如下:</p>
@@ -170,14 +170,14 @@ from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行
 			<div><div><img src="img/B15781_03_05.jpg" alt="Figure 3.5: A table showing confusion matrix values&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.5:显示混淆矩阵值的表格</p>
+			<p class="figure-caption">图 3.5:显示混淆矩阵值的表格</p>
 			<h3 id="_idParaDest-94"><a id="_idTextAnchor096"/>准确性</h3>
 			<p><strong class="bold">准确性</strong>，如前所述，衡量模型正确分类所有实例的能力。虽然这被认为是测量性能的最简单的方法之一，但是当研究的目标是最小化/最大化一个类的出现而不依赖于它在其他类上的性能时，它可能不总是有用的度量。</p>
-			<p>图3.4 中<em class="italic">的混淆矩阵的精度水平测量如下:</em></p>
+			<p>图 3.4 中<em class="italic">的混淆矩阵的精度水平测量如下:</em></p>
 			<div><div><img src="img/B15781_03_06.jpg" alt="Figure 3.6: An equation showing the calculation for accuracy&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.6:显示精确度计算的等式</p>
+			<p class="figure-caption">图 3.6:显示精确度计算的等式</p>
 			<p>这里，<em class="italic"> m </em>是实例总数。</p>
 			<p><code>86%</code>准确度指的是模型在对两个类别标签进行分类时的整体性能。</p>
 			<h3 id="_idParaDest-95"><a id="_idTextAnchor097"/>精密</h3>
@@ -185,18 +185,18 @@ from sklearn.model_selection import KFold</pre><p>前面代码中的最后一行
 			<div><div><img src="img/B15781_03_07.jpg" alt="Figure 3.7: An equation showing the calculation for precision&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.7:显示精度计算的等式</p>
-			<p>精度度量仅适用于二进制分类任务，其中只有两个类标签(例如，真或假)。考虑到类被转换成两个(例如，预测手写数字是6还是任何其他数字)，它也可以应用于多类任务，其中一个类引用具有条件的实例，而另一个类引用不具有条件的实例。</p>
-			<p>对于<em class="italic">图3.4 </em>中的例子，模型的精度等于81.8%。</p>
+			<p class="figure-caption">图 3.7:显示精度计算的等式</p>
+			<p>精度度量仅适用于二进制分类任务，其中只有两个类标签(例如，真或假)。考虑到类被转换成两个(例如，预测手写数字是 6 还是任何其他数字)，它也可以应用于多类任务，其中一个类引用具有条件的实例，而另一个类引用不具有条件的实例。</p>
+			<p>对于<em class="italic">图 3.4 </em>中的例子，模型的精度等于 81.8%。</p>
 			<h3 id="_idParaDest-96"><a id="_idTextAnchor098"/>回忆</h3>
 			<p>召回指标衡量所有阳性标签中正确预测的阳性标签的数量。这由<em class="italic">真阳性</em>与<em class="italic">真阳性</em>和<em class="italic">假阴性</em>之和的比值表示:</p>
 			<div><div><img src="img/B15781_03_08.jpg" alt="Figure 3.8: An equation showing the calculation for recall&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.8:显示召回率计算的等式</p>
-			<p>同样，这一措施应适用于两类标签。图3.4 中示例的召回值为92.6%，与其他两个指标相比，这代表了模型的最高性能。选择一个指标或另一个指标的决定将取决于研究的目的，稍后将对此进行更详细的解释。</p>
-			<h2 id="_idParaDest-97"><a id="_idTextAnchor099"/>练习3.03:计算分类任务的不同评估指标</h2>
-			<p>在本练习中，我们将使用乳腺癌玩具数据集，通过scikit-learn库计算评估指标。按照以下步骤完成本练习:</p>
+			<p class="figure-caption">图 3.8:显示召回率计算的等式</p>
+			<p>同样，这一措施应适用于两类标签。图 3.4 中示例的召回值为 92.6%，与其他两个指标相比，这代表了模型的最高性能。选择一个指标或另一个指标的决定将取决于研究的目的，稍后将对此进行更详细的解释。</p>
+			<h2 id="_idParaDest-97"><a id="_idTextAnchor099"/>练习 3.03:计算分类任务的不同评估指标</h2>
+			<p>在本练习中，我们将使用乳腺癌玩具数据集，通过 scikit-learn 库计算评估指标。按照以下步骤完成本练习:</p>
 			<ol>
 				<li value="1">Open a Jupyter Notebook to implement this exercise and import all the required elements:<pre>from sklearn.datasets import load_breast_cancer
 import pandas as pd
@@ -205,14 +205,14 @@ from sklearn import tree
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score</pre><p>第四行从scikit-learn导入了<code>tree</code>模块，它将用于在本练习中根据训练数据训练一个决策树模型。下面的代码行将导入本练习中将计算的不同评估指标。</p></li>
-				<li>乳腺癌玩具数据集包含569名女性乳房肿块分析的最终诊断(恶性或良性)。加载数据集并创建要素和目标熊猫数据框，如下:<pre>data = load_breast_cancer() X = pd.DataFrame(data.data) Y = pd.DataFrame(data.target)</pre></li>
+from sklearn.metrics import recall_score</pre><p>第四行从 scikit-learn 导入了<code>tree</code>模块，它将用于在本练习中根据训练数据训练一个决策树模型。下面的代码行将导入本练习中将计算的不同评估指标。</p></li>
+				<li>乳腺癌玩具数据集包含 569 名女性乳房肿块分析的最终诊断(恶性或良性)。加载数据集并创建要素和目标熊猫数据框，如下:<pre>data = load_breast_cancer() X = pd.DataFrame(data.data) Y = pd.DataFrame(data.target)</pre></li>
 				<li>Split the dataset using the conventional split approach:<pre>X_train, X_test, \
 Y_train, Y_test = train_test_split(X,Y, test_size = 0.1, \
-                                   random_state = 0)</pre><p>请注意，数据集分为两个子集(训练集和测试集)，因为本练习的目的是学习如何使用scikit-learn包计算评估指标。</p><p class="callout-heading">注意</p><p class="callout"><code>random_state</code>参数用于设置一个种子，确保每次运行代码时都得到相同的结果。这保证了您将获得与本练习中反映的结果相同的结果。不同的数字可以用作种子；但是，使用本章练习和活动中建议的相同数字可以获得与此处所示相同的结果。</p></li>
+                                   random_state = 0)</pre><p>请注意，数据集分为两个子集(训练集和测试集)，因为本练习的目的是学习如何使用 scikit-learn 包计算评估指标。</p><p class="callout-heading">注意</p><p class="callout"><code>random_state</code>参数用于设置一个种子，确保每次运行代码时都得到相同的结果。这保证了您将获得与本练习中反映的结果相同的结果。不同的数字可以用作种子；但是，使用本章练习和活动中建议的相同数字可以获得与此处所示相同的结果。</p></li>
 				<li>First, instantiate the <code>DecisionTreeClassifier</code> class from scikit-learn's <code>tree</code> module. Next, train a decision tree on the train set. Finally, use the model to predict the class label on the test set. Use the following code to do this:<pre>model = tree.DecisionTreeClassifier(random_state = 0)
 model = model.fit(X_train, Y_train)
-Y_pred = model.predict(X_test)</pre><p>首先，使用<code>random_state</code>设置种子来实例化模型。然后，<code>fit</code>方法用于使用来自训练集的数据训练模型(包括<code>X</code>和<code>Y</code>)。最后，使用<code>predict</code>方法来触发对测试集中数据的预测(只有<code>X</code>)。来自<code>Y_test</code>的数据将用于比较预测和地面真实情况。</p><p class="callout-heading">注意</p><p class="callout">训练监督学习模型的步骤将在<em class="italic">第4章</em>、<em class="italic">监督学习算法:预测年收入</em>和<em class="italic">第5章</em>、<em class="italic">人工神经网络:预测年收入</em>中进一步解释。</p></li>
+Y_pred = model.predict(X_test)</pre><p>首先，使用<code>random_state</code>设置种子来实例化模型。然后，<code>fit</code>方法用于使用来自训练集的数据训练模型(包括<code>X</code>和<code>Y</code>)。最后，使用<code>predict</code>方法来触发对测试集中数据的预测(只有<code>X</code>)。来自<code>Y_test</code>的数据将用于比较预测和地面真实情况。</p><p class="callout-heading">注意</p><p class="callout">训练监督学习模型的步骤将在<em class="italic">第 4 章</em>、<em class="italic">监督学习算法:预测年收入</em>和<em class="italic">第 5 章</em>、<em class="italic">人工神经网络:预测年收入</em>中进一步解释。</p></li>
 				<li>Use scikit-learn to construct a confusion matrix, as follows:<pre>confusion_matrix(Y_test, Y_pred)</pre><p>结果如下，其中地面真实值是根据预测值测量的:</p><pre>array([[21, 1],
        [6, 29]])</pre></li>
 				<li>Calculate the accuracy, precision, and recall of the model by comparing <code>Y_test</code> and <code>Y_pred</code>:<pre>accuracy = accuracy_score(Y_test, Y_pred)
@@ -222,7 +222,7 @@ print("precision:", precision)
 recall = recall_score(Y_test, Y_pred)
 print("recall:", recall)</pre><p>结果显示如下:</p><pre>accuracy: 0.8771
 precision: 0.9666
-recall: 0.8285</pre><p>假设阳性标记是那些肿块为恶性的标记，则可以得出结论，模型预测为恶性的情况有很高的概率(96.6%)为恶性，但是对于预测为良性的情况，模型有17.15%(100%-82.85%)的概率是错误的。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Yw0hiu">https://packt.live/2Yw0hiu</a>。</p><p class="callout">你也可以在<a href="https://packt.live/3e4rRtE">https://packt.live/3e4rRtE</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+recall: 0.8285</pre><p>假设阳性标记是那些肿块为恶性的标记，则可以得出结论，模型预测为恶性的情况有很高的概率(96.6%)为恶性，但是对于预测为良性的情况，模型有 17.15%(100%-82.85%)的概率是错误的。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Yw0hiu">https://packt.live/2Yw0hiu</a>。</p><p class="callout">你也可以在<a href="https://packt.live/3e4rRtE">https://packt.live/3e4rRtE</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>您已成功计算分类任务的评估指标。</p>
 			<h2 id="_idParaDest-98"><a id="_idTextAnchor100"/>选择评估指标</h2>
@@ -233,23 +233,23 @@ recall: 0.8285</pre><p>假设阳性标记是那些肿块为恶性的标记，则
 			<p>另一方面，对于为识别手写字符而创建的模型，其中没有一个字符比另一个字符更重要，理想的度量应该是衡量模型整体准确性的度量。</p>
 			<p>如果选择了多个指标，会发生什么情况？考虑到同时测量两个指标可能会导致需要不同的方法来改善结果，因此很难达到模型的最佳性能。</p>
 			<h2 id="_idParaDest-99"><a id="_idTextAnchor101"/>回归任务的评估指标</h2>
-			<p>考虑到回归任务的最终输出是连续的，没有固定数量的输出标注，因此基本事实和预测之间的比较基于值的接近度，而不是基于它们具有完全相同的值。例如，在预测房价时，一个预测价值为300，000美元的房屋价值为299，846美元的模型可以被认为是一个好模型。</p>
+			<p>考虑到回归任务的最终输出是连续的，没有固定数量的输出标注，因此基本事实和预测之间的比较基于值的接近度，而不是基于它们具有完全相同的值。例如，在预测房价时，一个预测价值为 300，000 美元的房屋价值为 299，846 美元的模型可以被认为是一个好模型。</p>
 			<p>最常用于评估连续变量准确性的两个指标是<strong class="bold">平均绝对误差</strong> ( <strong class="bold"> MAE </strong>)和<strong class="bold">均方根误差</strong> ( <strong class="bold"> RMSE </strong>)，在此解释如下:</p>
 			<ul>
-				<li><strong class="bold">平均绝对误差</strong>:该指标衡量预测和实际情况之间的平均绝对差异，不考虑误差的方向。MAE的计算公式如下:</li>
+				<li><strong class="bold">平均绝对误差</strong>:该指标衡量预测和实际情况之间的平均绝对差异，不考虑误差的方向。MAE 的计算公式如下:</li>
 			</ul>
 			<div><div><img src="img/B15781_03_09.jpg" alt="Figure 3.9: An equation showing the calculation of MAE&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.9:显示MAE计算的等式</p>
+			<p class="figure-caption">图 3.9:显示 MAE 计算的等式</p>
 			<p>这里，<em class="italic"> m </em>是指实例总数，<em class="italic"> y </em>是地面真值，<em class="italic"> ŷ </em>是预测值。</p>
 			<ul>
-				<li><strong class="bold">均方根误差</strong>:这是一个二次型度量，也是测量实际情况和预测之间误差的平均幅度。顾名思义，RMSE是平方差的平均值的平方根，如下面的公式所示:<div> <img src="img/B15781_03_10.jpg" alt="Figure 3.10: An equation showing the calculation of RMSE&#13;&#10;"/> </div></li>
+				<li><strong class="bold">均方根误差</strong>:这是一个二次型度量，也是测量实际情况和预测之间误差的平均幅度。顾名思义，RMSE 是平方差的平均值的平方根，如下面的公式所示:<div> <img src="img/B15781_03_10.jpg" alt="Figure 3.10: An equation showing the calculation of RMSE&#13;&#10;"/> </div></li>
 			</ul>
-			<p class="figure-caption">图3.10:显示RMSE计算的方程式</p>
-			<p>这两个指标都表示平均误差，范围从0到无穷大，值越低，模型的性能越好。这两个指标的主要区别在于，MAE对所有错误赋予相同的重要性权重，而RMSE对错误进行平方，对较大的错误赋予较高的权重。</p>
-			<p>考虑到这一点，RMSE度量在较大的错误应该受到惩罚的情况下特别有用，这意味着在性能测量中要考虑异常值。例如，当一个值相差4比相差2多一倍时，可以使用RMSE度量。另一方面，当一个值偏离4是一个值偏离2的两倍时，使用MAE。</p>
-			<h2 id="_idParaDest-100"><a id="_idTextAnchor102"/>练习3.04:计算回归任务的评估指标</h2>
+			<p class="figure-caption">图 3.10:显示 RMSE 计算的方程式</p>
+			<p>这两个指标都表示平均误差，范围从 0 到无穷大，值越低，模型的性能越好。这两个指标的主要区别在于，MAE 对所有错误赋予相同的重要性权重，而 RMSE 对错误进行平方，对较大的错误赋予较高的权重。</p>
+			<p>考虑到这一点，RMSE 度量在较大的错误应该受到惩罚的情况下特别有用，这意味着在性能测量中要考虑异常值。例如，当一个值相差 4 比相差 2 多一倍时，可以使用 RMSE 度量。另一方面，当一个值偏离 4 是一个值偏离 2 的两倍时，使用 MAE。</p>
+			<h2 id="_idParaDest-100"><a id="_idTextAnchor102"/>练习 3.04:计算回归任务的评估指标</h2>
 			<p>在本练习中，我们将计算使用线性回归训练的模型的评估指标。为此，我们将使用<code>boston</code>玩具数据集。按照以下步骤完成本练习:</p>
 			<ol>
 				<li value="1">Open a Jupyter Notebook to implement this exercise and import all the required elements, as follows:<pre>from sklearn.datasets import load_boston
@@ -258,54 +258,54 @@ from sklearn.model_selection import train_test_split
 from sklearn import linear_model
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
-import numpy as np</pre><p>第四行从scikit-learn导入<code>linear_model</code>模块，它将用于在训练数据集上训练线性回归模型。接下来的代码行导入了两个将在本练习中评估的性能指标。</p></li>
-				<li>在这个练习中，将使用<code>boston</code>玩具数据集。该数据集包含波士顿506套房子的价格数据。使用以下代码加载和分割数据集，与我们在前面的练习中所做的一样:<pre>data = load_boston() X = pd.DataFrame(data.data) Y = pd.DataFrame(data.target) X_train, X_test, Y_train, Y_test = train_test_split(X,Y, \                                    test_size = 0.1, random_state = 0)</pre></li>
+import numpy as np</pre><p>第四行从 scikit-learn 导入<code>linear_model</code>模块，它将用于在训练数据集上训练线性回归模型。接下来的代码行导入了两个将在本练习中评估的性能指标。</p></li>
+				<li>在这个练习中，将使用<code>boston</code>玩具数据集。该数据集包含波士顿 506 套房子的价格数据。使用以下代码加载和分割数据集，与我们在前面的练习中所做的一样:<pre>data = load_boston() X = pd.DataFrame(data.data) Y = pd.DataFrame(data.target) X_train, X_test, Y_train, Y_test = train_test_split(X,Y, \                                    test_size = 0.1, random_state = 0)</pre></li>
 				<li>Train a linear regression model on the train set. Then, use the model to predict the class label on the test set, as follows:<pre>model = linear_model.LinearRegression()
 model = model.fit(X_train, Y_train)
-Y_pred = model.predict(X_test)</pre><p>作为一般解释，首先实例化scikit-learn的<code>linear_model</code>模块中的<code>LinearRegression</code>类。然后，<code>fit</code>方法用于使用来自训练集的数据训练模型(包括<code>X</code>和<code>Y</code>)。最后，使用<code>predict</code>方法触发对测试集中数据的预测(仅<code>X</code>)。来自<code>Y_test</code>的数据将用于比较预测值和实际值。</p></li>
+Y_pred = model.predict(X_test)</pre><p>作为一般解释，首先实例化 scikit-learn 的<code>linear_model</code>模块中的<code>LinearRegression</code>类。然后，<code>fit</code>方法用于使用来自训练集的数据训练模型(包括<code>X</code>和<code>Y</code>)。最后，使用<code>predict</code>方法触发对测试集中数据的预测(仅<code>X</code>)。来自<code>Y_test</code>的数据将用于比较预测值和实际值。</p></li>
 				<li>Calculate both the MAE and RMSE metrics:<pre>MAE = mean_absolute_error(Y_test, Y_pred)
 print("MAE:", MAE)
 RMSE = np.sqrt(mean_squared_error(Y_test, Y_pred))
 print("RMSE:", RMSE)</pre><p>结果显示如下:</p><pre>MAE: 3.9357
-RMSE: 6.4594</pre><p class="callout-heading">注意</p><p class="callout">scikit-learn库允许您直接计算MSE。为了计算RMSE，计算从<code>mean_squared_error()</code>函数获得的值的平方根。通过使用平方根，我们确保来自梅和RMSE的值是可比较的。</p><p>从结果中，可以得出结论，考虑到两个值都接近于零，该模型在测试集上表现良好。尽管如此，这也意味着性能仍然可以提高。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2YxVXiU">https://packt.live/2YxVXiU</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2N0Elqy">https://packt.live/2N0Elqy</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+RMSE: 6.4594</pre><p class="callout-heading">注意</p><p class="callout">scikit-learn 库允许您直接计算 MSE。为了计算 RMSE，计算从<code>mean_squared_error()</code>函数获得的值的平方根。通过使用平方根，我们确保来自梅和 RMSE 的值是可比较的。</p><p>从结果中，可以得出结论，考虑到两个值都接近于零，该模型在测试集上表现良好。尽管如此，这也意味着性能仍然可以提高。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2YxVXiU">https://packt.live/2YxVXiU</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2N0Elqy">https://packt.live/2N0Elqy</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>现在，您已经在一个回归任务中成功地计算出了评估指标，该任务旨在根据房屋的特征来计算其价格。在下一个活动中，我们将计算为识别手写字符而创建的分类模型的性能。</p>
-			<h2 id="_idParaDest-101"><a id="_idTextAnchor103"/>活动3.02:评估在手写数据集上训练的模型的性能</h2>
+			<h2 id="_idParaDest-101"><a id="_idTextAnchor103"/>活动 3.02:评估在手写数据集上训练的模型的性能</h2>
 			<p>您将继续创建一个识别手写数字的模型。团队建立了一个模型，他们希望您评估该模型的性能。在本活动中，您将在一个经过训练的模型上计算不同的绩效评估指标。按照以下步骤完成本活动:</p>
 			<ol>
 				<li value="1">导入加载和分割数据集所需的所有元素，以便训练模型和评估分类任务的性能。</li>
-				<li>从scikit-learn加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧。</li>
-				<li>将数据分成训练集和测试集。使用20%作为测试集的大小。</li>
-				<li>Train a decision tree on the train set. Then, use the model to predict the class label on the test set.<p class="callout-heading">注意</p><p class="callout">要训练决策树，请重温<em class="italic">练习3.04 </em>、<em class="italic">计算分类任务的不同评估指标</em>。</p></li>
-				<li>使用scikit-learn构建混淆矩阵。</li>
+				<li>从 scikit-learn 加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧。</li>
+				<li>将数据分成训练集和测试集。使用 20%作为测试集的大小。</li>
+				<li>Train a decision tree on the train set. Then, use the model to predict the class label on the test set.<p class="callout-heading">注意</p><p class="callout">要训练决策树，请重温<em class="italic">练习 3.04 </em>、<em class="italic">计算分类任务的不同评估指标</em>。</p></li>
+				<li>使用 scikit-learn 构建混淆矩阵。</li>
 				<li>计算模型的精确度。</li>
-				<li>Calculate the precision and recall. Considering that both the precision and recall can only be calculated on binary classification problems, we'll assume that we are only interested in classifying instances as the number <code>6</code> or <code>any other number</code>.<p>为了能够计算精度和召回，使用下面的代码将<code>Y_test</code>和<code>Y_pred</code>转换成一个hot vector。独热向量由只包含0和1的向量组成。对于此活动，0代表<em class="italic">数字6 </em>，而1代表<code>any other number</code>。这将类别标签(<code>Y_test</code>和<code>Y_pred</code>)转换为二进制数据，这意味着只有两种可能的结果，而不是10种不同的结果。</p><p>然后，使用新变量计算精度和召回率:</p><pre>Y_test_2 = Y_test[:]
+				<li>Calculate the precision and recall. Considering that both the precision and recall can only be calculated on binary classification problems, we'll assume that we are only interested in classifying instances as the number <code>6</code> or <code>any other number</code>.<p>为了能够计算精度和召回，使用下面的代码将<code>Y_test</code>和<code>Y_pred</code>转换成一个 hot vector。独热向量由只包含 0 和 1 的向量组成。对于此活动，0 代表<em class="italic">数字 6 </em>，而 1 代表<code>any other number</code>。这将类别标签(<code>Y_test</code>和<code>Y_pred</code>)转换为二进制数据，这意味着只有两种可能的结果，而不是 10 种不同的结果。</p><p>然后，使用新变量计算精度和召回率:</p><pre>Y_test_2 = Y_test[:]
 Y_test_2[Y_test_2 != 6] = 1
 Y_test_2[Y_test_2 == 6] = 0
 Y_pred_2 = Y_pred
 Y_pred_2[Y_pred_2 != 6] = 1
 Y_pred_2[Y_pred_2 == 6] = 0</pre><p>您应该获得以下值作为输出:</p><pre>Accuracy = 84.72%
 Precision = 98.41%
-Recall = 98.10%</pre><p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第230页找到。</p></li>
+Recall = 98.10%</pre><p class="callout-heading">注意</p><p class="callout">这项活动的解决方案可在第 230 页找到。</p></li>
 			</ol>
 			<h1 id="_idParaDest-102"><a id="_idTextAnchor104"/>错误分析</h1>
-			<p>正如到目前为止所解释的那样，通过使用scikit-learn库，构建一个平均模型非常容易。构建例外模型的关键方面来自于研究者的分析和决策。</p>
+			<p>正如到目前为止所解释的那样，通过使用 scikit-learn 库，构建一个平均模型非常容易。构建例外模型的关键方面来自于研究者的分析和决策。</p>
 			<p>正如我们到目前为止所看到的，一些最重要的任务是选择和预处理数据集，确定研究的目的，以及选择适当的评估指标。在处理完所有这些并考虑到模型需要微调以达到最高标准后，大多数数据科学家建议训练一个简单的模型，不管超参数如何，以开始研究。</p>
 			<p>然后引入误差分析，这是一种非常有用的方法，可以将一个普通模型变成一个特殊模型。顾名思义，它包括分析数据集的不同子集之间的错误，以便在更大范围内针对影响模型的条件。</p>
 			<h2 id="_idParaDest-103"><a id="_idTextAnchor105"/>偏差、方差和数据不匹配</h2>
 			<p>为了理解可能影响机器学习模型的不同条件，理解什么是<strong class="bold">贝叶斯误差</strong>是很重要的。贝叶斯误差，也称为<strong class="bold">不可约误差</strong>，是可以达到的最低可能误差率。</p>
-			<p>在技术和人工智能取得进步之前，贝叶斯误差被认为是人类可以达到的最低可能误差(<strong class="bold">人为误差</strong>)。例如，对于大多数人以0.1的误差率实现的过程，但是顶级专家以0.05的误差率实现的过程，贝叶斯误差将是0.05。</p>
+			<p>在技术和人工智能取得进步之前，贝叶斯误差被认为是人类可以达到的最低可能误差(<strong class="bold">人为误差</strong>)。例如，对于大多数人以 0.1 的误差率实现的过程，但是顶级专家以 0.05 的误差率实现的过程，贝叶斯误差将是 0.05。</p>
 			<p>然而，贝叶斯误差现在已经被重新定义为机器可以达到的最低可能误差，这是未知的，因为作为人类，我们只能理解人类误差的程度。由于这个原因，当使用贝叶斯误差来分析误差时，一旦模型低于人为误差，就不可能知道最低限度。</p>
-			<p>下图有助于分析不同数据集之间的错误率，并确定对模型产生较大影响的条件。此图的目的是找出彼此差异较大的错误，以便可以相应地诊断和改进模型。需要强调的是，每个集合的误差值是通过从100%中减去该集合的评估指标(例如，准确性)来计算的:</p>
+			<p>下图有助于分析不同数据集之间的错误率，并确定对模型产生较大影响的条件。此图的目的是找出彼此差异较大的错误，以便可以相应地诊断和改进模型。需要强调的是，每个集合的误差值是通过从 100%中减去该集合的评估指标(例如，准确性)来计算的:</p>
 			<div><div><img src="img/B15781_03_11.jpg" alt="Figure 3.11: Error analysis methodology&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.11:错误分析方法</p>
+			<p class="figure-caption">图 3.11:错误分析方法</p>
 			<p>考虑到前面的图表，执行误差分析的过程如下:</p>
 			<ol>
 				<li value="1">绩效评估基于所有数据集进行计算。该度量用于计算每个集合的误差。</li>
 				<li>Starting from the bottom to the top, the difference is calculated as follows:<p>从测试集误差(12%)中减去开发集误差(12%)。结果值(0%)被保存。</p><p>从偏差设定误差(12%)中减去列车偏差(9%)。结果值(3%)被保存。</p><p>从训练偏差误差(9%)中减去训练集误差(8%)。结果值(1%)被保存。</p><p>从训练集误差(8%)中减去贝叶斯误差(2%)。结果值(6%)被保存。</p></li>
-				<li>The bigger difference determines the condition that is most seriously affecting the model. In this case, the bigger difference occurs between the Bayes error and the training set error, which, as shown in the preceding diagram, determines that the model is suffering from <em class="italic">high bias</em>. <p class="callout-heading">注意</p><p class="callout">训练/开发集合是训练和验证(开发)集合中数据的组合。它通常与dev集具有相同的形状，并且包含来自两个集的相同数量的数据。</p></li>
+				<li>The bigger difference determines the condition that is most seriously affecting the model. In this case, the bigger difference occurs between the Bayes error and the training set error, which, as shown in the preceding diagram, determines that the model is suffering from <em class="italic">high bias</em>. <p class="callout-heading">注意</p><p class="callout">训练/开发集合是训练和验证(开发)集合中数据的组合。它通常与 dev 集具有相同的形状，并且包含来自两个集的相同数量的数据。</p></li>
 			</ol>
 			<p>下面是对每种情况的解释，以及避免/修复它们的一些技巧:</p>
 			<ul>
@@ -315,10 +315,10 @@ Recall = 98.10%</pre><p class="callout-heading">注意</p><p class="callout">这
 				<li><strong class="bold">Overfitting to the dev set</strong>: Lastly, similar to the variance condition, this occurs when the model is not generalizing but instead is fitting the dev set too well. <p>应该使用解释高差异的相同方法来解决这个问题。</p></li>
 			</ul>
 			<p>在下一个练习中，我们将计算模型在不同数据集上的错误率，这可用于执行错误分析。</p>
-			<h2 id="_idParaDest-104"><a id="_idTextAnchor106"/>练习3.05:计算不同数据集的错误率</h2>
+			<h2 id="_idParaDest-104"><a id="_idTextAnchor106"/>练习 3.05:计算不同数据集的错误率</h2>
 			<p>在本练习中，我们将计算使用决策树训练的模型的错误率。为此，我们将使用乳腺癌数据集。按照以下步骤完成本练习:</p>
 			<ol>
-				<li value="1">打开一个Jupyter笔记本来实现本练习，并导入加载和分割数据集所需的所有元素。这些将用于训练模型并评估其召回:<pre>from sklearn.datasets import load_breast_cancer import pandas as pd from sklearn.model_selection import train_test_split import numpy as np from sklearn import tree from sklearn.metrics import recall_score</pre></li>
+				<li value="1">打开一个 Jupyter 笔记本来实现本练习，并导入加载和分割数据集所需的所有元素。这些将用于训练模型并评估其召回:<pre>from sklearn.datasets import load_breast_cancer import pandas as pd from sklearn.model_selection import train_test_split import numpy as np from sklearn import tree from sklearn.metrics import recall_score</pre></li>
 				<li>在本练习中，将使用<code>breast cancer</code>数据集。使用以下代码加载数据集并创建包含特征和目标矩阵的熊猫数据框架:<pre>breast_cancer = load_breast_cancer() X = pd.DataFrame(breast_cancer.data) Y = pd.DataFrame(breast_cancer.target)</pre></li>
 				<li>Split the dataset into training, validation, and testing sets: <pre>X_new, X_test, Y_new, Y_test = train_test_split(X, Y, \
                                test_size = 0.1, random_state = 101)
@@ -335,7 +335,7 @@ X_train_dev = pd.concat([X_train.iloc[indices_train,:], \
                          X_dev.iloc[indices_dev,:]])
 Y_train_dev = pd.concat([Y_train.iloc[indices_train,:], \
                          Y_dev.iloc[indices_dev,:]])
-print(X_train_dev.shape, Y_train_dev.shape)</pre><p>首先，设置一个随机种子，以确保结果的可重复性。接下来，NumPy <code>random.randint()</code>函数用于从<code>X_train</code>集合中选择随机指数。为此，在0和总长度<code>X_train</code>之间的范围内生成28个随机整数。相同的过程用于生成dev集的随机索引。最后，创建一个新变量来存储选择的<code>X_train</code>和<code>X_dev</code>的值，以及一个变量来存储来自<code>Y_train</code>和<code>Y_dev</code>的相应值。</p><p>已经创建的变量包含来自训练集的25个实例/标签和来自开发集的25个实例/标签。</p><p>集合的最终形状如下:</p><pre>(50, 30) (50, 1)</pre></li>
+print(X_train_dev.shape, Y_train_dev.shape)</pre><p>首先，设置一个随机种子，以确保结果的可重复性。接下来，NumPy <code>random.randint()</code>函数用于从<code>X_train</code>集合中选择随机指数。为此，在 0 和总长度<code>X_train</code>之间的范围内生成 28 个随机整数。相同的过程用于生成 dev 集的随机索引。最后，创建一个新变量来存储选择的<code>X_train</code>和<code>X_dev</code>的值，以及一个变量来存储来自<code>Y_train</code>和<code>Y_dev</code>的相应值。</p><p>已经创建的变量包含来自训练集的 25 个实例/标签和来自开发集的 25 个实例/标签。</p><p>集合的最终形状如下:</p><pre>(50, 30) (50, 1)</pre></li>
 				<li>在训练集上训练一个决策树，如下:<pre>model = tree.DecisionTreeClassifier(random_state = 101) model = model.fit(X_train, Y_train)</pre></li>
 				<li>Use the <code>predict</code> method to generate the predictions for all of your sets (train, train/dev, dev, and test). Next, considering that the objective of the study is to maximize the model's ability to predict all malignant cases, calculate the recall scores for all predictions. Store all of the scores in a variable named <code>scores</code>:<pre>sets = ["Training", "Train/dev", "Validation", "Testing"]
 X_sets = [X_train, X_train_dev, X_dev, X_test]
@@ -347,21 +347,21 @@ for i in range(0, len(X_sets)):
     scores[sets[i]] = score
 print(scores)</pre><p>所有数据集的错误率如下:</p><pre>{'Training': 1.0, 'Train/dev': 0.9705882352941176, 'Validation': 0.9333333333333333, 'Testing': 0.9714285714285714}</pre><p>根据前面的值，可以创建包含错误率的下表:</p><div><img src="img/B15781_03_12.jpg" alt="Figure 3.12: Error rates for all sets of data&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图3.12:所有数据集的错误率</p>
+			<p class="figure-caption">图 3.12:所有数据集的错误率</p>
 			<p>这里，贝叶斯误差被假设为<code>0</code>，考虑到恶性和良性肿块之间的分类是通过对肿块进行活检来完成的。</p>
-			<p>从上表中可以得出结论，考虑到所有错误率都接近于0，这是最低的可能错误，该模型在研究中表现得非常好。</p>
+			<p>从上表中可以得出结论，考虑到所有错误率都接近于 0，这是最低的可能错误，该模型在研究中表现得非常好。</p>
 			<p>在训练/开发集和开发集之间发现错误率的最大差异，这指的是数据不匹配。但是，考虑到所有数据集都来自同一分布，这种情况被认为是一个高方差问题，向训练集添加更多数据应有助于降低错误率。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3e4Toer">https://packt.live/3e4Toer</a>。</p>
-			<p class="callout">你也可以在https://packt.live/2UJzDkW在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<p class="callout">你也可以在 https://packt.live/2UJzDkW 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>您已经成功计算了所有数据子集的错误率。在下一个活动中，我们将执行错误分析，以定义要采取的步骤，从而提高为识别手写数字而创建的模型的性能。</p>
-			<h2 id="_idParaDest-105"><a id="_idTextAnchor107"/>活动3.03:对训练识别手写数字的模型进行错误分析</h2>
+			<h2 id="_idParaDest-105"><a id="_idTextAnchor107"/>活动 3.03:对训练识别手写数字的模型进行错误分析</h2>
 			<p>根据您向您的团队提供的用于测量模型性能的不同度量标准，他们选择了准确性作为理想的度量标准。考虑到这一点，您的团队要求您执行错误分析，以确定如何改进模型。在本练习中，您将通过比较不同集合在模型准确性方面的错误率来执行错误分析。按照以下步骤实现这一点:</p>
 			<ol>
 				<li value="1">导入所需的元素以加载和拆分数据集。我们将这样做来训练模型并测量其准确性。</li>
-				<li>从scikit-learn加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧。</li>
-				<li>将数据分成训练集、验证集和测试集。使用0.1作为测试集的大小，并使用等效的数字来构建相同形状的验证集。</li>
-				<li>为特征和目标值创建一个训练/开发集，其中包含训练集的90个实例/标签和开发集的90个实例/标签。</li>
+				<li>从 scikit-learn 加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧。</li>
+				<li>将数据分成训练集、验证集和测试集。使用 0.1 作为测试集的大小，并使用等效的数字来构建相同形状的验证集。</li>
+				<li>为特征和目标值创建一个训练/开发集，其中包含训练集的 90 个实例/标签和开发集的 90 个实例/标签。</li>
 				<li>在训练集数据上训练决策树。</li>
 				<li>根据模型的准确性计算所有数据集的错误率，并确定影响模型性能的条件。</li>
 			</ol>
@@ -369,9 +369,9 @@ print(scores)</pre><p>所有数据集的错误率如下:</p><pre>{'Training': 1.
 			<div><div><img src="img/B15781_03_13.jpg" alt="Figure 3.13: Expected error rates&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图3.13:预期错误率</p>
+			<p class="figure-caption">图 3.13:预期错误率</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">这项活动的解决方案可在第233页找到。</p>
+			<p class="callout">这项活动的解决方案可在第 233 页找到。</p>
 			<h1 id="_idParaDest-106"><a id="_idTextAnchor108"/>摘要</h1>
 			<p>本章解释了可以通过监督学习算法解决的不同任务:分类和回归。尽管这两种任务的目标都是逼近一个将一组要素映射到输出的函数，但分类任务有离散数量的输出，而回归任务可以有无限个连续值作为输出。</p>
 			<p>当开发机器学习模型来解决监督学习问题时，一个主要目标是模型能够一般化，以便它将适用于未来的未知数据，而不是仅仅很好地学习一组实例，但在新数据上表现不佳。因此，本章解释了验证和测试的方法，这涉及到将数据分成三组:训练组、开发组和测试组。这种方法消除了偏见的风险。</p>

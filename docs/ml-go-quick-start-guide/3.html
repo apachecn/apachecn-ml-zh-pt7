@@ -36,7 +36,7 @@
 
 <p>使用监督学习可以解决数量惊人的问题。许多电子邮件系统使用它来分类电子邮件，无论是重要的还是不重要的，只要有新消息到达收件箱。更复杂的例子包括图像识别系统，它可以纯粹从输入像素值中识别图像包含的内容<sup>【1】</sup>。这些系统首先从庞大的图像数据集学习，这些数据集已经由人类手动标记，但随后能够自动对全新的图像进行分类。甚至有可能使用监督学习来驾驶汽车在赛道上自动行驶:该算法从学习人类驾驶员如何控制车辆开始，最终能够复制这种行为<sup>【2】</sup>。</p>
 
-<p>本章结束时，你将能够使用Go实现两种类型的监督学习:</p>
+<p>本章结束时，你将能够使用 Go 实现两种类型的监督学习:</p>
 
 <ul>
 
@@ -52,7 +52,7 @@
 
 <li>何时使用回归和分类</li>
 
-<li>如何使用Go机器学习库实现回归和分类</li>
+<li>如何使用 Go 机器学习库实现回归和分类</li>
 
 <li>如何衡量算法的性能</li>
 
@@ -119,21 +119,21 @@
 
                 
 
-<p class="mce-root">当开始任何监督学习问题时，第一步是加载和准备数据。我们将从加载<strong> MNIST时尚</strong> <strong>数据集</strong><sup>【3】</sup>开始，这是一个小的灰度图像集合，显示不同的服装项目。我们的工作是建立一个系统，可以识别每个图像中的内容；也就是说，它包含一件衣服、一只鞋、一件外套等等吗？</p>
+<p class="mce-root">当开始任何监督学习问题时，第一步是加载和准备数据。我们将从加载<strong> MNIST 时尚</strong> <strong>数据集</strong><sup>【3】</sup>开始，这是一个小的灰度图像集合，显示不同的服装项目。我们的工作是建立一个系统，可以识别每个图像中的内容；也就是说，它包含一件衣服、一只鞋、一件外套等等吗？</p>
 
-<p>首先，我们需要通过运行代码库中的<kbd>download-fashion-mnist.sh</kbd>脚本来下载数据集。然后，我们将它加载到Go中:</p>
+<p>首先，我们需要通过运行代码库中的<kbd>download-fashion-mnist.sh</kbd>脚本来下载数据集。然后，我们将它加载到 Go 中:</p>
 
 <pre>import (<br/>    "fmt"<br/>     mnist "github.com/petar/GoMNIST"<br/>    "github.com/kniren/gota/dataframe"<br/>    "github.com/kniren/gota/series"<br/>    "math/rand"<br/>    "github.com/cdipaolo/goml/linear"<br/>    "github.com/cdipaolo/goml/base"<br/>    "image"<br/>    "bytes"<br/>    "math"<br/>    "github.com/gonum/stat"<br/>    "github.com/gonum/integrate"<br/>)<br/>set, err := mnist.ReadSet("../datasets/mnist/images.gz", "../datasets/mnist/labels.gz")</pre>
 
-<p>让我们先来看看这些图片的样本。每一个都是28 x 28像素，每个像素的值都在0到255之间。我们将使用这些像素值作为我们算法的输入:我们的系统将接受来自一幅图像的784个输入，并使用它们根据图像包含哪件衣服来对图像进行分类。在Jupyter中，您可以查看如下图像:</p>
+<p>让我们先来看看这些图片的样本。每一个都是 28 x 28 像素，每个像素的值都在 0 到 255 之间。我们将使用这些像素值作为我们算法的输入:我们的系统将接受来自一幅图像的 784 个输入，并使用它们根据图像包含哪件衣服来对图像进行分类。在 Jupyter 中，您可以查看如下图像:</p>
 
 <pre>set.Images[1]</pre>
 
-<p>这将显示数据集中的28 x 28图像之一，如下图所示:</p>
+<p>这将显示数据集中的 28 x 28 图像之一，如下图所示:</p>
 
 <p class="packt_figref CDPAlignCenter CDPAlign"><img src="img/a4ddbc0b-b7bd-4a7e-b2e0-4e8730942184.png" style="font-size: 10pt;text-align: center;width:4.75em;height:4.75em;"/></p>
 
-<p>为了使这些数据适用于机器学习算法，我们需要将其转换为dataframe格式，正如我们在<a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank">第2章</a>、<em>设置开发环境</em>中所学。首先，我们将从数据集中加载前1，000幅图像:</p>
+<p>为了使这些数据适用于机器学习算法，我们需要将其转换为 dataframe 格式，正如我们在<a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank">第 2 章</a>、<em>设置开发环境</em>中所学。首先，我们将从数据集中加载前 1，000 幅图像:</p>
 
 <pre>func MNISTSetToDataframe(st *mnist.Set, maxExamples int) dataframe.DataFrame {<br/> length := maxExamples<br/> if length &gt; len(st.Images) {<br/> length = len(st.Images)<br/> }<br/> s := make([]string, length, length)<br/> l := make([]int, length, length)<br/> for i := 0; i &lt; length; i++ {<br/> s[i] = string(st.Images[i])<br/> l[i] = int(st.Labels[i])<br/> }<br/> var df dataframe.DataFrame<br/> images := series.Strings(s)<br/> images.Name = "Image"<br/> labels := series.Ints(l)<br/> labels.Name = "Label"<br/> df = dataframe.New(images, labels)<br/> return df<br/>}<br/><br/>df := MNISTSetToDataframe(set, 1000)</pre>
 
@@ -141,9 +141,9 @@
 
 <pre>categories := []string{"tshirt", "trouser", "pullover", "dress", "coat", "sandal", "shirt", "shoe", "bag", "boot"}</pre>
 
-<p>为了测试完成的算法，从保留一小部分数据开始非常重要。这使我们能够衡量算法在训练期间没有使用的新数据上的工作情况。如果您不这样做，您很可能会构建一个在训练期间工作得很好，但在面对新数据时表现很差的系统。首先，我们将使用75%的图像来训练我们的模型，25%的图像来测试它。</p>
+<p>为了测试完成的算法，从保留一小部分数据开始非常重要。这使我们能够衡量算法在训练期间没有使用的新数据上的工作情况。如果您不这样做，您很可能会构建一个在训练期间工作得很好，但在面对新数据时表现很差的系统。首先，我们将使用 75%的图像来训练我们的模型，25%的图像来测试它。</p>
 
-<p>使用监督学习时，将您的数据分成<strong>训练集</strong>和<strong>测试集</strong>是至关重要的一步。保留20-30%的数据用于测试是正常的，但是如果你的数据集非常大，你可以少用一些。</p>
+<p>使用监督学习时，将您的数据分成<strong>训练集</strong>和<strong>测试集</strong>是至关重要的一步。保留 20-30%的数据用于测试是正常的，但是如果你的数据集非常大，你可以少用一些。</p>
 
 <p>使用上一章的<kbd>Split(df dataframe.DataFrame, valFraction float64)</kbd>函数准备这两个数据集:</p>
 
@@ -212,9 +212,9 @@
 
 <pre>func EqualsInt(s series.Series, to int) (*series.Series, error) {<br/> eq := make([]int, s.Len(), s.Len())<br/> ints, err := s.Int()<br/> if err != nil {<br/> return nil, err<br/> }<br/> for i := range ints {<br/> if ints[i] == to {<br/> eq[i] = 1<br/> }<br/>    }<br/>    ret := series.Ints(eq)<br/>    return &amp;ret, nil<br/>}<br/><br/>trainingIsTrouser, err1 := EqualsInt(training.Col("Label"), 1)<br/>validationIsTrouser, err2 := EqualsInt(validation.Col("Label"), 1)<br/>if err1 != nil || err2 != nil {<br/>    fmt.Println("Error", err1, err2)<br/>}</pre>
 
-<p>我们还将对像素数据进行规范化，这样，它将由0到1之间的浮点数表示，而不是存储为0到255之间的整数:</p>
+<p>我们还将对像素数据进行规范化，这样，它将由 0 到 1 之间的浮点数表示，而不是存储为 0 到 255 之间的整数:</p>
 
-<p>许多有监督的机器学习算法只有在数据被归一化，即被重新缩放以使其在0和1之间时才能正常工作。如果您在让算法正确训练方面遇到问题，请确保您已经正确地规范化了数据。</p>
+<p>许多有监督的机器学习算法只有在数据被归一化，即被重新缩放以使其在 0 和 1 之间时才能正常工作。如果您在让算法正确训练方面遇到问题，请确保您已经正确地规范化了数据。</p>
 
 <pre>func NormalizeBytes(bs []byte) []float64 {<br/>    ret := make([]float64, len(bs), len(bs))<br/>    for i := range bs {<br/>        ret[i] = float64(bs[i])/255.<br/>    }<br/>    return ret<br/>}<br/><br/>func ImageSeriesToFloats(df dataframe.DataFrame, col string) [][]float64 {<br/>    s := df.Col(col)<br/>    ret := make([][]float64, s.Len(), s.Len())<br/>    for i := 0; i &lt; s.Len(); i++ {<br/>        b := []byte(s.Elem(i).String())<br/>        ret[i] = NormalizeBytes(b)<br/>    }<br/>    return ret<br/>}<br/><br/>trainingImages := ImageSeriesToFloats(training, "Image")<br/>validationImages := ImageSeriesToFloats(validation, "Image")</pre>
 
@@ -277,7 +277,7 @@
 
 <div><strong>Accuracy</strong> measures what proportion of the input data can be classified correctly by the algorithm, for example, 90%, if 90 out of 100 predictions from the algorithm are correct.</div>
 
-<p>在我们的Go代码示例中，我们可以通过循环验证数据集并计算有多少图像被正确分类来测试模型。这将输出98.8%的模型精度:</p>
+<p>在我们的 Go 代码示例中，我们可以通过循环验证数据集并计算有多少图像被正确分类来测试模型。这将输出 98.8%的模型精度:</p>
 
 <pre>//Count correct classifications<br/>var correct = 0.<br/>for i := range validationImages {<br/>  prediction, err := model.Predict(validationImages[i])<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/><br/>  if math.Round(prediction[0]) == validationIsTrouser.Elem(i).Float() {<br/>    correct++<br/>  }<br/>}<br/><br/>//accuracy<br/>correct / float64(len(validationImages))</pre>
 
@@ -332,7 +332,7 @@
 
                 
 
-<p>测量精度可能会产生误导。假设您正在构建一个系统来对医疗患者是否会对一种罕见疾病检测呈阳性进行分类，在数据集中，只有0.1%的例子实际上呈阳性。一个非常糟糕的算法可能预测没有人会检测为阳性，但它有99.9%的准确率，因为这种疾病很罕见。</p>
+<p>测量精度可能会产生误导。假设您正在构建一个系统来对医疗患者是否会对一种罕见疾病检测呈阳性进行分类，在数据集中，只有 0.1%的例子实际上呈阳性。一个非常糟糕的算法可能预测没有人会检测为阳性，但它有 99.9%的准确率，因为这种疾病很罕见。</p>
 
 <p>一个数据集包含一个分类相对于另一个分类的更多示例，称为<strong>不平衡</strong>。在测量算法性能时，需要小心对待不平衡的数据集。</p>
 
@@ -364,7 +364,7 @@
 
 <pre>//precision<br/>truePositives / (truePositives + falsePositives)<br/>//recall<br/>truePositives / (truePositives + falseNegatives)</pre>
 
-<p>对于我们的线性模型，我们得到100%的精度，这意味着没有假阳性，召回率为90.3%。</p>
+<p>对于我们的线性模型，我们得到 100%的精度，这意味着没有假阳性，召回率为 90.3%。</p>
 
 
 
@@ -407,7 +407,7 @@
 
                             
 
-                    <h1 class="header-title">ROC曲线</h1>
+                    <h1 class="header-title">ROC 曲线</h1>
 
                 
 
@@ -421,21 +421,21 @@
 
 <ul>
 
-<li>首先，该模型计算一个介于0和1之间的值，表明给定图像被归类为一条裤子的可能性有多大。</li>
+<li>首先，该模型计算一个介于 0 和 1 之间的值，表明给定图像被归类为一条裤子的可能性有多大。</li>
 
 <li>设置阈值，使得只有得分高于阈值的图像被分类为裤子。设置不同的阈值可以以召回为代价来提高精确度，反之亦然。</li>
 
 </ul>
 
-<p>如果我们观察从0到1 的所有不同阈值的模型输出<em xmlns:epub="http://www.idpf.org/2007/ops">，我们可以更好地理解它有多有用。我们使用所谓的<strong xmlns:epub="http://www.idpf.org/2007/ops">接收器工作特性</strong> ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> ROC </strong>)曲线来实现这一点，该曲线是不同阈值下数据集的真阳性率与假阳性率的关系图。以下三个示例显示了差、中等和非常好的分类器的ROC曲线:</em></p>
+<p>如果我们观察从 0 到 1 的所有不同阈值的模型输出<em xmlns:epub="http://www.idpf.org/2007/ops">，我们可以更好地理解它有多有用。我们使用所谓的<strong xmlns:epub="http://www.idpf.org/2007/ops">接收器工作特性</strong> ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> ROC </strong>)曲线来实现这一点，该曲线是不同阈值下数据集的真阳性率与假阳性率的关系图。以下三个示例显示了差、中等和非常好的分类器的 ROC 曲线:</em></p>
 
 <div><img class="alignnone size-full wp-image-385 image-border" src="img/34189d2a-5b38-4024-8e0c-0eaa87b148d0.png" style="width:57.08em;height:18.25em;"/></div>
 
-<p>通过测量这些ROC曲线下的阴影面积，我们得到了模型有多好的一个简单度量，它被称为曲线下的面积 ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> AUC) </strong>。对于差的模型来说，这接近于<strong xmlns:epub="http://www.idpf.org/2007/ops"> 0.5 </strong>，但是对于非常好的模型来说，这接近于<strong xmlns:epub="http://www.idpf.org/2007/ops"> 1.0 </strong>，表明该模型能够同时实现<em xmlns:epub="http://www.idpf.org/2007/ops">高的真阳性率和低的假阳性率。</em></p>
+<p>通过测量这些 ROC 曲线下的阴影面积，我们得到了模型有多好的一个简单度量，它被称为曲线下的面积 ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> AUC) </strong>。对于差的模型来说，这接近于<strong xmlns:epub="http://www.idpf.org/2007/ops"> 0.5 </strong>，但是对于非常好的模型来说，这接近于<strong xmlns:epub="http://www.idpf.org/2007/ops"> 1.0 </strong>，表明该模型能够同时实现<em xmlns:epub="http://www.idpf.org/2007/ops">高的真阳性率和低的假阳性率。</em></p>
 
-<p><kbd>gonum</kbd> / <kbd>stat</kbd>包为计算ROC曲线提供了一个有用的函数，一旦我们扩展了模型以处理数据集中的每一件不同的衣服，我们将使用这个函数。</p>
+<p><kbd>gonum</kbd> / <kbd>stat</kbd>包为计算 ROC 曲线提供了一个有用的函数，一旦我们扩展了模型以处理数据集中的每一件不同的衣服，我们将使用这个函数。</p>
 
-<p><strong>接收器工作特性</strong>或<strong> ROC曲线</strong>，是不同阈值下真阳性率与假阳性率的关系图。它让我们可以直观地看到模型在分类方面有多好。AUC给出了分类器有多好的简单度量。</p>
+<p><strong>接收器工作特性</strong>或<strong> ROC 曲线</strong>，是不同阈值下真阳性率与假阳性率的关系图。它让我们可以直观地看到模型在分类方面有多好。AUC 给出了分类器有多好的简单度量。</p>
 
 
 
@@ -490,29 +490,29 @@
 
 <p>到目前为止，我们一直使用<strong>二元分类法</strong>；也就是说，如果图像显示一条裤子，它应该输出<kbd>true</kbd>，否则输出<kbd>false</kbd>。对于一些问题，比如检测一封邮件是否重要，这就是我们所需要的。但是在这个例子中，我们真正想要的是一个模型，它可以识别我们数据集中所有不同类型的服装，即衬衫、靴子、连衣裙等等。</p>
 
-<p>对于一些算法实现，您需要从对输出应用单热编码开始，如<a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank"/> <a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank">第2章</a>，<em>设置开发环境</em>中所示。然而，对于我们的例子，我们将在<strong> goml/linear </strong>中使用<strong> softmax regression </strong>，它会自动完成这一步。我们可以通过简单地将输入(像素值)和整数输出(0，1，2，...代表t恤、裤子、套头衫等):</p>
+<p>对于一些算法实现，您需要从对输出应用单热编码开始，如<a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank"/> <a href="532d8304-b31d-41ef-81c1-b13f4c692824.xhtml" target="_blank">第 2 章</a>，<em>设置开发环境</em>中所示。然而，对于我们的例子，我们将在<strong> goml/linear </strong>中使用<strong> softmax regression </strong>，它会自动完成这一步。我们可以通过简单地将输入(像素值)和整数输出(0，1，2，...代表 t 恤、裤子、套头衫等):</p>
 
 <pre>model2 := linear.NewSoftmax(base.BatchGA, 1e-4, 1, 10, 100, trainingImages, training.Col("Label").Float())<br/><br/>//Train<br/>err := model2.Learn()<br/>if err != nil {<br/>  fmt.Println(err)<br/>}</pre>
 
-<p>当使用这个模型进行推理时，它将为每个类别输出一个概率向量；也就是说，它告诉我们输入图像是t恤、裤子等等的概率。这正是我们进行ROC分析所需要的，但是，如果我们想要对每幅图像进行一次预测，我们可以使用下面的函数来查找具有最高<em xmlns:epub="http://www.idpf.org/2007/ops">概率的类:</em></p>
+<p>当使用这个模型进行推理时，它将为每个类别输出一个概率向量；也就是说，它告诉我们输入图像是 t 恤、裤子等等的概率。这正是我们进行 ROC 分析所需要的，但是，如果我们想要对每幅图像进行一次预测，我们可以使用下面的函数来查找具有最高<em xmlns:epub="http://www.idpf.org/2007/ops">概率的类:</em></p>
 
 <pre>func MaxIndex(f []float64) (i int) {<br/>  var (<br/>    curr float64<br/>    ix int = -1<br/>  )<br/>  for i := range f {<br/>    if f[i] &gt; curr {<br/>      curr = f[i]<br/>      ix = i<br/>    }<br/>  }<br/>  return ix<br/>}</pre>
 
-<p>接下来，我们可以绘制各个类别的ROC曲线和AUC。以下代码将循环验证数据集中的每个示例，并使用新模型预测每个类的概率:</p>
+<p>接下来，我们可以绘制各个类别的 ROC 曲线和 AUC。以下代码将循环验证数据集中的每个示例，并使用新模型预测每个类的概率:</p>
 
 <pre>//create objects for ROC generation<br/>//as per https://godoc.org/github.com/gonum/stat#ROC<br/>y := make([][]float64, len(categories), len(categories))<br/>classes := make([][]bool, len(categories), len(categories))<br/>//Validate<br/>for i := 0; i &lt; validation.Col("Image").Len(); i++ {<br/>  prediction, err := model2.Predict(validationImages[i])<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/>  for j := range categories {<br/>    y[j] = append(y[j], prediction[j])<br/>    classes[j] = append(classes[j], validation.Col("Label").Elem(i).Float() != float64(j))<br/>  }<br/>}<br/><br/>//Calculate ROC<br/>tprs := make([][]float64, len(categories), len(categories))<br/>fprs := make([][]float64, len(categories), len(categories))<br/><br/>for i := range categories {<br/>  stat.SortWeightedLabeled(y[i], classes[i], nil)<br/>  tprs[i], fprs[i] = stat.ROC(0, y[i], classes[i], nil)<br/>}<br/><br/></pre>
 
-<p>我们现在可以计算每个类别的AUC值，这表明我们的模型在某些类别上比其他类别表现得更好:</p>
+<p>我们现在可以计算每个类别的 AUC 值，这表明我们的模型在某些类别上比其他类别表现得更好:</p>
 
 <pre>for i := range categories {<br/>  fmt.Println(categories[i])<br/>  auc := integrate.Trapezoidal(fprs[i], tprs[i])<br/>  fmt.Println(auc)<br/>}</pre>
 
-<p>对于裤子，AUC值是<kbd>0.96</kbd>，表明在这种情况下，即使简单的线性模型也能很好地工作。不过衬衫和套头衫的得分都接近<kbd>0.6</kbd>。这具有直观的意义:衬衫和套头衫看起来非常相似，因此模型更难正确识别。我们可以通过将每个类别的ROC曲线绘制为单独的线来更清楚地看到这一点:该模型显然在衬衫和套头衫上表现最差，在具有非常独特形状的衣服(靴子、裤子、凉鞋等)上表现最好。</p>
+<p>对于裤子，AUC 值是<kbd>0.96</kbd>，表明在这种情况下，即使简单的线性模型也能很好地工作。不过衬衫和套头衫的得分都接近<kbd>0.6</kbd>。这具有直观的意义:衬衫和套头衫看起来非常相似，因此模型更难正确识别。我们可以通过将每个类别的 ROC 曲线绘制为单独的线来更清楚地看到这一点:该模型显然在衬衫和套头衫上表现最差，在具有非常独特形状的衣服(靴子、裤子、凉鞋等)上表现最好。</p>
 
-<p>以下代码加载gonums绘图库，创建ROC绘图，并将其保存为JPEG图像:</p>
+<p>以下代码加载 gonums 绘图库，创建 ROC 绘图，并将其保存为 JPEG 图像:</p>
 
 <pre>import (<br/>  "gonum.org/v1/plot"<br/>  "gonum.org/v1/plot/plotter"<br/>  "gonum.org/v1/plot/plotutil"<br/>  "gonum.org/v1/plot/vg"<br/>  "bufio"<br/>)<br/><br/>func plotROCBytes(fprs, tprs [][]float64, labels []string) []byte {<br/>  p, err := plot.New()<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/><br/>  p.Title.Text = "ROC Curves"<br/>  p.X.Label.Text = "False Positive Rate"<br/>  p.Y.Label.Text = "True Positive Rate"<br/><br/>  for i := range labels {<br/>    pts := make(plotter.XYs, len(fprs[i]))<br/>    for j := range fprs[i] {<br/>      pts[j].X = fprs[i][j]<br/>      pts[j].Y = tprs[i][j]<br/>    }<br/>    lines, points, err := plotter.NewLinePoints(pts)<br/>    if err != nil {<br/>      panic(err)<br/>    }<br/>    lines.Color = plotutil.Color(i)<br/>    lines.Width = 2<br/>    points.Shape = nil<br/><br/>    p.Add(lines, points)<br/>    p.Legend.Add(labels[i], lines, points)<br/>  }<br/><br/>  w, err := p.WriterTo(5*vg.Inch, 4*vg.Inch, "jpg")<br/>  if err != nil {<br/>    panic(err)<br/>  }<br/>  if err := p.Save(5*vg.Inch, 4*vg.Inch, "Multi-class ROC.jpg"); err != nil {<br/>    panic(err)<br/>  }<br/>  var b bytes.Buffer<br/>  writer := bufio.NewWriter(&amp;b)<br/>  w.WriteTo(writer)<br/>  return b.Bytes()<br/>}</pre>
 
-<p>如果我们查看Jupyter的图，我们可以看到最差的类沿着接近对角线的线，再次表明AUC接近<kbd>0.5</kbd>:</p>
+<p>如果我们查看 Jupyter 的图，我们可以看到最差的类沿着接近对角线的线，再次表明 AUC 接近<kbd>0.5</kbd>:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-436 image-border" src="img/c384cecc-fbc7-4f0a-9daf-7377d5e36731.png" style="width:30.50em;height:24.58em;"/></p>
 
@@ -567,25 +567,25 @@
 
                 
 
-<p>为了前进，我们需要使用不同的机器学习算法:一种能够模拟像素输入和输出类之间更复杂的非线性关系的算法。虽然一些主流的围棋机器学习库(如Golearn)支持像局部最小二乘法这样的基本算法，但没有一个库支持像Python的scikit-learn或R的标准库那样广泛的算法集。由于这个原因，通常有必要搜索实现与广泛使用的C库的绑定的替代库，或者包含适用于特定问题的算法的可配置实现的替代库。对于这个例子，我们将使用一种叫做<strong>支持向量机</strong> ( <strong> SVM </strong>)的算法。与线性模型相比，支持向量机可能更难使用，因为它们需要调整的参数更多，但其优势在于能够对数据中更复杂的模式进行建模。</p>
+<p>为了前进，我们需要使用不同的机器学习算法:一种能够模拟像素输入和输出类之间更复杂的非线性关系的算法。虽然一些主流的围棋机器学习库(如 Golearn)支持像局部最小二乘法这样的基本算法，但没有一个库支持像 Python 的 scikit-learn 或 R 的标准库那样广泛的算法集。由于这个原因，通常有必要搜索实现与广泛使用的 C 库的绑定的替代库，或者包含适用于特定问题的算法的可配置实现的替代库。对于这个例子，我们将使用一种叫做<strong>支持向量机</strong> ( <strong> SVM </strong>)的算法。与线性模型相比，支持向量机可能更难使用，因为它们需要调整的参数更多，但其优势在于能够对数据中更复杂的模式进行建模。</p>
 
 <p>SVM <strong> </strong>是一种更高级的机器学习方法，既可以用于分类，也可以用于回归。它们允许我们将<strong>内核</strong>应用于输入数据，这意味着它们可以模拟输入/输出之间的非线性关系。</p>
 
-<p>SVM模型的一个重要特征是它们能够使用内核函数。简而言之，这意味着该算法可以对输入数据进行变换，从而找到非线性模式。对于我们的例子，我们将使用<strong> LIBSVM </strong>库来训练图像数据上的SVM。LIBSVM是一个开源库，绑定了许多不同的语言，这意味着如果您想移植Python流行的scikit-learn库中构建的模型，它也很有用。首先，我们需要做一些数据准备，使我们的输入/输出数据适合输入到Go库:</p>
+<p>SVM 模型的一个重要特征是它们能够使用内核函数。简而言之，这意味着该算法可以对输入数据进行变换，从而找到非线性模式。对于我们的例子，我们将使用<strong> LIBSVM </strong>库来训练图像数据上的 SVM。LIBSVM 是一个开源库，绑定了许多不同的语言，这意味着如果您想移植 Python 流行的 scikit-learn 库中构建的模型，它也很有用。首先，我们需要做一些数据准备，使我们的输入/输出数据适合输入到 Go 库:</p>
 
 <pre>trainingOutputs := make([]float64, len(trainingImages))<br/>validationOutputs := make([]float64, len(validationImages))<br/><br/>ltCol:= training.Col("Label")<br/>for i := range trainingImages {<br/>    trainingOutputs[i] = ltCol.Elem(i).Float()<br/>}<br/><br/>lvCol:= validation.Col("Label")<br/>for i := range validationImages {<br/>    validationOutputs[i] = lvCol.Elem(i).Float()<br/>}<br/><br/>// FloatstoSVMNode converts a slice of float64 to SVMNode with sequential indices starting at 1<br/>func FloatsToSVMNode(f []float64) []libsvm.SVMNode {<br/>    ret := make([]libsvm.SVMNode, len(f), len(f))<br/>    for i := range f {<br/>        ret[i] = libsvm.SVMNode{<br/>            Index: i+1,<br/>            Value: f[i],<br/>        }<br/>    }<br/>    //End of Vector<br/>    ret = append(ret, libsvm.SVMNode{<br/>        Index: -1,<br/>        Value: 0,<br/>    })<br/>    return ret<br/>}</pre>
 
-<p>接下来，我们可以建立SVM模型，并用<strong>径向基函数</strong> ( <strong> RBF </strong> ) <strong>内核</strong>对其进行配置。使用支持向量机时，RBF核是一种常见的选择，但比线性模型需要更长的训练时间:</p>
+<p>接下来，我们可以建立 SVM 模型，并用<strong>径向基函数</strong> ( <strong> RBF </strong> ) <strong>内核</strong>对其进行配置。使用支持向量机时，RBF 核是一种常见的选择，但比线性模型需要更长的训练时间:</p>
 
 <pre>var (<br/>  trainingProblem libsvm.SVMProblem<br/>  validationProblem libsvm.SVMProblem<br/>)<br/><br/>trainingProblem.L = len(trainingImages)<br/>validationProblem.L = len(validationImages)<br/>for i := range trainingImages {<br/>  trainingProblem.X = append(trainingProblem.X, FloatsToSVMNode(trainingImages[i]))<br/>}<br/>trainingProblem.Y = trainingOutputs<br/><br/>for i := range validationImages {<br/>  validationProblem.X = append(validationProblem.X, FloatsToSVMNode(validationImages[i]))<br/>}<br/>validationProblem.Y = validationOutputs<br/><br/>// configure SVM<br/>svm := libsvm.NewSvm()<br/>param := libsvm.SVMParameter{<br/>  SvmType: libsvm.CSVC,<br/>  KernelType: libsvm.RBF,<br/>  C: 100,<br/>  Gamma: 0.01,<br/>  Coef0: 0,<br/>  Degree: 3,<br/>  Eps: 0.001,<br/>  Probability: 1,<br/>}</pre>
 
 <p class="mce-root"/>
 
-<p>最后，我们可以将我们的模型拟合到750幅图像的训练数据，然后使用<kbd>svm.SVMPredictProbability</kbd>来预测概率，就像我们对线性多类模型所做的那样:</p>
+<p>最后，我们可以将我们的模型拟合到 750 幅图像的训练数据，然后使用<kbd>svm.SVMPredictProbability</kbd>来预测概率，就像我们对线性多类模型所做的那样:</p>
 
 <pre>model := svm.SVMTrain(&amp;trainingProblem, &amp;param)</pre>
 
-<p>正如我们之前所做的，我们计算了AUC和ROC曲线，这表明该模型在所有方面都表现得更好，包括像衬衫和套头衫这样的困难类别:</p>
+<p>正如我们之前所做的，我们计算了 AUC 和 ROC 曲线，这表明该模型在所有方面都表现得更好，包括像衬衫和套头衫这样的困难类别:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-438 image-border" src="img/91329032-d01f-413b-8771-7773e3317475.png" style="width:32.83em;height:26.25em;"/></p>
 
@@ -640,7 +640,7 @@
 
                 
 
-<p class="mce-root">SVM模型在我们的验证数据集上的表现比线性模型好得多，但是，为了理解下一步该做什么，我们需要引入机器学习中的两个重要概念:<strong>过拟合</strong>和<strong>欠拟合</strong>。这两者都是指在训练模型时可能出现的问题。</p>
+<p class="mce-root">SVM 模型在我们的验证数据集上的表现比线性模型好得多，但是，为了理解下一步该做什么，我们需要引入机器学习中的两个重要概念:<strong>过拟合</strong>和<strong>欠拟合</strong>。这两者都是指在训练模型时可能出现的问题。</p>
 
 <p>如果模型<strong>对数据</strong>的拟合不足，那么<em>太简单</em>无法解释输入数据中的模式，因此在针对训练数据集和验证数据集进行评估时表现不佳。这个问题的另一个术语是模型有<strong>高偏差</strong>。<strong> <br/> <br/> </strong>如果一个模型<strong>过度拟合</strong>数据，那么它<em>太复杂</em>，并且不能很好地推广到没有作为训练的一部分包括的新数据点。这意味着该模型在根据定型数据进行评估时表现良好，但在根据验证数据集进行评估时表现不佳。这个问题的另一个术语是模型有<strong>高方差</strong>。</p>
 
@@ -648,7 +648,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-388 image-border" src="img/6397e42b-9573-4cf2-b611-c61ad5259c07.png" style="width:57.08em;height:17.17em;"/></p>
 
-<p>我们的线性模型存在拟合不足的问题:建模所有类别之间的差异过于简单。查看SVM的准确性，我们可以看到它在训练数据上的得分为100%，但在验证上的得分仅为82%。这是一个明显的信号，表明它正在过度拟合:与它训练过的图像相比，它在分类新图像方面要差得多。</p>
+<p>我们的线性模型存在拟合不足的问题:建模所有类别之间的差异过于简单。查看 SVM 的准确性，我们可以看到它在训练数据上的得分为 100%，但在验证上的得分仅为 82%。这是一个明显的信号，表明它正在过度拟合:与它训练过的图像相比，它在分类新图像方面要差得多。</p>
 
 <p>处理过度拟合的一种方法是使用更多的训练数据:如果训练数据集足够大，即使复杂的模型也无法过度拟合。另一种方法是引入正则化:许多机器学习模型都有一个参数，你可以调整它来减少过度拟合。</p>
 
@@ -703,19 +703,19 @@
 
                 
 
-<p>到目前为止，我们已经使用SVM改进了模型的性能，但是仍然面临两个问题:</p>
+<p>到目前为止，我们已经使用 SVM 改进了模型的性能，但是仍然面临两个问题:</p>
 
 <ul>
 
-<li>我们的SVM过度拟合了训练数据。</li>
+<li>我们的 SVM 过度拟合了训练数据。</li>
 
-<li>也很难扩展到60，000张图像的完整数据集:尝试用更多图像训练最后一个例子，你会发现它变得<em>慢得多</em>。如果我们将数据点的数量增加一倍，SVM算法花费的时间会比T4多一倍。</li>
+<li>也很难扩展到 60，000 张图像的完整数据集:尝试用更多图像训练最后一个例子，你会发现它变得<em>慢得多</em>。如果我们将数据点的数量增加一倍，SVM 算法花费的时间会比 T4 多一倍。</li>
 
 </ul>
 
 <p>在本节中，我们将使用一个<strong>深度神经网络</strong>来解决这个问题。这些类型的模型已经能够在图像分类任务以及许多其他机器学习问题上实现最先进的性能。它们能够模拟复杂的非线性模式，也可以很好地扩展到大型数据集。</p>
 
-<p class="mce-root">数据科学家将经常使用Python来开发和训练神经网络，因为它可以访问得到非常好支持的深度学习框架，如<strong> TensorFlow </strong>和<strong> Keras </strong>。这些框架使得构建复杂的神经网络并在大型数据集上训练它们比以往任何时候都更容易。它们通常是构建复杂的深度学习模型的最佳选择。在<a href="815e42bb-64e4-4f04-9dbd-c58af28f2580.xhtml" target="_blank">第5章</a>、<em>使用预训练模型</em>中，我们将看看如何从Python中导出一个训练好的模型，然后从Go中调用它进行推理。在本节中，我们将使用<kbd>go-deep</kbd>库从头开始构建一个更简单的神经网络来演示关键概念。</p>
+<p class="mce-root">数据科学家将经常使用 Python 来开发和训练神经网络，因为它可以访问得到非常好支持的深度学习框架，如<strong> TensorFlow </strong>和<strong> Keras </strong>。这些框架使得构建复杂的神经网络并在大型数据集上训练它们比以往任何时候都更容易。它们通常是构建复杂的深度学习模型的最佳选择。在<a href="815e42bb-64e4-4f04-9dbd-c58af28f2580.xhtml" target="_blank">第 5 章</a>、<em>使用预训练模型</em>中，我们将看看如何从 Python 中导出一个训练好的模型，然后从 Go 中调用它进行推理。在本节中，我们将使用<kbd>go-deep</kbd>库从头开始构建一个更简单的神经网络来演示关键概念。</p>
 
 
 
@@ -794,7 +794,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-137 image-border" src="img/d68fe958-c58f-4f05-b0d9-e351c81c13da.png" style="width:37.25em;height:21.25em;"/></p>
 
-<p>据说这个网络中的神经元排列成全连接或T21密集层。计算能力和软件方面的最新进展使得研究人员能够构建和训练比以往更复杂的神经网络架构。例如，最先进的图像识别系统可能包含数百万个单独的砝码，并且需要许多天的计算时间来训练所有这些参数以适应大型数据集。它们通常包含不同的神经元排列，例如，在<strong>卷积层</strong>中，它们在这些类型的系统中执行更专业的学习。</p>
+<p>据说这个网络中的神经元排列成全连接或 T21 密集层。计算能力和软件方面的最新进展使得研究人员能够构建和训练比以往更复杂的神经网络架构。例如，最先进的图像识别系统可能包含数百万个单独的砝码，并且需要许多天的计算时间来训练所有这些参数以适应大型数据集。它们通常包含不同的神经元排列，例如，在<strong>卷积层</strong>中，它们在这些类型的系统中执行更专业的学习。</p>
 
 <p>在实践中成功使用深度学习所需的大部分技能涉及对如何选择和调整网络以获得良好性能的广泛理解。有许多博客和在线资源提供了关于这些网络如何工作以及它们所应用的问题类型的更多细节。</p>
 
@@ -859,15 +859,15 @@
 
 <li>输入层</li>
 
-<li>两个隐藏层，每个包含128个神经元</li>
+<li>两个隐藏层，每个包含 128 个神经元</li>
 
-<li>10个神经元的输出层(数据集中的每个输出类一个)</li>
+<li>10 个神经元的输出层(数据集中的每个输出类一个)</li>
 
 <li>隐含层中的每个神经元将使用一个<strong>整流线性单元</strong> ( <strong> ReLU </strong>)作为其输出函数</li>
 
 </ul>
 
-<p>ReLUs是神经网络中激活函数的常见选择。它们是将非线性引入模型的非常简单的方法。其他常见的激活功能包括<strong>逻辑</strong>功能和<strong> tanh </strong>功能。</p>
+<p>ReLUs 是神经网络中激活函数的常见选择。它们是将非线性引入模型的非常简单的方法。其他常见的激活功能包括<strong>逻辑</strong>功能和<strong> tanh </strong>功能。</p>
 
 <p><kbd>go-deep</kbd>库让我们可以非常快速地构建这个架构:</p>
 
@@ -934,7 +934,7 @@
 
 <pre>// Parameters: learning rate, momentum, alpha decay, nesterov<br/>optimizer := training.NewSGD(0.006, 0.1, 1e-6, true)<br/>trainer := training.NewTrainer(optimizer, 1)<br/><br/>trainer.Train(network, trainingExamples, validationExamples, 500) <br/>// training, validation, iterations</pre>
 
-<p>这个神经网络在训练和验证数据集上都提供了80%的准确率，这是模型没有过度拟合的好迹象。看看能不能通过调整网络架构和重新训练来提高它的性能。在<a href="815e42bb-64e4-4f04-9dbd-c58af28f2580.xhtml" target="_blank">第5章</a>、<em>使用预训练的模型</em>中，我们将通过用Python构建一个更复杂的神经网络，然后将其导出到Go，来重温这个例子。</p>
+<p>这个神经网络在训练和验证数据集上都提供了 80%的准确率，这是模型没有过度拟合的好迹象。看看能不能通过调整网络架构和重新训练来提高它的性能。在<a href="815e42bb-64e4-4f04-9dbd-c58af28f2580.xhtml" target="_blank">第 5 章</a>、<em>使用预训练的模型</em>中，我们将通过用 Python 构建一个更复杂的神经网络，然后将其导出到 Go，来重温这个例子。</p>
 
 
 
@@ -989,11 +989,11 @@
 
 <p>在掌握了<em>分类</em>部分中的许多关键机器学习概念之后，在这一部分，我们将把我们所学的应用到一个回归问题中。我们将使用一个数据集，其中包含加利福尼亚州不同地点的房屋群信息。我们的目标是使用输入数据(如纬度/经度位置、中值房屋大小、年龄等)来预测每个组中的中值房价。</p>
 
-<p>使用<kbd>download-housing.sh</kbd>脚本下载数据集，然后将其加载到Go:</p>
+<p>使用<kbd>download-housing.sh</kbd>脚本下载数据集，然后将其加载到 Go:</p>
 
 <pre>import (<br/>    "fmt"<br/>    "github.com/kniren/gota/dataframe"<br/>    "github.com/kniren/gota/series"<br/>    "math/rand"<br/>    "image"<br/>    "bytes"<br/>    "math"<br/>    "github.com/gonum/stat"<br/>    "github.com/gonum/integrate"<br/>    "github.com/sajari/regression"<br/>    "io/ioutil"<br/>)<br/><br/>const path = "../datasets/housing/CaliforniaHousing/cal_housing.data"<br/><br/>columns := []string{"longitude", "latitude", "housingMedianAge", "totalRooms", "totalBedrooms", "population", "households", "medianIncome", "medianHouseValue"}<br/>b, err := ioutil.ReadFile(path)<br/>if err != nil {<br/>    fmt.Println("Error!", err)<br/>}<br/>df := dataframe.ReadCSV(bytes.NewReader(b), dataframe.Names(columns...))</pre>
 
-<p>我们需要进行一些数据准备，以在数据框架中创建代表每个地区房屋的平均房间和卧室数量以及平均入住率的列。我们还将把中值房价调整为100，000美元的单位:</p>
+<p>我们需要进行一些数据准备，以在数据框架中创建代表每个地区房屋的平均房间和卧室数量以及平均入住率的列。我们还将把中值房价调整为 100，000 美元的单位:</p>
 
 <pre>// Divide divides two series and returns a series with the given name. The series must have the same length.<br/>func Divide(s1 series.Series, s2 series.Series, name string) series.Series {<br/>    if s1.Len() != s2.Len() {<br/>        panic("Series must have the same length!")<br/>    }<br/>    <br/>    ret := make([]interface{}, s1.Len(), s1.Len())<br/>    for i := 0; i &lt; s1.Len(); i ++ {<br/>        ret[i] = s1.Elem(i).Float()/s2.Elem(i).Float()<br/>    }<br/>    s := series.Floats(ret)<br/>    s.Name = name<br/>    return s<br/>}<br/><br/>// MultiplyConst multiplies the series by a constant and returns another series with the same name.<br/>func MultiplyConst(s series.Series, f float64) series.Series {<br/>    ret := make([]interface{}, s.Len(), s.Len())<br/>    for i := 0; i &lt; s.Len(); i ++ {<br/>        ret[i] = s.Elem(i).Float()*f<br/>    }<br/>    ss := series.Floats(ret)<br/>    ss.Name = s.Name<br/>    return ss<br/>}<br/><br/>df = df.Mutate(Divide(df.Col("totalRooms"), df.Col("households"), "averageRooms"))<br/>df = df.Mutate(Divide(df.Col("totalBedrooms"), df.Col("households"), "averageBedrooms"))<br/>df = df.Mutate(Divide(df.Col("population"), df.Col("households"), "averageOccupancy"))<br/>df = df.Mutate(MultiplyConst(df.Col("medianHouseValue"), 0.00001))<br/>df = df.Select([]string{"medianIncome", "housingMedianAge", "averageRooms", "averageBedrooms", "population", "averageOccupancy", "latitude", "longitude", "medianHouseValue" })</pre>
 
@@ -1054,9 +1054,9 @@
 
 <p>与分类示例一样，我们将从使用线性模型作为基线开始。不过，这次我们预测的是一个<strong>连续输出变量</strong>，所以我们需要一个不同的性能指标。用于回归的一个常见指标是<strong>均方误差</strong> ( <strong> MSE </strong>)，即模型预测和真实值之间的平方差之和。通过使用<em>平方</em>误差，我们确保低估和高估的值增加是真实值。</p>
 
-<p>回归问题的MSE的一个常见替代方法是平均绝对误差 ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> MAE </strong>)。当输入数据包含异常值时，这很有用。</p>
+<p>回归问题的 MSE 的一个常见替代方法是平均绝对误差 ( <strong xmlns:epub="http://www.idpf.org/2007/ops"> MAE </strong>)。当输入数据包含异常值时，这很有用。</p>
 
-<p>使用Golang回归库，我们可以按如下方式训练模型:</p>
+<p>使用 Golang 回归库，我们可以按如下方式训练模型:</p>
 
 <pre>model := new(regression.Regression)<br/><br/>for i := range trainingX {<br/>  model.Train(regression.DataPoint(trainingY[i], trainingX[i]))<br/>}<br/>if err := model.Run(); err != nil {<br/>  fmt.Println(err)<br/>}</pre>
 
@@ -1123,11 +1123,11 @@
 
 <pre>func FloatsToInterfaces(f []float64) []interface{} {<br/>    iif := make([]interface{}, len(f), len(f))<br/>    for i := range f {<br/>        iif[i] = f[i]<br/>    }<br/>    return iif<br/>}<br/><br/>tx, trainingY := DataFrameToXYs(training, "medianHouseValue")<br/>vx, validationY := DataFrameToXYs(validation, "medianHouseValue")<br/><br/>var (<br/>    trainingX = make([][]interface{}, len(tx), len(tx))<br/>    validationX = make([][]interface{}, len(vx), len(vx))<br/>)<br/><br/>for i := range tx {<br/>    trainingX[i] = FloatsToInterfaces(tx[i])<br/>}<br/>for i := range vx {<br/>    validationX[i] = FloatsToInterfaces(vx[i])<br/>}</pre>
 
-<p>现在，我们可以拟合一个包含25个底层决策树的随机森林:</p>
+<p>现在，我们可以拟合一个包含 25 个底层决策树的随机森林:</p>
 
 <pre>model := Regression.BuildForest(trainingX, trainingY, 25, len(trainingX), 1)</pre>
 
-<p>这使得验证集上的<kbd>0.29</kbd>的MSE有了很大的改进，但是显示出过度拟合的迹象，在训练数据上只有<kbd>0.05</kbd>的误差。</p>
+<p>这使得验证集上的<kbd>0.29</kbd>的 MSE 有了很大的改进，但是显示出过度拟合的迹象，在训练数据上只有<kbd>0.05</kbd>的误差。</p>
 
 
 
@@ -1180,7 +1180,7 @@
 
                 
 
-<p>您可以在该数据集上尝试许多其他回归模型。事实上，我们在前面的例子中使用的SVM和深度学习模型也可以适用于回归问题。看看是否可以通过使用不同的模型来提高随机森林的性能。请记住，其中一些模型需要对数据进行规范化，以便对它们进行适当的训练。</p>
+<p>您可以在该数据集上尝试许多其他回归模型。事实上，我们在前面的例子中使用的 SVM 和深度学习模型也可以适用于回归问题。看看是否可以通过使用不同的模型来提高随机森林的性能。请记住，其中一些模型需要对数据进行规范化，以便对它们进行适当的训练。</p>
 
 
 
@@ -1294,17 +1294,17 @@
 
 <ol>
 
-<li><a href="http://yann.lecun.com/exdb/lenet/">http://yann.lecun.com/exdb/lenet/</a>。检索时间2019年3月24日。</li>
+<li><a href="http://yann.lecun.com/exdb/lenet/">http://yann.lecun.com/exdb/lenet/</a>。检索时间 2019 年 3 月 24 日。</li>
 
-<li><a href="https://blogs.nvidia.com/blog/2016/05/06/self-driving-cars-3/">https://blogs . NVIDIA . com/blog/2016/05/06/自驾-汽车-3/ </a>。检索时间2019年3月24日。</li>
+<li><a href="https://blogs.nvidia.com/blog/2016/05/06/self-driving-cars-3/">https://blogs . NVIDIA . com/blog/2016/05/06/自驾-汽车-3/ </a>。检索时间 2019 年 3 月 24 日。</li>
 
-<li>【https://github.com/zalandoresearch/fashion-mnist】T4。检索时间2019年3月24日。</li>
+<li>【https://github.com/zalandoresearch/fashion-mnist】T4。检索时间 2019 年 3 月 24 日。</li>
 
-<li><a href="http://colah.github.io/">http://colah.github.io/</a>。检索时间2019年5月15日。</li>
+<li><a href="http://colah.github.io/">http://colah.github.io/</a>。检索时间 2019 年 5 月 15 日。</li>
 
-<li><a href="https://karpathy.github.io/">https://karpathy.github.io/</a>。检索时间2019年5月15日。</li>
+<li><a href="https://karpathy.github.io/">https://karpathy.github.io/</a>。检索时间 2019 年 5 月 15 日。</li>
 
-<li><a href="http://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html">http://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html</a>。检索时间2019年3月24日。</li>
+<li><a href="http://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html">http://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html</a>。检索时间 2019 年 3 月 24 日。</li>
 
 </ol>
 

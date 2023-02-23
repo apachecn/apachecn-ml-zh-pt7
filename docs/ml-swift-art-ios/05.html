@@ -15,7 +15,7 @@
             
             
                 
-<p>在许多实际应用中，数据以列表的形式出现(有序或无序):购物清单、播放列表、访问过的位置或URL、应用程序日志等等。有时这些列表是作为业务流程的副产品生成的，但是它们仍然包含对流程改进潜在有用的信息和见解。为了提取一些隐藏的知识，可以使用一种特殊的无监督学习算法——关联规则挖掘。在这一章中，我们将构建一个应用程序，它可以分析你的购物清单，以规则的形式找出你的偏好，例如“<em>如果你已经买了燕麦片和玉米片，你还想买牛奶</em>”这可以用来创建可适应的用户体验，例如，上下文建议或提醒。</p>
+<p>在许多实际应用中，数据以列表的形式出现(有序或无序):购物清单、播放列表、访问过的位置或 URL、应用程序日志等等。有时这些列表是作为业务流程的副产品生成的，但是它们仍然包含对流程改进潜在有用的信息和见解。为了提取一些隐藏的知识，可以使用一种特殊的无监督学习算法——关联规则挖掘。在这一章中，我们将构建一个应用程序，它可以分析你的购物清单，以规则的形式找出你的偏好，例如“<em>如果你已经买了燕麦片和玉米片，你还想买牛奶</em>”这可以用来创建可适应的用户体验，例如，上下文建议或提醒。</p>
 <p>在本章中，我们将讨论以下主题:</p>
 <ul>
 <li>关联规则</li>
@@ -79,14 +79,14 @@
             
             
                 
-<p>到本章结束时，我们想要的是一个叫做Apriori的规则学习算法。稍后我们将了解算法细节；现在，我们只想定义我们将在本章中使用的数据结构，以及一些实用函数。</p>
+<p>到本章结束时，我们想要的是一个叫做 Apriori 的规则学习算法。稍后我们将了解算法细节；现在，我们只想定义我们将在本章中使用的数据结构，以及一些实用函数。</p>
 <p>该算法的一般结构如下:</p>
 <pre>public struct Apriori&lt;Item: Hashable &amp; Equatable&gt; { </pre>
-<p>在最简单的情况下，事务中项目的顺序无关紧要，它们的编号和相关的时间戳也无关紧要。这意味着我们将我们的项目集和交易视为数学或Swift集:</p>
+<p>在最简单的情况下，事务中项目的顺序无关紧要，它们的编号和相关的时间戳也无关紧要。这意味着我们将我们的项目集和交易视为数学或 Swift 集:</p>
 <pre>public typealias ItemSet = Set&lt;Item&gt; </pre>
 <p>参数<kbd>I</kbd>是您交易中的一种项目。接下来，我们必须为子集和规则实现一些结构:</p>
 <pre>class Subsets: Sequence {<br/>  var subsets: [ItemSet]<br/>  init(_ set: ItemSet) {<br/>    self.subsets = Array(set).combinations().map(Set.init)<br/>  }<br/>  func makeIterator() -&gt; AnyIterator&lt;ItemSet&gt; {<br/>    return AnyIterator { [weak self] in<br/>    guard let `self` = self else {<br/>      return nil<br/>    }<br/>    return self.subsets.popLast()<br/>  }<br/>}<br/>public struct Rule {<br/>  let ifPart: Set&lt;I&gt;<br/>  let thenPart: Set&lt;I&gt;<br/>}  </pre>
-<p>Apriori的结构变量如下:</p>
+<p>Apriori 的结构变量如下:</p>
 <pre>public var elements: Set&lt;Int&gt; 
 public let transactions: ContiguousArray&lt;ItemSet&gt; 
 public let map: [I: Int] 
@@ -157,7 +157,7 @@ public init(transactions: [Set&lt;I&gt;]) {
 <li>{燕麦片、玉米片→牛奶}</li>
 <li>{狗粮，回形针→洗衣粉}</li>
 </ul>
-<p>直觉上，第二条规则看起来比第一条更不可能，不是吗？但是，我们怎么能确定呢？在这种情况下，我们需要一些定量的方法来显示每个规则的可能性。我们在这里寻找的是在机器学习和数据挖掘中我们称之为关联度量。规则挖掘算法围绕这一概念，其方式类似于基于距离的算法围绕距离度量的方式。在本章中，我们将使用四种关联衡量标准:支持、信心、提升和信念(参见<em>表5.1 </em>)。</p>
+<p>直觉上，第二条规则看起来比第一条更不可能，不是吗？但是，我们怎么能确定呢？在这种情况下，我们需要一些定量的方法来显示每个规则的可能性。我们在这里寻找的是在机器学习和数据挖掘中我们称之为关联度量。规则挖掘算法围绕这一概念，其方式类似于基于距离的算法围绕距离度量的方式。在本章中，我们将使用四种关联衡量标准:支持、信心、提升和信念(参见<em>表 5.1 </em>)。</p>
 <p>请注意，这些度量没有告诉我们规则有多有用或有趣，只是量化了它们的概率特征。一个规则的有用性和实用性可能很难用数学方法来把握，通常需要在每种情况下进行人工判断。在统计学中，解释分析结果通常是领域专家或开发人员的事情。</p>
 
 
@@ -192,10 +192,10 @@ public init(transactions: [Set&lt;I&gt;]) {
 <p>{ <img height="14" src="img/bad7e95c-7885-4f9b-bfa1-b05996fb3ee2.png" width="14"/> <img height="19" src="img/d1df89c3-d973-423d-adf4-3f12e36cce46.png" width="19"/> }</p>
 <p>{ <img height="15" src="img/1d72cba3-9240-4459-8ea7-53ea2c753d4d.png" width="15"/> <img height="16" src="img/630b7ada-93e3-4451-8c79-4ae0305a794e.png" width="16"/> }</p>
 <p>{ <img height="19" src="img/bad7e95c-7885-4f9b-bfa1-b05996fb3ee2.png" width="19"/> }</p>
-<p>我们说项目集{ <img height="15" src="img/1d72cba3-9240-4459-8ea7-53ea2c753d4d.png" width="15"/> <img height="19" src="img/630b7ada-93e3-4451-8c79-4ae0305a794e.png" width="19"/> }涵盖了交易1、3和5，因为项目集是这些交易中每一个的子集。我们的例子中有<em>2<sup>n</sup>= 2<sup>4</sup>= 16</em>个可能的项目集，包括空项目集。</p>
+<p>我们说项目集{ <img height="15" src="img/1d72cba3-9240-4459-8ea7-53ea2c753d4d.png" width="15"/> <img height="19" src="img/630b7ada-93e3-4451-8c79-4ae0305a794e.png" width="19"/> }涵盖了交易 1、3 和 5，因为项目集是这些交易中每一个的子集。我们的例子中有<em>2<sup>n</sup>= 2<sup>4</sup>= 16</em>个可能的项目集，包括空项目集。</p>
 <p>项目集的支持显示了该集作为事务的一部分出现的频率；换句话说，这个项目集中包含多大比例的交易。例如:</p>
 <div><img height="37" src="img/0400d967-ddd5-454e-9423-c7fed2b7793e.png" width="181"/></div>
-<p>假设对空项目集的支持等于数据集中的事务数(在我们的例子中，<em> supp({}) = 6 </em>)。如果你用一个图来表示所有的项目集(见<em>图5.1 </em>，你可能会注意到支持度总是随着项目集长度的增长而下降。当挖掘关联规则时，我们通常对支持度大于给定阈值的较大项目集感兴趣；例如，对于支持阈值0.5，这样的项目集是{ <img height="13" src="img/bad7e95c-7885-4f9b-bfa1-b05996fb3ee2.png" width="13"/> <img height="17" src="img/d1df89c3-d973-423d-adf4-3f12e36cce46.png" width="17"/> } 、{ <img height="15" src="img/1d72cba3-9240-4459-8ea7-53ea2c753d4d.png" width="15"/> }和{ <img height="19" src="img/630b7ada-93e3-4451-8c79-4ae0305a794e.png" width="19"/> }。换句话说，这意味着每个项目集至少涵盖所有交易的一半。</p>
+<p>假设对空项目集的支持等于数据集中的事务数(在我们的例子中，<em> supp({}) = 6 </em>)。如果你用一个图来表示所有的项目集(见<em>图 5.1 </em>，你可能会注意到支持度总是随着项目集长度的增长而下降。当挖掘关联规则时，我们通常对支持度大于给定阈值的较大项目集感兴趣；例如，对于支持阈值 0.5，这样的项目集是{ <img height="13" src="img/bad7e95c-7885-4f9b-bfa1-b05996fb3ee2.png" width="13"/> <img height="17" src="img/d1df89c3-d973-423d-adf4-3f12e36cce46.png" width="17"/> } 、{ <img height="15" src="img/1d72cba3-9240-4459-8ea7-53ea2c753d4d.png" width="15"/> }和{ <img height="19" src="img/630b7ada-93e3-4451-8c79-4ae0305a794e.png" width="19"/> }。换句话说，这意味着每个项目集至少涵盖所有交易的一半。</p>
 <p>这里，为了方便起见，我们将关联度量提取到单独的结构扩展:</p>
 <pre>public extension Apriori { 
   public mutating func support(_ set: ItemSet) -&gt; Double { </pre>
@@ -213,7 +213,7 @@ supports[set] = result
 return result 
 } </pre>
 <div><img height="415" src="img/f157429f-4718-4272-9b16-311de06ffecc.png" width="412"/></div>
-<p>图5.1:左上角描述的事务的项目集合图。每个项目集的粗体边数描述了支持值(例如，三角形表示支持= 3)。每个节点的传入边的宽度与其支持度成比例。请注意，随着项目集大小的增长，支持度如何从顶部(6)到底部(1)单调下降</p>
+<p>图 5.1:左上角描述的事务的项目集合图。每个项目集的粗体边数描述了支持值(例如，三角形表示支持= 3)。每个节点的传入边的宽度与其支持度成比例。请注意，随着项目集大小的增长，支持度如何从顶部(6)到底部(1)单调下降</p>
 
 
             
@@ -245,7 +245,7 @@ return result
 <p>注意置信度不能大于<em> 1 </em>。这一措施的问题是，它没有考虑到该项目的普遍支持；如果{ <img height="16" src="img/7abafedc-2691-4546-afc5-579a4e46219d.png" width="16"/> }在数据集中很常见，那么它很可能会独立于任何关联出现在事务中。</p>
 <p>请注意:</p>
 <p><img height="29" src="img/6905c45e-3604-48d2-bf16-4ddabe27ce64.png" width="247"/></p>
-<p>在Swift中:</p>
+<p>在 Swift 中:</p>
 <pre>public mutating func confidence(_ rule: Rule) -&gt; Double { 
     return support(rule.ifPart.union(rule.thenPart))/support(rule.ifPart) 
 } </pre>
@@ -277,10 +277,10 @@ return result
                 
 <p>提升是由感兴趣的项目的支持标准化的置信度，如下所示:</p>
 <p><img height="47" src="img/a7aedbdd-9266-4b7d-a9ff-bf6c50864a3b.png" width="353"/></p>
-<p>Lift考虑了两个集合{ <img height="18" src="img/09bffb1e-a918-4205-99db-8163957b8b98.png" width="18"/> <img height="12" src="img/ecc39b13-bb54-421c-a5b3-7e73641d10b3.png" width="12"/> }和{ <img height="18" src="img/6025c8aa-625f-444b-82e0-1817dfdb4ff3.png" width="18"/> }的支持。<em> lift </em> &gt; <em> 1 </em>表示物品正相关，意味着如果箭头前的物品存在，箭头后的物品有可能被购买。<em>解除</em> &lt; <em> 1 </em>暗示一种消极的联想；在我们的例子中，这意味着如果顾客已经买了热狗和西红柿，他就不太可能再往篮子里放茶了。<em> Lift </em> = <em> 1 </em>表示完全没有关联。</p>
+<p>Lift 考虑了两个集合{ <img height="18" src="img/09bffb1e-a918-4205-99db-8163957b8b98.png" width="18"/> <img height="12" src="img/ecc39b13-bb54-421c-a5b3-7e73641d10b3.png" width="12"/> }和{ <img height="18" src="img/6025c8aa-625f-444b-82e0-1817dfdb4ff3.png" width="18"/> }的支持。<em> lift </em> &gt; <em> 1 </em>表示物品正相关，意味着如果箭头前的物品存在，箭头后的物品有可能被购买。<em>解除</em> &lt; <em> 1 </em>暗示一种消极的联想；在我们的例子中，这意味着如果顾客已经买了热狗和西红柿，他就不太可能再往篮子里放茶了。<em> Lift </em> = <em> 1 </em>表示完全没有关联。</p>
 <p>不同于自信:</p>
 <p><img height="28" src="img/5062f276-916a-41e1-8039-5531a177c426.png" width="212"/></p>
-<p>在Swift中:</p>
+<p>在 Swift 中:</p>
 <pre>public mutating func lift(_ rule: Rule) -&gt; Double { 
     return support(rule.ifPart.union(rule.thenPart))/support(rule.ifPart)/support(rule.thenPart) 
 } </pre>
@@ -310,9 +310,9 @@ return result
             
             
                 
-<p>信念是一种有助于判断规则是否碰巧存在的手段。它是由Sergey Brin和合著者在1997年引入的[1],作为不能捕捉关联方向的信心的替代。定罪是比较<em>出现的概率如果</em>没有<em>那么，</em>如果它们依赖于<em>的实际频率如果</em>没有<em>那么:</em></p>
+<p>信念是一种有助于判断规则是否碰巧存在的手段。它是由 Sergey Brin 和合著者在 1997 年引入的[1],作为不能捕捉关联方向的信心的替代。定罪是比较<em>出现的概率如果</em>没有<em>那么，</em>如果它们依赖于<em>的实际频率如果</em>没有<em>那么:</em></p>
 <p><img height="46" src="img/c7a3f44b-2753-46f1-b602-8ad3e7f782ae.png" width="310"/></p>
-<p>在命名器中，我们有没有{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="17" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="17"/> }的项目集的预期频率。(换句话说，这个规则不成立的频率。)在分母中，我们观察到了错误预测的频率。在我们的例子中，它表明如果{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="14" src="img/95fd7bd6-4f92-4c5e-b7e5-18defba269e0.png" width="14"/> }和{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="17" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="17"/> }之间的关联是偶然的，那么规则{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="18" src="img/95fd7bd6-4f92-4c5e-b7e5-18defba269e0.png" width="18"/> → <img xmlns:epub="http://www.idpf.org/2007/ops" height="14" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="14"/> }成立的几率大约为67%(T3 = 1.667)。</p>
+<p>在命名器中，我们有没有{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="17" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="17"/> }的项目集的预期频率。(换句话说，这个规则不成立的频率。)在分母中，我们观察到了错误预测的频率。在我们的例子中，它表明如果{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="14" src="img/95fd7bd6-4f92-4c5e-b7e5-18defba269e0.png" width="14"/> }和{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="17" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="17"/> }之间的关联是偶然的，那么规则{ <img xmlns:epub="http://www.idpf.org/2007/ops" height="18" src="img/95fd7bd6-4f92-4c5e-b7e5-18defba269e0.png" width="18"/> → <img xmlns:epub="http://www.idpf.org/2007/ops" height="14" src="img/557890ee-ed90-43a6-991f-00e5fda38748.png" width="14"/> }成立的几率大约为 67%(T3 = 1.667)。</p>
 <table class="MsoTableGrid">
 <tbody>
 <tr>
@@ -386,7 +386,7 @@ return result
 </tr>
 </tbody>
 </table>
-<p>表5.1:常见关联度量</p>
+<p>表 5.1:常见关联度量</p>
 <div><em>X</em> and <em>Y</em> stand for the item sets themselves, and they stand for the events of their presence in a transaction, so <em>P(X<sup>+ </sup>∩ Y<sup>+</sup>)</em> denotes the probability that both <em>X</em> and <em>Y</em> are present in a transaction.<br/>
 <br/>
 For the comprehensive list of association measures used in rule learning with explanations, formulas, and references, see <em>A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules</em> by Michael Hahsler at <a href="http://michael.hahsler.net/research/association_rules/measures.html" target="_blank">http://michael.hahsler.net/research/association_rules/measures.html</a>.</div>
@@ -509,7 +509,7 @@ print(array.combinations()) </pre>
      
     supporters[emptyItemSet] = Array(0 ..&lt; transactions.count) </pre>
 <p>这里我们使用优先级队列数据结构来跟踪可能的扩展。</p>
-<p>Foundation或Swift标准库中没有优先级队列实现，标准数据结构不在本书讨论范围之内。我们使用大卫·科佩克的开源实现(麻省理工学院许可):<a href="https://github.com/davecom/SwiftPriorityQueue" target="_blank">https://github.com/davecom/SwiftPriorityQueue</a>。</p>
+<p>Foundation 或 Swift 标准库中没有优先级队列实现，标准数据结构不在本书讨论范围之内。我们使用大卫·科佩克的开源实现(麻省理工学院许可):<a href="https://github.com/davecom/SwiftPriorityQueue" target="_blank">https://github.com/davecom/SwiftPriorityQueue</a>。</p>
 <p class="mce-root">为了使它与项目集一起工作，我们必须对代码做一点修改——不是用可比较的类型进行参数化，而是用符合等价协议的类型进行参数化:</p>
 <pre>    var queue = PriorityQueue&lt;ItemSet&gt;(order: { (lh, rh) -&gt; Bool in 
         lh.count &gt; rh.count 
@@ -553,28 +553,28 @@ print(array.combinations()) </pre>
         
 
                             
-                    <h1 class="header-title">Apriori算法</h1>
+                    <h1 class="header-title">Apriori 算法</h1>
                 
             
             
                 
-<p>关联规则学习最著名的算法是Apriori。它是由Agrawal和Srikant在1994年提出的。该算法的输入是交易的数据集，其中每个交易是一组项目。输出是支持度和置信度大于某个指定阈值的关联规则的集合。这个名字来自拉丁语短语<em>先验</em>(字面意思是“从之前的事情”)，因为算法背后有一个聪明的观察:<em>如果项目集是不频繁的，那么我们可以预先确定它的所有子集也是不频繁的。</em></p>
-<p>您可以通过以下步骤实现Apriori:</p>
+<p>关联规则学习最著名的算法是 Apriori。它是由 Agrawal 和 Srikant 在 1994 年提出的。该算法的输入是交易的数据集，其中每个交易是一组项目。输出是支持度和置信度大于某个指定阈值的关联规则的集合。这个名字来自拉丁语短语<em>先验</em>(字面意思是“从之前的事情”)，因为算法背后有一个聪明的观察:<em>如果项目集是不频繁的，那么我们可以预先确定它的所有子集也是不频繁的。</em></p>
+<p>您可以通过以下步骤实现 Apriori:</p>
 <ol>
-<li>计算长度为1的所有项目集的支持度，或者计算数据集中每个项目的出现频率。</li>
+<li>计算长度为 1 的所有项目集的支持度，或者计算数据集中每个项目的出现频率。</li>
 <li>删除支持度低于阈值的项目集。</li>
 <li>存储所有剩余的项目集。</li>
 <li>用所有可能的扩展将每个存储的项目集扩展一个元素。这一步被称为候选生成。</li>
 <li>计算每个候选人的支持值。</li>
 <li>删除所有低于阈值的候选人。</li>
-<li>删除第3步中所有与其扩展具有相同支持的存储项。</li>
+<li>删除第 3 步中所有与其扩展具有相同支持的存储项。</li>
 <li>将所有剩余的候选项添加到存储中。</li>
-<li>重复步骤4到步骤8，直到不再有支持大于阈值的扩展。</li>
+<li>重复步骤 4 到步骤 8，直到不再有支持大于阈值的扩展。</li>
 </ol>
 <p>如果你有很多数据，这不是一个非常有效的算法，但无论如何不建议移动应用程序使用大数据。这种算法在当时很有影响力，在今天也很优雅和容易理解。</p>
-<p>如果您希望从数据中提取规则作为服务器端数据处理管道的一部分，您可能希望在<kbd>mlxtend</kbd> Python库中检查Apriori的实现:<a href="http://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/" target="_blank">http://rasbt . github . io/mlx tend/user _ guide/frequency _ patterns/Apriori/</a>。</p>
+<p>如果您希望从数据中提取规则作为服务器端数据处理管道的一部分，您可能希望在<kbd>mlxtend</kbd> Python 库中检查 Apriori 的实现:<a href="http://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/" target="_blank">http://rasbt . github . io/mlx tend/user _ guide/frequency _ patterns/Apriori/</a>。</p>
 <div><img height="263" src="img/666355cb-7b5f-4d65-bab5-2d35062235d9.png" width="262"/>   <img height="263" src="img/b0ba5754-245d-49b5-ae00-aa2d6ff871d6.png" width="263"/></div>
-<p>图5.2:通过只排除一个节点，我们可以将可能的规则数量减少两倍。通过排除两个节点，我们将假设空间缩小了四倍</p>
+<p>图 5.2:通过只排除一个节点，我们可以将可能的规则数量减少两倍。通过排除两个节点，我们将假设空间缩小了四倍</p>
 
 
             
@@ -596,7 +596,7 @@ print(array.combinations()) </pre>
         
 
                             
-                    <h1 class="header-title">在Swift中实施先验知识</h1>
+                    <h1 class="header-title">在 Swift 中实施先验知识</h1>
                 
             
             
@@ -708,7 +708,7 @@ Confidence:  0.75 Lift:  1.3125 Conviction:  1.71428571428571 </pre>
             
             
                 
-<p>在这个例子中，我们从一个公寓中收集了真实世界的购物清单，并组成了一个小但真实的数据集。让我们看看是否能够使用我们的算法从中提取任何有意义的规则。请注意，这个数据集非常小。对于Apriori的任何生产应用程序，您将需要更大的数据集:</p>
+<p>在这个例子中，我们从一个公寓中收集了真实世界的购物清单，并组成了一个小但真实的数据集。让我们看看是否能够使用我们的算法从中提取任何有意义的规则。请注意，这个数据集非常小。对于 Apriori 的任何生产应用程序，您将需要更大的数据集:</p>
 <pre>let transactions =  
 [["Grapes", "Cheese"], 
 ["Cheese", "Milk"], 
@@ -727,7 +727,7 @@ Confidence:  0.75 Lift:  1.3125 Conviction:  1.71428571428571 </pre>
 ["Bread", "Canned vegetables"], 
 ["Carrot", "Beetroot", "Apples", "Sugar", "Buckwheat", "Rice", "Pasta", "Salt", "Rice flour", "Dates", "Tea", "Butter", "Beef", "Cheese", "Eggs", "Bread", "Cookies"] 
 ] </pre>
-<p>在对阈值进行了一些实验后，您可以看到我们最终得到了0.15的支持度和0.75的置信度。这给出了您在下表中可以看到的15条规则:</p>
+<p>在对阈值进行了一些实验后，您可以看到我们最终得到了 0.15 的支持度和 0.75 的置信度。这给出了您在下表中可以看到的 15 条规则:</p>
 <pre>let apriori = Apriori&lt;String&gt;(transactions: transactions) 
 let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pre>
 <p>生成的规则根据其生命周期进行排序:</p>
@@ -903,8 +903,8 @@ let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pr
 </tr>
 </tbody>
 </table>
-<p>表5.2: 15条规则</p>
-<p>荞麦是一种流行于东欧、西亚和其他地方的谷物。人们通常吃荞麦粥配黄油和面包(但不是在波兰)。然而，就我们的情况而言，似乎我们更喜欢奶酪而不是黄油，这并不完全正确。11条规则中有7条建议我们购买奶酪，这并不奇怪，因为它是所有交易中最常见的项目。剩下的四条规则指向面包和荞麦之间的联系，这不是偶然的，因为在乌克兰许多人一起消费这些产品，所以这些规则是有效的。这里重要的是，算法能够提取对应于现实世界现象的模式:用户偏好、文化传统等等。</p>
+<p>表 5.2: 15 条规则</p>
+<p>荞麦是一种流行于东欧、西亚和其他地方的谷物。人们通常吃荞麦粥配黄油和面包(但不是在波兰)。然而，就我们的情况而言，似乎我们更喜欢奶酪而不是黄油，这并不完全正确。11 条规则中有 7 条建议我们购买奶酪，这并不奇怪，因为它是所有交易中最常见的项目。剩下的四条规则指向面包和荞麦之间的联系，这不是偶然的，因为在乌克兰许多人一起消费这些产品，所以这些规则是有效的。这里重要的是，算法能够提取对应于现实世界现象的模式:用户偏好、文化传统等等。</p>
 
 
             
@@ -942,8 +942,8 @@ let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pr
 <p>先验的缺点如下:</p>
 <ul>
 <li>如果数据集很小，该算法可以找到许多只是偶然发生的错误关联。您可以通过评估从支持度、置信度、提升度和确信度值的保留测试数据中获得的规则来解决这个问题。</li>
-<li>正如Agrawal和Srikant在他们原始论文的结尾所指出的，该算法没有考虑产品的层次结构或交易中购买的商品数量。这些附加信息虽然对购物篮分析有用，但在其他规则挖掘领域可能是不相关的，并且超出了这种特定机器学习方法的范围。</li>
-<li>该算法计算量很大，但是有许多Apriori的变体可以提高算法的复杂性。</li>
+<li>正如 Agrawal 和 Srikant 在他们原始论文的结尾所指出的，该算法没有考虑产品的层次结构或交易中购买的商品数量。这些附加信息虽然对购物篮分析有用，但在其他规则挖掘领域可能是不相关的，并且超出了这种特定机器学习方法的范围。</li>
+<li>该算法计算量很大，但是有许多 Apriori 的变体可以提高算法的复杂性。</li>
 </ul>
 
 
@@ -971,13 +971,13 @@ let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pr
             
             
                 
-<p>人机交互从来都不容易。计算机不理解语音、情感或肢体语言。然而，我们都习惯于使用不太智能的按钮、下拉框、选择器、开关、复选框、滑块和数百种其他控件与智能设备进行交流。它们符合一种新的语言，通常称为UI。缓慢但不可避免的是，机器学习已经进入了计算机与人类直接交互的所有领域:语音输入、手写输入、唇读、手势识别、身体姿势估计、面部情感识别、情感分析等等。这可能不会立即显而易见，但机器学习是UI和UX的未来。今天，机器学习已经在改变用户与设备的交互方式。基于机器学习的解决方案可能会因其便利性而在ui中被广泛采用。此外，排名、上下文建议、自动翻译和个性化也是大多数互联网用户已经习惯的元素。机器学习如何推动用户界面的一个很好的例子是脸书应用程序，它在设备上运行机器学习(甚至离线)，自动对你的时间线中的帖子进行排序。</p>
-<p>在设计界，这种用户交互模式通常被称为<strong>预期</strong>或<strong>算法设计</strong>，并且经常被描述为<strong>新趋势</strong>或<strong>黑魔法</strong>。本质上，你可能在博客或演示中看到的所有预期设计的例子都是机器学习的例子(只是不要告诉设计人员)。机器学习不仅可以推动大数据分析，还可以推动小的UI调整，如移动屏幕上的按钮或猜测用户下一步想做什么，并帮助他们做到这一点。这些东西经过适当的设计和测试，可以让你的应用程序更加有趣和易于使用。这种设计模式的主要目标是当用户使用应用程序时，将他或她从认知负荷中解放出来。当你开始使用一个新的应用程序时，通常就像处于一个新的环境中:你知道不同的对象放在哪里，去哪里找到你想要的东西，以及捷径和陷阱在哪里。通过允许计算机也向用户学习，我们可以调整UX，使用户的学习曲线更陡峭。</p>
-<p>Laura Busche在她的博客<em>中解释了这个概念，关于《Smashing magazine》的预期设计</em>你需要知道的是:</p>
+<p>人机交互从来都不容易。计算机不理解语音、情感或肢体语言。然而，我们都习惯于使用不太智能的按钮、下拉框、选择器、开关、复选框、滑块和数百种其他控件与智能设备进行交流。它们符合一种新的语言，通常称为 UI。缓慢但不可避免的是，机器学习已经进入了计算机与人类直接交互的所有领域:语音输入、手写输入、唇读、手势识别、身体姿势估计、面部情感识别、情感分析等等。这可能不会立即显而易见，但机器学习是 UI 和 UX 的未来。今天，机器学习已经在改变用户与设备的交互方式。基于机器学习的解决方案可能会因其便利性而在 ui 中被广泛采用。此外，排名、上下文建议、自动翻译和个性化也是大多数互联网用户已经习惯的元素。机器学习如何推动用户界面的一个很好的例子是脸书应用程序，它在设备上运行机器学习(甚至离线)，自动对你的时间线中的帖子进行排序。</p>
+<p>在设计界，这种用户交互模式通常被称为<strong>预期</strong>或<strong>算法设计</strong>，并且经常被描述为<strong>新趋势</strong>或<strong>黑魔法</strong>。本质上，你可能在博客或演示中看到的所有预期设计的例子都是机器学习的例子(只是不要告诉设计人员)。机器学习不仅可以推动大数据分析，还可以推动小的 UI 调整，如移动屏幕上的按钮或猜测用户下一步想做什么，并帮助他们做到这一点。这些东西经过适当的设计和测试，可以让你的应用程序更加有趣和易于使用。这种设计模式的主要目标是当用户使用应用程序时，将他或她从认知负荷中解放出来。当你开始使用一个新的应用程序时，通常就像处于一个新的环境中:你知道不同的对象放在哪里，去哪里找到你想要的东西，以及捷径和陷阱在哪里。通过允许计算机也向用户学习，我们可以调整 UX，使用户的学习曲线更陡峭。</p>
+<p>Laura Busche 在她的博客<em>中解释了这个概念，关于《Smashing magazine》的预期设计</em>你需要知道的是:</p>
 <p>“在心理学中，我们使用认知负荷这个术语来描述在任何给定时刻工作记忆中使用的脑力劳动量。对于每个参与用户体验设计的人来说，认知负荷是一个至关重要的考虑因素。我们是否在尽我们所能来减轻由于学习新的东西来使用我们的产品所带来的压力？我们如何减少用户在任何时候都需要担心的元素的数量？减少认知负荷是预期设计的基石之一，因为它有助于通过预见用户的需求来创造更愉快的体验。"</p>
 <p>预期设计背后的主要思想是选择更少的原则——换句话说，我们以一种智能的方式减少了用户的选择数量。</p>
 <p>实际上，根据你的应用程序，你可以用很多不同的方式来做到这一点；你可以过滤掉不相关的结果，把最有可能的选项推到列表的顶部或者增加它们的大小，等等。</p>
-<p>回到本章的主题，你可以使用关联规则学习来分析你的应用程序中的用户活动，并缩小他们的可能性空间。例如，在照片编辑应用程序中，用户对他们的照片应用一组滤镜。当用户选择了第一个过滤器时，可以使用规则来预测接下来最有可能应用哪个过滤器(或者甚至哪组过滤器)。在这里，您可以根据其中一个关联度量对候选人进行排序。在<a href="008b17c3-cc77-41b8-b879-3dc0456af2cb.xhtml">第7章</a>、<em>线性分类器和逻辑回归</em>中，您将看到另一个基于监督学习的预期设计示例。</p>
+<p>回到本章的主题，你可以使用关联规则学习来分析你的应用程序中的用户活动，并缩小他们的可能性空间。例如，在照片编辑应用程序中，用户对他们的照片应用一组滤镜。当用户选择了第一个过滤器时，可以使用规则来预测接下来最有可能应用哪个过滤器(或者甚至哪组过滤器)。在这里，您可以根据其中一个关联度量对候选人进行排序。在<a href="008b17c3-cc77-41b8-b879-3dc0456af2cb.xhtml">第 7 章</a>、<em>线性分类器和逻辑回归</em>中，您将看到另一个基于监督学习的预期设计示例。</p>
 
 
             
@@ -1004,8 +1004,8 @@ let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pr
             
             
                 
-<p>在这一章中，我们探讨了关联规则学习，它是无监督学习的一个分支。我们实现了Apriori算法，该算法可用于在不同的事务数据集中发现规则形式的模式。Apriori的经典用例是购物篮分析。然而，它在概念上也很重要，因为规则学习算法弥合了经典人工智能方法(逻辑编程、概念学习、搜索图形等)和基于逻辑的机器学习(决策树)之间的差距。</p>
-<p>在下一章，我们将回到监督学习，但这一次我们将把注意力从非参数模型，如KNN和k-means，转移到参数线性模型。我们还将讨论线性回归和梯度下降优化方法。</p>
+<p>在这一章中，我们探讨了关联规则学习，它是无监督学习的一个分支。我们实现了 Apriori 算法，该算法可用于在不同的事务数据集中发现规则形式的模式。Apriori 的经典用例是购物篮分析。然而，它在概念上也很重要，因为规则学习算法弥合了经典人工智能方法(逻辑编程、概念学习、搜索图形等)和基于逻辑的机器学习(决策树)之间的差距。</p>
+<p>在下一章，我们将回到监督学习，但这一次我们将把注意力从非参数模型，如 KNN 和 k-means，转移到参数线性模型。我们还将讨论线性回归和梯度下降优化方法。</p>
 
 
             
@@ -1033,8 +1033,8 @@ let rules = apriori.associationRules(minSupport: 0.15, minConfidence: 0.75) </pr
             
                 
 <ol>
-<li>Sergey Brin、Rajeev Motwani、Jeffrey D. Ullman和Shalom Tsur，<em>市场购物篮数据的动态项目集计数和隐含规则</em>，1997年SIGMOD，ACM SIGMOD数据管理国际会议论文集，第255-264页，美国亚利桑那州图森，1997年5月</li>
-<li>Rakesh Agrawal和Ramakrishnan Srikant，<em xmlns:epub="http://www.idpf.org/2007/ops">挖掘关联规则的快速算法</em>，第20届<sup xmlns:epub="http://www.idpf.org/2007/ops">超大规模数据库国际会议论文集，VLDB，487-499页，智利圣地亚哥，1994年9月，http://www.vldb.org/conf/1994/P487.PDF:<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://www.vldb.org/conf/1994/P487.PDF" target="_blank"/></sup></li>
+<li>Sergey Brin、Rajeev Motwani、Jeffrey D. Ullman 和 Shalom Tsur，<em>市场购物篮数据的动态项目集计数和隐含规则</em>，1997 年 SIGMOD，ACM SIGMOD 数据管理国际会议论文集，第 255-264 页，美国亚利桑那州图森，1997 年 5 月</li>
+<li>Rakesh Agrawal 和 Ramakrishnan Srikant，<em xmlns:epub="http://www.idpf.org/2007/ops">挖掘关联规则的快速算法</em>，第 20 届<sup xmlns:epub="http://www.idpf.org/2007/ops">超大规模数据库国际会议论文集，VLDB，487-499 页，智利圣地亚哥，1994 年 9 月，http://www.vldb.org/conf/1994/P487.PDF:<a xmlns:epub="http://www.idpf.org/2007/ops" href="http://www.vldb.org/conf/1994/P487.PDF" target="_blank"/></sup></li>
 </ol>
 <p class="mce-root"/>
 

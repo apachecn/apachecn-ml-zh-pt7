@@ -8,7 +8,7 @@
 
 
 
-<title>Recurrent neural networks - predicting periodic signals</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch11lvl1sec53"/>递归神经网络-预测周期性信号</h1></div></div></div><p>振荡器是产生特定周期性波形的电路，如方波、三角波、锯齿波和正弦波。为了产生输出，振荡器通常使用某种形式的有源器件——灯，灯周围有电阻、电容和电感。振荡器的两个主要类别是张弛振荡器和正弦振荡器。使用张弛振荡器产生三角波、锯齿波和其他非正弦波形，而正弦振荡器由带有外部元件的放大器组成，以产生振荡。正常情况下，纯正弦波中不存在谐波，它们由单一频率组成。</p><div><div><div><div><h2 class="title"><a id="ch11lvl2sec66"/>准备就绪...</h2></div></div></div><p>任务是从有噪声的正弦波预测余弦。5Hz频率的波用于带有一些正态分布噪声的正弦波和平滑的余弦波。创建的数据集是一组10个序列，每个序列由40个观察值组成。</p></div><div><div><div><div><h2 class="title"><a id="ch11lvl2sec67"/>怎么做...</h2></div></div></div><p>作为要执行的第一步，需要加载以下软件包:</p><pre class="programlisting">
+<title>Recurrent neural networks - predicting periodic signals</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch11lvl1sec53"/>递归神经网络-预测周期性信号</h1></div></div></div><p>振荡器是产生特定周期性波形的电路，如方波、三角波、锯齿波和正弦波。为了产生输出，振荡器通常使用某种形式的有源器件——灯，灯周围有电阻、电容和电感。振荡器的两个主要类别是张弛振荡器和正弦振荡器。使用张弛振荡器产生三角波、锯齿波和其他非正弦波形，而正弦振荡器由带有外部元件的放大器组成，以产生振荡。正常情况下，纯正弦波中不存在谐波，它们由单一频率组成。</p><div><div><div><div><h2 class="title"><a id="ch11lvl2sec66"/>准备就绪...</h2></div></div></div><p>任务是从有噪声的正弦波预测余弦。5Hz 频率的波用于带有一些正态分布噪声的正弦波和平滑的余弦波。创建的数据集是一组 10 个序列，每个序列由 40 个观察值组成。</p></div><div><div><div><div><h2 class="title"><a id="ch11lvl2sec67"/>怎么做...</h2></div></div></div><p>作为要执行的第一步，需要加载以下软件包:</p><pre class="programlisting">
 <strong>    &gt; install.packages("rnn")</strong>
 <strong>    &gt; library(rnn)</strong>
 </pre><p>出于再现性的目的，将初始种子设置为随机数:</p><pre class="programlisting">
@@ -25,7 +25,7 @@
 </pre><p>生成时间序列的样本:<code class="literal">matrix()</code>函数从<code class="literal">x</code>和<code class="literal">y</code>值创建一个矩阵。<code class="literal">nrow = 40</code>表示所需的行数:</p><pre class="programlisting">
 <strong>    &gt; X &lt;- matrix(x, nrow = 40)</strong>
 <strong>    &gt; Y &lt;- matrix(y, nrow = 40)</strong>
-</pre><p>绘制噪音波:。<code class="literal">plot()</code>函数是绘制R对象的通用函数。<code class="literal">as.vector(X)</code>数据帧作为函数值传递。<code class="literal">type='l'</code>象征线条:</p><pre class="programlisting">
+</pre><p>绘制噪音波:。<code class="literal">plot()</code>函数是绘制 R 对象的通用函数。<code class="literal">as.vector(X)</code>数据帧作为函数值传递。<code class="literal">type='l'</code>象征线条:</p><pre class="programlisting">
 <strong>&gt; plot(as.vector(X), col='blue', type='l', ylab = "x-matrix, y-matrix", main = "Noisy waves")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_11_001.jpg" alt="How to do it..."/></div><p>
@@ -33,13 +33,13 @@
 <strong>&gt; lines(as.vector(Y), col = "red")</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_11_002.jpg" alt="How to do it..."/></div><p>
-</p><p>规范<code class="literal">X</code>的价值观。值的范围介于0和1之间:</p><pre class="programlisting">
+</p><p>规范<code class="literal">X</code>的价值观。值的范围介于 0 和 1 之间:</p><pre class="programlisting">
 <strong>&gt; X &lt;- (X - min(X)) / (max(X) - min(X))</strong>
 </pre><p>打印<code class="literal">X</code>的值:</p><pre class="programlisting">
 <strong>&gt; X</strong>
 </pre><p>结果如下:</p><p>
 </p><div><img src="img/image_11_003.jpg" alt="How to do it..."/></div><p>
-</p><p>标准化<code class="literal">Y</code>的值。值的范围介于0和1之间:</p><pre class="programlisting">
+</p><p>标准化<code class="literal">Y</code>的值。值的范围介于 0 和 1 之间:</p><pre class="programlisting">
 <strong>&gt; X &lt;- (X - min(X)) / (max(X) - min(X))</strong>
 </pre><p>打印<code class="literal">X</code>的值:</p><pre class="programlisting">
 <strong>&gt; X</strong>

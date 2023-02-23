@@ -11,19 +11,19 @@
         
 
                             
-                    <h1 class="header-title">在Azure上训练深度神经网络</h1>
+                    <h1 class="header-title">在 Azure 上训练深度神经网络</h1>
                 
             
             
                 
 <p>在前一章中，我们学习了如何使用基于非参数树的集成方法对经典的<strong>机器学习</strong> ( <strong> ML </strong>)模型进行训练和评分。虽然这些方法在许多带有分类变量的中小型数据集上运行良好，但在大型数据集上却不能很好地推广。</p>
 <p>在这一章中，我们将使用<strong>深度学习</strong> ( <strong> DL </strong>)来训练复杂的参数模型，以便更好地对大型数据集进行泛化。这将帮助你了解哪些情况下<strong>深度神经网络</strong> ( <strong> DNNs </strong>)比传统模型表现更好。</p>
-<p>首先，我们将给出一个简短而实用的概述，说明DL为什么以及何时工作良好。我们将更侧重于理解一般原则和基本原理，而不是理论方法。这将帮助您评估哪些用例以及数据集需要DL，以及它通常是如何工作的。</p>
-<p>然后我们将看看DL最流行的应用领域——计算机视觉。然后，我们将使用Azure ML服务和附加的Azure基础设施来训练一个简单的<strong>卷积神经网络</strong> ( <strong> CNN </strong>)架构，用于图像分类。我们将性能与在预训练的<strong>残差网络</strong> ( <strong> ResNet </strong>)模型上微调的模型进行比较。这将向您展示如何克服训练数据不足的情况。</p>
+<p>首先，我们将给出一个简短而实用的概述，说明 DL 为什么以及何时工作良好。我们将更侧重于理解一般原则和基本原理，而不是理论方法。这将帮助您评估哪些用例以及数据集需要 DL，以及它通常是如何工作的。</p>
+<p>然后我们将看看 DL 最流行的应用领域——计算机视觉。然后，我们将使用 Azure ML 服务和附加的 Azure 基础设施来训练一个简单的<strong>卷积神经网络</strong> ( <strong> CNN </strong>)架构，用于图像分类。我们将性能与在预训练的<strong>残差网络</strong> ( <strong> ResNet </strong>)模型上微调的模型进行比较。这将向您展示如何克服训练数据不足的情况。</p>
 <p>本章将涵盖以下主题:</p>
 <ul>
 <li>深度学习简介</li>
-<li>训练一个用于图像分类的CNN</li>
+<li>训练一个用于图像分类的 CNN</li>
 </ul>
 
 
@@ -53,8 +53,8 @@
             
             
                 
-<p>最近，DL已经彻底改变了ML领域，并且在各种任务中，例如图像分类、对象检测、分割、语音转录、文本翻译、文本理解、销售预测等等，DL不断超越经典统计方法，甚至超越人类。与经典模型相比，DL模型使用数百万个参数、巧妙的权重分配、优化技术和隐式特征提取，当用足够的数据训练时，其性能优于所有以前手工制作的特征检测器和ML模型。</p>
-<p>在本节中，我们将帮助您理解为什么以及何时DL模型对某些领域和数据集有意义。如果您已经是DL方面的专家，请随意跳过这一部分，直接进入更实用的部分。但是，如果您是DL的新手，我强烈建议您继续阅读这一部分，以便了解更大、更强大的模型的实际和业务需求，以及一些非理论背景。</p>
+<p>最近，DL 已经彻底改变了 ML 领域，并且在各种任务中，例如图像分类、对象检测、分割、语音转录、文本翻译、文本理解、销售预测等等，DL 不断超越经典统计方法，甚至超越人类。与经典模型相比，DL 模型使用数百万个参数、巧妙的权重分配、优化技术和隐式特征提取，当用足够的数据训练时，其性能优于所有以前手工制作的特征检测器和 ML 模型。</p>
+<p>在本节中，我们将帮助您理解为什么以及何时 DL 模型对某些领域和数据集有意义。如果您已经是 DL 方面的专家，请随意跳过这一部分，直接进入更实用的部分。但是，如果您是 DL 的新手，我强烈建议您继续阅读这一部分，以便了解更大、更强大的模型的实际和业务需求，以及一些非理论背景。</p>
 
 
             
@@ -78,19 +78,19 @@
         
 
                             
-                    <h1 class="header-title">为什么是DL？</h1>
+                    <h1 class="header-title">为什么是 DL？</h1>
                 
             
             
                 
-<p>在过去几年中，许多传统的优化、分类和预测过程在经典的ML方法上工作得很好，例如k-最近邻、线性/逻辑回归、朴素贝叶斯和基于树的集成模型。对于中小型数据集，他们能够很好地处理各种类型的数据(事务型、时序型、操作型等)和数据类型(二进制、数值型和分类型)。</p>
-<p>然而，在某些领域，数据生成已经爆炸，即使训练数据量增加，经典的ML模型也无法提高性能。这尤其影响了2010年末左右的计算机视觉和自然语言处理领域 ( <strong> NLP </strong>)。这时，研究人员开始再次研究神经网络(或<strong>多层感知器</strong> ( <strong> MLPs </strong>))，这是一种在80年代末使用的技术，通过使用多个嵌套层来捕捉大型图像数据集中的大量特征。</p>
-<p>下面的图表很好地抓住了这个想法。虽然传统的ML方法在小型和中型数据集上工作得非常好，但是它们的性能不会随着更多的训练数据而提高。然而，DL模型是大规模参数模型，可以从训练数据中捕获大量细节。因此，我们可以看到它们的预测性能随着数据量的增加而提高:</p>
+<p>在过去几年中，许多传统的优化、分类和预测过程在经典的 ML 方法上工作得很好，例如 k-最近邻、线性/逻辑回归、朴素贝叶斯和基于树的集成模型。对于中小型数据集，他们能够很好地处理各种类型的数据(事务型、时序型、操作型等)和数据类型(二进制、数值型和分类型)。</p>
+<p>然而，在某些领域，数据生成已经爆炸，即使训练数据量增加，经典的 ML 模型也无法提高性能。这尤其影响了 2010 年末左右的计算机视觉和自然语言处理领域 ( <strong> NLP </strong>)。这时，研究人员开始再次研究神经网络(或<strong>多层感知器</strong> ( <strong> MLPs </strong>))，这是一种在 80 年代末使用的技术，通过使用多个嵌套层来捕捉大型图像数据集中的大量特征。</p>
+<p>下面的图表很好地抓住了这个想法。虽然传统的 ML 方法在小型和中型数据集上工作得非常好，但是它们的性能不会随着更多的训练数据而提高。然而，DL 模型是大规模参数模型，可以从训练数据中捕获大量细节。因此，我们可以看到它们的预测性能随着数据量的增加而提高:</p>
 <div><img class="aligncenter size-full wp-image-1001 image-border" src="img/a7b33556-7f44-427e-81f1-81818ffe4b9e.png" style="width:16.33em;height:13.42em;"/></div>
-<p>传统模型倾向于使用预先设计的功能，因此针对各种数据类型和范围的数据集进行了优化。我们在上一章中看到，梯度增强树在分类数据上表现得非常好。然而，在具有高度结构化数据或可变长度数据的领域中，许多传统模型达到了它们的极限。对于二维和三维图像和视频中的像素信息，以及音频数据中的波形和文本数据中的字符，情况尤其如此。用于处理这种数据的ML模型将具有复杂的特征提取器，例如<strong>h</strong><strong>istog of oriented gradients</strong>(<strong>HOG</strong>)滤波器、<strong>尺度不变特征变换</strong> ( <strong> SIFT </strong>)特征、或者<strong>局部二进制模式</strong>(<strong>LBPs</strong>)——仅举几个例子。</p>
+<p>传统模型倾向于使用预先设计的功能，因此针对各种数据类型和范围的数据集进行了优化。我们在上一章中看到，梯度增强树在分类数据上表现得非常好。然而，在具有高度结构化数据或可变长度数据的领域中，许多传统模型达到了它们的极限。对于二维和三维图像和视频中的像素信息，以及音频数据中的波形和文本数据中的字符，情况尤其如此。用于处理这种数据的 ML 模型将具有复杂的特征提取器，例如<strong>h</strong><strong>istog of oriented gradients</strong>(<strong>HOG</strong>)滤波器、<strong>尺度不变特征变换</strong> ( <strong> SIFT </strong>)特征、或者<strong>局部二进制模式</strong>(<strong>LBPs</strong>)——仅举几个例子。</p>
 <p>使这些数据如此复杂的原因是，输入数据(例如，单个像素)和输出之间不存在明显的线性关系，在大多数情况下，查看图像的单个像素无助于确定图像中汽车的品牌。因此，越来越需要训练更大和更有能力的参数模型，这些模型使用原始的、未处理的数据作为输入来捕捉从输入像素到最终预测的这些关系。</p>
-<p>重要的是要理解，对具有更多参数的更深入模型的需求来自于特定领域中大量增加的高度结构化的训练数据，例如视觉、音频和语言。这些新模型通常具有数千万个参数，以捕捉大量原始和增强的训练数据，并开发训练数据的内部广义概念表示。在为您的用例选择ML方法时，请记住这一点。</p>
-<p>在许多情况下，您可以从训练数据的数据存储中建立到ML模型的直接关系。如果您的数据存储在SQL数据库或Excel文件中，那么您通常应该研究经典的ML方法，例如参数统计(线性回归、SVM等)或非参数(基于决策树的集成)方法。如果您的数据非常大，以至于存储在<strong> Hadoop分布式文件系统</strong> ( <strong> HDFS </strong>)、blob或文件存储服务器中，那么您可能需要使用DL方法。</p>
+<p>重要的是要理解，对具有更多参数的更深入模型的需求来自于特定领域中大量增加的高度结构化的训练数据，例如视觉、音频和语言。这些新模型通常具有数千万个参数，以捕捉大量原始和增强的训练数据，并开发训练数据的内部广义概念表示。在为您的用例选择 ML 方法时，请记住这一点。</p>
+<p>在许多情况下，您可以从训练数据的数据存储中建立到 ML 模型的直接关系。如果您的数据存储在 SQL 数据库或 Excel 文件中，那么您通常应该研究经典的 ML 方法，例如参数统计(线性回归、SVM 等)或非参数(基于决策树的集成)方法。如果您的数据非常大，以至于存储在<strong> Hadoop 分布式文件系统</strong> ( <strong> HDFS </strong>)、blob 或文件存储服务器中，那么您可能需要使用 DL 方法。</p>
 
 
             
@@ -119,9 +119,9 @@
             
             
                 
-<p>有各种资料详细解释了神经网络及其工作原理；比如斯坦福的DL课程，或者吴恩达的Coursera课程等等。本节将让你直观地了解它们从20世纪50年代的经典感知机到80年代的<strong>人工神经网络</strong> ( <strong> ANNs </strong>)和CNN，再到最近十年的DL的演变过程。</p>
+<p>有各种资料详细解释了神经网络及其工作原理；比如斯坦福的 DL 课程，或者吴恩达的 Coursera 课程等等。本节将让你直观地了解它们从 20 世纪 50 年代的经典感知机到 80 年代的<strong>人工神经网络</strong> ( <strong> ANNs </strong>)和 CNN，再到最近十年的 DL 的演变过程。</p>
 <p>你可能听说过，神经网络的基础——感知机——是一个超过半个世纪的概念。感知器被引入来模拟来自人脑的细胞，作为所有输入和激活函数的加权和，如果输出高于定义的阈值，激活函数就会触发。虽然脑细胞的这种生物类比是对大脑建模的一种很好的方式，但它是描述其内部状态和输入信号转换的一种很差的模型。</p>
-<p>与大脑中的神经元不同，我们更喜欢用一种简单得多的方法来思考感知器、MLPs(即ann)和CNN——也就是说，一种非常简洁的几何方法。这种方法要求你只理解二维中一条线的方程，以及一个更高维坐标空间中的同一个方程。因此，一个平面的方程将是三维的，一个超平面将是n维的。</p>
+<p>与大脑中的神经元不同，我们更喜欢用一种简单得多的方法来思考感知器、MLPs(即 ann)和 CNN——也就是说，一种非常简洁的几何方法。这种方法要求你只理解二维中一条线的方程，以及一个更高维坐标空间中的同一个方程。因此，一个平面的方程将是三维的，一个超平面将是 n 维的。</p>
 <p>如果我们看一个单一的感知器，它只描述了其输入的加权和加上带有激活函数的静态偏差。你知道什么也被描述为其输入的加权和吗？一个直线方程:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/76ea6339-03a7-4094-a401-99c1a71cd634.png" style="width:7.42em;height:1.42em;"/></p>
 <p>好吧，公平地说，这个线方程只有一个输入(<em> x </em>)，因此只有一个维度。然而，如果<em> x </em>是一个矢量，那么同样的方程描述了一个平面。我相信你在中学数学课程的某个时候会看到这个方程。这个等式的一个很好的特性是，当将一个点的坐标插入这个等式时，当移动到一边时，它产生<em> 0 = 0，</em>或简单的<em> 0 </em>。</p>
@@ -132,28 +132,28 @@
 <p>然而，它变得更好。我们如何训练这样的决策边界？好吧，我们看训练样本和从样本到随机初始化的决策边界的距离。然后，我们以正确分类样本的方式移动决策边界。然后我们看下一个样本，继续这个过程。移动决策边界的最佳向量是，如果我们沿着负梯度移动它，使得点和线之间的距离达到最小。如果训练样本是线性可分的，通过使用学习率因子，我们迭代这个过程几次，并以完美对齐的决策边界结束。</p>
 <p>因此，单个感知器(也称为<strong>神经元</strong>)加上激活函数简单地描述了一个由定义决策边界的超平面组成的小分类器。平行层中堆叠的多个感知机只是多个超平面的组合——例如，它们用于查找位于第一行右侧但位于第二行左侧的样本。</p>
 <p>虽然单个感知机堆栈只能描述输入和输出的线性组合，但研究人员开始将这些感知机堆叠成多个连续的层，其中每一层都有一个激活函数。这被称为<strong> MLP </strong>，或者简称为神经网络。虽然从生物学的角度来理解这种多层方法相当困难，但我们可以再次使用我们的几何模型。在几何模型中，我们可以简单地将多个超平面方程堆叠成更复杂的对象。</p>
-<p>这种精确的几何现象也被许多其他资源描述为DL模型的高级特征。网络的第一层描述非常低级的特征，例如线(边)的左侧或右侧，而较高级描述这些低级特征的复杂嵌套组合；例如，四条线组成一个正方形，五个正方形组成一个形状，这些形状的组合看起来像人的鼻子。因此，我们刚刚建立了一个使用3层神经网络的鼻子检测器。</p>
-<p>在下面的截图中，我们看到了一个DNN <em>如何在单独的层中看到</em>一个图像，并试图将它与每个层已经学习的特征相匹配。左侧的图像是原始图像，右侧的三幅图像显示了此图像在DNN特定图层中的表现形式。我们可以看到早期层主要关注线条和边缘(左起第二幅图像)，而中间层则关注形状(左起第三幅图像)，最后一层则激活图像中的特定高级特征(左起第四幅图像):</p>
+<p>这种精确的几何现象也被许多其他资源描述为 DL 模型的高级特征。网络的第一层描述非常低级的特征，例如线(边)的左侧或右侧，而较高级描述这些低级特征的复杂嵌套组合；例如，四条线组成一个正方形，五个正方形组成一个形状，这些形状的组合看起来像人的鼻子。因此，我们刚刚建立了一个使用 3 层神经网络的鼻子检测器。</p>
+<p>在下面的截图中，我们看到了一个 DNN <em>如何在单独的层中看到</em>一个图像，并试图将它与每个层已经学习的特征相匹配。左侧的图像是原始图像，右侧的三幅图像显示了此图像在 DNN 特定图层中的表现形式。我们可以看到早期层主要关注线条和边缘(左起第二幅图像)，而中间层则关注形状(左起第三幅图像)，最后一层则激活图像中的特定高级特征(左起第四幅图像):</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-721 image-border" src="img/0cb82045-0569-4b1b-bfcb-b1c0237ebfea.png" style="width:49.33em;height:9.58em;"/></p>
 <p>使用多个高维超平面方程，其中每个输出馈入下一层的每个输入，需要非常多的参数。虽然对大量复杂的训练数据进行建模需要大量的参数，但所谓的全连接神经网络并不是描述这些连接的最佳方式。那么，有什么问题呢？</p>
 <p>在全连接网络中，每个输出都作为输入馈送到连续层的每个神经元。在每个神经元中，我们需要每个输入的权重，因此，权重与输入维度一样多。当我们开始堆叠多层感知器时，这个数字会迅速爆炸。另一个问题是，网络不能一般化，因为它学习单个维度的单个权重。</p>
-<p>为了解决这个问题，CNN应运而生。他们的目的是减少连接的数量，从而将单个层上的参数减少到一组固定的参数，而与输入维数无关。因此，图层的参数现在在所有输入中共享。这种方法的想法来自信号处理，即通过卷积运算将滤波器应用于信号。卷积是指将一组权重(如窗口函数)应用于输入的多个区域，然后对每个位置的滤波器的所有信号响应求和。</p>
-<p>这与CNN上卷积层的想法相同。通过使用与输入卷积的固定大小的滤波器，我们可以大大减少每层的参数数量，从而向网络添加更多的嵌套层。通过使用所谓的池层，我们还可以减小图像大小，并对输入的缩小版本应用过滤器。正如我们之前所说的，这都是在80年代开发的。</p>
-<p>CNN在80年代没有达到2010年代末那样的大肆宣传有三个原因:</p>
+<p>为了解决这个问题，CNN 应运而生。他们的目的是减少连接的数量，从而将单个层上的参数减少到一组固定的参数，而与输入维数无关。因此，图层的参数现在在所有输入中共享。这种方法的想法来自信号处理，即通过卷积运算将滤波器应用于信号。卷积是指将一组权重(如窗口函数)应用于输入的多个区域，然后对每个位置的滤波器的所有信号响应求和。</p>
+<p>这与 CNN 上卷积层的想法相同。通过使用与输入卷积的固定大小的滤波器，我们可以大大减少每层的参数数量，从而向网络添加更多的嵌套层。通过使用所谓的池层，我们还可以减小图像大小，并对输入的缩小版本应用过滤器。正如我们之前所说的，这都是在 80 年代开发的。</p>
+<p>CNN 在 80 年代没有达到 2010 年代末那样的大肆宣传有三个原因:</p>
 <ul>
 <li>只有少量带标签的训练数据可用</li>
 <li>由于爆炸和消失梯度，训练过程的收敛是困难的</li>
 <li>计算性能很低</li>
 </ul>
-<p>然而，当研究人员在2012年研究这些模型时，通过ImageNet项目可以获得大量带标签的图像训练数据；通过GPU，高性能并行处理是可能的，即使是对于台式机，一些最终的调整，如标准化和整流器，有助于训练过程的收敛。</p>
+<p>然而，当研究人员在 2012 年研究这些模型时，通过 ImageNet 项目可以获得大量带标签的图像训练数据；通过 GPU，高性能并行处理是可能的，即使是对于台式机，一些最终的调整，如标准化和整流器，有助于训练过程的收敛。</p>
 <p>从那时起，研究人员开始做以下工作:</p>
 <ul>
-<li>水平(参见ResNet-152)和垂直(参见GoogLeNet)堆叠更多层</li>
+<li>水平(参见 ResNet-152)和垂直(参见 GoogLeNet)堆叠更多层</li>
 <li>开发更高效的层组(SqueezeNet，Inception v3，等等)</li>
-<li>发展新的层次(LSTM等)以及培训(甘)</li>
-<li>优化技术(RMSProp、Adam等)</li>
+<li>发展新的层次(LSTM 等)以及培训(甘)</li>
+<li>优化技术(RMSProp、Adam 等)</li>
 </ul>
-<p>今天，只要手头有足够的数据，DL几乎可以应用于任何领域。</p>
+<p>今天，只要手头有足够的数据，DL 几乎可以应用于任何领域。</p>
 
 
             
@@ -177,28 +177,28 @@
         
 
                             
-                    <h1 class="header-title">比较经典的ML和DL</h1>
+                    <h1 class="header-title">比较经典的 ML 和 DL</h1>
                 
             
             
                 
-<p>让我们看看经典ML和DL方法之间的主要区别，并找出DL模型用这么多参数做什么，以及它们如何从中受益。</p>
-<p>当我们看2012年之前的图像或音频处理领域时，ML模型通常不是在原始数据本身上训练的。此外，原始数据经过手工制作的特征提取器转换到低维特征空间。如果我们正在处理256 x 256 x 3维(RGB)的图像(对应于196，608维的特征空间)，并且将这些图像转换为例如2，048维的特征嵌入作为ML模型的输入，我们可以大大降低这些模型的计算要求。有趣的是，提取的图像和音频特征通常使用卷积算子和特定的滤波器(如边缘检测器、斑点检测器、尖峰/下降检测器等)。然而，过滤器通常是手工构建的。</p>
-<p>过去50多年开发的经典ML模型仍然是我们今天成功使用的模型。其中包括基于树的集成技术、线性和逻辑回归、<strong>支持向量机</strong> ( <strong>支持向量机</strong>)和MLPs。MLP模型也被称为具有隐藏层的全连接神经网络，并且仍然在一些早期的DL模型中充当分类/回归头。</p>
-<p>下图显示了计算机视觉领域中经典ML方法的典型管道:</p>
+<p>让我们看看经典 ML 和 DL 方法之间的主要区别，并找出 DL 模型用这么多参数做什么，以及它们如何从中受益。</p>
+<p>当我们看 2012 年之前的图像或音频处理领域时，ML 模型通常不是在原始数据本身上训练的。此外，原始数据经过手工制作的特征提取器转换到低维特征空间。如果我们正在处理 256 x 256 x 3 维(RGB)的图像(对应于 196，608 维的特征空间)，并且将这些图像转换为例如 2，048 维的特征嵌入作为 ML 模型的输入，我们可以大大降低这些模型的计算要求。有趣的是，提取的图像和音频特征通常使用卷积算子和特定的滤波器(如边缘检测器、斑点检测器、尖峰/下降检测器等)。然而，过滤器通常是手工构建的。</p>
+<p>过去 50 多年开发的经典 ML 模型仍然是我们今天成功使用的模型。其中包括基于树的集成技术、线性和逻辑回归、<strong>支持向量机</strong> ( <strong>支持向量机</strong>)和 MLPs。MLP 模型也被称为具有隐藏层的全连接神经网络，并且仍然在一些早期的 DL 模型中充当分类/回归头。</p>
+<p>下图显示了计算机视觉领域中经典 ML 方法的典型管道:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-1004 image-border" src="img/68178fd6-53ab-46d9-bf31-ee70d854bc3a.png" style="width:38.67em;height:8.42em;"/></p>
-<p>首先，使用手工制作的图像滤波器(SIFT、SURF、Haar滤波器等)将原始数据转换为低维特征嵌入。然后，使用特征嵌入来训练一个ML模型；例如，多层、全连接的神经网络。</p>
-<p>当人类难以用简单的规则表达输入图像和输出标签之间的关系时，经典的计算机视觉和ML方法也难以学习这些规则。其原因是DL模型是在原始输入数据而不是手动提取的特征上训练的。由于卷积层与随机化和训练的图像滤波器相同，这些用于特征提取的滤波器被网络隐含地学习。</p>
+<p>首先，使用手工制作的图像滤波器(SIFT、SURF、Haar 滤波器等)将原始数据转换为低维特征嵌入。然后，使用特征嵌入来训练一个 ML 模型；例如，多层、全连接的神经网络。</p>
+<p>当人类难以用简单的规则表达输入图像和输出标签之间的关系时，经典的计算机视觉和 ML 方法也难以学习这些规则。其原因是 DL 模型是在原始输入数据而不是手动提取的特征上训练的。由于卷积层与随机化和训练的图像滤波器相同，这些用于特征提取的滤波器被网络隐含地学习。</p>
 <p class="mce-root"/>
-<p>下图显示了用于影像分类的DL方法，类似于上图中用于经典ML方法的方法:</p>
+<p>下图显示了用于影像分类的 DL 方法，类似于上图中用于经典 ML 方法的方法:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-1012 image-border" src="img/c72c1aa5-8e74-434d-9f2e-0d3132a4a3e9.png" style="width:37.25em;height:8.83em;"/></p>
-<p>正如我们所看到的，图像的原始输入数据被直接馈送到网络，网络输出最终的图像标签。这就是为什么我们经常将DL模型称为端到端模型，因为它在输入数据(字面意思是像素)和输出数据之间创建了端到端的连接。</p>
-<p>一个关键的要点是，在选择ML模型之前，还应该考虑数据的类型。如果您正在处理图像、视频、音频、时间序列、语言或文本，您可能会使用DL模型或特征提取器来进行嵌入、聚类、分类或回归。如果您正在处理运营或业务数据，那么经典方法可能会更合适。</p>
-<p>在许多情况下，尤其是当您拥有小数据集或没有足够的计算资源或知识来训练端到端DL模型时，您还可以重用预训练的DL模型作为特征提取器。这可以通过加载预训练模型并执行向前传递直到分类/回归头来完成。它返回一个多维嵌入(所谓的潜在空间表示)，你可以直接插入到一个经典的ML模型中。</p>
-<p>下面是这种混合方法的一个例子。我们使用<kbd>IncpetionV3</kbd>模型作为特征提取器，根据<kbd>imagenet</kbd>数据进行预训练。DL模型仅用于将原始输入图像数据转换成较低维度的特征表示。然后，在图像特征之上训练SVM模型。让我们看看这个例子的源代码:</p>
+<p>正如我们所看到的，图像的原始输入数据被直接馈送到网络，网络输出最终的图像标签。这就是为什么我们经常将 DL 模型称为端到端模型，因为它在输入数据(字面意思是像素)和输出数据之间创建了端到端的连接。</p>
+<p>一个关键的要点是，在选择 ML 模型之前，还应该考虑数据的类型。如果您正在处理图像、视频、音频、时间序列、语言或文本，您可能会使用 DL 模型或特征提取器来进行嵌入、聚类、分类或回归。如果您正在处理运营或业务数据，那么经典方法可能会更合适。</p>
+<p>在许多情况下，尤其是当您拥有小数据集或没有足够的计算资源或知识来训练端到端 DL 模型时，您还可以重用预训练的 DL 模型作为特征提取器。这可以通过加载预训练模型并执行向前传递直到分类/回归头来完成。它返回一个多维嵌入(所谓的潜在空间表示)，你可以直接插入到一个经典的 ML 模型中。</p>
+<p>下面是这种混合方法的一个例子。我们使用<kbd>IncpetionV3</kbd>模型作为特征提取器，根据<kbd>imagenet</kbd>数据进行预训练。DL 模型仅用于将原始输入图像数据转换成较低维度的特征表示。然后，在图像特征之上训练 SVM 模型。让我们看看这个例子的源代码:</p>
 <pre>import numpy as np <br/>from keras.applications import InceptionV3<br/><br/>def extract_features(img_data, IMG_SIZE):    <br/>  IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)    <br/>  model = InceptionV3(input_shape=IMG_SHAPE, include_top=False, <br/>    weights='imagenet', pooling='avg')    <br/>  predictions = model.predict(img_data)    <br/>  return np.squeeze(predictions)<br/><br/>labels = [] # loaded previously<br/>features = extract_features(image_data)<br/><br/>X_train, X_test, y_train, y_test = train_test_split(features, labels)<br/><br/>from sklearn.svm import SVC<br/>clf = SVC(kernel='linear', C=1)<br/>clf.fit(X_train, y_train)</pre>
-<p>在前面的代码中，我们使用TensorFlow加载带有<kbd>imagenet</kbd>权重的<kbd>InceptionV3</kbd>模型，但没有任何分类或回归头。这是通过将<kbd>include_top</kbd>属性设置为<kbd>False</kbd>来实现的。然后，我们将预测的输出压缩到一个向量中。最后，我们使用scikit-learn和默认的训练/测试分割来训练图像特征上的SVM。</p>
-<p>我们从经典方法开始，其中特征提取和ML被分成两个步骤。然而，传统方法中的过滤器是手工制作的，并直接应用于原始输入数据。在DL方法中，我们隐含地学习特征提取。</p>
+<p>在前面的代码中，我们使用 TensorFlow 加载带有<kbd>imagenet</kbd>权重的<kbd>InceptionV3</kbd>模型，但没有任何分类或回归头。这是通过将<kbd>include_top</kbd>属性设置为<kbd>False</kbd>来实现的。然后，我们将预测的输出压缩到一个向量中。最后，我们使用 scikit-learn 和默认的训练/测试分割来训练图像特征上的 SVM。</p>
+<p>我们从经典方法开始，其中特征提取和 ML 被分成两个步骤。然而，传统方法中的过滤器是手工制作的，并直接应用于原始输入数据。在 DL 方法中，我们隐含地学习特征提取。</p>
 
 
             
@@ -222,21 +222,21 @@
         
 
                             
-                    <h1 class="header-title">训练一个用于图像分类的CNN</h1>
+                    <h1 class="header-title">训练一个用于图像分类的 CNN</h1>
                 
             
             
                 
-<p>一旦我们很好地理解了为什么以及何时使用DL模型，我们就可以开始使用Azure ML服务实际实现一个模型。我们将从DL在过去几年中表现出色的一项任务开始，计算机视觉，或者更准确地说，图像分类。如果您觉得这对您来说太容易了，您可以用任何其他计算机视觉技术来替换实际的训练脚本，并遵循本节中的步骤:</p>
+<p>一旦我们很好地理解了为什么以及何时使用 DL 模型，我们就可以开始使用 Azure ML 服务实际实现一个模型。我们将从 DL 在过去几年中表现出色的一项任务开始，计算机视觉，或者更准确地说，图像分类。如果您觉得这对您来说太容易了，您可以用任何其他计算机视觉技术来替换实际的训练脚本，并遵循本节中的步骤:</p>
 <ol>
-<li>首先，我们将启动一个Azure ML计算实例，作为我们的Jupyter笔记本创作环境。我们将首先编写一个训练脚本，并在创作环境中执行它，以验证它是否正常工作，检查模型，并记录训练和验证指标。我们将训练模型几个时期，以验证设置、代码和生成的模型。</li>
-<li>一旦设置完成，我们将尝试通过向训练脚本添加数据扩充来改进算法。虽然这看起来是一个简单的任务，但我想重申，对于任何基于DL的ML方法来说，这都是必要的，也是强烈推荐的。可以很容易地扩充图像数据以提高泛化能力，从而提高模型评分性能。然而，通过这种技术，模型的训练将花费比以前更长的时间，因为每个时期使用更多的训练数据。</li>
+<li>首先，我们将启动一个 Azure ML 计算实例，作为我们的 Jupyter 笔记本创作环境。我们将首先编写一个训练脚本，并在创作环境中执行它，以验证它是否正常工作，检查模型，并记录训练和验证指标。我们将训练模型几个时期，以验证设置、代码和生成的模型。</li>
+<li>一旦设置完成，我们将尝试通过向训练脚本添加数据扩充来改进算法。虽然这看起来是一个简单的任务，但我想重申，对于任何基于 DL 的 ML 方法来说，这都是必要的，也是强烈推荐的。可以很容易地扩充图像数据以提高泛化能力，从而提高模型评分性能。然而，通过这种技术，模型的训练将花费比以前更长的时间，因为每个时期使用更多的训练数据。</li>
 </ol>
 <ol start="3">
-<li>在下一步中，我们将训练脚本从创作环境移动到GPU集群——一个远程计算环境。我们将在Azure ML服务的创作环境中完成所有这些工作——上传数据、生成训练脚本、创建集群、在集群上执行训练脚本，以及检索训练好的模型。如果您已经在自己的服务器上训练了ML模型，那么本节将向您展示如何将您的训练脚本移动到远程执行环境，以及如何从动态可伸缩计算(垂直和水平，因此更大和更多的机器)、自动伸缩、廉价的数据存储等等中受益。</li>
+<li>在下一步中，我们将训练脚本从创作环境移动到 GPU 集群——一个远程计算环境。我们将在 Azure ML 服务的创作环境中完成所有这些工作——上传数据、生成训练脚本、创建集群、在集群上执行训练脚本，以及检索训练好的模型。如果您已经在自己的服务器上训练了 ML 模型，那么本节将向您展示如何将您的训练脚本移动到远程执行环境，以及如何从动态可伸缩计算(垂直和水平，因此更大和更多的机器)、自动伸缩、廉价的数据存储等等中受益。</li>
 </ol>
 <ol start="4">
-<li>一旦你从零开始成功地训练了一个CNN，你就想在模型性能和复杂性方面更上一层楼。推荐的好方法是微调预训练的DL模型，而不是从头开始训练它们。使用这种方法，我们通常还可以使用来自特定任务的预训练模型，从模型中删除分类头(通常是最后一层或两层),并通过在顶部训练我们自己的分类头，将特征提取器重新用于另一个任务。这被称为迁移学习，广泛用于训练各种领域的最新模型。</li>
+<li>一旦你从零开始成功地训练了一个 CNN，你就想在模型性能和复杂性方面更上一层楼。推荐的好方法是微调预训练的 DL 模型，而不是从头开始训练它们。使用这种方法，我们通常还可以使用来自特定任务的预训练模型，从模型中删除分类头(通常是最后一层或两层),并通过在顶部训练我们自己的分类头，将特征提取器重新用于另一个任务。这被称为迁移学习，广泛用于训练各种领域的最新模型。</li>
 </ol>
 <p>让我们开始吧！</p>
 
@@ -262,48 +262,48 @@
         
 
                             
-                    <h1 class="header-title">在你的笔记本上从头开始训练CNN</h1>
+                    <h1 class="header-title">在你的笔记本上从头开始训练 CNN</h1>
                 
             
             
                 
-<p>让我们用Azure ML服务在Jupyter上训练一个CNN。作为第一步，我们希望在当前的创作环境中简单地训练一个模型，并从计算实例中使用计算(CPU和内存)。这是一个标准的Python/Jupyter环境，因此与在本地机器上训练ML模型没有什么不同。因此，我们继续在我们的Azure ML服务工作区中创建新的计算实例，然后打开Jupyter环境:</p>
+<p>让我们用 Azure ML 服务在 Jupyter 上训练一个 CNN。作为第一步，我们希望在当前的创作环境中简单地训练一个模型，并从计算实例中使用计算(CPU 和内存)。这是一个标准的 Python/Jupyter 环境，因此与在本地机器上训练 ML 模型没有什么不同。因此，我们继续在我们的 Azure ML 服务工作区中创建新的计算实例，然后打开 Jupyter 环境:</p>
 <ol>
-<li>在我们开始创建CNN模型之前，我们需要一些训练数据。当我们在创作计算机上训练ML模型时，数据需要在同一台机器上。对于本例，我们将使用MNIST影像数据集:</li>
+<li>在我们开始创建 CNN 模型之前，我们需要一些训练数据。当我们在创作计算机上训练 ML 模型时，数据需要在同一台机器上。对于本例，我们将使用 MNIST 影像数据集:</li>
 </ol>
 <pre style="padding-left: 60px">import os<br/>import urllib<br/><br/>os.makedirs('./data/mnist', exist_ok=True)<br/><br/>urllib.request.urlretrieve(<br/>  'http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',<br/>  filename = './data/mnist/train-images.gz')<br/>urllib.request.urlretrieve(<br/>  'http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz',<br/>  filename = './data/mnist/train-labels.gz')<br/>urllib.request.urlretrieve(<br/>  'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz',<br/>  filename = './data/mnist/test-images.gz')<br/>urllib.request.urlretrieve(<br/>  'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz',<br/>  filename = './data/mnist/test-labels.gz')</pre>
-<p style="padding-left: 60px">在前面的代码中，我们可以看到，我们加载了训练和测试数据，并将其放在代码执行的当前环境的数据目录中。我们将在接下来的部分中看到如何在ML工作空间中的任何计算上使数据可用。</p>
+<p style="padding-left: 60px">在前面的代码中，我们可以看到，我们加载了训练和测试数据，并将其放在代码执行的当前环境的数据目录中。我们将在接下来的部分中看到如何在 ML 工作空间中的任何计算上使数据可用。</p>
 <ol start="2">
-<li>接下来，我们加载数据，解析数据，并将其存储在多维NumPy数组中。我们使用一个助手函数<kbd>load</kbd>，它在本章的源代码中有定义。我们通过将像素值归一化到<kbd>0</kbd>和<kbd>1</kbd>之间的范围来预处理训练数据:</li>
+<li>接下来，我们加载数据，解析数据，并将其存储在多维 NumPy 数组中。我们使用一个助手函数<kbd>load</kbd>，它在本章的源代码中有定义。我们通过将像素值归一化到<kbd>0</kbd>和<kbd>1</kbd>之间的范围来预处理训练数据:</li>
 </ol>
 <pre style="padding-left: 60px">X_train = load('./data/mnist/train-images.gz', False) / 255.0<br/>X_test = load('./data/mnist/test-images.gz', False) / 255.0<br/><br/>y_train = load('./data/mnist/train-labels.gz', True).reshape(-1)<br/>y_test = load('./data/mnist/test-labels.gz', True).reshape(-1)</pre>
 <p style="padding-left: 60px">使用<kbd>reshape</kbd>方法，我们检查训练和测试标签是一维向量，每个训练和测试样本有一个标签。</p>
-<p>一旦我们有了训练数据，就该决定使用哪个Python框架来训练神经网络模型了。实际上，在开始为您的ML实验编写代码之前，您应该已经想到了这一点。虽然在Azure ML中不局限于任何特定的框架，但建议您使用TensorFlow(带Keras)或PyTorch来训练神经网络和DL模型。在为生产培训和部署标准模型时，TensorFlow和Keras是很好的选择。<br/> <br/> PyTorch是修补奇异模型和定制层以及调试定制模型的绝佳选择。在我看来，PyTorch更容易上手，而TensorFlow更复杂、更成熟，拥有更大的生态系统。在本章中，我们将使用TensorFlow，因为它拥有庞大的生态系统、Keras集成、优秀的文档以及Azure ML服务中的良好支持。</p>
+<p>一旦我们有了训练数据，就该决定使用哪个 Python 框架来训练神经网络模型了。实际上，在开始为您的 ML 实验编写代码之前，您应该已经想到了这一点。虽然在 Azure ML 中不局限于任何特定的框架，但建议您使用 TensorFlow(带 Keras)或 PyTorch 来训练神经网络和 DL 模型。在为生产培训和部署标准模型时，TensorFlow 和 Keras 是很好的选择。<br/> <br/> PyTorch 是修补奇异模型和定制层以及调试定制模型的绝佳选择。在我看来，PyTorch 更容易上手，而 TensorFlow 更复杂、更成熟，拥有更大的生态系统。在本章中，我们将使用 TensorFlow，因为它拥有庞大的生态系统、Keras 集成、优秀的文档以及 Azure ML 服务中的良好支持。</p>
 <ol start="3">
-<li>选择了ML框架后，我们可以开始构建一个简单的CNN。我们使用<kbd>keras</kbd>来构建一个序列模型:</li>
+<li>选择了 ML 框架后，我们可以开始构建一个简单的 CNN。我们使用<kbd>keras</kbd>来构建一个序列模型:</li>
 </ol>
 <pre style="padding-left: 60px">from keras.models import Sequential<br/>from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense<br/><br/>model = Sequential()<br/>model.add(Conv2D(filters=16, kernel_size=3, padding='same', <br/>  activation='relu', input_shape=(28,28,1)))<br/>model.add(MaxPooling2D(pool_size=2))<br/>model.add(Conv2D(filters=32, kernel_size=3, padding='same', <br/>  activation='relu'))<br/>model.add(MaxPooling2D(pool_size=2))<br/>model.add(Flatten())<br/>model.add(Dense(256, activation='relu'))<br/>model.add(Dense(10, activation='softmax'))</pre>
-<p style="padding-left: 60px">在前面的代码中，我们利用<kbd>keras.Sequential</kbd>模型API构建了一个简单的CNN模型。我们使用默认的权重初始化，并在这里单独指定模型结构。您还可以看到特征提取器的典型组合，直到<kbd>Flatten</kbd>层，MLP分类头使用最后的<kbd>softmax</kbd>激活功能输出10个概率。</p>
-<p style="padding-left: 60px">让我们快速看一下这个模型，它总共有409，322个参数。请注意，我们专门从28 x 28灰度图像的微小图像尺寸构建了一个简单的CNN。下图显示了所定义模型的紧凑结构。我们可以观察到，最大数量的参数是特征提取器之后的全连接层，包含整个模型的98%的参数:</p>
+<p style="padding-left: 60px">在前面的代码中，我们利用<kbd>keras.Sequential</kbd>模型 API 构建了一个简单的 CNN 模型。我们使用默认的权重初始化，并在这里单独指定模型结构。您还可以看到特征提取器的典型组合，直到<kbd>Flatten</kbd>层，MLP 分类头使用最后的<kbd>softmax</kbd>激活功能输出 10 个概率。</p>
+<p style="padding-left: 60px">让我们快速看一下这个模型，它总共有 409，322 个参数。请注意，我们专门从 28 x 28 灰度图像的微小图像尺寸构建了一个简单的 CNN。下图显示了所定义模型的紧凑结构。我们可以观察到，最大数量的参数是特征提取器之后的全连接层，包含整个模型的 98%的参数:</p>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-1136 image-border" src="img/25f2ac3f-bbdc-4672-8200-286f96ffe949.png" style="width:14.75em;height:29.92em;"/></p>
 <ol start="4">
-<li>在定义了模型结构之后，我们需要定义我们试图优化的<kbd>loss</kbd>指标，并指定一个优化器。给定总损失和反向传播损失，优化器负责计算每个训练迭代的所有权重的变化。借助Keras和TensorFlow，我们可以轻松选择一流的优化器，并使用默认的分类指标:</li>
+<li>在定义了模型结构之后，我们需要定义我们试图优化的<kbd>loss</kbd>指标，并指定一个优化器。给定总损失和反向传播损失，优化器负责计算每个训练迭代的所有权重的变化。借助 Keras 和 TensorFlow，我们可以轻松选择一流的优化器，并使用默认的分类指标:</li>
 </ol>
 <pre style="padding-left: 60px">model.compile(loss='categorical_crossentropy',<br/>  optimizer='adam', metrics=['accuracy'])</pre>
-<p style="padding-left: 60px">在前面的代码中，我们定义了一个用于训练CNN的<kbd>categorical_crossentropy</kbd>损失和<kbd>adam</kbd>优化器。除了损失，我们还跟踪另一个指标，即<kbd>accuracy</kbd>。这使得在训练期间更容易估计和测量CNN的性能。</p>
+<p style="padding-left: 60px">在前面的代码中，我们定义了一个用于训练 CNN 的<kbd>categorical_crossentropy</kbd>损失和<kbd>adam</kbd>优化器。除了损失，我们还跟踪另一个指标，即<kbd>accuracy</kbd>。这使得在训练期间更容易估计和测量 CNN 的性能。</p>
 <ol start="5">
-<li>在我们开始训练之前，还有一个步骤是定义一个模型检查点。这是非常重要的，允许我们在一个时期后的任何给定时间暂停和恢复训练。使用Keras，实现以下内容非常简单:</li>
+<li>在我们开始训练之前，还有一个步骤是定义一个模型检查点。这是非常重要的，允许我们在一个时期后的任何给定时间暂停和恢复训练。使用 Keras，实现以下内容非常简单:</li>
 </ol>
 <pre style="padding-left: 60px">from keras.callbacks import ModelCheckpoint<br/><br/>checkpoint_path = "./mnist_cnn.bin"<br/>checkpoint_cb = ModelCheckpoint(checkpoint_path)</pre>
 <ol start="6">
-<li>最后，我们可以通过调用Keras模型上的<kbd>fit</kbd>方法在本地开始训练。我们提供训练数据以及训练的批次大小和时期(迭代)数。我们还通过了之前创建的<kbd>callback</kbd>模型检查点，因此我们可以在每个时期后保存模型:</li>
+<li>最后，我们可以通过调用 Keras 模型上的<kbd>fit</kbd>方法在本地开始训练。我们提供训练数据以及训练的批次大小和时期(迭代)数。我们还通过了之前创建的<kbd>callback</kbd>模型检查点，因此我们可以在每个时期后保存模型:</li>
 </ol>
 <pre style="padding-left: 60px">model.fit(X_train, y_train, batch_size=16, epochs=10, <br/>  callbacks=[checkpoint_cb])</pre>
 <ol start="7">
 <li>最后，我们可以使用最后一个时期的训练模型来计算测试集的最终分数:</li>
 </ol>
 <pre style="padding-left: 60px">from keras.models import load_model<br/><br/>model = load_model(checkpoint_path)<br/>scores = model.evaluate(X_test, y_test, verbose=1)<br/><br/>print('Test loss:', scores[0])<br/>print('Test accuracy:', scores[1])</pre>
-<p>在前面的代码中，我们可以看到，在Azure ML的计算实例上训练CNN非常简单，类似于在本地机器上训练模型。唯一的区别是，我们必须确保安装了所有必需的库(和必需的版本),并且数据是可用的。</p>
+<p>在前面的代码中，我们可以看到，在 Azure ML 的计算实例上训练 CNN 非常简单，类似于在本地机器上训练模型。唯一的区别是，我们必须确保安装了所有必需的库(和必需的版本),并且数据是可用的。</p>
 <p class="mce-root"/>
 
 
@@ -333,15 +333,15 @@
             
             
                 
-<p>DL模型通常有数百万个参数来表示具有训练集分布的模型。因此，当处理DL时，无论是在使用认知服务的定制视觉中，Azure ML Studio中，还是在ML服务工作区中的定制模型中，您都应该实现数据增强。</p>
-<p>数据扩充是一种通过稍微修改可用数据并将修改后的数据提供给ML算法来创建更多训练数据的方法。根据使用情况，这可能包括镜像、平移、缩放或倾斜图像；或者改变图像的亮度、发光度或颜色信息。这些修改极大地提高了模型的泛化能力，例如实现了更好的缩放、平移、旋转和变换不变性。</p>
-<p>使用TensorFlow和Keras的好处是数据扩充是一种内置功能。我们首先创建一个<kbd>ImageDataGenerator</kbd>对象，它存储我们所有的修改，并可以通过扩充的数据集生成迭代器。该生成器的数据扩充技术可以在生成器初始化期间进行配置。但是，我们希望使用生成器简单地迭代没有增强的训练图像，并在连接所有片段后添加增强:</p>
+<p>DL 模型通常有数百万个参数来表示具有训练集分布的模型。因此，当处理 DL 时，无论是在使用认知服务的定制视觉中，Azure ML Studio 中，还是在 ML 服务工作区中的定制模型中，您都应该实现数据增强。</p>
+<p>数据扩充是一种通过稍微修改可用数据并将修改后的数据提供给 ML 算法来创建更多训练数据的方法。根据使用情况，这可能包括镜像、平移、缩放或倾斜图像；或者改变图像的亮度、发光度或颜色信息。这些修改极大地提高了模型的泛化能力，例如实现了更好的缩放、平移、旋转和变换不变性。</p>
+<p>使用 TensorFlow 和 Keras 的好处是数据扩充是一种内置功能。我们首先创建一个<kbd>ImageDataGenerator</kbd>对象，它存储我们所有的修改，并可以通过扩充的数据集生成迭代器。该生成器的数据扩充技术可以在生成器初始化期间进行配置。但是，我们希望使用生成器简单地迭代没有增强的训练图像，并在连接所有片段后添加增强:</p>
 <ol>
-<li>让我们使用<kbd>ImageDataGenerator</kbd>对象在Keras中实现一个图像数据生成器:</li>
+<li>让我们使用<kbd>ImageDataGenerator</kbd>对象在 Keras 中实现一个图像数据生成器:</li>
 </ol>
 <pre style="padding-left: 60px">datagen = ImageDataGenerator()</pre>
 <ol start="2">
-<li>在下一步中，我们可以通过将原始训练图像数据和标签传递给生成器，从图像数据生成器返回一个数据迭代器。在我们对来自生成器的图像进行采样之前，我们需要计算进一步扩充所需的训练集统计数据。类似于scikit-learn <kbd>BaseTransformer</kbd>接口，我们需要调用生成器上的<kbd>fit</kbd>方法:</li>
+<li>在下一步中，我们可以通过将原始训练图像数据和标签传递给生成器，从图像数据生成器返回一个数据迭代器。在我们对来自生成器的图像进行采样之前，我们需要计算进一步扩充所需的训练集统计数据。类似于 scikit-learn <kbd>BaseTransformer</kbd>接口，我们需要调用生成器上的<kbd>fit</kbd>方法:</li>
 </ol>
 <pre style="padding-left: 60px">datagen.fit(x_train)</pre>
 <ol start="3">
@@ -349,7 +349,7 @@
 </ol>
 <pre style="padding-left: 60px">it = datagen.flow(X_train, y_train, batch_size=16)</pre>
 <ol start="4">
-<li>如果我们不想事先将图像加载到NumPy数组中，而是想从文件夹中读取单个图像，我们可以使用不同的生成器函数来实现，如下面的代码片段所示:</li>
+<li>如果我们不想事先将图像加载到 NumPy 数组中，而是想从文件夹中读取单个图像，我们可以使用不同的生成器函数来实现，如下面的代码片段所示:</li>
 </ol>
 <pre style="padding-left: 60px">it = datagen.flow_from_directory(directory='./data/mnist',<br/>  target_size=(28, 28), batch_size=16, class_mode='categorical')</pre>
 <p style="padding-left: 60px">然而，在我们的示例中，训练图像被合并到一个文件中，因此我们不需要自己加载图像数据。</p>
@@ -368,8 +368,8 @@
 </ul>
 <p>让我们回到图像数据生成器并激活数据增强技术。以下是图像处理中常用于数据扩充的生成器示例:</p>
 <pre>datagen = ImageDataGenerator(<br/>    featurewise_center=True,<br/>    featurewise_std_normalization=True,<br/>    rotation_range=20,<br/>    width_shift_range=0.2,<br/>    height_shift_range=0.2,<br/>    horizontal_flip=True)</pre>
-<p>通过使用这个数据生成器，我们现在可以用增强的图像数据来训练模型，并进一步提高CNN的性能。正如我们之前看到的，这是任何DL培训管道中至关重要且强烈推荐的一步。</p>
-<p>让我们将目前为止开发的所有代码移到一个名为<kbd>scripts/train.py</kbd>的文件中。我们将在下一节中使用该文件在GPU集群上调度和运行它。</p>
+<p>通过使用这个数据生成器，我们现在可以用增强的图像数据来训练模型，并进一步提高 CNN 的性能。正如我们之前看到的，这是任何 DL 培训管道中至关重要且强烈推荐的一步。</p>
+<p>让我们将目前为止开发的所有代码移到一个名为<kbd>scripts/train.py</kbd>的文件中。我们将在下一节中使用该文件在 GPU 集群上调度和运行它。</p>
 
 
             
@@ -393,24 +393,24 @@
         
 
                             
-                    <h1 class="header-title">使用Azure ML compute将培训转移到GPU集群</h1>
+                    <h1 class="header-title">使用 Azure ML compute 将培训转移到 GPU 集群</h1>
                 
             
             
                 
-<p>一旦我们准备好了一个训练脚本，验证了脚本可以工作，并且添加了数据扩充，我们就可以将这个训练脚本转移到一个更高性能的执行环境中。在DL中，许多操作，如卷积、池和一般张量运算符，都可以从并行执行中受益。因此，我们将在GPU集群上执行训练脚本，并在创作环境中跟踪它的状态。</p>
-<p>Azure ML的一个很棒的方面是，我们可以从创作环境中设置和运行Python中的一切，这就是运行在Azure ML计算实例上的Jupyter笔记本:</p>
+<p>一旦我们准备好了一个训练脚本，验证了脚本可以工作，并且添加了数据扩充，我们就可以将这个训练脚本转移到一个更高性能的执行环境中。在 DL 中，许多操作，如卷积、池和一般张量运算符，都可以从并行执行中受益。因此，我们将在 GPU 集群上执行训练脚本，并在创作环境中跟踪它的状态。</p>
+<p>Azure ML 的一个很棒的方面是，我们可以从创作环境中设置和运行 Python 中的一切，这就是运行在 Azure ML 计算实例上的 Jupyter 笔记本:</p>
 <ol>
-<li>首先，我们将配置我们的Azure ML工作空间，这是一个在计算实例上没有参数的单一语句:</li>
+<li>首先，我们将配置我们的 Azure ML 工作空间，这是一个在计算实例上没有参数的单一语句:</li>
 </ol>
 <pre style="padding-left: 60px">from azureml.core.workspace import Workspace<br/><br/>ws = Workspace.from_config()</pre>
-<p>请注意，您需要通过配置方法输出的URL，使用您的Azure帐户对此应用程序进行身份验证。</p>
+<p>请注意，您需要通过配置方法输出的 URL，使用您的 Azure 帐户对此应用程序进行身份验证。</p>
 <ol start="2">
-<li>接下来，我们将为培训流程加载或创建一个具有自动扩展功能的GPU集群:</li>
+<li>接下来，我们将为培训流程加载或创建一个具有自动扩展功能的 GPU 集群:</li>
 </ol>
 <pre style="padding-left: 60px">from azureml.core.compute import ComputeTarget, AmlCompute<br/>from azureml.core.compute_target import ComputeTargetException<br/><br/>cluster_name = "gpu-cluster"<br/>vm_size = "STANDARD_NC6"<br/>max_nodes = 3<br/><br/>try:<br/>    compute_target = ComputeTarget(workspace=ws, name=cluster_name)<br/>    print('Found existing compute target.')<br/>except ComputeTargetException:<br/>    print('Creating a new compute target...')<br/>    compute_config = AmlCompute.provisioning_configuration(<br/>        vm_size=vm_size, max_nodes=max_nodes)<br/><br/>    # create the cluster and wait for completion<br/>    compute_target = ComputeTarget.create(ws, cluster_name, <br/>        compute_config)<br/><br/>compute_target.wait_for_completion(show_output=True)</pre>
-<p style="padding-left: 60px">这不是很简单吗？在Jupyter中用三行代码创建一个具有自动伸缩功能的GPU集群非常酷。太好了，现在我们的集群已经启动并运行了。但是，我们如何为GPU集群选择虚拟机大小和节点数量呢？</p>
-<p style="padding-left: 60px">通常，您可以在Azure的N系列虚拟机中选择NC、ND和NV类型。更高的版本号(例如，v2或v3)通常意味着更新的硬件，因此会有更新的CPU和GPU，以及更好的内存。为了提供一点帮助，您可以从应用程序的角度考虑不同的N系列版本(NC，其中C表示计算；ND，其中D表示深度学习；和NV，其中V表示视频)。下表比较了不同的N系列虚拟机类型及其特定的GPU配置。大多数机器可以扩展到每个虚拟机4个GPU。下表显示了Azure VM N系列的比较:</p>
+<p style="padding-left: 60px">这不是很简单吗？在 Jupyter 中用三行代码创建一个具有自动伸缩功能的 GPU 集群非常酷。太好了，现在我们的集群已经启动并运行了。但是，我们如何为 GPU 集群选择虚拟机大小和节点数量呢？</p>
+<p style="padding-left: 60px">通常，您可以在 Azure 的 N 系列虚拟机中选择 NC、ND 和 NV 类型。更高的版本号(例如，v2 或 v3)通常意味着更新的硬件，因此会有更新的 CPU 和 GPU，以及更好的内存。为了提供一点帮助，您可以从应用程序的角度考虑不同的 N 系列版本(NC，其中 C 表示计算；ND，其中 D 表示深度学习；和 NV，其中 V 表示视频)。下表比较了不同的 N 系列虚拟机类型及其特定的 GPU 配置。大多数机器可以扩展到每个虚拟机 4 个 GPU。下表显示了 Azure VM N 系列的比较:</p>
 <table style="border-collapse: collapse;width: 100%" border="1">
 <tbody>
 <tr>
@@ -421,7 +421,7 @@
 <p><strong> GPU </strong></p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p><strong> GPU内存</strong></p>
+<p><strong> GPU 内存</strong></p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p><strong> TFlops (FP32) </strong></p>
@@ -435,7 +435,7 @@
 <p>网络计算机</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>特斯拉K80</p>
+<p>特斯拉 K80</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>12 GB</p>
@@ -452,7 +452,7 @@
 <p>NCv2</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>1辆特斯拉P100</p>
+<p>1 辆特斯拉 P100</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>16 GB</p>
@@ -469,7 +469,7 @@
 <p>NCv3</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>1辆特斯拉V100</p>
+<p>1 辆特斯拉 V100</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>16 GB</p>
@@ -486,7 +486,7 @@
 <p>钕</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>1特斯拉P40</p>
+<p>1 特斯拉 P40</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>24 GB</p>
@@ -503,7 +503,7 @@
 <p>NDv2</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>8特斯拉V100 (NVLINK)</p>
+<p>8 特斯拉 V100 (NVLINK)</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>16 GB</p>
@@ -520,7 +520,7 @@
 <p>内华达州</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>特斯拉M60(网格)</p>
+<p>特斯拉 M60(网格)</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>8 GB</p>
@@ -537,7 +537,7 @@
 <p>NVv3</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
-<p>特斯拉M60(网格)</p>
+<p>特斯拉 M60(网格)</p>
 </td>
 <td class="CDPAlignCenter CDPAlign">
 <p>8 GB</p>
@@ -552,8 +552,8 @@
 </tbody>
 </table>
 <p> </p>
-<p style="padding-left: 60px">上表中的价格代表2019年9月美国西部2地区(美国西部的NVv3和美国东部的NDv2除外)Linux虚拟机的现收现付价格。请注意，在您阅读本文时，这些价格可能已经发生了变化，但它应该会为您提供可供选择的不同选项和配置。</p>
-<p style="padding-left: 60px">为了更好地了解成本和性能，我们可以看看在ImageNet数据集上训练ResNet-50模型的典型工作负载。Nvidia提供的下表显示，选择最新的GPU型号是有意义的，因为它们的性能提升更好，成本实际上更低:</p>
+<p style="padding-left: 60px">上表中的价格代表 2019 年 9 月美国西部 2 地区(美国西部的 NVv3 和美国东部的 NDv2 除外)Linux 虚拟机的现收现付价格。请注意，在您阅读本文时，这些价格可能已经发生了变化，但它应该会为您提供可供选择的不同选项和配置。</p>
+<p style="padding-left: 60px">为了更好地了解成本和性能，我们可以看看在 ImageNet 数据集上训练 ResNet-50 模型的典型工作负载。Nvidia 提供的下表显示，选择最新的 GPU 型号是有意义的，因为它们的性能提升更好，成本实际上更低:</p>
 <table style="border-collapse: collapse;width: 100%" border="1">
 <tbody>
 <tr>
@@ -578,13 +578,13 @@
 <p>8X V100</p>
 </td>
 <td style="width: 14.0743%" class="CDPAlignCenter CDPAlign">
-<p>6小时</p>
+<p>6 小时</p>
 </td>
 <td style="width: 36.9257%" class="CDPAlignCenter CDPAlign">
-<p>2个标准_NC24s_v3</p>
+<p>2 个标准 _NC24s_v3</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
-<p>13.712美元/小时</p>
+<p>13.712 美元/小时</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
 <p>$164.54</p>
@@ -595,13 +595,13 @@
 <p>8X P100</p>
 </td>
 <td style="width: 14.0743%" class="CDPAlignCenter CDPAlign">
-<p>18小时</p>
+<p>18 小时</p>
 </td>
 <td style="width: 36.9257%" class="CDPAlignCenter CDPAlign">
-<p>2个标准_NC24s_v2</p>
+<p>2 个标准 _NC24s_v2</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
-<p>9.972美元/小时</p>
+<p>9.972 美元/小时</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
 <p>$358.99</p>
@@ -612,13 +612,13 @@
 <p>8X K80</p>
 </td>
 <td style="width: 14.0743%" class="CDPAlignCenter CDPAlign">
-<p>38小时</p>
+<p>38 小时</p>
 </td>
 <td style="width: 36.9257%" class="CDPAlignCenter CDPAlign">
-<p>4个标准_NC24</p>
+<p>4 个标准 _NC24</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
-<p>每小时4.336美元</p>
+<p>每小时 4.336 美元</p>
 </td>
 <td style="width: 17%" class="CDPAlignCenter CDPAlign">
 <p>$659.07</p>
@@ -628,21 +628,21 @@
 </table>
 <p> </p>
 <p style="padding-left: 60px">正如我们在上表中所看到的，同样的任务在较短的训练持续时间内表现出明显的提高，这带来了回报，并使整个任务的成本大大降低。</p>
-<p style="padding-left: 60px">因此，从定价的角度来看，<kbd>STANDARD_NC6</kbd>模型是在Azure中试验GPU和CNN的一个很好的起点。我们必须确保的唯一事情是我们的模型能够适合虚拟机的可用GPU内存。一种常见的计算方法是计算模型的参数数量，乘以2以存储梯度(当我们只进行推理时乘以1)，乘以批处理大小，乘以4以字节为单位的单精度大小(使用2表示半精度)。</p>
-<p style="padding-left: 60px">在我们的例子中，CNN架构需要1.63 MB来存储可训练参数(权重和偏差)。为了存储批量为16的反向传播损失，我们需要大约52.6 MB的GPU内存，以便在单个GPU上执行整个端到端训练。这也非常适合我们最小的NC实例中的12gb GPU内存。</p>
-<p>请注意，虽然这些数字对于我们的测试用例来说似乎很小并且合理，但是您通常会处理更大的模型(大约1到1000万个参数)和更大的图像大小。客观地说，在224 x 224 x 3的图像尺寸上训练的ResNet-152具有大约6000万个参数和240 MB的大小。在<kbd>STANDARD_NC6</kbd>实例中，根据我们的等式，我们最多可以以24的批量进行训练。然而，在现实中，我们还需要在GPU内存中存储额外的blobs，这使得这个计算非常尖锐。</p>
-<p style="padding-left: 60px">通过向集群添加更多的GPU或节点，我们必须引入不同的框架来利用分布式设置。我们将在<a href="8a4eafa1-2b6b-4fca-ab84-edaeeb149b25.xhtml">第11章</a>、<em>Azure ML集群上的分布式机器学习</em>中对此进行更详细的讨论。但是，我们可以向集群添加更多具有自动伸缩功能的节点，这样多人就可以同时提交多个作业。最大节点数可以通过<em>同时模型/节点*同时训练的峰值模型数</em>轻松计算。在我们的测试场景中，我们使用的集群大小为<kbd>3</kbd>，因此我们可以同时调度几个模型。</p>
+<p style="padding-left: 60px">因此，从定价的角度来看，<kbd>STANDARD_NC6</kbd>模型是在 Azure 中试验 GPU 和 CNN 的一个很好的起点。我们必须确保的唯一事情是我们的模型能够适合虚拟机的可用 GPU 内存。一种常见的计算方法是计算模型的参数数量，乘以 2 以存储梯度(当我们只进行推理时乘以 1)，乘以批处理大小，乘以 4 以字节为单位的单精度大小(使用 2 表示半精度)。</p>
+<p style="padding-left: 60px">在我们的例子中，CNN 架构需要 1.63 MB 来存储可训练参数(权重和偏差)。为了存储批量为 16 的反向传播损失，我们需要大约 52.6 MB 的 GPU 内存，以便在单个 GPU 上执行整个端到端训练。这也非常适合我们最小的 NC 实例中的 12gb GPU 内存。</p>
+<p>请注意，虽然这些数字对于我们的测试用例来说似乎很小并且合理，但是您通常会处理更大的模型(大约 1 到 1000 万个参数)和更大的图像大小。客观地说，在 224 x 224 x 3 的图像尺寸上训练的 ResNet-152 具有大约 6000 万个参数和 240 MB 的大小。在<kbd>STANDARD_NC6</kbd>实例中，根据我们的等式，我们最多可以以 24 的批量进行训练。然而，在现实中，我们还需要在 GPU 内存中存储额外的 blobs，这使得这个计算非常尖锐。</p>
+<p style="padding-left: 60px">通过向集群添加更多的 GPU 或节点，我们必须引入不同的框架来利用分布式设置。我们将在<a href="8a4eafa1-2b6b-4fca-ab84-edaeeb149b25.xhtml">第 11 章</a>、<em>Azure ML 集群上的分布式机器学习</em>中对此进行更详细的讨论。但是，我们可以向集群添加更多具有自动伸缩功能的节点，这样多人就可以同时提交多个作业。最大节点数可以通过<em>同时模型/节点*同时训练的峰值模型数</em>轻松计算。在我们的测试场景中，我们使用的集群大小为<kbd>3</kbd>，因此我们可以同时调度几个模型。</p>
 <p>请记住，在进行并行超参数调优时，这是一个更重要的问题——我们将在下一章对此进行更深入的探讨。</p>
 <ol start="3">
-<li>好了，我们决定了虚拟机大小和GPU配置，可以继续培训过程。接下来，我们需要确保集群可以访问训练数据。为此，我们使用Azure ML服务工作区上的默认数据存储。这是随每个工作区自动部署的blob存储，并且已为您的容器实例配置了访问控制:</li>
+<li>好了，我们决定了虚拟机大小和 GPU 配置，可以继续培训过程。接下来，我们需要确保集群可以访问训练数据。为此，我们使用 Azure ML 服务工作区上的默认数据存储。这是随每个工作区自动部署的 blob 存储，并且已为您的容器实例配置了访问控制:</li>
 </ol>
 <pre style="padding-left: 60px">ds = ws.get_default_datastore()<br/>ds.upload(src_dir='./data/mnist', target_path='mnist', <br/>  show_progress=True)</pre>
-<p style="padding-left: 60px">在前面的代码中，我们将训练数据从本地计算机复制到默认的数据存储(blob存储帐户)中。正如我们在前面的章节中所讨论的，还有其他方法可以将您的数据上传到blob存储或其他存储系统。然而，在Azure ML服务中使用数据存储API有一个很大的好处——将存储挂载到集群。</p>
-<p style="padding-left: 60px">将blob存储挂载到一台机器，甚至一个集群，通常不是一件简单的任务。是的，您可以拥有一个n NAS，并将其作为网络驱动器安装在集群中的每个节点上，但是这种设置和扩展非常繁琐。使用数据存储API，我们可以简单地请求对数据存储的引用，该引用可用于在需要访问数据的每台机器上安装正确的文件夹:</p>
+<p style="padding-left: 60px">在前面的代码中，我们将训练数据从本地计算机复制到默认的数据存储(blob 存储帐户)中。正如我们在前面的章节中所讨论的，还有其他方法可以将您的数据上传到 blob 存储或其他存储系统。然而，在 Azure ML 服务中使用数据存储 API 有一个很大的好处——将存储挂载到集群。</p>
+<p style="padding-left: 60px">将 blob 存储挂载到一台机器，甚至一个集群，通常不是一件简单的任务。是的，您可以拥有一个 n NAS，并将其作为网络驱动器安装在集群中的每个节点上，但是这种设置和扩展非常繁琐。使用数据存储 API，我们可以简单地请求对数据存储的引用，该引用可用于在需要访问数据的每台机器上安装正确的文件夹:</p>
 <pre style="padding-left: 60px"><strong>ds_data = ds.as_mount()</strong></pre>
-<p style="padding-left: 60px">前面的命令返回了一个<kbd>Datastore Mount</kbd>对象，看起来并不是特别强大。但是，如果我们通过estimator将这个引用作为参数传递给训练脚本，它可以自动装载数据存储并从数据存储中读取内容。如果你玩过挂载点或者<kbd>fstab</kbd>，你就会明白这个神奇的一行程序真的可以加快你的日常工作流程。</p>
+<p style="padding-left: 60px">前面的命令返回了一个<kbd>Datastore Mount</kbd>对象，看起来并不是特别强大。但是，如果我们通过 estimator 将这个引用作为参数传递给训练脚本，它可以自动装载数据存储并从数据存储中读取内容。如果你玩过挂载点或者<kbd>fstab</kbd>，你就会明白这个神奇的一行程序真的可以加快你的日常工作流程。</p>
 <ol start="4">
-<li>现在，我们可以创建一个Azure ML估计器。估算器是对计算目标、高度可配置的执行环境(例如，Docker、Python 3、Conda或TensorFlow)以及您的训练脚本的抽象。虽然您可以在抽象估算器上运行任何Python脚本，但是有一些预配置的估算器可以与TensorFlow、PyTorch、Chainer、scikit-learn等一起使用。让我们创建这样一个估计器，以便我们可以在集群上对它进行调度:</li>
+<li>现在，我们可以创建一个 Azure ML 估计器。估算器是对计算目标、高度可配置的执行环境(例如，Docker、Python 3、Conda 或 TensorFlow)以及您的训练脚本的抽象。虽然您可以在抽象估算器上运行任何 Python 脚本，但是有一些预配置的估算器可以与 TensorFlow、PyTorch、Chainer、scikit-learn 等一起使用。让我们创建这样一个估计器，以便我们可以在集群上对它进行调度:</li>
 </ol>
 <pre style="padding-left: 60px">from azureml.train.dnn import TensorFlow<br/><br/>script_params={<br/>    '--data-dir': ds_data<br/>}<br/><br/>estimator= TensorFlow(<br/>    source_directory='./scripts',<br/>    compute_target=compute_target,<br/>    script_params=script_params,<br/>    framework_version='1.13',<br/>    entry_script='train.py')</pre>
 <ol start="5">
@@ -650,10 +650,10 @@
 </ol>
 <pre style="padding-left: 60px">import argparse<br/><br/>parser = argparse.ArgumentParser()<br/>parser.add_argument('--data-dir', type=str, dest='data_dir')<br/>args = parser.parse_args()<br/><br/>X_train = load(... % args.data_dir, False) / 255.0<br/>X_test = load(... % args.data_dir, False) / 255.0<br/><br/>y_train = load(... % args.data_dir, True).reshape(-1)<br/>y_test = load(... % args.data_dir, True).reshape(-1)</pre>
 <ol start="6">
-<li>这就让我们在GPU集群上调度和运行脚本。然而，在这样做之前，我们希望确保所有运行都在Azure ML服务中被跟踪。因此，我们还将<kbd>Run</kbd>添加到<kbd>train.py</kbd>文件中，并重用来自<a href="f94e748a-d4f6-4b43-9026-6236984368e8.xhtml">第3章</a>、<em>使用Azure进行数据实验和可视化</em>的针对Azure ML的Keras回调。下面是培训脚本的样子:</li>
+<li>这就让我们在 GPU 集群上调度和运行脚本。然而，在这样做之前，我们希望确保所有运行都在 Azure ML 服务中被跟踪。因此，我们还将<kbd>Run</kbd>添加到<kbd>train.py</kbd>文件中，并重用来自<a href="f94e748a-d4f6-4b43-9026-6236984368e8.xhtml">第 3 章</a>、<em>使用 Azure 进行数据实验和可视化</em>的针对 Azure ML 的 Keras 回调。下面是培训脚本的样子:</li>
 </ol>
 <pre style="padding-left: 60px">from azureml.core import Run<br/><br/># Get the run configuration<br/>run = Run.get_context()<br/><br/># Create an Azure Machine Learning monitor callback<br/>azureml_cb = AzureMlKerasCallback(run)<br/><br/>model.fit_generator(it, steps_per_epoch=256, <br/> epochs=10, callbacks=[azureml_cb, checkpoint_cb])<br/><br/># Load the best model<br/>model = load_model(checkpoint_path)<br/><br/># Score trained model<br/>scores = model.evaluate(X_test, y_test, verbose=1)<br/>print('Test loss:', scores[0])run.log('Test loss', scores[0])<br/>print('Test accuracy:', scores[1])<br/>run.log('Test accuracy', scores[1])</pre>
-<p>正如我们在前面的代码中所看到的，我们添加了<kbd>Run</kbd>配置和Keras回调，以跟踪各个时期的所有指标。我们还收集最终的测试集指标，并将其报告给Azure ML服务。您可以在本书提供的代码中找到完整的runnable示例。</p>
+<p>正如我们在前面的代码中所看到的，我们添加了<kbd>Run</kbd>配置和 Keras 回调，以跟踪各个时期的所有指标。我们还收集最终的测试集指标，并将其报告给 Azure ML 服务。您可以在本书提供的代码中找到完整的 runnable 示例。</p>
 
 
             
@@ -683,27 +683,27 @@
             
                 
 <p>在许多情况下，你没有一个由数亿个已标记的训练样本组成的数据集，这完全可以理解。然而，您如何仍然能够从所有以前的工作和基准中受益呢？受过识别动物训练的特征提取器不也应该在识别人脸方面表现出色吗？分类器当然会不同，但是从图像中提取的视觉特征应该是相似的。</p>
-<p>这就是<strong>微调</strong>预训练模型或者更一般地说<strong>转移学习</strong>背后的确切想法。为了进行微调，我们可以简单地重用预训练DL模型中的特征提取器(例如，在<kbd>ImageNet</kbd>数据集、<kbd>faces</kbd>数据集、<kbd>CoCo</kbd>数据集等上进行预训练)，并将自定义分类器附加到模型的末尾。迁移学习意味着我们可以将一个模型的特征从一个任务迁移到另一个任务；比如从分类到物体检测。起初，我们是否想为不同的任务重用特性似乎有点令人困惑。然而，如果一个模型学会了识别图像中地理形状的模式，这当然可以在同一领域的任何图像相关任务中重复使用。</p>
-<p>这样做的一个很酷的特性是，迁移学习的任务不一定需要是受监督的ML任务，因此通常不需要基础任务的带注释的训练数据。一种流行的无监督ML技术被称为自动编码器，其中ML模型试图使用特征提取器和上采样网络在给定输入的情况下生成相似的输出。通过最小化生成的输出和输入之间的误差，特征提取器学习有效地表示输入数据。在为实际任务重用预训练的权重之前，自动编码器普遍用于预训练网络架构。</p>
+<p>这就是<strong>微调</strong>预训练模型或者更一般地说<strong>转移学习</strong>背后的确切想法。为了进行微调，我们可以简单地重用预训练 DL 模型中的特征提取器(例如，在<kbd>ImageNet</kbd>数据集、<kbd>faces</kbd>数据集、<kbd>CoCo</kbd>数据集等上进行预训练)，并将自定义分类器附加到模型的末尾。迁移学习意味着我们可以将一个模型的特征从一个任务迁移到另一个任务；比如从分类到物体检测。起初，我们是否想为不同的任务重用特性似乎有点令人困惑。然而，如果一个模型学会了识别图像中地理形状的模式，这当然可以在同一领域的任何图像相关任务中重复使用。</p>
+<p>这样做的一个很酷的特性是，迁移学习的任务不一定需要是受监督的 ML 任务，因此通常不需要基础任务的带注释的训练数据。一种流行的无监督 ML 技术被称为自动编码器，其中 ML 模型试图使用特征提取器和上采样网络在给定输入的情况下生成相似的输出。通过最小化生成的输出和输入之间的误差，特征提取器学习有效地表示输入数据。在为实际任务重用预训练的权重之前，自动编码器普遍用于预训练网络架构。</p>
 <p>因此，我们需要确保预训练模型是在同一领域的数据集上训练的。生物细胞的图像看起来与脸非常不同，云看起来与建筑物非常不同。一般来说，<kbd>ImageNet</kbd>数据集涵盖了许多标准视觉特征的照片风格的图像，例如建筑物、汽车、动物等等。所以对于很多前期训练的模特来说是个不错的选择。</p>
-<p>另一个值得一提的想法是，迁移学习不仅与图像数据和处理计算机视觉的模型相关联。事实证明，迁移学习在任何数据集足够相似的领域都是有价值的，比如人类语音或书面文本。因此，无论何时实现DL模型，都要研究哪些数据集可以用于迁移学习，并最终提高模型的性能。</p>
-<p>让我们深入一些代码。我们在本章前面看到了一个类似的例子，我们将特征提取器的输出通过管道传输到SVM。在这一节中，我们想要实现一些类似的东西，但是使用一个单独的DL模型。因此，在本例中，我们将单独为新模型构建一个网络架构，该网络架构包括一个预训练的特征提取器和一个新初始化的分类头:</p>
+<p>另一个值得一提的想法是，迁移学习不仅与图像数据和处理计算机视觉的模型相关联。事实证明，迁移学习在任何数据集足够相似的领域都是有价值的，比如人类语音或书面文本。因此，无论何时实现 DL 模型，都要研究哪些数据集可以用于迁移学习，并最终提高模型的性能。</p>
+<p>让我们深入一些代码。我们在本章前面看到了一个类似的例子，我们将特征提取器的输出通过管道传输到 SVM。在这一节中，我们想要实现一些类似的东西，但是使用一个单独的 DL 模型。因此，在本例中，我们将单独为新模型构建一个网络架构，该网络架构包括一个预训练的特征提取器和一个新初始化的分类头:</p>
 <ol>
-<li>首先，我们定义输出类的数量和输入形状，并从Keras加载基础模型:</li>
+<li>首先，我们定义输出类的数量和输入形状，并从 Keras 加载基础模型:</li>
 </ol>
 <pre style="padding-left: 60px" class="mce-root">from keras.applications.resnet50 import ResNet50<br/><br/>num_classes = 10<br/>input_shape = (224, 224, 3)<br/><br/># create the base pre-trained model<br/>base_model = ResNet50(input_shape=input_shape, <br/>  weights='imagenet', include_top=False, pooling='avg')</pre>
-<p style="padding-left: 60px">在前面的代码中，预训练的大部分魔法都要归功于Keras。我们首先使用<kbd>weights</kbd>参数指定用于训练该模型的图像数据集，这将使用预训练的<kbd>imagenet</kbd>权重自动初始化模型权重。对于第三个参数<kbd>include_top=False</kbd>，我们告诉Keras只加载模型的特征提取器部分。使用<kbd>pooling</kbd>参数，我们还可以指定最后一个池操作应该如何执行。在这种情况下，我们选择平均池。</p>
+<p style="padding-left: 60px">在前面的代码中，预训练的大部分魔法都要归功于 Keras。我们首先使用<kbd>weights</kbd>参数指定用于训练该模型的图像数据集，这将使用预训练的<kbd>imagenet</kbd>权重自动初始化模型权重。对于第三个参数<kbd>include_top=False</kbd>，我们告诉 Keras 只加载模型的特征提取器部分。使用<kbd>pooling</kbd>参数，我们还可以指定最后一个池操作应该如何执行。在这种情况下，我们选择平均池。</p>
 <ol start="2">
 <li>接下来，我们通过将模型的可训练属性设置为<kbd>False</kbd>来冻结模型的层。为此，我们只需循环遍历模型中的所有层:</li>
 </ol>
 <pre style="padding-left: 60px">for layer in base_model.layers:<br/>  layer.trainable=False</pre>
 <ol start="3">
-<li>最后，我们可以将任何网络架构附加到我们想要的模型上。在这种情况下，我们将附加上一节CNN网络中使用的相同分类器头。最后，我们使用新的架构构建最终的模型类，并在分类器输出层输出:</li>
+<li>最后，我们可以将任何网络架构附加到我们想要的模型上。在这种情况下，我们将附加上一节 CNN 网络中使用的相同分类器头。最后，我们使用新的架构构建最终的模型类，并在分类器输出层输出:</li>
 </ol>
 <pre style="padding-left: 60px">from keras.models import Model<br/>from keras.layers import Flatten, Dense<br/><br/>clf = base_model.output<br/>clf = Dense(256, activation='relu')(clf)<br/>clf = Dense(10, activation='softmax')(clf)<br/><br/>model = Model(base_model.input, clf)</pre>
-<p>就是这样！您已经成功构建了一个模型，将预先在ImageNet上训练的ResNet50特征提取器与您自己的自定义分类头结合起来。您现在可以使用这个Keras模型，并将其插入到您首选的优化器中，然后将其发送到GPU集群。培训的输出将是一个单一的模型，可以像任何其他自定义模型一样进行管理和部署。</p>
-<p>我想提一下，你并不局限于时刻冻结原网络的所有层。一种常见的方法也是解冻网络中的后续层，将学习速率降低至少10倍，并继续训练。通过重复这一过程，我们甚至可以以递减的学习速率一步一步地重新训练(或微调)网络的所有层。</p>
-<p>独立于您的选择和用例，您应该将迁移学习添加到培训DL模型的标准技巧中。将其视为类似于数据扩充，我认为在所有情况下都应该使用数据扩充。</p>
+<p>就是这样！您已经成功构建了一个模型，将预先在 ImageNet 上训练的 ResNet50 特征提取器与您自己的自定义分类头结合起来。您现在可以使用这个 Keras 模型，并将其插入到您首选的优化器中，然后将其发送到 GPU 集群。培训的输出将是一个单一的模型，可以像任何其他自定义模型一样进行管理和部署。</p>
+<p>我想提一下，你并不局限于时刻冻结原网络的所有层。一种常见的方法也是解冻网络中的后续层，将学习速率降低至少 10 倍，并继续训练。通过重复这一过程，我们甚至可以以递减的学习速率一步一步地重新训练(或微调)网络的所有层。</p>
+<p>独立于您的选择和用例，您应该将迁移学习添加到培训 DL 模型的标准技巧中。将其视为类似于数据扩充，我认为在所有情况下都应该使用数据扩充。</p>
 
 
             
@@ -732,10 +732,10 @@
             
             
                 
-<p>在这一章中，我们学习了何时以及如何使用DL在Azure上训练一个ML模型。我们使用Azure ML服务中的计算实例和GPU集群来训练使用Keras和TensorFlow的模型。</p>
-<p>首先，我们发现DL对于从原始输入数据到结果预测之间没有明显关系的高度结构化的数据非常有效。图像分类、语音转文本或翻译就是很好的例子。然而，我们也看到，DL模型是具有大量参数的参数模型，因此我们经常需要大量带标签的或扩充的输入数据。与传统的ML方法相比，额外的参数用于训练完全端到端的模型，还包括从原始输入数据中提取特征。</p>
-<p>使用Azure ML服务训练CNN并不困难。我们看到了许多方法，从在Jupyter中构建原型到扩充训练数据，再到在具有自动缩放功能的GPU集群上运行训练。DL中的难点是准备和提供足够多的高质量训练数据，找到一个描述性的误差度量，并在成本和性能之间进行优化。我们看了如何为您的工作决定最佳虚拟机和GPU大小和配置的概述，这是我建议您在启动第一个GPU集群之前做的事情。</p>
-<p>在下一章中，我们将更进一步，研究超参数调整和自动化ML，这是Azure ML服务中的一项功能，允许您自动训练和优化堆叠模型。</p>
+<p>在这一章中，我们学习了何时以及如何使用 DL 在 Azure 上训练一个 ML 模型。我们使用 Azure ML 服务中的计算实例和 GPU 集群来训练使用 Keras 和 TensorFlow 的模型。</p>
+<p>首先，我们发现 DL 对于从原始输入数据到结果预测之间没有明显关系的高度结构化的数据非常有效。图像分类、语音转文本或翻译就是很好的例子。然而，我们也看到，DL 模型是具有大量参数的参数模型，因此我们经常需要大量带标签的或扩充的输入数据。与传统的 ML 方法相比，额外的参数用于训练完全端到端的模型，还包括从原始输入数据中提取特征。</p>
+<p>使用 Azure ML 服务训练 CNN 并不困难。我们看到了许多方法，从在 Jupyter 中构建原型到扩充训练数据，再到在具有自动缩放功能的 GPU 集群上运行训练。DL 中的难点是准备和提供足够多的高质量训练数据，找到一个描述性的误差度量，并在成本和性能之间进行优化。我们看了如何为您的工作决定最佳虚拟机和 GPU 大小和配置的概述，这是我建议您在启动第一个 GPU 集群之前做的事情。</p>
+<p>在下一章中，我们将更进一步，研究超参数调整和自动化 ML，这是 Azure ML 服务中的一项功能，允许您自动训练和优化堆叠模型。</p>
 
 
             

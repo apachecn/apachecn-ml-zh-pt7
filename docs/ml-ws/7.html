@@ -8,19 +8,19 @@
 	
 		<div><h1 id="_idParaDest-172"><a id="_idTextAnchor178"/>附录</h1>
 		</div>
-		<div><h1 id="_idParaDest-173"><a id="_idTextAnchor179"/> 1。Scikit简介-了解</h1>
-			<h2 id="_idParaDest-174"><a id="_idTextAnchor180"/>活动1.01:选择目标特征并创建目标矩阵</h2>
+		<div><h1 id="_idParaDest-173"><a id="_idTextAnchor179"/> 1。Scikit 简介-了解</h1>
+			<h2 id="_idParaDest-174"><a id="_idTextAnchor180"/>活动 1.01:选择目标特征并创建目标矩阵</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li>Load the <code>titanic</code> dataset using the <code>seaborn</code> library:<pre>import seaborn as sns
 titanic = sns.load_dataset('titanic')
-titanic.head(10)</pre><p>前几行应该如下所示:</p><div><img src="img/B15781_01_22.jpg" alt="Figure 1.22: An image showing the first 10 instances of the Titanic dataset&#13;&#10;"/></div><p class="figure-caption">图1.22:显示泰坦尼克号数据集的前10个实例的图像</p></li>
+titanic.head(10)</pre><p>前几行应该如下所示:</p><div><img src="img/B15781_01_22.jpg" alt="Figure 1.22: An image showing the first 10 instances of the Titanic dataset&#13;&#10;"/></div><p class="figure-caption">图 1.22:显示泰坦尼克号数据集的前 10 个实例的图像</p></li>
 				<li>Select your preferred target feature for the goal of this activity.<p>首选目标特征可以是<code>survived</code>或<code>alive</code>。这主要是因为两者都标注了一个人是否在坠机事件中幸存。对于下面的步骤，已经选择的变量是<code>survived</code>。但是，选择<code>alive</code>不会影响变量的最终形状。</p></li>
-				<li>创建特征矩阵和目标矩阵。确保将特征矩阵中的数据存储在变量X中，将目标矩阵中的数据存储在另一个变量Y中:<pre>X = titanic.drop('survived',axis = 1) Y = titanic['survived']</pre></li>
+				<li>创建特征矩阵和目标矩阵。确保将特征矩阵中的数据存储在变量 X 中，将目标矩阵中的数据存储在另一个变量 Y 中:<pre>X = titanic.drop('survived',axis = 1) Y = titanic['survived']</pre></li>
 				<li>Print out the shape of <code>X</code>, as follows:<pre>X.shape</pre><p>输出如下所示:</p><pre>(891, 14)</pre><p>对<code>Y</code>进行同样的操作:</p><pre>Y.shape</pre><p>输出如下所示:</p><pre>(891,)</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/37BwgSv">https://packt.live/37BwgSv</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2MXFtuP">https://packt.live/2MXFtuP</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>您已经成功地将数据集拆分为两个子集，稍后将使用这两个子集来训练模型。</p>
-			<h2 id="_idParaDest-175"><a id="_idTextAnchor181"/>活动1.02:预处理整个数据集</h2>
+			<h2 id="_idParaDest-175"><a id="_idTextAnchor181"/>活动 1.02:预处理整个数据集</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li value="1">Import <code>seaborn</code> and the <code>LabelEncoder</code> class from scikit-learn. Next, load the <code>titanic</code> dataset and create the features matrix, including the following features: <code>sex</code>, <code>age</code>, <code>fare</code>, <code>class</code>, <code>embark_town</code>, and <code>alone</code>:<pre>import seaborn as sns
@@ -39,7 +39,7 @@ Age: 177
 Fare: 0
 Class: 0
 Embark town: 2
-Alone: 0</pre><p>从前面的输出中可以看出，只有一个特性包含大量缺失值:<code>age</code>。因为它包含许多丢失的值，几乎占总数的20%，所以应该替换这些值。将采用平均值插补方法，如以下代码所示:</p><pre>mean = X['age'].mean()
+Alone: 0</pre><p>从前面的输出中可以看出，只有一个特性包含大量缺失值:<code>age</code>。因为它包含许多丢失的值，几乎占总数的 20%，所以应该替换这些值。将采用平均值插补方法，如以下代码所示:</p><pre>mean = X['age'].mean()
 mean =round(mean)
 X['age'].fillna(mean,inplace = True)</pre><p>接下来，发现数值特征中存在的异常值。让我们使用三个标准差作为度量来计算数字要素的最小和最大阈值:</p><pre>features = ["age", "fare"]
 for feature in features:
@@ -48,31 +48,31 @@ for feature in features:
     X = X[X[feature] &lt;= max_]
     X = X[X[feature] &gt;= min_]
     print(feature,    ":", X.shape)</pre><p>输出如下所示:</p><pre>age: (884, 6)
-fare: (864, 6)</pre><p>年龄和费用特征的异常值总数分别为7和20，将初始矩阵的形状减少了27个实例。</p><p>接下来，使用<code>for</code>循环，发现文本特征中存在的异常值。<code>value_counts()</code>函数用于统计每个特征中类的出现次数:</p><pre>features = ["sex", "class", "embark_town", "alone"]
+fare: (864, 6)</pre><p>年龄和费用特征的异常值总数分别为 7 和 20，将初始矩阵的形状减少了 27 个实例。</p><p>接下来，使用<code>for</code>循环，发现文本特征中存在的异常值。<code>value_counts()</code>函数用于统计每个特征中类的出现次数:</p><pre>features = ["sex", "class", "embark_town", "alone"]
 for feature in features:
     count_ = X[feature].value_counts()
     print(feature)
-    print(count_, "\n")</pre><p>输出如下所示:</p><div><img src="img/B15781_01_23.jpg" alt="Figure 1.23: Count of occurrence of the classes in each feature&#13;&#10;"/></div><p class="figure-caption">图1.23:每个特征中类的出现次数</p><p>任何要素的类都不会被视为异常值，因为它们都占整个数据集的5%以上。</p></li>
+    print(count_, "\n")</pre><p>输出如下所示:</p><div><img src="img/B15781_01_23.jpg" alt="Figure 1.23: Count of occurrence of the classes in each feature&#13;&#10;"/></div><p class="figure-caption">图 1.23:每个特征中类的出现次数</p><p>任何要素的类都不会被视为异常值，因为它们都占整个数据集的 5%以上。</p></li>
 				<li>Convert all text features into their numeric representations. Use scikit-learn's <code>LabelEncoder</code> class, as shown in the following code:<pre>enc = LabelEncoder()
 X["sex"] = enc.fit_transform(X['sex'].astype('str'))
 X["class"] = enc.fit_transform(X['class'].astype('str'))
 X["embark_town"] = enc.fit_transform(X['embark_town'].\
                                      astype('str'))
-X["alone"] = enc.fit_transform(X['alone'].astype('str'))</pre><p>打印出功能矩阵的前五个实例，以查看转换结果:</p><pre>X.head()</pre><p>输出如下所示:</p><div><img src="img/B15781_01_24.jpg" alt="Figure 1.24: A screenshot displaying the first five instances of the features matrix&#13;&#10;"/></div><p class="figure-caption">图1.24:显示特征矩阵前五个实例的屏幕截图</p></li>
+X["alone"] = enc.fit_transform(X['alone'].astype('str'))</pre><p>打印出功能矩阵的前五个实例，以查看转换结果:</p><pre>X.head()</pre><p>输出如下所示:</p><div><img src="img/B15781_01_24.jpg" alt="Figure 1.24: A screenshot displaying the first five instances of the features matrix&#13;&#10;"/></div><p class="figure-caption">图 1.24:显示特征矩阵前五个实例的屏幕截图</p></li>
 				<li>Rescale your data, either by normalizing or standardizing it.<p>从以下代码中可以看出，所有要素都经过了规范化过程，但只有那些不符合规范化变量标准的要素才会被更改:</p><pre>X = (X - X.min()) / (X.max() - X.min())
-X.head(10)</pre><p>最终输出的前10行显示在下面的屏幕截图中:</p><div><img src="img/B15781_01_25.jpg" alt="Figure 1.25: Displaying the first 10 instances of the normalized dataset&#13;&#10;"/></div></li>
+X.head(10)</pre><p>最终输出的前 10 行显示在下面的屏幕截图中:</p><div><img src="img/B15781_01_25.jpg" alt="Figure 1.25: Displaying the first 10 instances of the normalized dataset&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图1.25:显示规范化数据集的前10个实例</p>
+			<p class="figure-caption">图 1.25:显示规范化数据集的前 10 个实例</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">要访问该特定部分的源代码，请参考https://packt.live/2MY1wld的<a href="https://packt.live/2MY1wld"/>。</p>
-			<p class="callout">你也可以在https://packt.live/3e2lyqt在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
-			<p>您已经成功地对数据集执行了数据预处理，现在可以使用它来训练ML算法。</p>
+			<p class="callout">要访问该特定部分的源代码，请参考 https://packt.live/2MY1wld 的<a href="https://packt.live/2MY1wld"/>。</p>
+			<p class="callout">你也可以在 https://packt.live/3e2lyqt 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<p>您已经成功地对数据集执行了数据预处理，现在可以使用它来训练 ML 算法。</p>
 			<h1 id="_idParaDest-176"><a id="_idTextAnchor182"/> 2。无监督学习——现实生活中的应用</h1>
-			<h2 id="_idParaDest-177"><a id="_idTextAnchor183"/>活动2.01:使用数据可视化来辅助预处理过程</h2>
+			<h2 id="_idParaDest-177"><a id="_idTextAnchor183"/>活动 2.01:使用数据可视化来辅助预处理过程</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li value="1">导入加载数据集所需的所有元素并对其进行预处理:<pre>import pandas as pd import matplotlib.pyplot as plt import numpy as np</pre></li>
-				<li>使用pandas的<code>read_csv()</code>功能加载之前下载的数据集。将数据集存储在名为<code>data</code> : <pre>data = pd.read_csv("wholesale_customers_data.csv")</pre>的pandas数据帧中</li>
+				<li>使用 pandas 的<code>read_csv()</code>功能加载之前下载的数据集。将数据集存储在名为<code>data</code> : <pre>data = pd.read_csv("wholesale_customers_data.csv")</pre>的 pandas 数据帧中</li>
 				<li>Check for missing values in your DataFrame. Using the <code>isnull()</code> function plus the <code>sum()</code> function, count the missing values of the entire dataset at once:<pre>data.isnull().sum()</pre><p>输出如下所示:</p><pre>Channel             0
 Region              0
 Fresh               0
@@ -96,29 +96,29 @@ for i in range(data.shape[1]):
 print(outliers)</pre><p>每个要素的异常值计数如下:</p><pre>{'Channel': [0, 440], 'Region': [0, 440], 'Fresh': [7, 433], 'Milk': [9, 431], 'Grocery': [7, 433], 'Frozen': [6, 434], 'Detergents_Paper': [10, 430], 'Delicassen': [4, 436]}</pre><p>从前面的截图中可以看出，一些特性确实有异常值。考虑到每个特性只有几个异常值，有两种可能的方法来处理它们。</p><p>首先，您可以决定删除离群值。可以通过显示带有异常值的要素的直方图来支持这一决策:</p><pre>plt.hist(data["Fresh"])
 plt.show()</pre><p>输出如下所示:</p><div><img src="img/B15781_02_14.jpg" alt="Figure 2.14: An example histogram plot for the “Fresh” feature&#13;&#10;"/></div><pre>plt.figure(figsize=(8,8))
 plt.pie(outliers["Detergents_Paper"],autopct="%.2f")
-plt.show()</pre><p>输出如下所示:</p><p> </p><div><img src="img/B15781_02_15.jpg" alt="Figure 2.15: A pie chart showing the participation of outliers from the Detergents_papers feature in the dataset&#13;&#10;"/></div><p class="figure-caption">图2.15:一个饼图显示了数据集中来自Detergents_papers特征的异常值的参与情况</p><p>上图显示了来自<code>Detergents_papers</code>要素的异常值的参与情况，该要素是数据集中异常值最多的要素。只有2.27%的值是异常值，这个值非常低，也不会影响模型的性能。</p><p>对于本书中的解决方案，我们决定保留离群值，因为它们不太可能影响模型的性能。</p></li>
+plt.show()</pre><p>输出如下所示:</p><p> </p><div><img src="img/B15781_02_15.jpg" alt="Figure 2.15: A pie chart showing the participation of outliers from the Detergents_papers feature in the dataset&#13;&#10;"/></div><p class="figure-caption">图 2.15:一个饼图显示了数据集中来自 Detergents_papers 特征的异常值的参与情况</p><p>上图显示了来自<code>Detergents_papers</code>要素的异常值的参与情况，该要素是数据集中异常值最多的要素。只有 2.27%的值是异常值，这个值非常低，也不会影响模型的性能。</p><p>对于本书中的解决方案，我们决定保留离群值，因为它们不太可能影响模型的性能。</p></li>
 				<li>Rescale the data. <p>对于此解决方案，使用了标准化公式。请注意，公式可以一次应用于整个数据集，而不是分别应用于每个要素:</p><pre>data_standardized = (data - data.mean())/data.std()
 data_standardized.head()</pre><p>输出如下所示:</p><div><img src="img/B15781_02_16.jpg" alt="Figure 2.16: Rescaled data&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图2.16:重新调整的数据</p>
+			<p class="figure-caption">图 2.16:重新调整的数据</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Y3ooGh">https://packt.live/2Y3ooGh</a>。</p>
 			<p class="callout">你也可以在<a href="https://packt.live/2B8vKPI">https://packt.live/2B8vKPI</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>您已经成功地预处理了批发客户数据集，该数据集将在后续活动中用于构建一个模型，该模型将这些观察结果分类到聚类中。</p>
-			<h2 id="_idParaDest-178"><a id="_idTextAnchor184"/>活动2.02:将k-means算法应用于数据集</h2>
+			<h2 id="_idParaDest-178"><a id="_idTextAnchor184"/>活动 2.02:将 k-means 算法应用于数据集</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">Open the Jupyter Notebook that you used for the previous activity. There, you should have imported all the required libraries and performed the necessary steps to pre-process the dataset. <p>标准化数据应该如下所示:</p><div><img src="img/B15781_02_17.jpg" alt="Figure 2.17: A screenshot displaying the first five instances of the standardized dataset&#13;&#10;"/></div><p class="figure-caption">图2.17:显示标准化数据集的前五个实例的屏幕截图</p></li>
+				<li value="1">Open the Jupyter Notebook that you used for the previous activity. There, you should have imported all the required libraries and performed the necessary steps to pre-process the dataset. <p>标准化数据应该如下所示:</p><div><img src="img/B15781_02_17.jpg" alt="Figure 2.17: A screenshot displaying the first five instances of the standardized dataset&#13;&#10;"/></div><p class="figure-caption">图 2.17:显示标准化数据集的前五个实例的屏幕截图</p></li>
 				<li>Calculate the average distance of data points from its centroid in relation to the number of clusters. Based on this distance, select the appropriate number of clusters to train the model on. <p>首先，导入算法类:</p><pre>from sklearn.cluster import KMeans</pre><p>接下来，使用以下代码片段中的代码，根据创建的聚类数计算数据点到质心的平均距离:</p><pre>ideal_k = []
 for i in range(1,21):
     est_kmeans = KMeans(n_clusters=i, random_state=0)
     est_kmeans.fit(data_standardized)
     ideal_k.append([i,est_kmeans.inertia_])
 ideal_k = np.array(ideal_k)</pre><p>最后，绘制关系以找到线的断点，并选择聚类数:</p><pre>plt.plot(ideal_k[:,0],ideal_k[:,1])
-plt.show()</pre><p>输出如下所示:</p><p> </p><div><img src="img/B15781_02_18.jpg" alt="Figure 2.18: The output of the plot function used&#13;&#10;"/></div><p class="figure-caption">图2.18:所用绘图函数的输出</p><p>同样，<em class="italic"> x轴</em>表示聚类的数量，而<em class="italic"> y轴</em>指的是聚类中的数据点到其质心的计算平均距离。</p></li>
+plt.show()</pre><p>输出如下所示:</p><p> </p><div><img src="img/B15781_02_18.jpg" alt="Figure 2.18: The output of the plot function used&#13;&#10;"/></div><p class="figure-caption">图 2.18:所用绘图函数的输出</p><p>同样，<em class="italic"> x 轴</em>表示聚类的数量，而<em class="italic"> y 轴</em>指的是聚类中的数据点到其质心的计算平均距离。</p></li>
 				<li>Train the model and assign a cluster to each data point in your dataset. Plot the results. <p>若要定型模型，请使用以下代码:</p><pre>est_kmeans = KMeans(n_clusters=6, random_state = 0)
 est_kmeans.fit(data_standardized)
-pred_kmeans = est_kmeans.predict(data_standardized)</pre><p>选择的簇数为<code>6</code>；但是，由于没有确切的断点，5到10之间的值也是可以接受的。</p><p>最后，绘制聚类过程的结果。由于数据集包含八个不同的要素，因此选择两个要素同时进行绘制，如以下代码所示:</p><pre>plt.subplots(1, 2, sharex='col', \
+pred_kmeans = est_kmeans.predict(data_standardized)</pre><p>选择的簇数为<code>6</code>；但是，由于没有确切的断点，5 到 10 之间的值也是可以接受的。</p><p>最后，绘制聚类过程的结果。由于数据集包含八个不同的要素，因此选择两个要素同时进行绘制，如以下代码所示:</p><pre>plt.subplots(1, 2, sharex='col', \
              sharey='row', figsize=(16,8))
 plt.scatter(data.iloc[:,5], data.iloc[:,3], \
             c=pred_kmeans, s=20)
@@ -134,15 +134,15 @@ plt.xlabel('Grocery')
 plt.ylabel('Milk')
 plt.show()</pre><p>输出如下所示:</p><div><img src="img/B15781_02_19.jpg" alt="Figure 2.19: Two example plots obtained after the clustering process&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图2.19:聚类过程后获得的两个示例图</p>
+			<p class="figure-caption">图 2.19:聚类过程后获得的两个示例图</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问此活动的源代码，请参考<a href="https://packt.live/3fhgO0y">https://packt.live/3fhgO0y</a>。</p>
 			<p class="callout">你也可以在<a href="https://packt.live/3eeEOB6">https://packt.live/3eeEOB6</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>来自<code>matplotlib</code>的<code>subplots()</code>函数被用于一次绘制两个散点图。对于每个图形，轴代表相对于另一个特性的值的所选特性的值。从图中可以看出，由于我们只能使用数据集中八个特征中的两个，因此没有明显的视觉关系。然而，模型的最终输出创建了六个不同的集群，代表六个不同的客户端配置文件。</p>
-			<h2 id="_idParaDest-179"><a id="_idTextAnchor185"/>活动2.03:将均值漂移算法应用于数据集</h2>
+			<h2 id="_idParaDest-179"><a id="_idTextAnchor185"/>活动 2.03:将均值漂移算法应用于数据集</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您在之前的活动中使用的Jupyter笔记本。</li>
+				<li value="1">打开您在之前的活动中使用的 Jupyter 笔记本。</li>
 				<li>Train the model and assign a cluster to each data point in your dataset. Plot the results. <p>首先，导入算法类:</p><pre>from sklearn.cluster import MeanShift</pre><p>若要定型模型，请使用以下代码:</p><pre>est_meanshift = MeanShift(0.4)
 est_meanshift.fit(data_standardized)
 pred_meanshift = est_meanshift.predict(data_standardized)</pre><p>使用<code>0.4</code>的带宽训练该模型。但是，可以随意测试其他值，看看结果如何变化。</p><p>最后，绘制聚类过程的结果。由于数据集包含八个不同的要素，因此选择两个要素同时进行绘制，如以下代码片段所示。与上一个练习类似，由于只能从八个特征中画出两个，所以看不到聚类之间的分隔:</p><pre>plt.subplots(1, 2, sharex='col', \
@@ -161,16 +161,16 @@ plt.xlabel('Grocery')
 plt.ylabel('Milk')
 plt.show()</pre><p>输出如下所示:</p><div><img src="img/B15781_02_20.jpg" alt="Figure 2.20: Example plots obtained at the end of the process&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图2.20:流程结束时获得的示例图</p>
+			<p class="figure-caption">图 2.20:流程结束时获得的示例图</p>
 			<p>对于每个图，轴代表所选特性的值，而不是另一个特性的值。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问此活动的源代码，请参考<a href="https://packt.live/3fviVy1">https://packt.live/3fviVy1</a>。</p>
-			<p class="callout">你也可以在https://packt.live/2Y1aqEF的<a href="https://packt.live/2Y1aqEF">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p>
+			<p class="callout">你也可以在 https://packt.live/2Y1aqEF 的<a href="https://packt.live/2Y1aqEF">在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</a></p>
 			<p>您已经成功地对批发客户数据集应用了均值漂移算法。稍后，您将能够比较同一数据集上不同算法的结果，以选择性能最佳的算法。</p>
-			<h2 id="_idParaDest-180"><a id="_idTextAnchor186"/>活动2.04:将DBSCAN算法应用于数据集</h2>
+			<h2 id="_idParaDest-180"><a id="_idTextAnchor186"/>活动 2.04:将 DBSCAN 算法应用于数据集</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您在之前的活动中使用的Jupyter笔记本。</li>
+				<li value="1">打开您在之前的活动中使用的 Jupyter 笔记本。</li>
 				<li>Train the model and assign a cluster to each data point in your dataset. Plot the results. <p>首先，导入算法类:</p><pre>from sklearn.cluster import DBSCAN</pre><p>若要定型模型，请使用以下代码:</p><pre>est_dbscan = DBSCAN(eps=0.8)
 pred_dbscan = est_dbscan.fit_predict(data_standardized)</pre><p>使用ε值<code>0.8</code>训练该模型。但是，可以随意测试其他值，看看结果如何变化。</p><p>最后，绘制聚类过程的结果。由于数据集包含八个不同的要素，因此选择两个要素同时进行绘制，如以下代码所示:</p><pre>plt.subplots(1, 2, sharex='col', \
              sharey='row', figsize=(16,8))
@@ -188,15 +188,15 @@ plt.xlabel('Grocery')
 plt.ylabel('Milk')
 plt.show()</pre><p>输出如下所示:</p><div><img src="img/B15781_02_21.jpg" alt="Figure 2.21: Example plots obtained at the end of the clustering process&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图2.21:聚类过程结束时获得的示例图</p>
+			<p class="figure-caption">图 2.21:聚类过程结束时获得的示例图</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问此活动的源代码，请参考<a href="https://packt.live/2YCFvh8">https://packt.live/2YCFvh8</a>。</p>
-			<p class="callout">你也可以在https://packt.live/2MZgnvC在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
+			<p class="callout">你也可以在 https://packt.live/2MZgnvC 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>与上一个练习类似，由于一次只能从八个要素中画出两个，所以看不到聚类之间的分隔。</p>
-			<h2 id="_idParaDest-181"><a id="_idTextAnchor187"/>活动2.05:测量和比较算法的性能</h2>
+			<h2 id="_idParaDest-181"><a id="_idTextAnchor187"/>活动 2.05:测量和比较算法的性能</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您在之前的活动中使用的Jupyter笔记本。</li>
+				<li value="1">打开您在之前的活动中使用的 Jupyter 笔记本。</li>
 				<li>Calculate both the Silhouette Coefficient score and the Calinski–Harabasz index for all the models that you trained previously. <p>首先，导入指标:</p><pre>from sklearn.metrics import silhouette_score
 from sklearn.metrics import calinski_harabasz_score</pre><p>计算所有算法的轮廓系数得分，如以下代码所示:</p><pre>kmeans_score = silhouette_score(data_standardized, \
                                 pred_kmeans, \
@@ -207,20 +207,20 @@ meanshift_score = silhouette_score(data_standardized, \
 dbscan_score = silhouette_score(data_standardized, \
                                 pred_dbscan, \
                                 metric='euclidean')
-print(kmeans_score, meanshift_score, dbscan_score)</pre><p>k-means、mean-shift和DBSCAN算法的得分分别约为<code>0.3515</code>、<code>0.0933</code>和<code>0.1685</code>。</p><p>最后，计算所有算法的卡林斯基-哈拉巴斯指数。以下是这方面的代码片段:</p><pre>kmeans_score = calinski_harabasz_score(data_standardized, \
+print(kmeans_score, meanshift_score, dbscan_score)</pre><p>k-means、mean-shift 和 DBSCAN 算法的得分分别约为<code>0.3515</code>、<code>0.0933</code>和<code>0.1685</code>。</p><p>最后，计算所有算法的卡林斯基-哈拉巴斯指数。以下是这方面的代码片段:</p><pre>kmeans_score = calinski_harabasz_score(data_standardized, \
                                        pred_kmeans)
 meanshift_score = calinski_harabasz_score(data_standardized, \
                                           pred_meanshift)
 dbscan_score = calinski_harabasz_score(data_standardized, \
                                        pred_dbscan)
-print(kmeans_score, meanshift_score, dbscan_score)</pre><p>按照前面代码片段中给出的顺序，三种算法的得分大约为<code>145.73</code>、<code>112.90</code>和<code>42.45</code>。</p><p class="callout-heading">注意</p><p class="callout">要访问此活动的源代码，请参考<a href="https://packt.live/2Y2xHWR">https://packt.live/2Y2xHWR</a>。</p><p class="callout">你也可以在https://packt.live/3hszegy在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+print(kmeans_score, meanshift_score, dbscan_score)</pre><p>按照前面代码片段中给出的顺序，三种算法的得分大约为<code>145.73</code>、<code>112.90</code>和<code>42.45</code>。</p><p class="callout-heading">注意</p><p class="callout">要访问此活动的源代码，请参考<a href="https://packt.live/2Y2xHWR">https://packt.live/2Y2xHWR</a>。</p><p class="callout">你也可以在 https://packt.live/3hszegy 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>通过快速查看我们从这两个指标获得的结果，可以得出这样的结论:k-means算法优于其他模型，因此应该选择它来解决数据问题。</p>
+			<p>通过快速查看我们从这两个指标获得的结果，可以得出这样的结论:k-means 算法优于其他模型，因此应该选择它来解决数据问题。</p>
 			<h1 id="_idParaDest-182"><a id="_idTextAnchor188"/> 3。监督学习–关键步骤</h1>
-			<h2 id="_idParaDest-183"><a id="_idTextAnchor189"/>活动3.01:手写数字数据集的数据划分</h2>
+			<h2 id="_idParaDest-183"><a id="_idTextAnchor189"/>活动 3.01:手写数字数据集的数据划分</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">导入分割数据集所需的所有元素，以及scikit-learn中的<code>load_digits</code>函数来加载<code>digits</code>数据集。使用下面的代码来做到这一点:<pre>from sklearn.datasets import load_digits import pandas as pd from sklearn.model_selection import train_test_split from sklearn.model_selection import KFold</pre></li>
+				<li value="1">导入分割数据集所需的所有元素，以及 scikit-learn 中的<code>load_digits</code>函数来加载<code>digits</code>数据集。使用下面的代码来做到这一点:<pre>from sklearn.datasets import load_digits import pandas as pd from sklearn.model_selection import train_test_split from sklearn.model_selection import KFold</pre></li>
 				<li>Load the <code>digits</code> dataset and create Pandas DataFrames containing the features and target matrices:<pre>digits = load_digits()
 X = pd.DataFrame(digits.data)
 Y = pd.DataFrame(digits.target)
@@ -234,7 +234,7 @@ Y_train, Y_dev = train_test_split(X_new, Y_new, \
 print(X_train.shape, Y_train.shape, X_dev.shape, \
       Y_dev.shape, X_test.shape, Y_test.shape)</pre><p>上述代码片段的输出如下:</p><pre>(1077, 64) (1077, 1) (360, 64) (360, 1) (360, 64) (360, 1)</pre></li>
 				<li>Using the same DataFrames, perform a 10-fold cross-validation split.<p>首先，将数据集分为初始训练集和测试集:</p><pre>X_new_2, X_test_2, \
-Y_new_2, Y_test_2 = train_test_split(X, Y, test_size=0.1)</pre><p>使用<code>KFold</code>类，执行10倍分割:</p><pre>kf = KFold(n_splits = 10)
+Y_new_2, Y_test_2 = train_test_split(X, Y, test_size=0.1)</pre><p>使用<code>KFold</code>类，执行 10 倍分割:</p><pre>kf = KFold(n_splits = 10)
 splits = kf.split(X_new_2)</pre><p>请记住，交叉验证执行不同的分割配置，每次都混洗数据。考虑到这一点，执行一个<code>for</code>循环，该循环将遍历所有分割配置:</p><pre>for train_index, dev_index in splits:
     X_train_2, X_dev_2 = X_new_2.iloc[train_index,:], \
                          X_new_2.iloc[dev_index,:]
@@ -243,14 +243,14 @@ splits = kf.split(X_new_2)</pre><p>请记住，交叉验证执行不同的分割
       Y_dev_2.shape, X_test_2.shape, Y_test_2.shape)</pre><p>按照前面的代码片段，通过打印所有子集的形状，输出如下:</p><pre>(1456, 64) (1456, 1) (161, 64) (161, 1) (180, 64) (180, 1)</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/37xatv3">https://packt.live/37xatv3</a>。</p><p class="callout">你也可以在<a href="https://packt.live/2Y2nolS">https://packt.live/2Y2nolS</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>您已经使用传统的拆分方法和交叉验证方法成功地拆分了数据集。这些集合现在可以用来训练在看不见的数据上表现良好的优秀模型。</p>
-			<h2 id="_idParaDest-184"><a id="_idTextAnchor190"/>活动3.02:评估在手写数据集上训练的模型的性能</h2>
+			<h2 id="_idParaDest-184"><a id="_idTextAnchor190"/>活动 3.02:评估在手写数据集上训练的模型的性能</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li value="1">导入加载和分割数据集所需的所有元素，以便训练模型并评估分类任务的性能:<pre>from sklearn.datasets import load_digits import pandas as pd from sklearn.model_selection import train_test_split from sklearn import tree from sklearn.metrics import confusion_matrix from sklearn.metrics import accuracy_score from sklearn.metrics import precision_score from sklearn.metrics import recall_score</pre></li>
-				<li>从scikit-learn加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧:<pre>digits = load_digits() X = pd.DataFrame(digits.data) Y = pd.DataFrame(digits.target)</pre></li>
-				<li>将数据分成训练集和测试集。使用20%作为测试集的大小:<pre>X_train, X_test, \ Y_train, Y_test = train_test_split(X,Y, test_size = 0.2,\                                    random_state = 0)</pre></li>
-				<li>在训练集上训练决策树。然后，使用模型预测测试集上的类标签(提示:训练决策树，重温<em class="italic">练习3.04 </em>，<em class="italic">计算一个分类任务上不同的评价度量</em> ): <pre>model = tree.DecisionTreeClassifier(random_state = 0) model = model.fit(X_train, Y_train) Y_pred = model.predict(X_test)</pre></li>
-				<li>Use scikit-learn to construct a confusion matrix:<pre>confusion_matrix(Y_test, Y_pred)</pre><p>混淆矩阵的输出如下:</p><p> </p><div><img src="img/B15781_03_14.jpg" alt="Figure 3.14: Output of the confusion matrix&#13;&#10;"/></div><p class="figure-caption">图3.14:混淆矩阵的输出</p></li>
+				<li>从 scikit-learn 加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧:<pre>digits = load_digits() X = pd.DataFrame(digits.data) Y = pd.DataFrame(digits.target)</pre></li>
+				<li>将数据分成训练集和测试集。使用 20%作为测试集的大小:<pre>X_train, X_test, \ Y_train, Y_test = train_test_split(X,Y, test_size = 0.2,\                                    random_state = 0)</pre></li>
+				<li>在训练集上训练决策树。然后，使用模型预测测试集上的类标签(提示:训练决策树，重温<em class="italic">练习 3.04 </em>，<em class="italic">计算一个分类任务上不同的评价度量</em> ): <pre>model = tree.DecisionTreeClassifier(random_state = 0) model = model.fit(X_train, Y_train) Y_pred = model.predict(X_test)</pre></li>
+				<li>Use scikit-learn to construct a confusion matrix:<pre>confusion_matrix(Y_test, Y_pred)</pre><p>混淆矩阵的输出如下:</p><p> </p><div><img src="img/B15781_03_14.jpg" alt="Figure 3.14: Output of the confusion matrix&#13;&#10;"/></div><p class="figure-caption">图 3.14:混淆矩阵的输出</p></li>
 				<li>Calculate the accuracy of the model:<pre>accuracy = accuracy_score(Y_test, Y_pred)
 print("accuracy:", accuracy)</pre><p>精度等于<code>84.72</code> %。</p></li>
 				<li>Calculate the precision and recall. Considering that both the precision and recall can only be calculated on binary data, we'll assume that we are only interested in classifying instances as number 6 or any other number:<pre>Y_test_2 = Y_test[:]
@@ -263,14 +263,14 @@ precision = precision_score(Y_test_2, Y_pred_2)
 print("precision:", precision)
 recall = recall_score(Y_test_2, Y_pred_2)
 print("recall:", recall)</pre><p>上述代码片段的输出如下:</p><pre>precision: 0.9841269841269841
-recall: 0.9810126582278481</pre><p>据此，准确率和召回率得分应该分别等于<code>98.41</code> %和<code>98.10</code> %。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2UJMFPC">https://packt.live/2UJMFPC</a>。</p><p class="callout">你也可以在https://packt.live/2zwqkgX在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+recall: 0.9810126582278481</pre><p>据此，准确率和召回率得分应该分别等于<code>98.41</code> %和<code>98.10</code> %。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2UJMFPC">https://packt.live/2UJMFPC</a>。</p><p class="callout">你也可以在 https://packt.live/2zwqkgX 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>您已经成功测量了分类任务的性能。</p>
-			<h2 id="_idParaDest-185"><a id="_idTextAnchor191"/>活动3.03:对训练识别手写数字的模型进行错误分析</h2>
+			<h2 id="_idParaDest-185"><a id="_idTextAnchor191"/>活动 3.03:对训练识别手写数字的模型进行错误分析</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li value="1">导入所需的元素以加载和拆分数据集。我们将这样做来训练模型并测量其准确性:<pre>from sklearn.<a id="_idTextAnchor192"/>datasets import load_digits import pandas as pd from sklearn.model_selection import train_test_split import numpy as np from sklearn import tree from sklearn.metrics import accuracy_score</pre></li>
-				<li>从scikit-learn加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧:<pre>digits = load_digits() X = pd.DataFrame(digits.data) Y = pd.DataFrame(digits.target)</pre></li>
+				<li>从 scikit-learn 加载<code>digits</code>玩具数据集，并创建包含特征和目标矩阵的熊猫数据帧:<pre>digits = load_digits() X = pd.DataFrame(digits.data) Y = pd.DataFrame(digits.target)</pre></li>
 				<li>Split the data into training, validation, and testing sets. Use <code>0.1</code> as the size of the test set, and an equivalent number to build a validation set of the same shape:<pre>X_new, X_test, \
 Y_new, Y_test = train_test_split(X, Y, test_size = 0.1,\
                                  random_state = 101)
@@ -300,17 +300,17 @@ for i in range(0, len(X_sets)):
     scores[sets[i]] = score
 print(scores)</pre><p>输出如下所示:</p><pre>{'Training': 1.0, 'Train/dev': 0.9444444444444444, 'Validation': 0.8833333333333333, 'Testing': 0.8833333333333333}</pre><p>错误率见下表:</p><div><img src="img/B15781_03_15.jpg" alt="Figure 3.15: Error rates of the Handwritten Digits model&#13;&#10;"/></div></li>
 			</ol>
-			<p class="figure-caption">图3.15:手写数字模型的错误率</p>
+			<p class="figure-caption">图 3.15:手写数字模型的错误率</p>
 			<p>从前面的结果可以得出结论，该模型同样遭受方差和数据不匹配。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3d0c4uM">https://packt.live/3d0c4uM</a>。</p>
 			<p class="callout">你也可以在<a href="https://packt.live/3eeFlTC">https://packt.live/3eeFlTC</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p>
 			<p>现在，您已经成功地执行了错误分析，确定了改进模型性能的措施。</p>
 			<h1 id="_idParaDest-186"><a id="_idTextAnchor193"/> 4。监督学习算法:预测年收入</h1>
-			<h2 id="_idParaDest-187"><a id="_idTextAnchor194"/>活动4.01:为我们的人口普查收入数据集训练一个朴素贝叶斯模型</h2>
+			<h2 id="_idParaDest-187"><a id="_idTextAnchor194"/>活动 4.01:为我们的人口普查收入数据集训练一个朴素贝叶斯模型</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">在Jupyter笔记本中，导入所有必需的元素来加载和拆分数据集，以及训练一个朴素贝叶斯算法:<pre>import pandas as pd from sklearn.model_selection import train_test_split from sklearn.naive_bayes import GaussianNB</pre></li>
+				<li value="1">在 Jupyter 笔记本中，导入所有必需的元素来加载和拆分数据集，以及训练一个朴素贝叶斯算法:<pre>import pandas as pd from sklearn.model_selection import train_test_split from sklearn.naive_bayes import GaussianNB</pre></li>
 				<li>Load the pre-processed Census Income dataset. Next, separate the features from the target by creating two variables, <code>X</code> and <code>Y</code>:<pre>data = pd.read_csv("census_income_dataset_preprocessed.csv")
 X = data.drop("target", axis=1)
 Y = data["target"]</pre><p>注意有几种方法可以实现<code>X</code>和<code>Y</code>的分离。用你觉得最舒服的那个。但是，要考虑到<code>X</code>应该包含所有实例的特性，而<code>Y</code>应该包含所有实例的类标签。</p></li>
@@ -326,31 +326,31 @@ print(X_train.shape, Y_train.shape, X_dev.shape, \
       Y_dev.shape, X_test.shape, Y_test.shape)</pre><p>最终形状将如下所示:</p><pre>(26047, 9) (26047,) (3257, 9) (3257,) (3257, 9) (3257,)</pre></li>
 				<li>使用<code>fit</code>方法在训练集上训练一个朴素贝叶斯模型(<code>X_train</code>和<code>Y_train</code> ): <pre>model_NB = GaussianNB() model_NB.fit(X_train,Y_train)</pre></li>
 				<li>Finally, perform a prediction using the model that you trained previously for a new instance with the following values for each feature – <code>39</code>, <code>6</code>, <code>13</code>, <code>4</code>, <code>0</code>, <code>2174</code>, <code>0</code>, <code>40</code>, <code>38</code>:<pre>pred_1 = model_NB.predict([[39,6,13,4,0,2174,0,40,38]])
-print(pred_1)</pre><p>预测的输出如下:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3ht1TCs">https://packt.live/3ht1TCs</a>。</p><p class="callout">你也可以在https://packt.live/2zwqxkf在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+print(pred_1)</pre><p>预测的输出如下:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3ht1TCs">https://packt.live/3ht1TCs</a>。</p><p class="callout">你也可以在 https://packt.live/2zwqxkf 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>这意味着个人的收入少于或等于50K，考虑到0是工资少于或等于50K的个人的标签。</p>
-			<h2 id="_idParaDest-188"><a id="_idTextAnchor195"/>活动4.02:为我们的人口普查收入数据集训练决策树模型</h2>
+			<p>这意味着个人的收入少于或等于 50K，考虑到 0 是工资少于或等于 50K 的个人的标签。</p>
+			<h2 id="_idParaDest-188"><a id="_idTextAnchor195"/>活动 4.02:为我们的人口普查收入数据集训练决策树模型</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您在之前活动中使用的Jupyter笔记本，从scikit-learn: <pre>from sklearn.tree import DecisionTreeClassifier</pre>导入决策树算法</li>
-				<li>在scikit-learn的<code>DecisionTreeClassifier</code>类上使用<code>fit</code>方法训练模型。为了训练模型，使用来自先前活动的训练集数据(<code>X_train</code>和<code>Y_train</code> ): <pre>model_tree = DecisionTreeClassifier(random_state=101) model_tree.fit(X_train,Y_train)</pre></li>
+				<li value="1">打开您在之前活动中使用的 Jupyter 笔记本，从 scikit-learn: <pre>from sklearn.tree import DecisionTreeClassifier</pre>导入决策树算法</li>
+				<li>在 scikit-learn 的<code>DecisionTreeClassifier</code>类上使用<code>fit</code>方法训练模型。为了训练模型，使用来自先前活动的训练集数据(<code>X_train</code>和<code>Y_train</code> ): <pre>model_tree = DecisionTreeClassifier(random_state=101) model_tree.fit(X_train,Y_train)</pre></li>
 				<li>Finally, perform a prediction using the model that you trained before for a new instance with the following values for each feature – <code>39</code>, <code>6</code>, <code>13</code>, <code>4</code>, <code>0</code>, <code>2174</code>, <code>0</code>, <code>40</code>, <code>38</code>:<pre>pred_2 = model_tree.predict([[39,6,13,4,0,2174,0,40,38]])
-print(pred_2)</pre><p>上述代码片段的输出如下:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2zxQIqV">https://packt.live/2zxQIqV</a>。</p><p class="callout">你也可以在https://packt.live/2AC7iWX在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+print(pred_2)</pre><p>上述代码片段的输出如下:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2zxQIqV">https://packt.live/2zxQIqV</a>。</p><p class="callout">你也可以在 https://packt.live/2AC7iWX 在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
-			<p>这意味着主体的收入低于或等于50K。</p>
-			<h2 id="_idParaDest-189"><a id="_idTextAnchor196"/>活动4.03:为人口普查收入数据集训练一个SVM模型</h2>
+			<p>这意味着主体的收入低于或等于 50K。</p>
+			<h2 id="_idParaDest-189"><a id="_idTextAnchor196"/>活动 4.03:为人口普查收入数据集训练一个 SVM 模型</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您在之前的练习中使用的Jupyter笔记本，从scikit-learn: <pre>from sklearn.svm import SVC</pre>导入SVM算法</li>
-				<li>使用scikit-learn的<code>SVC</code>类上的<code>fit</code>方法训练模型。为了训练模型，使用来自先前活动的训练集数据(<code>X_train</code>和<code>Y_train</code> ): <pre>model_svm = SVC() model_svm.fit(X_train, Y_train)</pre></li>
+				<li value="1">打开您在之前的练习中使用的 Jupyter 笔记本，从 scikit-learn: <pre>from sklearn.svm import SVC</pre>导入 SVM 算法</li>
+				<li>使用 scikit-learn 的<code>SVC</code>类上的<code>fit</code>方法训练模型。为了训练模型，使用来自先前活动的训练集数据(<code>X_train</code>和<code>Y_train</code> ): <pre>model_svm = SVC() model_svm.fit(X_train, Y_train)</pre></li>
 				<li>Finally, perform a prediction using the model that you trained before for a new instance with the following values for each feature – <code>39</code>, <code>6</code>, <code>13</code>, <code>4</code>, <a id="_idTextAnchor197"/><code>0</code>, <code>2174</code>, <code>0</code>, <code>40</code>, <code>38</code>:<pre>pred_3 = model_svm.predict([[39,6,13,4,0,2174,0,40,38]])
 print(pred_3)</pre><p>输出如下所示:</p><pre>[0]</pre><p>对个人的预测等于零，这意味着个人的收入低于或等于<code>50K</code>。</p><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2Nb6J9z">https://packt.live/2Nb6J9z</a>。</p><p class="callout">你也可以在<a href="https://packt.live/3hbpCGm">https://packt.live/3hbpCGm</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<h1 id="_idParaDest-190"><a id="_idTextAnchor198"/> 5。人工神经网络:预测年收入</h1>
-			<h2 id="_idParaDest-191"><a id="_idTextAnchor199"/>活动5.01:为人口普查收入数据集训练MLP</h2>
+			<h2 id="_idParaDest-191"><a id="_idTextAnchor199"/>活动 5.01:为人口普查收入数据集训练 MLP</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">导入加载和分割数据集、训练MLP以及测量准确度所需的所有元素:<pre>import pandas as pd from sklearn.model_selection import train_test_split from sklearn.neural_network import MLPClassifier from sklearn.metrics import accuracy_score</pre></li>
+				<li value="1">导入加载和分割数据集、训练 MLP 以及测量准确度所需的所有元素:<pre>import pandas as pd from sklearn.model_selection import train_test_split from sklearn.neural_network import MLPClassifier from sklearn.metrics import accuracy_score</pre></li>
 				<li>Using the preprocessed Census Income Dataset, separate the features from the target, creating the variables <code>X</code> and <code>Y</code>:<pre>data = pd.read_csv("census_income_dataset_preprocessed.csv")
 X = data.drop("target", axis=1)
 Y = data["target"]</pre><p>如前所述，有几种方法可以实现<code>X</code>和<code>Y</code>的分离，主要考虑的是<code>X</code>应该包含所有实例的特性，而<code>Y</code>应该包含所有实例的类标签。</p></li>
@@ -364,7 +364,7 @@ Y_train, Y_dev = train_test_split(X_new, Y_new, \
                                   random_state=101)
 print(X_train.shape, X_dev.shape, X_test.shape, \
       Y_train.shape, Y_dev.shape, Y_test.shape)</pre><p>创建的集合的形状应该如下所示:</p><pre>(26047, 9) (3257, 9) (3257, 9) (26047,) (3257,) (3257,)</pre></li>
-				<li>从scikit-learn实例化<code>MLPClassifier</code>类，并用训练数据训练模型。将超参数保留为默认值。同样，使用一个等于<code>101</code> : <pre>model = MLPClassifier(random_state=101) model = model.fit(X_train, Y_train)</pre>的<code>random_state</code></li>
+				<li>从 scikit-learn 实例化<code>MLPClassifier</code>类，并用训练数据训练模型。将超参数保留为默认值。同样，使用一个等于<code>101</code> : <pre>model = MLPClassifier(random_state=101) model = model.fit(X_train, Y_train)</pre>的<code>random_state</code></li>
 				<li>Calculate the accuracy of the model for all three sets (training, validation, and testing):<pre>sets = ["Training", "Validation", "Testing"]
 X_sets = [X_train, X_dev, X_test]
 Y_sets = [Y_train, Y_dev, Y_test]
@@ -375,29 +375,29 @@ for i in range(0,len(X_sets)):
     accuracy[sets[i]] = score
 print(accuracy)</pre><p>三个集合的准确度分数应该如下:</p><pre>{'Training': 0.8465909090909091, 'Validation': 0.8246314496314496, 'Testing': 0.8415719987718759}</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/3hneWFr">https://packt.live/3hneWFr</a>。</p><p class="callout">本节目前没有在线交互示例，需要在本地运行。</p></li>
 			</ol>
-			<p>您已经成功训练了一个MLP模型来解决现实生活中的数据问题。</p>
-			<h2 id="_idParaDest-192"><a id="_idTextAnchor200"/>活动5.02:比较不同的模型，选择最适合人口普查收入数据问题的模型</h2>
+			<p>您已经成功训练了一个 MLP 模型来解决现实生活中的数据问题。</p>
+			<h2 id="_idParaDest-192"><a id="_idTextAnchor200"/>活动 5.02:比较不同的模型，选择最适合人口普查收入数据问题的模型</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开您用来训练模型的Jupyter笔记本。</li>
-				<li>Compare the four models, based only on their accuracy scores.<p>通过获取前一章中模型的准确性分数，以及本章中训练的模型的准确性，可以执行最终比较，以选择最能解决数据问题的模型。为此，下表显示了所有四种模型的准确度分数:</p><div><img src="img/B15781_05_15.jpg" alt="Figure 5.15: Accuracy scores of all four models for the Census Income Dataset&#13;&#10;"/></div><p class="figure-caption">图5.15:人口普查收入数据集的所有四个模型的准确度得分</p></li>
-				<li>On the basis of the accuracy scores, identify the model that best solves the data problem.<p>要确定最能解决数据问题的模型，首先要比较训练集的准确率。由此可以得出结论，决策树模型更适合数据问题。尽管如此，在验证和测试集上的性能低于使用MLP获得的性能，这表明决策树模型中存在高方差。</p><p>因此，一个好的方法是通过简化模型来解决决策树模型的高方差。这可以通过添加修剪参数来实现，该参数“修剪”树的叶子以简化树，并忽略树的一些细节，以便将模型推广到数据。理想情况下，该模型应该能够对所有三组数据达到相似的精度水平，这将使其成为解决数据问题的最佳模型。</p><p>但是，如果模型无法克服高方差，并且假设所有模型都已经过微调以实现可能的最大性能，则考虑到MLP在测试集中的性能最佳，应该选择它。这主要是因为模型在测试集上的性能定义了它在看不见的数据上的整体性能，这意味着从长远来看，具有更高测试集性能的模型将更有用。</p></li>
+				<li value="1">打开您用来训练模型的 Jupyter 笔记本。</li>
+				<li>Compare the four models, based only on their accuracy scores.<p>通过获取前一章中模型的准确性分数，以及本章中训练的模型的准确性，可以执行最终比较，以选择最能解决数据问题的模型。为此，下表显示了所有四种模型的准确度分数:</p><div><img src="img/B15781_05_15.jpg" alt="Figure 5.15: Accuracy scores of all four models for the Census Income Dataset&#13;&#10;"/></div><p class="figure-caption">图 5.15:人口普查收入数据集的所有四个模型的准确度得分</p></li>
+				<li>On the basis of the accuracy scores, identify the model that best solves the data problem.<p>要确定最能解决数据问题的模型，首先要比较训练集的准确率。由此可以得出结论，决策树模型更适合数据问题。尽管如此，在验证和测试集上的性能低于使用 MLP 获得的性能，这表明决策树模型中存在高方差。</p><p>因此，一个好的方法是通过简化模型来解决决策树模型的高方差。这可以通过添加修剪参数来实现，该参数“修剪”树的叶子以简化树，并忽略树的一些细节，以便将模型推广到数据。理想情况下，该模型应该能够对所有三组数据达到相似的精度水平，这将使其成为解决数据问题的最佳模型。</p><p>但是，如果模型无法克服高方差，并且假设所有模型都已经过微调以实现可能的最大性能，则考虑到 MLP 在测试集中的性能最佳，应该选择它。这主要是因为模型在测试集上的性能定义了它在看不见的数据上的整体性能，这意味着从长远来看，具有更高测试集性能的模型将更有用。</p></li>
 			</ol>
 			<h1 id="_idParaDest-193"><a id="_idTextAnchor201"/> 6。构建您自己的程序</h1>
-			<h2 id="_idParaDest-194"><a id="_idTextAnchor202"/>活动6.01:执行银行营销数据集的准备和创建阶段</h2>
+			<h2 id="_idParaDest-194"><a id="_idTextAnchor202"/>活动 6.01:执行银行营销数据集的准备和创建阶段</h2>
 			<p>解决方案:</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">为了确保在<a href="https://packt.live/2RpIhn9">https://packt.live/2RpIhn9</a>获得的结果的可再现性，请确保在分割数据集时使用<code>0</code>的<code>random_state</code>，在训练模型时使用<code>2</code>的<code>random_state</code>。</p>
 			<ol>
-				<li value="1">打开一个Jupyter笔记本，输入所有需要的元素:<pre>import pandas as pd from sklearn.preprocessing import LabelEncoder from sklearn.model_selection import train_test_split from sklearn.tree import DecisionTreeClassifier from sklearn.neural_network import MLPClassifier from sklearn.metrics import precision_score</pre></li>
+				<li value="1">打开一个 Jupyter 笔记本，输入所有需要的元素:<pre>import pandas as pd from sklearn.preprocessing import LabelEncoder from sklearn.model_selection import train_test_split from sklearn.tree import DecisionTreeClassifier from sklearn.neural_network import MLPClassifier from sklearn.metrics import precision_score</pre></li>
 				<li>Load the dataset into the notebook. Make sure that you load the one that was edited previously, named <code>bank-full-dataset.csv</code>, which is also available at <a href="https://packt.live/2wnJyny">https://packt.live/2wnJyny</a>:<pre>data = pd.read_csv("bank-full-dataset.csv")
-data.head(10)</pre><p>输出如下所示:</p><div><img src="img/B15781_06_08.jpg" alt="Figure 6.8: A screenshot showing the first 10 instances of the dataset&#13;&#10;"/></div><p class="figure-caption">图6.8:显示数据集前10个实例的屏幕截图</p><p>如前所述，缺失值显示为<code>NaN</code>。</p></li>
+data.head(10)</pre><p>输出如下所示:</p><div><img src="img/B15781_06_08.jpg" alt="Figure 6.8: A screenshot showing the first 10 instances of the dataset&#13;&#10;"/></div><p class="figure-caption">图 6.8:显示数据集前 10 个实例的屏幕截图</p><p>如前所述，缺失值显示为<code>NaN</code>。</p></li>
 				<li>Select the metric that's the most appropriate for measuring the performance of the model, considering that the purpose of the study is to detect clients who would subscribe to the term deposit.<p>评估模型性能的指标是<strong class="bold">精度</strong>指标，因为它将正确分类的阳性标签与预测为阳性的实例总数进行比较。</p></li>
-				<li>Pre-process the dataset.<p>处理缺失值的过程是按照我们在第一章、<em class="italic">Scikit-Learn简介</em>中了解到的概念来处理的，这些概念在本书中已经得到了应用。使用以下代码检查缺少的值:</p><pre>data.isnull().sum()</pre><p>根据结果，您将观察到只有四个特征包含缺失值:<code>job</code> (288)、<code>education</code> (1，857)、<code>contact</code> (13，020)和<code>poutcome</code> (36，959)。</p><p>考虑到丢失的值不到整个数据的5%,前两个特征可以不处理。另一方面，28.8%的值在<code>contact</code>功能中缺失，考虑到该功能指的是联系方式，而联系方式被认为与确定一个人是否会订阅新产品无关，因此从研究中删除该功能是安全的。最后，<code>poutcome</code>特征缺少其值的81.7%，这就是为什么该特征也被从研究中移除。</p><p>使用下面的代码，前面的两个功能将被删除:</p><pre>data = data.drop(["contact", "poutcome"], axis=1)</pre><p>正如我们在<em class="italic">第1章</em>、<em class="italic">sci kit-Learn简介</em>中所解释的，并且贯穿本书，将分类特征转换成它们的数字形式的过程如下。</p><p>对于所有标称特征，使用以下代码:</p><pre>enc = LabelEncoder()
+				<li>Pre-process the dataset.<p>处理缺失值的过程是按照我们在第一章、<em class="italic">Scikit-Learn 简介</em>中了解到的概念来处理的，这些概念在本书中已经得到了应用。使用以下代码检查缺少的值:</p><pre>data.isnull().sum()</pre><p>根据结果，您将观察到只有四个特征包含缺失值:<code>job</code> (288)、<code>education</code> (1，857)、<code>contact</code> (13，020)和<code>poutcome</code> (36，959)。</p><p>考虑到丢失的值不到整个数据的 5%,前两个特征可以不处理。另一方面，28.8%的值在<code>contact</code>功能中缺失，考虑到该功能指的是联系方式，而联系方式被认为与确定一个人是否会订阅新产品无关，因此从研究中删除该功能是安全的。最后，<code>poutcome</code>特征缺少其值的 81.7%，这就是为什么该特征也被从研究中移除。</p><p>使用下面的代码，前面的两个功能将被删除:</p><pre>data = data.drop(["contact", "poutcome"], axis=1)</pre><p>正如我们在<em class="italic">第 1 章</em>、<em class="italic">sci kit-Learn 简介</em>中所解释的，并且贯穿本书，将分类特征转换成它们的数字形式的过程如下。</p><p>对于所有标称特征，使用以下代码:</p><pre>enc = LabelEncoder()
 features_to_convert=["job","marital","default",\
                      "housing","loan","month","y"]
 for i in features_to_convert:
-    data[i] = enc.fit_transform(data[i].astype('str'))</pre><p>如前几章所述，前面的代码将所有定性特征转换成数字形式。</p><p>接下来，为了处理序数特征，我们必须使用下面的代码，正如在<em class="italic">步骤4 </em>中提到的:</p><pre>data['education'] = data['education'].fillna('unknown')
+    data[i] = enc.fit_transform(data[i].astype('str'))</pre><p>如前几章所述，前面的代码将所有定性特征转换成数字形式。</p><p>接下来，为了处理序数特征，我们必须使用下面的代码，正如在<em class="italic">步骤 4 </em>中提到的:</p><pre>data['education'] = data['education'].fillna('unknown')
 encoder = ['unknown','primary','secondary','tertiary']
 for i, word in enumerate(encoder):
     data['education'] = data['education'].astype('str').\
@@ -414,9 +414,9 @@ for i in range(data.shape[1]):
         if j &lt; min_t or j &gt; max_t:
             count += 1
     outliers[data.columns[i]] = [count, data.shape[0]]
-print(outliers)</pre><p>如果我们打印结果字典，我们会得到以下输出:</p><pre>{'age': [381, 45211], 'job': [0, 45211], 'marital': [0, 45211], 'education': [0, 45211], 'default': [815, 45211], 'balance': [745, 45211], 'housing': [0, 45211], 'loan': [0, 45211], 'day': [0, 45211], 'month': [0, 45211], 'duration': [963, 45211], 'campaign': [840, 45211], 'pdays': [1723, 45211], 'previous': [582, 45211], 'y': [0, 45211]}</pre><p>正如我们所见，异常值在每个要素中所占的比例不超过总值的5%，这就是为什么它们可以不处理的原因。</p><p>这可以通过采用具有最多异常值的特征(<code>pdays</code>)并将异常值的数量除以实例的总数(1，723除以45，211)来验证。该操作的结果是0.038，相当于3.8%。这意味着该特征只有3.8%的异常值。</p></li>
+print(outliers)</pre><p>如果我们打印结果字典，我们会得到以下输出:</p><pre>{'age': [381, 45211], 'job': [0, 45211], 'marital': [0, 45211], 'education': [0, 45211], 'default': [815, 45211], 'balance': [745, 45211], 'housing': [0, 45211], 'loan': [0, 45211], 'day': [0, 45211], 'month': [0, 45211], 'duration': [963, 45211], 'campaign': [840, 45211], 'pdays': [1723, 45211], 'previous': [582, 45211], 'y': [0, 45211]}</pre><p>正如我们所见，异常值在每个要素中所占的比例不超过总值的 5%，这就是为什么它们可以不处理的原因。</p><p>这可以通过采用具有最多异常值的特征(<code>pdays</code>)并将异常值的数量除以实例的总数(1，723 除以 45，211)来验证。该操作的结果是 0.038，相当于 3.8%。这意味着该特征只有 3.8%的异常值。</p></li>
 				<li>Separate the features from the class label and split the dataset into three sets (training, validation, and testing).<p>要将特性与目标值分开，请使用以下代码:</p><pre>X = data.drop("y", axis = 1)
-Y = data["y"]</pre><p>接下来，要执行60/20/20分割，请使用以下代码:</p><pre>X_new, X_test, \
+Y = data["y"]</pre><p>接下来，要执行 60/20/20 分割，请使用以下代码:</p><pre>X_new, X_test, \
 Y_new, Y_test = train_test_split(X, Y, test_size=0.2,\
                                  random_state = 0)
 test_size = X_test.shape[0] / X_new.shape[0]
@@ -428,7 +428,7 @@ print(X_train.shape, Y_train.shape, X_dev.shape, \
     Y_dev.shape, X_test.shape, Y_test.shape)</pre><p>如果我们打印所有子集的形状，输出如下:</p><pre>(27125, 14) (27125,) (9043, 14) (9043,) (9043, 14) (9043,)</pre></li>
 				<li>Use the decision tree algorithm on the dataset and train the model: <pre>model_tree = DecisionTreeClassifier(random_state = 2)
 model_tree.fit(X_train, Y_train)</pre><p class="callout-heading">注意</p><p class="callout">提醒一下，调用<code>fit</code>方法的输出包含了当前被训练的模型及其接受的所有参数。</p></li>
-				<li>对数据集使用多层感知器算法并训练模型。为了重温这一点，进入第5章、<em class="italic">人工神经网络:预测年收入</em> : <pre>model_NN = MLPClassifier(random_state = 2) model_NN.fit(X_train, Y_train)</pre></li>
+				<li>对数据集使用多层感知器算法并训练模型。为了重温这一点，进入第 5 章、<em class="italic">人工神经网络:预测年收入</em> : <pre>model_NN = MLPClassifier(random_state = 2) model_NN.fit(X_train, Y_train)</pre></li>
 				<li>Evaluate both models by using the metric that was selected previously. <p>使用以下代码，可以测量决策树模型的精度分数:</p><pre>X_sets = [X_train, X_dev, X_test]
 Y_sets = [Y_train, Y_dev, Y_test]
 precision = []
@@ -443,7 +443,7 @@ for i in range(0, len(X_sets)):
     pred = model_NN.predict(X_sets[i])
     score = precision_score(Y_sets[i], pred)
     precision.append(score)
-print(precision)</pre><p>如果我们打印包含多层感知器模型的每个集合的精度分数的列表，输出如下:</p><pre>[0.35577647236029525, 0.35199283475145543, 0.3470483005366726]</pre><p>下表显示了两个模型的所有数据子集的精度得分:</p><div><img src="img/B15781_06_10.jpg" alt="Figure 6.10: Precision scores for both models&#13;&#10;"/></div><p class="figure-caption">图6.10:两种模型的精度分数</p></li>
+print(precision)</pre><p>如果我们打印包含多层感知器模型的每个集合的精度分数的列表，输出如下:</p><pre>[0.35577647236029525, 0.35199283475145543, 0.3470483005366726]</pre><p>下表显示了两个模型的所有数据子集的精度得分:</p><div><img src="img/B15781_06_10.jpg" alt="Figure 6.10: Precision scores for both models&#13;&#10;"/></div><p class="figure-caption">图 6.10:两种模型的精度分数</p></li>
 				<li>Fine-tune some of the hyperparameters to fix the issues that were detected during the evaluation of the model by performing error analysis.<p>虽然决策树在训练集上的精度是完美的，但是在将其与其他两个集的结果进行比较时，可以得出结论，该模型存在较高的方差。</p><p>另一方面，多层感知器在所有三个集合上具有相似的性能，但是整体性能较低，这意味着该模型更可能遭受高偏差。</p><p>考虑到这一点，对于决策树模型，为了简化模型，需要在叶节点的最小样本数和树的最大深度都被改变。另一方面，对于多层感知器，改变迭代次数、隐藏层数、每层中的单元数和优化容限。</p><p>以下代码显示了用于决策树算法的超参数的最终值，考虑到要达到这些值需要尝试不同的值:</p><pre>model_tree = DecisionTreeClassifier(random_state = 2, \
                                     min_samples_leaf=100, \
                                     max_depth=100)
@@ -471,26 +471,26 @@ print(precision)</pre><p>结果列表应该如下所示:</p><pre>[0.759941089837
 			<div><div><img src="img/B15781_06_11.jpg" alt="Figure 6.11: Precision scores for the newly trained models&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图6.11:新训练模型的精度分数</p>
+			<p class="figure-caption">图 6.11:新训练模型的精度分数</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2RpIhn9">https://packt.live/2RpIhn9</a>。</p>
 			<p class="callout">本节目前没有在线交互示例，需要在本地运行。</p>
 			<p>两种模型的性能都有所提高，通过比较这些值，可以得出多层感知器优于决策树模型的结论。在此基础上，选择多层感知器作为解决数据问题的较好模型。</p>
 			<p class="callout-heading">注意</p>
 			<p class="callout">鼓励您继续微调参数，以达到更高的精度分数。</p>
-			<h2 id="_idParaDest-195"><a id="_idTextAnchor203"/>活动6.02:保存并加载银行营销数据集的最终模型</h2>
+			<h2 id="_idParaDest-195"><a id="_idTextAnchor203"/>活动 6.02:保存并加载银行营销数据集的最终模型</h2>
 			<p>解决方案:</p>
 			<ol>
-				<li value="1">打开<em class="italic">活动6.01 </em>、<em class="italic">中的Jupyter笔记本，执行银行营销数据集</em>的准备和创建阶段。</li>
+				<li value="1">打开<em class="italic">活动 6.01 </em>、<em class="italic">中的 Jupyter 笔记本，执行银行营销数据集</em>的准备和创建阶段。</li>
 				<li>出于学习的目的，将您选择的模型作为最佳模型，去掉<code>random_state</code>参数，并运行几次。</li>
 				<li>将你选择的最佳模型保存到一个名为<code>final_model.pkl</code>的文件中。<pre>path = os.getcwd() + "/final_model.pkl" file = open(path, "wb") pickle.dump(model_NN, file)</pre></li>
-				<li>打开一个新的Jupyter笔记本，导入需要的模块和类:<pre>from sklearn.neural_network import MLPClassifier import pickle import os</pre></li>
+				<li>打开一个新的 Jupyter 笔记本，导入需要的模块和类:<pre>from sklearn.neural_network import MLPClassifier import pickle import os</pre></li>
 				<li>加载保存的模型:<pre>path = os.getcwd() + "/final_model.pkl" file = open(path, "rb") model = pickle.load(file)</pre></li>
 				<li>Perform a prediction for an individual by using the following values: <code>42</code>, <code>2</code>, <code>0</code>, <code>0</code>, <code>1</code>, <code>2</code>, <code>1</code>, <code>0</code>, <code>5</code>, <code>8</code>, <code>380</code>, <code>1</code>, <code>-1</code>, <code>0</code>:<pre>pred = model.predict([[42,2,0,0,1,2,1,0,5,8,380,1,-1,0]])
 print(pred)</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考<a href="https://packt.live/2UIWFss">https://packt.live/2UIWFss</a>。</p><p class="callout">本节目前没有在线交互示例，需要在本地运行。</p></li>
 			</ol>
 			<p>如果我们打印<code>pred</code>变量，输出是<code>0</code>，它是<code>No</code>的数字形式。这意味着个人更有可能不订阅新产品。</p>
-			<h2 id="_idParaDest-196"><a id="_idTextAnchor204"/>活动6.03:允许与银行营销数据集模型交互</h2>
+			<h2 id="_idParaDest-196"><a id="_idTextAnchor204"/>活动 6.03:允许与银行营销数据集模型交互</h2>
 			<p>解决方案:</p>
 			<ol>
 				<li value="1">In a text editor, create a class object that contains two main functions. One should be an initializer that loads the saved model, while the other should be a <code>predict</code> method where the data is fed to the model to retrieve an output:<pre>import pickle
@@ -527,7 +527,7 @@ previous = 0</pre><p>应用<code>predict</code>方法进行预测:</p><pre>pred 
                      loan=loan, day=day, month=month, \
                      duration=duration, campaign=campaign, \
                      pdays=pdays, previous=previous)
-print(pred)</pre><p>通过打印变量，预测等于<code>0</code>；也就是说，具有给定特征的个人不太可能订阅该产品，如下所示:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考https://packt.live/2Y2yBCJ的<a href="https://packt.live/2Y2yBCJ"/>。</p><p class="callout">你也可以在<a href="https://packt.live/3d6ku3E">https://packt.live/3d6ku3E</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
+print(pred)</pre><p>通过打印变量，预测等于<code>0</code>；也就是说，具有给定特征的个人不太可能订阅该产品，如下所示:</p><pre>[0]</pre><p class="callout-heading">注意</p><p class="callout">要访问该特定部分的源代码，请参考 https://packt.live/2Y2yBCJ 的<a href="https://packt.live/2Y2yBCJ"/>。</p><p class="callout">你也可以在<a href="https://packt.live/3d6ku3E">https://packt.live/3d6ku3E</a>在线运行这个例子。您必须执行整个笔记本才能获得想要的结果。</p></li>
 			</ol>
 			<p>通过本章中的活动，您已经成功地学习了如何开发一个完整的机器学习解决方案，从数据预处理和训练模型到使用错误分析选择性能最佳的模型并保存模型以便能够有效地利用它。</p>
 		</div>

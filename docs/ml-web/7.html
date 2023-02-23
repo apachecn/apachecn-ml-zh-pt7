@@ -2,11 +2,11 @@
 
 
 
-<title>Chapter 7. Movie Recommendation System Web Application</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07"/>第七章。电影推荐系统Web应用程序</h1></div></div></div><p>这一章的目的是使用Django框架来解释推荐系统的一个实际案例。我们将实现一个电影推荐系统，其中订阅该服务的每个用户都将收到基于其偏好的推荐电影，正如我们在<a class="link" href="ch05.html" title="Chapter 5. Recommendation Systems">第5章</a>、<em>推荐系统</em>中所讨论的，我们还将使用由942个用户评价超过50次的603部电影组成的相同数据。为了获得推荐，每个用户必须对一定数量的电影进行评级，因此实现了一个信息检索系统(<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第4章</a>、<em> Web挖掘技术</em>)来搜索要评级的电影。将讨论Django应用程序的不同部分:设置、模型、用户登录/注销、命令、信息检索系统、推荐系统、管理界面和API(所有代码都可以在GitHub的author <code class="literal">chapter_7</code>文件夹中获得，网址为<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_7">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 7</a>)。由于<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第6章</a>，<em>Django的基础知识:一个简单的web框架</em>刚刚介绍了Django的主要特性，每当采用一个新特性时，都会提供一个技术解释。现在我们可以开始描述不同的设置和运行应用程序的初始设置。</p><div><div><div><div><h1 class="title"><a id="ch07lvl1sec43"/>应用程序设置</h1></div></div></div><p>我们<a id="id546" class="indexterm"/>照常创建和启动Django:</p><div><pre class="programlisting">
+<title>Chapter 7. Movie Recommendation System Web Application</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07"/>第七章。电影推荐系统 Web 应用程序</h1></div></div></div><p>这一章的目的是使用 Django 框架来解释推荐系统的一个实际案例。我们将实现一个电影推荐系统，其中订阅该服务的每个用户都将收到基于其偏好的推荐电影，正如我们在<a class="link" href="ch05.html" title="Chapter 5. Recommendation Systems">第 5 章</a>、<em>推荐系统</em>中所讨论的，我们还将使用由 942 个用户评价超过 50 次的 603 部电影组成的相同数据。为了获得推荐，每个用户必须对一定数量的电影进行评级，因此实现了一个信息检索系统(<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第 4 章</a>、<em> Web 挖掘技术</em>)来搜索要评级的电影。将讨论 Django 应用程序的不同部分:设置、模型、用户登录/注销、命令、信息检索系统、推荐系统、管理界面和 API(所有代码都可以在 GitHub 的 author <code class="literal">chapter_7</code>文件夹中获得，网址为<a class="ulink" href="https://github.com/ai2010/machine_learning_for_the_web/tree/master/chapter_7">https://GitHub . com/ai 2010/machine _ learning _ for _ the _ web/tree/master/chapter _ 7</a>)。由于<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第 6 章</a>，<em>Django 的基础知识:一个简单的 web 框架</em>刚刚介绍了 Django 的主要特性，每当采用一个新特性时，都会提供一个技术解释。现在我们可以开始描述不同的设置和运行应用程序的初始设置。</p><div><div><div><div><h1 class="title"><a id="ch07lvl1sec43"/>应用程序设置</h1></div></div></div><p>我们<a id="id546" class="indexterm"/>照常创建和启动 Django:</p><div><pre class="programlisting">
 <strong>django-admin startproject server_movierecsys</strong>
 </pre></div><p>我们从<code class="literal">server_movierecsys</code>文件夹启动应用程序:</p><div><pre class="programlisting">
 <strong>python manage.py startapp books_recsys_app</strong>
-</pre></div><p>现在需要配置<code class="literal">settings.py</code>。正如我们在<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第6章</a>、<em>Django的基础知识:一个简单的web框架</em>中看到的，我们设置已安装的应用程序、HTML模板、布局格式化文件夹和SQLite数据库:</p><div><pre class="programlisting">INSTALLED_APPS = (
+</pre></div><p>现在需要配置<code class="literal">settings.py</code>。正如我们在<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第 6 章</a>、<em>Django 的基础知识:一个简单的 web 框架</em>中看到的，我们设置已安装的应用程序、HTML 模板、布局格式化文件夹和 SQLite 数据库:</p><div><pre class="programlisting">INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,7 +28,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}</pre></div><p>除了标准应用程序和rest框架(swagger)之外，<code class="literal">books_recsys_app</code>已经包含在已安装应用程序列表中。</p><p>在这种情况下，我们需要将数据持久地加载到内存中，这样就不会在每次用户请求时都计算或检索数据，从而改善了用户体验。为了在内存中保存数据或昂贵的计算结果，我们在<code class="literal">settings.py</code>建立了Django的缓存系统:</p><div><pre class="programlisting">CACHES = {
+}</pre></div><p>除了标准应用程序和 rest 框架(swagger)之外，<code class="literal">books_recsys_app</code>已经包含在已安装应用程序列表中。</p><p>在这种情况下，我们需要将数据持久地加载到内存中，这样就不会在每次用户请求时都计算或检索数据，从而改善了用户体验。为了在内存中保存数据或昂贵的计算结果，我们在<code class="literal">settings.py</code>建立了 Django 的缓存系统:</p><div><pre class="programlisting">CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
@@ -82,7 +82,7 @@ class MovieData(models.Model):
     title = models.CharField(max_length=100)
     array = jsonfield.JSONField()
     ndim = models.IntegerField(default=300)
-    description = models.TextField()</pre></div><p><a id="id550" class="indexterm"/>模型<code class="literal">MovieData</code>存储每部电影的数据:标题、描述和向量表示(<code class="literal">ndim</code>是向量表示的维度)。<code class="literal">MovieRated</code>记录登录用户评价的每部电影(与<code class="literal">MovieRated</code>关联的每个对象都有一个利用网站的<code class="literal">UserProfile</code>)。模型存储了所有注册网站的用户，因此他们可以对电影进行评级并接收推荐。每个<code class="literal">UserProfile</code>都通过添加<code class="literal">array</code>字段来扩展默认的Django用户模型，该字段存储来自<code class="literal">user,</code>的所有电影评级和存储他的最后推荐的<code class="literal">recsvec</code>字段:覆盖<code class="literal">save</code>函数，用与用户相关的所有<code class="literal">MovieRated</code>对象填充<code class="literal">array</code>字段(如果<code class="literal">else</code>语句是<code class="literal">true</code>，并用最后推荐(<code class="literal">else if</code>语句)填充<code class="literal">lastrecs</code>字段)。注意，<code class="literal">MovieRated</code>模型有一个<code class="literal">UserProfile</code>外键，其<code class="literal">related_name</code>等于<code class="literal">ratedmovies</code>:在<code class="literal">UserProfile</code>模型的<code class="literal">save</code>函数中，<code class="literal">self.ratedmovies.all()</code>引用所有具有相同<code class="literal">UserProfile</code>值的<code class="literal">RatedMovie</code>对象。<code class="literal">UserProfile</code>模型上的字段<code class="literal">arrayratedmoviesindxs</code>记录了用户评定的所有电影，它由应用程序的API使用。</p><p>要在数据库上编写这些数据结构，我们需要运行:</p><div><pre class="programlisting">
+    description = models.TextField()</pre></div><p><a id="id550" class="indexterm"/>模型<code class="literal">MovieData</code>存储每部电影的数据:标题、描述和向量表示(<code class="literal">ndim</code>是向量表示的维度)。<code class="literal">MovieRated</code>记录登录用户评价的每部电影(与<code class="literal">MovieRated</code>关联的每个对象都有一个利用网站的<code class="literal">UserProfile</code>)。模型存储了所有注册网站的用户，因此他们可以对电影进行评级并接收推荐。每个<code class="literal">UserProfile</code>都通过添加<code class="literal">array</code>字段来扩展默认的 Django 用户模型，该字段存储来自<code class="literal">user,</code>的所有电影评级和存储他的最后推荐的<code class="literal">recsvec</code>字段:覆盖<code class="literal">save</code>函数，用与用户相关的所有<code class="literal">MovieRated</code>对象填充<code class="literal">array</code>字段(如果<code class="literal">else</code>语句是<code class="literal">true</code>，并用最后推荐(<code class="literal">else if</code>语句)填充<code class="literal">lastrecs</code>字段)。注意，<code class="literal">MovieRated</code>模型有一个<code class="literal">UserProfile</code>外键，其<code class="literal">related_name</code>等于<code class="literal">ratedmovies</code>:在<code class="literal">UserProfile</code>模型的<code class="literal">save</code>函数中，<code class="literal">self.ratedmovies.all()</code>引用所有具有相同<code class="literal">UserProfile</code>值的<code class="literal">RatedMovie</code>对象。<code class="literal">UserProfile</code>模型上的字段<code class="literal">arrayratedmoviesindxs</code>记录了用户评定的所有电影，它由应用程序的 API 使用。</p><p>要在数据库上编写这些数据结构，我们需要运行:</p><div><pre class="programlisting">
 <strong>python manage.py makemigrations</strong>
 <strong>python manage.py migrate</strong>
 </pre></div></div>
@@ -153,7 +153,7 @@ class Command(BaseCommand):
         outumatrixfile = options['umatrixoutfile']
         df_utilitymatrix.to_csv(outumatrixfile, index=False)</pre></div><p><a id="id553" class="indexterm"/>命令的语法是:</p><div><pre class="programlisting">
 <strong>python manage.py --input=utilitymatrix.csv --outputplots=plots.csv –outputumatrix='umatrix.csv'</strong>
-</pre></div><p>包含在<code class="literal">utilitymatrix</code>文件中的每个电影标题由<code class="literal">getplotfromomdb</code>函数使用，以使用Python模块中的请求从网站<a class="ulink" href="http://www.omdbapi.com/">http://www.omdbapi.com/</a>检索电影的描述(<code class="literal">plot</code>)。然后，电影的描述(和<code class="literal">titles</code>)与相应的效用矩阵(<code class="literal">outputumatrix</code>)一起保存在CSV文件(<code class="literal">outputplots</code>)中。</p><p>另一个命令将获取电影的描述，并创建一个信息检索<a id="id554" class="indexterm"/>系统(<strong>术语频率，逆文档频率</strong> ( <strong> TF-IDF </strong>)模型)，以允许用户键入一些相关的单词来找到电影。该tf-idf模型然后与初始推荐系统模型一起保存在Django缓存中(<strong> CF基于项目的</strong>和<strong>对数似然</strong> <a id="id555" class="indexterm"/>比率)。代码<a id="id556" class="indexterm"/>如下:</p><div><pre class="programlisting">from django.core.management.base import BaseCommand
+</pre></div><p>包含在<code class="literal">utilitymatrix</code>文件中的每个电影标题由<code class="literal">getplotfromomdb</code>函数使用，以使用 Python 模块中的请求从网站<a class="ulink" href="http://www.omdbapi.com/">http://www.omdbapi.com/</a>检索电影的描述(<code class="literal">plot</code>)。然后，电影的描述(和<code class="literal">titles</code>)与相应的效用矩阵(<code class="literal">outputumatrix</code>)一起保存在 CSV 文件(<code class="literal">outputplots</code>)中。</p><p>另一个命令将获取电影的描述，并创建一个信息检索<a id="id554" class="indexterm"/>系统(<strong>术语频率，逆文档频率</strong> ( <strong> TF-IDF </strong>)模型)，以允许用户键入一些相关的单词来找到电影。该 tf-idf 模型然后与初始推荐系统模型一起保存在 Django 缓存中(<strong> CF 基于项目的</strong>和<strong>对数似然</strong> <a id="id555" class="indexterm"/>比率)。代码<a id="id556" class="indexterm"/>如下:</p><div><pre class="programlisting">from django.core.management.base import BaseCommand
 import os
 import optparse
 import numpy as np
@@ -263,19 +263,19 @@ class CF_itembased(object):
 class LogLikelihood(object):
 ...</pre></div><p>运行<a id="id557" class="indexterm"/>命令的语法是:</p><div><pre class="programlisting">
 <strong>python manage.py load_data --input=plots.csv --nmaxwords=30000  --umatrixfile=umatrix.csv</strong>
-</pre></div><p>输入参数采用使用<code class="literal">get_plotsfromtitles</code>命令获得的电影描述，并使用由<code class="literal">nmaxwords</code>参数指定的最大字数创建一个<code class="literal">tf-idf</code>模型(参见<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第4章</a>、<em>网络挖掘技术</em>)。每部电影的数据也保存在一个<code class="literal">MovieData</code>对象中(标题、tf-idf表示、描述和tf-idf词汇表的<code class="literal">ndim</code>字数)。注意，第一次运行该命令时，需要下载来自<code class="literal">nltk.download('stopwords')</code>的<code class="literal">stopwords</code>(在前面的代码中有注释)。</p><p>使用以下命令将tf-idf模型、标题列表和tf-idf电影表示矩阵保存在Django缓存中:</p><div><pre class="programlisting">from django.core.cache import cache
+</pre></div><p>输入参数采用使用<code class="literal">get_plotsfromtitles</code>命令获得的电影描述，并使用由<code class="literal">nmaxwords</code>参数指定的最大字数创建一个<code class="literal">tf-idf</code>模型(参见<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第 4 章</a>、<em>网络挖掘技术</em>)。每部电影的数据也保存在一个<code class="literal">MovieData</code>对象中(标题、tf-idf 表示、描述和 tf-idf 词汇表的<code class="literal">ndim</code>字数)。注意，第一次运行该命令时，需要下载来自<code class="literal">nltk.download('stopwords')</code>的<code class="literal">stopwords</code>(在前面的代码中有注释)。</p><p>使用以下命令将 tf-idf 模型、标题列表和 tf-idf 电影表示矩阵保存在 Django 缓存中:</p><div><pre class="programlisting">from django.core.cache import cache
 ...
 cache.set('model',mod_tfidf)
 cache.set('data', matr)
-cache.set('titles', titles)</pre></div><div><div><h3 class="title"><a id="note05"/>注意</h3><p>注意，缓存Django模块(<code class="literal">django.core.cache</code>)需要被加载(在文件的开头)才能使用。</p></div></div><p>同样，效用矩阵(<code class="literal">umatrixfile</code>参数)用于初始化应用使用的两个推荐系统:基于项目的协同过滤和对数似然比方法。这两种方法都没有写在前面的代码中，因为它们本质上与第五章、<em>推荐系统</em>中描述的代码<a id="id558" class="indexterm"/>相同(完整代码通常可以在作者的GitHub库的<code class="literal">chapter_7</code>文件夹中看到)。然后将方法和效用矩阵加载到Django缓存中，以备使用:</p><div><pre class="programlisting">cache.set('umatrix',Umatrix)
+cache.set('titles', titles)</pre></div><div><div><h3 class="title"><a id="note05"/>注意</h3><p>注意，缓存 Django 模块(<code class="literal">django.core.cache</code>)需要被加载(在文件的开头)才能使用。</p></div></div><p>同样，效用矩阵(<code class="literal">umatrixfile</code>参数)用于初始化应用使用的两个推荐系统:基于项目的协同过滤和对数似然比方法。这两种方法都没有写在前面的代码中，因为它们本质上与第五章、<em>推荐系统</em>中描述的代码<a id="id558" class="indexterm"/>相同(完整代码通常可以在作者的 GitHub 库的<code class="literal">chapter_7</code>文件夹中看到)。然后将方法和效用矩阵加载到 Django 缓存中，以备使用:</p><div><pre class="programlisting">cache.set('umatrix',Umatrix)
    cache.set('cf_itembased',cf_itembased)
-   cache.set('loglikelihood',llr)</pre></div><p>现在，只要调用相应的名称，就可以在web页面中使用数据(和模型),我们将在下面的小节中看到这一点。</p></div>
+   cache.set('loglikelihood',llr)</pre></div><p>现在，只要调用相应的名称，就可以在 web 页面中使用数据(和模型),我们将在下面的小节中看到这一点。</p></div>
 
 
 
 
 
-<title>User sign up login/logout implementation</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec46"/>用户签约登录/注销实现</h1></div></div></div><p>这个应用程序可以向在网站上注册的不同用户推荐<a id="id559" class="indexterm"/>电影。为了管理注册过程，我们使用标准的<code class="literal">User</code> Django模块，正如我们在<em>模型</em>部分中看到的。网站的每个页面都是指<code class="literal">base.html</code>页面，该页面实现了一个允许用户注册或登录的顶栏(右侧):</p><div><img src="img/5143_07_01.jpg" alt="User sign up login/logout implementation"/></div><p>点击两个按钮中的一个<strong>登录</strong>或<strong>注册</strong>将激活代码:</p><div><pre class="programlisting">                &lt;form class="navbar-search pull-right" action="{% url 'auth' %}" method="GET"&gt;
+<title>User sign up login/logout implementation</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec46"/>用户签约登录/注销实现</h1></div></div></div><p>这个应用程序可以向在网站上注册的不同用户推荐<a id="id559" class="indexterm"/>电影。为了管理注册过程，我们使用标准的<code class="literal">User</code> Django 模块，正如我们在<em>模型</em>部分中看到的。网站的每个页面都是指<code class="literal">base.html</code>页面，该页面实现了一个允许用户注册或登录的顶栏(右侧):</p><div><img src="img/5143_07_01.jpg" alt="User sign up login/logout implementation"/></div><p>点击两个按钮中的一个<strong>登录</strong>或<strong>注册</strong>将激活代码:</p><div><pre class="programlisting">                &lt;form class="navbar-search pull-right" action="{% url 'auth' %}" method="GET"&gt;
                   {% csrf_token %}
                    &lt;div style="overflow: hidden; padding-right: .5em;"&gt;
                      &lt;input type="submit" name="auth_method" value="sign up" size="30" style="float: right" /&gt;
@@ -321,18 +321,18 @@ cache.set('titles', titles)</pre></div><div><div><h3 class="title"><a id="note05
                 #notfound
                 return render_to_response(
                     'books_recsys_app/nopersonfound.html', 
-                       RequestContext(request))</pre></div><p>该功能将<a id="id561" class="indexterm"/>重定向至注册页面，如下图所示:</p><div><img src="img/5143_07_02.jpg" alt="User sign up login/logout implementation"/></div><p>如果您已经注册，它会将您带到登录页面，如下图所示:</p><div><img src="img/5143_07_03.jpg" alt="User sign up login/logout implementation"/></div><p>页面<a id="id562" class="indexterm"/>允许用户创建用户名和密码并登录网站。然后，该数据用于创建用户Django模型的新对象和相关的<code class="literal">UserProfile</code>对象(注意<code class="literal">create</code>参数是<code class="literal">True</code>以保存对象，而不关联分级电影的数组):</p><div><pre class="programlisting">user = User.objects.create_user(username=name,password=pwd)
+                       RequestContext(request))</pre></div><p>该功能将<a id="id561" class="indexterm"/>重定向至注册页面，如下图所示:</p><div><img src="img/5143_07_02.jpg" alt="User sign up login/logout implementation"/></div><p>如果您已经注册，它会将您带到登录页面，如下图所示:</p><div><img src="img/5143_07_03.jpg" alt="User sign up login/logout implementation"/></div><p>页面<a id="id562" class="indexterm"/>允许用户创建用户名和密码并登录网站。然后，该数据用于创建用户 Django 模型的新对象和相关的<code class="literal">UserProfile</code>对象(注意<code class="literal">create</code>参数是<code class="literal">True</code>以保存对象，而不关联分级电影的数组):</p><div><pre class="programlisting">user = User.objects.create_user(username=name,password=pwd)
 uprofile = UserProfile()
 uprofile.user = user
 uprofile.save(create=True)
-user = authenticate(username=name, password=pwd)</pre></div><p>然后，用户使用标准的Django方法登录:</p><div><pre class="programlisting">from django.contrib.auth import authenticate, login
+user = authenticate(username=name, password=pwd)</pre></div><p>然后，用户使用标准的 Django 方法登录:</p><div><pre class="programlisting">from django.contrib.auth import authenticate, login
 ...
 login(request, user)</pre></div><p>因此，网站顶栏看起来像(用户名:<strong> a </strong>)如下面的截图所示:</p><div><img src="img/5143_07_04.jpg" alt="User sign up login/logout implementation"/></div><p>请注意，在同名用户已经存在(新注册异常事件)或找不到用户(登录异常事件)的情况下，这两种情况都会实现，读者可以查看代码以了解这些事件是如何处理的。</p><p><strong>签出</strong>按钮是指<code class="literal">urls.py</code>:</p><div><pre class="programlisting">url(r'^signout/','books_recsys_app.views.signout',name='signout')</pre></div><p>这将从<code class="literal">views.py</code>中调用<code class="literal">signout</code>函数:</p><div><pre class="programlisting">from django.contrib.auth import logout
 …
 def signout(request):
     logout(request)
     return render_to_response(
-        'books_recsys_app/home.html', RequestContext(request))  </pre></div><p>该功能使用标准Django注销方法<a id="id563" class="indexterm"/>并重定向到主页(顶部栏中再次显示<strong>登录</strong>和<strong>注销</strong>按钮)。用户现在可以使用下一节中描述的信息检索系统(搜索引擎)来搜索要评级的电影。</p></div>
+        'books_recsys_app/home.html', RequestContext(request))  </pre></div><p>该功能使用标准 Django 注销方法<a id="id563" class="indexterm"/>并重定向到主页(顶部栏中再次显示<strong>登录</strong>和<strong>注销</strong>按钮)。用户现在可以使用下一节中描述的信息检索系统(搜索引擎)来搜索要评级的电影。</p></div>
 
 
 
@@ -407,15 +407,15 @@ def signout(request):
         context['rates']=[1,2,3,4,5]
         return render_to_response(
             'books_recsys_app/query_results.html', 
-              RequestContext(request, context))</pre></div><p>函数开始处的<code class="literal">data</code>参数将存储键入的查询，函数将使用该查询将其转换为向量tf-idf表示，该表示使用已经由<code class="literal">load_data</code>命令加载到内存中的模型:</p><div><pre class="programlisting">        matr = cache.get('data')
+              RequestContext(request, context))</pre></div><p>函数开始处的<code class="literal">data</code>参数将存储键入的查询，函数将使用该查询将其转换为向量 tf-idf 表示，该表示使用已经由<code class="literal">load_data</code>命令加载到内存中的模型:</p><div><pre class="programlisting">        matr = cache.get('data')
         titles = cache.get('titles')
-        model_tfidf = cache.get('model')</pre></div><p>此外，从缓存中检索<a id="id565" class="indexterm"/>矩阵(关键字:<code class="literal">matr</code>)和电影标题(关键字:<code class="literal">titles</code>)以返回类似于查询向量的电影列表(更多详细信息，请参见<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第4章</a>、<em>网络挖掘技术</em>)。还要注意，在缓存为空的情况下，模型(和其他数据)会在第一次调用该函数时直接创建并加载到内存中。例如，我们可以键入<code class="literal">war</code>作为查询，网站将返回与该查询最相似的电影(<code class="literal">query_results.html</code>):</p><div><img src="img/5143_07_06.jpg" alt="Information retrieval system (movies query)"/></div><p>正如我们所看到的，我们<a id="id566" class="indexterm"/>有五部电影(在<code class="literal">views.py</code>文件的开头，我们可以设置每个查询参数的电影数量:<code class="literal">nmoviesperquery</code>)，其中大部分都与战争有关。在这一页，我们可以按照下一节的讨论对电影进行评级。</p></div>
+        model_tfidf = cache.get('model')</pre></div><p>此外，从缓存中检索<a id="id565" class="indexterm"/>矩阵(关键字:<code class="literal">matr</code>)和电影标题(关键字:<code class="literal">titles</code>)以返回类似于查询向量的电影列表(更多详细信息，请参见<a class="link" href="ch04.html" title="Chapter 4. Web Mining Techniques">第 4 章</a>、<em>网络挖掘技术</em>)。还要注意，在缓存为空的情况下，模型(和其他数据)会在第一次调用该函数时直接创建并加载到内存中。例如，我们可以键入<code class="literal">war</code>作为查询，网站将返回与该查询最相似的电影(<code class="literal">query_results.html</code>):</p><div><img src="img/5143_07_06.jpg" alt="Information retrieval system (movies query)"/></div><p>正如我们所看到的，我们<a id="id566" class="indexterm"/>有五部电影(在<code class="literal">views.py</code>文件的开头，我们可以设置每个查询参数的电影数量:<code class="literal">nmoviesperquery</code>)，其中大部分都与战争有关。在这一页，我们可以按照下一节的讨论对电影进行评级。</p></div>
 
 
 
 
 
-<title>Rating system</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec48"/>评级体系</h1></div></div></div><p>每个用户(登录后)只需点击电影结果页面中电影标题旁边的评分值(1到5)即可对<a id="id567" class="indexterm"/>电影进行评分(参见前面的截图)。这个动作会触发<code class="literal">views.py</code>文件中的<code class="literal">rate_movie</code>函数(通过<code class="literal">urls.py</code>中对应的URL):</p><div><pre class="programlisting">def rate_movie(request):
+<title>Rating system</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec48"/>评级体系</h1></div></div></div><p>每个用户(登录后)只需点击电影结果页面中电影标题旁边的评分值(1 到 5)即可对<a id="id567" class="indexterm"/>电影进行评分(参见前面的截图)。这个动作会触发<code class="literal">views.py</code>文件中的<code class="literal">rate_movie</code>函数(通过<code class="literal">urls.py</code>中对应的 URL):</p><div><pre class="programlisting">def rate_movie(request):
     data = request.GET
     rate = data.get("vote")
     movies,moviesindxs = zip(*literal_eval(data.get("movies")))
@@ -462,7 +462,7 @@ def signout(request):
 
 <title>Recommendation systems</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec49"/>推荐系统</h1></div></div></div><p>该功能将使用在<code class="literal">views.py</code>文件的<a id="id569" class="indexterm"/>开头设置的参数:</p><div><pre class="programlisting">nminimumrates=5
 numrecs=5
-recmethod = 'loglikelihood'</pre></div><p>这分别定义了在获得推荐之前要评级的电影的最小数量、向用户显示的推荐的数量以及推荐系统方法。要显示建议，用户可以点击顶栏上的<strong>建议</strong>按钮:</p><div><img src="img/5143_07_04.jpg" alt="Recommendation systems"/></div><p>该动作将触发<code class="literal">views.py</code>文件中的<code class="literal">movies_recs</code>函数<a id="id570" class="indexterm"/>(通过<code class="literal">urls.py</code>文件中定义的相应URL):</p><div><pre class="programlisting">def movies_recs(request):
+recmethod = 'loglikelihood'</pre></div><p>这分别定义了在获得推荐之前要评级的电影的最小数量、向用户显示的推荐的数量以及推荐系统方法。要显示建议，用户可以点击顶栏上的<strong>建议</strong>按钮:</p><div><img src="img/5143_07_04.jpg" alt="Recommendation systems"/></div><p>该动作将触发<code class="literal">views.py</code>文件中的<code class="literal">movies_recs</code>函数<a id="id570" class="indexterm"/>(通过<code class="literal">urls.py</code>文件中定义的相应 URL):</p><div><pre class="programlisting">def movies_recs(request):
     
     userprofile = None
     if request.user.is_superuser:
@@ -509,20 +509,20 @@ recmethod = 'loglikelihood'</pre></div><p>这分别定义了在获得推荐之�
 
 
 
-<title>Admin interface and API</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec50"/>管理界面和API</h1></div></div></div><p>为了管理应用程序的<a id="id572" class="indexterm"/>数据，可以设置<a id="id573" class="indexterm"/>管理接口和一个API点。从管理面板中，我们可以看到电影的数据和用户注册，编写以下<code class="literal">admin.py</code>文件:</p><div><pre class="programlisting">from django.contrib import admin
+<title>Admin interface and API</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec50"/>管理界面和 API</h1></div></div></div><p>为了管理应用程序的<a id="id572" class="indexterm"/>数据，可以设置<a id="id573" class="indexterm"/>管理接口和一个 API 点。从管理面板中，我们可以看到电影的数据和用户注册，编写以下<code class="literal">admin.py</code>文件:</p><div><pre class="programlisting">from django.contrib import admin
 from books_recsys_app.models import MovieData,UserProfile
       
 class MoviesAdmin(admin.ModelAdmin):
       list_display = ['title', 'description']
 
 admin.site.register(UserProfile)
-admin.site.register(MovieData,MoviesAdmin)</pre></div><p>在<code class="literal">urls.py</code>文件上设置相应的<code class="literal">admin</code> URL后:</p><div><pre class="programlisting">url(r'^admin/', include(admin.site.urls))</pre></div><p>我们应该看到我们的管理面板(在<code class="literal">http://localhost:8000/admin/</code>)有两个模型，模型中的数据类似于<code class="literal">admin.py</code>文件中指定的字段:</p><div><img src="img/5143_07_08.jpg" alt="Admin interface and API"/></div><p>为了设置API <a id="id574" class="indexterm"/>端点来检索<a id="id575" class="indexterm"/>每个注册用户的数据，首先我们需要写出<code class="literal">serializers.py</code>，指定我们想要使用<code class="literal">UserProfile</code>模型的哪些字段:</p><div><pre class="programlisting">from books_recsys_app.models import UserProfile
+admin.site.register(MovieData,MoviesAdmin)</pre></div><p>在<code class="literal">urls.py</code>文件上设置相应的<code class="literal">admin</code> URL 后:</p><div><pre class="programlisting">url(r'^admin/', include(admin.site.urls))</pre></div><p>我们应该看到我们的管理面板(在<code class="literal">http://localhost:8000/admin/</code>)有两个模型，模型中的数据类似于<code class="literal">admin.py</code>文件中指定的字段:</p><div><img src="img/5143_07_08.jpg" alt="Admin interface and API"/></div><p>为了设置 API <a id="id574" class="indexterm"/>端点来检索<a id="id575" class="indexterm"/>每个注册用户的数据，首先我们需要写出<code class="literal">serializers.py</code>，指定我们想要使用<code class="literal">UserProfile</code>模型的哪些字段:</p><div><pre class="programlisting">from books_recsys_app.models import UserProfile
 from rest_framework import serializers
 
 class UsersSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('name', 'arrayratedmoviesindxs','lastrecs')</pre></div><p>在这种情况下，我们希望收集用户评价的电影的ID，以及他最后推荐的电影的ID。然后在<code class="literal">api.py</code>文件中设置API，如下所示:</p><div><pre class="programlisting">from rest_framework import generics
+        fields = ('name', 'arrayratedmoviesindxs','lastrecs')</pre></div><p>在这种情况下，我们希望收集用户评价的电影的 ID，以及他最后推荐的电影的 ID。然后在<code class="literal">api.py</code>文件中设置 API，如下所示:</p><div><pre class="programlisting">from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.pagination import PageNumberPagination
 from books_recsys_app.serializers import UsersSerializer
@@ -544,13 +544,13 @@ class UsersList(generics.ListAPIView):
         if query('name'):
            return UserProfile.objects.filter(name=query('name')) 
         else:
-           return UserProfile.objects.all()</pre></div><p>注意，在<a id="id577" class="indexterm"/>的情况下，查询<a id="id576" class="indexterm"/>参数<code class="literal">name</code>是允许的，我们只想收集一个特定用户的数据。在<code class="literal">urls.py</code>文件中设置相应的URL后:</p><div><pre class="programlisting">url(r'^users-list/',UsersList.as_view(),name='users-list')</pre></div><p>可以使用终端通过<code class="literal">curl</code>命令调用终点:</p><div><pre class="programlisting">
+           return UserProfile.objects.all()</pre></div><p>注意，在<a id="id577" class="indexterm"/>的情况下，查询<a id="id576" class="indexterm"/>参数<code class="literal">name</code>是允许的，我们只想收集一个特定用户的数据。在<code class="literal">urls.py</code>文件中设置相应的 URL 后:</p><div><pre class="programlisting">url(r'^users-list/',UsersList.as_view(),name='users-list')</pre></div><p>可以使用终端通过<code class="literal">curl</code>命令调用终点:</p><div><pre class="programlisting">
 <strong>curl -X GET localhost:8000/users-list/</strong>
-</pre></div><p>也可以出于测试目的使用swagger接口调用它(参见<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第6章</a>、<em>Django的基础知识:一个简单的web框架</em>)。</p></div>
+</pre></div><p>也可以出于测试目的使用 swagger 接口调用它(参见<a class="link" href="ch06.html" title="Chapter 6. Getting Started with Django">第 6 章</a>、<em>Django 的基础知识:一个简单的 web 框架</em>)。</p></div>
 
 
 
 
 
-<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec51"/>总结</h1></div></div></div><p>我们刚刚展示了如何使用Django框架构建一个推荐电影的应用程序。现在，您应该对如何使用Python和支持它的机器学习算法开发专业的web应用程序有了一定的信心。</p><p>在下一章中，一个关于电影的web情感接收的额外示例将让您更加理解如何高效地用Python编写您自己的机器学习web应用程序。</p></div>
+<title>Summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><div><div><div><div><h1 class="title"><a id="ch07lvl1sec51"/>总结</h1></div></div></div><p>我们刚刚展示了如何使用 Django 框架构建一个推荐电影的应用程序。现在，您应该对如何使用 Python 和支持它的机器学习算法开发专业的 web 应用程序有了一定的信心。</p><p>在下一章中，一个关于电影的 web 情感接收的额外示例将让您更加理解如何高效地用 Python 编写您自己的机器学习 web 应用程序。</p></div>
 </body></html>

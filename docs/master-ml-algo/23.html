@@ -22,7 +22,7 @@
 
 			<h1 id="_idParaDest-337" class="chapterTitle" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor351"/>深度信念网络</h1>
 
-			<p class="normal">在本章中，我们将介绍两个概率生成模型，它们采用一组潜在变量来表示特定的数据生成过程。<strong class="bold">1986年提出的受限玻尔兹曼机器</strong> ( <strong class="bold"> RBMs </strong>)，是一个更复杂模型的构建模块，称为<strong class="bold">深度信念网络</strong> ( <strong class="bold"> DBN </strong>)，它能够捕捉不同级别特征之间的复杂关系(在某种程度上与深度卷积网络没有什么不同)。这两种模型都可以在无监督和有监督的情况下用作预处理程序，或者像DBN通常使用的那样，使用标准反向传播算法微调参数。</p>
+			<p class="normal">在本章中，我们将介绍两个概率生成模型，它们采用一组潜在变量来表示特定的数据生成过程。<strong class="bold">1986 年提出的受限玻尔兹曼机器</strong> ( <strong class="bold"> RBMs </strong>)，是一个更复杂模型的构建模块，称为<strong class="bold">深度信念网络</strong> ( <strong class="bold"> DBN </strong>)，它能够捕捉不同级别特征之间的复杂关系(在某种程度上与深度卷积网络没有什么不同)。这两种模型都可以在无监督和有监督的情况下用作预处理程序，或者像 DBN 通常使用的那样，使用标准反向传播算法微调参数。</p>
 
 			<p class="normal">特别是，我们将讨论:</p>
 
@@ -32,7 +32,7 @@
 
 				<li class="list">RBM，包括<strong class="bold">对比发散</strong> ( <strong class="bold"> CD-k </strong>)算法</li>
 
-				<li class="list">DBN有监督和无监督的例子</li>
+				<li class="list">DBN 有监督和无监督的例子</li>
 
 			</ul>
 
@@ -56,13 +56,13 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_02.png" alt=""/></figure>
 
-			<p class="packt_figref">在<em class="italics">x</em>T94】0和<em class="italics">x</em>T98】5之间有连接的概率无向图示例</p>
+			<p class="packt_figref">在<em class="italics">x</em>T94】0 和<em class="italics">x</em>T98】5 之间有连接的概率无向图示例</p>
 
-			<p class="normal">最大团是不能通过添加新顶点来扩展的团。一个特殊的MRF族<a id="_idIndexMarker1415"/>由所有这些图组成，这些图的联合概率分布可以分解为:</p>
+			<p class="normal">最大团是不能通过添加新顶点来扩展的团。一个特殊的 MRF 族<a id="_idIndexMarker1415"/>由所有这些图组成，这些图的联合概率分布可以分解为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_003.png" alt=""/></figure>
 
-			<p class="normal">在这种情况下，<img src="img/B14713_23_004.png" alt=""/>是归一化常数，并且乘积被扩展到所有极大团的集合。根据Hammersley-Clifford定理，如果联合概率密度函数是严格正的，则MRF可以分解，并且所有的<img src="img/B14713_23_005.png" alt=""/>函数也是严格正的。因此<img src="img/B14713_23_006.png" alt=""/>，经过一些基于对数性质的简单操作后，可以改写为吉布斯(或玻尔兹曼)分布:</p>
+			<p class="normal">在这种情况下，<img src="img/B14713_23_004.png" alt=""/>是归一化常数，并且乘积被扩展到所有极大团的集合。根据 Hammersley-Clifford 定理，如果联合概率密度函数是严格正的，则 MRF 可以分解，并且所有的<img src="img/B14713_23_005.png" alt=""/>函数也是严格正的。因此<img src="img/B14713_23_006.png" alt=""/>，经过一些基于对数性质的简单操作后，可以改写为吉布斯(或玻尔兹曼)分布:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_007.png" alt=""/></figure>
 
@@ -78,23 +78,23 @@
 
 			<h1 id="_idParaDest-339" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor353"/>受限玻尔兹曼机器</h1>
 
-			<p class="normal">一个<strong class="bold">受限玻尔兹曼机</strong> ( <strong class="bold"> RBM </strong>)，最初<a id="_idIndexMarker1417"/>称为Harmonium，是由Smolensky提出的一个神经模型<a id="_idIndexMarker1418"/>(在Smolensky P .，<em class="italics">动态系统中的信息处理:和谐理论的基础</em>，并行分布式处理，第1卷，麻省理工学院出版社，1986年)由一层输入(可观察)神经元和一层隐藏(潜伏)神经元组成。下图显示了一个通用结构:</p>
+			<p class="normal">一个<strong class="bold">受限玻尔兹曼机</strong> ( <strong class="bold"> RBM </strong>)，最初<a id="_idIndexMarker1417"/>称为 Harmonium，是由 Smolensky 提出的一个神经模型<a id="_idIndexMarker1418"/>(在 Smolensky P .，<em class="italics">动态系统中的信息处理:和谐理论的基础</em>，并行分布式处理，第 1 卷，麻省理工学院出版社，1986 年)由一层输入(可观察)神经元和一层隐藏(潜伏)神经元组成。下图显示了一个通用结构:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_03.png" alt=""/></figure>
 
-			<p class="packt_figref">RBM的结构</p>
+			<p class="packt_figref">RBM 的结构</p>
 
-			<p class="normal">由于无向图是二分的(在属于同一层的神经元之间没有连接)，潜在的概率结构是MRF。在原始模型中(即使这不是一个限制)，所有的神经元都被假设为伯努利分布(<em class="italics"> x </em> <sub style="font-style: italic;"> i </sub>，<em class="italics"> h </em> <sub style="font-style: italic;"> j </sub> = {0，1})，偏置<em class="italics"> b </em> <sub style="font-style: italic;"> i </sub>(对于被观察单元)和<em class="italics"> c </em> <sub style="font-style: italic;"> j </sub>(对于潜在神经元)。由此产生的能量函数为:</p>
+			<p class="normal">由于无向图是二分的(在属于同一层的神经元之间没有连接)，潜在的概率结构是 MRF。在原始模型中(即使这不是一个限制)，所有的神经元都被假设为伯努利分布(<em class="italics"> x </em> <sub style="font-style: italic;"> i </sub>，<em class="italics"> h </em> <sub style="font-style: italic;"> j </sub> = {0，1})，偏置<em class="italics"> b </em> <sub style="font-style: italic;"> i </sub>(对于被观察单元)和<em class="italics"> c </em> <sub style="font-style: italic;"> j </sub>(对于潜在神经元)。由此产生的能量函数为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_019.png" alt=""/></figure>
 
-			<p class="normal">RBM是一种概率生成模型，它可以学习数据生成过程，<em class="italics"> p </em> <sub style="font-style: italic;"> data </sub>，该过程由观察到的单元表示，但是利用潜在变量的存在，以便对所有内部关系进行建模。</p>
+			<p class="normal">RBM 是一种概率生成模型，它可以学习数据生成过程，<em class="italics"> p </em> <sub style="font-style: italic;"> data </sub>，该过程由观察到的单元表示，但是利用潜在变量的存在，以便对所有内部关系进行建模。</p>
 
 			<p class="normal">如果我们将所有参数汇总在一个向量<img src="img/B14713_23_020.png" alt=""/>中，吉布斯分布变为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_021.png" alt=""/></figure>
 
-			<p class="normal">RBM的训练目标是最大化输入分布的对数似然。因此，第一步是在前一个表达式边缘化后确定<img src="img/B14713_23_022.png" alt=""/>:</p>
+			<p class="normal">RBM 的训练目标是最大化输入分布的对数似然。因此，第一步是在前一个表达式边缘化后确定<img src="img/B14713_23_022.png" alt=""/>:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_023.png" alt=""/></figure>
 
@@ -110,11 +110,11 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_027.png" alt=""/></figure>
 
-			<p class="normal">考虑到全联合概率，在一些繁琐的操作(为简单起见省略)之后，有可能导出以下条件表达式，其中<img src="img/B14713_23_028.png" alt=""/>是sigmoid函数:</p>
+			<p class="normal">考虑到全联合概率，在一些繁琐的操作(为简单起见省略)之后，有可能导出以下条件表达式，其中<img src="img/B14713_23_028.png" alt=""/>是 sigmoid 函数:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_029.png" alt=""/></figure>
 
-			<p class="normal">此时，我们可以<a id="_idIndexMarker1420"/>计算对数似然相对于每个单一参数的梯度，<em class="italics"> w </em> <sub style="font-style: italic;"> ij </sub>，<em class="italics"> b </em> <sub style="font-style: italic;"> i </sub>，以及<em class="italics"> c </em> <sub style="font-style: italic;"> j </sub>。从<em class="italics">w</em>ij开始，考虑到<img style="height: 1.7em! important;" src="img/B14713_23_030.png" alt=""/>，我们得到:</p>
+			<p class="normal">此时，我们可以<a id="_idIndexMarker1420"/>计算对数似然相对于每个单一参数的梯度，<em class="italics"> w </em> <sub style="font-style: italic;"> ij </sub>，<em class="italics"> b </em> <sub style="font-style: italic;"> i </sub>，以及<em class="italics"> c </em> <sub style="font-style: italic;"> j </sub>。从<em class="italics">w</em>ij 开始，考虑到<img style="height: 1.7em! important;" src="img/B14713_23_030.png" alt=""/>，我们得到:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_031.png" alt=""/></figure>
 
@@ -122,7 +122,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_032.png" alt=""/></figure>
 
-			<p class="normal">现在，考虑到所有单元都是伯努利分布的，并且只隔离第<em class="italics">j</em>t【60】th隐藏单元，可以应用简化:</p>
+			<p class="normal">现在，考虑到所有单元都是伯努利分布的，并且只隔离第<em class="italics">j</em>t【60】th 隐藏单元，可以应用简化:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_033.png" alt=""/></figure>
 
@@ -130,7 +130,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_034.png" alt=""/></figure>
 
-			<p class="normal">同理，我们可以<a id="_idIndexMarker1421"/>推导出<img src="img/B14713_23_035.png" alt=""/>相对于<em class="italics">b</em>T66】I和<em class="italics">c</em>T70】j的梯度:</p>
+			<p class="normal">同理，我们可以<a id="_idIndexMarker1421"/>推导出<img src="img/B14713_23_035.png" alt=""/>相对于<em class="italics">b</em>T66】I 和<em class="italics">c</em>T70】j 的梯度:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_036.png" alt=""/></figure>
 
@@ -140,15 +140,15 @@
 
 			<h2 id="_idParaDest-340" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor354"/>对比分歧</h2>
 
-			<p class="normal">为了解决这个问题，Hinton提出了(在Hinton G .，<em class="italics">训练受限玻尔兹曼机器的实用指南</em>，多伦多大学计算机科学系，2010)一种替代的<a id="_idIndexMarker1422"/>算法，称为CD-k。这个想法非常简单，但非常有效:我们不是等待马尔可夫链达到平稳分布，而是从在<em class="italics"> t </em> = 0、<img src="img/B14713_23_042.png" alt=""/>的训练样本开始采样固定次数，并通过从<img src="img/B14713_23_044.png" alt=""/>采样来计算<img src="img/B14713_23_043.png" alt=""/>。然后，使用隐藏向量对来自<img src="img/B14713_23_046.png" alt=""/>的重构<img src="img/B14713_23_045.png" alt=""/>进行采样。这一过程可以重复多次，但在实践中，一个采样步骤通常足以确保相当好的精度。此时，对数似然的梯度近似为(考虑t步):</p>
+			<p class="normal">为了解决这个问题，Hinton 提出了(在 Hinton G .，<em class="italics">训练受限玻尔兹曼机器的实用指南</em>，多伦多大学计算机科学系，2010)一种替代的<a id="_idIndexMarker1422"/>算法，称为 CD-k。这个想法非常简单，但非常有效:我们不是等待马尔可夫链达到平稳分布，而是从在<em class="italics"> t </em> = 0、<img src="img/B14713_23_042.png" alt=""/>的训练样本开始采样固定次数，并通过从<img src="img/B14713_23_044.png" alt=""/>采样来计算<img src="img/B14713_23_043.png" alt=""/>。然后，使用隐藏向量对来自<img src="img/B14713_23_046.png" alt=""/>的重构<img src="img/B14713_23_045.png" alt=""/>进行采样。这一过程可以重复多次，但在实践中，一个采样步骤通常足以确保相当好的精度。此时，对数似然的梯度近似为(考虑 t 步):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_047.png" alt=""/></figure>
 
-			<p class="normal">考虑到前面的过程，可以容易地获得相对于<em class="italics">w</em>T22】ij、<em class="italics">b</em>T26】I和<em class="italics">c</em>T30】j的单一梯度。术语对比源自在<img src="img/B14713_23_049.png" alt=""/>计算的<img src="img/B14713_23_048.png" alt=""/>梯度的近似值，其中一项称为正梯度，另一项定义为负梯度。这种方法类似于具有这种增量比的导数的近似值:</p>
+			<p class="normal">考虑到前面的过程，可以容易地获得相对于<em class="italics">w</em>T22】ij、<em class="italics">b</em>T26】I 和<em class="italics">c</em>T30】j 的单一梯度。术语对比源自在<img src="img/B14713_23_049.png" alt=""/>计算的<img src="img/B14713_23_048.png" alt=""/>梯度的近似值，其中一项称为正梯度，另一项定义为负梯度。这种方法类似于具有这种增量比的导数的近似值:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_050.png" alt=""/></figure>
 
-			<p class="normal">基于单步CD-k的完整RBM <a id="_idIndexMarker1423"/>训练算法是(假设有<em class="italics"> M个</em>训练数据点):</p>
+			<p class="normal">基于单步 CD-k 的完整 RBM <a id="_idIndexMarker1423"/>训练算法是(假设有<em class="italics"> M 个</em>训练数据点):</p>
 
 			<ol>
 
@@ -160,9 +160,9 @@
 
 			
 
-				<li class="list" value="4">对于<em class="italics"> e </em> = 1到<em class="italics">N</em>T51】历元:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">设置<img src="img/B14713_23_053.png" alt=""/>。</li>
+				<li class="list" value="4">对于<em class="italics"> e </em> = 1 到<em class="italics">N</em>T51】历元:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">设置<img src="img/B14713_23_053.png" alt=""/>。</li>
 
-<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> i </em> = 1到<em class="italics"> M </em>:</li>
+<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> i </em> = 1 到<em class="italics"> M </em>:</li>
 
 </ol></li>
 
@@ -216,35 +216,35 @@
 
 			<h1 id="_idParaDest-341" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor355"/>深度信念网络</h1>
 
-			<p class="normal">信念或<a id="_idIndexMarker1425"/>贝叶斯网络是一个已经在<em class="italics">第11章</em>、<em class="italics">贝叶斯网络和隐马尔可夫模型</em>中探讨过的概念。在这种特殊情况下，我们将考虑信念网络，其中有可见和潜在的变量，组织成同质层。第一层总是包含输入(可见)单元，而所有其余的是潜在的。因此，DBN可以构建为一堆RBM，其中每个隐藏层也是后续RBM的可见层，如下图所示(每层的单元数量可以不同):</p>
+			<p class="normal">信念或<a id="_idIndexMarker1425"/>贝叶斯网络是一个已经在<em class="italics">第 11 章</em>、<em class="italics">贝叶斯网络和隐马尔可夫模型</em>中探讨过的概念。在这种特殊情况下，我们将考虑信念网络，其中有可见和潜在的变量，组织成同质层。第一层总是包含输入(可见)单元，而所有其余的是潜在的。因此，DBN 可以构建为一堆 RBM，其中每个隐藏层也是后续 RBM 的可见层，如下图所示(每层的单元数量可以不同):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_04.png" alt=""/></figure>
 
-			<p class="packt_figref">通用DBN的结构</p>
+			<p class="packt_figref">通用 DBN 的结构</p>
 
-			<p class="normal">学习<a id="_idIndexMarker1426"/>过程通常是贪婪的和逐步的(如Hinton G. E .，Osindero S .，Teh Y. W .，<em class="italics">一种用于深度信念网络的快速学习算法</em>，Neural Computation，18/7，2006中所提出的)。第一个RBM使用数据集进行训练，并使用CD-k算法进行优化以重构原始分布。此时，内部(隐藏)表示被用作下一个RBM的输入，等等，直到所有的块都被完全训练。通过这种方式，DBN被迫创建可用于不同目的的数据集的后续内部表示。当然，当训练模型时，可以从隐藏层的识别(逆)模型采样中进行推断，并计算激活概率，因为(<img src="img/B14713_09_008.png" alt=""/>表示一般原因):</p>
+			<p class="normal">学习<a id="_idIndexMarker1426"/>过程通常是贪婪的和逐步的(如 Hinton G. E .，Osindero S .，Teh Y. W .，<em class="italics">一种用于深度信念网络的快速学习算法</em>，Neural Computation，18/7，2006 中所提出的)。第一个 RBM 使用数据集进行训练，并使用 CD-k 算法进行优化以重构原始分布。此时，内部(隐藏)表示被用作下一个 RBM 的输入，等等，直到所有的块都被完全训练。通过这种方式，DBN 被迫创建可用于不同目的的数据集的后续内部表示。当然，当训练模型时，可以从隐藏层的识别(逆)模型采样中进行推断，并计算激活概率，因为(<img src="img/B14713_09_008.png" alt=""/>表示一般原因):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_069.png" alt=""/></figure>
 
-			<p class="normal">由于DBN始终是一个生成过程，在无人监管的情况下，它可以执行组件分析/维度缩减，其方法基于创建子过程链的思想，能够重建内部表示。虽然单个RBM聚焦于单个隐藏层，因此不能学习子特征，但是DBN贪婪地学习如何使用改进的隐藏分布来表示每个子特征向量。</p>
+			<p class="normal">由于 DBN 始终是一个生成过程，在无人监管的情况下，它可以执行组件分析/维度缩减，其方法基于创建子过程链的思想，能够重建内部表示。虽然单个 RBM 聚焦于单个隐藏层，因此不能学习子特征，但是 DBN 贪婪地学习如何使用改进的隐藏分布来表示每个子特征向量。</p>
 
-			<p class="normal">这一过程背后的概念与级联卷积层并无太大不同，主要区别在于，在这种情况下，学习过程是贪婪的。与PCA等方法的另一个区别是，我们并不确切知道内部表示是如何构建的。由于潜在变量是通过最大化对数似然来优化的，因此可能有许多最佳点，但我们不能轻易地对它们施加约束。</p>
+			<p class="normal">这一过程背后的概念与级联卷积层并无太大不同，主要区别在于，在这种情况下，学习过程是贪婪的。与 PCA 等方法的另一个区别是，我们并不确切知道内部表示是如何构建的。由于潜在变量是通过最大化对数似然来优化的，因此可能有许多最佳点，但我们不能轻易地对它们施加约束。</p>
 
-			<p class="normal">然而，DBNs在不同的场景中表现出非常强大的特性，即使它们的计算成本通常比其他方法高得多。一个主要的问题(大多数深度学习方法共有的)是关于每一层中隐藏单元的正确选择。因为它们代表潜在的变量，所以它们的数量是训练程序成功的关键因素。正确的选择不是立竿见影的，因为有必要了解数据生成过程的复杂性。然而，作为一个经验法则，我建议从包含32/64个单元的几层开始，并继续增加隐藏神经元的数量和层数，直到达到期望的精度(同样，我建议从小的学习速率开始，如<img style="height: 1.2em! important;" src="img/B14713_23_070.png" alt=""/>如果必要的话增加它)。</p>
+			<p class="normal">然而，DBNs 在不同的场景中表现出非常强大的特性，即使它们的计算成本通常比其他方法高得多。一个主要的问题(大多数深度学习方法共有的)是关于每一层中隐藏单元的正确选择。因为它们代表潜在的变量，所以它们的数量是训练程序成功的关键因素。正确的选择不是立竿见影的，因为有必要了解数据生成过程的复杂性。然而，作为一个经验法则，我建议从包含 32/64 个单元的几层开始，并继续增加隐藏神经元的数量和层数，直到达到期望的精度(同样，我建议从小的学习速率开始，如<img style="height: 1.2em! important;" src="img/B14713_23_070.png" alt=""/>如果必要的话增加它)。</p>
 
-			<p class="normal">由于第一个RBM负责重构原始数据集，因此在每个历元后监控对数似然(或误差)非常有用，以便了解该过程是正确学习(减少误差)还是容量饱和。很明显，最初糟糕的重建会导致随后更糟糕的表现。由于学习过程是贪婪的，在无监督的任务中，当前面的训练步骤完成时，没有办法提高较低层的性能。因此，我总是建议调整参数，使第一次重建非常准确。当然，所有关于过度拟合的考虑仍然有效，因此，用验证样本监控泛化能力也很重要。然而，在组件分析中，我们假设我们正在处理一个代表底层数据生成过程的分布，因此找到以前见过的特征的风险应该是最小的。</p>
+			<p class="normal">由于第一个 RBM 负责重构原始数据集，因此在每个历元后监控对数似然(或误差)非常有用，以便了解该过程是正确学习(减少误差)还是容量饱和。很明显，最初糟糕的重建会导致随后更糟糕的表现。由于学习过程是贪婪的，在无监督的任务中，当前面的训练步骤完成时，没有办法提高较低层的性能。因此，我总是建议调整参数，使第一次重建非常准确。当然，所有关于过度拟合的考虑仍然有效，因此，用验证样本监控泛化能力也很重要。然而，在组件分析中，我们假设我们正在处理一个代表底层数据生成过程的分布，因此找到以前见过的特征的风险应该是最小的。</p>
 
-			<p class="normal">在有监督的场景中，通常有两种选择，其第一步总是对DBN进行贪婪的训练。然而，第一种方法使用标准算法执行后续细化，例如反向传播(将整个架构视为单个深度网络)，而第二种方法使用最后的内部表示作为单独分类器的输入。</p>
+			<p class="normal">在有监督的场景中，通常有两种选择，其第一步总是对 DBN 进行贪婪的训练。然而，第一种方法使用标准算法执行后续细化，例如反向传播(将整个架构视为单个深度网络)，而第二种方法使用最后的内部表示作为单独分类器的输入。</p>
 
 			<p class="normal">不言而喻，第一种方法具有更多的自由度，因为它与预训练的网络一起工作，该网络的权重可以调整，直到验证精度达到其最大值。在这种情况下，第一个贪婪步骤与通过观察深度模型(类似于卷积网络)的内部行为<a id="_idIndexMarker1428"/>以经验方式确认的相同假设一起工作。第一层学习如何检测低级特征，而所有后续层增加细节。因此，反向传播步骤可能从已经非常接近最优值的点开始，并且可以更快地收敛。</p>
 
-			<p class="normal">相反，第二种<a id="_idIndexMarker1429"/>方法类似于将内核技巧应用于标准的<strong class="bold">支持向量机</strong> ( <strong class="bold"> SVM </strong>)。事实上，外部分类器通常非常简单(例如逻辑回归或SVM ),准确度的提高通常是由于通过将原始样本投影到一个子空间(通常是更高维度的)而获得的线性可分性的提高，在该子空间中它们可以被容易地分类。一般来说，这种方法产生的性能比第一种差，因为一旦DBN被训练，就没有办法调整参数。因此，当最终投影不适合线性分类时，有必要采用更复杂的模型，并且由此产生的计算成本可能非常高，而没有相应的性能增益。由于深度学习通常基于端到端学习的概念，因此训练整个网络对于在完整的结构中隐含地包括预处理步骤可能是有用的，这成为将输入样本与特定结果相关联的黑盒。另一方面，每当请求显式流水线时，贪婪地训练DBN并采用单独的分类器可能是更合适的解决方案。</p>
+			<p class="normal">相反，第二种<a id="_idIndexMarker1429"/>方法类似于将内核技巧应用于标准的<strong class="bold">支持向量机</strong> ( <strong class="bold"> SVM </strong>)。事实上，外部分类器通常非常简单(例如逻辑回归或 SVM ),准确度的提高通常是由于通过将原始样本投影到一个子空间(通常是更高维度的)而获得的线性可分性的提高，在该子空间中它们可以被容易地分类。一般来说，这种方法产生的性能比第一种差，因为一旦 DBN 被训练，就没有办法调整参数。因此，当最终投影不适合线性分类时，有必要采用更复杂的模型，并且由此产生的计算成本可能非常高，而没有相应的性能增益。由于深度学习通常基于端到端学习的概念，因此训练整个网络对于在完整的结构中隐含地包括预处理步骤可能是有用的，这成为将输入样本与特定结果相关联的黑盒。另一方面，每当请求显式流水线时，贪婪地训练 DBN 并采用单独的分类器可能是更合适的解决方案。</p>
 
-			<h2 id="_idParaDest-342" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor356"/>Python中无监督DBN的示例</h2>
+			<h2 id="_idParaDest-342" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor356"/>Python 中无监督 DBN 的示例</h2>
 
-			<p class="normal">在本例中，我们<a id="_idIndexMarker1430"/>将使用GitHub(<a href="https://github.com/albertbup/deep-belief-network">https://github.com/albertbup/deep-belief-network</a>)上免费提供的Python库，该库允许使用NumPy(仅限CPU)或tensor flow(2.0之前版本的CPU或GPU支持)和标准scikit-learn接口来处理有监督和无监督的DBN。可以使用<code class="Code-In-Text--PACKT-">pip install git+git://github.com/albertbup/deep-belief-network.git</code>命令安装软件包。然而，由于我们<a id="_idIndexMarker1432"/>将注意力集中在TensorFlow 2.0上，我们将使用NumPy接口。</p>
+			<p class="normal">在本例中，我们<a id="_idIndexMarker1430"/>将使用 GitHub(<a href="https://github.com/albertbup/deep-belief-network">https://github.com/albertbup/deep-belief-network</a>)上免费提供的 Python 库，该库允许使用 NumPy(仅限 CPU)或 tensor flow(2.0 之前版本的 CPU 或 GPU 支持)和标准 scikit-learn 接口来处理有监督和无监督的 DBN。可以使用<code class="Code-In-Text--PACKT-">pip install git+git://github.com/albertbup/deep-belief-network.git</code>命令安装软件包。然而，由于我们<a id="_idIndexMarker1432"/>将注意力集中在 TensorFlow 2.0 上，我们将使用 NumPy 接口。</p>
 
-			<p class="normal">我们的目标是创建MNIST数据集子集的低维表示(由于训练过程可能非常缓慢，我们将它限制在400个样本)，它由数据点组成<img src="img/B14713_23_071.png" alt=""/>。第一步是加载(使用TensorFlow/Keras辅助函数)、混排和规范化数据集:</p>
+			<p class="normal">我们的目标是创建 MNIST 数据集子集的低维表示(由于训练过程可能非常缓慢，我们将它限制在 400 个样本)，它由数据点组成<img src="img/B14713_23_071.png" alt=""/>。第一步是加载(使用 TensorFlow/Keras 辅助函数)、混排和规范化数据集:</p>
 
 			<pre>import numpy as np
 import tensorflow as tf 
@@ -261,9 +261,9 @@ X = X_train[0:nb_samples].reshape(
             astype(np.float32) / 255.0
 Y = Y_train[0:nb_samples]</pre>
 
-			<p class="normal">此时，我们可以创建一个UnsupervisedDBN类的实例，分别用512、256和64个sigmoid单位设置三个隐藏层(因为我们想要绑定0和1之间的值)，而我们不需要指定输入维度，因为它是从数据集中自动检测的<a id="_idIndexMarker1433"/>。很容易理解，模型的最终目标是执行顺序降维。第一个RBM将维度从784减少到512(约65%)，第二个<a id="_idIndexMarker1434"/>将维度减半，因为该层中有256个潜在变量。一旦该第二表示已经被优化，第三RBM将维度除以4，获得输出<img src="img/B14713_23_072.png" alt=""/>。值得注意的是，与PCA相反，在这种情况下，模型完全捕捉到了单个变量(在这种情况下是像素)之间的相互依赖关系。</p>
+			<p class="normal">此时，我们可以创建一个 UnsupervisedDBN 类的实例，分别用 512、256 和 64 个 sigmoid 单位设置三个隐藏层(因为我们想要绑定 0 和 1 之间的值)，而我们不需要指定输入维度，因为它是从数据集中自动检测的<a id="_idIndexMarker1433"/>。很容易理解，模型的最终目标是执行顺序降维。第一个 RBM 将维度从 784 减少到 512(约 65%)，第二个<a id="_idIndexMarker1434"/>将维度减半，因为该层中有 256 个潜在变量。一旦该第二表示已经被优化，第三 RBM 将维度除以 4，获得输出<img src="img/B14713_23_072.png" alt=""/>。值得注意的是，与 PCA 相反，在这种情况下，模型完全捕捉到了单个变量(在这种情况下是像素)之间的相互依赖关系。</p>
 
-			<p class="normal">学习率<img src="img/B14713_17_016.png" alt=""/> ( <code class="Code-In-Text--PACKT-">learning_rate_rbm</code>)设定为0.05，批量(<code class="Code-In-Text--PACKT-">batch_size</code>)设定为64，每个RBM的时期数(<code class="Code-In-Text--PACKT-">n_epochs_rbm</code>)设定为100。CD-k步数的默认值是1，但是可以使用<code class="Code-In-Text--PACKT-">contrastive_divergence_iter</code>参数来更改。所有这些值都可以自由地改变，以提高性能(例如，获得较小的损失)或加快训练过程。我们的选择基于准确性和速度之间的权衡:</p>
+			<p class="normal">学习率<img src="img/B14713_17_016.png" alt=""/> ( <code class="Code-In-Text--PACKT-">learning_rate_rbm</code>)设定为 0.05，批量(<code class="Code-In-Text--PACKT-">batch_size</code>)设定为 64，每个 RBM 的时期数(<code class="Code-In-Text--PACKT-">n_epochs_rbm</code>)设定为 100。CD-k 步数的默认值是 1，但是可以使用<code class="Code-In-Text--PACKT-">contrastive_divergence_iter</code>参数来更改。所有这些值都可以自由地改变，以提高性能(例如，获得较小的损失)或加快训练过程。我们的选择基于准确性和速度之间的权衡:</p>
 
 			<pre>from dbn import UnsupervisedDBN
 unsupervised_dbn = UnsupervisedDBN(
@@ -284,7 +284,7 @@ X_dbn = unsupervised_dbn.fit_transform(X)</pre>
 <strong class="screen-text">&gt;&gt; Epoch 100 finished 	RBM Reconstruction error 6.439276</strong>
 <strong class="screen-text">[END] Pre-training step</strong></pre>
 
-			<p class="normal">如前所述，训练<a id="_idIndexMarker1436"/>过程是连续的，分为预训练和微调阶段。当然，复杂度与层数和隐藏单元数成正比。一旦这一步完成，<code class="Code-In-Text--PACKT-">X_dbn</code>数组包含从最后一个隐藏层采样的值。不幸的是，这个库没有实现逆变换方法，但是我们可以使用t-SNE算法将分布投影到二维空间:</p>
+			<p class="normal">如前所述，训练<a id="_idIndexMarker1436"/>过程是连续的，分为预训练和微调阶段。当然，复杂度与层数和隐藏单元数成正比。一旦这一步完成，<code class="Code-In-Text--PACKT-">X_dbn</code>数组包含从最后一个隐藏层采样的值。不幸的是，这个库没有实现逆变换方法，但是我们可以使用 t-SNE 算法将分布投影到二维空间:</p>
 
 			<pre>from sklearn.manifold import TSNE
 tsne = TSNE(n_components=2,
@@ -296,17 +296,17 @@ X_tsne = tsne.fit_transform(X_dbn)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_23_05.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\B22B2DA5.tmp"/></figure>
 
-			<p class="packt_figref">最后一个DBN隐藏层分布的t-SNE图(64维)</p>
+			<p class="packt_figref">最后一个 DBN 隐藏层分布的 t-SNE 图(64 维)</p>
 
-			<p class="normal">正如您所看到的，即使仍然有一些异常，隐藏的低维表示与原始数据集是全局一致的。包含相同数字的每个组被组织成紧凑的簇，这些簇保留了数据集所在的原始<a id="_idIndexMarker1437"/>流形的许多几何属性。例如，包含代表9的数字的组非常接近包含7的图像的组。3组和8组也彼此非常接近。</p>
+			<p class="normal">正如您所看到的，即使仍然有一些异常，隐藏的低维表示与原始数据集是全局一致的。包含相同数字的每个组被组织成紧凑的簇，这些簇保留了数据集所在的原始<a id="_idIndexMarker1437"/>流形的许多几何属性。例如，包含代表 9 的数字的组非常接近包含 7 的图像的组。3 组和 8 组也彼此非常接近。</p>
 
-			<p class="normal">该结果<a id="_idIndexMarker1438"/>证实了DBN可成功用作分类目的的预处理层，但在这种情况下，与其降低维度，不如增加维度以利用冗余，这样我们就可以使用更简单的线性分类器(为了更好地理解这一概念，考虑用多项式特征扩充数据集)。我邀请读者通过预处理整个MNIST数据集，然后使用逻辑回归对其进行分类，并将结果与直接方法进行比较，来测试这种能力。</p>
+			<p class="normal">该结果<a id="_idIndexMarker1438"/>证实了 DBN 可成功用作分类目的的预处理层，但在这种情况下，与其降低维度，不如增加维度以利用冗余，这样我们就可以使用更简单的线性分类器(为了更好地理解这一概念，考虑用多项式特征扩充数据集)。我邀请读者通过预处理整个 MNIST 数据集，然后使用逻辑回归对其进行分类，并将结果与直接方法进行比较，来测试这种能力。</p>
 
-			<h2 id="_idParaDest-343" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor357"/>Python中监督DBN的例子</h2>
+			<h2 id="_idParaDest-343" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor357"/>Python 中监督 DBN 的例子</h2>
 
-			<p class="normal">在本例中，我们<a id="_idIndexMarker1439"/>将使用葡萄酒数据集(由scikit-learn提供)，其中包含代表三种不同葡萄酒类别的化学<a id="_idIndexMarker1440"/>属性的数据点<img src="img/B14713_23_074.png" alt=""/>。这个数据集并不极其复杂，可以用更简单的方法成功分类；然而，这个例子只是一个教学目的，对于理解如何处理这种数据是有用的。</p>
+			<p class="normal">在本例中，我们<a id="_idIndexMarker1439"/>将使用葡萄酒数据集(由 scikit-learn 提供)，其中包含代表三种不同葡萄酒类别的化学<a id="_idIndexMarker1440"/>属性的数据点<img src="img/B14713_23_074.png" alt=""/>。这个数据集并不极其复杂，可以用更简单的方法成功分类；然而，这个例子只是一个教学目的，对于理解如何处理这种数据是有用的。</p>
 
-			<p class="normal">第一步是加载数据集，并通过移除平均值并除以标准偏差来标准化值(这在使用ReLU单位时非常重要，例如，当输入为正时，ReLU单位相当于线性单位):</p>
+			<p class="normal">第一步是加载数据集，并通过移除平均值并除以标准偏差来标准化值(这在使用 ReLU 单位时非常重要，例如，当输入为正时，ReLU 单位相当于线性单位):</p>
 
 			<pre>from sklearn.datasets import load_wine
 from sklearn.preprocessing import StandardScaler
@@ -323,9 +323,9 @@ X_train, X_test, Y_train, Y_test = \
                          test_size=0.25,
                          random_state=1000)</pre>
 
-			<p class="normal">该模型基于SupervisedDBNClassification类的一个实例，它实现了<a id="_idIndexMarker1441"/>反向传播方法。这些参数与无监督的情况非常相似，但现在我们还可以指定<a id="_idIndexMarker1442"/>随机梯度下降(SGD)学习速率(<code class="Code-In-Text--PACKT-">learning_rate</code>)、反向传播时期的数量(<code class="Code-In-Text--PACKT-">n_iter_backprop</code>)和可选的退出(<code class="Code-In-Text--PACKT-">dropout_p</code>)。该算法执行初始贪婪训练(其计算成本通常高于SGD阶段)，然后进行微调。考虑到训练集的结构，我们选择了包含16和8个单元的两个隐藏ReLU层，并应用了0.1的下降以防止过度拟合。</p>
+			<p class="normal">该模型基于 SupervisedDBNClassification 类的一个实例，它实现了<a id="_idIndexMarker1441"/>反向传播方法。这些参数与无监督的情况非常相似，但现在我们还可以指定<a id="_idIndexMarker1442"/>随机梯度下降(SGD)学习速率(<code class="Code-In-Text--PACKT-">learning_rate</code>)、反向传播时期的数量(<code class="Code-In-Text--PACKT-">n_iter_backprop</code>)和可选的退出(<code class="Code-In-Text--PACKT-">dropout_p</code>)。该算法执行初始贪婪训练(其计算成本通常高于 SGD 阶段)，然后进行微调。考虑到训练集的结构，我们选择了包含 16 和 8 个单元的两个隐藏 ReLU 层，并应用了 0.1 的下降以防止过度拟合。</p>
 
-			<p class="normal">考虑到这些模型的一般行为，两个RBM将试图找到<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>的内部表示，以便获得最准确的分类。在我们的例子中，第一个RBM将维度扩展到16个单位，因此，隐藏层应该更明确地编码一些相互依赖的特征。相反，第二个RBM将维度减少到8个单位，它主要负责发现数据集所在的流形。网络结构的选择类似于深度学习中采用的任何其他程序，并且应该遵循奥卡姆剃刀原则。因此，我建议从非常简单的模型开始，然后添加新的层或扩展现有的层。当然，当过度拟合的风险很大时(例如，当数据集非常小并且不可能检索新的数据点时)，强烈建议使用dropout:</p>
+			<p class="normal">考虑到这些模型的一般行为，两个 RBM 将试图找到<em class="italics"> p </em> <sub style="font-style: italic;">数据</sub>的内部表示，以便获得最准确的分类。在我们的例子中，第一个 RBM 将维度扩展到 16 个单位，因此，隐藏层应该更明确地编码一些相互依赖的特征。相反，第二个 RBM 将维度减少到 8 个单位，它主要负责发现数据集所在的流形。网络结构的选择类似于深度学习中采用的任何其他程序，并且应该遵循奥卡姆剃刀原则。因此，我建议从非常简单的模型开始，然后添加新的层或扩展现有的层。当然，当过度拟合的风险很大时(例如，当数据集非常小并且不可能检索新的数据点时)，强烈建议使用 dropout:</p>
 
 			<pre>from dbn import SupervisedDBNClassification
 classifier = SupervisedDBNClassification(
@@ -349,7 +349,7 @@ classifier.fit(X_train, Y_train)</pre>
 <strong class="screen-text">&gt;&gt; Epoch 100 finished 	ANN training loss 1.328146</strong>
 <strong class="screen-text">[END] Fine tuning step</strong></pre>
 
-			<p class="normal">此时，我们可以<a id="_idIndexMarker1444"/>使用scikit-learn分类报告评估我们的模型:</p>
+			<p class="normal">此时，我们可以<a id="_idIndexMarker1444"/>使用 scikit-learn 分类报告评估我们的模型:</p>
 
 			<pre>from sklearn.metrics.classification import \
     classification_report
@@ -366,17 +366,17 @@ print(classification_report(Y_test, Y_pred))</pre>
 <strong class="screen-text">   macro avg       0.95      0.97      0.96        45</strong>
 <strong class="screen-text">weighted avg       0.96      0.96      0.96        45</strong></pre>
 
-			<p class="normal">验证精度(就精度和召回率而言)非常大(接近0.96)，但这确实是一个只需要几分钟训练的简单数据集。我邀请读者在MNIST/时尚MNIST数据集的分类中测试DBN的性能，将结果与使用深度卷积网络获得的结果进行比较。在这种情况下，监控每个RBM的重建误差是很重要的，在运行反向传播阶段之前尝试将其最小化。在本练习结束时，您应该能够回答这个问题:端到端方法和基于预处理的方法哪个更好？</p>
+			<p class="normal">验证精度(就精度和召回率而言)非常大(接近 0.96)，但这确实是一个只需要几分钟训练的简单数据集。我邀请读者在 MNIST/时尚 MNIST 数据集的分类中测试 DBN 的性能，将结果与使用深度卷积网络获得的结果进行比较。在这种情况下，监控每个 RBM 的重建误差是很重要的，在运行反向传播阶段之前尝试将其最小化。在本练习结束时，您应该能够回答这个问题:端到端方法和基于预处理的方法哪个更好？</p>
 
 			<h1 id="_idParaDest-344" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor358"/>总结</h1>
 
-			<p class="normal">在本章中，我们介绍了MRF作为RBM的底层结构。MRF被表示为顶点是随机变量的无向图。特别地，为了我们的目的，我们考虑了MRF，它的联合概率可以表示为每个随机变量的正函数的乘积。最常见的基于指数的分布称为吉布斯(或玻尔兹曼)分布，它特别适合我们的问题，因为对数抵消了指数，产生了更简单的表达式。</p>
+			<p class="normal">在本章中，我们介绍了 MRF 作为 RBM 的底层结构。MRF 被表示为顶点是随机变量的无向图。特别地，为了我们的目的，我们考虑了 MRF，它的联合概率可以表示为每个随机变量的正函数的乘积。最常见的基于指数的分布称为吉布斯(或玻尔兹曼)分布，它特别适合我们的问题，因为对数抵消了指数，产生了更简单的表达式。</p>
 
-			<p class="normal">RBM是一个简单的二分无向图，由可见和潜在的变量组成，只在不同的组之间有联系。</p>
+			<p class="normal">RBM 是一个简单的二分无向图，由可见和潜在的变量组成，只在不同的组之间有联系。</p>
 
-			<p class="normal">该模型的目标是学习概率分布，这要归功于可以模拟未知关系的隐藏单元的存在。不幸的是，对数似然虽然非常简单，但不容易优化，因为归一化项需要对所有输入值求和。出于这个原因，Hinton提出了一种替代算法，称为CD-k，它基于固定数量(通常为1)的Gibbs采样步骤输出对数似然梯度的近似值。</p>
+			<p class="normal">该模型的目标是学习概率分布，这要归功于可以模拟未知关系的隐藏单元的存在。不幸的是，对数似然虽然非常简单，但不容易优化，因为归一化项需要对所有输入值求和。出于这个原因，Hinton 提出了一种替代算法，称为 CD-k，它基于固定数量(通常为 1)的 Gibbs 采样步骤输出对数似然梯度的近似值。</p>
 
-			<p class="normal">堆叠多个RBM允许我们对dbn建模，其中每个块的隐藏层也是下一个块的可见层。可以使用贪婪方法来训练dbn，最大化序列中每个RBM的对数似然。在无人监管的情况下，DBN能够以分层的方式提取数据生成过程的特征，因此应用程序包括组件分析和降维。在受监督的场景中，可以使用反向传播算法(考虑整个网络)或有时使用流水线中的预处理步骤(其中分类器通常是非常简单的模型，如逻辑回归)来贪婪地预训练和微调DBN。</p>
+			<p class="normal">堆叠多个 RBM 允许我们对 dbn 建模，其中每个块的隐藏层也是下一个块的可见层。可以使用贪婪方法来训练 dbn，最大化序列中每个 RBM 的对数似然。在无人监管的情况下，DBN 能够以分层的方式提取数据生成过程的特征，因此应用程序包括组件分析和降维。在受监督的场景中，可以使用反向传播算法(考虑整个网络)或有时使用流水线中的预处理步骤(其中分类器通常是非常简单的模型，如逻辑回归)来贪婪地预训练和微调 DBN。</p>
 
 			<p class="normal">在网上提供的下一章中，我们将介绍强化学习的概念，讨论可以自主学习玩游戏或允许机器人行走、跳跃和执行使用经典方法建模和控制极其困难的任务的系统的最重要元素。</p>
 
@@ -384,15 +384,15 @@ print(classification_report(Y_test, Y_pred))</pre>
 
 			<ul>
 
-				<li class="list">Smolensky P .，<em class="italics">动力系统中的信息处理:和谐理论的基础</em>，并行分布式处理，第1卷，麻省理工学院出版社，1986</li>
+				<li class="list">Smolensky P .，<em class="italics">动力系统中的信息处理:和谐理论的基础</em>，并行分布式处理，第 1 卷，麻省理工学院出版社，1986</li>
 
-				<li class="list">Hinton G .，<em class="italics">训练受限玻尔兹曼机器的实用指南</em>，多伦多大学计算机科学系，2010年</li>
+				<li class="list">Hinton G .，<em class="italics">训练受限玻尔兹曼机器的实用指南</em>，多伦多大学计算机科学系，2010 年</li>
 
 				<li class="list">辛顿，奥辛德罗，崔永伟，<em class="italics">深度信念网络的快速学习算法</em>，神经计算，18/7，2006</li>
 
-				<li class="list">Goodfellow I .，Bengio Y .，库维尔a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2016</li>
+				<li class="list">Goodfellow I .，Bengio Y .，库维尔 a .，<em class="italics">深度学习</em>，麻省理工学院出版社，2016</li>
 
-				<li class="list">Bonaccorso G .，<em class="italics">用Python进行动手无监督学习</em>，Packt出版社，2019</li>
+				<li class="list">Bonaccorso G .，<em class="italics">用 Python 进行动手无监督学习</em>，Packt 出版社，2019</li>
 
 			</ul>
 

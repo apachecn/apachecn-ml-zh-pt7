@@ -28,13 +28,13 @@
 
 			<ul>
 
-				<li class="list">单个神经元的Hebb规则，这是一个简单但在生物学上看似合理的行为法则。</li>
+				<li class="list">单个神经元的 Hebb 规则，这是一个简单但在生物学上看似合理的行为法则。</li>
 
-				<li class="list">Hebb规则的一些变体，如Oja和协方差规则，是为了克服一些稳定性问题而引入的。</li>
+				<li class="list">Hebb 规则的一些变体，如 Oja 和协方差规则，是为了克服一些稳定性问题而引入的。</li>
 
-				<li class="list">Hebbian神经元获得的最终结果，包括计算输入数据集的第一个主成分。</li>
+				<li class="list">Hebbian 神经元获得的最终结果，包括计算输入数据集的第一个主成分。</li>
 
-				<li class="list">两个神经网络模型(Sanger的网络和Rubner-Tavan的网络)可以提取一般数量的主成分。</li>
+				<li class="list">两个神经网络模型(Sanger 的网络和 Rubner-Tavan 的网络)可以提取一般数量的主成分。</li>
 
 				<li class="list"><strong class="bold">自组织地图</strong> ( <strong class="bold"> SOMs </strong>)的概念，重点是科霍宁网络。</li>
 
@@ -44,7 +44,7 @@
 
 			<h1 id="_idParaDest-217" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor228"/>赫布法则</h1>
 
-			<p class="normal">赫布法则(Hebb's rule)是加拿大心理学家唐纳德·赫布(Donald Hebb)在1949年提出的一个猜想，用来描述天然神经元的突触可塑性。</p>
+			<p class="normal">赫布法则(Hebb's rule)是加拿大心理学家唐纳德·赫布(Donald Hebb)在 1949 年提出的一个猜想，用来描述天然神经元的突触可塑性。</p>
 
 			<p class="normal">发表几年后，这一规则被神经生理学研究证实，许多研究也表明了它在人工智能的许多应用中的有效性。在介绍该规则之前，描述一般的赫比神经元是有用的，如下图所示:</p>
 
@@ -60,15 +60,15 @@
 
 			<p class="normal">赫布法则指出，当同一条链中的两个神经元(一个突触前神经元和一个突触后神经元)有相同的行为时，它们的连接会越来越强。另一方面，如果它们有不同的行为，以至于当一个神经元被兴奋时，另一个被抑制，它们的连接就会减弱。</p>
 
-			<p class="normal">科学家s . lowel用著名的句子用通俗易懂的语言表达了这一概念:“一起放电的神经元连在一起”。</p>
+			<p class="normal">科学家 s . lowel 用著名的句子用通俗易懂的语言表达了这一概念:“一起放电的神经元连在一起”。</p>
 
-			<p class="normal">在Hebb理论的最初版本中，输入向量代表神经放电率，它总是非负的。这意味着突触权重只能得到加强(这种现象的神经科学术语是“长时程增强”——LTP)。然而，出于我们的目的，我们假设<img src="img/B14713_14_001.png" alt=""/>是一个实值向量，就像<img src="img/B14713_14_002.png" alt=""/>一样。这个条件允许在不失一般性的情况下模拟更多的人工场景。</p>
+			<p class="normal">在 Hebb 理论的最初版本中，输入向量代表神经放电率，它总是非负的。这意味着突触权重只能得到加强(这种现象的神经科学术语是“长时程增强”——LTP)。然而，出于我们的目的，我们假设<img src="img/B14713_14_001.png" alt=""/>是一个实值向量，就像<img src="img/B14713_14_002.png" alt=""/>一样。这个条件允许在不失一般性的情况下模拟更多的人工场景。</p>
 
-			<p class="normal">当需要处理以矩阵形式组织的许多输入样本时，对单个向量执行的相同操作也适用。如果我们有N<em class="italics"/><em class="italics">m</em>维输入向量，公式如下:</p>
+			<p class="normal">当需要处理以矩阵形式组织的许多输入样本时，对单个向量执行的相同操作也适用。如果我们有 N<em class="italics"/><em class="italics">m</em>维输入向量，公式如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_009.png" alt=""/></figure>
 
-			<p class="normal">离散形式的Hebb规则的基本形式可以表示为(对于单个输入)如下:</p>
+			<p class="normal">离散形式的 Hebb 规则的基本形式可以表示为(对于单个输入)如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_010.png" alt=""/></figure>
 
@@ -86,7 +86,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_022.png" alt=""/></figure>
 
-			<p class="normal">因此，如果<img src="img/B14713_14_002.png" alt=""/>与<img src="img/B14713_14_001.png" alt=""/>之间的初始角度<img src="img/B14713_14_023.png" alt=""/>小于90 ( <img src="img/B14713_14_026.png" alt=""/>)，则<img src="img/B14713_14_002.png" alt=""/>将具有与<img src="img/B14713_14_001.png" alt=""/>相同的<a id="_idIndexMarker850"/>方位；如果初始角度<img src="img/B14713_14_023.png" alt=""/>大于90度，<img src="img/B14713_14_002.png" alt=""/>将与<img src="img/B14713_14_001.png" alt=""/>方向相反。在<img style="height: 1.3em! important;" src="img/B14713_14_032.png" alt=""/>的情况下，余弦等于1，<em class="italics"> y </em>的符号始终为正(假设<em class="italics">符号</em> (0) = 1)。下图是该过程的示意图:</p>
+			<p class="normal">因此，如果<img src="img/B14713_14_002.png" alt=""/>与<img src="img/B14713_14_001.png" alt=""/>之间的初始角度<img src="img/B14713_14_023.png" alt=""/>小于 90 ( <img src="img/B14713_14_026.png" alt=""/>)，则<img src="img/B14713_14_002.png" alt=""/>将具有与<img src="img/B14713_14_001.png" alt=""/>相同的<a id="_idIndexMarker850"/>方位；如果初始角度<img src="img/B14713_14_023.png" alt=""/>大于 90 度，<img src="img/B14713_14_002.png" alt=""/>将与<img src="img/B14713_14_001.png" alt=""/>方向相反。在<img style="height: 1.3em! important;" src="img/B14713_14_032.png" alt=""/>的情况下，余弦等于 1，<em class="italics"> y </em>的符号始终为正(假设<em class="italics">符号</em> (0) = 1)。下图是该过程的示意图:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_02.png" alt=""/></figure>
 
@@ -114,7 +114,7 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 			<pre><strong class="screen-text">[8028.48942243 40137.64711215]</strong>
 <strong class="screen-text">0.001</strong></pre>
 
-			<p class="normal">正如所料，最终角度<img src="img/B14713_14_033.png" alt=""/>接近于零，并且<img src="img/B14713_14_002.png" alt=""/>具有与<img src="img/B14713_14_001.png" alt=""/>相同的方向和方向。我们现在可以用大于90°的<img src="img/B14713_14_033.png" alt=""/>重复实验(我们只改变<img src="img/B14713_14_002.png" alt=""/>的值，因为程序是相同的):</p>
+			<p class="normal">正如所料，最终角度<img src="img/B14713_14_033.png" alt=""/>接近于零，并且<img src="img/B14713_14_002.png" alt=""/>具有与<img src="img/B14713_14_001.png" alt=""/>相同的方向和方向。我们现在可以用大于 90°的<img src="img/B14713_14_033.png" alt=""/>重复实验(我们只改变<img src="img/B14713_14_002.png" alt=""/>的值，因为程序是相同的):</p>
 
 			<pre>w = np.array([1.0, -1.0])</pre>
 
@@ -123,7 +123,7 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 			<pre><strong class="screen-text">[-16053.97884486 -80275.89422431]</strong>
 <strong class="screen-text">179.999</strong></pre>
 
-			<p class="normal">在这种情况下，最终的<a id="_idIndexMarker852"/>角度<img src="img/B14713_14_033.png" alt=""/>约为180°，当然<img src="img/B14713_14_002.png" alt=""/>相对于<img src="img/B14713_14_001.png" alt=""/>方向相反。正如s . lowel所说:“一起放电的神经元连接在一起”。</p>
+			<p class="normal">在这种情况下，最终的<a id="_idIndexMarker852"/>角度<img src="img/B14713_14_033.png" alt=""/>约为 180°，当然<img src="img/B14713_14_002.png" alt=""/>相对于<img src="img/B14713_14_001.png" alt=""/>方向相反。正如 s . lowel 所说:“一起放电的神经元连接在一起”。</p>
 
 			<p class="normal">我们可以重新表达这个概念(使其适应机器学习场景)，可以说这种方法的主要假设是基于这样的想法:当突触前和突触后单元一致时(它们的信号具有相同的符号)，神经元之间的连接变得越来越强。另一方面，如果它们不一致，相应的突触重量就会减少。为了精确起见，如果<img src="img/B14713_14_001.png" alt=""/>是一个尖峰率，那么它应该表示为一个实函数<img style="height: 1.3em! important;" src="img/B14713_14_043.png" alt=""/>以及<em class="italics"> y </em> ( <em class="italics"> t </em>)。</p>
 
@@ -141,7 +141,7 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_050.png" alt=""/></figure>
 
-			<p class="normal">先前的输出<em class="italics">y</em>k总是乘以一个大于1的因子(空输入的情况除外)，因此它的增长没有界限。与<img style="height: 1.3em! important;" src="img/B14713_14_051.png" alt=""/>一样，该条件意味着<img src="img/B14713_14_052.png" alt=""/>的大小在每次迭代中增加(或者如果<img src="img/B14713_14_001.png" alt=""/>的大小为空，则保持不变)(考虑到原始微分方程，可以容易地获得更严格的证明)。</p>
+			<p class="normal">先前的输出<em class="italics">y</em>k 总是乘以一个大于 1 的因子(空输入的情况除外)，因此它的增长没有界限。与<img style="height: 1.3em! important;" src="img/B14713_14_051.png" alt=""/>一样，该条件意味着<img src="img/B14713_14_052.png" alt=""/>的大小在每次迭代中增加(或者如果<img src="img/B14713_14_001.png" alt=""/>的大小为空，则保持不变)(考虑到原始微分方程，可以容易地获得更严格的证明)。</p>
 
 			<p class="normal">这种情况不仅在生物学上不可接受，而且在机器学习问题中也有必要对其进行适当管理，以避免几次迭代后出现数值溢出。在下一段中，我们将讨论一些克服这个问题的常用方法。现在，我们可以继续我们的分析，而不引入修正系数。</p>
 
@@ -157,13 +157,13 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_056.png" alt=""/></figure>
 
-			<p class="normal">然而，出于我们的目的，考虑基于输入向量的阈值<img src="img/B14713_14_057.png" alt=""/>的稍微不同的赫比规则是有用的(也有证明这种选择的生物学原因，但这超出了本书的范围；感兴趣的读者可以在Dayan P .，Abbott F. L .，<em class="italics">理论神经科学，</em>麻省理工学院出版社，2003年)中找到。</p>
+			<p class="normal">然而，出于我们的目的，考虑基于输入向量的阈值<img src="img/B14713_14_057.png" alt=""/>的稍微不同的赫比规则是有用的(也有证明这种选择的生物学原因，但这超出了本书的范围；感兴趣的读者可以在 Dayan P .，Abbott F. L .，<em class="italics">理论神经科学，</em>麻省理工学院出版社，2003 年)中找到。</p>
 
-			<p class="normal">很容易理解，在原来的理论中<img style="height: 1.1em! important;" src="img/B14713_14_058.png" alt=""/>和<em class="italics"> y </em> ( <em class="italics"> t </em>)是射速，这个修改允许一个与LTP相反的现象<a id="_idIndexMarker855"/>叫做<strong class="bold">长时抑郁</strong> ( <strong class="bold"> LTD </strong>)。实际上，当<img style="height: 1.2em! important;" src="img/B14713_14_059.png" alt=""/>和<em class="italics"> y </em> ( <em class="italics"> t </em>)为正时，乘积<img style="height: 1.2em! important;" src="img/B14713_14_060.png" alt=""/>为负，突触权重减弱。</p>
+			<p class="normal">很容易理解，在原来的理论中<img style="height: 1.1em! important;" src="img/B14713_14_058.png" alt=""/>和<em class="italics"> y </em> ( <em class="italics"> t </em>)是射速，这个修改允许一个与 LTP 相反的现象<a id="_idIndexMarker855"/>叫做<strong class="bold">长时抑郁</strong> ( <strong class="bold"> LTD </strong>)。实际上，当<img style="height: 1.2em! important;" src="img/B14713_14_059.png" alt=""/>和<em class="italics"> y </em> ( <em class="italics"> t </em>)为正时，乘积<img style="height: 1.2em! important;" src="img/B14713_14_060.png" alt=""/>为负，突触权重减弱。</p>
 
 			<p class="normal">如果我们设置<img style="height: 1.2em! important;" src="img/B14713_14_061.png" alt=""/>，我们可以导出一个与上一个非常相似的表达式，但是基于输入的<a id="_idIndexMarker856"/>协方差矩阵(通过贝塞尔校正无偏):</p>
 
-			<div><div><p class="Information-Box--PACKT-">如果公式除以<em class="italics"> N </em>，则样本(协)方差有偏差。为了避免偏差，有必要除以<em class="italics">N</em>–1。当然，当<img style="height: 1.2em! important;" src="img/B14713_14_062.png" alt=""/>出现时，这种差异趋于消失，但是考虑这种修正通常是有帮助的。想了解贝塞尔修正的更多细节的读者可以阅读华纳r .，<em class="italics">应用统计</em>，SAGE Publications，2013。</p>
+			<div><div><p class="Information-Box--PACKT-">如果公式除以<em class="italics"> N </em>，则样本(协)方差有偏差。为了避免偏差，有必要除以<em class="italics">N</em>–1。当然，当<img style="height: 1.2em! important;" src="img/B14713_14_062.png" alt=""/>出现时，这种差异趋于消失，但是考虑这种修正通常是有帮助的。想了解贝塞尔修正的更多细节的读者可以阅读华纳 r .，<em class="italics">应用统计</em>，SAGE Publications，2013。</p>
 
 				</div>
 
@@ -171,7 +171,7 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_063.png" alt=""/></figure>
 
-			<p class="normal">出于显而易见的原因，原始Hebb规则的这个<a id="_idIndexMarker857"/>变体被称为协方差规则。也可以使用<strong class="bold">最大似然估计</strong> ( <strong class="bold"> MLE </strong>)(或有偏)协方差矩阵(除以<em class="italics"> N </em>)，但检查所采用的数学软件包采用的版本很重要。使用NumPy时，可以通过使用<code class="Code-In-Text--PACKT-">np.cov()</code>功能和设置<code class="Code-In-Text--PACKT-">bias=True/False</code>参数来决定版本(默认值为<code class="Code-In-Text--PACKT-">False</code>，因此应用贝塞尔校正)。但当<em class="italics">N&gt;T71】1</em>时，<a id="_idIndexMarker858"/>版本之间的差异减小，往往可以舍弃。在本书中，我们将使用不带偏见的版本。</p>
+			<p class="normal">出于显而易见的原因，原始 Hebb 规则的这个<a id="_idIndexMarker857"/>变体被称为协方差规则。也可以使用<strong class="bold">最大似然估计</strong> ( <strong class="bold"> MLE </strong>)(或有偏)协方差矩阵(除以<em class="italics"> N </em>)，但检查所采用的数学软件包采用的版本很重要。使用 NumPy 时，可以通过使用<code class="Code-In-Text--PACKT-">np.cov()</code>功能和设置<code class="Code-In-Text--PACKT-">bias=True/False</code>参数来决定版本(默认值为<code class="Code-In-Text--PACKT-">False</code>，因此应用贝塞尔校正)。但当<em class="italics">N&gt;T71】1</em>时，<a id="_idIndexMarker858"/>版本之间的差异减小，往往可以舍弃。在本书中，我们将使用不带偏见的版本。</p>
 
 			<h2 id="_idParaDest-218" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor229"/>协方差规则分析</h2>
 
@@ -225,9 +225,9 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 
 			<p class="normal">结果显示了一个非常重要的性质:不仅近似是正确的，而且正如我们将要显示的，如果一个特征值<img src="img/B14713_14_103.png" alt=""/>大于所有其他特征值，协方差规则将总是收敛到相应的特征向量<em class="italics">v</em>T22】I。不存在其他稳定的不动点！</p>
 
-			<p class="normal">这个假设不再有效。在这种情况下，总方差同样可以由每个特征向量的方向来解释(这种情况意味着对称在现实生活中并不常见)。这种情况在使用有限精度算术时也会发生，但是一般来说，如果最大特征值和第二个特征值之间的差小于可达到的最大精度(例如，32位浮点)，接受相等似乎是合理的。</p>
+			<p class="normal">这个假设不再有效。在这种情况下，总方差同样可以由每个特征向量的方向来解释(这种情况意味着对称在现实生活中并不常见)。这种情况在使用有限精度算术时也会发生，但是一般来说，如果最大特征值和第二个特征值之间的差小于可达到的最大精度(例如，32 位浮点)，接受相等似乎是合理的。</p>
 
-			<p class="normal">当然，我们假设数据集没有被白化，因为我们的目标(也在接下来的段落中)是仅考虑具有最高总可变性的分量子集来减少原始维度(去相关，就像在<strong class="bold">主分量分析</strong> ( <strong class="bold"> PCA </strong>)中一样，必须是<a id="_idIndexMarker863"/>算法的结果，而不是前提条件)。另一方面，使数据集以零为中心可能有助于利用sigmoid或双曲线正切等后处理函数的对称性。但是，这种算法不一定要保证<a id="_idIndexMarker864"/>的正确性。</p>
+			<p class="normal">当然，我们假设数据集没有被白化，因为我们的目标(也在接下来的段落中)是仅考虑具有最高总可变性的分量子集来减少原始维度(去相关，就像在<strong class="bold">主分量分析</strong> ( <strong class="bold"> PCA </strong>)中一样，必须是<a id="_idIndexMarker863"/>算法的结果，而不是前提条件)。另一方面，使数据集以零为中心可能有助于利用 sigmoid 或双曲线正切等后处理函数的对称性。但是，这种算法不一定要保证<a id="_idIndexMarker864"/>的正确性。</p>
 
 			<p class="normal">考虑到这种近似，如果我们重写<img src="img/B14713_14_098.png" alt=""/>的表达式，我们得到如下:</p>
 
@@ -243,11 +243,11 @@ print("{:.3f}".format(alpha * 180.0 / np.pi))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_116.png" alt=""/></figure>
 
-			<p class="normal">这一重要结果表明，使用协方差规则的Hebbian神经元如何能够在不需要特征分解<img src="img/B14713_14_110.png" alt=""/>的情况下执行仅限于第一分量的PCA <a id="_idIndexMarker865"/>。事实上，向量<img src="img/B14713_14_118.png" alt=""/>(我们不考虑数量增加的问题，这很容易管理)将快速收敛到输入数据集<em class="italics"> X </em>作为最大方差的方向。在<em class="italics">第十三章</em>EM算法和成分分析中，我们讨论了PCA的细节；在下一段中，我们将讨论使用Hebb规则的一个变体来寻找第一个<em class="italics"> N </em>主成分的几种方法。正如我们将要看到的，这些方法的一个主要优点是对内存的要求有限，并且可以很容易地以迭代的方式对极其复杂的数据集执行PCA。此外，网络还可以利用基于GPU的计算库，提供额外的速度增益。</p>
+			<p class="normal">这一重要结果表明，使用协方差规则的 Hebbian 神经元如何能够在不需要特征分解<img src="img/B14713_14_110.png" alt=""/>的情况下执行仅限于第一分量的 PCA <a id="_idIndexMarker865"/>。事实上，向量<img src="img/B14713_14_118.png" alt=""/>(我们不考虑数量增加的问题，这很容易管理)将快速收敛到输入数据集<em class="italics"> X </em>作为最大方差的方向。在<em class="italics">第十三章</em>EM 算法和成分分析中，我们讨论了 PCA 的细节；在下一段中，我们将讨论使用 Hebb 规则的一个变体来寻找第一个<em class="italics"> N </em>主成分的几种方法。正如我们将要看到的，这些方法的一个主要优点是对内存的要求有限，并且可以很容易地以迭代的方式对极其复杂的数据集执行 PCA。此外，网络还可以利用基于 GPU 的计算库，提供额外的速度增益。</p>
 
 			<h3 id="_idParaDest-219" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor230"/>协方差规则的应用示例</h3>
 
-			<p class="normal">在继续之前，让我们用一个简单的Python例子来模拟这个行为。我们首先生成从二元高斯分布(方差是主动不对称的)中采样的1000个值，然后我们应用协方差规则来找到第一主分量(<img src="img/B14713_14_119.png" alt=""/>已被选择为不与<img src="img/B14713_14_115.png" alt=""/>正交):</p>
+			<p class="normal">在继续之前，让我们用一个简单的 Python 例子来模拟这个行为。我们首先生成从二元高斯分布(方差是主动不对称的)中采样的 1000 个值，然后我们应用协方差规则来找到第一主分量(<img src="img/B14713_14_119.png" alt=""/>已被选择为不与<img src="img/B14713_14_115.png" alt=""/>正交):</p>
 
 			<pre>import numpy as np
 rs = np.random.RandomState(1000)
@@ -277,11 +277,11 @@ w *= 50.0</pre>
 
 			<p class="packt_figref">协方差规则的应用。w∞变得与第一主分量成比例</p>
 
-			<p class="normal">在有限次数的<a id="_idIndexMarker868"/>迭代之后，<img src="img/B14713_14_125.png" alt=""/>具有主特征向量的相同方向，在这种情况下，主特征向量平行于<em class="italics"> x </em>轴。意义取决于初始值<img src="img/B14713_14_126.png" alt=""/>；然而，在PCA中，这不是一个重要的元素。</p>
+			<p class="normal">在有限次数的<a id="_idIndexMarker868"/>迭代之后，<img src="img/B14713_14_125.png" alt=""/>具有主特征向量的相同方向，在这种情况下，主特征向量平行于<em class="italics"> x </em>轴。意义取决于初始值<img src="img/B14713_14_126.png" alt=""/>；然而，在 PCA 中，这不是一个重要的元素。</p>
 
-			<h2 id="_idParaDest-220" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor231"/>权重向量稳定和Oja规则</h2>
+			<h2 id="_idParaDest-220" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor231"/>权重向量稳定和 Oja 规则</h2>
 
-			<p class="normal">稳定<a id="_idIndexMarker869"/>权重向量的最简单方法是在每次更新后将其归一化。这样，它的长度将始终保持等于1。事实上，在这种<a id="_idIndexMarker870"/>神经网络中，我们对大小不感兴趣，只对方向感兴趣(归一化后保持不变)。然而，有两个主要原因阻碍了这种方法。</p>
+			<p class="normal">稳定<a id="_idIndexMarker869"/>权重向量的最简单方法是在每次更新后将其归一化。这样，它的长度将始终保持等于 1。事实上，在这种<a id="_idIndexMarker870"/>神经网络中，我们对大小不感兴趣，只对方向感兴趣(归一化后保持不变)。然而，有两个主要原因阻碍了这种方法。</p>
 
 			<p class="normal">首先是它不是本地的。为了标准化向量<em class="italics"> w </em>，我们需要知道它的所有值，这在生物学上是不合理的。一个真正的突触权重模型应该是自我限制的，不需要访问无法获得的外部信息。</p>
 
@@ -291,7 +291,7 @@ w *= 50.0</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_127.png" alt=""/></figure>
 
-			<p class="normal"><img src="img/B14713_14_128.png" alt=""/>函数可以作为局部和非局部规格化器<a id="_idIndexMarker871"/>工作。第一种类型的例子是Oja规则:</p>
+			<p class="normal"><img src="img/B14713_14_128.png" alt=""/>函数可以作为局部和非局部规格化器<a id="_idIndexMarker871"/>工作。第一种类型的例子是 Oja 规则:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_129.png" alt=""/></figure>
 
@@ -309,19 +309,19 @@ w *= 50.0</pre>
 
 			<h1 id="_idParaDest-221" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor232"/>桑格的网络</h1>
 
-			<p class="normal">A Sanger's network是一种用于在线主成分提取的神经网络模型，由T. D. Sanger在Sanger t . d .<a id="_idIndexMarker873"/>最优无监督学习、<em class="italics">单层线性前馈神经网络</em>中提出，神经网络，1989/2。作者从赫布规则的标准版本开始，并对其进行了修改，使其能够以降序<img style="height: 1.3em! important;" src="img/B14713_14_137.png" alt=""/>提取可变数量的主成分<img style="height: 1.7em! important;" src="img/B14713_14_136.png" alt=""/>。由此产生的<a id="_idIndexMarker874"/>方法，是Oja规则的自然延伸，被称为<strong class="bold">广义希比规则</strong>(<strong class="bold">GHA</strong>)——你可能<a id="_idIndexMarker875"/>有时也会把它称为<strong class="bold">广义希比学习</strong> ( <strong class="bold"> GHL </strong>)。网络的结构如下图所示:</p>
+			<p class="normal">A Sanger's network 是一种用于在线主成分提取的神经网络模型，由 T. D. Sanger 在 Sanger t . d .<a id="_idIndexMarker873"/>最优无监督学习、<em class="italics">单层线性前馈神经网络</em>中提出，神经网络，1989/2。作者从赫布规则的标准版本开始，并对其进行了修改，使其能够以降序<img style="height: 1.3em! important;" src="img/B14713_14_137.png" alt=""/>提取可变数量的主成分<img style="height: 1.7em! important;" src="img/B14713_14_136.png" alt=""/>。由此产生的<a id="_idIndexMarker874"/>方法，是 Oja 规则的自然延伸，被称为<strong class="bold">广义希比规则</strong>(<strong class="bold">GHA</strong>)——你可能<a id="_idIndexMarker875"/>有时也会把它称为<strong class="bold">广义希比学习</strong> ( <strong class="bold"> GHL </strong>)。网络的结构如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_04.png" alt=""/></figure>
 
 			<p class="packt_figref">桑格网络的结构</p>
 
-			<p class="normal">该网络由从n维数据集中提取的样本提供:</p>
+			<p class="normal">该网络由从 n 维数据集中提取的样本提供:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_138.png" alt=""/></figure>
 
-			<p class="normal"><em class="italics"> m </em>个输出神经元通过一个权重矩阵<em class="italics">W</em>= {<em class="italics">W</em>T21】ij}连接到输入，其中第一个索引指的是输入分量(突触前单元)，第二个索引指的是神经元。网络的输出可以很容易地用标量积来计算；然而，在这种情况下，我们对它不感兴趣，因为就像协方差(和Oja的)规则一样，通过权重更新来提取主成分。</p>
+			<p class="normal"><em class="italics"> m </em>个输出神经元通过一个权重矩阵<em class="italics">W</em>= {<em class="italics">W</em>T21】ij}连接到输入，其中第一个索引指的是输入分量(突触前单元)，第二个索引指的是神经元。网络的输出可以很容易地用标量积来计算；然而，在这种情况下，我们对它不感兴趣，因为就像协方差(和 Oja 的)规则一样，通过权重更新来提取主成分。</p>
 
-			<p class="normal">Oja规则制定后出现的问题是关于多种成分的提取。事实上，如果我们将原始规则应用于之前的网络，所有的权重向量(<em class="italics"> w </em>的行)都将收敛到第一个主分量。克服这种限制的主要思想(基于Gram-Schmidt正交归一化方法)是基于这样的观察:一旦我们提取了第一个分量<img src="img/B14713_14_139.png" alt=""/>，第二个分量<img src="img/B14713_14_140.png" alt=""/>可以被强制正交于<img src="img/B14713_14_141.png" alt=""/>，第三个分量<img src="img/B14713_14_142.png" alt=""/>可以被强制正交于<img src="img/B14713_14_139.png" alt=""/>和<img src="img/B14713_14_140.png" alt=""/>，等等。考虑以下表示:</p>
+			<p class="normal">Oja 规则制定后出现的问题是关于多种成分的提取。事实上，如果我们将原始规则应用于之前的网络，所有的权重向量(<em class="italics"> w </em>的行)都将收敛到第一个主分量。克服这种限制的主要思想(基于 Gram-Schmidt 正交归一化方法)是基于这样的观察:一旦我们提取了第一个分量<img src="img/B14713_14_139.png" alt=""/>，第二个分量<img src="img/B14713_14_140.png" alt=""/>可以被强制正交于<img src="img/B14713_14_141.png" alt=""/>，第三个分量<img src="img/B14713_14_142.png" alt=""/>可以被强制正交于<img src="img/B14713_14_139.png" alt=""/>和<img src="img/B14713_14_140.png" alt=""/>，等等。考虑以下表示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_05.png" alt=""/></figure>
 
@@ -335,17 +335,17 @@ w *= 50.0</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_152.png" alt=""/></figure>
 
-			<p class="normal">将该方法应用于原始的Oja规则，我们获得了用于权重更新的新表达式(称为<a id="_idIndexMarker878"/>桑格规则):</p>
+			<p class="normal">将该方法应用于原始的 Oja 规则，我们获得了用于权重更新的新表达式(称为<a id="_idIndexMarker878"/>桑格规则):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_153.png" alt=""/></figure>
 
-			<p class="normal">该规则引用单个输入向量<img src="img/B14713_14_154.png" alt=""/>，因此<em class="italics">x</em>T43】j是<img src="img/B14713_14_154.png" alt=""/>的<em class="italics"> j </em>第<sup style="font-style: italic;">个</sup>分量。第一项是经典的Hebb规则，它迫使权重<img src="img/B14713_14_156.png" alt=""/>变得与第一主分量平行，而第二项以类似于Gram-Schmidt正交化的方式起作用，通过减去与<em class="italics"> w </em>在连接到先前突触后单元的所有权重上的投影成比例的项，同时考虑Oja规则提供的归一化约束(与输出的平方成比例)。</p>
+			<p class="normal">该规则引用单个输入向量<img src="img/B14713_14_154.png" alt=""/>，因此<em class="italics">x</em>T43】j 是<img src="img/B14713_14_154.png" alt=""/>的<em class="italics"> j </em>第<sup style="font-style: italic;">个</sup>分量。第一项是经典的 Hebb 规则，它迫使权重<img src="img/B14713_14_156.png" alt=""/>变得与第一主分量平行，而第二项以类似于 Gram-Schmidt 正交化的方式起作用，通过减去与<em class="italics"> w </em>在连接到先前突触后单元的所有权重上的投影成比例的项，同时考虑 Oja 规则提供的归一化约束(与输出的平方成比例)。</p>
 
 			<p class="normal">事实上，扩展上一项，我们得到如下结果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_157.png" alt=""/></figure>
 
-			<p class="normal">减去每个分量<em class="italics">w</em>T4】ij的项<a id="_idIndexMarker879"/>与所有分量成比例，其中指数<em class="italics"> j </em>是固定的，并且第一指数等于1，2，…，<em class="italics"> i </em>。这个过程不会立即产生正交化，但需要几次迭代才能收敛。证明是不平凡的，涉及凸优化和动态系统方法，但它可以在上述文件中找到。Sanger证明，如果学习率<img style="height: 1.5em! important;" src="img/B14713_14_158.png" alt=""/>单调递减，并且在<img style="height: 1.2em! important;" src="img/B14713_14_159.png" alt=""/>时收敛到零，则算法总是收敛到排序后的第一个<em class="italics"> n个</em>主分量(从最大特征值到最小特征值)，即使对于形式证明是必要的，这个条件也可以放宽(一个稳定值<img src="img/B14713_14_160.png" alt=""/>通常是足够的)。在我们的实现中，矩阵<em class="italics"> W </em>在每次迭代后被归一化，因此，在过程结束时，<em class="italics">W</em>T19】T(权重在行中)是正交的，并构成特征向量子空间的基础。</p>
+			<p class="normal">减去每个分量<em class="italics">w</em>T4】ij 的项<a id="_idIndexMarker879"/>与所有分量成比例，其中指数<em class="italics"> j </em>是固定的，并且第一指数等于 1，2，…，<em class="italics"> i </em>。这个过程不会立即产生正交化，但需要几次迭代才能收敛。证明是不平凡的，涉及凸优化和动态系统方法，但它可以在上述文件中找到。Sanger 证明，如果学习率<img style="height: 1.5em! important;" src="img/B14713_14_158.png" alt=""/>单调递减，并且在<img style="height: 1.2em! important;" src="img/B14713_14_159.png" alt=""/>时收敛到零，则算法总是收敛到排序后的第一个<em class="italics"> n 个</em>主分量(从最大特征值到最小特征值)，即使对于形式证明是必要的，这个条件也可以放宽(一个稳定值<img src="img/B14713_14_160.png" alt=""/>通常是足够的)。在我们的实现中，矩阵<em class="italics"> W </em>在每次迭代后被归一化，因此，在过程结束时，<em class="italics">W</em>T19】T(权重在行中)是正交的，并构成特征向量子空间的基础。</p>
 
 			<p class="normal">在矩阵形式中，规则如下:</p>
 
@@ -395,7 +395,7 @@ w *= 50.0</pre>
 
 			<h2 id="_idParaDest-222" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor233"/>桑格网络的例子</h2>
 
-			<p class="normal">对于这个Python例子，我们认为<a id="_idIndexMarker882"/>是一个具有500个数据点的二维零中心数据集<em class="italics"> X </em>(我们使用第一章中定义的函数)。在初始化<em class="italics"> X </em>之后，我们还计算特征分解，以便能够再次检查结果:</p>
+			<p class="normal">对于这个 Python 例子，我们认为<a id="_idIndexMarker882"/>是一个具有 500 个数据点的二维零中心数据集<em class="italics"> X </em>(我们使用第一章中定义的函数)。在初始化<em class="italics"> X </em>之后，我们还计算特征分解，以便能够再次检查结果:</p>
 
 			<pre>import numpy as np
 from sklearn.datasets import make_blobs
@@ -465,41 +465,41 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<p class="normal">考虑到这个好的特性，没有必要检查特征值的大小；因此，该算法可以在不对输入协方差矩阵进行特征分解的情况下运行。即使需要一个正式的证明来解释这种行为，也有可能直观地理解它。给定一个完整的特征向量子空间，每个单个神经元收敛到第一个主分量。这个性质总是保持的，但是正交化之后，子空间隐式地减少了一个维度。第二个神经元会一直收敛到第一个分量，现在对应的是全局的第二个分量，以此类推。</p>
 
-			<p class="normal">这种算法的优点之一(也是下一种算法的优点)是，标准的PCA通常是一个批量过程(即使有批处理算法)，而桑格网络是一个在线算法，<a id="_idIndexMarker885"/>是增量训练的。一般来说，由于迭代次数的原因，桑格网络的时间性能比直接方法差。一些优化可以通过使用更多的矢量化或GPU支持或使用优化的<a id="_idIndexMarker886"/>库如Numba(【http://numba.pydata.org/】)来加速循环和实现内部并行化。另一方面，当分量的数量小于输入维数时，a Sanger网络是节省存储器的(例如，<em class="italics"> n </em> = 1000的协方差矩阵具有10 <sup> 6 </sup>个元素，如果<em class="italics"> m </em> = 100，则权重矩阵具有10 <sup> 4 </sup>个元素)。</p>
+			<p class="normal">这种算法的优点之一(也是下一种算法的优点)是，标准的 PCA 通常是一个批量过程(即使有批处理算法)，而桑格网络是一个在线算法，<a id="_idIndexMarker885"/>是增量训练的。一般来说，由于迭代次数的原因，桑格网络的时间性能比直接方法差。一些优化可以通过使用更多的矢量化或 GPU 支持或使用优化的<a id="_idIndexMarker886"/>库如 Numba(【http://numba.pydata.org/】)来加速循环和实现内部并行化。另一方面，当分量的数量小于输入维数时，a Sanger 网络是节省存储器的(例如，<em class="italics"> n </em> = 1000 的协方差矩阵具有 10 <sup> 6 </sup>个元素，如果<em class="italics"> m </em> = 100，则权重矩阵具有 10 <sup> 4 </sup>个元素)。</p>
 
 			<h1 id="_idParaDest-223" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor234"/>鲁布纳-塔万网络</h1>
 
-			<p class="normal">在<em class="italics">第13章</em>、<em class="italics">分量分析和降维</em>中，我们提到任何对输入<a id="_idIndexMarker887"/>协方差矩阵去相关的算法都是在执行没有降维的PCA。从这种方法开始，Rubner和Tavan(在论文Rubner J .，Tavan P .，<em class="italics">A Self-Organizing Network for Principal-Components Analysis</em>，Europhysics，Letters，10(7)，1989)中)提出了一种神经模型，其目标是对输出分量去相关，以迫使输出协方差矩阵(在低维子空间中)随之去相关。假设数据集以零为中心，且<em class="italics"> E </em> [ <em class="italics"> y </em> ] = 0，则<em class="italics"> m </em>主分量的输出协方差矩阵如下:</p>
+			<p class="normal">在<em class="italics">第 13 章</em>、<em class="italics">分量分析和降维</em>中，我们提到任何对输入<a id="_idIndexMarker887"/>协方差矩阵去相关的算法都是在执行没有降维的 PCA。从这种方法开始，Rubner 和 Tavan(在论文 Rubner J .，Tavan P .，<em class="italics">A Self-Organizing Network for Principal-Components Analysis</em>，Europhysics，Letters，10(7)，1989)中)提出了一种神经模型，其目标是对输出分量去相关，以迫使输出协方差矩阵(在低维子空间中)随之去相关。假设数据集以零为中心，且<em class="italics"> E </em> [ <em class="italics"> y </em> ] = 0，则<em class="italics"> m </em>主分量的输出协方差矩阵如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_177.png" alt=""/></figure>
 
 			<p class="normal">因此，有可能实现近似去相关，迫使项<img src="img/B14713_14_178.png" alt=""/>变得接近零。</p>
 
-			<p class="normal">与标准方法(如白化或普通PCA)的主要区别在于，该过程是局部的，而所有标准方法都是全局操作的，直接使用协方差矩阵。作者提出的神经模型如下图所示(最初的模型是针对二进制单元提出的，但它也适用于线性单元):</p>
+			<p class="normal">与标准方法(如白化或普通 PCA)的主要区别在于，该过程是局部的，而所有标准方法都是全局操作的，直接使用协方差矩阵。作者提出的神经模型如下图所示(最初的模型是针对二进制单元提出的，但它也适用于线性单元):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_07.png" alt=""/></figure>
 
-			<p class="packt_figref">鲁布纳-塔万网络。连接<em class="italics">V</em>T29】JK是基于反希比规则</p>
+			<p class="packt_figref">鲁布纳-塔万网络。连接<em class="italics">V</em>T29】JK 是基于反希比规则</p>
 
-			<p class="normal">网络有m个输出单元，最后的<em class="italics"> m个</em>–1个神经元有一个求和节点，接收前面单元的加权输出(分层横向连接)。动态过程很简单:不修改<a id="_idIndexMarker888"/>的第一个输出。第二个被强制变得与第一个去相关。第三个信号被迫与第一个和第二个信号去相关，依此类推。该过程必须重复多次，因为输入是一个接一个地呈现的，并且出现在相关/协方差矩阵中的累积项(将数据集置于零中心并使用相关矩阵总是更容易)必须隐式地拆分到其加数中。不难理解，收敛到唯一稳定的不动点(已被作者证明存在)需要一些迭代来纠正错误的输出估计。</p>
+			<p class="normal">网络有 m 个输出单元，最后的<em class="italics"> m 个</em>–1 个神经元有一个求和节点，接收前面单元的加权输出(分层横向连接)。动态过程很简单:不修改<a id="_idIndexMarker888"/>的第一个输出。第二个被强制变得与第一个去相关。第三个信号被迫与第一个和第二个信号去相关，依此类推。该过程必须重复多次，因为输入是一个接一个地呈现的，并且出现在相关/协方差矩阵中的累积项(将数据集置于零中心并使用相关矩阵总是更容易)必须隐式地拆分到其加数中。不难理解，收敛到唯一稳定的不动点(已被作者证明存在)需要一些迭代来纠正错误的输出估计。</p>
 
 			<p class="normal">网络的输出由两部分组成:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_179.png" alt=""/></figure>
 
-			<p class="normal">符号<em class="italics">y</em>/<em class="italics">x</em><sup style="font-style: italic;">(I)</sup>表示<em class="italics"> y </em> / <em class="italics"> x </em>的<em class="italics"> i </em> <sup style="font-style: italic;"> th </sup>元素。第一项仅基于输入产生部分输出，而第二项使用分层横向连接来校正值并实施去相关。使用Oja规则的标准版本更新内部权重<em class="italics">w</em>ij(这主要负责每个权重向量收敛到第一主分量):</p>
+			<p class="normal">符号<em class="italics">y</em>/<em class="italics">x</em><sup style="font-style: italic;">(I)</sup>表示<em class="italics"> y </em> / <em class="italics"> x </em>的<em class="italics"> i </em> <sup style="font-style: italic;"> th </sup>元素。第一项仅基于输入产生部分输出，而第二项使用分层横向连接来校正值并实施去相关。使用 Oja 规则的标准版本更新内部权重<em class="italics">w</em>ij(这主要负责每个权重向量收敛到第一主分量):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_180.png" alt=""/></figure>
 
-			<p class="normal">相反，外部权重<em class="italics">v</em>T54】JK使用反希比规则更新:</p>
+			<p class="normal">相反，外部权重<em class="italics">v</em>T54】JK 使用反希比规则更新:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_181.png" alt=""/></figure>
 
-			<p class="normal">前面的公式<a id="_idIndexMarker889"/>可以分为两部分:第一项<img src="img/B14713_14_182.png" alt=""/>的作用方向与标准版本的Hebb规则相反(这就是为什么它被称为反Hebbian ),并强制去相关。第二个<img src="img/B14713_14_183.png" alt=""/>作为一个正则，它的<a id="_idIndexMarker890"/>类似于Oja的规则。术语<img src="img/B14713_14_182.png" alt=""/>作为Oja规则的反馈信号，根据实际输出的新幅度重新调整更新。事实上，在修改横向连接后，输出也被迫改变，这种修改会影响<em class="italics"> w </em> <sub style="font-style: italic;"> ij </sub>的更新。当所有输出去相关时，向量<img src="img/B14713_14_185.png" alt=""/>被隐含地强制正交。</p>
+			<p class="normal">前面的公式<a id="_idIndexMarker889"/>可以分为两部分:第一项<img src="img/B14713_14_182.png" alt=""/>的作用方向与标准版本的 Hebb 规则相反(这就是为什么它被称为反 Hebbian ),并强制去相关。第二个<img src="img/B14713_14_183.png" alt=""/>作为一个正则，它的<a id="_idIndexMarker890"/>类似于 Oja 的规则。术语<img src="img/B14713_14_182.png" alt=""/>作为 Oja 规则的反馈信号，根据实际输出的新幅度重新调整更新。事实上，在修改横向连接后，输出也被迫改变，这种修改会影响<em class="italics"> w </em> <sub style="font-style: italic;"> ij </sub>的更新。当所有输出去相关时，向量<img src="img/B14713_14_185.png" alt=""/>被隐含地强制正交。</p>
 
-			<p class="normal">可以想象与Gram-Schmidt正交化的类比，即使在这种情况下，不同分量的提取和解相关之间的关系更复杂。与Sanger的网络一样，该模型按照降序提取前m个主成分(原因与已经直观解释过的相同)，但要获得完整的(非平凡的)数学证明，请参考前述论文。</p>
+			<p class="normal">可以想象与 Gram-Schmidt 正交化的类比，即使在这种情况下，不同分量的提取和解相关之间的关系更复杂。与 Sanger 的网络一样，该模型按照降序提取前 m 个主成分(原因与已经直观解释过的相同)，但要获得完整的(非平凡的)数学证明，请参考前述论文。</p>
 
-			<p class="normal">如果输入维度是<em class="italics"> n </em>并且组件的数量等于<em class="italics"> m </em>，那么可以使用一个下三角矩阵<em class="italics">V</em>(<em class="italics">m</em>x<em class="italics">m</em>)所有对角元素都设置为0，并且使用一个标准矩阵用于<em class="italics">W</em>(<em class="italics">n</em>x<em class="italics">m</em>)。</p>
+			<p class="normal">如果输入维度是<em class="italics"> n </em>并且组件的数量等于<em class="italics"> m </em>，那么可以使用一个下三角矩阵<em class="italics">V</em>(<em class="italics">m</em>x<em class="italics">m</em>)所有对角元素都设置为 0，并且使用一个标准矩阵用于<em class="italics">W</em>(<em class="italics">n</em>x<em class="italics">m</em>)。</p>
 
 			<p class="normal"><em class="italics"> W </em>的结构如下:</p>
 
@@ -513,13 +513,13 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_189.png" alt=""/></figure>
 
-			<p class="normal">由于输出是基于<a id="_idIndexMarker891"/>循环横向连接，其值必须通过迭代之前的公式固定次数来稳定，或者直到两个连续值之间的范数小于预定义的阈值。在我们的例子中，我们使用等于5的固定迭代次数。更新规则不能直接用矩阵符号编写，但是可以使用向量<img src="img/B14713_14_185.png" alt=""/>(列)和<img src="img/B14713_14_191.png" alt=""/>(行):</p>
+			<p class="normal">由于输出是基于<a id="_idIndexMarker891"/>循环横向连接，其值必须通过迭代之前的公式固定次数来稳定，或者直到两个连续值之间的范数小于预定义的阈值。在我们的例子中，我们使用等于 5 的固定迭代次数。更新规则不能直接用矩阵符号编写，但是可以使用向量<img src="img/B14713_14_185.png" alt=""/>(列)和<img src="img/B14713_14_191.png" alt=""/>(行):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_192.png" alt=""/></figure>
 
-			<p class="normal">在这种情况下，<img src="img/B14713_14_193.png" alt=""/>是指<img src="img/B14713_14_194.png" alt=""/>的<em class="italics">I</em>T37】th组件。这两个矩阵必须用一个循环填充。</p>
+			<p class="normal">在这种情况下，<img src="img/B14713_14_193.png" alt=""/>是指<img src="img/B14713_14_194.png" alt=""/>的<em class="italics">I</em>T37】th 组件。这两个矩阵必须用一个循环填充。</p>
 
-			<p class="normal">完整的Rubner-Tavan网络算法为(<img src="img/B14713_14_195.png" alt=""/>的维数为<em class="italics"> n </em>，组件数为<a id="_idIndexMarker892"/>用<em class="italics"> m </em>表示):</p>
+			<p class="normal">完整的 Rubner-Tavan 网络算法为(<img src="img/B14713_14_195.png" alt=""/>的维数为<em class="italics"> n </em>，组件数为<a id="_idIndexMarker892"/>用<em class="italics"> m </em>表示):</p>
 
 			<ol>
 
@@ -529,7 +529,7 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 				<li class="list">设置<em class="italics">V</em><sup>(0)</sup>=<em class="italics">Tril</em>(<em class="italics">V</em><sup>(0)</sup>)。函数<img src="img/B14713_14_196.png" alt=""/>转换下三角矩阵中的输入参数。</li>
 
-				<li class="list">将<em class="italics"> V </em> <sup> (0) </sup>的所有对角线分量设置为0。</li>
+				<li class="list">将<em class="italics"> V </em> <sup> (0) </sup>的所有对角线分量设置为 0。</li>
 
 				<li class="list">设置学习率(<img src="img/B14713_14_198.png" alt=""/>)。</li>
 
@@ -547,13 +547,13 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<ol>
 
-				<li class="list" value="1">设T = T + 1。</li>
+				<li class="list" value="1">设 T = T + 1。</li>
 
 			</ol>
 
 			<ol>
 
-				<li class="list" value="2">对于X中的每个<img src="img/B14713_14_195.png" alt=""/>:</li>
+				<li class="list" value="2">对于 X 中的每个<img src="img/B14713_14_195.png" alt=""/>:</li>
 
 			</ol>
 
@@ -565,7 +565,7 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<ol>
 
-				<li class="list" value="2">对于<em class="italics"> i </em> = 1到<em class="italics">N</em>T109】stab:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1"><img src="img/B14713_14_202.png" alt=""/></li>
+				<li class="list" value="2">对于<em class="italics"> i </em> = 1 到<em class="italics">N</em>T109】stab:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1"><img src="img/B14713_14_202.png" alt=""/></li>
 
 <li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_203.png" alt=""/></li>
 
@@ -573,7 +573,7 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 				<li class="list">计算<em class="italics"> W </em>和<em class="italics"> V </em>的更新:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">创建<a id="_idIndexMarker893"/>两个空矩阵<img src="img/B14713_14_204.png" alt=""/> ( <em class="italics"> n </em> × <em class="italics"> m </em>)和<img src="img/B14713_14_205.png" alt=""/> ( <em class="italics"> m </em> × <em class="italics"> m </em></li>
 
-<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> t </em> = 1至<em class="italics"> m </em>:</li>
+<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> t </em> = 1 至<em class="italics"> m </em>:</li>
 
 </ol></li>
 
@@ -601,7 +601,7 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<ol>
 
-				<li class="list" value="2"><img src="img/B14713_14_209.png" alt=""/><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="4">设置<em class="italics">V</em>=<em class="italics">Tril</em>(<em class="italics">V</em>)并将所有对角线元素设置为0。</li>
+				<li class="list" value="2"><img src="img/B14713_14_209.png" alt=""/><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="4">设置<em class="italics">V</em>=<em class="italics">Tril</em>(<em class="italics">V</em>)并将所有对角线元素设置为 0。</li>
 
 <li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">设置<img style="height: 1.8em! important;" src="img/B14713_14_210.png" alt=""/>(定额必须按列计算)</li>
 
@@ -613,7 +613,7 @@ print('Final weights:\n {}'.format(W_sanger.T))</pre>
 
 			<h2 id="_idParaDest-224" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor235"/>鲁布纳-塔万网络示例</h2>
 
-			<p class="normal">对于我们的Python示例，我们<a id="_idIndexMarker895"/>将使用已经为桑格网络创建的相同数据集(预计在变量Xs中可用)。在这个例子中，以及在所有其他例子中，NumPy随机种子被设置为等于1000 ( <code class="Code-In-Text--PACKT-">np.random.seed(1000)</code>)。使用不同的值(或者在不重置种子的情况下重复实验更多次)会导致稍微不同的结果(总是一致的)。</p>
+			<p class="normal">对于我们的 Python 示例，我们<a id="_idIndexMarker895"/>将使用已经为桑格网络创建的相同数据集(预计在变量 Xs 中可用)。在这个例子中，以及在所有其他例子中，NumPy 随机种子被设置为等于 1000 ( <code class="Code-In-Text--PACKT-">np.random.seed(1000)</code>)。使用不同的值(或者在不重置种子的情况下重复实验更多次)会导致稍微不同的结果(总是一致的)。</p>
 
 			<p class="normal">我们可以开始设置所有的常量和变量:</p>
 
@@ -685,29 +685,29 @@ print(np.cov(Y_comp.T))</pre>
 			<pre><strong class="screen-text">[[ 48.9901765   -0.34109965]</strong>
 <strong class="screen-text"> [ -0.34109965  24.51072811]]</strong></pre>
 
-			<p class="normal">如预期的那样，算法已经成功地收敛到特征向量(以降序)，并且输出协方差矩阵几乎完全去相关(非对角元素的符号<a id="_idIndexMarker897"/>可以是正的或负的)。Rubner-Tavan的网络一般比Sanger的网络更快，这要归功于反希比规则产生的反馈信号；然而，为学习率选择正确的值很重要。一种可能的策略是从不大于0.0001的值开始实施时间衰减(如在Sanger的网络中所做的)。然而，当n增加时(例如，<img src="img/B14713_14_212.png" alt=""/>时)减少<img src="img/B14713_14_211.png" alt=""/>是很重要的，因为Oja规则对横向连接<em class="italics">v</em>T43】JK的归一化强度通常不足以避免当<em class="italics">n&gt;T58】1</em>时的上溢和下溢。我不建议对<code class="Code-In-Text--PACKT-">V</code>做任何额外的归一化处理(考虑到<code class="Code-In-Text--PACKT-">V</code>是单数，必须仔细分析)，因为这样会拖慢进程，降低最终的精度。</p>
+			<p class="normal">如预期的那样，算法已经成功地收敛到特征向量(以降序)，并且输出协方差矩阵几乎完全去相关(非对角元素的符号<a id="_idIndexMarker897"/>可以是正的或负的)。Rubner-Tavan 的网络一般比 Sanger 的网络更快，这要归功于反希比规则产生的反馈信号；然而，为学习率选择正确的值很重要。一种可能的策略是从不大于 0.0001 的值开始实施时间衰减(如在 Sanger 的网络中所做的)。然而，当 n 增加时(例如，<img src="img/B14713_14_212.png" alt=""/>时)减少<img src="img/B14713_14_211.png" alt=""/>是很重要的，因为 Oja 规则对横向连接<em class="italics">v</em>T43】JK 的归一化强度通常不足以避免当<em class="italics">n&gt;T58】1</em>时的上溢和下溢。我不建议对<code class="Code-In-Text--PACKT-">V</code>做任何额外的归一化处理(考虑到<code class="Code-In-Text--PACKT-">V</code>是单数，必须仔细分析)，因为这样会拖慢进程，降低最终的精度。</p>
 
 			<h1 id="_idParaDest-225" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor236"/>自组织地图</h1>
 
-			<p class="normal"><strong class="bold">自组织映射</strong> ( <strong class="bold"> SOMs </strong>)已经由Willshaw和Von Der Malsburg提出(在Willshaw D. J .，Von Der Malsburg C .，<em class="italics">如何通过自组织建立模式化的神经连接</em>，伦敦皇家学会学报，B/194，N. 1117，1976)以模拟在动物中观察到的不同神经生物学<a id="_idIndexMarker898"/>现象。特别是，他们发现大脑的一些区域发展出具有不同区域的结构，每个区域对特定的输入模式都具有高度的敏感性。这种行为背后的过程与我们迄今为止所讨论的完全不同，因为它是基于神经单元之间的竞争，这种竞争基于一种叫做赢者通吃的原则。在训练期间，所有的单元都被相同的信号激励，但是只有一个单元会产生最高的响应。该单元自动成为该特定模式的接受盆地的候选者。我们将要呈现的特定模型已经由Kohonen(在论文Kohonen T .，<em class="italics">拓扑正确特征图的自组织形成，</em>生物控制论，43/1，1982)引入，并且以他的名字命名。</p>
+			<p class="normal"><strong class="bold">自组织映射</strong> ( <strong class="bold"> SOMs </strong>)已经由 Willshaw 和 Von Der Malsburg 提出(在 Willshaw D. J .，Von Der Malsburg C .，<em class="italics">如何通过自组织建立模式化的神经连接</em>，伦敦皇家学会学报，B/194，N. 1117，1976)以模拟在动物中观察到的不同神经生物学<a id="_idIndexMarker898"/>现象。特别是，他们发现大脑的一些区域发展出具有不同区域的结构，每个区域对特定的输入模式都具有高度的敏感性。这种行为背后的过程与我们迄今为止所讨论的完全不同，因为它是基于神经单元之间的竞争，这种竞争基于一种叫做赢者通吃的原则。在训练期间，所有的单元都被相同的信号激励，但是只有一个单元会产生最高的响应。该单元自动成为该特定模式的接受盆地的候选者。我们将要呈现的特定模型已经由 Kohonen(在论文 Kohonen T .，<em class="italics">拓扑正确特征图的自组织形成，</em>生物控制论，43/1，1982)引入，并且以他的名字命名。</p>
 
 			<p class="normal">主要思想是实现一个渐进的赢家通吃范式，以避免神经元(作为确定的赢家)的过早收敛，并增加网络的可塑性水平。这个概念在下图中用图形表示(这里我们考虑神经元的线性序列):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_08.png" alt=""/></figure>
 
-			<p class="packt_figref">由Kohonen网络实现的墨西哥帽动态</p>
+			<p class="packt_figref">由 Kohonen 网络实现的墨西哥帽动态</p>
 
 			<p class="normal">在这种情况下，相同的模式<a id="_idIndexMarker899"/>呈现给所有的神经元。在训练过程开始时(<em class="italics"> t </em> = 0)，在<img src="img/B14713_14_213.png" alt=""/>到<img src="img/B14713_14_214.png" alt=""/>中观察到积极响应，在<img src="img/B14713_14_215.png" alt=""/>中达到峰值。潜在的赢家显然是<img src="img/B14713_14_215.png" alt=""/>，但是所有这些单位都是根据它们与<img src="img/B14713_14_215.png" alt=""/>的距离来加强的。换句话说，如果其他模式产生更强的激活，网络(按顺序训练)仍然能够接受变化。相反，如果<img src="img/B14713_14_215.png" alt=""/>继续获胜，半径会稍微减小，直到唯一的增强单位是<img src="img/B14713_14_215.png" alt=""/>。考虑到该函数的形状，其在<a id="_idIndexMarker900"/>获胜单元周围形成峰值，这种动态通常被称为<em class="italics">墨西哥帽</em>。使用这种方法，网络保持可塑性，直到所有的模式都被重复呈现。例如，如果另一个模式在<img src="img/B14713_14_215.png" alt=""/>中引发了更强的响应，重要的是它的激活仍然不要太高，以允许网络的快速重新配置。与此同时，新的赢家很可能是<img src="img/B14713_14_215.png" alt=""/>的邻居，它接受了一个部分增强，可以轻松取代<img src="img/B14713_14_215.png" alt=""/>。</p>
 
-			<p class="normal">自组织映射在非线性降维的情况下也表现出非常有趣的行为。事实上，当数据集<img src="img/B14713_14_223.png" alt=""/>被投影到一个具有<em class="italics">m&lt;T35】n</em>的<em class="italics"> m </em>维空间上时(例如，图像被投影到一个二维矩阵上)，获胜的单元就像是围绕一个特定的循环模式开发的集群的伪质心。假设<em class="italics"> X </em>位于一个低维流形上，投影会移除冗余，同时保留拓扑相似性。然而，与其他流形学习算法相反，SOMs以不同的方式获得这个结果。正如<a id="_idIndexMarker901"/>所解释的，只有在一系列(长)迭代之后，获胜的单元才变得稳定。在每次迭代中，半径逐渐减小。因此，最初，相同的拓扑结构由一个邻域共享。随着该过程以平滑的方式继续，流形距离被保留，直到训练过程结束。在这一点上，相邻的单元在拓扑上是相似的，特别是在2D地图上，几乎不可能观察到突然的变化。此外，由于每个数据点<img src="img/B14713_14_224.png" alt=""/>仅引出单个最大响应，SOM也是隐式聚类空间。然而，如果像K-Means这样的算法通过最小化在原始空间中测量的距离来排列质心，SOMs也执行数据集的隐式投影。</p>
+			<p class="normal">自组织映射在非线性降维的情况下也表现出非常有趣的行为。事实上，当数据集<img src="img/B14713_14_223.png" alt=""/>被投影到一个具有<em class="italics">m&lt;T35】n</em>的<em class="italics"> m </em>维空间上时(例如，图像被投影到一个二维矩阵上)，获胜的单元就像是围绕一个特定的循环模式开发的集群的伪质心。假设<em class="italics"> X </em>位于一个低维流形上，投影会移除冗余，同时保留拓扑相似性。然而，与其他流形学习算法相反，SOMs 以不同的方式获得这个结果。正如<a id="_idIndexMarker901"/>所解释的，只有在一系列(长)迭代之后，获胜的单元才变得稳定。在每次迭代中，半径逐渐减小。因此，最初，相同的拓扑结构由一个邻域共享。随着该过程以平滑的方式继续，流形距离被保留，直到训练过程结束。在这一点上，相邻的单元在拓扑上是相似的，特别是在 2D 地图上，几乎不可能观察到突然的变化。此外，由于每个数据点<img src="img/B14713_14_224.png" alt=""/>仅引出单个最大响应，SOM 也是隐式聚类空间。然而，如果像 K-Means 这样的算法通过最小化在原始空间中测量的距离来排列质心，SOMs 也执行数据集的隐式投影。</p>
 
-			<p class="normal">这种奇特的行为使我们可以将这些模型视为集群数据集的<em class="italics">代理</em>来使用它们。事实上，当投影稳定并且相邻单元由相似的模式引出时，可以将地图上的位置视为具有度量属性的真实指示器(也就是说，两个单元越接近，它们就越相似，反之亦然)。这种能力的应用有几个，它们包括眼球跟踪系统、去噪过滤器和语音解码器(如T. Kohonen为验证他的想法而设计的开创性语音控制打字机)。</p>
+			<p class="normal">这种奇特的行为使我们可以将这些模型视为集群数据集的<em class="italics">代理</em>来使用它们。事实上，当投影稳定并且相邻单元由相似的模式引出时，可以将地图上的位置视为具有度量属性的真实指示器(也就是说，两个单元越接近，它们就越相似，反之亦然)。这种能力的应用有几个，它们包括眼球跟踪系统、去噪过滤器和语音解码器(如 T. Kohonen 为验证他的想法而设计的开创性语音控制打字机)。</p>
 
-			<p class="normal">考虑到后一种模型的有效性，我们现在可以用本章的最后一部分来分析Kohonen地图的工作原理以及如何使用影像数据集来实现它。</p>
+			<p class="normal">考虑到后一种模型的有效性，我们现在可以用本章的最后一部分来分析 Kohonen 地图的工作原理以及如何使用影像数据集来实现它。</p>
 
 			<h2 id="_idParaDest-226" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor237"/>科霍宁地图</h2>
 
-			<p class="normal">Kohonen SOM(也称为Kohonen network或简称Kohonen Map)通常被表示为一个二维图(例如，一个正方形矩阵<em class="italics"> m </em> x <em class="italics"> m </em>，或任何其他矩形形状)，但3D表面，如球面或圆环面<a id="_idIndexMarker903"/>也是可能的(唯一的必要条件是存在一个合适的度量)。在我们的例子中，我们总是指一个正方形矩阵，其中每个细胞都是一个接受性神经元，其特征在于突触权重w与输入模式的维度:</p>
+			<p class="normal">Kohonen SOM(也称为 Kohonen network 或简称 Kohonen Map)通常被表示为一个二维图(例如，一个正方形矩阵<em class="italics"> m </em> x <em class="italics"> m </em>，或任何其他矩形形状)，但 3D 表面，如球面或圆环面<a id="_idIndexMarker903"/>也是可能的(唯一的必要条件是存在一个合适的度量)。在我们的例子中，我们总是指一个正方形矩阵，其中每个细胞都是一个接受性神经元，其特征在于突触权重 w 与输入模式的维度:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_225.png" alt=""/></figure>
 
@@ -715,11 +715,11 @@ print(np.cov(Y_comp.T))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_227.png" alt=""/></figure>
 
-			<p class="normal">如前所述，避免过早收敛很重要，因为完整的最终配置可能与初始配置大相径庭。因此，训练过程通常分为两个不同的阶段。在第一个过程中，其持续时间通常约为迭代总数的10-20%(让我们称这个值为<em class="italics">t</em>T9】max)，校正被应用于获胜单元及其邻居(通过采用衰减半径来计算)。相反，在第二个过程中，半径被设置为1.0，并且校正仅应用于获胜的单元。通过这种方式，可以分析大量可能的配置，自动选择与最小错误相关的配置。邻域可以具有不同的形状；它可以是方形的(在闭合的3D地图中，边界不再存在)，或者更简单地，可以采用基于指数衰减距离权重的径向基函数:</p>
+			<p class="normal">如前所述，避免过早收敛很重要，因为完整的最终配置可能与初始配置大相径庭。因此，训练过程通常分为两个不同的阶段。在第一个过程中，其持续时间通常约为迭代总数的 10-20%(让我们称这个值为<em class="italics">t</em>T9】max)，校正被应用于获胜单元及其邻居(通过采用衰减半径来计算)。相反，在第二个过程中，半径被设置为 1.0，并且校正仅应用于获胜的单元。通过这种方式，可以分析大量可能的配置，自动选择与最小错误相关的配置。邻域可以具有不同的形状；它可以是方形的(在闭合的 3D 地图中，边界不再存在)，或者更简单地，可以采用基于指数衰减距离权重的径向基函数:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_228.png" alt=""/></figure>
 
-			<p class="normal">每个神经元的相对权重由<img src="img/B14713_14_229.png" alt=""/>功能决定。<img src="img/B14713_14_230.png" alt=""/>是初始半径，而<img src="img/B14713_14_231.png" alt=""/>是时间常数，必须将其视为决定重量衰减斜率的超参数。合适的值是迭代总数的5-10%。采用<a id="_idIndexMarker904"/>径向基函数，不需要计算实际的邻域，因为乘法因子<em class="italics"> n </em> ( <em class="italics"> i </em>，<em class="italics"> j </em>)在边界外变得接近零。一个缺点<a id="_idIndexMarker905"/>与计算成本有关，计算成本高于正方形邻域(因为必须对整个地图计算函数)；然而，通过预先计算所有的平方距离(分子)并利用NumPy(每次计算一个指数)等软件包提供的矢量化功能，可以加快这个过程。</p>
+			<p class="normal">每个神经元的相对权重由<img src="img/B14713_14_229.png" alt=""/>功能决定。<img src="img/B14713_14_230.png" alt=""/>是初始半径，而<img src="img/B14713_14_231.png" alt=""/>是时间常数，必须将其视为决定重量衰减斜率的超参数。合适的值是迭代总数的 5-10%。采用<a id="_idIndexMarker904"/>径向基函数，不需要计算实际的邻域，因为乘法因子<em class="italics"> n </em> ( <em class="italics"> i </em>，<em class="italics"> j </em>)在边界外变得接近零。一个缺点<a id="_idIndexMarker905"/>与计算成本有关，计算成本高于正方形邻域(因为必须对整个地图计算函数)；然而，通过预先计算所有的平方距离(分子)并利用 NumPy(每次计算一个指数)等软件包提供的矢量化功能，可以加快这个过程。</p>
 
 			<p class="normal">更新规则非常简单，它基于将获胜单元突触权重移近模式<img src="img/B14713_14_232.png" alt=""/>(对整个数据集<em class="italics"> X </em>重复)的思想:</p>
 
@@ -729,15 +729,15 @@ print(np.cov(Y_comp.T))</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_237.png" alt=""/></figure>
 
-			<p class="normal">通过这种方式，初始更改会强制权重与输入模式保持一致，而所有后续更新都允许稍加修改，以提高整体精度。因此，每次更新与学习速率、邻域加权距离以及每个模式与突触向量之间的差异成比例。理论上，如果<img src="img/B14713_14_238.png" alt=""/>对于获胜的单元等于0，则意味着一个神经元已经成为特定输入模式的吸引子，它的邻居将会接受有噪声/被改变的版本。最有趣的方面是，完整的最终地图将包含所有模式的吸引子，这些模式被组织为最大化相邻单元之间的相似性。以这种方式，当一个新的模式出现时，映射最相似形状的神经元区域将显示出更高的响应。例如，如果模式由手写数字组成，则数字1和数字7的吸引子将比例如数字8的吸引子更接近。一个畸形的1(可能被解释为7)将引出一个在<a id="_idIndexMarker907"/>前两个吸引子之间的响应，允许我们基于距离分配一个相对概率。正如我们将在示例中看到的，该特性可以在同一模式类的不同变体之间实现平滑过渡，避免强制二元决策的严格边界(如在K-Means聚类或硬分类器中)。</p>
+			<p class="normal">通过这种方式，初始更改会强制权重与输入模式保持一致，而所有后续更新都允许稍加修改，以提高整体精度。因此，每次更新与学习速率、邻域加权距离以及每个模式与突触向量之间的差异成比例。理论上，如果<img src="img/B14713_14_238.png" alt=""/>对于获胜的单元等于 0，则意味着一个神经元已经成为特定输入模式的吸引子，它的邻居将会接受有噪声/被改变的版本。最有趣的方面是，完整的最终地图将包含所有模式的吸引子，这些模式被组织为最大化相邻单元之间的相似性。以这种方式，当一个新的模式出现时，映射最相似形状的神经元区域将显示出更高的响应。例如，如果模式由手写数字组成，则数字 1 和数字 7 的吸引子将比例如数字 8 的吸引子更接近。一个畸形的 1(可能被解释为 7)将引出一个在<a id="_idIndexMarker907"/>前两个吸引子之间的响应，允许我们基于距离分配一个相对概率。正如我们将在示例中看到的，该特性可以在同一模式类的不同变体之间实现平滑过渡，避免强制二元决策的严格边界(如在 K-Means 聚类或硬分类器中)。</p>
 
-			<p class="normal">完整的Kohonen SOM算法如下:</p>
+			<p class="normal">完整的 Kohonen SOM 算法如下:</p>
 
 			<ol>
 
 				<li class="list" value="1">随机初始化<em class="italics"> W </em> <sup> (0) </sup>(例如<img src="img/B14713_14_239.png" alt=""/>)。形状为(<em class="italics">k</em>x<em class="italics">n</em>x<em class="italics">p</em>)。</li>
 
-				<li class="list">初始化总迭代次数<em class="italics">N</em>T5】max和<em class="italics">t</em>T9】max(例如<em class="italics">N</em>T13】max= 1000和<em class="italics">t</em>T17】max= 150)。</li>
+				<li class="list">初始化总迭代次数<em class="italics">N</em>T5】max 和<em class="italics">t</em>T9】max(例如<em class="italics">N</em>T13】max= 1000 和<em class="italics">t</em>T17】max= 150)。</li>
 
 				<li class="list">初始化<img src="img/B14713_14_240.png" alt=""/>(例如<img src="img/B14713_14_241.png" alt=""/>)。</li>
 
@@ -747,7 +747,7 @@ print(np.cov(Y_comp.T))</pre>
 
 			<ol>
 
-				<li class="list" value="5">对于<em class="italics"> t </em> = 0至<em class="italics">N</em>T29】max:<ol><li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">如果<em class="italics">t&lt;t</em>t<sub style="font-style: italic;">max</sub>:</li>
+				<li class="list" value="5">对于<em class="italics"> t </em> = 0 至<em class="italics">N</em>T29】max:<ol><li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">如果<em class="italics">t&lt;t</em>t<sub style="font-style: italic;">max</sub>:</li>
 
 </ol></li>
 
@@ -797,13 +797,13 @@ print(np.cov(Y_comp.T))</pre>
 
 			</ol>
 
-			<p class="normal">在讨论了<a id="_idIndexMarker908"/>理论部分之后，我们已经准备好看到使用包含一组人的不同<a id="_idIndexMarker909"/>图片的数据集的Kohonen地图的实际实现。这个例子也有助于理解如何调整超参数，以加快收敛和提高精度。</p>
+			<p class="normal">在讨论了<a id="_idIndexMarker908"/>理论部分之后，我们已经准备好看到使用包含一组人的不同<a id="_idIndexMarker909"/>图片的数据集的 Kohonen 地图的实际实现。这个例子也有助于理解如何调整超参数，以加快收敛和提高精度。</p>
 
-			<h2 id="_idParaDest-227" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor238"/>SOM的例子</h2>
+			<h2 id="_idParaDest-227" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor238"/>SOM 的例子</h2>
 
-			<p class="normal">我们现在可以使用Olivetti faces数据集实现一个SOM <a id="_idIndexMarker910"/>。由于该过程可能非常长，在本例中，我们将输入模式的数量限制为100(使用4 x 4矩阵)。读者可以尝试使用整个数据集和更大的地图。</p>
+			<p class="normal">我们现在可以使用 Olivetti faces 数据集实现一个 SOM <a id="_idIndexMarker910"/>。由于该过程可能非常长，在本例中，我们将输入模式的数量限制为 100(使用 4 x 4 矩阵)。读者可以尝试使用整个数据集和更大的地图。</p>
 
-			<p class="normal">第一步是加载数据，对其进行规范化，使所有值都在0.0和1.0之间，并设置常数:</p>
+			<p class="normal">第一步是加载数据，对其进行规范化，使所有值都在 0.0 和 1.0 之间，并设置常数:</p>
 
 			<pre>import numpy as np
 from sklearn.datasets import fetch_olivetti_faces
@@ -844,7 +844,7 @@ W = np.random.normal(0, 0.1,
 def sigma(t):
     return float(sigma0) * np.exp(-float(t) / tau)</pre>
 
-			<p class="normal">如前所述，不是为每个单元计算径向基函数，而是使用一个预先计算的距离矩阵(在本例中为4×4×4×4 ),其中包含单元对之间所有可能的距离<a id="_idIndexMarker912"/>。通过这种方式，NumPy凭借其矢量化功能加快了计算速度:</p>
+			<p class="normal">如前所述，不是为每个单元计算径向基函数，而是使用一个预先计算的距离矩阵(在本例中为 4×4×4×4 ),其中包含单元对之间所有可能的距离<a id="_idIndexMarker912"/>。通过这种方式，NumPy 凭借其矢量化功能加快了计算速度:</p>
 
 			<pre>precomputed_distances = np.zeros((matrix_side, 
                                   matrix_side, 
@@ -886,25 +886,25 @@ for e in range(nb_iterations):
     W /= np.linalg.norm(W, axis=2).\
          reshape((matrix_side, matrix_side, 1))</pre>
 
-			<p class="normal">在这种情况下，我们设置了<img style="height: 1.3em! important;" src="img/B14713_14_256.png" alt=""/>，但是我邀请读者尝试不同的值并评估最终结果。在<a id="_idIndexMarker913"/>训练了5000个时期后，我们得到了以下权重矩阵(每个权重被绘制为二维数组):</p>
+			<p class="normal">在这种情况下，我们设置了<img style="height: 1.3em! important;" src="img/B14713_14_256.png" alt=""/>，但是我邀请读者尝试不同的值并评估最终结果。在<a id="_idIndexMarker913"/>训练了 5000 个时期后，我们得到了以下权重矩阵(每个权重被绘制为二维数组):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_14_09.png" alt=""/></figure>
 
-			<p class="packt_figref">最终SOM权重矩阵</p>
+			<p class="packt_figref">最终 SOM 权重矩阵</p>
 
-			<p class="normal">正如可能看到的那样，权重已经收敛到具有稍微不同特征的脸上。特别是，看着脸的形状和表情，很容易注意到不同吸引子之间的过渡(一些脸在微笑，而另一些脸更严肃；有些人戴着眼镜，留着小胡子，留着胡须，等等)。考虑矩阵大于最小容量也很重要(数据集中有10个不同的个体)。这允许映射更多不容易被正确的神经元吸引的模式。</p>
+			<p class="normal">正如可能看到的那样，权重已经收敛到具有稍微不同特征的脸上。特别是，看着脸的形状和表情，很容易注意到不同吸引子之间的过渡(一些脸在微笑，而另一些脸更严肃；有些人戴着眼镜，留着小胡子，留着胡须，等等)。考虑矩阵大于最小容量也很重要(数据集中有 10 个不同的个体)。这允许映射更多不容易被正确的神经元吸引的模式。</p>
 
-			<p class="normal">例如，一个人可以有带胡子和不带胡子的照片，这可能会导致混淆。如果矩阵太小，就有可能观察到收敛过程中的不稳定性，而如果太大，就很容易看到冗余。正确的选择取决于每个不同的数据集和内部方差，没有办法定义一个标准的标准。一个好的起点是选择一个容量比所需吸引子的数量大2.0到3.0倍的矩阵，然后增加或减少其大小，直到精度达到最大值。</p>
+			<p class="normal">例如，一个人可以有带胡子和不带胡子的照片，这可能会导致混淆。如果矩阵太小，就有可能观察到收敛过程中的不稳定性，而如果太大，就很容易看到冗余。正确的选择取决于每个不同的数据集和内部方差，没有办法定义一个标准的标准。一个好的起点是选择一个容量比所需吸引子的数量大 2.0 到 3.0 倍的矩阵，然后增加或减少其大小，直到精度达到最大值。</p>
 
 			<p class="normal">要考虑的最后一个因素是标签阶段。在训练过程的最后，我们不知道获胜神经元的权重分布，因此有必要处理数据集并注释每个模式的获胜单元。这样，就有可能提交新的模式来获得最可能的标签。这个过程没有显示出来，但是它很简单，读者可以很容易地在不同的场景中实现它。</p>
 
 			<h1 id="_idParaDest-228" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor239"/>总结</h1>
 
-			<p class="normal">在本章中，我们讨论了Hebb规则，展示了它如何驱动输入数据集第一主成分的计算。我们也看到这个规则是不稳定的，因为它导致突触权重的无限增长，以及如何使用归一化或Oja规则来解决这个问题。</p>
+			<p class="normal">在本章中，我们讨论了 Hebb 规则，展示了它如何驱动输入数据集第一主成分的计算。我们也看到这个规则是不稳定的，因为它导致突触权重的无限增长，以及如何使用归一化或 Oja 规则来解决这个问题。</p>
 
-			<p class="normal">我们引入了两种不同的基于Hebbian学习的神经网络(Sanger的和Rubner-Tavan的网络)，它们的内部动力学略有不同，并且能够以正确的顺序(从最大特征值开始)提取前n个主分量，而无需对输入协方差矩阵进行特征分解。</p>
+			<p class="normal">我们引入了两种不同的基于 Hebbian 学习的神经网络(Sanger 的和 Rubner-Tavan 的网络)，它们的内部动力学略有不同，并且能够以正确的顺序(从最大特征值开始)提取前 n 个主分量，而无需对输入协方差矩阵进行特征分解。</p>
 
-			<p class="normal">最后，我们介绍了SOM的概念，并提出了一个称为Kohonen网络的模型，它能够通过竞争学习过程将输入模式映射到放置了一些吸引子(每个类一个)的表面上。这种模型能够通过在与模式最相似的吸引子中引出强响应来识别新的模式(属于同一分布)。以这种方式，在标记过程之后，该模型可以被用作软分类器，该软分类器可以容易地管理有噪声或改变的模式。</p>
+			<p class="normal">最后，我们介绍了 SOM 的概念，并提出了一个称为 Kohonen 网络的模型，它能够通过竞争学习过程将输入模式映射到放置了一些吸引子(每个类一个)的表面上。这种模型能够通过在与模式最相似的吸引子中引出强响应来识别新的模式(属于同一分布)。以这种方式，在标记过程之后，该模型可以被用作软分类器，该软分类器可以容易地管理有噪声或改变的模式。</p>
 
 			<p class="normal">在下一章中，我们将讨论集成学习的主要概念以及最重要和最广泛的打包和提升算法。</p>
 
@@ -912,9 +912,9 @@ for e in range(nb_iterations):
 
 			<ul>
 
-				<li class="list"><em class="italics">理论神经科学</em>，麻省理工学院出版社，2003年</li>
+				<li class="list"><em class="italics">理论神经科学</em>，麻省理工学院出版社，2003 年</li>
 
-				<li class="list">Warner R .，<em class="italics">应用统计学</em>，SAGE出版社，2013年</li>
+				<li class="list">Warner R .，<em class="italics">应用统计学</em>，SAGE 出版社，2013 年</li>
 
 				<li class="list">桑格. T. D .，<em class="italics">单层线性前馈神经网络</em>，神经网络，1989/2</li>
 
@@ -926,7 +926,7 @@ for e in range(nb_iterations):
 
 				<li class="list">Kohonen T .，<em class="italics">拓扑正确特征图的自组织形成</em>，生物控制论，43/1，1982</li>
 
-				<li class="list">Kohonen T .，<em class="italics">学习矢量量化，自组织映射</em>。斯普林格信息科学丛书，第30卷。斯普林格，1995年</li>
+				<li class="list">Kohonen T .，<em class="italics">学习矢量量化，自组织映射</em>。斯普林格信息科学丛书，第 30 卷。斯普林格，1995 年</li>
 
 			</ul>
 

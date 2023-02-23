@@ -22,7 +22,7 @@
 
                             
 
-                    <h1 class="header-title">使用OpenCV与你的朋友交换面孔</h1>
+                    <h1 class="header-title">使用 OpenCV 与你的朋友交换面孔</h1>
 
                 
 
@@ -34,11 +34,11 @@
 
 <p class="mce-root">计算机视觉已经走过了漫长的道路。我们现在可以识别物体，以生成人脸交换视频。这可以通过在逐帧的基础上用另一个人的脸替换一个人的脸来实现。这个过程使得很难检测视频是变形的还是真实的。</p>
 
-<p class="mce-root">在这一章中，我们将研究如何构建一个应用程序，在这个应用程序中，一个人脸图像被放置在另一个图像之上。我们还将讨论包含称为dlib的<strong>机器学习</strong> ( <strong> ML </strong>)算法的C++工具包和<strong>开源计算机视觉库</strong> ( <strong> OpenCV </strong>)。</p>
+<p class="mce-root">在这一章中，我们将研究如何构建一个应用程序，在这个应用程序中，一个人脸图像被放置在另一个图像之上。我们还将讨论包含称为 dlib 的<strong>机器学习</strong> ( <strong> ML </strong>)算法的 C++工具包和<strong>开源计算机视觉库</strong> ( <strong> OpenCV </strong>)。</p>
 
-<p>OpenCV是一个具有C++、Python和Java接口的库，支持Windows、Linux、macOS、iOS和Android。OpenCV旨在提高计算效率，并专注于实时应用。它广泛应用于所有基于视觉的应用。Dlib是一个C++工具包，包含ML算法和工具，用于创建基于C++的真实应用程序。它被广泛应用于工业和学术界，包括机器人、嵌入式设备、移动电话和大型高性能计算环境。Dlib是开源的，可以在任何应用程序中免费使用。</p>
+<p>OpenCV 是一个具有 C++、Python 和 Java 接口的库，支持 Windows、Linux、macOS、iOS 和 Android。OpenCV 旨在提高计算效率，并专注于实时应用。它广泛应用于所有基于视觉的应用。Dlib 是一个 C++工具包，包含 ML 算法和工具，用于创建基于 C++的真实应用程序。它被广泛应用于工业和学术界，包括机器人、嵌入式设备、移动电话和大型高性能计算环境。Dlib 是开源的，可以在任何应用程序中免费使用。</p>
 
-<p class="mce-root">本章中创建的Android应用程序使用这两个框架以及Google Vision SDK进行人脸检测，以便在两幅图像之间交换人脸。下图显示了一个简单的示例:</p>
+<p class="mce-root">本章中创建的 Android 应用程序使用这两个框架以及 Google Vision SDK 进行人脸检测，以便在两幅图像之间交换人脸。下图显示了一个简单的示例:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-415 image-border" src="img/a11bb191-a9d7-409f-a58c-b7bb468867b0.png" style="width:120.42em;height:22.67em;"/></p>
 
@@ -50,7 +50,7 @@
 
 <li>构建原生人脸交换库</li>
 
-<li>构建一个用于面部交换的Android应用程序。</li>
+<li>构建一个用于面部交换的 Android 应用程序。</li>
 
 </ul>
 
@@ -117,7 +117,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/146519dc-25d1-4278-9622-39edc4f2d1af.png" style="width:26.50em;height:26.08em;"/></p>
 
-<p>面部关键点检测最初是由瓦伊德·卡泽米和约瑟芬·沙利文发明的，他们发现了68个特定的点构成了面部标志，如上图所示。这里是这篇论文的链接:<a href="http://www.csc.kth.se/~vahidk/papers/KazemiCVPR14.pdf" target="_blank">http://www.csc.kth.se/~vahidk/papers/KazemiCVPR14.pdf</a>。</p>
+<p>面部关键点检测最初是由瓦伊德·卡泽米和约瑟芬·沙利文发明的，他们发现了 68 个特定的点构成了面部标志，如上图所示。这里是这篇论文的链接:<a href="http://www.csc.kth.se/~vahidk/papers/KazemiCVPR14.pdf" target="_blank">http://www.csc.kth.se/~vahidk/papers/KazemiCVPR14.pdf</a>。</p>
 
 <p>为了在两张脸之间应用脸交换，我们需要考虑一些事情:</p>
 
@@ -131,7 +131,7 @@
 
 <ul>
 
-<li>不同的人面部几何形状不同。如果面部几何形状之间存在巨大差异，我们可能不会收到想要的输出。例如，如果我们试图把一个1岁小孩的脸换成一个85岁的老奶奶，我们可能得不到想要的结果。</li>
+<li>不同的人面部几何形状不同。如果面部几何形状之间存在巨大差异，我们可能不会收到想要的输出。例如，如果我们试图把一个 1 岁小孩的脸换成一个 85 岁的老奶奶，我们可能得不到想要的结果。</li>
 
 <li>不同的图片面部角度不同。这也取决于相机的角度。</li>
 
@@ -243,13 +243,13 @@
 
                 
 
-<p>使面部交换看起来真实的重要方面是对准面部。目的是将一个面放在另一个面的上面，使其覆盖另一个面。为了识别面部关键点，我们需要识别两个人脸的几何形状。由于面与面之间的几何体不同，我们需要扭曲源面，使其与目标面对齐。Dlib帮助识别68个面部关键点。我们确定面的外部边界如下:</p>
+<p>使面部交换看起来真实的重要方面是对准面部。目的是将一个面放在另一个面的上面，使其覆盖另一个面。为了识别面部关键点，我们需要识别两个人脸的几何形状。由于面与面之间的几何体不同，我们需要扭曲源面，使其与目标面对齐。Dlib 帮助识别 68 个面部关键点。我们确定面的外部边界如下:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/cedced3a-2d22-4d32-b561-4a3f78c5bf9f.png" style="width:22.08em;height:21.08em;"/></p>
 
-<p>这张图片显示了68个位于每个面上的地标。</p>
+<p>这张图片显示了 68 个位于每个面上的地标。</p>
 
-<p>上图是CMU的Brandon Amos创作的，他在<kbd>OpenFace</kbd>图书馆工作。</p>
+<p>上图是 CMU 的 Brandon Amos 创作的，他在<kbd>OpenFace</kbd>图书馆工作。</p>
 
 
 
@@ -349,7 +349,7 @@
 
                             
 
-                    <h1 class="header-title">Delaunay三角剖分和Voronoi图</h1>
+                    <h1 class="header-title">Delaunay 三角剖分和 Voronoi 图</h1>
 
                 
 
@@ -359,17 +359,17 @@
 
                 
 
-<p class="CDPAlignLeft CDPAlign">下图左侧显示了一个人的常规图像，中间显示了图像的Delaunay三角剖分，右侧显示了同一个人的Voronoi图:</p>
+<p class="CDPAlignLeft CDPAlign">下图左侧显示了一个人的常规图像，中间显示了图像的 Delaunay 三角剖分，右侧显示了同一个人的 Voronoi 图:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-416 image-border" src="img/939a6f31-93e9-426c-8744-16231e9050b8.png" style="font-size: 1em;width:63.67em;height:26.08em;"/></p>
 
-<p>给定平面中的一组点，三角剖分是指将平面细分为三角形，以这些点为顶点。对于同一直线上的一组点，不存在Delaunay三角剖分。一组点可以有许多可能的三角剖分，但是Delaunay三角剖分根据所有三角形的外接圆具有空内部的条件而不同。</p>
+<p>给定平面中的一组点，三角剖分是指将平面细分为三角形，以这些点为顶点。对于同一直线上的一组点，不存在 Delaunay 三角剖分。一组点可以有许多可能的三角剖分，但是 Delaunay 三角剖分根据所有三角形的外接圆具有空内部的条件而不同。</p>
 
-<p>任何关于Delaunay三角剖分的讨论都应该利用Voronoi图，因为它们是紧密耦合的。我们为三角测量计算的点集也类似地用于Voronoi图:</p>
+<p>任何关于 Delaunay 三角剖分的讨论都应该利用 Voronoi 图，因为它们是紧密耦合的。我们为三角测量计算的点集也类似地用于 Voronoi 图:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/22101532-2169-40ca-b89f-695fa372f4c5.png" style="width:31.08em;height:31.08em;"/></p>
 
-<p>正如您在前面一个包含一组点的平面图像中所看到的，Voronoi图将这组点划分为多个区域，在这些区域中，边界线与相邻点的距离相等。Voronoi图也被称为Voronoi镶嵌、Voronoi分解、Voronoi分割或Dirichlet镶嵌。</p>
+<p>正如您在前面一个包含一组点的平面图像中所看到的，Voronoi 图将这组点划分为多个区域，在这些区域中，边界线与相邻点的距离相等。Voronoi 图也被称为 Voronoi 镶嵌、Voronoi 分解、Voronoi 分割或 Dirichlet 镶嵌。</p>
 
 <p>这两个主题的维基百科链接分别是<a href="https://en.wikipedia.org/wiki/Delaunay_triangulation" target="_blank">https://en.wikipedia.org/wiki/Delaunay_triangulation</a>和<a href="https://en.wikipedia.org/wiki/Voronoi_diagram" target="_blank">https://en.wikipedia.org/wiki/Voronoi_diagram</a>。</p>
 
@@ -428,7 +428,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/cc66b234-9315-41d1-b012-abed106fb7bd.png" style="width:21.00em;height:26.67em;"/></p>
 
-<p>类似地，在第二个要交换面的图像上执行相同的过程。这是使用名为<kbd>warpAffine</kbd>的OpenCV方法实现的。我们将在实现该方法时详细讨论这一点。</p>
+<p>类似地，在第二个要交换面的图像上执行相同的过程。这是使用名为<kbd>warpAffine</kbd>的 OpenCV 方法实现的。我们将在实现该方法时详细讨论这一点。</p>
 
 <p class="CDPAlignLeft CDPAlign">应用<kbd>warpAffine</kbd>后，交换的图像如下所示:</p>
 
@@ -491,7 +491,7 @@
 
 <li>这是我们在应用程序中使用的。当将具有复杂轮廓的物体插入到新的背景中时，该方法的能力被充分表现出来。</li>
 
-<li><kbd>MIXED_CLONE</kbd>:经典的方法——基于颜色的选择和alpha蒙版可能比较耗时，而且经常会留下不理想的光晕。</li>
+<li><kbd>MIXED_CLONE</kbd>:经典的方法——基于颜色的选择和 alpha 蒙版可能比较耗时，而且经常会留下不理想的光晕。</li>
 
 <li><kbd>FEATURE_EXCHANGE</kbd>:特征交换允许用户轻松地用替代特征替换一个对象的某些特征。</li>
 
@@ -544,7 +544,7 @@
 
                             
 
-                    <h1 class="header-title">构建Android应用程序</h1>
+                    <h1 class="header-title">构建 Android 应用程序</h1>
 
                 
 
@@ -554,13 +554,13 @@
 
                 
 
-<p>作为第一步，我们需要在Android Studio上安装<strong>原生开发套件</strong> ( <strong> NDK </strong>)。由于面部交换的核心部分涉及C++的原生代码，NDK帮助构建了一个带有原生代码的Android应用程序。</p>
+<p>作为第一步，我们需要在 Android Studio 上安装<strong>原生开发套件</strong> ( <strong> NDK </strong>)。由于面部交换的核心部分涉及 C++的原生代码，NDK 帮助构建了一个带有原生代码的 Android 应用程序。</p>
 
-<p>您可以在SDK管理器中的<strong> SDK Tools </strong>选项卡下启用NDK，如下图所示:</p>
+<p>您可以在 SDK 管理器中的<strong> SDK Tools </strong>选项卡下启用 NDK，如下图所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-417 image-border" src="img/c5934362-e18c-45af-9c0b-2d60f6ef0ec8.png" style="width:162.50em;height:109.58em;"/></p>
 
-<p>这个库使用OpenCV 3.0.0版本的Android SDK。这个可以从<a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/3.0.0/" target="_blank">https://SourceForge . net/projects/opencv library/files/opencv-Android/3 . 0 . 0/</a>下载。</p>
+<p>这个库使用 OpenCV 3.0.0 版本的 Android SDK。这个可以从<a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/3.0.0/" target="_blank">https://SourceForge . net/projects/opencv library/files/opencv-Android/3 . 0 . 0/</a>下载。</p>
 
 
 
@@ -613,7 +613,7 @@
 
                 
 
-<p>让我们继续构建面部交换库。为Android构建一个本地库涉及三个文件:</p>
+<p>让我们继续构建面部交换库。为 Android 构建一个本地库涉及三个文件:</p>
 
 <ul>
 
@@ -625,7 +625,7 @@
 
 </ul>
 
-<p>在Android中创建一个原生库在这里讨论:【https://developer.android.com/ndk/guides/】T21。</p>
+<p>在 Android 中创建一个原生库在这里讨论:【https://developer.android.com/ndk/guides/】T21。</p>
 
 <p>在我们开始构建模型之前，让我们仔细看看这些。<br/></p>
 
@@ -680,7 +680,7 @@
 
                 
 
-<p>这样，根据您的本地路径更改<kbd>OpenCV.mk</kbd>路径。此应用程序构建在MacBook Pro macOS High Sierra上。<kbd>Android.mk</kbd>文件位于项目的<kbd>jni/</kbd>目录的子目录中。它实际上是构建系统解析一次或多次的微小GNU<kbd>makefile</kbd>片段:</p>
+<p>这样，根据您的本地路径更改<kbd>OpenCV.mk</kbd>路径。此应用程序构建在 MacBook Pro macOS High Sierra 上。<kbd>Android.mk</kbd>文件位于项目的<kbd>jni/</kbd>目录的子目录中。它实际上是构建系统解析一次或多次的微小 GNU<kbd>makefile</kbd>片段:</p>
 
 <pre>LOCAL_PATH := $(call my-dir)<br/><br/>include $(CLEAR_VARS)<br/><br/>OPENCV_INSTALL_MODULES:=on<br/>OPENCV_CAMERA_MODULES:=off<br/>OPENCV_LIB_TYPE:=STATIC<br/>include /Users/karthikeyan/Downloads/OpenCV-<br/>                           android/sdk/native/jni/OpenCV.mk<br/><br/>LOCAL_MODULE    := faceswapper<br/>LOCAL_SRC_FILES := faceswapper.cpp<br/>LOCAL_LDLIBS +=  -llog -ldl -landroid -latomic<br/>LOCAL_CPPFLAGS := -O0 -g3 -std=c++11 -Wall -Wextra -fexceptions<br/><br/><br/>include $(BUILD_SHARED_LIBRARY)</pre>
 
@@ -737,11 +737,11 @@
 
                 
 
-<p><kbd>Application.mk</kbd>文件包含目标ABIs、工具链、发布/调试模式和STL。如果我们没有明确指定，下面列出了几个参数的默认值:</p>
+<p><kbd>Application.mk</kbd>文件包含目标 ABIs、工具链、发布/调试模式和 STL。如果我们没有明确指定，下面列出了几个参数的默认值:</p>
 
 <ul>
 
-<li><strong> ABI </strong>:所有未被否决的ABI</li>
+<li><strong> ABI </strong>:所有未被否决的 ABI</li>
 
 <li><strong>工具链</strong>:叮当</li>
 
@@ -751,11 +751,11 @@
 
 </ul>
 
-<p>这里，我们指定了工具链、Android API版本和将要使用的架构。类似地，如果您正在为其他架构构建，例如每秒<strong>百万条指令</strong> ( <strong> MIPS </strong>)，请在<kbd>APP_ABI</kbd>变量中将其指定为逗号分隔值:</p>
+<p>这里，我们指定了工具链、Android API 版本和将要使用的架构。类似地，如果您正在为其他架构构建，例如每秒<strong>百万条指令</strong> ( <strong> MIPS </strong>)，请在<kbd>APP_ABI</kbd>变量中将其指定为逗号分隔值:</p>
 
 <pre>NDK_TOOLCHAIN_VERSION := clang<br/>APP_STL := gnustl_static<br/>APP_CPPFLAGS := -frtti -fexceptions -std=c++11 -DNO_MAKEFILE<br/>APP_ABI := armeabi-v7a<br/>APP_PLATFORM := android-15<br/><br/>APP_CXX = -clang++<br/>LOCAL_C_INCLUDES += ${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/4.8/include</pre>
 
-<p>面交换逻辑是使用OpenCV和dlib库用C++编写的。</p>
+<p>面交换逻辑是使用 OpenCV 和 dlib 库用 C++编写的。</p>
 
 <p>更多细节可以在这里找到:<a href="https://developer.android.com/ndk/guides/application_mk" target="_blank">https://developer.android.com/ndk/guides/application_mk</a>。</p>
 
@@ -810,7 +810,7 @@
 
                 
 
-<p>我们将把两个输入图像作为参数传递给swapper方法。这里的<kbd>img1</kbd>是有脸的图像，将在<kbd>img2</kbd>中粘贴到身体上。一般来说，<kbd>img2</kbd>包含有脸的身体，但是在结果中看不到身体。作为第一步，我们首先向该方法提供两幅图像的矩阵值以及使用dlib计算的所有点向量(面部关键点)。我们将得到如下所示的<kbd>img2</kbd>的扭曲图像:</p>
+<p>我们将把两个输入图像作为参数传递给 swapper 方法。这里的<kbd>img1</kbd>是有脸的图像，将在<kbd>img2</kbd>中粘贴到身体上。一般来说，<kbd>img2</kbd>包含有脸的身体，但是在结果中看不到身体。作为第一步，我们首先向该方法提供两幅图像的矩阵值以及使用 dlib 计算的所有点向量(面部关键点)。我们将得到如下所示的<kbd>img2</kbd>的扭曲图像:</p>
 
 <pre>//faceswapper.cpp<br/>Mat img1Warped = img2.clone();<br/><br/>//convert Mat to float data type<br/>img1.convertTo(img1, CV_32F);<br/>img1Warped.convertTo(img1Warped, CV_32F);<br/><br/>Mat img11 = img1, img22 = img2;<br/>img11.convertTo(img11, CV_8UC3);<br/>img22.convertTo(img22, CV_8UC3);</pre>
 
@@ -832,7 +832,7 @@
 
 <p class="mceNonEditable"/>
 
-<p>一旦确定了凸包，我们将使用以下方法找到Delaunay三角剖分:</p>
+<p>一旦确定了凸包，我们将使用以下方法找到 Delaunay 三角剖分:</p>
 
 <pre>// Find delaunay triangulation for points on the convex hull<br/> vector&lt; vector&lt;int&gt; &gt; dt;<br/>Rect rect(0, 0, img1Warped.cols, img1Warped.rows);<br/>calculateDelaunayTriangles(rect, hull2, dt);</pre>
 
@@ -846,19 +846,19 @@
 
 <p>代替<kbd>NORMAL_CLONE</kbd>，可以尝试传递值<kbd>2</kbd>和<kbd>3</kbd>，分别对应<kbd>MIXED_CLONE</kbd>和<kbd>FEATURE_EXCHANGE</kbd>。</p>
 
-<p>将使用以下代码从Android Java代码库调用该方法:</p>
+<p>将使用以下代码从 Android Java 代码库调用该方法:</p>
 
 <pre>Java_com_mlmobileapps_faceswapper_FaceSwap_portraitSwapNative(                                         <br/>                                    JNIEnv *env,<br/>                                    jobject obj,<br/>                                    jlong addrImg1,<br/>                                    jlong addrImg2,<br/>                                    jintArray landmarksX1,<br/>                                    jintArray landmarksY1,<br/>                                    jintArray landmarksX2,<br/>                                    jintArray landmarksY2,<br/>                                    jlong addrResult )<br/>{<br/>    // Transform java points to readable OpenCV points<br/>    vector&lt;Point2f&gt; points1 = readPoints(env, landmarksX1, <br/>                                         landmarksY1);<br/>    vector&lt;Point2f&gt; points2 = readPoints(env, landmarksX2, <br/>                                         landmarksY2);<br/><br/>    // Get the OpenCV Mats<br/>    Mat img1 = *(Mat*)addrImg1;<br/>    Mat img2 = *(Mat*)addrImg2;<br/>    Mat* retImg = (Mat*)addrResult;<br/><br/>    // Call faceswap function to swap faces<br/>    Mat swapImg = faceswap_main(img1, img2, points1, points2);<br/>    swapImg.convertTo(swapImg, CV_8UC3);<br/>    swapImg.copyTo(*retImg);<br/>}<br/>}</pre>
 
-<p>将C++文件另存为<kbd>faceswapper.cpp</kbd>。</p>
+<p>将 C++文件另存为<kbd>faceswapper.cpp</kbd>。</p>
 
 <p>现在是建图书馆的时候了。从终端运行以下命令:</p>
 
 <pre><strong>$ndk-build V=1</strong></pre>
 
-<p>您将会在相应的架构文件夹中找到生成的<kbd>libfaceswapper.so</kbd>库。将文件复制到Android项目的<kbd>jnilibs</kbd>文件夹中。我们不会深入研究项目中产生的每一个布局。相反，您可以从我们在GitHub上的公共代码库中下载完整的代码库。</p>
+<p>您将会在相应的架构文件夹中找到生成的<kbd>libfaceswapper.so</kbd>库。将文件复制到 Android 项目的<kbd>jnilibs</kbd>文件夹中。我们不会深入研究项目中产生的每一个布局。相反，您可以从我们在 GitHub 上的公共代码库中下载完整的代码库。</p>
 
-<p>GitHub链接:<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter7" target="_blank">https://GitHub . com/intrepidkarthi/MLmobileapps/tree/master/chapter 7</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://GitHub . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。</p>
+<p>GitHub 链接:<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter7" target="_blank">https://GitHub . com/intrepidkarthi/MLmobileapps/tree/master/chapter 7</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://GitHub . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>。</p>
 
 
 
@@ -911,7 +911,7 @@
 
                 
 
-<p>使用Android Studio中的设计编辑器创建UI更容易。如果您熟悉基于XML的文本编辑器，也可以使用它。我们将创建一个简单的<kbd>ViewPager</kbd> ( <kbd>activity_swap.xml</kbd>)，它将在一个<kbd>CoordinatorLayout</kbd>中保存两个输入图像，如下面的代码块所示:</p>
+<p>使用 Android Studio 中的设计编辑器创建 UI 更容易。如果您熟悉基于 XML 的文本编辑器，也可以使用它。我们将创建一个简单的<kbd>ViewPager</kbd> ( <kbd>activity_swap.xml</kbd>)，它将在一个<kbd>CoordinatorLayout</kbd>中保存两个输入图像，如下面的代码块所示:</p>
 
 <pre>&lt;android.support.v4.view.ViewPager<br/>    android:id="@+id/container"<br/>    android:layout_width="0dp"<br/>    android:layout_height="0dp"<br/>    android:layout_gravity="center_vertical"<br/>    app:layout_behavior="@string/appbar_scrolling_view_behavior"<br/>    app:layout_constraintBottom_toTopOf="@+id/container1"<br/>    app:layout_constraintHorizontal_bias="0.0"<br/>    app:layout_constraintLeft_toLeftOf="parent"<br/>    app:layout_constraintRight_toRightOf="parent"<br/>    app:layout_constraintTop_toBottomOf="@+id/container2"/&gt;</pre>
 
@@ -937,7 +937,7 @@
 
 <pre>@SuppressWarnings("UnusedParameters")<br/>public void galleryMode(View view) {<br/>    if (checkPermissions()) {<br/>        // Opens photo album<br/>        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);<br/>        startActivityForResult(i, RESULT_LOAD_IMAGE);<br/>    } else {<br/>        if (infoToast != null) {<br/>            infoToast.cancel();<br/>        }<br/>        infoToast = showInfoToast(getString(R.string.err_permission));<br/>    }<br/>}</pre>
 
-<p>一旦我们设置好所有基本的UI布局，应用程序将如下所示:</p>
+<p>一旦我们设置好所有基本的 UI 布局，应用程序将如下所示:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-804 image-border" src="img/dc5a9f19-cf0b-4b52-961d-48bbe1d2efcc.png" style="width:25.42em;height:45.17em;"/></p>
 
@@ -945,7 +945,7 @@
 
 <pre> * @param addrImg1,    memory address to image 1.<br/> * @param addrImg2,    memory address to image 2.<br/> * @param landmarksX1, facial landmark x-coordinates to image 1.<br/> * @param landmarksY1, facial landmark y-coordinates to image 1.<br/> * @param landmarksX2, facial landmark x-coordinates to image 2.<br/> * @param landmarksY2, facial landmark y-coordinates to image 2.<br/> * @param addrResult, memory address to result image.<br/> */<br/>@SuppressWarnings("JniMissingFunction")<br/>public native void portraitSwapNative(long addrImg1,<br/>                                      long addrImg2,<br/>                                      int[] landmarksX1,<br/>                                      int[] landmarksY1,<br/>                                      int[] landmarksX2,<br/>                                      int[] landmarksY2,<br/>                                      long addrResult);<br/><br/>/* Load Native Library */<br/>static {<br/>    //noinspection StatementWithEmptyBody<br/>    if (!OpenCVLoader.initDebug()) ;<br/>    else System.loadLibrary("faceswapper");<br/>}</pre>
 
-<p>之后，我们编写交换脸时要调用的方法。我们需要传递所有的面部关键点作为该方法的输入。我们可以使用<kbd>FaceDetector</kbd>类从Google Vision SDK获取面部数据:</p>
+<p>之后，我们编写交换脸时要调用的方法。我们需要传递所有的面部关键点作为该方法的输入。我们可以使用<kbd>FaceDetector</kbd>类从 Google Vision SDK 获取面部数据:</p>
 
 <pre>FaceDetector detector = new FaceDetector.Builder(context)<br/>        .setTrackingEnabled(false)<br/>        .setLandmarkType(FaceDetector.ALL_LANDMARKS)<br/>        .build();</pre>
 
@@ -977,7 +977,7 @@
 
 <p>为了获得更好的输出效果，请使用相同分辨率和大小的图像。如果边界框包含相同大小的数据，您将获得更好的输出。肤色和图像几何在这里也起着重要的作用。</p>
 
-<p>如果您在编译代码时遇到任何问题，请尝试从SDK管理器中禁用NDK，然后重试。</p>
+<p>如果您在编译代码时遇到任何问题，请尝试从 SDK 管理器中禁用 NDK，然后重试。</p>
 
 
 
@@ -1032,7 +1032,7 @@
 
 <p>在这一章中，我们学习了如何构建一个完整的人脸交换应用程序。这是计算机视觉研究的基本组成部分之一。在此基础上可以构建许多有用的应用程序。</p>
 
-<p>在下一章，我们将使用TensorFlow构建我们自己的食物分类器，并使用Core ML将其构建到iOS应用程序中。</p>
+<p>在下一章，我们将使用 TensorFlow 构建我们自己的食物分类器，并使用 Core ML 将其构建到 iOS 应用程序中。</p>
 
 
 
@@ -1091,9 +1091,9 @@
 
 <li>深度学习换脸:<a href="https://github.com/deepfakes/faceswap" target="_blank">https://github.com/deepfakes/faceswap</a></li>
 
-<li>来自谷歌和必应API的图片剪贴:<a href="https://github.com/rushilsrivastava/image_search" target="_blank">https://github.com/rushilsrivastava/image_search</a></li>
+<li>来自谷歌和必应 API 的图片剪贴:<a href="https://github.com/rushilsrivastava/image_search" target="_blank">https://github.com/rushilsrivastava/image_search</a></li>
 
-<li>Python实现与dlib和OpenCV框架相同的应用:<a href="https://github.com/wuhuikai/FaceSwap" target="_blank">https://github.com/wuhuikai/FaceSwap</a></li>
+<li>Python 实现与 dlib 和 OpenCV 框架相同的应用:<a href="https://github.com/wuhuikai/FaceSwap" target="_blank">https://github.com/wuhuikai/FaceSwap</a></li>
 
 <li>与甘对脸:<a href="https://github.com/shaoanlu/faceswap-GAN" target="_blank">与</a></li>
 
@@ -1154,7 +1154,7 @@
 
 <li>你明白面部交换是如何进行的吗？</li>
 
-<li>你能自己为Android建立一个NDK图书馆吗？</li>
+<li>你能自己为 Android 建立一个 NDK 图书馆吗？</li>
 
 <li>你能用<kbd>ViewPager</kbd>构建一个简单的安卓应用吗？</li>
 

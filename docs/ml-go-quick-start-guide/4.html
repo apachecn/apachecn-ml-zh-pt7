@@ -36,9 +36,9 @@
 
 <p>作为人类，我们非常熟悉这个概念:我们做的很多事情从来没有被别人明确地教给我们。相反，我们探索我们周围的世界，寻找和发现模式。出于这个原因，无监督学习对那些试图为<strong>一般智能</strong>开发系统的研究人员来说特别感兴趣:可以独立学习他们需要的东西的计算机<sup>【1】</sup>。</p>
 
-<p>在本章中，我们将介绍两种流行的无监督算法，并在Go中实现它们。首先，我们将使用一个<strong>聚类算法</strong>将一个数据集分成不同的组，而不需要任何关于寻找什么的指导。然后，我们将使用一种称为<strong>主成分分析</strong>的技术，通过首先找到数据集内的隐藏结构来压缩数据集。</p>
+<p>在本章中，我们将介绍两种流行的无监督算法，并在 Go 中实现它们。首先，我们将使用一个<strong>聚类算法</strong>将一个数据集分成不同的组，而不需要任何关于寻找什么的指导。然后，我们将使用一种称为<strong>主成分分析</strong>的技术，通过首先找到数据集内的隐藏结构来压缩数据集。</p>
 
-<p>这仅仅触及了无监督学习所能达到的表面。一些尖端算法能够让计算机执行通常需要人类创造力的任务。一个值得一看的例子是NVIDIA的从草图创建真实图片的系统。你还可以在网上找到一些代码示例，这些代码可以对图像的显示方式做出逼真的改变，例如，将马变成斑马，或者将橙子变成苹果。</p>
+<p>这仅仅触及了无监督学习所能达到的表面。一些尖端算法能够让计算机执行通常需要人类创造力的任务。一个值得一看的例子是 NVIDIA 的从草图创建真实图片的系统。你还可以在网上找到一些代码示例，这些代码可以对图像的显示方式做出逼真的改变，例如，将马变成斑马，或者将橙子变成苹果。</p>
 
 <p>本章将涵盖以下主题:</p>
 
@@ -111,7 +111,7 @@
 
 <ol>
 
-<li>首先，将数据加载到Go中，就像我们在前面的例子中所做的那样:</li>
+<li>首先，将数据加载到 Go 中，就像我们在前面的例子中所做的那样:</li>
 
 </ol>
 
@@ -119,7 +119,7 @@
 
 <ol start="2">
 
-<li>接下来，我们需要通过将species列从其余数据中分离出来来准备数据:这将仅用于聚类后的组的最终评估。为此，使用前面示例中的<kbd>DataFrameToXYs</kbd>函数:</li>
+<li>接下来，我们需要通过将 species 列从其余数据中分离出来来准备数据:这将仅用于聚类后的组的最终评估。为此，使用前面示例中的<kbd>DataFrameToXYs</kbd>函数:</li>
 
 </ol>
 
@@ -127,13 +127,13 @@
 
 <ol start="3">
 
-<li>现在，我们可以训练一个名为<strong> k-means </strong>的算法，尝试将数据集分成三个聚类。k-means的工作方式是首先随机选择每个聚类的中间(称为<strong>质心</strong>)，然后将训练集中的每个数据点分配到其最近的质心。然后，它迭代地更新每个聚类的位置，在每一步重新分配数据点，直到它达到收敛。</li>
+<li>现在，我们可以训练一个名为<strong> k-means </strong>的算法，尝试将数据集分成三个聚类。k-means 的工作方式是首先随机选择每个聚类的中间(称为<strong>质心</strong>)，然后将训练集中的每个数据点分配到其最近的质心。然后，它迭代地更新每个聚类的位置，在每一步重新分配数据点，直到它达到收敛。</li>
 
 </ol>
 
 <div><strong>k-means</strong> is a simple algorithm and is fast to train, so it is a good starting point when clustering data. However, it does require you to specify how many clusters to find, which is not always obvious. Other clustering algorithms, such as DBSCAN, do not have this limitation.</div>
 
-<p class="mce-root">使用goml中的k-means实现，我们可以尝试在数据中找到三个聚类。通常，您可能需要使用试错法来确定使用多少个聚类-K。如果在运行k-means后有许多非常小的聚类，那么您可能需要减少K:</p>
+<p class="mce-root">使用 goml 中的 k-means 实现，我们可以尝试在数据中找到三个聚类。通常，您可能需要使用试错法来确定使用多少个聚类-K。如果在运行 k-means 后有许多非常小的聚类，那么您可能需要减少 K:</p>
 
 <pre>import (<br/>    "gonum.org/v1/plot"<br/>    "gonum.org/v1/plot/plotter"<br/>    "gonum.org/v1/plot/plotutil"<br/>    "gonum.org/v1/plot/vg"<br/>    "github.com/cdipaolo/goml/cluster"<br/>    "github.com/cdipaolo/goml/base"<br/>    "bufio"<br/>    "strconv"<br/>)<br/><br/>model := cluster.NewKMeans(3, 30, features)<br/><br/>if err := model.Learn(); err != nil {
     panic(err)<br/>}</pre>
@@ -150,9 +150,9 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-440 image-border" src="img/f936c844-bdf7-4f9f-87a7-0531cad7c1e5.png" style="width:29.08em;height:23.00em;"/></p>
 
-<p>每个点的形状根据虹膜种类设置，而颜色由k-means的输出设置，即算法将每个数据点分配给哪个聚类。我们现在可以看到的是，这些聚类与每个鸢尾的物种几乎完全匹配:k-means已经能够将数据细分为三个不同的组，对应于不同的物种。</p>
+<p>每个点的形状根据虹膜种类设置，而颜色由 k-means 的输出设置，即算法将每个数据点分配给哪个聚类。我们现在可以看到的是，这些聚类与每个鸢尾的物种几乎完全匹配:k-means 已经能够将数据细分为三个不同的组，对应于不同的物种。</p>
 
-<p class="mce-root">虽然k-means在这种情况下工作得很好，但您可能会发现需要在自己的数据集上使用不同的算法。Python的scikit-learn库提供了一个有用的演示，演示了哪些算法在不同类型的数据集上效果最好<sup>【5】</sup>。您可能还会发现，以某种方式准备数据是有帮助的；例如，将其标准化或对其应用非线性变换。</p>
+<p class="mce-root">虽然 k-means 在这种情况下工作得很好，但您可能会发现需要在自己的数据集上使用不同的算法。Python 的 scikit-learn 库提供了一个有用的演示，演示了哪些算法在不同类型的数据集上效果最好<sup>【5】</sup>。您可能还会发现，以某种方式准备数据是有帮助的；例如，将其标准化或对其应用非线性变换。</p>
 
 
 
@@ -205,17 +205,17 @@
 
                 
 
-<p><strong>主成分分析</strong> ( <strong> PCA </strong>)是一种降低数据集中维数的方法。我们可以把它想象成一种压缩数据集的方式。假设你的数据集中有100个不同的变量。情况可能是，这些变量中有许多是相互关联的。如果是这种情况，那么就有可能通过组合变量建立一个更小的数据集来解释数据中的大多数变化。PCA执行这项任务:它试图找到输入变量的线性组合，并报告每个组合解释了多少变化。</p>
+<p><strong>主成分分析</strong> ( <strong> PCA </strong>)是一种降低数据集中维数的方法。我们可以把它想象成一种压缩数据集的方式。假设你的数据集中有 100 个不同的变量。情况可能是，这些变量中有许多是相互关联的。如果是这种情况，那么就有可能通过组合变量建立一个更小的数据集来解释数据中的大多数变化。PCA 执行这项任务:它试图找到输入变量的线性组合，并报告每个组合解释了多少变化。</p>
 
 <p>主成分分析是一种降低数据集中维数的方法:实际上，是对数据进行总结，以便您可以关注最重要的特征，这些特征解释了数据集中的大多数变化。</p>
 
-<p>PCA在两个方面对机器学习有用:</p>
+<p>PCA 在两个方面对机器学习有用:</p>
 
 <ul>
 
 <li>在应用监督学习方法之前，这可能是一个有用的预处理步骤。在对你的数据进行主成分分析后，你可能会发现，例如，95%的变化只能由少数几个变量来解释。您可以使用这些知识来减少输入数据中的变量数量，这意味着您的后续模型将训练得更快。</li>
 
-<li>在构建模型之前可视化数据集时，这也很有帮助。如果您的数据有三个以上的变量，那么很难在图表上可视化它，也很难理解它包含什么样的模式。PCA让你转换数据，这样你就可以绘制出它最重要的方面。</li>
+<li>在构建模型之前可视化数据集时，这也很有帮助。如果您的数据有三个以上的变量，那么很难在图表上可视化它，也很难理解它包含什么样的模式。PCA 让你转换数据，这样你就可以绘制出它最重要的方面。</li>
 
 </ul>
 
@@ -223,7 +223,7 @@
 
 <ol>
 
-<li>首先像以前一样加载sepal数据，并将其规范化如下:</li>
+<li>首先像以前一样加载 sepal 数据，并将其规范化如下:</li>
 
 </ol>
 
@@ -237,17 +237,17 @@
 
 <pre style="padding-left: 60px">import (<br/>    "github.com/gonum/matrix/mat64"<br/>)<br/><br/>// DataFrameToMatrix converts the given dataframe to a gonum matrix<br/>func DataFrameToMatrix(df dataframe.DataFrame) mat64.Matrix {<br/>    var x []float64 //slice to hold matrix entries in row-major order<br/>    <br/>    for i := 0; i &lt; df.Nrow(); i++ {<br/>        for j := 0; j &lt; df.Ncol(); j ++ {<br/>            x = append(x, df.Elem(i,j).Float())<br/>        } <br/>    }<br/>    return mat64.NewDense(df.Nrow(), df.Ncol(), x)<br/>}<br/><br/>features := DataFrameToMatrix(df)</pre>
 
-<p>PCA的工作原理是找到数据集的<strong>特征向量</strong>和<strong>特征值</strong>。出于这个原因，大多数软件库需要数据处于矩阵结构中，以便可以使用标准的线性代数例程如<strong> blas </strong>和<strong> lapack </strong>来进行计算。</p>
+<p>PCA 的工作原理是找到数据集的<strong>特征向量</strong>和<strong>特征值</strong>。出于这个原因，大多数软件库需要数据处于矩阵结构中，以便可以使用标准的线性代数例程如<strong> blas </strong>和<strong> lapack </strong>来进行计算。</p>
 
 <ol start="3">
 
-<li>现在，我们可以利用高纳姆的<kbd>stat</kbd>包来实现PCA:</li>
+<li>现在，我们可以利用高纳姆的<kbd>stat</kbd>包来实现 PCA:</li>
 
 </ol>
 
 <pre style="padding-left: 60px">model := stat.PC{}<br/>if ok := model.PrincipalComponents(features, nil); !ok {<br/>  fmt.Println("Error!")<br/>}<br/>variances := model.Vars(nil)<br/>components := model.Vectors(nil)</pre>
 
-<p style="padding-left: 60px">这就给了我们两个变量:<kbd>components</kbd>，它是一个矩阵，告诉我们如何将原来的变量映射到新的组件上；还有<kbd>variances</kbd>，它告诉我们每个分量解释了多少方差。如果我们打印出每个组件的方差，我们可以看到前两个解释了整个数据集的96%(组件1解释了73%，组件2解释了23%):</p>
+<p style="padding-left: 60px">这就给了我们两个变量:<kbd>components</kbd>，它是一个矩阵，告诉我们如何将原来的变量映射到新的组件上；还有<kbd>variances</kbd>，它告诉我们每个分量解释了多少方差。如果我们打印出每个组件的方差，我们可以看到前两个解释了整个数据集的 96%(组件 1 解释了 73%，组件 2 解释了 23%):</p>
 
 <pre style="padding-left: 60px">total_variance := 0.0<br/>for i := range variances {<br/>  total_variance += variances[i]<br/>}<br/><br/>for i := range variances {<br/>  fmt.Printf("Component %d: %5.3f\n", i+1, variances[i]/total_variance)<br/>}</pre>
 
@@ -263,7 +263,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-441 image-border" src="img/8e4e724c-c63c-4871-95ce-1d20bbf7ac30.png" style="width:23.58em;height:18.75em;"/></p>
 
-<p>现在，您可以尝试训练一个监督学习模型，使用前两个PCA特征来预测鸢尾物种:将其性能与在所有四个输入特征上训练的模型进行比较。</p>
+<p>现在，您可以尝试训练一个监督学习模型，使用前两个 PCA 特征来预测鸢尾物种:将其性能与在所有四个输入特征上训练的模型进行比较。</p>
 
 
 
@@ -318,7 +318,7 @@
 
 <p>在这一章中，我们讨论了无监督机器学习中的两种常见技术。两者都经常被数据科学家用于探索性分析，但也可以构成生产系统中数据处理管道的一部分。您已经学习了如何训练聚类分析算法将数据自动分组。这种技术可用于对电子商务网站上新注册的客户进行分类，以便为他们提供个性化信息。我们还介绍了主成分分析作为一种压缩数据的手段，换句话说，减少其维数。这可以用作在运行监督学习技术之前的预处理步骤，以便减小数据集的大小。</p>
 
-<p>在这两种情况下，都可以利用<kbd>gonum</kbd>和<kbd>goml</kbd>库用最少的代码在Go中构建高效的实现。</p>
+<p>在这两种情况下，都可以利用<kbd>gonum</kbd>和<kbd>goml</kbd>库用最少的代码在 Go 中构建高效的实现。</p>
 
 
 
@@ -373,15 +373,15 @@
 
 <ol>
 
-<li>https://deepmind.com/blog/unsupervised-learning/<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://deepmind.com/blog/unsupervised-learning/">。检索时间2019年4月12日。</a></li>
+<li>https://deepmind.com/blog/unsupervised-learning/<a xmlns:epub="http://www.idpf.org/2007/ops" href="https://deepmind.com/blog/unsupervised-learning/">。检索时间 2019 年 4 月 12 日。</a></li>
 
-<li><a href="https://blogs.nvidia.com/blog/2019/03/18/gaugan-photorealistic-landscapes-nvidia-research/">https://blogs . NVIDIA . com/blog/2019/03/18/gaugan-照片级真实感-风景-nvidia-research/ </a>。检索时间2019年4月12日。</li>
+<li><a href="https://blogs.nvidia.com/blog/2019/03/18/gaugan-photorealistic-landscapes-nvidia-research/">https://blogs . NVIDIA . com/blog/2019/03/18/gaugan-照片级真实感-风景-nvidia-research/ </a>。检索时间 2019 年 4 月 12 日。</li>
 
-<li><a href="https://github.com/junyanz/CycleGAN">https://github.com/junyanz/CycleGAN</a>。检索时间2019年4月12日。</li>
+<li><a href="https://github.com/junyanz/CycleGAN">https://github.com/junyanz/CycleGAN</a>。检索时间 2019 年 4 月 12 日。</li>
 
-<li><a href="http://robots.stanford.edu/papers/dahlkamp.adaptvision06.pdf">http://robots . Stanford . edu/papers/Dahl kamp . adapt vision 06 . pdf</a>。检索时间2019年4月13日。</li>
+<li><a href="http://robots.stanford.edu/papers/dahlkamp.adaptvision06.pdf">http://robots . Stanford . edu/papers/Dahl kamp . adapt vision 06 . pdf</a>。检索时间 2019 年 4 月 13 日。</li>
 
-<li><a href="https://scikit-learn.org/stable/modules/clustering.html#overview-of-clustering-methods">https://scikit-learn . org/stable/modules/clustering . html # overview-of-clustering-methods</a>。检索时间2019年4月12日。</li>
+<li><a href="https://scikit-learn.org/stable/modules/clustering.html#overview-of-clustering-methods">https://scikit-learn . org/stable/modules/clustering . html # overview-of-clustering-methods</a>。检索时间 2019 年 4 月 12 日。</li>
 
 </ol>
 

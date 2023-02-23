@@ -36,7 +36,7 @@
 
 </ul></li>
 
-				<li class="list">用PyMC3和PyStan建模贝叶斯网络</li>
+				<li class="list">用 PyMC3 和 PyStan 建模贝叶斯网络</li>
 
 				<li class="list"><strong class="bold">隐马尔可夫模型</strong> ( <strong class="bold"> HMMs </strong>)</li>
 
@@ -60,7 +60,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_004.png" alt=""/></figure>
 
-			<p class="normal">让我们假设<a id="_idIndexMarker652"/>我们需要估计一个事件的概率<em class="italics"> A </em>给定一些观察值<em class="italics"> B </em>，或者使用标准符号，A的后验概率；前面的公式<a id="_idIndexMarker653"/>将这个值表示为与项<em class="italics"> P </em> ( <em class="italics"> A </em>)成比例，它是<em class="italics"> A </em>的边际概率，称为先验概率，是给定事件<em class="italics"> A </em>的观测值<em class="italics"> B </em>的条件概率。<em class="italics"> p </em> ( <em class="italics"> B|A </em>)称为可能性，定义事件<em class="italics"> A </em>如何可能决定<em class="italics"> B </em>。因此，我们可以将这种关系概括为:</p>
+			<p class="normal">让我们假设<a id="_idIndexMarker652"/>我们需要估计一个事件的概率<em class="italics"> A </em>给定一些观察值<em class="italics"> B </em>，或者使用标准符号，A 的后验概率；前面的公式<a id="_idIndexMarker653"/>将这个值表示为与项<em class="italics"> P </em> ( <em class="italics"> A </em>)成比例，它是<em class="italics"> A </em>的边际概率，称为先验概率，是给定事件<em class="italics"> A </em>的观测值<em class="italics"> B </em>的条件概率。<em class="italics"> p </em> ( <em class="italics"> B|A </em>)称为可能性，定义事件<em class="italics"> A </em>如何可能决定<em class="italics"> B </em>。因此，我们可以将这种关系概括为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_005.png" alt=""/></figure>
 
@@ -78,7 +78,7 @@
 
 			<p class="normal">这种概率分布可以很容易地模拟任何二项式场景。事实上，如果<img style="height: 1.2em! important;" src="img/B14713_11_010.png" alt=""/>，p.d.f .是完全对称的，当一个参数大于另一个参数时，它在极值附近达到峰值。为了公平起见，我们预计这两个常数有可能以同样的方式改变。当<img src="img/B14713_11_011.png" alt=""/>时，可能性变成二项式(因为实验是独立的)和<img src="img/B14713_11_012.png" alt=""/>。因此，该分布退化为完全平衡的伯努利分布，其中<em class="italics"> p </em> =1/2。</p>
 
-			<p class="normal">另一方面，例如，如果正面的数量(在连续模型中，这个结果可以正好等于1)比反面的数量大得多，<img style="height: 1.2em! important;" src="img/B14713_11_013.png" alt=""/>(或者反之亦然)，则贝塔分布在接近极值1的区域开始非常尖峰化。如果<img style="height: 1.9em! important;" src="img/B14713_11_014.png" alt=""/>，并且分布退化为<em class="italics"> p </em> = 1的伯努利(对应人头)。下图显示了这种情况:</p>
+			<p class="normal">另一方面，例如，如果正面的数量(在连续模型中，这个结果可以正好等于 1)比反面的数量大得多，<img style="height: 1.2em! important;" src="img/B14713_11_013.png" alt=""/>(或者反之亦然)，则贝塔分布在接近极值 1 的区域开始非常尖峰化。如果<img style="height: 1.9em! important;" src="img/B14713_11_014.png" alt=""/>，并且分布退化为<em class="italics"> p </em> = 1 的伯努利(对应人头)。下图显示了这种情况:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_01.png" alt="C:\Users\giuse\AppData\Local\Microsoft\Windows\INetCache\Content.MSO\3B9C68B7.tmp"/></figure>
 
@@ -86,13 +86,13 @@
 
 			<p class="normal">不难看出，<a id="_idIndexMarker658"/>当似然性为伯努利或二项式时，共轭先验为β，显然，似然性的作用是移动<img src="img/B14713_11_015.png" alt=""/>和<img src="img/B14713_11_016.png" alt=""/>以再现实际的后验分布。</p>
 
-			<p class="normal">我们现在可以考虑投掷硬币10次(事件<em class="italics"> A </em>)。我们知道，如果硬币是公平的，那么<em class="italics"> P </em> ( <em class="italics"> A </em> ) = 1/2。如果我们想知道得到10个人头的概率是多少，我们可以使用二项分布，得到<em class="italics"> P </em> ( <em class="italics"> k个人头</em> ) = 1/2 <sup style="font-style: italic;"> k </sup>。然而，让我们假设我们不知道硬币是否公平，但我们怀疑它装载了一个先验概率<em class="italics"> P </em> ( <em class="italics">硬币</em> = <em class="italics">装载</em> ) = 0.7有利于尾部。我们可以使用指示函数定义一个完整的先验概率<em class="italics"> P </em> ( <em class="italics">硬币</em>):</p>
+			<p class="normal">我们现在可以考虑投掷硬币 10 次(事件<em class="italics"> A </em>)。我们知道，如果硬币是公平的，那么<em class="italics"> P </em> ( <em class="italics"> A </em> ) = 1/2。如果我们想知道得到 10 个人头的概率是多少，我们可以使用二项分布，得到<em class="italics"> P </em> ( <em class="italics"> k 个人头</em> ) = 1/2 <sup style="font-style: italic;"> k </sup>。然而，让我们假设我们不知道硬币是否公平，但我们怀疑它装载了一个先验概率<em class="italics"> P </em> ( <em class="italics">硬币</em> = <em class="italics">装载</em> ) = 0.7 有利于尾部。我们可以使用指示函数定义一个完整的先验概率<em class="italics"> P </em> ( <em class="italics">硬币</em>):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_017.png" alt=""/></figure>
 
-			<p class="normal">在前面的表达式中，我们假设<em class="italics"> P </em> ( <em class="italics">币</em> = <em class="italics">公平</em> ) = 0.5，<em class="italics"> P </em> ( <em class="italics">币</em> = <em class="italics">装</em> ) = 0.7，只有当币公平时，指示器<em class="italics"> I </em> <sub style="font-style: italic;">币=公平</sub> = 1，否则为0。当硬币被装入时，<em class="italics"> I </em> <sub style="font-style: italic;"> Coin=Loaded </sub>也会发生同样的情况。我们现在的目标是确定后验概率<em class="italics"> P </em> ( <em class="italics">币|B </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，B </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，B </em> <sub style="font-style: italic;"> n </sub>)能够确认或者拒绝我们的假设。</p>
+			<p class="normal">在前面的表达式中，我们假设<em class="italics"> P </em> ( <em class="italics">币</em> = <em class="italics">公平</em> ) = 0.5，<em class="italics"> P </em> ( <em class="italics">币</em> = <em class="italics">装</em> ) = 0.7，只有当币公平时，指示器<em class="italics"> I </em> <sub style="font-style: italic;">币=公平</sub> = 1，否则为 0。当硬币被装入时，<em class="italics"> I </em> <sub style="font-style: italic;"> Coin=Loaded </sub>也会发生同样的情况。我们现在的目标是确定后验概率<em class="italics"> P </em> ( <em class="italics">币|B </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，B </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，B </em> <sub style="font-style: italic;"> n </sub>)能够确认或者拒绝我们的假设。</p>
 
-			<p class="normal">我们来想象一下用<em class="italics"> B </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics"> =头</em>和<em class="italics"> B </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，B </em> <sub style="font-style: italic;"> n </sub> <em class="italics"> =尾</em>观察<em class="italics"> n </em> = 10个事件。我们可以用二项式分布来表示每个结果的概率:</p>
+			<p class="normal">我们来想象一下用<em class="italics"> B </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics"> =头</em>和<em class="italics"> B </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，B </em> <sub style="font-style: italic;"> n </sub> <em class="italics"> =尾</em>观察<em class="italics"> n </em> = 10 个事件。我们可以用二项式分布来表示每个结果的概率:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_018.png" alt=""/></figure>
 
@@ -100,9 +100,9 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_019.png" alt=""/></figure>
 
-			<p class="normal">我们还需要<a id="_idIndexMarker659"/>将两项除以0.083(两项之和)进行归一化，这样就得到最终的后验概率<img style="height: 1.2em! important;" src="img/B14713_11_020.png" alt=""/>。这个结果证实并加强了我们的假设。由于在一个头部之后的九个尾部观察序列，装载硬币的概率现在约为96%。</p>
+			<p class="normal">我们还需要<a id="_idIndexMarker659"/>将两项除以 0.083(两项之和)进行归一化，这样就得到最终的后验概率<img style="height: 1.2em! important;" src="img/B14713_11_020.png" alt=""/>。这个结果证实并加强了我们的假设。由于在一个头部之后的九个尾部观察序列，装载硬币的概率现在约为 96%。</p>
 
-			<p class="normal">这个例子展示了数据(观察)是如何插入贝叶斯框架的。如果读者有兴趣更详细地研究这些概念，在2008年麻省理工学院出版社出版的Pratt J .，Raiffa H .，Schlaifer R .，<em class="italics">统计决策理论简介</em>，可以找到许多有趣的例子和解释；然而，在介绍贝叶斯网络之前，定义另外两个基本概念是有用的。</p>
+			<p class="normal">这个例子展示了数据(观察)是如何插入贝叶斯框架的。如果读者有兴趣更详细地研究这些概念，在 2008 年麻省理工学院出版社出版的 Pratt J .，Raiffa H .，Schlaifer R .，<em class="italics">统计决策理论简介</em>，可以找到许多有趣的例子和解释；然而，在介绍贝叶斯网络之前，定义另外两个基本概念是有用的。</p>
 
 			<p class="normal">第一个概念称为条件独立性，它可以通过考虑两个变量<em class="italics"> A </em>和<em class="italics"> B </em>来形式化，这两个变量以第三个变量<em class="italics"> C </em>为条件。我们说<em class="italics"> A </em>和<em class="italics"> B </em>是条件独立的，给定<em class="italics"> C </em>如果:</p>
 
@@ -136,19 +136,19 @@
 
 			<p class="packt_figref">贝叶斯网络的例子</p>
 
-			<p class="normal">变量<em class="italics">X</em>T2【4】T3<a id="_idIndexMarker662"/>依赖<em class="italics">X</em>T7】3，依赖<em class="italics">X</em>T11】1和<em class="italics">X</em>2。描述网络，我们需要边际概率<em class="italics">P</em>(<em class="italics">X</em><sub>1</sub>)和<em class="italics">P</em>(<em class="italics">X</em>T27】2)和条件概率<em class="italics">P</em>(<em class="italics">X</em><sub>3</sub>|<em class="italics">X</em><sub>1</sub>，<em class="italics">事实上，使用链式法则，我们可以将完全联合概率推导为:</em></p>
+			<p class="normal">变量<em class="italics">X</em>T2【4】T3<a id="_idIndexMarker662"/>依赖<em class="italics">X</em>T7】3，依赖<em class="italics">X</em>T11】1 和<em class="italics">X</em>2。描述网络，我们需要边际概率<em class="italics">P</em>(<em class="italics">X</em><sub>1</sub>)和<em class="italics">P</em>(<em class="italics">X</em>T27】2)和条件概率<em class="italics">P</em>(<em class="italics">X</em><sub>3</sub>|<em class="italics">X</em><sub>1</sub>，<em class="italics">事实上，使用链式法则，我们可以将完全联合概率推导为:</em></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_026.png" alt=""/></figure>
 
-			<p class="normal">前面的表达式显示了一个重要的概念:由于图是直接的和非循环的，每个变量有条件地独立于所有其他变量，这些变量不是给定其前任的后继变量。为了形式化这个概念，我们可以定义函数<em class="italics">前辈</em>(<em class="italics">X</em>T59】I，该函数直接返回影响<em class="italics">X</em>T63】I的节点集合，例如:<em class="italics">前辈</em>(<em class="italics">X</em>T69】3【T70)= {<em class="italics">X</em>T73】1<sub>1使用该函数，可以为具有<em class="italics"> N </em>个节点的贝叶斯网络的全联合概率编写一个通用表达式:</sub></p>
+			<p class="normal">前面的表达式显示了一个重要的概念:由于图是直接的和非循环的，每个变量有条件地独立于所有其他变量，这些变量不是给定其前任的后继变量。为了形式化这个概念，我们可以定义函数<em class="italics">前辈</em>(<em class="italics">X</em>T59】I，该函数直接返回影响<em class="italics">X</em>T63】I 的节点集合，例如:<em class="italics">前辈</em>(<em class="italics">X</em>T69】3【T70)= {<em class="italics">X</em>T73】1<sub>1 使用该函数，可以为具有<em class="italics"> N </em>个节点的贝叶斯网络的全联合概率编写一个通用表达式:</sub></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_027.png" alt=""/></figure>
 
-			<p class="normal">构建贝叶斯网络的一般过程应该总是从第一个原因开始，一个一个地添加它们的影响，直到最后的节点被插入到图中。如果不遵守这一规则，生成的图可能包含无用的关系，从而增加模型的复杂性。例如，如果<em class="italics"> X </em> <sub> 4 </sub>是由<em class="italics"> X </em> <sub> 1 </sub>和<em class="italics"> X </em> <sub> 2 </sub>间接造成的，那么添加边<img src="img/B14713_11_028.png" alt=""/>和<img src="img/B14713_11_029.png" alt=""/>可能看起来是一个不错的建模选择；但是我们知道，最终对<em class="italics">X</em>T97】4的影响只由<em class="italics">X</em>T101】3的值决定，其概率是以<em class="italics">X</em>T106】1和<em class="italics">X</em>T110】2为条件的<a id="_idIndexMarker663"/>。因此，我们可以有把握地说<img src="img/B14713_11_030.png" alt=""/>和<img src="img/B14713_11_031.png" alt=""/>是杂散边缘，不需要添加。</p>
+			<p class="normal">构建贝叶斯网络的一般过程应该总是从第一个原因开始，一个一个地添加它们的影响，直到最后的节点被插入到图中。如果不遵守这一规则，生成的图可能包含无用的关系，从而增加模型的复杂性。例如，如果<em class="italics"> X </em> <sub> 4 </sub>是由<em class="italics"> X </em> <sub> 1 </sub>和<em class="italics"> X </em> <sub> 2 </sub>间接造成的，那么添加边<img src="img/B14713_11_028.png" alt=""/>和<img src="img/B14713_11_029.png" alt=""/>可能看起来是一个不错的建模选择；但是我们知道，最终对<em class="italics">X</em>T97】4 的影响只由<em class="italics">X</em>T101】3 的值决定，其概率是以<em class="italics">X</em>T106】1 和<em class="italics">X</em>T110】2 为条件的<a id="_idIndexMarker663"/>。因此，我们可以有把握地说<img src="img/B14713_11_030.png" alt=""/>和<img src="img/B14713_11_031.png" alt=""/>是杂散边缘，不需要添加。</p>
 
 			<h2 id="_idParaDest-173" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor183"/>从贝叶斯网络中采样</h2>
 
-			<p class="normal">当存在大量变量和边时，在贝叶斯网络上执行直接的<a id="_idIndexMarker664"/>推理可能是相当困难的操作，因为完整的联合概率可能会变得极其复杂，标准化分布所需的积分也是如此。由于我们需要计算归一化常数来获得后验概率，如果这一步不可行，我们需要找到其他方法来解决这个问题。为此，提出了几种取样方法。在本段中，我们将展示如何使用直接方法和两种MCMC算法来确定网络的全联合概率采样。</p>
+			<p class="normal">当存在大量变量和边时，在贝叶斯网络上执行直接的<a id="_idIndexMarker664"/>推理可能是相当困难的操作，因为完整的联合概率可能会变得极其复杂，标准化分布所需的积分也是如此。由于我们需要计算归一化常数来获得后验概率，如果这一步不可行，我们需要找到其他方法来解决这个问题。为此，提出了几种取样方法。在本段中，我们将展示如何使用直接方法和两种 MCMC 算法来确定网络的全联合概率采样。</p>
 
 			<p class="normal">让我们首先考虑一个简单的网络，它有两个相连的节点，<em class="italics"> X </em> <sub> 1 </sub>和<em class="italics"> X </em> <sub> 2 </sub>，分布如下:</p>
 
@@ -166,9 +166,9 @@
 
 				<li class="list">用形状初始化一个矢量<em class="italics">S</em>(<em class="italics">N</em>，<em class="italics"> N </em> <sub style="font-style: italic;">样本</sub>)。</li>
 
-				<li class="list">初始化一个具有形状的频率向量<em class="italics">F</em>T3】样本(<em class="italics">N</em>，<em class="italics">N</em>T9】样本)。在Python中，最好使用一个字典，其中的键是一个组合(<em class="italics"> x </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，x </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，x </em> <sub style="font-style: italic;"> n </sub>)。</li>
+				<li class="list">初始化一个具有形状的频率向量<em class="italics">F</em>T3】样本(<em class="italics">N</em>，<em class="italics">N</em>T9】样本)。在 Python 中，最好使用一个字典，其中的键是一个组合(<em class="italics"> x </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，x </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，x </em> <sub style="font-style: italic;"> n </sub>)。</li>
 
-				<li class="list">对于<em class="italics"> t </em> = 1到<em class="italics">N</em>T27】样本:<ol><li class="Numbered-Bullet-Within-Bullet--PACKT-">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</li>
+				<li class="list">对于<em class="italics"> t </em> = 1 到<em class="italics">N</em>T27】样本:<ol><li class="Numbered-Bullet-Within-Bullet--PACKT-">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</li>
 
 </ol><ol><li class="Numbered-Bullet-Within-Bullet--PACKT-" value="1">样本来自<em class="italics">P</em>(<em class="italics">X</em>I|<em class="italics">前任</em>(<em class="italics">X</em>T43】I)</li>
 
@@ -176,7 +176,7 @@
 
 </ol><ol><li class="Numbered-Bullet-Within-Bullet--PACKT-" value="1">如果<em class="italics"> F </em> <sub style="font-style: italic;">样本</sub>包含被采样的元组<em class="italics"> S </em>:，t:<img style="height: 1.8em! important;" src="img/B14713_11_033.png" alt=""/></li>
 
-<li class="Numbered-Bullet-Within-Bullet-End--PACKT-">Else:<p class="Numbered-Bullet-Within-Bullet-End--PACKT-"><img style="height: 1.5em! important;" src="img/B14713_11_034.png" alt=""/>(这两个操作在Python字典中都是直接的)</p></li>
+<li class="Numbered-Bullet-Within-Bullet-End--PACKT-">Else:<p class="Numbered-Bullet-Within-Bullet-End--PACKT-"><img style="height: 1.5em! important;" src="img/B14713_11_034.png" alt=""/>(这两个操作在 Python 字典中都是直接的)</p></li>
 
 </ol></li>
 
@@ -196,7 +196,7 @@
 
 			<h4 class="title" lang="en-GB" xml:lang="en-GB">直接取样的例子</h4>
 
-			<p class="normal">我们现在可以用Python实现<a id="_idIndexMarker667"/>这个算法。让我们首先使用NumPy函数<code class="Code-In-Text--PACKT-">np.random.normal(u,s)</code>定义样本方法，该函数从一个<em class="italics"> N </em> ( <em class="italics"> u，s </em> <sup style="font-style: italic;"> 2 </sup>)分布中抽取一个样本:</p>
+			<p class="normal">我们现在可以用 Python 实现<a id="_idIndexMarker667"/>这个算法。让我们首先使用 NumPy 函数<code class="Code-In-Text--PACKT-">np.random.normal(u,s)</code>定义样本方法，该函数从一个<em class="italics"> N </em> ( <em class="italics"> u，s </em> <sup style="font-style: italic;"> 2 </sup>)分布中抽取一个样本:</p>
 
 			<pre>import numpy as np
 def X1_sample():
@@ -204,7 +204,7 @@ def X1_sample():
 def X2_sample(x1):
     return np.random.normal(x1, 0.5 + np.sqrt(np.abs(x1)))</pre>
 
-			<p class="normal">至此，我们可以实现主循环了。由于变量是布尔型的，概率总数是16，所以我们设置<em class="italics"> N </em> <sub style="font-style: italic;">样本</sub>= 10000(更小的值也是可以接受的):</p>
+			<p class="normal">至此，我们可以实现主循环了。由于变量是布尔型的，概率总数是 16，所以我们设置<em class="italics"> N </em> <sub style="font-style: italic;">样本</sub>= 10000(更小的值也是可以接受的):</p>
 
 			<pre>Nsamples = 10000
 X = np.zeros((Nsamples, ))
@@ -224,7 +224,7 @@ for i, t in enumerate(range(Nsamples)):
 
 			<h3 id="_idParaDest-175" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor185"/>马尔可夫链简介</h3>
 
-			<p class="normal">为了讨论<a id="_idIndexMarker669"/> MCMC算法，有必要引入马尔可夫链的概念。事实上，虽然直接采样方法没有任何特定的顺序来抽取样本，但是MCMC策略根据从一个样本到下一个样本的精确转移概率来抽取样本序列。</p>
+			<p class="normal">为了讨论<a id="_idIndexMarker669"/> MCMC 算法，有必要引入马尔可夫链的概念。事实上，虽然直接采样方法没有任何特定的顺序来抽取样本，但是 MCMC 策略根据从一个样本到下一个样本的精确转移概率来抽取样本序列。</p>
 
 			<p class="normal">让我们考虑一个与时间相关的随机变量<em class="italics"> X </em> ( <em class="italics"> t </em>)，让我们假设一个离散的时间序列<em class="italics"> X </em> <sub> 1 </sub>，<em class="italics"> X </em> <sub> 2 </sub>，…，<em class="italics"> X </em> <sub> t </sub>，<em class="italics"> X </em> <sub> t+1 </sub>在下图中，有一个该序列的示意图:</p>
 
@@ -260,7 +260,7 @@ for i, t in enumerate(range(Nsamples)):
 
 			<p class="normal">马尔可夫链的遍历过程由两个条件保证。第一个是所有状态的非周期性，这意味着不可能找到一个正数<em class="italics"> p </em>使得链在等于<em class="italics"> p </em>的倍数的若干瞬间之后以相同的状态序列返回。第二个条件是所有状态必须是正循环的:这意味着，给定一个随机变量<em class="italics">N</em><sub style="font-style: italic;">instants</sub>(<em class="italics">I</em>)，描述返回到状态<em class="italics"> s </em> <sub style="font-style: italic;"> i </sub>，<img style="height: 1.2em! important;" src="img/B14713_11_051.png" alt=""/>所需的时刻数；因此，潜在地，所有的状态都可以在有限的时间内被重新访问。</p>
 
-			<p class="normal">我们<a id="_idIndexMarker671"/>之所以需要遍历条件，以及唯一平稳分布的存在，是因为我们正在考虑被建模为马尔可夫链的采样过程，其中下一个值是根据当前状态采样的。从一个状态到另一个状态的转换是为了找到更好的样本，正如我们将在Metropolis-Hastings采样器中看到的那样，我们也可以决定拒绝一个样本，并使链保持相同的状态。出于这个原因，我们需要确保算法收敛到唯一的稳定分布(接近我们的贝叶斯网络的真实的完全联合分布)。如果满足以下条件，就有可能证明链总是达到平稳分布:</p>
+			<p class="normal">我们<a id="_idIndexMarker671"/>之所以需要遍历条件，以及唯一平稳分布的存在，是因为我们正在考虑被建模为马尔可夫链的采样过程，其中下一个值是根据当前状态采样的。从一个状态到另一个状态的转换是为了找到更好的样本，正如我们将在 Metropolis-Hastings 采样器中看到的那样，我们也可以决定拒绝一个样本，并使链保持相同的状态。出于这个原因，我们需要确保算法收敛到唯一的稳定分布(接近我们的贝叶斯网络的真实的完全联合分布)。如果满足以下条件，就有可能证明链总是达到平稳分布:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_052.png" alt=""/></figure>
 
@@ -270,7 +270,7 @@ for i, t in enumerate(range(Nsamples)):
 
 			<h3 id="_idParaDest-176" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor186"/>吉布斯采样</h3>
 
-			<p class="normal">假设我们想获得贝叶斯网络的全联合概率P(X  <sub style="font-style: italic;"> 1 </sub> <em class="italics">，X </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，X</em><sub style="font-style: italic;">N</sub><em class="italics">)</em>；然而，变量的数量很大，没有办法以封闭的形式容易地解决这个问题。而且，想象一下，我们想得到一个边际分布，比如<em class="italics">P(X</em><sub style="font-style: italic;">2</sub><em class="italics">)</em>，但是要做到这一点我们需要对全联合概率进行积分，这个任务就更难了。吉布斯采样允许用迭代过程逼近所有的边际分布。如果我们有<em class="italics"> N </em>个变量，算法将继续以下步骤:</p>
+			<p class="normal">假设我们想获得贝叶斯网络的全联合概率 P(X  <sub style="font-style: italic;"> 1 </sub> <em class="italics">，X </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，X</em><sub style="font-style: italic;">N</sub><em class="italics">)</em>；然而，变量的数量很大，没有办法以封闭的形式容易地解决这个问题。而且，想象一下，我们想得到一个边际分布，比如<em class="italics">P(X</em><sub style="font-style: italic;">2</sub><em class="italics">)</em>，但是要做到这一点我们需要对全联合概率进行积分，这个任务就更难了。吉布斯采样允许用迭代过程逼近所有的边际分布。如果我们有<em class="italics"> N </em>个变量，算法将继续以下步骤:</p>
 
 			<ul>
 
@@ -294,7 +294,7 @@ for i, t in enumerate(range(Nsamples)):
 
 			<p class="normal">在迭代结束时，向量<em class="italics"> S </em>将包含每个分布的<em class="italics"> N </em> <sub style="font-style: italic;">次迭代</sub>个样本。因为我们需要确定概率，所以有必要像直接采样算法一样进行，计算单次出现的<a id="_idIndexMarker674"/>数量，并除以<em class="italics">N</em>t<sub style="font-style: italic;">迭代</sub>进行归一化。如果变量是连续的，可以考虑区间，计算每个区间包含多少样本。</p>
 
-			<p class="normal">对于小型网络，此过程与直接采样非常相似，只是在处理非常大的网络时，采样过程可能会变得很慢；但引入<em class="italics">X</em>T52】I的马尔可夫毯概念后可以简化算法，马尔可夫毯是<em class="italics">X</em>T56】I为<em class="italics">X</em>T60】I的前辈、后继、后继的前辈的随机变量集合(在某些书中，他们用父母和子女这两个术语来表示这些概念)。在贝叶斯网络中，变量<em class="italics">X</em>I<sub style="font-style: italic;">I</sub>是一个独立于所有其他变量的条件，给定它的马尔可夫毯。因此，如果我们定义函数<em class="italics">MB</em>(<em class="italics">X</em><sub style="font-style: italic;">I</sub>)，该函数返回blanket中的变量集，那么通用采样步骤可以重写为P(<em class="italics">X</em><sub style="font-style: italic;">I</sub>| MB(<em class="italics">X</em>T78】I【T79])，并且不再需要考虑所有其他变量。</p>
+			<p class="normal">对于小型网络，此过程与直接采样非常相似，只是在处理非常大的网络时，采样过程可能会变得很慢；但引入<em class="italics">X</em>T52】I 的马尔可夫毯概念后可以简化算法，马尔可夫毯是<em class="italics">X</em>T56】I 为<em class="italics">X</em>T60】I 的前辈、后继、后继的前辈的随机变量集合(在某些书中，他们用父母和子女这两个术语来表示这些概念)。在贝叶斯网络中，变量<em class="italics">X</em>I<sub style="font-style: italic;">I</sub>是一个独立于所有其他变量的条件，给定它的马尔可夫毯。因此，如果我们定义函数<em class="italics">MB</em>(<em class="italics">X</em><sub style="font-style: italic;">I</sub>)，该函数返回 blanket 中的变量集，那么通用采样步骤可以重写为 P(<em class="italics">X</em><sub style="font-style: italic;">I</sub>| MB(<em class="italics">X</em>T78】I【T79])，并且不再需要考虑所有其他变量。</p>
 
 			<p class="normal">为了理解这个概念，让我们考虑下图所示的网络:</p>
 
@@ -320,11 +320,11 @@ for i, t in enumerate(range(Nsamples)):
 
 			</ul>
 
-			<p class="normal">一般来说，如果N很大，那么基数为<em class="italics">| MB(X</em><sub style="font-style: italic;">I</sub><em class="italics">)|&lt;&lt;N</em>，这样就简化了过程(香草吉布斯<a id="_idIndexMarker675"/>采样需要每个变量有<em class="italics">N</em>–1个条件)。我们可以证明吉布斯采样从处于详细平衡的马尔可夫链中生成样本:</p>
+			<p class="normal">一般来说，如果 N 很大，那么基数为<em class="italics">| MB(X</em><sub style="font-style: italic;">I</sub><em class="italics">)|&lt;&lt;N</em>，这样就简化了过程(香草吉布斯<a id="_idIndexMarker675"/>采样需要每个变量有<em class="italics">N</em>–1 个条件)。我们可以证明吉布斯采样从处于详细平衡的马尔可夫链中生成样本:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_060.png" alt=""/></figure>
 
-			<p class="normal">因此，该过程收敛于唯一的平稳分布。这个算法相当简单；然而，它的性能并不出色，因为随机行走没有被调整以探索状态空间的正确区域，在该区域中找到好样本的概率很高。此外，轨迹还可能回到糟糕的状态，从而减慢整个过程。一个替代方案(也是Stan为连续随机变量实现的)是不掉头算法，本书不讨论。对这个主题感兴趣的读者可以在Hoffmann M. D .，Gelman A .，<em class="italics">The No-U-Turn Sampler:adaptive Setting Path length in Hamiltonian Monte Carlo</em>，arXiv:1111.4246，2011中找到完整的描述。</p>
+			<p class="normal">因此，该过程收敛于唯一的平稳分布。这个算法相当简单；然而，它的性能并不出色，因为随机行走没有被调整以探索状态空间的正确区域，在该区域中找到好样本的概率很高。此外，轨迹还可能回到糟糕的状态，从而减慢整个过程。一个替代方案(也是 Stan 为连续随机变量实现的)是不掉头算法，本书不讨论。对这个主题感兴趣的读者可以在 Hoffmann M. D .，Gelman A .，<em class="italics">The No-U-Turn Sampler:adaptive Setting Path length in Hamiltonian Monte Carlo</em>，arXiv:1111.4246，2011 中找到完整的描述。</p>
 
 			<h3 id="_idParaDest-177" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor187"/>大都会-黑斯廷斯算法</h3>
 
@@ -332,9 +332,9 @@ for i, t in enumerate(range(Nsamples)):
 
 			<p class="normal">假设我们有表达式<em class="italics"> P(A|B) = KP(B|A)P(A) </em>。我特意插入了归一化常数<em class="italics"> K </em>,因为如果我们知道它，我们可以立即获得后验概率；然而，找到它通常需要对<em class="italics"> P(B|A)P(A) </em>进行积分，并且这种操作在封闭形式下是不可能的。</p>
 
-			<p class="normal">Metropolis-Hastings算法可以帮助我们解决这个问题。假设我们需要从<em class="italics"> P(X </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，X </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，X </em> <sub style="font-style: italic;"> N </sub> <em class="italics"> ) </em>中采样，但是我们知道这个分布最多是一个归一化常数，所以<img style="height: 1.5em! important;" src="img/B14713_11_061.png" alt=""/>。为了简单起见，从现在开始我们把所有变量都折叠成一个向量，所以<img style="height: 1.2em! important;" src="img/B14713_11_062.png" alt=""/>。</p>
+			<p class="normal">Metropolis-Hastings 算法可以帮助我们解决这个问题。假设我们需要从<em class="italics"> P(X </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，X </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，X </em> <sub style="font-style: italic;"> N </sub> <em class="italics"> ) </em>中采样，但是我们知道这个分布最多是一个归一化常数，所以<img style="height: 1.5em! important;" src="img/B14713_11_061.png" alt=""/>。为了简单起见，从现在开始我们把所有变量都折叠成一个向量，所以<img style="height: 1.2em! important;" src="img/B14713_11_062.png" alt=""/>。</p>
 
-			<p class="normal">再来看另一个分布<img style="height: 1.5em! important;" src="img/B14713_11_063.png" alt=""/>，叫做<em class="italics">候选生成分布</em>。这个选择没有特别的<a id="_idIndexMarker677"/>限制，只有那个<img style="height: 1.2em! important;" src="img/B14713_11_064.png" alt=""/>，很容易出样。在某些情况下，q可以选择为与分布<img style="height: 1.2em! important;" src="img/B14713_11_065.png" alt=""/>非常相似的函数，这是我们的目标，而在其他情况下，可以使用均值等于<em class="italics">x</em><sup>(</sup><sup style="font-style: italic;">I-1</sup><sup>)</sup>的正态分布。正如我们将要看到的，这个函数作为一个提议生成器，但是我们没有义务接受从中抽取的所有样本；因此，潜在地，可以使用与<em class="italics"> P(X) </em>具有相同域的任何分布。</p>
+			<p class="normal">再来看另一个分布<img style="height: 1.5em! important;" src="img/B14713_11_063.png" alt=""/>，叫做<em class="italics">候选生成分布</em>。这个选择没有特别的<a id="_idIndexMarker677"/>限制，只有那个<img style="height: 1.2em! important;" src="img/B14713_11_064.png" alt=""/>，很容易出样。在某些情况下，q 可以选择为与分布<img style="height: 1.2em! important;" src="img/B14713_11_065.png" alt=""/>非常相似的函数，这是我们的目标，而在其他情况下，可以使用均值等于<em class="italics">x</em><sup>(</sup><sup style="font-style: italic;">I-1</sup><sup>)</sup>的正态分布。正如我们将要看到的，这个函数作为一个提议生成器，但是我们没有义务接受从中抽取的所有样本；因此，潜在地，可以使用与<em class="italics"> P(X) </em>具有相同域的任何分布。</p>
 
 			<p class="normal">当样本被接受时，马尔可夫链转移到下一个状态。否则，它将保留在当前文件中。这个决策过程是基于这样的想法，即采样器必须探索最重要的状态空间区域，并丢弃找到好样本的概率较低的区域。</p>
 
@@ -370,9 +370,9 @@ for i, t in enumerate(range(Nsamples)):
 
 			<p class="normal">以概率<img src="img/B14713_11_076.png" alt=""/>拒绝样本<img src="img/B14713_11_074.png" alt=""/>设置<img src="img/B14713_11_075.png" alt=""/></p>
 
-			<p class="normal">可以证明(证明将被省略，但在Walsh B .，<em class="italics">Markov Chain Monte Carlo and Gibbs Sampling</em>，EEB 596z讲义，2002)Metropolis-Hastings算法的转移概率<a id="_idIndexMarker678"/>满足详细的平衡方程(<img style="height: 1.5em! important;" src="img/B14713_11_077.png" alt=""/>)，因此该算法收敛于真实的后验分布。</p>
+			<p class="normal">可以证明(证明将被省略，但在 Walsh B .，<em class="italics">Markov Chain Monte Carlo and Gibbs Sampling</em>，EEB 596z 讲义，2002)Metropolis-Hastings 算法的转移概率<a id="_idIndexMarker678"/>满足详细的平衡方程(<img style="height: 1.5em! important;" src="img/B14713_11_077.png" alt=""/>)，因此该算法收敛于真实的后验分布。</p>
 
-			<h4 class="title" lang="en-GB" xml:lang="en-GB">Metropolis-Hastings抽样示例</h4>
+			<h4 class="title" lang="en-GB" xml:lang="en-GB">Metropolis-Hastings 抽样示例</h4>
 
 			<p class="normal">给定<em class="italics"> P(B|A) </em>和<em class="italics"> P(A) </em>的乘积，我们可以实现该算法来找到后验分布<em class="italics"> P(A|B) </em>，而不需要<a id="_idIndexMarker679"/>考虑需要复杂积分的归一化常数。</p>
 
@@ -384,7 +384,7 @@ for i, t in enumerate(range(Nsamples)):
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_079.png" alt=""/></figure>
 
-			<p class="normal">为了解决这个问题，我们采用随机漫步Metropolis-Hastings，它由选择<img style="height: 1.5em! important;" src="img/B14713_11_080.png" alt=""/>组成。这种选择允许简化数值<img src="img/B14713_11_081.png" alt=""/>，因为两项<img style="height: 1.5em! important;" src="img/B14713_11_082.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_083.png" alt=""/>相等(得益于围绕穿过<em class="italics"> x </em>的垂直轴对称<sub style="font-style: italic;">表示</sub>)并且可以被抵消，所以<img src="img/B14713_11_084.png" alt=""/>变成了<img style="height: 1.2em! important;" src="img/B14713_11_085.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_086.png" alt=""/>之间的比值。</p>
+			<p class="normal">为了解决这个问题，我们采用随机漫步 Metropolis-Hastings，它由选择<img style="height: 1.5em! important;" src="img/B14713_11_080.png" alt=""/>组成。这种选择允许简化数值<img src="img/B14713_11_081.png" alt=""/>，因为两项<img style="height: 1.5em! important;" src="img/B14713_11_082.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_083.png" alt=""/>相等(得益于围绕穿过<em class="italics"> x </em>的垂直轴对称<sub style="font-style: italic;">表示</sub>)并且可以被抵消，所以<img src="img/B14713_11_084.png" alt=""/>变成了<img style="height: 1.2em! important;" src="img/B14713_11_085.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_086.png" alt=""/>之间的比值。</p>
 
 			<p class="normal">第一件事是定义函数:</p>
 
@@ -400,7 +400,7 @@ def g(x):
 def q(xp):
     return np.random.normal(xp)</pre>
 
-			<p class="normal">现在，我们可以用100，000次迭代和<em class="italics">x</em><sup>【0】</sup>= 1开始我们的采样过程:</p>
+			<p class="normal">现在，我们可以用 100，000 次迭代和<em class="italics">x</em><sup>【0】</sup>= 1 开始我们的采样过程:</p>
 
 			<pre>nb_iterations = 100000
 x = 1.0
@@ -426,17 +426,17 @@ for i in range(nb_iterations):
 
 			<p class="packt_figref">样本概率密度函数(左)和累积分布(右)</p>
 
-			<h2 id="_idParaDest-178" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor188"/>使用PyMC3采样</h2>
+			<h2 id="_idParaDest-178" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor188"/>使用 PyMC3 采样</h2>
 
-			<p class="normal">PyMC3是一个<a id="_idIndexMarker681"/>强大的Python贝叶斯框架<a id="_idIndexMarker682"/>，它依赖于ano来执行高速计算(它也可以单独使用NumPy)。它实现了所有最重要的连续和离散分布，并主要使用不掉头和Metropolis-Hastings算法执行采样过程。</p>
+			<p class="normal">PyMC3 是一个<a id="_idIndexMarker681"/>强大的 Python 贝叶斯框架<a id="_idIndexMarker682"/>，它依赖于 ano 来执行高速计算(它也可以单独使用 NumPy)。它实现了所有最重要的连续和离散分布，并主要使用不掉头和 Metropolis-Hastings 算法执行采样过程。</p>
 
-			<div><div><p class="Information-Box--PACKT-">关于PyMC3 API(发行版、函数和绘图工具)的所有细节<a id="_idIndexMarker683"/>，我建议访问文档主页<a href="http://docs.pymc.io/index.html">http://docs.pymc.io/index.html</a>，在那里也可以找到一些非常直观的教程。</p>
+			<div><div><p class="Information-Box--PACKT-">关于 PyMC3 API(发行版、函数和绘图工具)的所有细节<a id="_idIndexMarker683"/>，我建议访问文档主页<a href="http://docs.pymc.io/index.html">http://docs.pymc.io/index.html</a>，在那里也可以找到一些非常直观的教程。</p>
 
 				</div>
 
 			</div>
 
-			<p class="normal">我们想要建模和模拟的示例基于这个场景:从伦敦到罗马的每日航班的预定起飞时间是上午12:00，标准飞行时间是两个小时。我们需要在目的地机场组织运营，但我们不希望在飞机着陆前太久分配资源。因此，我们希望使用贝叶斯网络对流程进行建模，并考虑一些可能影响到达时间的常见因素。</p>
+			<p class="normal">我们想要建模和模拟的示例基于这个场景:从伦敦到罗马的每日航班的预定起飞时间是上午 12:00，标准飞行时间是两个小时。我们需要在目的地机场组织运营，但我们不希望在飞机着陆前太久分配资源。因此，我们希望使用贝叶斯网络对流程进行建模，并考虑一些可能影响到达时间的常见因素。</p>
 
 			<p class="normal">特别是，我们知道入职流程可能比预期的要长，加油流程也是如此，即使它们是并行进行的。伦敦空中交通管制可以强制延迟，当飞机接近罗马时也会发生同样的情况。我们也知道恶劣天气的出现会导致另一次延误，因为恶劣天气会迫使我们改变路线。我们可以用下面的图来总结这一分析:</p>
 
@@ -460,7 +460,7 @@ for i in range(nb_iterations):
 
 				<li class="list">恶劣的天气~伯努利(<em class="italics"> p </em> =0.35)</li>
 
-				<li class="list">飞行时间~指数(<img src="img/B14713_11_091.png" alt=""/> =0.5 - (0.1恶劣天气))(一个伯努利分布的输出是<code class="Code-In-Text--PACKT-">0</code>或<code class="Code-In-Text--PACKT-">1</code>，对应<code class="Code-In-Text--PACKT-">False</code>和<code class="Code-In-Text--PACKT-">True</code>。)</li>
+				<li class="list">飞行时间~指数(<img src="img/B14713_11_091.png" alt=""/> =0.5 - (0.1 恶劣天气))(一个伯努利分布的输出是<code class="Code-In-Text--PACKT-">0</code>或<code class="Code-In-Text--PACKT-">1</code>，对应<code class="Code-In-Text--PACKT-">False</code>和<code class="Code-In-Text--PACKT-">True</code>。)</li>
 
 				<li class="list">到达时间=起飞时间+飞行时间+到达交通延误</li>
 
@@ -468,7 +468,7 @@ for i in range(nb_iterations):
 
 			<p class="normal">变量出发时间和到达时间是随机变量的函数，飞行时间的参数<img src="img/B14713_11_091.png" alt=""/>也是恶劣天气的函数。</p>
 
-			<p class="normal">即使模型不是很复杂，直接推断也是相当低效的，因此我们想要使用PyMC3模拟<a id="_idIndexMarker685"/>过程(可以使用标准的<code class="Code-In-Text--PACKT-">pip</code> / <code class="Code-In-Text--PACKT-">conda</code>命令安装该包，如<a href="http://docs.pymc.io/index.html">http://docs.pymc.io/index.html</a>所示)。</p>
+			<p class="normal">即使模型不是很复杂，直接推断也是相当低效的，因此我们想要使用 PyMC3 模拟<a id="_idIndexMarker685"/>过程(可以使用标准的<code class="Code-In-Text--PACKT-">pip</code> / <code class="Code-In-Text--PACKT-">conda</code>命令安装该包，如<a href="http://docs.pymc.io/index.html">http://docs.pymc.io/index.html</a>所示)。</p>
 
 			<p class="normal">第一步是创建一个模型实例:</p>
 
@@ -517,17 +517,17 @@ passenger_onboarding = \
 
 			<p class="normal">我们已经导入了两个<a id="_idIndexMarker686"/>名称空间，<code class="Code-In-Text--PACKT-">pymc3.distributions.continuous</code>和<code class="Code-In-Text--PACKT-">pymc3.distributions.discrete</code>，因为我们使用了两种类型的变量。瓦尔德和指数是连续分布，而伯努利是离散的。在前三行中，我们声明了变量<code class="Code-In-Text--PACKT-">passenger_onboarding</code>、<code class="Code-In-Text--PACKT-">refueling</code>和<code class="Code-In-Text--PACKT-">departure_traffic_delay</code>。结构总是相同的:我们需要指定对应于期望的分布的类，传递变量名和所有必需的参数。</p>
 
-			<p class="normal">变量<code class="Code-In-Text--PACKT-">departure_time</code>被声明为<code class="Code-In-Text--PACKT-">pm.Deterministic</code>。在PyMC3中，这意味着一旦设置了所有的随机元素，它的值就完全确定了。事实上，如果我们从<code class="Code-In-Text--PACKT-">departure_traffic_delay</code>、<code class="Code-In-Text--PACKT-">passenger_onboarding</code>和<code class="Code-In-Text--PACKT-">refueling</code>采样，我们会得到<code class="Code-In-Text--PACKT-">departure_time</code>的确定值。在这个声明中，我们还使用了实用函数<code class="Code-In-Text--PACKT-">pmm.switch</code>，它基于第一个参数<a id="_idIndexMarker687"/>来操作二元选择(例如，<em class="italics">if A&gt;B return A else return B</em>)。</p>
+			<p class="normal">变量<code class="Code-In-Text--PACKT-">departure_time</code>被声明为<code class="Code-In-Text--PACKT-">pm.Deterministic</code>。在 PyMC3 中，这意味着一旦设置了所有的随机元素，它的值就完全确定了。事实上，如果我们从<code class="Code-In-Text--PACKT-">departure_traffic_delay</code>、<code class="Code-In-Text--PACKT-">passenger_onboarding</code>和<code class="Code-In-Text--PACKT-">refueling</code>采样，我们会得到<code class="Code-In-Text--PACKT-">departure_time</code>的确定值。在这个声明中，我们还使用了实用函数<code class="Code-In-Text--PACKT-">pmm.switch</code>，它基于第一个参数<a id="_idIndexMarker687"/>来操作二元选择(例如，<em class="italics">if A&gt;B return A else return B</em>)。</p>
 
-			<p class="normal">其他变量非常相似，除了<code class="Code-In-Text--PACKT-">flight_time</code>是一个带参数的指数变量<img src="img/B14713_11_091.png" alt=""/>，是另一个变量(<code class="Code-In-Text--PACKT-">rough_weather</code>)的函数。因为如果天气恶劣，伯努利变量以概率<em class="italics"> p </em>输出1，以概率1-<em class="italics">p</em><img style="height: 0.9em! important;" src="img/B14713_11_094.png" alt=""/>输出0，否则输出0.5。</p>
+			<p class="normal">其他变量非常相似，除了<code class="Code-In-Text--PACKT-">flight_time</code>是一个带参数的指数变量<img src="img/B14713_11_091.png" alt=""/>，是另一个变量(<code class="Code-In-Text--PACKT-">rough_weather</code>)的函数。因为如果天气恶劣，伯努利变量以概率<em class="italics"> p </em>输出 1，以概率 1-<em class="italics">p</em><img style="height: 0.9em! important;" src="img/B14713_11_094.png" alt=""/>输出 0，否则输出 0.5。</p>
 
 			<h3 id="_idParaDest-179" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor189"/>运行采样过程</h3>
 
-			<p class="normal">一旦模型建立起来，就可以通过采样过程来模拟它。PyMC3根据变量类型自动选择<a id="_idIndexMarker688"/>最佳采样器。</p>
+			<p class="normal">一旦模型建立起来，就可以通过采样过程来模拟它。PyMC3 根据变量类型自动选择<a id="_idIndexMarker688"/>最佳采样器。</p>
 
-			<p class="normal">由于模型不是很复杂，我们可以使用4个链的默认值将该过程限制为500个样本(对于更复杂的情况，该参数可以增加)。此外，作为默认设置，PyMC3将跳过前500个样本(通过参数draws设置),因为链可能尚未达到稳定分布。这个预热阶段非常重要，因为第一个样本是不可靠的，包含它们会降低后验概率预测的准确性。相反，使用多个链有助于减少差异。</p>
+			<p class="normal">由于模型不是很复杂，我们可以使用 4 个链的默认值将该过程限制为 500 个样本(对于更复杂的情况，该参数可以增加)。此外，作为默认设置，PyMC3 将跳过前 500 个样本(通过参数 draws 设置),因为链可能尚未达到稳定分布。这个预热阶段非常重要，因为第一个样本是不可靠的，包含它们会降低后验概率预测的准确性。相反，使用多个链有助于减少差异。</p>
 
-			<p class="normal">因此，我们将对总共(500 + 500) x 4 = 4，000个数据点进行采样:</p>
+			<p class="normal">因此，我们将对总共(500 + 500) x 4 = 4，000 个数据点进行采样:</p>
 
 			<pre>nb_samples = 500
 with model:
@@ -540,7 +540,7 @@ samples = pm.sample(draws=nb_samples,
 
 			<p class="packt_figref">所有随机变量的分布和样本</p>
 
-			<p class="normal">右栏显示为随机变量生成的样本，而左栏显示相对频率。这个图有助于从视觉上证实我们最初的想法；实际上，到达时间的大部分质量集中在14:00到16:00(数字总是小数，所以需要换算时间)；然而，我们<a id="_idIndexMarker689"/>应该积分来得到概率。相反，通过<code class="Code-In-Text--PACKT-">pm.summary()</code>函数，PyMC3提供了一个统计摘要，可以帮助我们做出正确的决策。在下面的代码片段中，显示了包含整个摘要(Pandas数据帧)的输出:</p>
+			<p class="normal">右栏显示为随机变量生成的样本，而左栏显示相对频率。这个图有助于从视觉上证实我们最初的想法；实际上，到达时间的大部分质量集中在 14:00 到 16:00(数字总是小数，所以需要换算时间)；然而，我们<a id="_idIndexMarker689"/>应该积分来得到概率。相反，通过<code class="Code-In-Text--PACKT-">pm.summary()</code>函数，PyMC3 提供了一个统计摘要，可以帮助我们做出正确的决策。在下面的代码片段中，显示了包含整个摘要(Pandas 数据帧)的输出:</p>
 
 			<pre>import pandas as pd
 with pd.option_context('display.max_rows', None, 
@@ -589,13 +589,13 @@ Arrival time             1787.109205  0.999169</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_105.png" alt=""/></figure>
 
-			<p class="normal">特别地，当<img style="height: 1.2em! important;" src="img/B14713_11_106.png" alt=""/> if <img style="height: 1.5em! important;" src="img/B14713_11_107.png" alt=""/>时，这意味着序列没有被适当地混合(阈值0.1可以被认为是最佳实践)，并且估计可能是不准确的(即使理论上<img style="height: 1.5em! important;" src="img/B14713_11_108.png" alt=""/>，收敛速度可能太慢以至于不能确保准确的结果)。在我们的例子中，可以看到所有的<img style="height: 1.3em! important;" src="img/B14713_11_109.png" alt=""/>，因此我们可以信任混合结果。</p>
+			<p class="normal">特别地，当<img style="height: 1.2em! important;" src="img/B14713_11_106.png" alt=""/> if <img style="height: 1.5em! important;" src="img/B14713_11_107.png" alt=""/>时，这意味着序列没有被适当地混合(阈值 0.1 可以被认为是最佳实践)，并且估计可能是不准确的(即使理论上<img style="height: 1.5em! important;" src="img/B14713_11_108.png" alt=""/>，收敛速度可能太慢以至于不能确保准确的结果)。在我们的例子中，可以看到所有的<img style="height: 1.3em! important;" src="img/B14713_11_109.png" alt=""/>，因此我们可以信任混合结果。</p>
 
-			<p class="normal">由于混合不是立即进行的，有效样本量(通常表示为<code class="Code-In-Text--PACKT-">n_eff</code>)对应于<em class="italics">可靠</em>抽取的数量(即混合后获得的数量)。这个值比<img src="img/B14713_11_110.png" alt=""/>提供的信息少，但是它有助于理解迭代次数是否足够或者最好增加它。例如，如果我们预计至少有1，000次抽奖，那么示例中获得的结果是令人满意的。</p>
+			<p class="normal">由于混合不是立即进行的，有效样本量(通常表示为<code class="Code-In-Text--PACKT-">n_eff</code>)对应于<em class="italics">可靠</em>抽取的数量(即混合后获得的数量)。这个值比<img src="img/B14713_11_110.png" alt=""/>提供的信息少，但是它有助于理解迭代次数是否足够或者最好增加它。例如，如果我们预计至少有 1，000 次抽奖，那么示例中获得的结果是令人满意的。</p>
 
-			<p class="normal">相反，如果后验分布的复杂性很高，并且我们希望至少抽取2，000个，则模拟必须延长，因为混合时间不允许我们对所有参数都达到该值。</p>
+			<p class="normal">相反，如果后验分布的复杂性很高，并且我们希望至少抽取 2，000 个，则模拟必须延长，因为混合时间不允许我们对所有参数都达到该值。</p>
 
-			<h2 id="_idParaDest-180" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor190"/>使用PyStan采样</h2>
+			<h2 id="_idParaDest-180" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor190"/>使用 PyStan 采样</h2>
 
 			<p class="normal">现在让我们考虑一个使用另一个流行框架(Stan)的稍微简单一点的例子。假设您想要将飞机的到达时间建模为三个因素的线性组合:</p>
 
@@ -617,7 +617,7 @@ Arrival time             1787.109205  0.999169</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img style="height: 4.5em! important;" src="img/B14713_11_112.png" alt=""/></figure>
 
-			<p class="normal">由于航空公司的目标是最小化出发延迟，我们选择了指数分布，其p.d.f为:</p>
+			<p class="normal">由于航空公司的目标是最小化出发延迟，我们选择了指数分布，其 p.d.f 为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_113.png" alt=""/></figure>
 
@@ -625,7 +625,7 @@ Arrival time             1787.109205  0.999169</pre>
 
 			<p class="normal">对于到达延误，我们做了与出发时相同的假设，因此采用了另一个更低的指数<img src="img/B14713_11_114.png" alt=""/>(因为飞机长时间飞行的可能性有限)。</p>
 
-			<p class="normal">Stan基于一种被转化为高度优化的C++代码的元语言；因此，第一步是定义整个模型:</p>
+			<p class="normal">Stan 基于一种被转化为高度优化的 C++代码的元语言；因此，第一步是定义整个模型:</p>
 
 			<pre>code = """
 data {
@@ -657,13 +657,13 @@ model {
 
 			<ul>
 
-				<li class="list"><code class="Code-In-Text--PACKT-">data</code>，描述作为输入观测值传递的参数。元语言的细节可以在官方文档中找到；然而，它们非常直观。在这种情况下，我们声明一个整数变量num来定义观察值的数量，并声明四个向量来存储它们的值(作为实型双精度/浮点型变量)。</li>
+				<li class="list"><code class="Code-In-Text--PACKT-">data</code>，描述作为输入观测值传递的参数。元语言的细节可以在官方文档中找到；然而，它们非常直观。在这种情况下，我们声明一个整数变量 num 来定义观察值的数量，并声明四个向量来存储它们的值(作为实型双精度/浮点型变量)。</li>
 
 				<li class="list"><code class="Code-In-Text--PACKT-">parameters</code>，包含估计参数列表。该块中的每个值将被视为一个变量，必须使用蒙特卡罗算法进行估计。</li>
 
 				<li class="list"><code class="Code-In-Text--PACKT-">transformed parameters</code>，在本例中没有，但是它通常包含所有那些通过特定转换获得的参数(例如，函数)。</li>
 
-				<li class="list"><code class="Code-In-Text--PACKT-">model</code>，其中<a id="_idIndexMarker694"/>包含了代码的主要结构，描述了每个随机变量的性质以及它们如何组合以产生期望的结果。在我们的例子中，我们已经声明了所有的p.d.f .和到达时间的结构，它有一个定义明确的平均值，但是有一个可变的标准偏差，这个标准偏差是可以估计的。</li>
+				<li class="list"><code class="Code-In-Text--PACKT-">model</code>，其中<a id="_idIndexMarker694"/>包含了代码的主要结构，描述了每个随机变量的性质以及它们如何组合以产生期望的结果。在我们的例子中，我们已经声明了所有的 p.d.f .和到达时间的结构，它有一个定义明确的平均值，但是有一个可变的标准偏差，这个标准偏差是可以估计的。</li>
 
 			</ul>
 
@@ -679,12 +679,12 @@ arrival_time = np.random.normal(departure_delay +
                                 arrival_delay, 
                                 0.5, size=nb_samples)</pre>
 
-			<p class="normal">在真实案例中，我们应该已经通过实际观察收集了这些数据。一旦模型准备好，我们就可以用PyStan编译它<a id="_idIndexMarker695"/>(这个包一般可以用命令<code class="Code-In-Text--PACKT-">pip install pystan</code>安装，但是读者可以在页面<a href="https://pystan.readthedocs.io/en/latest/installation_beginner.html">https://PyStan . readthedocs . io/en/latest/installation _ beginner . html</a>找到详细的说明):</p>
+			<p class="normal">在真实案例中，我们应该已经通过实际观察收集了这些数据。一旦模型准备好，我们就可以用 PyStan 编译它<a id="_idIndexMarker695"/>(这个包一般可以用命令<code class="Code-In-Text--PACKT-">pip install pystan</code>安装，但是读者可以在页面<a href="https://pystan.readthedocs.io/en/latest/installation_beginner.html">https://PyStan . readthedocs . io/en/latest/installation _ beginner . html</a>找到详细的说明):</p>
 
 			<pre>import pystan
 model = pystan.StanModel(model_code=code)</pre>
 
-			<p class="normal">通过这种方式，PyStan将<a id="_idIndexMarker696"/>把代码转换成C++模块，以达到最佳性能。一旦模型编译完成(这个过程可能需要一些时间，这取决于可用的硬件)，就需要使用我们的数据来拟合它。为此，我们首先需要创建一个字典，其中每个键都与代码的数据部分中声明的变量名相匹配:</p>
+			<p class="normal">通过这种方式，PyStan 将<a id="_idIndexMarker696"/>把代码转换成 C++模块，以达到最佳性能。一旦模型编译完成(这个过程可能需要一些时间，这取决于可用的硬件)，就需要使用我们的数据来拟合它。为此，我们首先需要创建一个字典，其中每个键都与代码的数据部分中声明的变量名相匹配:</p>
 
 			<pre>data = {
     "num": nb_samples,
@@ -694,7 +694,7 @@ model = pystan.StanModel(model_code=code)</pre>
     "arrival_delay": arrival_delay
 }</pre>
 
-			<p class="normal">一旦词典准备好了，我们就可以根据模型进行修改了。在这种情况下，我们希望执行10，000次迭代，使用2个链预热1，000次绘制:</p>
+			<p class="normal">一旦词典准备好了，我们就可以根据模型进行修改了。在这种情况下，我们希望执行 10，000 次迭代，使用 2 个链预热 1，000 次绘制:</p>
 
 			<pre>fit = model.sampling(data=data, iter=10000, 
                      refresh=10000, warmup=1000, 
@@ -708,7 +708,7 @@ model = pystan.StanModel(model_code=code)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_09.png" alt=""/></figure>
 
-			<p class="normal">概要<a id="_idIndexMarker697"/>提供了关于每个估计参数的信息。对于所有参数，最小有效样本量大于5，000和<img style="height: 1.2em! important;" src="img/B14713_11_115.png" alt=""/>(这并不奇怪，因为我们创建了数据集，但是我邀请读者采用不同的分布并检查结果)。为了确认估计值，我们可以要求模型从后验分布中取样:</p>
+			<p class="normal">概要<a id="_idIndexMarker697"/>提供了关于每个估计参数的信息。对于所有参数，最小有效样本量大于 5，000 和<img style="height: 1.2em! important;" src="img/B14713_11_115.png" alt=""/>(这并不奇怪，因为我们创建了数据集，但是我邀请读者采用不同的分布并检查结果)。为了确认估计值，我们可以要求模型从后验分布中取样:</p>
 
 			<pre>ext = fit.extract()
 beta_a = ext["beta_a"]
@@ -722,7 +722,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<p class="packt_figref">抽样估计的分布</p>
 
-			<p class="normal">在处理指数分布时，读者必须注意Stan和NumPy之间的区别。事实上，NumPy将参数<img src="img/B14713_11_116.png" alt=""/>视为<img src="img/B14713_11_117.png" alt=""/>，因此，图表是正确的，峰值对应于真实值。考虑到<a id="_idIndexMarker698"/>行程时间，<img src="img/B14713_11_118.png" alt=""/>正态分布在实际平均值附近，而<img src="img/B14713_11_119.png" alt=""/>不对称，表明较大的方差比类似的较小方差更不可能。然而，该分布有一个长的正尾，如<img src="img/B14713_11_120.png" alt=""/>。使用这些值，可以确定平均值，从而确定平均到达时间。在此模型中，我们已经将所有的不确定性包括在先验分布中(加上到达时间的标准偏差)，但是，也可以采用与线性回归相同的方式，将模型构建为:</p>
+			<p class="normal">在处理指数分布时，读者必须注意 Stan 和 NumPy 之间的区别。事实上，NumPy 将参数<img src="img/B14713_11_116.png" alt=""/>视为<img src="img/B14713_11_117.png" alt=""/>，因此，图表是正确的，峰值对应于真实值。考虑到<a id="_idIndexMarker698"/>行程时间，<img src="img/B14713_11_118.png" alt=""/>正态分布在实际平均值附近，而<img src="img/B14713_11_119.png" alt=""/>不对称，表明较大的方差比类似的较小方差更不可能。然而，该分布有一个长的正尾，如<img src="img/B14713_11_120.png" alt=""/>。使用这些值，可以确定平均值，从而确定平均到达时间。在此模型中，我们已经将所有的不确定性包括在先验分布中(加上到达时间的标准偏差)，但是，也可以采用与线性回归相同的方式，将模型构建为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_121.png" alt=""/></figure>
 
@@ -730,7 +730,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<p class="normal">这种方法的优点是更容易解释，因为系数<img src="img/B14713_11_122.png" alt=""/>(例如，它们的平均值和标准偏差)的大小与每个因素对到达时间的影响直接相关。具体策略的选择取决于背景；然而，考虑到框架的灵活性和计算能力，我强烈建议每当存在未管理的不确定性来源时，避免使用确定性变量。</p>
 
-			<p class="normal">如果先验信息<a id="_idIndexMarker699"/>有限，总是可以默认非信息先验(例如，均匀分布)，让模型自己找到最佳参数。另一方面，如果观察数据集有限，依靠领域专家来定义最可靠的先验分布可能会有所帮助(例如，在我们的情况下，我们可能只观察到几个航班，而空中交通管制员可以确认到达延迟通常接近于0，因为机场没有太多的进入流量)。</p>
+			<p class="normal">如果先验信息<a id="_idIndexMarker699"/>有限，总是可以默认非信息先验(例如，均匀分布)，让模型自己找到最佳参数。另一方面，如果观察数据集有限，依靠领域专家来定义最可靠的先验分布可能会有所帮助(例如，在我们的情况下，我们可能只观察到几个航班，而空中交通管制员可以确认到达延迟通常接近于 0，因为机场没有太多的进入流量)。</p>
 
 			<p class="normal">当需要在先验知识和数据证据之间进行权衡时，贝叶斯方法的优势是显而易见的。在某些情况下，前者可能会有偏差或受到限制，因此最好完全依赖数据(假设收集了足够多的数据点)。相反，当专家可以提供准确的细节而数据点有限时，最好按照预期对先验进行建模，并让模型相应地调整参数。</p>
 
@@ -758,29 +758,29 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<p class="normal">马尔可夫假设适用于许多现实生活中的过程，如果它们是自然的一阶马尔可夫过程，或者如果状态包含证明一个转变所需的所有历史。换句话说，在许多情况下，如果状态是<em class="italics"> A </em>，那么就有一个到<em class="italics"> B </em>的过渡，最后到<em class="italics"> C </em>。我们假设当在<em class="italics"> C </em>时，系统从携带由<em class="italics"> A </em>提供的一部分信息的状态(<em class="italics"> B </em>)转移。</p>
 
-			<p class="normal">例如，如果我们正在填充一个水箱，我们可以在时间<em class="italics"> t </em>、<em class="italics"> t </em> + 1测量水位(我们系统的状态)……如果因为我们没有稳定器而用随机变量模拟水流，我们可以找到水在时间<em class="italics"> t </em>、<em class="italics">P</em>(<em class="italics">L</em><sub style="font-style: italic;">t<em class="italics">达到某一水位的概率当然，检查所有先前状态的条件是没有意义的，因为如果水平例如是在时间<em class="italics">t</em>–1的80 <em class="italics"> m </em>，那么确定在时间<em class="italics"> t </em>的新水平(状态)的概率所需的所有信息已经包含在该状态中(80 <em class="italics"> m </em>)。</em></sub></p>
+			<p class="normal">例如，如果我们正在填充一个水箱，我们可以在时间<em class="italics"> t </em>、<em class="italics"> t </em> + 1 测量水位(我们系统的状态)……如果因为我们没有稳定器而用随机变量模拟水流，我们可以找到水在时间<em class="italics"> t </em>、<em class="italics">P</em>(<em class="italics">L</em><sub style="font-style: italic;">t<em class="italics">达到某一水位的概率当然，检查所有先前状态的条件是没有意义的，因为如果水平例如是在时间<em class="italics">t</em>–1 的 80 <em class="italics"> m </em>，那么确定在时间<em class="italics"> t </em>的新水平(状态)的概率所需的所有信息已经包含在该状态中(80 <em class="italics"> m </em>)。</em></sub></p>
 
-			<p class="normal">在这一点上，我们<a id="_idIndexMarker702"/>可以开始分析如何训练一个HMM，以及如何确定给定一个观察序列的最可能的隐藏状态。为简单起见，我们称<em class="italics"> A </em>为转移概率矩阵，<em class="italics"> B </em>为包含所有<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">I</sub>|<em class="italics">x</em><sub style="font-style: italic;">t</sub>)的矩阵。得到的模型可以通过那些元素的知识来确定:<em class="italics"> HMM = {A，B} </em>。</p>
+			<p class="normal">在这一点上，我们<a id="_idIndexMarker702"/>可以开始分析如何训练一个 HMM，以及如何确定给定一个观察序列的最可能的隐藏状态。为简单起见，我们称<em class="italics"> A </em>为转移概率矩阵，<em class="italics"> B </em>为包含所有<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">I</sub>|<em class="italics">x</em><sub style="font-style: italic;">t</sub>)的矩阵。得到的模型可以通过那些元素的知识来确定:<em class="italics"> HMM = {A，B} </em>。</p>
 
 			<h2 id="_idParaDest-182" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor192"/>向前向后算法</h2>
 
-			<p class="normal">向前向后算法<a id="_idIndexMarker703"/>是一种简单但<a id="_idIndexMarker704"/>有效的方法，用于在给定一系列观察值的情况下找到转移概率矩阵<em class="italics">T</em><em class="italics">o</em><sub style="font-style: italic;">1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;"> t </sub>。第一步称为正向阶段，包括确定一系列观察值的概率<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub> | <em class="italics"> A，B </em>)。如果我们需要知道一个序列的似然性，并且有必要与反相一起估计潜在HMM的结构(<em class="italics"> A </em>和<em class="italics"> B </em>),那么这条信息可能是直接有用的。</p>
+			<p class="normal">向前向后算法<a id="_idIndexMarker703"/>是一种简单但<a id="_idIndexMarker704"/>有效的方法，用于在给定一系列观察值的情况下找到转移概率矩阵<em class="italics">T</em><em class="italics">o</em><sub style="font-style: italic;">1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;"> t </sub>。第一步称为正向阶段，包括确定一系列观察值的概率<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub> | <em class="italics"> A，B </em>)。如果我们需要知道一个序列的似然性，并且有必要与反相一起估计潜在 HMM 的结构(<em class="italics"> A </em>和<em class="italics"> B </em>),那么这条信息可能是直接有用的。</p>
 
-			<p class="normal">这两种算法都基于动态规划的概念，即把一个复杂的问题分解成易于解决的子问题，并以递归/迭代的方式重用这些解决方案来解决更复杂的步骤。关于这方面的进一步信息，请参考R. A. Howard的《动态规划和马尔可夫过程》，麻省理工学院出版社，1960年。</p>
+			<p class="normal">这两种算法都基于动态规划的概念，即把一个复杂的问题分解成易于解决的子问题，并以递归/迭代的方式重用这些解决方案来解决更复杂的步骤。关于这方面的进一步信息，请参考 R. A. Howard 的《动态规划和马尔可夫过程》，麻省理工学院出版社，1960 年。</p>
 
 			<h3 id="_idParaDest-183" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor193"/>前进阶段</h3>
 
-			<p class="normal">如果我们称<em class="italics">p</em>T5】ij为<a id="_idIndexMarker705"/>转移概率<img style="height: 1.2em! important;" src="img/B14713_11_127.png" alt=""/>，我们定义一个考虑以下概率的递归过程:</p>
+			<p class="normal">如果我们称<em class="italics">p</em>T5】ij 为<a id="_idIndexMarker705"/>转移概率<img style="height: 1.2em! important;" src="img/B14713_11_127.png" alt=""/>，我们定义一个考虑以下概率的递归过程:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_128.png" alt=""/></figure>
 
-			<p class="normal">变量<img src="img/B14713_11_129.png" alt=""/>表示HMM在<em class="italics"> t </em>次观察(从1到)后处于状态<em class="italics"> i </em>(在时间<em class="italics"> t </em>)的概率。考虑到HMM假设，我们可以声明<img src="img/B14713_11_130.png" alt=""/>依赖于所有可能的<img src="img/B14713_11_131.png" alt=""/>。更准确地说，我们有:</p>
+			<p class="normal">变量<img src="img/B14713_11_129.png" alt=""/>表示 HMM 在<em class="italics"> t </em>次观察(从 1 到)后处于状态<em class="italics"> i </em>(在时间<em class="italics"> t </em>)的概率。考虑到 HMM 假设，我们可以声明<img src="img/B14713_11_130.png" alt=""/>依赖于所有可能的<img src="img/B14713_11_131.png" alt=""/>。更准确地说，我们有:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_132.png" alt=""/></figure>
 
-			<p class="normal">通过这个过程，我们<a id="_idIndexMarker706"/>认为HMM可以在时间<em class="italics">t</em>–1(利用第一个<em class="italics">t</em>–1观察)到达任何状态，并且以概率<em class="italics"> p </em> <sub> ij </sub>在时间<em class="italics"> t </em>过渡到状态<em class="italics"> i </em>。我们还需要考虑最终状态<em class="italics">o</em>t<sub style="font-style: italic;">t</sub>的发射概率，这取决于每个可能的先前状态。</p>
+			<p class="normal">通过这个过程，我们<a id="_idIndexMarker706"/>认为 HMM 可以在时间<em class="italics">t</em>–1(利用第一个<em class="italics">t</em>–1 观察)到达任何状态，并且以概率<em class="italics"> p </em> <sub> ij </sub>在时间<em class="italics"> t </em>过渡到状态<em class="italics"> i </em>。我们还需要考虑最终状态<em class="italics">o</em>t<sub style="font-style: italic;">t</sub>的发射概率，这取决于每个可能的先前状态。</p>
 
-			<p class="normal">根据定义，初始和结束状态是不发射的。意思是我们可以把任意一个观测值序列写成0，<em class="italics"> o </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub>，0其中第一个和最后一个值为空。该过程开始于在时间1:</p>
+			<p class="normal">根据定义，初始和结束状态是不发射的。意思是我们可以把任意一个观测值序列写成 0，<em class="italics"> o </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub>，0 其中第一个和最后一个值为空。该过程开始于在时间 1:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_133.png" alt=""/></figure>
 
@@ -790,7 +790,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<p class="normal">结束的最后状态<em class="italics">x</em>T49】的表达式在这里被解释为<em class="italics"> A </em>和<em class="italics"> B </em>矩阵中结束状态的索引。例如，我们将<em class="italics"> p </em> <sub style="font-style: italic;"> ij </sub>表示为<em class="italics"> A </em> [ <em class="italics"> i </em>，<em class="italics"> j </em> ]，意思是在一般时刻从状态<em class="italics">x</em><sub style="font-style: italic;">t</sub><em class="italics">= I</em>到状态<em class="italics"> x </em> <sub style="font-style: italic;"> t+1【的转移概率同理<em class="italics"> p </em> <sub style="font-style: italic;"> iending </sub>，表示为<em class="italics">A</em><em class="italics">I</em>，<em class="italics"> ending </em>意为从倒数第二个状态<em class="italics"> x </em> <sub style="font-style: italic;">序列长度-1</sub><em class="italics">= I<em class="italics">x</em><sub style="font-style: italic;">序列长度-1<sub style="font-style: italic;"/></sub></em></sub></p>
 
-			<p class="normal">因此，前向算法可以总结为以下步骤(我们假设具有<em class="italics"> N </em>个状态，因此，考虑到初始和结束状态，我们需要分配<em class="italics"> N </em> + 2个位置):</p>
+			<p class="normal">因此，前向算法可以总结为以下步骤(我们假设具有<em class="italics"> N </em>个状态，因此，考虑到初始和结束状态，我们需要分配<em class="italics"> N </em> + 2 个位置):</p>
 
 			<ol>
 
@@ -802,7 +802,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 				<li class="list">For <em class="italics">i</em> = 1 to <em class="italics">N</em>:<p class="normal">设置<em class="italics">前进</em> [ <em class="italics"> i </em>，1] = <em class="italics"> A </em> [0，<em class="italics"> i </em> ] <em class="italics"> B </em> [1，<em class="italics"> i </em></p></li>
 
-				<li class="list">对于<em class="italics"> t </em> = 2到<em class="italics">序列长度</em>–1:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">For <em class="italics">i</em> = 1 to <em class="italics">N</em>:<p class="normal" lang="en-US" xml:lang="en-US">设置<em class="italics"> S </em> = 0</p></li>
+				<li class="list">对于<em class="italics"> t </em> = 2 到<em class="italics">序列长度</em>–1:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">For <em class="italics">i</em> = 1 to <em class="italics">N</em>:<p class="normal" lang="en-US" xml:lang="en-US">设置<em class="italics"> S </em> = 0</p></li>
 
 <li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">For <em class="italics">j</em> = 1 to <em class="italics">N</em>:<p class="normal" lang="en-US" xml:lang="en-US">设置<em class="italics"> S </em> = <em class="italics"> S </em> + <em class="italics">前进</em> [ <em class="italics"> j </em>，<em class="italics">t</em>–1】<em class="italics">A</em>[<em class="italics">j</em>，<em class="italics">I</em><em class="italics">B</em>[<em class="italics">t</em>，<em class="italics"> i </em></p></li>
 
@@ -812,7 +812,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 				<li class="list">设置<em class="italics"> S </em> = 0</li>
 
-				<li class="list">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</li>
+				<li class="list">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</li>
 
 			</ol>
 
@@ -828,7 +828,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<h3 id="_idParaDest-184" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor194"/>倒退阶段</h3>
 
-			<p class="normal">在后向阶段，我们<a id="_idIndexMarker708"/>需要计算一个序列在时间<em class="italics"> t </em> + 1开始的概率:o<em class="italics">o</em><sub style="font-style: italic;">t+1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> t+2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub>，给定时间<em class="italics"> t </em>的状态为<em class="italics">就像我们之前做的一样，我们定义以下概率:</em></p>
+			<p class="normal">在后向阶段，我们<a id="_idIndexMarker708"/>需要计算一个序列在时间<em class="italics"> t </em> + 1 开始的概率:o<em class="italics">o</em><sub style="font-style: italic;">t+1</sub><em class="italics">，o </em> <sub style="font-style: italic;"> t+2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度</sub>，给定时间<em class="italics"> t </em>的状态为<em class="italics">就像我们之前做的一样，我们定义以下概率:</em></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_135.png" alt=""/></figure>
 
@@ -848,11 +848,11 @@ sigma_t = ext["sigma_t"]</pre>
 
 				<li class="list">用形状(<em class="italics"> N </em>，<em class="italics"> N) </em>初始化<em class="italics"> A </em>(转移概率矩阵)。每个元素都是<em class="italics">P</em>(<em class="italics">x</em>T109】I|<em class="italics">x</em>j)。</li>
 
-				<li class="list">用形状初始化B(<em class="italics">序列长度</em>，<em class="italics"> N </em>)。每个元素都是<em class="italics">P</em>(<em class="italics">o</em>T123】I|<em class="italics">x</em>T127】j)。</li>
+				<li class="list">用形状初始化 B(<em class="italics">序列长度</em>，<em class="italics"> N </em>)。每个元素都是<em class="italics">P</em>(<em class="italics">o</em>T123】I|<em class="italics">x</em>T127】j)。</li>
 
 				<li class="list">For <em class="italics">i</em> = 1 to <em class="italics">N</em>:<p class="normal">设置<em class="italics">向后</em>、<em class="italics"> x </em>、<em class="italics">结尾、</em>=<em class="italics">A</em>、<em class="italics"> i </em>、<em class="italics"> x </em>、<sub style="font-style: italic;">结尾</sub></p></li>
 
-				<li class="list">For <em class="italics">t</em> = <em class="italics">Sequence length</em> – 1 to 1:<p class="Bullet-Without-Bullet-Within-Bullet-End--PACKT-">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</p><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">设置<em class="italics"> S </em> = 0</li>
+				<li class="list">For <em class="italics">t</em> = <em class="italics">Sequence length</em> – 1 to 1:<p class="Bullet-Without-Bullet-Within-Bullet-End--PACKT-">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</p><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">设置<em class="italics"> S </em> = 0</li>
 
 <li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">For <em class="italics">j</em> = 1 to <em class="italics">N</em>:<p class="normal" lang="en-US" xml:lang="en-US">设置<em class="italics">S</em>=<em class="italics">S</em>+<em class="italics">向后</em> [ <em class="italics"> j </em>，<em class="italics">t</em>+1】<em class="italics">A</em>[<em class="italics">j</em>，<em class="italics">I</em>]<em class="italics">B</em>[<em class="italics">t</em>+1，<em class="italics"/></p></li>
 
@@ -862,7 +862,7 @@ sigma_t = ext["sigma_t"]</pre>
 
 				<li class="list">设置<em class="italics"> S </em> = 0</li>
 
-				<li class="list">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</li>
+				<li class="list">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</li>
 
 			</ol>
 
@@ -874,11 +874,11 @@ sigma_t = ext["sigma_t"]</pre>
 
 			</ol>
 
-			<p class="normal">既然我们已经定义了前向和后向算法，我们可以用它们来估计底层HMM的结构。</p>
+			<p class="normal">既然我们已经定义了前向和后向算法，我们可以用它们来估计底层 HMM 的结构。</p>
 
-			<h3 id="_idParaDest-185" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor195"/> HMM参数估计</h3>
+			<h3 id="_idParaDest-185" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor195"/> HMM 参数估计</h3>
 
-			<p class="normal">我们用来<a id="_idIndexMarker710"/>估计HMM参数的程序是期望最大化算法的一个应用，这将在下一章讨论，<em class="italics">第12章</em>，<em class="italics">EM算法</em>。它的目标可以概括为定义我们希望如何估计<em class="italics"> A </em>和<em class="italics"> B </em>的值。如果我们将<em class="italics"> N </em> ( <em class="italics"> i </em>，<em class="italics"> j </em>)定义为从状态<em class="italics"> i </em>到状态<em class="italics"> j </em>的转换次数，并将<em class="italics"> N </em> ( <em class="italics"> i </em>)从状态<em class="italics"> i </em>的转换总数定义为从状态<em class="italics">I</em>到状态<img style="height: 1.2em! important;" src="img/B14713_11_138.png" alt=""/>的转换概率，我们可以近似为:</p>
+			<p class="normal">我们用来<a id="_idIndexMarker710"/>估计 HMM 参数的程序是期望最大化算法的一个应用，这将在下一章讨论，<em class="italics">第 12 章</em>，<em class="italics">EM 算法</em>。它的目标可以概括为定义我们希望如何估计<em class="italics"> A </em>和<em class="italics"> B </em>的值。如果我们将<em class="italics"> N </em> ( <em class="italics"> i </em>，<em class="italics"> j </em>)定义为从状态<em class="italics"> i </em>到状态<em class="italics"> j </em>的转换次数，并将<em class="italics"> N </em> ( <em class="italics"> i </em>)从状态<em class="italics"> i </em>的转换总数定义为从状态<em class="italics">I</em>到状态<img style="height: 1.2em! important;" src="img/B14713_11_138.png" alt=""/>的转换概率，我们可以近似为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_139.png" alt=""/></figure>
 
@@ -886,15 +886,15 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_140.png" alt=""/></figure>
 
-			<p class="normal">让我们从估计转移概率矩阵<em class="italics"> A </em>开始。如果我们考虑给定观察值时HMM在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>以及在时间<em class="italics"> t </em> + 1处于状态<em class="italics"> j </em>的概率，我们有:</p>
+			<p class="normal">让我们从估计转移概率矩阵<em class="italics"> A </em>开始。如果我们考虑给定观察值时 HMM 在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>以及在时间<em class="italics"> t </em> + 1 处于状态<em class="italics"> j </em>的概率，我们有:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_141.png" alt=""/></figure>
 
-			<p class="normal">我们可以使用向前和向后算法来计算这个概率，给定一个观察序列<em class="italics"> o </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，… o </em> <sub style="font-style: italic;">序列长度</sub>。事实上，我们既可以使用前向消息<img src="img/B14713_11_142.png" alt=""/>，它是HMM在<em class="italics"> t </em>观察后处于状态<em class="italics"> i </em>的概率，也可以使用后向消息<img src="img/B14713_11_143.png" alt=""/>，它是一个序列<em class="italics"> o </em> <sub style="font-style: italic;"> t+1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> t+2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度的概率当然，我们还需要包括发射概率和跃迁概率<em class="italics"> p </em> <sub style="font-style: italic;"> ij </sub>，这是我们正在估算的。实际上，该算法从一个随机假设开始，并且迭代直到<em class="italics"> A </em>的值变得稳定。在时间<em class="italics"> t </em>的估计值<img src="img/B14713_11_144.png" alt=""/>等于:</sub></p>
+			<p class="normal">我们可以使用向前和向后算法来计算这个概率，给定一个观察序列<em class="italics"> o </em> <sub style="font-style: italic;"> 1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> 2 </sub> <em class="italics">，… o </em> <sub style="font-style: italic;">序列长度</sub>。事实上，我们既可以使用前向消息<img src="img/B14713_11_142.png" alt=""/>，它是 HMM 在<em class="italics"> t </em>观察后处于状态<em class="italics"> i </em>的概率，也可以使用后向消息<img src="img/B14713_11_143.png" alt=""/>，它是一个序列<em class="italics"> o </em> <sub style="font-style: italic;"> t+1 </sub> <em class="italics">，o </em> <sub style="font-style: italic;"> t+2 </sub> <em class="italics">，…，o </em> <sub style="font-style: italic;">序列长度的概率当然，我们还需要包括发射概率和跃迁概率<em class="italics"> p </em> <sub style="font-style: italic;"> ij </sub>，这是我们正在估算的。实际上，该算法从一个随机假设开始，并且迭代直到<em class="italics"> A </em>的值变得稳定。在时间<em class="italics"> t </em>的估计值<img src="img/B14713_11_144.png" alt=""/>等于:</sub></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_145.png" alt=""/></figure>
 
-			<p class="normal">在这种情况下，由于其复杂性，我们省略了完整的证明；然而，读者可以在Rabiner L. R .，<em class="italics">语音识别中的隐马尔可夫模型和选定应用教程</em>，IEEE 77.2会议录，1989中找到它。</p>
+			<p class="normal">在这种情况下，由于其复杂性，我们省略了完整的证明；然而，读者可以在 Rabiner L. R .，<em class="italics">语音识别中的隐马尔可夫模型和选定应用教程</em>，IEEE 77.2 会议录，1989 中找到它。</p>
 
 			<p class="normal">为了计算发射概率，更容易的是从在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>的概率开始，给定<a id="_idIndexMarker712"/>观察序列:</p>
 
@@ -904,11 +904,11 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_147.png" alt=""/></figure>
 
-			<p class="normal">如何获得归一化常数的证明可以在上述论文中找到。我们现在可以把这些表达式代入对<em class="italics">a</em>T133】ij和<em class="italics">b</em>T137】IP的估计:</p>
+			<p class="normal">如何获得归一化常数的证明可以在上述论文中找到。我们现在可以把这些表达式代入对<em class="italics">a</em>T133】ij 和<em class="italics">b</em>T137】IP 的估计:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_148.png" alt=""/></figure>
 
-			<p class="normal">在第二个公式的分子中，我们采用了指示器函数(仅当条件为真时为1，否则为0)来限制这些元素为<em class="italics">o</em>t=<em class="italics">p</em>时的总和。在一次迭代中<em class="italics"> k </em>，<em class="italics"> p </em> <sub style="font-style: italic;"> ij </sub>是通过前一次迭代中得到的估计值<img src="img/B14713_11_149.png" alt=""/>k–1得到的。</p>
+			<p class="normal">在第二个公式的分子中，我们采用了指示器函数(仅当条件为真时为 1，否则为 0)来限制这些元素为<em class="italics">o</em>t=<em class="italics">p</em>时的总和。在一次迭代中<em class="italics"> k </em>，<em class="italics"> p </em> <sub style="font-style: italic;"> ij </sub>是通过前一次迭代中得到的估计值<img src="img/B14713_11_149.png" alt=""/>k–1 得到的。</p>
 
 			<p class="normal">该算法基于以下步骤:</p>
 
@@ -922,9 +922,9 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<ol>
 
-				<li class="list" value="3">而| |<em class="italics">A</em><sub style="font-style: italic;">k</sub>–<em class="italics">A</em><sub style="font-style: italic;">k-1</sub>| |&gt;|<em class="italics">Tol</em>和| |<em class="italics">B</em><sub style="font-style: italic;">k</sub>–<em class="italics">B</em><sub style="font-style: italic;">k-1</sub>|&gt;|<em class="italics">Tol</em>(<em class="italics">k</em>为迭代指数):<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> t </em> = 1到<em class="italics">序列长度</em>–1:</li>
+				<li class="list" value="3">而| |<em class="italics">A</em><sub style="font-style: italic;">k</sub>–<em class="italics">A</em><sub style="font-style: italic;">k-1</sub>| |&gt;|<em class="italics">Tol</em>和| |<em class="italics">B</em><sub style="font-style: italic;">k</sub>–<em class="italics">B</em><sub style="font-style: italic;">k-1</sub>|&gt;|<em class="italics">Tol</em>(<em class="italics">k</em>为迭代指数):<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> t </em> = 1 到<em class="italics">序列长度</em>–1:</li>
 
-</ol><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</li>
+</ol><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</li>
 
 </ol></li>
 
@@ -932,11 +932,11 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<ol>
 
-				<li class="list" value="1">对于<em class="italics"> j </em> = 1到<em class="italics"> N </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">计算<img style="height: 1.5em! important;" src="img/B14713_11_150.png" alt=""/></li>
+				<li class="list" value="1">对于<em class="italics"> j </em> = 1 到<em class="italics"> N </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">计算<img style="height: 1.5em! important;" src="img/B14713_11_150.png" alt=""/></li>
 
 <li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">计算<img style="height: 1.5em! important;" src="img/B14713_11_151.png" alt=""/></li>
 
-</ol><ol><li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">计算<img style="height: 1.3em! important;" src="img/B14713_11_152.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_153.png" alt=""/>的估计值，并存储在<em class="italics">A</em>k中。</li>
+</ol><ol><li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">计算<img style="height: 1.3em! important;" src="img/B14713_11_152.png" alt=""/>和<img style="height: 1.5em! important;" src="img/B14713_11_153.png" alt=""/>的估计值，并存储在<em class="italics">A</em>k 中。</li>
 
 </ol></li>
 
@@ -944,19 +944,19 @@ sigma_t = ext["sigma_t"]</pre>
 
 			<p class="normal">或者，<a id="_idIndexMarker713"/>可以固定迭代次数，即使最佳解决方案是同时使用公差和最大迭代次数，以在满足第一个条件时终止流程。</p>
 
-			<h4 class="title" lang="en-GB" xml:lang="en-GB">使用hmmlearn进行HMM训练的示例</h4>
+			<h4 class="title" lang="en-GB" xml:lang="en-GB">使用 hmmlearn 进行 HMM 训练的示例</h4>
 
-			<p class="normal">对于这个例子，我们<a id="_idIndexMarker714"/>将使用<code class="Code-In-Text--PACKT-">hmmlearn</code>(可通过命令<code class="Code-In-Text--PACKT-">pip install hmmlearn</code>安装)，这是一个用于HMM计算的包(更多细节见本节末尾的信息框)。</p>
+			<p class="normal">对于这个例子，我们<a id="_idIndexMarker714"/>将使用<code class="Code-In-Text--PACKT-">hmmlearn</code>(可通过命令<code class="Code-In-Text--PACKT-">pip install hmmlearn</code>安装)，这是一个用于 HMM 计算的包(更多细节见本节末尾的信息框)。</p>
 
 			<p class="normal">为了简单起见，让我们考虑一下我们在贝叶斯网络部分讨论的机场例子，假设我们有一个代表天气的隐藏变量(当然，这不是一个真正的隐藏变量！)，建模为具有两个分量(好的和粗略的)的多项式分布。</p>
 
-			<p class="normal">我们观察我们的伦敦-罗马航班的到达时间(部分取决于天气条件)，并且我们想要训练一个HMM来推断未来状态并计算对应于给定序列的隐藏状态的后验概率。</p>
+			<p class="normal">我们观察我们的伦敦-罗马航班的到达时间(部分取决于天气条件)，并且我们想要训练一个 HMM 来推断未来状态并计算对应于给定序列的隐藏状态的后验概率。</p>
 
 			<p class="normal">下图显示了我们示例的模式:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_12.png" alt=""/></figure>
 
-			<p class="packt_figref">天气到达延迟问题的HMM</p>
+			<p class="packt_figref">天气到达延迟问题的 HMM</p>
 
 			<p class="normal">让我们从定义我们的<a id="_idIndexMarker716"/>观察向量开始。因为我们有两个<a id="_idIndexMarker717"/>状态，它的值将是<code class="Code-In-Text--PACKT-">0</code>和<code class="Code-In-Text--PACKT-">1</code>。假设<code class="Code-In-Text--PACKT-">0</code>表示<strong class="bold">导通</strong>而<code class="Code-In-Text--PACKT-">1</code>表示<strong class="bold">延迟</strong>:</p>
 
@@ -975,9 +975,9 @@ observations = np.array([[0], [1], [1],
                          [0], [0], [0]], 
                          dtype=np.int32)</pre>
 
-			<p class="normal">我们有35个连续的观察值，它们的值不是<code class="Code-In-Text--PACKT-">0</code>就是<code class="Code-In-Text--PACKT-">1</code>。</p>
+			<p class="normal">我们有 35 个连续的观察值，它们的值不是<code class="Code-In-Text--PACKT-">0</code>就是<code class="Code-In-Text--PACKT-">1</code>。</p>
 
-			<p class="normal">为了构建HMM，我们将使用带有<code class="Code-In-Text--PACKT-">n_components=2</code>、<code class="Code-In-Text--PACKT-">n_iter=100</code>和<code class="Code-In-Text--PACKT-">random_state=1000</code>的<code class="Code-In-Text--PACKT-">MultinomialHMM</code>类(务必始终使用相同的种子以避免结果的差异)。迭代的次数有时很难确定；出于这个原因，<code class="Code-In-Text--PACKT-">hmmlearn</code>提供了一个实用程序<code class="Code-In-Text--PACKT-">ConvergenceMonitor</code>类，可以对其进行检查以确保算法已经成功收敛。</p>
+			<p class="normal">为了构建 HMM，我们将使用带有<code class="Code-In-Text--PACKT-">n_components=2</code>、<code class="Code-In-Text--PACKT-">n_iter=100</code>和<code class="Code-In-Text--PACKT-">random_state=1000</code>的<code class="Code-In-Text--PACKT-">MultinomialHMM</code>类(务必始终使用相同的种子以避免结果的差异)。迭代的次数有时很难确定；出于这个原因，<code class="Code-In-Text--PACKT-">hmmlearn</code>提供了一个实用程序<code class="Code-In-Text--PACKT-">ConvergenceMonitor</code>类，可以对其进行检查以确保算法已经成功收敛。</p>
 
 			<p class="normal">现在，我们可以使用<code class="Code-In-Text--PACKT-">fit()</code>方法训练我们的模型，将观察值列表作为参数传递(该数组必须始终是二维的，具有形状<em class="italics">序列长度</em> x <em class="italics"> N </em> <sub style="font-style: italic;">组件</sub>):</p>
 
@@ -1003,19 +1003,19 @@ print(hmm_model.transmat_)</pre>
 [[0.0025384  0.9974616 ]
  [0.69191905 0.30808095]]</pre>
 
-			<p class="normal">我们可以将这些值解释为从0(好天气)转换到1(坏天气)的概率比相反的情况更高(<em class="italics">p</em>T6】01接近1)，并且比状态0更有可能保持在状态1(<em class="italics">p</em>T10】00几乎为零)。我们可以推断这些观测数据是在冬天收集的！在下一节解释维特比算法之后，我们还可以检查，给定一些观察，什么是最可能的隐藏状态序列。</p>
+			<p class="normal">我们可以将这些值解释为从 0(好天气)转换到 1(坏天气)的概率比相反的情况更高(<em class="italics">p</em>T6】01 接近 1)，并且比状态 0 更有可能保持在状态 1(<em class="italics">p</em>T10】00 几乎为零)。我们可以推断这些观测数据是在冬天收集的！在下一节解释维特比算法之后，我们还可以检查，给定一些观察，什么是最可能的隐藏状态序列。</p>
 
 			<h2 id="_idParaDest-186" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor196"/>维特比算法</h2>
 
-			<p class="normal">维特比算法<a id="_idIndexMarker720"/>是HMM最常用的解码算法之一。它的目标是找到一系列观测值对应的最可能的隐藏状态序列<a id="_idIndexMarker721"/>。该结构非常类似于正向算法，但是该算法不是计算与最后时刻的状态相结合的观察序列的概率，而是寻找:</p>
+			<p class="normal">维特比算法<a id="_idIndexMarker720"/>是 HMM 最常用的解码算法之一。它的目标是找到一系列观测值对应的最可能的隐藏状态序列<a id="_idIndexMarker721"/>。该结构非常类似于正向算法，但是该算法不是计算与最后时刻的状态相结合的观察序列的概率，而是寻找:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_154.png" alt=""/></figure>
 
-			<p class="normal">变量<img src="img/B14713_11_155.png" alt=""/>表示给定观察序列与<em class="italics">x</em><sub style="font-style: italic;">t</sub>=<em class="italics">I</em>联合的最大概率，考虑所有可能的隐藏状态路径(从时刻1到<em class="italics">t</em>–1)。我们可以通过评估所有的<img src="img/B14713_11_157.png" alt=""/>乘以相应的跃迁概率<em class="italics"> p </em> <sub style="font-style: italic;"> ji </sub>和发射概率<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">t</sub>|<em class="italics">x</em><sub style="font-style: italic;">I</sub>)来递归计算<img src="img/B14713_11_156.png" alt=""/>。并且总是选择<em class="italics"> j </em>的最大总可能值:</p>
+			<p class="normal">变量<img src="img/B14713_11_155.png" alt=""/>表示给定观察序列与<em class="italics">x</em><sub style="font-style: italic;">t</sub>=<em class="italics">I</em>联合的最大概率，考虑所有可能的隐藏状态路径(从时刻 1 到<em class="italics">t</em>–1)。我们可以通过评估所有的<img src="img/B14713_11_157.png" alt=""/>乘以相应的跃迁概率<em class="italics"> p </em> <sub style="font-style: italic;"> ji </sub>和发射概率<em class="italics">P</em>(<em class="italics">o</em><sub style="font-style: italic;">t</sub>|<em class="italics">x</em><sub style="font-style: italic;">I</sub>)来递归计算<img src="img/B14713_11_156.png" alt=""/>。并且总是选择<em class="italics"> j </em>的最大总可能值:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_158.png" alt=""/></figure>
 
-			<p class="normal">该算法基于<a id="_idIndexMarker722"/>回溯方法，使用反向指针<img src="img/B14713_11_159.png" alt=""/>，其递归表达式与<img src="img/B14713_11_160.png" alt=""/>相同，但使用argmax函数代替max:</p>
+			<p class="normal">该算法基于<a id="_idIndexMarker722"/>回溯方法，使用反向指针<img src="img/B14713_11_159.png" alt=""/>，其递归表达式与<img src="img/B14713_11_160.png" alt=""/>相同，但使用 argmax 函数代替 max:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_161.png" alt=""/></figure>
 
@@ -1033,13 +1033,13 @@ print(hmm_model.transmat_)</pre>
 
 				<li class="list">用形状(<em class="italics">序列长度</em>、<em class="italics"> N </em>)初始化<em class="italics"> B </em>。每个元素都是<em class="italics">P</em>(<em class="italics">o</em>T101】I|<em class="italics">x</em>T105】j)。</li>
 
-				<li class="list">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">设置<em class="italics"> V </em> [ <em class="italics"> i </em>，1] = <em class="italics"> A </em> [ <em class="italics"> i </em>，0】<em class="italics">B</em>[1，<em class="italics"> i </em></li>
+				<li class="list">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">设置<em class="italics"> V </em> [ <em class="italics"> i </em>，1] = <em class="italics"> A </em> [ <em class="italics"> i </em>，0】<em class="italics">B</em>[1，<em class="italics"> i </em></li>
 
 <li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB"><em class="italics"> BP </em> [ <em class="italics"> i </em>，1] = <em class="italics"> Null </em>(或任何其他不能解释为状态的值)</li>
 
 </ol></li>
 
-				<li class="list">对于<em class="italics"> t </em> = 1到<em class="italics">序列长度</em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> i </em> = 1到<em class="italics"> N </em>:</li>
+				<li class="list">对于<em class="italics"> t </em> = 1 到<em class="italics">序列长度</em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">对于<em class="italics"> i </em> = 1 到<em class="italics"> N </em>:</li>
 
 </ol><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">设定<img style="height: 1.8em! important;" src="img/B14713_11_165.png" alt=""/>。</li>
 
@@ -1061,7 +1061,7 @@ print(hmm_model.transmat_)</pre>
 
 			<p class="normal">维特比算法的输出<a id="_idIndexMarker723"/>是具有最可能序列<em class="italics"> BP </em>和相应概率<em class="italics"> V </em>的元组。</p>
 
-			<h3 id="_idParaDest-187" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor198"/>使用维特比算法和hmmlearn找到最可能的隐藏状态序列</h3>
+			<h3 id="_idParaDest-187" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor198"/>使用维特比算法和 hmmlearn 找到最可能的隐藏状态序列</h3>
 
 			<p class="normal">在这一点上，我们可以<a id="_idIndexMarker724"/>继续前面的<a id="_idIndexMarker725"/>例子，在给定一组可能的观察值的情况下，使用我们的模型找到最可能的隐藏状态序列。我们可以使用<code class="Code-In-Text--PACKT-">decode()</code>方法或<code class="Code-In-Text--PACKT-">predict()</code>方法。第一个返回整个序列和序列本身的对数概率；然而，它们都使用维特比算法作为默认解码器:</p>
 
@@ -1091,13 +1091,13 @@ print(lp)</pre>
 Log-propability:
 -30.4899924688786</pre>
 
-			<p class="normal">序列<a id="_idIndexMarker726"/>与<a id="_idIndexMarker727"/>转移概率矩阵一致；事实上，更有可能是持续的恶劣天气，而不是相反。因此，从1到0的转变比从0到1的转变更不可能。状态的选择是通过选择最高概率来进行的；然而，在某些情况下，差异很小(在我们的示例中，可能恰好有<em class="italics"> p </em> = (0.49，0.51)，这意味着出现错误的可能性很大)，因此检查序列中所有状态的后验概率很有用，如下图所示:</p>
+			<p class="normal">序列<a id="_idIndexMarker726"/>与<a id="_idIndexMarker727"/>转移概率矩阵一致；事实上，更有可能是持续的恶劣天气，而不是相反。因此，从 1 到 0 的转变比从 0 到 1 的转变更不可能。状态的选择是通过选择最高概率来进行的；然而，在某些情况下，差异很小(在我们的示例中，可能恰好有<em class="italics"> p </em> = (0.49，0.51)，这意味着出现错误的可能性很大)，因此检查序列中所有状态的后验概率很有用，如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_13.png" alt=""/></figure>
 
 			<p class="packt_figref">预测的状态转换</p>
 
-			<p class="normal">在我们的例子中，有几个状态有<img style="height: 1.2em! important;" src="img/B14713_11_169.png" alt=""/>，所以即使输出状态是1(恶劣天气)，考虑观察到好天气的中等概率也是有用的。在<a id="_idIndexMarker728"/>一般情况下，如果一个序列与之前学习(或手动输入)的转移概率是一致的，那么那些<a id="_idIndexMarker729"/>情况就不是很常见。假设我们想要评估一个天气总是好的序列(0):</p>
+			<p class="normal">在我们的例子中，有几个状态有<img style="height: 1.2em! important;" src="img/B14713_11_169.png" alt=""/>，所以即使输出状态是 1(恶劣天气)，考虑观察到好天气的中等概率也是有用的。在<a id="_idIndexMarker728"/>一般情况下，如果一个序列与之前学习(或手动输入)的转移概率是一致的，那么那些<a id="_idIndexMarker729"/>情况就不是很常见。假设我们想要评估一个天气总是好的序列(0):</p>
 
 			<pre>sequence0 = np.array([[0], [0], [0],
                       [0], [0], [0],
@@ -1113,53 +1113,53 @@ Log-propability:
                       dtype=np.int32)
 pp0 = hmm_model.predict_proba(sequence0)</pre>
 
-			<p class="normal">这种情况非常特殊，因为我们知道从好天气到坏天气的转变是非常可能的(接近1)；因此，我们不能指望一个稳定的产量。状态转换的概率如下图所示:</p>
+			<p class="normal">这种情况非常特殊，因为我们知道从好天气到坏天气的转变是非常可能的(接近 1)；因此，我们不能指望一个稳定的产量。状态转换的概率如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_11_14.png" alt=""/></figure>
 
 			<p class="packt_figref">仅在一系列良好天气条件下预测的状态转换</p>
 
-			<p class="normal">在开始时，模型以高概率预测交替状态。这是由于先前<a id="_idIndexMarker730"/>获取的知识并编码在转换矩阵中。然而，在几步之后，概率倾向于变得接近<img style="height: 1.5em! important;" src="img/B14713_11_170.png" alt=""/>，增加了不确定性。这种行为的原因很简单。我们已经使用观测数据训练了一个模型，描述了一个场景，在这个场景中，天气好的一天几乎总是紧接着天气不好的一天。因此，0(好天气)的序列是模型无法正确管理的异常，默认为两种状态可能性相等的最大熵序列。这个例子有助于理解hmm是如何工作的，以及在哪里需要使用额外的特殊序列来重新训练它们。</p>
+			<p class="normal">在开始时，模型以高概率预测交替状态。这是由于先前<a id="_idIndexMarker730"/>获取的知识并编码在转换矩阵中。然而，在几步之后，概率倾向于变得接近<img style="height: 1.5em! important;" src="img/B14713_11_170.png" alt=""/>，增加了不确定性。这种行为的原因很简单。我们已经使用观测数据训练了一个模型，描述了一个场景，在这个场景中，天气好的一天几乎总是紧接着天气不好的一天。因此，0(好天气)的序列是模型无法正确管理的异常，默认为两种状态可能性相等的最大熵序列。这个例子有助于理解 hmm 是如何工作的，以及在哪里需要使用额外的特殊序列来重新训练它们。</p>
 
-			<p class="normal">例如，如果在夏季，观察到15-20个晴天，考虑到<img style="height: 2.3em! important;" src="img/B14713_11_171.png" alt=""/>观察的频率(以避免使模型产生偏差)，该区块应包括在训练集中。如果由于天气时好时坏，这种方法还不够，那么可以在一年中的每个时期训练更多的hmm。一般来说，我总是建议尝试不同的配置和观察序列，并评估最奇怪情况的概率(如零秒序列)。在这一点上，有可能重新训练模型，并重新检查新的证据已被正确处理。</p>
+			<p class="normal">例如，如果在夏季，观察到 15-20 个晴天，考虑到<img style="height: 2.3em! important;" src="img/B14713_11_171.png" alt=""/>观察的频率(以避免使模型产生偏差)，该区块应包括在训练集中。如果由于天气时好时坏，这种方法还不够，那么可以在一年中的每个时期训练更多的 hmm。一般来说，我总是建议尝试不同的配置和观察序列，并评估最奇怪情况的概率(如零秒序列)。在这一点上，有可能重新训练模型，并重新检查新的证据已被正确处理。</p>
 
-			<p class="normal">数据科学家有责任了解模型是否足够准确，或者它们是否需要更多数据或替代方法。作为一个练习，我邀请读者也使用一组连续的好天气观测来改变<a id="_idIndexMarker732"/>训练序列<a id="_idIndexMarker733"/>，并检查预测是否变得更不确定(更接近0或1)。</p>
+			<p class="normal">数据科学家有责任了解模型是否足够准确，或者它们是否需要更多数据或替代方法。作为一个练习，我邀请读者也使用一组连续的好天气观测来改变<a id="_idIndexMarker732"/>训练序列<a id="_idIndexMarker733"/>，并检查预测是否变得更不确定(更接近 0 或 1)。</p>
 
 			<h1 id="_idParaDest-188" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor199"/>总结</h1>
 
 			<p class="normal">在这一章中，我们介绍了贝叶斯网络，描述了它们的结构和关系。我们已经看到了如何建立一个网络来模拟一个概率场景，其中一些元素可以影响其他元素的概率。我们还描述了如何使用最常见的采样方法来获得完整的联合概率，这允许通过近似来降低计算复杂度。</p>
 
-			<p class="normal">最常见的采样方法属于MCMC算法家族，它将从一个样本到另一个样本的转移概率建模为一阶马尔可夫链。特别是，吉布斯采样器是基于这样的假设，即从条件分布中采样比直接使用完全联合概率更容易。该方法非常容易实现，但是它有一些性能缺陷，这些缺陷可以通过采用更复杂的策略来避免。</p>
+			<p class="normal">最常见的采样方法属于 MCMC 算法家族，它将从一个样本到另一个样本的转移概率建模为一阶马尔可夫链。特别是，吉布斯采样器是基于这样的假设，即从条件分布中采样比直接使用完全联合概率更容易。该方法非常容易实现，但是它有一些性能缺陷，这些缺陷可以通过采用更复杂的策略来避免。</p>
 
-			<p class="normal">相反，Metropolis-Hastings采样器使用候选生成分布和标准来接受或拒绝样本。两种方法都满足详细的平衡方程，这保证了它们的收敛性(底层的马尔可夫链将达到唯一的平稳分布)。</p>
+			<p class="normal">相反，Metropolis-Hastings 采样器使用候选生成分布和标准来接受或拒绝样本。两种方法都满足详细的平衡方程，这保证了它们的收敛性(底层的马尔可夫链将达到唯一的平稳分布)。</p>
 
-			<p class="normal">在本章的最后一部分，我们介绍了hmm，它允许基于与一系列隐藏状态相对应的观察值对时间序列进行建模。事实上，这种模型的主要概念是存在不可观察的状态，这些状态决定了特定观察(可观察的)的发射。我们讨论了主要假设以及如何构建、训练和推断模型。特别地，当需要学习转移概率矩阵和发射概率时，可以采用前向-后向算法，而采用维特比算法来寻找给定一组连续观察的最可能的隐藏状态序列。</p>
+			<p class="normal">在本章的最后一部分，我们介绍了 hmm，它允许基于与一系列隐藏状态相对应的观察值对时间序列进行建模。事实上，这种模型的主要概念是存在不可观察的状态，这些状态决定了特定观察(可观察的)的发射。我们讨论了主要假设以及如何构建、训练和推断模型。特别地，当需要学习转移概率矩阵和发射概率时，可以采用前向-后向算法，而采用维特比算法来寻找给定一组连续观察的最可能的隐藏状态序列。</p>
 
-			<p class="normal">在<em class="italics">第12章</em>、<em class="italics">EM算法</em>中，我们将简要讨论期望值最大化算法，重点关注基于<strong class="bold">最大似然估计</strong> ( <strong class="bold"> MLE </strong>)方法的一些重要应用。</p>
+			<p class="normal">在<em class="italics">第 12 章</em>、<em class="italics">EM 算法</em>中，我们将简要讨论期望值最大化算法，重点关注基于<strong class="bold">最大似然估计</strong> ( <strong class="bold"> MLE </strong>)方法的一些重要应用。</p>
 
 			<h1 id="_idParaDest-189" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor200"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">Pratt J .，Raiffa H .，Schlaifer R .，<em class="italics">统计决策理论介绍</em>，麻省理工学院出版社，2008年</li>
+				<li class="list">Pratt J .，Raiffa H .，Schlaifer R .，<em class="italics">统计决策理论介绍</em>，麻省理工学院出版社，2008 年</li>
 
 				<li class="list">Hoffmann M. D .，Gelman A .，<em class="italics">不掉头采样器:自适应设置哈密顿蒙特卡罗中的路径长度</em>，arXiv:1111.4246，2011</li>
 
-				<li class="list">A.盖尔曼，J. B .卡林，H. S .斯特恩，<em class="italics">贝叶斯数据分析，CRC出版社</em>，2013年</li>
+				<li class="list">A.盖尔曼，J. B .卡林，H. S .斯特恩，<em class="italics">贝叶斯数据分析，CRC 出版社</em>，2013 年</li>
 
-				<li class="list">Walsh B .，<em class="italics">马尔可夫链蒙特卡罗和Gibbs抽样</em>，EEB 596z讲义，2002年</li>
+				<li class="list">Walsh B .，<em class="italics">马尔可夫链蒙特卡罗和 Gibbs 抽样</em>，EEB 596z 讲义，2002 年</li>
 
-				<li class="list">R.a .霍华德，<em class="italics">动态规划和马尔可夫过程</em>，麻省理工学院出版社，1960年</li>
+				<li class="list">R.a .霍华德，<em class="italics">动态规划和马尔可夫过程</em>，麻省理工学院出版社，1960 年</li>
 
-				<li class="list">Rabiner L. R .，<em class="italics">语音识别中隐马尔可夫模型和选定应用的教程</em>，IEEE 77.2会议录，1989年</li>
+				<li class="list">Rabiner L. R .，<em class="italics">语音识别中隐马尔可夫模型和选定应用的教程</em>，IEEE 77.2 会议录，1989 年</li>
 
 				<li class="list">W.K. Hastings，<em class="italics">使用马尔可夫链的蒙特卡罗抽样方法及其应用</em>，生物计量学，57/1，04/1970</li>
 
-				<li class="list">凯文·b·科尔布，安·e·尼科尔森，<em class="italics">贝叶斯人工智能</em>，CRC出版社，2010年</li>
+				<li class="list">凯文·b·科尔布，安·e·尼科尔森，<em class="italics">贝叶斯人工智能</em>，CRC 出版社，2010 年</li>
 
-				<li class="list">珀尔j .，<em class="italics">因果关系</em>，剑桥大学出版社，2009年</li>
+				<li class="list">珀尔 j .，<em class="italics">因果关系</em>，剑桥大学出版社，2009 年</li>
 
-				<li class="list">长度e .鲍姆，t .佩特里，<em class="italics">有限状态马氏链概率函数的统计推断</em>，《数理统计年鉴》，37，1966年</li>
+				<li class="list">长度 e .鲍姆，t .佩特里，<em class="italics">有限状态马氏链概率函数的统计推断</em>，《数理统计年鉴》，37，1966 年</li>
 
 			</ul>
 

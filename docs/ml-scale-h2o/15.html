@@ -7,86 +7,86 @@
 	
 	
 		<div><h1 id="_idParaDest-205"><em class="italic"> <a id="_idTextAnchor207"/>第十一章</em>:管理员和操作视图</h1>
-			<p>到目前为止，我们已经在本书中花了很大一部分时间来理解H2O机器学习大规模框架的组件，并深入开发在企业系统上实现模型构建和模型部署框架的技能。</p>
-			<p>机器学习的成功需要代码和技术方面的技能，但在企业中，它还需要人员和流程方面的成功。换个角度来看，众所周知的<em class="italic">成功是团队运动</em>这句话太对了。现在，让我们开始看看那些参与为H2O机器学习带来大规模成功的角色或利益相关者。</p>
-			<p>在这一章中，我们将首先讨论与这一成功直接相关的角色:H2O管理员、运营团队和数据科学家。我们将了解主要利益相关者如何在比例模型构建和模型部署方面与H2O互动。我们将查看H2O管理员对H2O的大规模视图，并理解企业级Steam如何成为该视图的核心。我们还将从比例模型构建和模型部署的角度来看H2O的运营团队。最后，我们将了解数据科学家如何受到H2O管理员和运营团队视图的影响。</p>
+			<p>到目前为止，我们已经在本书中花了很大一部分时间来理解 H2O 机器学习大规模框架的组件，并深入开发在企业系统上实现模型构建和模型部署框架的技能。</p>
+			<p>机器学习的成功需要代码和技术方面的技能，但在企业中，它还需要人员和流程方面的成功。换个角度来看，众所周知的<em class="italic">成功是团队运动</em>这句话太对了。现在，让我们开始看看那些参与为 H2O 机器学习带来大规模成功的角色或利益相关者。</p>
+			<p>在这一章中，我们将首先讨论与这一成功直接相关的角色:H2O 管理员、运营团队和数据科学家。我们将了解主要利益相关者如何在比例模型构建和模型部署方面与 H2O 互动。我们将查看 H2O 管理员对 H2O 的大规模视图，并理解企业级 Steam 如何成为该视图的核心。我们还将从比例模型构建和模型部署的角度来看 H2O 的运营团队。最后，我们将了解数据科学家如何受到 H2O 管理员和运营团队视图的影响。</p>
 			<p>在本章中，我们将讨论以下主要话题:</p>
 			<ul>
 				<li>模型构建和部署视图:地面上的角色</li>
-				<li>视图1:企业Steam管理员</li>
-				<li>视图2:运营团队</li>
-				<li>视图3:数据科学家</li>
+				<li>视图 1:企业 Steam 管理员</li>
+				<li>视图 2:运营团队</li>
+				<li>视图 3:数据科学家</li>
 			</ul>
 			<h1 id="_idParaDest-206"><a id="_idTextAnchor208"/>模型构建和部署视图——现场的角色</h1>
-			<p>许多角色或<a id="_idIndexMarker856"/>利益相关者都参与到机器学习的生命周期中。参与H2O大规模模型构建和部署的关键角色是数据科学家、企业Steam管理员和运营团队。本章的重点是这些人物角色。让我们从高层次上了解他们的活动，如下图所示:</p>
+			<p>许多角色或<a id="_idIndexMarker856"/>利益相关者都参与到机器学习的生命周期中。参与 H2O 大规模模型构建和部署的关键角色是数据科学家、企业 Steam 管理员和运营团队。本章的重点是这些人物角色。让我们从高层次上了解他们的活动，如下图所示:</p>
 			<p class="figure-caption"> </p>
 			<div><div><img src="img/B16721_11_001.jpg" alt="Figure 11.1 – Key personas involved in building and deploying H2O models at scale&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.1-大规模构建和部署H2O模型时涉及的关键人物角色</p>
+			<p class="figure-caption">图 11.1-大规模构建和部署 H2O 模型时涉及的关键人物角色</p>
 			<p>这些利益相关者及其高层关注的问题总结如下:</p>
 			<ul>
-				<li><strong class="bold">企业Steam管理员</strong>:管理<a id="_idIndexMarker857"/>谁在多租户企业<a id="_idIndexMarker858"/>服务器集群上启动H2O集群以及允许他们消耗多少资源，并集中管理服务器集群上的H2O集成</li>
-				<li><strong class="bold"> H2O集群操作</strong>:对<a id="_idIndexMarker860"/>企业服务器集群(Kubernetes或Hadoop集群)上的<a id="_idIndexMarker859"/> H2O作业进行故障排除</li>
+				<li><strong class="bold">企业 Steam 管理员</strong>:管理<a id="_idIndexMarker857"/>谁在多租户企业<a id="_idIndexMarker858"/>服务器集群上启动 H2O 集群以及允许他们消耗多少资源，并集中管理服务器集群上的 H2O 集成</li>
+				<li><strong class="bold"> H2O 集群操作</strong>:对<a id="_idIndexMarker860"/>企业服务器集群(Kubernetes 或 Hadoop 集群)上的<a id="_idIndexMarker859"/> H2O 作业进行故障排除</li>
 				<li><strong class="bold">模型操作</strong>:部署、管理和<a id="_idIndexMarker861"/>监控部署到评分环境的模型</li>
 				<li><strong class="bold">数据科学家</strong>:为了本章的目的<a id="_idIndexMarker862"/>，知道如何以及为什么与上述<a id="_idIndexMarker863"/>人物角色互动</li>
 			</ul>
-			<p>本章的其余部分将致力于深入研究这些人物角色在大规模使用H2O机器学习时的观点和活动。</p>
+			<p>本章的其余部分将致力于深入研究这些人物角色在大规模使用 H2O 机器学习时的观点和活动。</p>
 			<p>让我们开始吧。</p>
-			<h1 id="_idParaDest-207"><a id="_idTextAnchor209"/>视图1–企业蒸汽管理员</h1>
-			<p>我们先来看看企业Steam管理员的<a id="_idIndexMarker864"/>关注点，再了解他们的活动。</p>
+			<h1 id="_idParaDest-207"><a id="_idTextAnchor209"/>视图 1–企业蒸汽管理员</h1>
+			<p>我们先来看看企业 Steam 管理员的<a id="_idIndexMarker864"/>关注点，再了解他们的活动。</p>
 			<h2 id="_idParaDest-208"><a id="_idTextAnchor210"/>企业蒸汽管理员关注的问题</h2>
-			<p>企业Steam <a id="_idIndexMarker865"/>管理员有两个广泛的<a id="_idIndexMarker866"/>关注点，如下图所示:</p>
+			<p>企业 Steam <a id="_idIndexMarker865"/>管理员有两个广泛的<a id="_idIndexMarker866"/>关注点，如下图所示:</p>
 			<p class="figure-caption"> </p>
 			<div><div><img src="img/B16721_11_002.jpg" alt="Figure 11.2 – Enterprise Steam administrator concerns&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.2-企业Steam管理员关注的问题</p>
+			<p class="figure-caption">图 11.2-企业 Steam 管理员关注的问题</p>
 			<p><strong class="bold">上图可总结如下:</strong></p>
 			<ul>
-				<li><strong class="bold"> H2O用户治理</strong>:这些关注点集中于治理数据科学家，他们在企业服务器集群上启动H2O模型构建工作。这包括根据企业身份提供者对这些H2O <a id="_idIndexMarker867"/>用户进行身份验证，为H2O用户定义角色，以及在企业服务器集群环境中管理H2O用户的资源消耗。</li>
-				<li><strong class="bold"> H2O系统管理</strong>:这些问题围绕着集中H2O技术与企业服务器集群的集成以及管理H2O软件版本。这造成了角色的分离，现在数据科学家不需要理解这种集成的复杂性(如果没有实施Enterprise Steam，他们会理解)。</li>
+				<li><strong class="bold"> H2O 用户治理</strong>:这些关注点集中于治理数据科学家，他们在企业服务器集群上启动 H2O 模型构建工作。这包括根据企业身份提供者对这些 H2O <a id="_idIndexMarker867"/>用户进行身份验证，为 H2O 用户定义角色，以及在企业服务器集群环境中管理 H2O 用户的资源消耗。</li>
+				<li><strong class="bold"> H2O 系统管理</strong>:这些问题围绕着集中 H2O 技术与企业服务器集群的集成以及管理 H2O 软件版本。这造成了角色的分离，现在数据科学家不需要理解这种集成的复杂性(如果没有实施 Enterprise Steam，他们会理解)。</li>
 			</ul>
 			<p>企业蒸汽可以被视为处理企业问题的必需品。</p>
 			<p class="callout-heading">企业蒸汽对企业的价值</p>
-			<p class="callout">企业在管理谁使用企业系统、用户如何与企业系统集成以及用户如何使用企业系统上的资源时往往会很小心。管理员使用Enterprise Steam构建集中式安全措施来处理这些问题，并创建H2O使用的统一性和可预测性。Enterprise Steam还使数据科学家更容易工作，因为他们不需要了解将H2O与企业系统集成的技术复杂性。</p>
-			<p>要了解Enterprise Steam的优势，看看它在数据科学家与H2O一起构建大规模模型的工作流程中所扮演的角色是很有用的。下图对此进行了总结:</p>
+			<p class="callout">企业在管理谁使用企业系统、用户如何与企业系统集成以及用户如何使用企业系统上的资源时往往会很小心。管理员使用 Enterprise Steam 构建集中式安全措施来处理这些问题，并创建 H2O 使用的统一性和可预测性。Enterprise Steam 还使数据科学家更容易工作，因为他们不需要了解将 H2O 与企业系统集成的技术复杂性。</p>
+			<p>要了解 Enterprise Steam 的优势，看看它在数据科学家与 H2O 一起构建大规模模型的工作流程中所扮演的角色是很有用的。下图对此进行了总结:</p>
 			<p> </p>
 			<div><div><img src="img/B16721_11_003.jpg" alt="Figure 11.3 – Data science and administrator workflows through Enterprise Steam&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.3–通过企业流的数据科学和管理员工作流</p>
-			<p>从根本上说，Enterprise Steam <a id="_idIndexMarker870"/>位于所有数据科学家访问企业服务器集群上的H2O的前面。让我们一步步了解这种设计的优势:</p>
+			<p class="figure-caption">图 11.3–通过企业流的数据科学和管理员工作流</p>
+			<p>从根本上说，Enterprise Steam <a id="_idIndexMarker870"/>位于所有数据科学家访问企业服务器集群上的 H2O 的前面。让我们一步步了解这种设计的优势:</p>
 			<ol>
-				<li><strong class="bold">数据科学家通过企业Steam进行身份验证</strong>:所有使用H2O的数据科学家都通过企业身份提供者(例如LDAP)进行身份验证。我们将在本章后面看到，从身份提供者返回的组成员身份用于配置特定于该组的用户权能。</li>
-				<li><strong class="bold">启动H2O集群</strong>:数据科学家必须通过Enterprise Steam在企业服务器集群上启动H2O集群。这样，数据科学家就有了可以启动的H2O集群大小(服务器节点、内存和每个节点的CPU数量)的界限，以及它在关闭之前可以运行多长时间。我们将在本章的后面看到企业Steam管理员如何使用<strong class="bold">概要文件</strong>来定义这些界限。</li>
+				<li><strong class="bold">数据科学家通过企业 Steam 进行身份验证</strong>:所有使用 H2O 的数据科学家都通过企业身份提供者(例如 LDAP)进行身份验证。我们将在本章后面看到，从身份提供者返回的组成员身份用于配置特定于该组的用户权能。</li>
+				<li><strong class="bold">启动 H2O 集群</strong>:数据科学家必须通过 Enterprise Steam 在企业服务器集群上启动 H2O 集群。这样，数据科学家就有了可以启动的 H2O 集群大小(服务器节点、内存和每个节点的 CPU 数量)的界限，以及它在关闭之前可以运行多长时间。我们将在本章的后面看到企业 Steam 管理员如何使用<strong class="bold">概要文件</strong>来定义这些界限。</li>
 			</ol>
-			<p>请注意，配置H2O以与企业服务器集群的细节集成是非常复杂的。这由企业Steam管理员使用企业Steam的配置工作流来完成。数据科学家无需执行这项任务，只需使用企业级Steam UI(或其来自模型构建IDE的API)即可快速启动H2O集群。</p>
+			<p>请注意，配置 H2O 以与企业服务器集群的细节集成是非常复杂的。这由企业 Steam 管理员使用企业 Steam 的配置工作流来完成。数据科学家无需执行这项任务，只需使用企业级 Steam UI(或其来自模型构建 IDE 的 API)即可快速启动 H2O 集群。</p>
 			<ol>
-				<li value="3"><strong class="bold">构建模型</strong>:在模型构建IDE中，数据科学家必须使用企业Steam API进行身份验证，然后才能与已经启动的H2O集群进行交互。通过Enterprise Steam认证后，数据科学家将能够连接到他们的H2O集群，并在其上编写代码来构建模型。</li>
+				<li value="3"><strong class="bold">构建模型</strong>:在模型构建 IDE 中，数据科学家必须使用企业 Steam API 进行身份验证，然后才能与已经启动的 H2O 集群进行交互。通过 Enterprise Steam 认证后，数据科学家将能够连接到他们的 H2O 集群，并在其上编写代码来构建模型。</li>
 			</ol>
-			<p>请注意，刚刚描述的<a id="_idIndexMarker871"/>工作流中的所有步骤都可以从数据科学家的IDE中以编程方式完成，并且不需要与企业Steam UI进行交互。</p>
-			<p class="callout-heading">企业Steam UI与API</p>
-			<p class="callout">从Enterprise Steam UI管理一个或多个H2O集群(启动、停止、重新启动、终止)非常方便。或者，这也可以在您的IDE中完成，方法是在从IDE连接到您的集群以构建模型时，使用向Enterprise Steam进行身份验证所需的相同Enterprise Steam API。因此，如果您愿意，您可以完全在IDE中工作。</p>
-			<p>现在让我们回到企业Steam管理员在管理H2O用户和管理H2O系统和集成中的角色。</p>
+			<p>请注意，刚刚描述的<a id="_idIndexMarker871"/>工作流中的所有步骤都可以从数据科学家的 IDE 中以编程方式完成，并且不需要与企业 Steam UI 进行交互。</p>
+			<p class="callout-heading">企业 Steam UI 与 API</p>
+			<p class="callout">从 Enterprise Steam UI 管理一个或多个 H2O 集群(启动、停止、重新启动、终止)非常方便。或者，这也可以在您的 IDE 中完成，方法是在从 IDE 连接到您的集群以构建模型时，使用向 Enterprise Steam 进行身份验证所需的相同 Enterprise Steam API。因此，如果您愿意，您可以完全在 IDE 中工作。</p>
+			<p>现在让我们回到企业 Steam 管理员在管理 H2O 用户和管理 H2O 系统和集成中的角色。</p>
 			<h2 id="_idParaDest-209"><a id="_idTextAnchor211"/>企业蒸汽配置</h2>
-			<p>让我们直接进入Enterprise Steam中的主页<a id="_idIndexMarker873"/>配置屏幕。这将有助于我们在关注H2O用户治理和H2O <a id="_idIndexMarker874"/>系统管理之前了解全局。如下图所示。请记住，只有企业Steam管理员可以查看和访问这些配置:</p>
+			<p>让我们直接进入 Enterprise Steam 中的主页<a id="_idIndexMarker873"/>配置屏幕。这将有助于我们在关注 H2O 用户治理和 H2O <a id="_idIndexMarker874"/>系统管理之前了解全局。如下图所示。请记住，只有企业 Steam 管理员可以查看和访问这些配置:</p>
 			<p> </p>
 			<div><div><img src="img/B16721_11_004.jpg" alt="Figure 11.4 – Enterprise Steam configurations home page (administrator visibility only)&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.4–企业Steam配置主页(仅管理员可见)</p>
+			<p class="figure-caption">图 11.4–企业 Steam 配置主页(仅管理员可见)</p>
 			<p>让我们从逻辑上组织一下:</p>
 			<ul>
-				<li><strong class="bold"> H2O用户治理</strong>:这是使用<strong class="bold">访问控制</strong>配置集完成的。注意，这些<a id="_idIndexMarker875"/>配置还包括用户资源消耗治理和其他防护栏。</li>
-				<li><strong class="bold"> H2O系统管理–集成</strong>:使用<strong class="bold">后端</strong>和<strong class="bold">产品</strong>配置集完成与企业集群环境集成的配置<a id="_idIndexMarker876"/>。这也包括H2O版本的管理。</li>
-				<li><strong class="bold">H2O System Management – Steam</strong>: Configuring <a id="_idIndexMarker877"/>Enterprise Steam itself is done using the <strong class="bold">STEAM CONFIGURATION</strong> configuration set.<p class="callout-heading">无人驾驶AI可以在企业Steam中配置(等等，什么？)</p><p class="callout">这本书的重点是<a id="_idIndexMarker878"/>H2O的大规模机器学习。从模型构建的角度来看，这侧重于通过这些创建的水平扩展架构在大规模数据集上进行H2O-3或苏打水集群训练。</p><p class="callout">无人驾驶人工智能是一款H2O产品，专门用于extreme AutoML(通常在小于100-200 GB的数据集上)，利用广泛的自动化、寻找最佳模型的遗传算法以及高度自动化和详尽的特征工程。我们会在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第十三章</em> </a>、<em class="italic">介绍H2O AI云</em>中涉及H2O.ai的端到端机器学习平台时，对无人驾驶AI进行更详细的阐述。我们将在那一章看到无人驾驶人工智能如何大规模增加H2O-3和苏打水的使用。目前，我们知道无人驾驶AI也可以通过Steam(在Kubernetes集群上)启动和管理。</p></li>
+				<li><strong class="bold"> H2O 用户治理</strong>:这是使用<strong class="bold">访问控制</strong>配置集完成的。注意，这些<a id="_idIndexMarker875"/>配置还包括用户资源消耗治理和其他防护栏。</li>
+				<li><strong class="bold"> H2O 系统管理–集成</strong>:使用<strong class="bold">后端</strong>和<strong class="bold">产品</strong>配置集完成与企业集群环境集成的配置<a id="_idIndexMarker876"/>。这也包括 H2O 版本的管理。</li>
+				<li><strong class="bold">H2O System Management – Steam</strong>: Configuring <a id="_idIndexMarker877"/>Enterprise Steam itself is done using the <strong class="bold">STEAM CONFIGURATION</strong> configuration set.<p class="callout-heading">无人驾驶 AI 可以在企业 Steam 中配置(等等，什么？)</p><p class="callout">这本书的重点是<a id="_idIndexMarker878"/>H2O 的大规模机器学习。从模型构建的角度来看，这侧重于通过这些创建的水平扩展架构在大规模数据集上进行 H2O-3 或苏打水集群训练。</p><p class="callout">无人驾驶人工智能是一款 H2O 产品，专门用于 extreme AutoML(通常在小于 100-200 GB 的数据集上)，利用广泛的自动化、寻找最佳模型的遗传算法以及高度自动化和详尽的特征工程。我们会在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第十三章</em> </a>、<em class="italic">介绍 H2O AI 云</em>中涉及 H2O.ai 的端到端机器学习平台时，对无人驾驶 AI 进行更详细的阐述。我们将在那一章看到无人驾驶人工智能如何大规模增加 H2O-3 和苏打水的使用。目前，我们知道无人驾驶 AI 也可以通过 Steam(在 Kubernetes 集群上)启动和管理。</p></li>
 			</ul>
 			<p>现在让我们逐一阐述前面的要点。</p>
-			<h2 id="_idParaDest-210"><a id="_idTextAnchor212"/>企业Steam的H2O用户治理</h2>
-			<p>企业Steam管理员使用<strong class="bold">通用</strong> &gt; <strong class="bold">访问控制</strong>组配置来管理<a id="_idIndexMarker880"/>H2O集群的<a id="_idIndexMarker879"/>用户。这些配置的概述如下。</p>
+			<h2 id="_idParaDest-210"><a id="_idTextAnchor212"/>企业 Steam 的 H2O 用户治理</h2>
+			<p>企业 Steam 管理员使用<strong class="bold">通用</strong> &gt; <strong class="bold">访问控制</strong>组配置来管理<a id="_idIndexMarker880"/>H2O 集群的<a id="_idIndexMarker879"/>用户。这些配置的概述如下。</p>
 			<h3>证明</h3>
-			<p>可以针对以下<a id="_idIndexMarker881"/>企业身份提供者来配置针对企业Steam以及已启动的H2O集群的用户身份认证:</p>
+			<p>可以针对以下<a id="_idIndexMarker881"/>企业身份提供者来配置针对企业 Steam 以及已启动的 H2O 集群的用户身份认证:</p>
 			<ul>
 				<li><strong class="bold"> OpenID </strong></li>
 				<li><strong class="bold"> LDAP </strong></li>
@@ -95,88 +95,88 @@
 			</ul>
 			<p>详细而熟悉的设置是根据所选择的提供商来配置的。</p>
 			<h3>代币</h3>
-			<p>在使用企业Steam API时，令牌是使用密码的替代方法。这里为登录的用户颁发令牌。每次生成令牌时，先前发布的令牌都会被撤销。在OIDC授权的情况下，用户必须获得<a id="_idIndexMarker883"/>一个令牌来使用API(不能使用<strong class="bold">单点登录</strong> ( <strong class="bold"> SSO </strong>)密码)。</p>
+			<p>在使用企业 Steam API 时，令牌是使用密码的替代方法。这里为登录的用户颁发令牌。每次生成令牌时，先前发布的令牌都会被撤销。在 OIDC 授权的情况下，用户必须获得<a id="_idIndexMarker883"/>一个令牌来使用 API(不能使用<strong class="bold">单点登录</strong> ( <strong class="bold"> SSO </strong>)密码)。</p>
 			<h3>用户</h3>
-			<p>通过Enterprise Steam认证过<a id="_idIndexMarker884"/>的用户都列在这个页面上。用户按用户名、角色和身份验证方法列出。可以在这里停用和重新激活用户。</p>
+			<p>通过 Enterprise Steam 认证过<a id="_idIndexMarker884"/>的用户都列在这个页面上。用户按用户名、角色和身份验证方法列出。可以在这里停用和重新激活用户。</p>
 			<p>也可以在这里覆盖单个用户的角色、身份验证方法和配置文件分配。请注意，用户的角色、身份验证方法和配置文件通常通过映射分配给他们所属的组，并由身份提供者返回。另请注意，当用户存在于多个已启用的身份提供者系统中时，可在此处覆盖已启用的身份提供者的用户配置。</p>
 			<h3>角色</h3>
-			<p><a id="_idIndexMarker885"/> Enterprise steam中有两个角色:</p>
+			<p><a id="_idIndexMarker885"/> Enterprise steam 中有两个角色:</p>
 			<ul>
 				<li><strong class="bold">管理员</strong>:具有管理员角色的登录用户可以进行配置更改，如本章<a id="_idIndexMarker886"/>所述。</li>
-				<li><strong class="bold">标准用户</strong>:具有标准用户角色的登录用户<a id="_idIndexMarker887"/>是数据科学家，他们可以从Enterprise Steam启动集群，如图<em class="italic">图11.3 </em>所示。这种用户体验在<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"> <em class="italic">第3章</em> </a>、<em class="italic">基础工作流-数据到可部署模型</em>中有更全面的描述。</li>
+				<li><strong class="bold">标准用户</strong>:具有标准用户角色的登录用户<a id="_idIndexMarker887"/>是数据科学家，他们可以从 Enterprise Steam 启动集群，如图<em class="italic">图 11.3 </em>所示。这种用户体验在<a href="B16721_03_Final_SK_ePub.xhtml#_idTextAnchor042"> <em class="italic">第 3 章</em> </a>、<em class="italic">基础工作流-数据到可部署模型</em>中有更全面的描述。</li>
 			</ul>
 			<p>请注意，角色可以按组名分配(根据身份提供者的身份验证返回)。您还可以提供一个带有通配符<code>*</code>的组名，以便为所有经过身份验证的用户分配一个角色。</p>
 			<h3>轮廓</h3>
-			<p>在这里，用户可以对他们的H2O集群的资源消耗进行限制。这些边界被分配给一个有名称的配置文件，配置文件被映射到一个或多个用户组或单个用户。通配符<code>*</code>将配置文件映射到所有用户。</p>
-			<p>用户在启动H2O集群时会受到这些限制。例如，实习生可能只允许一个包含不超过2个节点且每个节点内存为1 GB的并发H2O群集，而高级用户可能允许3个并发群集，每个群集最多包含20个节点，每个节点内存为50 GB。</p>
+			<p>在这里，用户可以对他们的 H2O 集群的资源消耗进行限制。这些边界被分配给一个有名称的配置文件，配置文件被映射到一个或多个用户组或单个用户。通配符<code>*</code>将配置文件映射到所有用户。</p>
+			<p>用户在启动 H2O 集群时会受到这些限制。例如，实习生可能只允许一个包含不超过 2 个节点且每个节点内存为 1 GB 的并发 H2O 群集，而高级用户可能允许 3 个并发群集，每个群集最多包含 20 个节点，每个节点内存为 50 GB。</p>
 			<p class="callout-heading">配置文件控制用户资源消耗</p>
-			<p class="callout">配置文件围绕共享服务器集群上每个用户的资源消耗划分界限。这是通过限制用户可以同时管理的H2O集群的数量、每个集群的大小(服务器节点总数、每个节点的内存、每个节点的CPU)以及集群可以运行的时间来实现的。</p>
+			<p class="callout">配置文件围绕共享服务器集群上每个用户的资源消耗划分界限。这是通过限制用户可以同时管理的 H2O 集群的数量、每个集群的大小(服务器节点总数、每个节点的内存、每个节点的 CPU)以及集群可以运行的时间来实现的。</p>
 			<p class="callout">配置文件不应该限制用户，但另一方面，他们应该为他们适当的大小。如果没有配置文件，用户倾向于最大限度地消耗资源，而需要的资源却少得多。乘以所有用户，这通常会产生不必要的压力，以扩展服务器集群(成本很高)或限制使用它的租户。</p>
-			<p>可以为用户配置和分配三种H2O核心配置文件类型:</p>
+			<p>可以为用户配置和分配三种 H2O 核心配置文件类型:</p>
 			<ul>
-				<li><strong class="bold">H2O</strong>:Hadoop上的H2O-3集群<a id="_idIndexMarker889"/>。</li>
-				<li><strong class="bold">sparking Water–内部后端</strong>:Hadoop上的sparking Water集群，其中H2O和Spark DataFrames <a id="_idIndexMarker890"/>占用相同的内存空间(即同一服务器节点上的内存)。</li>
-				<li><strong class="bold">Hadoop:sparking Water–外部后端</strong>:Hadoop上的sparking Water集群，其中H2O和Spark数据帧占用单独的内存空间(不同服务器<a id="_idIndexMarker891"/>节点上的内存)。请注意，此配置文件很少使用，通常仅用于持续时间非常长(通常超过24小时)的汽水处理。外部后端的优点是将H2O苏打水集群与Spark节点终止或重新分配引起的中断隔离，但缺点是需要在<a id="_idIndexMarker892"/> H2O和Spark数据帧之间进行网络(相对于存储空间)数据传输。</li>
-				<li><strong class="bold">H2O–库伯内特</strong>:库伯内特集群框架上的H2O-3集群<a id="_idIndexMarker893"/>。</li>
+				<li><strong class="bold">H2O</strong>:Hadoop 上的 H2O-3 集群<a id="_idIndexMarker889"/>。</li>
+				<li><strong class="bold">sparking Water–内部后端</strong>:Hadoop 上的 sparking Water 集群，其中 H2O 和 Spark DataFrames <a id="_idIndexMarker890"/>占用相同的内存空间(即同一服务器节点上的内存)。</li>
+				<li><strong class="bold">Hadoop:sparking Water–外部后端</strong>:Hadoop 上的 sparking Water 集群，其中 H2O 和 Spark 数据帧占用单独的内存空间(不同服务器<a id="_idIndexMarker891"/>节点上的内存)。请注意，此配置文件很少使用，通常仅用于持续时间非常长(通常超过 24 小时)的汽水处理。外部后端的优点是将 H2O 苏打水集群与 Spark 节点终止或重新分配引起的中断隔离，但缺点是需要在<a id="_idIndexMarker892"/> H2O 和 Spark 数据帧之间进行网络(相对于存储空间)数据传输。</li>
+				<li><strong class="bold">H2O–库伯内特</strong>:库伯内特集群框架上的 H2O-3 集群<a id="_idIndexMarker893"/>。</li>
 			</ul>
-			<p>参见<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第二章</em> </a>、<em class="italic">平台组件和关键概念</em>，重温H2O-3和波光水团的区别。还记得<strong class="bold"> H2O星团</strong>指的是<strong class="bold"> H2O-3星团</strong>或<strong class="bold">汽水星团</strong>。</p>
-			<p class="callout-heading">Hadoop Spark与纯Spark集群的对比</p>
-			<p class="callout">Hadoop系统<a id="_idIndexMarker894"/>通常实现MapReduce和Spark框架，因为这些框架上的分布式计算系统和作业通常由YARN资源管理器管理。Enterprise Steam在Hadoop/YARN的MapReduce框架上管理H2O-3集群，在Hadoop/YARN的Spark框架上管理苏打水集群。</p>
-			<p class="callout">注意，Spark也可以在Hadoop和YARN之外单独运行。H2O苏打水集群可以在这种类型的Spark实现上运行，但目前，H2O没有将企业蒸汽与这些环境集成。</p>
-			<p class="callout">Kubernetes是实现分布式计算的另一种框架。Enterprise Steam还与Kubernetes集成，以启动和运行H2O-3集群。支持企业蒸汽和Kubernetes的苏打水目前正在进行中。</p>
+			<p>参见<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第二章</em> </a>、<em class="italic">平台组件和关键概念</em>，重温 H2O-3 和波光水团的区别。还记得<strong class="bold"> H2O 星团</strong>指的是<strong class="bold"> H2O-3 星团</strong>或<strong class="bold">汽水星团</strong>。</p>
+			<p class="callout-heading">Hadoop Spark 与纯 Spark 集群的对比</p>
+			<p class="callout">Hadoop 系统<a id="_idIndexMarker894"/>通常实现 MapReduce 和 Spark 框架，因为这些框架上的分布式计算系统和作业通常由 YARN 资源管理器管理。Enterprise Steam 在 Hadoop/YARN 的 MapReduce 框架上管理 H2O-3 集群，在 Hadoop/YARN 的 Spark 框架上管理苏打水集群。</p>
+			<p class="callout">注意，Spark 也可以在 Hadoop 和 YARN 之外单独运行。H2O 苏打水集群可以在这种类型的 Spark 实现上运行，但目前，H2O 没有将企业蒸汽与这些环境集成。</p>
+			<p class="callout">Kubernetes 是实现分布式计算的另一种框架。Enterprise Steam 还与 Kubernetes 集成，以启动和运行 H2O-3 集群。支持企业蒸汽和 Kubernetes 的苏打水目前正在进行中。</p>
 			<p>前面列出的四种轮廓<a id="_idIndexMarker896"/>类型的详细信息有所不同，但它们都有以下关键配置:</p>
 			<ul>
 				<li><strong class="bold">配置文件名</strong>:分配给用户组。</li>
 				<li><strong class="bold">用户组</strong>:将配置文件分配给谁。</li>
-				<li><strong class="bold">每个用户的集群限制</strong>:一个用户可以并发运行的H2O集群的数量。</li>
-				<li><strong class="bold">节点数量</strong>:组成分布式H2O集群的服务器节点数量。</li>
-				<li><strong class="bold">内存和CPU </strong>:专用于H2O集群的每个节点的内存和CPU数量。</li>
-				<li><strong class="bold">最大空闲时间(小时)</strong>:当H2O集群空闲时间超过这个时间长度时，H2O集群将自动关闭。</li>
-				<li><strong class="bold">最大正常运行时间(小时)</strong>:当H2O集群运行时间超过此时间长度时，无论空闲与否，H2O集群都将自动关闭。</li>
+				<li><strong class="bold">每个用户的集群限制</strong>:一个用户可以并发运行的 H2O 集群的数量。</li>
+				<li><strong class="bold">节点数量</strong>:组成分布式 H2O 集群的服务器节点数量。</li>
+				<li><strong class="bold">内存和 CPU </strong>:专用于 H2O 集群的每个节点的内存和 CPU 数量。</li>
+				<li><strong class="bold">最大空闲时间(小时)</strong>:当 H2O 集群空闲时间超过这个时间长度时，H2O 集群将自动关闭。</li>
+				<li><strong class="bold">最大正常运行时间(小时)</strong>:当 H2O 集群运行时间超过此时间长度时，无论空闲与否，H2O 集群都将自动关闭。</li>
 				<li><strong class="bold">启用集群保存</strong>:在集群关闭时保存集群数据(在用户手动关闭之后，或者在超过最大空闲时间或正常运行时间之后)，以便集群可以重新启动并恢复到关闭时的状态。</li>
 			</ul>
-			<p>请注意，前面的内容并不是详尽的列表，而只是管理H2O集群上用户资源使用的关键配置的列表。</p>
+			<p>请注意，前面的内容并不是详尽的列表，而只是管理 H2O 集群上用户资源使用的关键配置的列表。</p>
 			<h2 id="_idParaDest-211"><a id="_idTextAnchor213"/>企业蒸汽配置</h2>
-			<p>管理企业Steam服务器的配置在<strong class="bold">常规</strong> &gt; <strong class="bold"> STEAM配置</strong>中进行。完成此任务的配置集如下。</p>
+			<p>管理企业 Steam 服务器的配置在<strong class="bold">常规</strong> &gt; <strong class="bold"> STEAM 配置</strong>中进行。完成此任务的配置集如下。</p>
 			<h3>许可证</h3>
-			<p>Enterprise Steam <a id="_idIndexMarker897"/>需要来自H2O.ai的许可证。此配置页面标识当前许可证的剩余天数，并提供管理许可证的方法。</p>
+			<p>Enterprise Steam <a id="_idIndexMarker897"/>需要来自 H2O.ai 的许可证。此配置页面标识当前许可证的剩余天数，并提供管理许可证的方法。</p>
 			<h3>安全性</h3>
-			<p>此配置页面提供了加强企业级Steam安全性的设置。Enterprise <a id="_idIndexMarker898"/> Steam只在HTTPS上运行，默认情况下，Steam会生成一个自签名证书。此页面允许您配置您自己的TLS证书的路径，以及其他安全设置。</p>
+			<p>此配置页面提供了加强企业级 Steam 安全性的设置。Enterprise <a id="_idIndexMarker898"/> Steam 只在 HTTPS 上运行，默认情况下，Steam 会生成一个自签名证书。此页面允许您配置您自己的 TLS 证书的路径，以及其他安全设置。</p>
 			<h3>记录</h3>
-			<p>Enterprise Steam <a id="_idIndexMarker899"/>对用户认证和H2O集群的使用情况进行广泛的日志记录。此页面允许您配置日志级别和日志目录路径。这也是您可以下载日志的地方。</p>
-			<p>您还可以下载用户级粒度的H2O集群使用情况报告。</p>
+			<p>Enterprise Steam <a id="_idIndexMarker899"/>对用户认证和 H2O 集群的使用情况进行广泛的日志记录。此页面允许您配置日志级别和日志目录路径。这也是您可以下载日志的地方。</p>
+			<p>您还可以下载用户级粒度的 H2O 集群使用情况报告。</p>
 			<h3>进口/出口</h3>
-			<p>该页面通过允许导出企业Steam配置以及导入和加载来自另一个实例的配置来促进配置的<a id="_idIndexMarker900"/>重用。</p>
+			<p>该页面通过允许导出企业 Steam 配置以及导入和加载来自另一个实例的配置来促进配置的<a id="_idIndexMarker900"/>重用。</p>
 			<h2 id="_idParaDest-212"><a id="_idTextAnchor214"/>服务器集群(后端)集成</h2>
-			<p>这本书的一个主题<a id="_idIndexMarker901"/>是H2O核心(H2O-3和苏打水)被用来在海量数据上建立模型。为了实现这一点，用户启动了H2O集群，它将数据和计算并行分布在多个独立的服务器上。例如，这允许XGBoost或<strong class="bold">广义线性模型</strong> ( <strong class="bold"> GLM </strong>)算法<a id="_idIndexMarker902"/>针对1tb的数据进行训练。</p>
-			<p>Enterprise Steam允许管理员在这些服务器集群环境中配置H2O集群的集成。这是在配置页面的<strong class="bold">后端</strong>部分完成的。</p>
-			<p>H2O集群可以在两种类型的服务器集群后端上启动，并由Enterprise Steam管理:</p>
+			<p>这本书的一个主题<a id="_idIndexMarker901"/>是 H2O 核心(H2O-3 和苏打水)被用来在海量数据上建立模型。为了实现这一点，用户启动了 H2O 集群，它将数据和计算并行分布在多个独立的服务器上。例如，这允许 XGBoost 或<strong class="bold">广义线性模型</strong> ( <strong class="bold"> GLM </strong>)算法<a id="_idIndexMarker902"/>针对 1tb 的数据进行训练。</p>
+			<p>Enterprise Steam 允许管理员在这些服务器集群环境中配置 H2O 集群的集成。这是在配置页面的<strong class="bold">后端</strong>部分完成的。</p>
+			<p>H2O 集群可以在两种类型的服务器集群后端上启动，并由 Enterprise Steam 管理:</p>
 			<ul>
-				<li><strong class="bold"> Hadoop </strong>:这些是基于YARN的分布式<a id="_idIndexMarker903"/>系统，例如Cloudera CDH或CDP，或者亚马逊EMR。</li>
+				<li><strong class="bold"> Hadoop </strong>:这些是基于 YARN 的分布式<a id="_idIndexMarker903"/>系统，例如 Cloudera CDH 或 CDP，或者亚马逊 EMR。</li>
 				<li><strong class="bold"> Kubernetes </strong>:这是一个分布式<a id="_idIndexMarker904"/>框架，围绕编排容器池而构建，与供应商无关，尽管提供特定于供应商的产品。</li>
 			</ul>
-			<p>任一后端的配置项目都很详细<a id="_idIndexMarker905"/>和广泛，以允许H2O集群在这些企业环境中安全运行。请在<a href="https://docs.h2o.ai/enterprise-steam/latest-stable/docs/install-docs/backends.html">https://docs . H2O . ai/enterprise-steam/latest-stable/docs/install-docs/back ends . html</a>查看H2O文档以了解完整的详细信息。</p>
-			<h2 id="_idParaDest-213"><a id="_idTextAnchor215"/> H2O-3和苏打水管理</h2>
+			<p>任一后端的配置项目都很详细<a id="_idIndexMarker905"/>和广泛，以允许 H2O 集群在这些企业环境中安全运行。请在<a href="https://docs.h2o.ai/enterprise-steam/latest-stable/docs/install-docs/backends.html">https://docs . H2O . ai/enterprise-steam/latest-stable/docs/install-docs/back ends . html</a>查看 H2O 文档以了解完整的详细信息。</p>
+			<h2 id="_idParaDest-213"><a id="_idTextAnchor215"/> H2O-3 和苏打水管理</h2>
 			<p>现在集群后端已经<a id="_idIndexMarker906"/>配置好了，管理员可以管理和配置<strong class="bold"> H2O-3 </strong>或<strong class="bold">苏打水</strong>，用户在这些后端上运行。这是在配置页面的<strong class="bold">产品</strong>部分完成的。</p>
-			<p>H2O-3和苏打水都有以下页面:</p>
+			<p>H2O-3 和苏打水都有以下页面:</p>
 			<ul>
-				<li><strong class="bold">配置</strong>:这是用户和配置文件中所有H2O-3或苏打水集群的高级配置。例如，您可以在Hadoop系统上的YARN资源管理器UI中列出的所有H2O集群的作业名称后面添加一个已配置的YARN前缀。</li>
-				<li><code>scp</code> command from another server). Library versions can be added and removed on this configuration page.<p class="callout-heading">关于升级H2O版本的说明</p><p class="callout">升级H2O版本很容易:用户只需通过选择一个新的库版本来启动一个新的H2O集群(<a id="_idIndexMarker908"/>管理员已经如上所述上传或复制到Enterprise Steam)。这种简单的升级方法是可行的，因为(a)当H2O集群启动时，H2O集群架构将库从企业Steam推送到服务器集群上的节点，并且当H2O集群终止时移除库，以及(b)每个H2O集群是一个独立的实体。因此，<em class="italic">用户A </em>可以使用一个H2O版本启动H2O集群，而<em class="italic">用户B </em>可以使用另一个版本(或者<em class="italic">用户A </em>可以使用不同的版本启动多个H2O集群)。</p><p class="callout">在所有情况下，都要求IDE环境中安装的库版本与启动H2O集群时使用的版本相匹配。</p></li>
+				<li><strong class="bold">配置</strong>:这是用户和配置文件中所有 H2O-3 或苏打水集群的高级配置。例如，您可以在 Hadoop 系统上的 YARN 资源管理器 UI 中列出的所有 H2O 集群的作业名称后面添加一个已配置的 YARN 前缀。</li>
+				<li><code>scp</code> command from another server). Library versions can be added and removed on this configuration page.<p class="callout-heading">关于升级 H2O 版本的说明</p><p class="callout">升级 H2O 版本很容易:用户只需通过选择一个新的库版本来启动一个新的 H2O 集群(<a id="_idIndexMarker908"/>管理员已经如上所述上传或复制到 Enterprise Steam)。这种简单的升级方法是可行的，因为(a)当 H2O 集群启动时，H2O 集群架构将库从企业 Steam 推送到服务器集群上的节点，并且当 H2O 集群终止时移除库，以及(b)每个 H2O 集群是一个独立的实体。因此，<em class="italic">用户 A </em>可以使用一个 H2O 版本启动 H2O 集群，而<em class="italic">用户 B </em>可以使用另一个版本(或者<em class="italic">用户 A </em>可以使用不同的版本启动多个 H2O 集群)。</p><p class="callout">在所有情况下，都要求 IDE 环境中安装的库版本与启动 H2O 集群时使用的版本相匹配。</p></li>
 			</ul>
-			<p>关于在Hadoop上使用H2O-3的更多深入细节，请参见H2O.ai文档:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/welcome.html#hadoop-users">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/welcome . html # Hadoop-users</a>。请注意，此链接中列出的Hadoop启动参数列表可用于为所有H2O-3集群配置企业级Steam。</p>
+			<p>关于在 Hadoop 上使用 H2O-3 的更多深入细节，请参见 H2O.ai 文档:<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/welcome.html#hadoop-users">https://docs . H2O . ai/H2O/latest-stable/H2O-docs/welcome . html # Hadoop-users</a>。请注意，此链接中列出的 Hadoop 启动参数列表可用于为所有 H2O-3 集群配置企业级 Steam。</p>
 			<h2 id="_idParaDest-214"><a id="_idTextAnchor216"/>重启企业蒸汽</h2>
-			<p>对于某些<a id="_idIndexMarker910"/>配置更改，将会提示您一条消息，说明需要重启Enterprise Steam才能应用这些更改。</p>
-			<p>通过从企业Steam服务器命令行运行以下命令来重新启动企业Steam:</p>
+			<p>对于某些<a id="_idIndexMarker910"/>配置更改，将会提示您一条消息，说明需要重启 Enterprise Steam 才能应用这些更改。</p>
+			<p>通过从企业 Steam 服务器命令行运行以下命令来重新启动企业 Steam:</p>
 			<pre>sudo systemctl restart steam</pre>
-			<p>通过运行以下命令，验证企业级Steam在重启后是否正在运行:</p>
+			<p>通过运行以下命令，验证企业级 Steam 在重启后是否正在运行:</p>
 			<pre>sudo systemctl status steam</pre>
-			<p>企业Steam服务故障排除日志位于企业Steam服务器上的以下路径:<code>/opt/h2oai/steam/logs/steam.log</code>。</p>
-			<p>现在我们已经了解了企业Steam管理员对H2O大规模机器学习的看法，让我们看看这对运营团队意味着什么。</p>
-			<h1 id="_idParaDest-215"><a id="_idTextAnchor217"/>视图2–运营团队</h1>
-			<p>运营团队维护<a id="_idIndexMarker911"/>企业系统并监控其上运行的工作负载。对于大规模的H2O，这些操作集中在以下三个方面:</p>
+			<p>企业 Steam 服务故障排除日志位于企业 Steam 服务器上的以下路径:<code>/opt/h2oai/steam/logs/steam.log</code>。</p>
+			<p>现在我们已经了解了企业 Steam 管理员对 H2O 大规模机器学习的看法，让我们看看这对运营团队意味着什么。</p>
+			<h1 id="_idParaDest-215"><a id="_idTextAnchor217"/>视图 2–运营团队</h1>
+			<p>运营团队维护<a id="_idIndexMarker911"/>企业系统并监控其上运行的工作负载。对于大规模的 H2O，这些操作集中在以下三个方面:</p>
 			<ul>
-				<li>企业Steam服务器</li>
-				<li>H2O模型构建在企业集群上运行的作业</li>
+				<li>企业 Steam 服务器</li>
+				<li>H2O 模型构建在企业集群上运行的作业</li>
 				<li>部署到生产评分环境中的模型</li>
 			</ul>
 			<p>下图总结了围绕这些领域的具体操作角色及其关注点:</p>
@@ -184,41 +184,41 @@
 			<div><div><img src="img/B16721_11_005.jpg" alt="Figure 11.5 – Operations and persona concerns for H2O at scale&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.5-大规模H2O的运营和角色关注点</p>
-			<p>让我们更仔细地看看每个运营角色以及他们对H2O大规模运营的关注。</p>
-			<h2 id="_idParaDest-216"><a id="_idTextAnchor218"/>企业Steam服务器运营</h2>
-			<p>围绕企业级Steam <a id="_idIndexMarker913"/>服务器的运营重点是部署和维护服务器以及在其上运行的企业级Steam服务。</p>
-			<p>Enterprise Steam是一个轻量级服务，主要是一个web应用程序，带有一个嵌入式数据库来维护状态。没有在企业流上运行的数据科学工作负载，也没有数据科学数据通过或驻留在其上。正如之前所讨论的以及图11.3 中所总结的，Enterprise Steam在后端Hadoop或Kubernetes基础架构上启动H2O集群形成，在数据科学家的IDE的驱动下，H2O工作负载在该基础架构上发生。</p>
-			<h2 id="_idParaDest-217"><a id="_idTextAnchor219"/> H2O集群运营部</h2>
-			<p>H2O集群操作通常由Hadoop或Kubernetes管理员执行。在Hadoop上，H2O集群作为原生YARN MapReduce(针对H2O-3集群)或Spark(针对苏打水集群)作业<a id="_idIndexMarker914"/>运行，并且可以在YARN资源管理UI中查看。如<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第2章</em> </a>、<em class="italic">平台组件和关键概念</em>所述，每个纱线作业映射到一个H2O集群，并在集群运行期间运行。</p>
+			<p class="figure-caption">图 11.5-大规模 H2O 的运营和角色关注点</p>
+			<p>让我们更仔细地看看每个运营角色以及他们对 H2O 大规模运营的关注。</p>
+			<h2 id="_idParaDest-216"><a id="_idTextAnchor218"/>企业 Steam 服务器运营</h2>
+			<p>围绕企业级 Steam <a id="_idIndexMarker913"/>服务器的运营重点是部署和维护服务器以及在其上运行的企业级 Steam 服务。</p>
+			<p>Enterprise Steam 是一个轻量级服务，主要是一个 web 应用程序，带有一个嵌入式数据库来维护状态。没有在企业流上运行的数据科学工作负载，也没有数据科学数据通过或驻留在其上。正如之前所讨论的以及图 11.3 中所总结的，Enterprise Steam 在后端 Hadoop 或 Kubernetes 基础架构上启动 H2O 集群形成，在数据科学家的 IDE 的驱动下，H2O 工作负载在该基础架构上发生。</p>
+			<h2 id="_idParaDest-217"><a id="_idTextAnchor219"/> H2O 集群运营部</h2>
+			<p>H2O 集群操作通常由 Hadoop 或 Kubernetes 管理员执行。在 Hadoop 上，H2O 集群作为原生 YARN MapReduce(针对 H2O-3 集群)或 Spark(针对苏打水集群)作业<a id="_idIndexMarker914"/>运行，并且可以在 YARN 资源管理 UI 中查看。如<a href="B16721_02_Final_SK_ePub.xhtml#_idTextAnchor024"> <em class="italic">第 2 章</em> </a>、<em class="italic">平台组件和关键概念</em>所述，每个纱线作业映射到一个 H2O 集群，并在集群运行期间运行。</p>
 			<h2 id="_idParaDest-218"><a id="_idTextAnchor220"/> MLOps</h2>
-			<p>MLOps有时指的是整个机器学习生命周期中的操作<a id="_idIndexMarker915"/>，但我们将专注于在生产系统中部署和维护评分模型的操作。这些操作通常集中在以下方面:</p>
+			<p>MLOps 有时指的是整个机器学习生命周期中的操作<a id="_idIndexMarker915"/>，但我们将专注于在生产系统中部署和维护评分模型的操作。这些操作通常集中在以下方面:</p>
 			<ul>
 				<li><strong class="bold">模型部署</strong>:这涉及到模型到其评分环境的实际<a id="_idIndexMarker916"/>部署，通常<a id="_idIndexMarker917"/>通过自动化<strong class="bold">持续集成和持续交付</strong> ( <strong class="bold"> CI/CD </strong>)管道来执行。</li>
 				<li><strong class="bold">模型监控(软件焦点)</strong>:这是<a id="_idIndexMarker918"/>一个传统的关注点，从运行软件的角度询问模型的健康程度。典型地，模型被监控<a id="_idIndexMarker919"/>以查看它正在无错误地运行，并且它的评分延迟满足<strong class="bold">服务水平协议</strong> ( <strong class="bold"> SLA </strong>)期望。</li>
 				<li><strong class="bold">模型监控(机器学习焦点)</strong>:这是一组专门围绕模型评分结果的关注点。它通常说明数据漂移是否正在发生(评分时的数据分布是否已经偏离训练数据的分布)，这用于确定模型是否需要重新训练。其他关注点可能是监控预测衰减(分数的预测分布是否正在向预测性更低的方向转变)、监控偏差(模型是否以不公平或有偏见的方式对特定子集或人口统计组进行预测)，以及监控敌对攻击(试图用人工数据欺骗模型以创建错误的预测或恶意破坏模型评分)。</li>
-				<li><strong class="bold">模型治理</strong>:这是一组关注点，包括管理模型版本和追溯部署的模型到模型构建的细节(例如，用于构建模型的训练和<a id="_idIndexMarker921"/>测试数据集，训练模型的配置细节，训练模型的数据科学所有者，等等)。它还包括回滚或重现模型以及其他可能特定于组织的问题的能力。请注意，在模型构建阶段生成的模型文档是用于模型治理的极好资产。(关于生成H2O AutoDoc的详细内容，参见<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第七章</em> </a>、<em class="italic">了解ML模型</em>)。)</li>
+				<li><strong class="bold">模型治理</strong>:这是一组关注点，包括管理模型版本和追溯部署的模型到模型构建的细节(例如，用于构建模型的训练和<a id="_idIndexMarker921"/>测试数据集，训练模型的配置细节，训练模型的数据科学所有者，等等)。它还包括回滚或重现模型以及其他可能特定于组织的问题的能力。请注意，在模型构建阶段生成的模型文档是用于模型治理的极好资产。(关于生成 H2O AutoDoc 的详细内容，参见<a href="B16721_07_Final_SK_ePub.xhtml#_idTextAnchor127"> <em class="italic">第七章</em> </a>、<em class="italic">了解 ML 模型</em>)。)</li>
 			</ul>
-			<p>请注意，MLOps是一组<a id="_idIndexMarker922"/>快速移动的实践和实现。自行构建MLOPs框架可能会导致很难跟上软件供应商提供的MLOps平台的功能和易用性。我们将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第13章</em> </a>、<em class="italic">介绍H2O人工智能云</em>中看到，H2O.ai提供了一个完全有能力的MLOps组件，作为其端到端平台的一部分。</p>
-			<p>现在，我们已经了解了企业Steam管理员和H2O对机器学习的运营观点，让我们看看这对数据科学家意味着什么。</p>
-			<h1 id="_idParaDest-219"><a id="_idTextAnchor221"/>视图3–数据科学家</h1>
-			<p>下图显示了大规模使用H2O的数据科学家与企业Steam管理员和运营团队互动的主要方式:</p>
+			<p>请注意，MLOps 是一组<a id="_idIndexMarker922"/>快速移动的实践和实现。自行构建 MLOPs 框架可能会导致很难跟上软件供应商提供的 MLOps 平台的功能和易用性。我们将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第 13 章</em> </a>、<em class="italic">介绍 H2O 人工智能云</em>中看到，H2O.ai 提供了一个完全有能力的 MLOps 组件，作为其端到端平台的一部分。</p>
+			<p>现在，我们已经了解了企业 Steam 管理员和 H2O 对机器学习的运营观点，让我们看看这对数据科学家意味着什么。</p>
+			<h1 id="_idParaDest-219"><a id="_idTextAnchor221"/>视图 3–数据科学家</h1>
+			<p>下图显示了大规模使用 H2O 的数据科学家与企业 Steam 管理员和运营团队互动的主要方式:</p>
 			<div><div><img src="img/B16721_11_006.jpg" alt="Figure 11.6 – Data scientist interactions with administrator and operations stakeholders when using H2O at scale&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图11.6—大规模使用H2O时，数据科学家与管理员和运营利益相关方的互动</p>
-			<p>让我们深入了解<a id="_idIndexMarker924"/>关键数据科学家与企业Steam管理员和运营团队的互动。</p>
-			<h2 id="_idParaDest-220"><a id="_idTextAnchor222"/>与企业Steam管理员的互动</h2>
-			<p>回想一下，数据科学家<a id="_idIndexMarker925"/>通过Enterprise Steam进行身份验证，并启动由Enterprise Steam配置文件定义的H2O集群大小。数据科学家有时可能会与企业Steam <a id="_idIndexMarker926"/>管理员进行交互，以解决身份验证问题，或者要求配置文件来调整H2O集群的大小，使其更适合他们的需求。他们还可能请求访问不同于其配置文件中所允许的纱线队列，请求为其配置文件配置更长的空闲时间，或者请求新版本的H2O来启动H2O集群。当然可能有其他H2O配置和简档请求。回顾<em class="italic">视图1——企业Steam管理员</em>部分将帮助数据科学家了解企业Steam配置如何影响他们，以及可能需要改变的地方。</p>
-			<h2 id="_idParaDest-221"><a id="_idTextAnchor223"/>与H2O集群(Hadoop或Kubernetes)运营团队的互动</h2>
-			<p>数据科学家很少与<a id="_idIndexMarker927"/> H2O集群运营团队互动。这些团队通常是Hadoop或Kubernetes运营<a id="_idIndexMarker928"/>团队，这取决于哪个服务器集群后端H2O集群启动。</p>
-			<p>当数据科学家与这些团队互动时，通常是为了帮助解决H2O工作失败或表现不佳的问题。这种交互可能涉及请求Hadoop或Kubernetes日志<a id="_idIndexMarker929"/>发送到<strong class="bold"> H2O支持门户</strong>用于H2O方面的故障排除。</p>
-			<h2 id="_idParaDest-222"><a id="_idTextAnchor224"/>与MLOps团队的互动</h2>
-			<p>数据科学家通常与MLOps团队互动<a id="_idIndexMarker930"/>,在模型部署过程的开始就参与进来。这通常包括为部署准备被称为<a id="_idIndexMarker932"/> H2O MOJO(从模型构建中生成)的<a id="_idIndexMarker931"/>模型评分工件，并且可能为治理目的准备其他资产与模型一起存档(例如，H2O AutoDoc)。</p>
-			<p>数据科学家还可以与MLOps团队进行交互，以确定数据漂移是否正在发生，从而决定是否使用更多最新的训练数据来重新训练模型。根据MLOps系统，此流程可能会自动执行，以便向数据科学家和其他利益相关方发送警报，其中包含识别和描述漂移的内容。</p>
+			<p class="figure-caption">图 11.6—大规模使用 H2O 时，数据科学家与管理员和运营利益相关方的互动</p>
+			<p>让我们深入了解<a id="_idIndexMarker924"/>关键数据科学家与企业 Steam 管理员和运营团队的互动。</p>
+			<h2 id="_idParaDest-220"><a id="_idTextAnchor222"/>与企业 Steam 管理员的互动</h2>
+			<p>回想一下，数据科学家<a id="_idIndexMarker925"/>通过 Enterprise Steam 进行身份验证，并启动由 Enterprise Steam 配置文件定义的 H2O 集群大小。数据科学家有时可能会与企业 Steam <a id="_idIndexMarker926"/>管理员进行交互，以解决身份验证问题，或者要求配置文件来调整 H2O 集群的大小，使其更适合他们的需求。他们还可能请求访问不同于其配置文件中所允许的纱线队列，请求为其配置文件配置更长的空闲时间，或者请求新版本的 H2O 来启动 H2O 集群。当然可能有其他 H2O 配置和简档请求。回顾<em class="italic">视图 1——企业 Steam 管理员</em>部分将帮助数据科学家了解企业 Steam 配置如何影响他们，以及可能需要改变的地方。</p>
+			<h2 id="_idParaDest-221"><a id="_idTextAnchor223"/>与 H2O 集群(Hadoop 或 Kubernetes)运营团队的互动</h2>
+			<p>数据科学家很少与<a id="_idIndexMarker927"/> H2O 集群运营团队互动。这些团队通常是 Hadoop 或 Kubernetes 运营<a id="_idIndexMarker928"/>团队，这取决于哪个服务器集群后端 H2O 集群启动。</p>
+			<p>当数据科学家与这些团队互动时，通常是为了帮助解决 H2O 工作失败或表现不佳的问题。这种交互可能涉及请求 Hadoop 或 Kubernetes 日志<a id="_idIndexMarker929"/>发送到<strong class="bold"> H2O 支持门户</strong>用于 H2O 方面的故障排除。</p>
+			<h2 id="_idParaDest-222"><a id="_idTextAnchor224"/>与 MLOps 团队的互动</h2>
+			<p>数据科学家通常与 MLOps 团队互动<a id="_idIndexMarker930"/>,在模型部署过程的开始就参与进来。这通常包括为部署准备被称为<a id="_idIndexMarker932"/> H2O MOJO(从模型构建中生成)的<a id="_idIndexMarker931"/>模型评分工件，并且可能为治理目的准备其他资产与模型一起存档(例如，H2O AutoDoc)。</p>
+			<p>数据科学家还可以与 MLOps 团队进行交互，以确定数据漂移是否正在发生，从而决定是否使用更多最新的训练数据来重新训练模型。根据 MLOps 系统，此流程可能会自动执行，以便向数据科学家和其他利益相关方发送警报，其中包含识别和描述漂移的内容。</p>
 			<h1 id="_idParaDest-223"><a id="_idTextAnchor225"/>总结</h1>
-			<p>在本章中，我们了解到H2O管理员(通过Enterprise Steam工作)和运营团队(管理执行H2O模型构建的企业服务器集群环境，并在模型部署到评分环境后管理、监控和治理模型)是大规模参与H2O机器学习的关键角色。我们还了解了构建模型的数据科学家如何受到这些角色的影响，以及为什么他们可能需要与角色互动。</p>
-			<p>让我们继续讨论另外两个角色，他们在H2O机器学习中发挥着重要作用，并且可能会影响数据科学家:企业架构师和安全利益相关者。</p>
+			<p>在本章中，我们了解到 H2O 管理员(通过 Enterprise Steam 工作)和运营团队(管理执行 H2O 模型构建的企业服务器集群环境，并在模型部署到评分环境后管理、监控和治理模型)是大规模参与 H2O 机器学习的关键角色。我们还了解了构建模型的数据科学家如何受到这些角色的影响，以及为什么他们可能需要与角色互动。</p>
+			<p>让我们继续讨论另外两个角色，他们在 H2O 机器学习中发挥着重要作用，并且可能会影响数据科学家:企业架构师和安全利益相关者。</p>
 		</div>
 	
 

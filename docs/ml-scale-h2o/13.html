@@ -6,152 +6,152 @@
 		
 	
 	
-		<div><h1 id="_idParaDest-176"><em class="italic"> <a id="_idTextAnchor178"/>第十章</em> : H2O模式部署模式</h1>
-			<p>在前一章中，我们了解了从我们的模型构建步骤中生成一个随时可以部署的评分工件是多么容易，以及这个工件，称为MOJO，是如何被设计来灵活地部署到各种各样的生产系统的。</p>
-			<p>在这一章中，我们通过调查各种MOJO部署模式并深入研究每种部署模式的细节来探索MOJO部署的灵活性。我们将看到MOJOs是如何在H2O软件、包括<strong class="bold">商业智能</strong> ( <strong class="bold"> BI </strong>)工具在内的第三方软件以及您自己的软件上实现评分的。这些实施将包括对实时、批量和流式数据的评分。</p>
-			<p>回想一下从<a href="B16721_01_Final_SK_ePub.xhtml#_idTextAnchor015"> <em class="italic">第一章</em> </a>，<em class="italic">机遇与挑战</em>，<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型在部署到生产系统时如何实现商业价值。您在本章中获得的知识将允许您为特定的业务案例找到合适的MOJO部署模式。例如，它将允许分析师从<strong class="bold"> Microsoft Excel </strong>电子表格中执行时间序列预测，允许技术人员对来自制造流程的数据流中的产品缺陷预测做出回应，允许业务利益相关者对直接在雪花表上评分的欺诈预测做出回应。</p>
-			<p>本章的目标是让你实现自己的H2O模型评分，无论是从这些例子，你的网络搜索，还是你的想象力，这些例子的启发。</p>
+		<div><h1 id="_idParaDest-176"><em class="italic"> <a id="_idTextAnchor178"/>第十章</em> : H2O 模式部署模式</h1>
+			<p>在前一章中，我们了解了从我们的模型构建步骤中生成一个随时可以部署的评分工件是多么容易，以及这个工件，称为 MOJO，是如何被设计来灵活地部署到各种各样的生产系统的。</p>
+			<p>在这一章中，我们通过调查各种 MOJO 部署模式并深入研究每种部署模式的细节来探索 MOJO 部署的灵活性。我们将看到 MOJOs 是如何在 H2O 软件、包括<strong class="bold">商业智能</strong> ( <strong class="bold"> BI </strong>)工具在内的第三方软件以及您自己的软件上实现评分的。这些实施将包括对实时、批量和流式数据的评分。</p>
+			<p>回想一下从<a href="B16721_01_Final_SK_ePub.xhtml#_idTextAnchor015"> <em class="italic">第一章</em> </a>，<em class="italic">机遇与挑战</em>，<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型在部署到生产系统时如何实现商业价值。您在本章中获得的知识将允许您为特定的业务案例找到合适的 MOJO 部署模式。例如，它将允许分析师从<strong class="bold"> Microsoft Excel </strong>电子表格中执行时间序列预测，允许技术人员对来自制造流程的数据流中的产品缺陷预测做出回应，允许业务利益相关者对直接在雪花表上评分的欺诈预测做出回应。</p>
+			<p>本章的目标是让你实现自己的 H2O 模型评分，无论是从这些例子，你的网络搜索，还是你的想象力，这些例子的启发。</p>
 			<p>因此，在本章中，我们将讨论以下主要话题:</p>
 			<ul>
-				<li>调查MOJO部署模式的示例</li>
-				<li>探索H2O软件上的MOJO评分示例</li>
-				<li>探索第三方软件上的MOJO评分示例</li>
-				<li>探索目标系统软件上的MOJO评分示例</li>
-				<li>探索基于H2O无人驾驶人工智能集成的加速器示例</li>
+				<li>调查 MOJO 部署模式的示例</li>
+				<li>探索 H2O 软件上的 MOJO 评分示例</li>
+				<li>探索第三方软件上的 MOJO 评分示例</li>
+				<li>探索目标系统软件上的 MOJO 评分示例</li>
+				<li>探索基于 H2O 无人驾驶人工智能集成的加速器示例</li>
 			</ul>
 			<h1 id="_idParaDest-177"><a id="_idTextAnchor179"/>技术要求</h1>
-			<p>本章没有技术要求，尽管我们将强调实现和执行MOJO部署模式的技术步骤。</p>
-			<h1 id="_idParaDest-178"><a id="_idTextAnchor180"/>调查MOJO部署模式的样本</h1>
-			<p>本章的目的是<a id="_idIndexMarker711"/>概述部署MOJOs进行预测的各种方式。给出了足够的细节来帮助理解MOJO部署和评分的背景。提供链接是为了查找底层细节。</p>
-			<p>首先，让我们以表格形式总结一下我们的MOJO评分模式示例，以了解部署MOJO的许多不同方式。在这个示例概述之后，我们将更全面地阐述每个表条目。</p>
+			<p>本章没有技术要求，尽管我们将强调实现和执行 MOJO 部署模式的技术步骤。</p>
+			<h1 id="_idParaDest-178"><a id="_idTextAnchor180"/>调查 MOJO 部署模式的样本</h1>
+			<p>本章的目的是<a id="_idIndexMarker711"/>概述部署 MOJOs 进行预测的各种方式。给出了足够的细节来帮助理解 MOJO 部署和评分的背景。提供链接是为了查找底层细节。</p>
+			<p>首先，让我们以表格形式总结一下我们的 MOJO 评分模式示例，以了解部署 MOJO 的许多不同方式。在这个示例概述之后，我们将更全面地阐述每个表条目。</p>
 			<p>请注意，我们的部署模式摘要的表列如下所示:</p>
 			<ul>
-				<li><strong class="bold">数据速度</strong>:这是指被评分数据的大小<a id="_idIndexMarker712"/>和速度，分为<strong class="bold">实时</strong>(单个记录被评分，通常不到100毫秒)<strong class="bold">批量</strong>(一次评分大量记录)<strong class="bold">流式</strong>(被评分记录的连续流)。</li>
+				<li><strong class="bold">数据速度</strong>:这是指被评分数据的大小<a id="_idIndexMarker712"/>和速度，分为<strong class="bold">实时</strong>(单个记录被评分，通常不到 100 毫秒)<strong class="bold">批量</strong>(一次评分大量记录)<strong class="bold">流式</strong>(被评分记录的连续流)。</li>
 				<li><strong class="bold">计分通信</strong>:这是指<a id="_idIndexMarker713"/>计分是如何被<a id="_idIndexMarker714"/>触发和通信的——例如，通过一个<strong class="bold">表象状态转移</strong> ( <strong class="bold"> REST </strong>)调用或者<a id="_idIndexMarker715"/>一个<strong class="bold">结构化查询语言</strong> ( <strong class="bold"> SQL </strong>)语句。</li>
-				<li><strong class="bold"> MOJO部署</strong>:这是一个关于MOJO如何在评分系统上部署的简短<a id="_idIndexMarker716"/>描述。</li>
+				<li><strong class="bold"> MOJO 部署</strong>:这是一个关于 MOJO 如何在评分系统上部署的简短<a id="_idIndexMarker716"/>描述。</li>
 			</ul>
 			<p>让我们来看看一些部署模式。我们将这些模式分为四类。</p>
-			<h2 id="_idParaDest-179"><a id="_idTextAnchor181"/> H2O软件</h2>
-			<p>这是一个您可以在H2O.ai提供和支持的软件上<a id="_idIndexMarker717"/>部署和评分MOJOs的方法示例。下表对此进行了总结:</p>
+			<h2 id="_idParaDest-179"><a id="_idTextAnchor181"/> H2O 软件</h2>
+			<p>这是一个您可以在 H2O.ai 提供和支持的软件上<a id="_idIndexMarker717"/>部署和评分 MOJOs 的方法示例。下表对此进行了总结:</p>
 			<div><div><img src="img/B16721_10_Table_01.jpg" alt=""/>
 				</div>
 			</div>
-			<p>我们将看到部署到H2O软件是超级容易的，因为你所要做的就是上传MOJO(手动或编程)。</p>
+			<p>我们将看到部署到 H2O 软件是超级容易的，因为你所要做的就是上传 MOJO(手动或编程)。</p>
 			<h2 id="_idParaDest-180">第三方软件集成</h2>
-			<p>以下是一些使用第三方软件进行MOJO <a id="_idIndexMarker718"/>评分的例子:</p>
+			<p>以下是一些使用第三方软件进行 MOJO <a id="_idIndexMarker718"/>评分的例子:</p>
 			<div><div><img src="img/B16721_10_Table_02.jpg" alt=""/>
 				</div>
 			</div>
-			<p>请注意，一些第三方集成是通过使用部署到REST服务器的MOJOs的评分来完成的。这样做的好处是将您的部署集中在一个地方(REST服务器)，并从许多地方使用它(例如，在员工个人计算机上部署的许多Tableau或MS Excel实例<a id="_idIndexMarker719"/>)。</p>
-			<p>其他第三方集成是通过直接在第三方软件系统上部署MOJOs来完成的。例如，雪花集成是在雪花架构上实现的，并允许以雪花规模执行批量评分(每秒可以对几十万行进行评分)。</p>
+			<p>请注意，一些第三方集成是通过使用部署到 REST 服务器的 MOJOs 的评分来完成的。这样做的好处是将您的部署集中在一个地方(REST 服务器)，并从许多地方使用它(例如，在员工个人计算机上部署的许多 Tableau 或 MS Excel 实例<a id="_idIndexMarker719"/>)。</p>
+			<p>其他第三方集成是通过直接在第三方软件系统上部署 MOJOs 来完成的。例如，雪花集成是在雪花架构上实现的，并允许以雪花规模执行批量评分(每秒可以对几十万行进行评分)。</p>
 			<h2 id="_idParaDest-181"><a id="_idTextAnchor183"/>您的软件集成</h2>
-			<p>我们将探索以下模式<a id="_idIndexMarker720"/>，将MOJOs直接集成到您自己的软件中:</p>
+			<p>我们将探索以下模式<a id="_idIndexMarker720"/>，将 MOJOs 直接集成到您自己的软件中:</p>
 			<div><div><img src="img/B16721_10_Table_03.jpg" alt=""/>
 				</div>
 			</div>
-			<p>MOJO集成到您的软件中需要一个MOJO包装类。我们在第九章 、<em class="italic">制作配乐和H2O魔咒</em>中学习了如何做到这一点。当然，您可以采用另一种方法，将您的软件与从REST端点使用的MOJO评分相集成。</p>
-			<h2 id="_idParaDest-182"><a id="_idTextAnchor184"/>基于H2O无人驾驶人工智能集成的加速器</h2>
-			<p>本书重点介绍了H2O岩心(H2O-3和<a id="_idIndexMarker721"/>苏打水)建模技术，用于针对大数据量建立模型。H2O提供了一种替代的建模技术，称为无人驾驶人工智能。无人驾驶<a id="_idIndexMarker722"/> AI是一个专业的、<strong class="bold">自动化ML </strong> ( <strong class="bold"> AutoML </strong>)引擎，允许用户在极短的时间内找到高度准确和可信的模型<a id="_idIndexMarker723"/>。然而，无人驾驶人工智能无法在H2O核心可以进行的大规模数据集上进行训练。然而，无人驾驶人工智能也会产生一种魔力，它的魔力与H2O核心魔力类似。这些相似之处在<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第9章</em> </a>、<em class="italic">制作评分和H2O魔咒</em>中有所涉及。</p>
-			<p>网上有很多部署无人驾驶AI MOJOs的例子。这些例子可以作为以相同模式部署H2O核心MOJOs的指南。因此，将以下无人驾驶人工智能示例视为加速器，可以帮助您部署您的H2O核心MOJOs，但一些实施细节会有所不同:</p>
+			<p>MOJO 集成到您的软件中需要一个 MOJO 包装类。我们在第九章 、<em class="italic">制作配乐和 H2O 魔咒</em>中学习了如何做到这一点。当然，您可以采用另一种方法，将您的软件与从 REST 端点使用的 MOJO 评分相集成。</p>
+			<h2 id="_idParaDest-182"><a id="_idTextAnchor184"/>基于 H2O 无人驾驶人工智能集成的加速器</h2>
+			<p>本书重点介绍了 H2O 岩心(H2O-3 和<a id="_idIndexMarker721"/>苏打水)建模技术，用于针对大数据量建立模型。H2O 提供了一种替代的建模技术，称为无人驾驶人工智能。无人驾驶<a id="_idIndexMarker722"/> AI 是一个专业的、<strong class="bold">自动化 ML </strong> ( <strong class="bold"> AutoML </strong>)引擎，允许用户在极短的时间内找到高度准确和可信的模型<a id="_idIndexMarker723"/>。然而，无人驾驶人工智能无法在 H2O 核心可以进行的大规模数据集上进行训练。然而，无人驾驶人工智能也会产生一种魔力，它的魔力与 H2O 核心魔力类似。这些相似之处在<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第 9 章</em> </a>、<em class="italic">制作评分和 H2O 魔咒</em>中有所涉及。</p>
+			<p>网上有很多部署无人驾驶 AI MOJOs 的例子。这些例子可以作为以相同模式部署 H2O 核心 MOJOs 的指南。因此，将以下无人驾驶人工智能示例视为加速器，可以帮助您部署您的 H2O 核心 MOJOs，但一些实施细节会有所不同:</p>
 			<div><div><img src="img/B16721_10_Table_04.jpg" alt=""/>
 				</div>
 			</div>
-			<p>这四个<a id="_idIndexMarker724"/>表中显示的模式应该能让你很好地理解部署MOJOs的许多方法。然而，它们并不代表所有的可能性。</p>
+			<p>这四个<a id="_idIndexMarker724"/>表中显示的模式应该能让你很好地理解部署 MOJOs 的许多方法。然而，它们并不代表所有的可能性。</p>
 			<p class="callout-heading">关于可能性的一个注记</p>
-			<p class="callout">此处显示的模式仅仅是现有的或可能的H2O MOJO评分模式的一个示例。通过网络搜索可以找到其他MOJO评分模式，您可以发挥想象力，以多种方式将MOJO评分集成到您自己的软件中。此外，H2O.ai正在快速扩展其用于评分的第三方合作伙伴集成，以及扩展其自身的MOJO部署、监控和管理功能。这是一个快速移动的空间。</p>
-			<p>既然我们已经了解了MOJO部署模式的概况，那么让我们开始深入研究每个例子。</p>
-			<h1 id="_idParaDest-183"><a id="_idTextAnchor185"/>探索使用H2O软件进行MOJO评分的示例</h1>
-			<p>本节中的模式代表了部署到H2O软件的mojo<a id="_idIndexMarker725"/>。部署到H2O软件有许多优势。首先，软件是由H2O和他们的ML专家团队支持的。第二，对于H2O软件来说，这个部署工作流程大大简化了，因为你所要做的就是<a id="_idIndexMarker726"/>在一个简单的上传中提供MOJO(通过<strong class="bold">用户界面</strong> ( <strong class="bold"> UI </strong>)、一个API或者一种传输方法，比如远程复制)。第三，H2O评分软件具有额外的功能，如监测预测和数据漂移，这对部署到生产系统的模型非常重要。</p>
-			<p>让我们先来看看H2O的旗舰模型评分平台。</p>
+			<p class="callout">此处显示的模式仅仅是现有的或可能的 H2O MOJO 评分模式的一个示例。通过网络搜索可以找到其他 MOJO 评分模式，您可以发挥想象力，以多种方式将 MOJO 评分集成到您自己的软件中。此外，H2O.ai 正在快速扩展其用于评分的第三方合作伙伴集成，以及扩展其自身的 MOJO 部署、监控和管理功能。这是一个快速移动的空间。</p>
+			<p>既然我们已经了解了 MOJO 部署模式的概况，那么让我们开始深入研究每个例子。</p>
+			<h1 id="_idParaDest-183"><a id="_idTextAnchor185"/>探索使用 H2O 软件进行 MOJO 评分的示例</h1>
+			<p>本节中的模式代表了部署到 H2O 软件的 mojo<a id="_idIndexMarker725"/>。部署到 H2O 软件有许多优势。首先，软件是由 H2O 和他们的 ML 专家团队支持的。第二，对于 H2O 软件来说，这个部署工作流程大大简化了，因为你所要做的就是<a id="_idIndexMarker726"/>在一个简单的上传中提供 MOJO(通过<strong class="bold">用户界面</strong> ( <strong class="bold"> UI </strong>)、一个 API 或者一种传输方法，比如远程复制)。第三，H2O 评分软件具有额外的功能，如监测预测和数据漂移，这对部署到生产系统的模型非常重要。</p>
+			<p>让我们先来看看 H2O 的旗舰模型评分平台。</p>
 			<h2 id="_idParaDest-184">H2O MLOps</h2>
-			<p>H2O MLOps是一个用于部署、监控、管理和治理ML模型的全功能平台。H2O MLOps <a id="_idIndexMarker727"/>致力于大规模部署<a id="_idIndexMarker728"/>模型(许多模型和模型版本、企业级吞吐量和性能、<strong class="bold">高可用性</strong>等等)，并解决生产中模型的监控、管理和治理问题。</p>
-			<p>H2O MLOps及其与H2O更大的<strong class="bold">端到端</strong> ML平台的关系将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第13章</em> </a>、<em class="italic">介绍H2O AI云</em>中进行回顾。另请参见<a href="https://docs.h2o.ai/mlops-release/latest-stable/docs/userguide/index.html">https://docs . H2O . ai/mlops-release/latest-stable/docs/user guide/index . html</a>获取MLOps用户指南，以便更好地了解H2O MLOps。</p>
+			<p>H2O MLOps 是一个用于部署、监控、管理和治理 ML 模型的全功能平台。H2O MLOps <a id="_idIndexMarker727"/>致力于大规模部署<a id="_idIndexMarker728"/>模型(许多模型和模型版本、企业级吞吐量和性能、<strong class="bold">高可用性</strong>等等)，并解决生产中模型的监控、管理和治理问题。</p>
+			<p>H2O MLOps 及其与 H2O 更大的<strong class="bold">端到端</strong> ML 平台的关系将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第 13 章</em> </a>、<em class="italic">介绍 H2O AI 云</em>中进行回顾。另请参见<a href="https://docs.h2o.ai/mlops-release/latest-stable/docs/userguide/index.html">https://docs . H2O . ai/mlops-release/latest-stable/docs/user guide/index . html</a>获取 MLOps 用户指南，以便更好地了解 H2O MLOps。</p>
 			<h3>模式概述</h3>
-			<p>H2O MLOps评分模式<a id="_idIndexMarker729"/>如下图所示:</p>
+			<p>H2O MLOps 评分模式<a id="_idIndexMarker729"/>如下图所示:</p>
 			<div><div><img src="img/B16721_10_001.jpg" alt="Figure 10.1 – Model-scoring pattern for H2O MLOps&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.1-H2O mlop的模型评分模式</p>
+			<p class="figure-caption">图 10.1-H2O mlop 的模型评分模式</p>
 			<p>我们接下来将详细阐述这一点。</p>
 			<h3>评分上下文</h3>
-			<p>这是H2O.ai的旗舰<a id="_idIndexMarker730"/>模型部署、模型监控和模型治理平台。它可用于托管和评分H2O和第三方(非H2O)模型。</p>
-			<p>H2O MLOps实时批量评分模型<a id="_idIndexMarker731"/>。预测<a id="_idIndexMarker732"/>可选地返回原因代码。模型部署为单一模型、冠军/挑战者和A/B。参见<em class="italic">附加注释</em>部分，了解其功能的完整描述。</p>
+			<p>这是 H2O.ai 的旗舰<a id="_idIndexMarker730"/>模型部署、模型监控和模型治理平台。它可用于托管和评分 H2O 和第三方(非 H2O)模型。</p>
+			<p>H2O MLOps 实时批量评分模型<a id="_idIndexMarker731"/>。预测<a id="_idIndexMarker732"/>可选地返回原因代码。模型部署为单一模型、冠军/挑战者和 A/B。参见<em class="italic">附加注释</em>部分，了解其功能的完整描述。</p>
 			<h3>履行</h3>
-			<p>H2O MLOps是一个现代的基于Kubernetes的<a id="_idIndexMarker733"/>实现，使用Terraform脚本和舵图部署。</p>
+			<p>H2O MLOps 是一个现代的基于 Kubernetes 的<a id="_idIndexMarker733"/>实现，使用 Terraform 脚本和舵图部署。</p>
 			<h3>评分示例</h3>
 			<p>以下代码片段显示了使用<code>curl</code>命令发送的<a id="_idIndexMarker734"/>实时评分请求:</p>
 			<pre>curl -X POST -H "Content-Type: application/json" -d @- https://model.prod.xyz.com/9c5c3042-1f9a-42b5-ac1a-9dca19414fbb/model/score &lt;&lt; EOF
 {"fields":["loan_amnt","term","int_rate","emp_length","home_ownership","annual_inc","purpose","addr_state","dti","delinq_2yrs","revol_util","total_acc","longest_credit_length","verification_status"rows":[["5000","36months","10.65","10",24000.0","RENT","AZ","27.650","0","83.7","9","26","verified"]]}EOF</pre>
 			<p>这是结果:</p>
 			<pre>{"fields":["bad_loan.0","bad_loan.1"],"id":"45d0677a-9327-11ec-b656-2e37808d3384","score":[["0.7730158252427003","0.2269841747572997"]]} </pre>
-			<p>从这里，我们看到贷款违约的概率<a id="_idIndexMarker735"/>(<code>1</code>的<code>bad_loan</code>值)是<code>0.2269841747572997</code>。<code>id</code>字段用于识别REST端点，这在模型以<a id="_idIndexMarker737"/>冠军/挑战者或A/B测试模式<a id="_idIndexMarker736"/>部署时非常有用。</p>
+			<p>从这里，我们看到贷款违约的概率<a id="_idIndexMarker735"/>(<code>1</code>的<code>bad_loan</code>值)是<code>0.2269841747572997</code>。<code>id</code>字段用于识别 REST 端点，这在模型以<a id="_idIndexMarker737"/>冠军/挑战者或 A/B 测试模式<a id="_idIndexMarker736"/>部署时非常有用。</p>
 			<h3>附加注释</h3>
-			<p>以下是H2O MLOps关键功能的简要总结:</p>
+			<p>以下是 H2O MLOps 关键功能的简要总结:</p>
 			<ul>
-				<li><strong class="bold">多部署模式</strong>:单机；冠军/挑战者；A/B型号</li>
+				<li><strong class="bold">多部署模式</strong>:单机；冠军/挑战者；A/B 型号</li>
 				<li><strong class="bold">多模型问题</strong>:表格化；时间序列；形象；语言模型</li>
-				<li><strong class="bold"> Shapley值</strong>:部署时，指定是否返回Shapley值(原因代码)和预测</li>
-				<li><strong class="bold">第三方模型</strong>:对非H2O模型进行评分和监控，例如scikit-learn模型</li>
+				<li><strong class="bold"> Shapley 值</strong>:部署时，指定是否返回 Shapley 值(原因代码)和预测</li>
+				<li><strong class="bold">第三方模型</strong>:对非 H2O 模型进行评分和监控，例如 scikit-learn 模型</li>
 				<li><strong class="bold">模型管理</strong>:模型注册；版本控制；模型元数据；提升和批准工作流</li>
 				<li><strong class="bold">API</strong>:API<a id="_idIndexMarker739"/>和<strong class="bold">持续集成和持续交付</strong> ( <strong class="bold"> CI/CD </strong>)集成</li>
 				<li><strong class="bold">分析</strong>:可以选择将得分数据推送到您的系统中，供您自己进行分析</li>
 				<li><strong class="bold">谱系</strong>:理解数据、实验和模型的谱系</li>
-				<li><strong class="bold">Model monitoring</strong>: Data drift and prediction monitoring with alert management (bias and other types <a id="_idIndexMarker740"/>of monitoring are on the MLOps roadmap)<p class="callout-heading">H2O MLOps与其他H2O模型评分软件</p><p class="callout">MLOps是H2O的旗舰全功能<a id="_idIndexMarker741"/>平台，用于部署、监控和管理评分模型。H2O提供其他软件(概述如下),专门解决MLOps可能不适合的需求或限制。</p></li>
+				<li><strong class="bold">Model monitoring</strong>: Data drift and prediction monitoring with alert management (bias and other types <a id="_idIndexMarker740"/>of monitoring are on the MLOps roadmap)<p class="callout-heading">H2O MLOps 与其他 H2O 模型评分软件</p><p class="callout">MLOps 是 H2O 的旗舰全功能<a id="_idIndexMarker741"/>平台，用于部署、监控和管理评分模型。H2O 提供其他软件(概述如下),专门解决 MLOps 可能不适合的需求或限制。</p></li>
 			</ul>
-			<p>接下来，让我们看看H2O休息射手。</p>
+			<p>接下来，让我们看看 H2O 休息射手。</p>
 			<h2 id="_idParaDest-185"><a id="_idTextAnchor187"/>H2O·埃斯科勒</h2>
-			<p>H2O有一个轻量级但功能强大的REST服务器来评分MOJOs，叫做H2O eScorer。这<a id="_idIndexMarker744"/>是一个很好的替代方案，可将MOJOs作为REST端点，而无需满足H2O MLOps平台的更大基础设施<a id="_idIndexMarker745"/>要求，从而将部署选项释放到内部部署和轻量级部署。回想一下，第三方软件通常通过REST端点集成的方式与MOJOs集成，因此这是实现这一点的有效方法。</p>
+			<p>H2O 有一个轻量级但功能强大的 REST 服务器来评分 MOJOs，叫做 H2O eScorer。这<a id="_idIndexMarker744"/>是一个很好的替代方案，可将 MOJOs 作为 REST 端点，而无需满足 H2O MLOps 平台的更大基础设施<a id="_idIndexMarker745"/>要求，从而将部署选项释放到内部部署和轻量级部署。回想一下，第三方软件通常通过 REST 端点集成的方式与 MOJOs 集成，因此这是实现这一点的有效方法。</p>
 			<h3>模式概述</h3>
-			<p>H2O刀架划线器图形<a id="_idIndexMarker746"/>如下图所示:</p>
+			<p>H2O 刀架划线器图形<a id="_idIndexMarker746"/>如下图所示:</p>
 			<div><div><img src="img/B16721_10_002.jpg" alt="Figure 10.2 – MOJO scoring pattern for H2O REST scorer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.2-H2O休息评分者的MOJO评分模式</p>
+			<p class="figure-caption">图 10.2-H2O 休息评分者的 MOJO 评分模式</p>
 			<p>这里是一个阐述。</p>
 			<h3>评分上下文</h3>
-			<p>H2O休息计分器对休息终点进行实时和<a id="_idIndexMarker747"/>批量预测。预测可选地包括原因代码。</p>
+			<p>H2O 休息计分器对休息终点进行实时和<a id="_idIndexMarker747"/>批量预测。预测可选地包括原因代码。</p>
 			<h3>履行</h3>
-			<p>H2O Rest scorer是一个单独的Java归档文件，保存着一个Apache Tomcat服务器，该服务器托管着一个Spring REST服务框架。属性文件将应用程序配置为托管多个REST评分端点。MOJO要么通过REST本身加载，要么通过其他方式将MOJO传输到服务器。</p>
-			<p>高吞吐量是通过在一个负载平衡器后放置多个H2O休息计分器来实现的。</p>
+			<p>H2O Rest scorer 是一个单独的 Java 归档文件，保存着一个 Apache Tomcat 服务器，该服务器托管着一个 Spring REST 服务框架。属性文件将应用程序配置为托管多个 REST 评分端点。MOJO 要么通过 REST 本身加载，要么通过其他方式将 MOJO 传输到服务器。</p>
+			<p>高吞吐量是通过在一个负载平衡器后放置多个 H2O 休息计分器来实现的。</p>
 			<h3>评分示例</h3>
-			<p>以下是实时评分的REST <a id="_idIndexMarker751"/>终点的一些示例:</p>
+			<p>以下是实时评分的 REST <a id="_idIndexMarker751"/>终点的一些示例:</p>
 			<pre class="source-code">http://192.1.1.1:8080/model?name=riskmodel.mojo &amp;row=5000,36months,10.65,162.87,10,RENT,24000,VERIFIED-income,AZ,27.65,0,1,0,13648,83.7,0"</pre>
-			<p>REST scorer的REST API相当灵活。例如，它包括多种构造有效载荷的方式(例如，一个观察值<a id="_idIndexMarker752"/>输入可以作为<strong class="bold">逗号分隔值</strong> ( <strong class="bold"> CSV </strong>)、<strong class="bold"> JavaScript对象表示法</strong> ( <strong class="bold"> JSON </strong>)，或者与<a id="_idIndexMarker754"/>中返回的<a id="_idIndexMarker753"/>scorer输出具有相同格式的其他结构，这在与BI工具集成时很方便)。</p>
+			<p>REST scorer 的 REST API 相当灵活。例如，它包括多种构造有效载荷的方式(例如，一个观察值<a id="_idIndexMarker752"/>输入可以作为<strong class="bold">逗号分隔值</strong> ( <strong class="bold"> CSV </strong>)、<strong class="bold"> JavaScript 对象表示法</strong> ( <strong class="bold"> JSON </strong>)，或者与<a id="_idIndexMarker754"/>中返回的<a id="_idIndexMarker753"/>scorer 输出具有相同格式的其他结构，这在与 BI 工具集成时很方便)。</p>
 			<h3>附加注释</h3>
-			<p>以下是H2O休息计分器的一组<a id="_idIndexMarker755"/>功能的总结:</p>
+			<p>以下是 H2O 休息计分器的一组<a id="_idIndexMarker755"/>功能的总结:</p>
 			<ul>
-				<li>每个H2O Rest评分者可以对多个模型(即MOJOs)进行评分，每个模型都有自己的Rest端点。</li>
-				<li>通常，在H2O REST scorer服务器上，每个CPU每秒可以获得1000次<a id="_idIndexMarker756"/>。</li>
+				<li>每个 H2O Rest 评分者可以对多个模型(即 MOJOs)进行评分，每个模型都有自己的 Rest 端点。</li>
+				<li>通常，在 H2O REST scorer 服务器上，每个 CPU 每秒可以获得 1000 次<a id="_idIndexMarker756"/>。</li>
 				<li>安全、监控和日志记录设置可在属性文件中配置。</li>
-				<li><strong class="bold"> Java监控bean</strong>(<strong class="bold">JMX</strong>)可以<a id="_idIndexMarker757"/>配置，这样你自己的监控工具就可以收集和分析运行时统计数据。监控包括评分错误、评分延迟和数据漂移。</li>
-				<li>安全特性包括<strong class="bold"> HTTPS </strong>、管理员认证、认证端点<strong class="bold"> URIs </strong>和来自IP前缀的受限访问。</li>
+				<li><strong class="bold"> Java 监控 bean</strong>(<strong class="bold">JMX</strong>)可以<a id="_idIndexMarker757"/>配置，这样你自己的监控工具就可以收集和分析运行时统计数据。监控包括评分错误、评分延迟和数据漂移。</li>
+				<li>安全特性包括<strong class="bold"> HTTPS </strong>、管理员认证、认证端点<strong class="bold"> URIs </strong>和来自 IP 前缀的受限访问。</li>
 				<li>有大量的<a id="_idIndexMarker758"/>日志记录。</li>
-				<li>REST API提供了广泛的功能，包括获取模型元数据、定义预测输出格式、定义日志详细程度以及管理服务器上的MOJOs。</li>
-				<li>REST API可以生成从不同BI工具发送的示例请求，以便在H2O REST评分器上对模型进行评分——例如，调用Power BI模型的示例Python代码。</li>
+				<li>REST API 提供了广泛的功能，包括获取模型元数据、定义预测输出格式、定义日志详细程度以及管理服务器上的 MOJOs。</li>
+				<li>REST API 可以生成从不同 BI 工具发送的示例请求，以便在 H2O REST 评分器上对模型进行评分——例如，调用 Power BI 模型的示例 Python 代码。</li>
 			</ul>
-			<p>接下来，我们将看看H2O批处理数据库计分器。</p>
-			<h2 id="_idParaDest-186"><a id="_idTextAnchor188"/> H2O批处理数据库计分器</h2>
-			<p>H2O批处理数据库<a id="_idIndexMarker759"/>计分器是一个客户端应用程序，它可以使用<strong class="bold"> Java数据库连接</strong> ( <strong class="bold"> JDBC </strong>)连接对表<a id="_idIndexMarker762"/>执行<a id="_idIndexMarker760"/>批处理预测<a id="_idIndexMarker761"/>。</p>
+			<p>接下来，我们将看看 H2O 批处理数据库计分器。</p>
+			<h2 id="_idParaDest-186"><a id="_idTextAnchor188"/> H2O 批处理数据库计分器</h2>
+			<p>H2O 批处理数据库<a id="_idIndexMarker759"/>计分器是一个客户端应用程序，它可以使用<strong class="bold"> Java 数据库连接</strong> ( <strong class="bold"> JDBC </strong>)连接对表<a id="_idIndexMarker762"/>执行<a id="_idIndexMarker760"/>批处理预测<a id="_idIndexMarker761"/>。</p>
 			<h3>模式概述</h3>
-			<p>H2O批次数据库<a id="_idIndexMarker763"/>计分器模式如下图所示:</p>
+			<p>H2O 批次数据库<a id="_idIndexMarker763"/>计分器模式如下图所示:</p>
 			<div><div><img src="img/B16721_10_003.jpg" alt="Figure 10.3 – MOJO scoring pattern for H2O batch database scorer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.3-H2O批处理数据库计分器的MOJO计分模式</p>
+			<p class="figure-caption">图 10.3-H2O 批处理数据库计分器的 MOJO 计分模式</p>
 			<p>我们接下来将详细阐述这一点。</p>
 			<h3>评分上下文</h3>
-			<p>H2O批处理数据库计分器<a id="_idIndexMarker764"/>对数据库表执行批处理预测。预测可选地包括原因代码。根据其配置方式，针对表格行的预测可以插入到新表格中，或者更新<a id="_idIndexMarker765"/>到正在评分的同一个表格中。或者，它可以生成预测结果的CSV文件。该CSV输出可用于手动更新表格或其他下游处理。</p>
-			<p>H2O批次数据库评分的处理顺序详见<em class="italic">图10.3 </em>。</p>
+			<p>H2O 批处理数据库计分器<a id="_idIndexMarker764"/>对数据库表执行批处理预测。预测可选地包括原因代码。根据其配置方式，针对表格行的预测可以插入到新表格中，或者更新<a id="_idIndexMarker765"/>到正在评分的同一个表格中。或者，它可以生成预测结果的 CSV 文件。该 CSV 输出可用于手动更新表格或其他下游处理。</p>
+			<p>H2O 批次数据库评分的处理顺序详见<em class="italic">图 10.3 </em>。</p>
 			<h3>履行</h3>
-			<p>H2O批处理数据库计分器是一个单独的JAR文件，可从H2O.ai获得。JAR文件使用属性文件来配置数据库工作流的各个方面。</p>
+			<p>H2O 批处理数据库计分器是一个单独的 JAR 文件，可从 H2O.ai 获得。JAR 文件使用属性文件来配置数据库工作流的各个方面。</p>
 			<p>更具体地说，属性文件包含以下内容:</p>
 			<ul>
-				<li>SQL连接字符串</li>
-				<li>用于批量评分的SQL <code>SELECT</code>语句</li>
+				<li>SQL 连接字符串</li>
+				<li>用于批量评分的 SQL <code>SELECT</code>语句</li>
 				<li>SQL <code>INSERT</code>或<code>UPDATE</code>语句来写预测结果</li>
 				<li>批量评分过程中的线程数</li>
-				<li>通往MOJO的道路</li>
-				<li>是否将结果写入CSV的标志</li>
+				<li>通往 MOJO 的道路</li>
+				<li>是否将结果写入 CSV 的标志</li>
 				<li>安全设置</li>
 				<li>其他设置</li>
 			</ul>
@@ -161,58 +161,58 @@
 			<p>当然，这可以集成到调度程序或脚本中，以调度和自动化批量评分。</p>
 			<p>注意，这个命令<a id="_idIndexMarker768"/>不包含任何关于数据库或表的内容。从该命令启动的程序找到属性文件，如前面的<em class="italic">实现</em>小节所述，并使用那里的信息来驱动批评分。</p>
 			<h3>附加注释</h3>
-			<p>单个属性文件包含运行单个批量评分作业所需的所有信息(属性文件映射到一个针对要评分的表的SQL语句)。</p>
-			<p>如果Java命令中没有规定要评分的属性文件(参见<em class="italic">评分示例</em>部分)，则使用默认属性文件。或者，可以在Java命令行的<a id="_idIndexMarker769"/>中指定一个特定的属性文件来运行非默认的评分作业。</p>
-			<p>接下来，让我们看看H2O批处理文件计分器。</p>
-			<h2 id="_idParaDest-187"><a id="_idTextAnchor189"/> H2O批处理文件计分器</h2>
-			<p>H2O批处理文件记分器是一个能够对文件中的记录执行批处理预测的应用程序。</p>
+			<p>单个属性文件包含运行单个批量评分作业所需的所有信息(属性文件映射到一个针对要评分的表的 SQL 语句)。</p>
+			<p>如果 Java 命令中没有规定要评分的属性文件(参见<em class="italic">评分示例</em>部分)，则使用默认属性文件。或者，可以在 Java 命令行的<a id="_idIndexMarker769"/>中指定一个特定的属性文件来运行非默认的评分作业。</p>
+			<p>接下来，让我们看看 H2O 批处理文件计分器。</p>
+			<h2 id="_idParaDest-187"><a id="_idTextAnchor189"/> H2O 批处理文件计分器</h2>
+			<p>H2O 批处理文件记分器是一个能够对文件中的记录执行批处理预测的应用程序。</p>
 			<h3>模式概述</h3>
-			<p>H2O批处理文件划线器<a id="_idIndexMarker772"/>模式如下图所示:</p>
+			<p>H2O 批处理文件划线器<a id="_idIndexMarker772"/>模式如下图所示:</p>
 			<div><div><img src="img/B16721_10_004.jpg" alt="Figure 10.4 – MOJO scoring pattern for H2O batch file scorer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.4–H2O批处理文件计分器的MOJO计分模式</p>
+			<p class="figure-caption">图 10.4–H2O 批处理文件计分器的 MOJO 计分模式</p>
 			<p>这就是<a id="_idIndexMarker773"/>的使用方法。</p>
 			<h3>评分上下文</h3>
-			<p>针对文件中的记录进行批量评分，并且<a id="_idIndexMarker774"/>输出将是一个与输入文件相同的文件，但每个记录都附加了一个评分字段。输出文件将保留在H2O批计分器系统中，直到被另一个系统处理(例如，复制到下游系统进行处理)。</p>
+			<p>针对文件中的记录进行批量评分，并且<a id="_idIndexMarker774"/>输出将是一个与输入文件相同的文件，但每个记录都附加了一个评分字段。输出文件将保留在 H2O 批计分器系统中，直到被另一个系统处理(例如，复制到下游系统进行处理)。</p>
 			<h3>履行</h3>
-			<p>H2O批处理文件计分器是一个单独的<a id="_idIndexMarker775"/> JAR文件，可以从H2O.ai获得<a id="_idIndexMarker776"/>。命令行参数用于指定模型和输入文件的位置，以及任何运行时参数，例如跳过文件中存在的列头<a id="_idIndexMarker777"/>。</p>
+			<p>H2O 批处理文件计分器是一个单独的<a id="_idIndexMarker775"/> JAR 文件，可以从 H2O.ai 获得<a id="_idIndexMarker776"/>。命令行参数用于指定模型和输入文件的位置，以及任何运行时参数，例如跳过文件中存在的列头<a id="_idIndexMarker777"/>。</p>
 			<h3>评分示例</h3>
 			<p>以下命令显示了如何从命令行运行批处理文件作业:</p>
 			<pre>java -Xms10g -Xmx10g -Dskipheader=true -Dautocolumns=true -classpath mojo2-runtime.jar:DAIMojoRunner_TQ.jar daimojorunner_tq.DAIMojoRunner_TQ pipeline.mojo LoanStats4.csv</pre>
 			<p>有几点值得一提。</p>
 			<h3>附加注释</h3>
-			<p>这个计分器非常适合作为单个任务处理非常大的文件(&gt; GB)，使其易于在传统的批处理工作流中使用。如果输入文件包含标题，那么scorer将选择正确的列传递给模型，如果没有标题，那么这些列可以作为命令行参数传递。</p>
-			<p>现在让我们来看看这位H2O·卡夫卡式的射手。</p>
+			<p>这个计分器非常适合作为单个任务处理非常大的文件(&gt; GB)，使其易于在传统的批处理工作流中使用。如果输入文件包含标题，那么 scorer 将选择正确的列传递给模型，如果没有标题，那么这些列可以作为命令行参数传递。</p>
+			<p>现在让我们来看看这位 H2O·卡夫卡式的射手。</p>
 			<h2 id="_idParaDest-188"><a id="_idTextAnchor190"/>H2O·卡夫卡得分手</h2>
-			<p>H2O卡夫卡评分器是一个<a id="_idIndexMarker780"/>应用程序，集成了来自卡夫卡流的<a id="_idIndexMarker781"/>评分。</p>
+			<p>H2O 卡夫卡评分器是一个<a id="_idIndexMarker780"/>应用程序，集成了来自卡夫卡流的<a id="_idIndexMarker781"/>评分。</p>
 			<h3>模式概述</h3>
-			<p>H2O卡夫卡计分器图案为<a id="_idIndexMarker782"/>，如下图所示:</p>
+			<p>H2O 卡夫卡计分器图案为<a id="_idIndexMarker782"/>，如下图所示:</p>
 			<div><div><img src="img/B16721_10_005.jpg" alt="Figure 10.5 – MOJO scoring pattern for H2O Kafka scorer&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.5–H2O·卡夫卡评分者的MOJO评分模式</p>
+			<p class="figure-caption">图 10.5–H2O·卡夫卡评分者的 MOJO 评分模式</p>
 			<h3>评分上下文</h3>
-			<p>针对流数据的评分如<em class="italic">图10.5 </em>所示。具体来说，H2O卡夫卡评分器从<a id="_idIndexMarker783"/>主题队列中提取消息，并将评分结果发布到另一个主题。</p>
+			<p>针对流数据的评分如<em class="italic">图 10.5 </em>所示。具体来说，H2O 卡夫卡评分器从<a id="_idIndexMarker783"/>主题队列中提取消息，并将评分结果发布到另一个主题。</p>
 			<h3>履行</h3>
-			<p><a id="_idIndexMarker784"/> H2O卡夫卡评分器是一个JAR文件，在Kafka系统上<a id="_idIndexMarker785"/>实现。属性文件用于配置使用哪个主题(以及对哪些消息进行评分)和发布到哪个主题(将结果发送到哪里)。当H2O Kafka scorer JAR文件启动时，它加载MOJO，然后监听来自主题的消息。</p>
+			<p><a id="_idIndexMarker784"/> H2O 卡夫卡评分器是一个 JAR 文件，在 Kafka 系统上<a id="_idIndexMarker785"/>实现。属性文件用于配置使用哪个主题(以及对哪些消息进行评分)和发布到哪个主题(将结果发送到哪里)。当 H2O Kafka scorer JAR 文件启动时，它加载 MOJO，然后监听来自主题的消息。</p>
 			<h3>评分示例</h3>
 			<p>当消息<a id="_idIndexMarker786"/>到达上游主题时，评分完成。预测被附加到原始消息的最后一个字段。这个新消息被<a id="_idIndexMarker787"/>发送到一个主题进行下游处理。</p>
 			<h3>附加注释</h3>
-			<p>使用分布式并行架构中固有的原生Kafka扩展技术来扩展吞吐量。</p>
-			<p>最后，让我们来看看H2O·巴奇在Spark上的得分。</p>
-			<h2 id="_idParaDest-189"><a id="_idTextAnchor191"/> H2O星火上批量评分</h2>
-			<p>H2O魔咒可以被部署为本地Spark任务。</p>
+			<p>使用分布式并行架构中固有的原生 Kafka 扩展技术来扩展吞吐量。</p>
+			<p>最后，让我们来看看 H2O·巴奇在 Spark 上的得分。</p>
+			<h2 id="_idParaDest-189"><a id="_idTextAnchor191"/> H2O 星火上批量评分</h2>
+			<p>H2O 魔咒可以被部署为本地 Spark 任务。</p>
 			<h3>模式概述</h3>
-			<p>火花<a id="_idIndexMarker790"/>图案上的H2O批次计分如下图所示:</p>
+			<p>火花<a id="_idIndexMarker790"/>图案上的 H2O 批次计分如下图所示:</p>
 			<div><div><img src="img/B16721_10_006.jpg" alt="Figure 10.6 – MOJO scoring pattern for H2O batch scoring on Spark&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.6–H2O在Spark上批量评分的MOJO评分模式</p>
+			<p class="figure-caption">图 10.6–H2O 在 Spark 上批量评分的 MOJO 评分模式</p>
 			<h3>评分上下文</h3>
 			<p>在<a id="_idIndexMarker791"/>火花簇上批量评分。因此，<a id="_idIndexMarker792"/>批次评分是分布式的，因此可以很好地扩展到大批量。</p>
 			<h3>履行</h3>
-			<p>对Spark <a id="_idIndexMarker794"/>集群上的<a id="_idIndexMarker793"/>mojo评分所需的依赖关系通过<code>spark-submit</code>命令进行分配，如下节所示。</p>
+			<p>对 Spark <a id="_idIndexMarker794"/>集群上的<a id="_idIndexMarker793"/>mojo 评分所需的依赖关系通过<code>spark-submit</code>命令进行分配，如下节所示。</p>
 			<h3>评分示例</h3>
 			<p>首先，我们将创建一个<code>myRiskScoring.py</code>。代码如下面的代码片段所示:</p>
 			<pre class="source-code">from pysparkling.ml import *</pre>
@@ -221,93 +221,93 @@
 			<pre class="source-code">model = H2OMOJOModel.createFromMojo(model_location, settings")</pre>
 			<pre class="source-code">predictions = model.transform(dataset)</pre>
 			<pre class="source-code">// do something with predictions, e.g. write to hdfs</pre>
-			<p>然后，向H2O评分库提交您的Spark作业，如下所示:</p>
+			<p>然后，向 H2O 评分库提交您的 Spark 作业，如下所示:</p>
 			<pre>./bin/spark-submit \
     --py-files py/h2o_pysparkling_scoring.zip \
     myRiskScoring.py</pre>
-			<p>注意，<code>h2o_pysparkling_scoring.zip</code>依赖项将被分配给具有<a id="_idIndexMarker796"/>作业的集群。这个<a id="_idIndexMarker797"/>库可以从H2O.ai的<a id="_idIndexMarker798"/>中获得。</p>
+			<p>注意，<code>h2o_pysparkling_scoring.zip</code>依赖项将被分配给具有<a id="_idIndexMarker796"/>作业的集群。这个<a id="_idIndexMarker797"/>库可以从 H2O.ai 的<a id="_idIndexMarker798"/>中获得。</p>
 			<h3>附加注释</h3>
 			<p>除了前面的代码示例中显示的评分设置之外，还有其他评分设置。以下链接会提供更多细节:<a href="https://docs.h2o.ai/sparkling-water/3.1/latest-stable/doc/deployment/load_mojo.html">https://docs . H2O . ai/sparkling-water/3.1/latest-stable/doc/deployment/load _ mojo . html</a>。</p>
-			<p>我们已经完成了对H2O软件的一些评分模式的审查。现在让我们过渡到第三方软件的评分模式。</p>
-			<h1 id="_idParaDest-190"><a id="_idTextAnchor192"/>探索使用第三方软件进行MOJO评分的示例</h1>
+			<p>我们已经完成了对 H2O 软件的一些评分模式的审查。现在让我们过渡到第三方软件的评分模式。</p>
+			<h1 id="_idParaDest-190"><a id="_idTextAnchor192"/>探索使用第三方软件进行 MOJO 评分的示例</h1>
 			<p>现在让我们来看一些涉及第三方软件的<a id="_idIndexMarker800"/>评分的例子。</p>
 			<h2 id="_idParaDest-191"><a id="_idTextAnchor193"/>雪花融合</h2>
-			<p>H2O.ai已经与<a id="_idIndexMarker801"/>雪花合作，将MOJO评分整合到雪花表格中。值得注意的是，该集成中的MOJO部署在雪花架构上，因此实现了雪花的本机可伸缩性优势。结合MOJO评分的低延迟，<a id="_idIndexMarker802"/>的结果是在几秒钟内对大规模雪花表进行批量评分，尽管对少量记录进行实时评分也是可以实现的。</p>
+			<p>H2O.ai 已经与<a id="_idIndexMarker801"/>雪花合作，将 MOJO 评分整合到雪花表格中。值得注意的是，该集成中的 MOJO 部署在雪花架构上，因此实现了雪花的本机可伸缩性优势。结合 MOJO 评分的低延迟，<a id="_idIndexMarker802"/>的结果是在几秒钟内对大规模雪花表进行批量评分，尽管对少量记录进行实时评分也是可以实现的。</p>
 			<h3>模式概述</h3>
 			<p>雪花<a id="_idIndexMarker803"/>集成模式如下图所示:</p>
 			<div><div><img src="img/B16721_10_007.jpg" alt="Figure 10.7 – MOJO scoring pattern for Snowflake Java user-defined function (UDF) integration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.7–雪花Java用户定义函数(UDF)集成的MOJO评分模式</p>
+			<p class="figure-caption">图 10.7–雪花 Java 用户定义函数(UDF)集成的 MOJO 评分模式</p>
 			<p>我们来细说一下。</p>
 			<h3>评分上下文</h3>
 			<p>针对<a id="_idIndexMarker804"/>雪花表进行批量评分，并利用雪花平台的可伸缩性。因此，可以对任何雪花表进行评分，包括那些包含大量数据集的表。</p>
-			<p>评分是通过从雪花客户端运行SQL语句来完成的。这可以是本机雪花工作表SnowSQL，也可以是带有雪花连接器的SQL客户端。或者，可以使用Snowflake的Snowpark API以编程方式进行评分。</p>
+			<p>评分是通过从雪花客户端运行 SQL 语句来完成的。这可以是本机雪花工作表 SnowSQL，也可以是带有雪花连接器的 SQL 客户端。或者，可以使用 Snowflake 的 Snowpark API 以编程方式进行评分。</p>
 			<h3>履行</h3>
-			<p>要实现您的分数，创建一个<a id="_idIndexMarker805"/> staging表并授予对它的权限。然后将您的MOJO和H2O JAR文件依赖项复制到staging表中。</p>
-			<p>然后，您可以使用SQL创建一个Java UDF来导入这些依赖项，并为进行评分的H2O依赖项分配一个处理程序。然后，在创建SQL评分语句时，将引用该UDF，如下所示。</p>
-			<p>你可以在这里找到H2O的依赖项和说明:<a href="https://s3.amazonaws.com/artifacts.h2o.ai/releases/ai/h2o/dai-snowflake-integration/java-udf/download/index.html">https://S3 . amazonaws . com/artifacts . H2O . ai/releases/ai/H2O/Dai-snow flake-integration/Java-UDF/download/index . html</a>。</p>
-			<p>在https://cloud.h2o.ai/v1/latestapp/wave-snowflake<a href="https://cloud.h2o.ai/v1/latestapp/wave-snowflake">网站</a>还可以在线获得使用UDF和雪花的完整体验。</p>
+			<p>要实现您的分数，创建一个<a id="_idIndexMarker805"/> staging 表并授予对它的权限。然后将您的 MOJO 和 H2O JAR 文件依赖项复制到 staging 表中。</p>
+			<p>然后，您可以使用 SQL 创建一个 Java UDF 来导入这些依赖项，并为进行评分的 H2O 依赖项分配一个处理程序。然后，在创建 SQL 评分语句时，将引用该 UDF，如下所示。</p>
+			<p>你可以在这里找到 H2O 的依赖项和说明:<a href="https://s3.amazonaws.com/artifacts.h2o.ai/releases/ai/h2o/dai-snowflake-integration/java-udf/download/index.html">https://S3 . amazonaws . com/artifacts . H2O . ai/releases/ai/H2O/Dai-snow flake-integration/Java-UDF/download/index . html</a>。</p>
+			<p>在 https://cloud.h2o.ai/v1/latestapp/wave-snowflake<a href="https://cloud.h2o.ai/v1/latestapp/wave-snowflake">网站</a>还可以在线获得使用 UDF 和雪花的完整体验。</p>
 			<h3>评分示例</h3>
-			<p>这是一个SQL语句的例子，其中<a id="_idIndexMarker806"/>对一个表执行批量评分:</p>
+			<p>这是一个 SQL 语句的例子，其中<a id="_idIndexMarker806"/>对一个表执行批量评分:</p>
 			<pre class="source-code">select ID, H2OScore_Java('Modelname=riskmodel.zip', ARRAY_CONSTRUCT(loan_amnt, term, int_rate, installment, emp_length, annual_inc, verification_status, addr_state, dti, inq_last_6mths, revol_bal, revol_util, total_acc)) as H2OPrediction from RiskTable;</pre>
-			<p>请注意，H2O评分UDF(如<em class="italic">实现</em>部分所示加载)正在运行，并且模型名称(MOJO名称)被引用。</p>
+			<p>请注意，H2O 评分 UDF(如<em class="italic">实现</em>部分所示加载)正在运行，并且模型名称(MOJO 名称)被引用。</p>
 			<h3>附加注释</h3>
-			<p>对于更程序化的方法，您可以使用Snowpark API而不是SQL语句来批量评分。</p>
+			<p>对于更程序化的方法，您可以使用 Snowpark API 而不是 SQL 语句来批量评分。</p>
 			<h3>替代实施–通过雪花外部函数评分</h3>
-			<p>如果您不想将<a id="_idIndexMarker807"/> MOJOs直接部署到雪花环境中，您可以在雪花上实现一个外部函数，然后将评分传递给H2O·埃斯科勒实现。请注意，评分本身是在雪花的外部，批量吞吐率是由H2O eScorer而不是雪花架构决定的。如下图所示:</p>
+			<p>如果您不想将<a id="_idIndexMarker807"/> MOJOs 直接部署到雪花环境中，您可以在雪花上实现一个外部函数，然后将评分传递给 H2O·埃斯科勒实现。请注意，评分本身是在雪花的外部，批量吞吐率是由 H2O eScorer 而不是雪花架构决定的。如下图所示:</p>
 			<p class="figure-caption"> </p>
 			<div><div><img src="img/B16721_10_008.jpg" alt="Figure 10.8 – MOJO scoring pattern for Snowflake external function integration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.8–雪花外部功能集成的MOJO评分模式</p>
-			<p>为了实现这一点，我们将<a id="_idIndexMarker808"/>使用AWS上的雪花作为例子。请遵循以下步骤:</p>
+			<p class="figure-caption">图 10.8–雪花外部功能集成的 MOJO 评分模式</p>
+			<p>为了实现这一点，我们将<a id="_idIndexMarker808"/>使用 AWS 上的雪花作为例子。请遵循以下步骤:</p>
 			<ol>
-				<li>首先，使用雪花客户端创建<code>api_integration</code>到<code>aws_api_gateway</code>。当与H2O escore通信时，需要一个网关来保护外部功能，它将在雪花外部。您需要有正确的角色来创建它。</li>
-				<li>然后，使用SQL在Snowflake上创建一个外部函数——例如，名为H2OPredict。外部函数将引用<code>api_integration</code>。</li>
-				<li>现在，您已经准备好通过外部函数传递给H2O eScorer对雪花表格进行批量评分。下面是一个示例SQL语句:<pre>select ID, H2OPredict('Modelname=riskmodel.zip', loan_amnt, term, int_rate, installment, emp_length, annual_inc, verification_status, addr_state, dti, inq_last_6mths, revol_bal, revol_util, total_acc) as H2OPrediction from RiskTable;</pre></li>
+				<li>首先，使用雪花客户端创建<code>api_integration</code>到<code>aws_api_gateway</code>。当与 H2O escore 通信时，需要一个网关来保护外部功能，它将在雪花外部。您需要有正确的角色来创建它。</li>
+				<li>然后，使用 SQL 在 Snowflake 上创建一个外部函数——例如，名为 H2OPredict。外部函数将引用<code>api_integration</code>。</li>
+				<li>现在，您已经准备好通过外部函数传递给 H2O eScorer 对雪花表格进行批量评分。下面是一个示例 SQL 语句:<pre>select ID, H2OPredict('Modelname=riskmodel.zip', loan_amnt, term, int_rate, installment, emp_length, annual_inc, verification_status, addr_state, dti, inq_last_6mths, revol_bal, revol_util, total_acc) as H2OPrediction from RiskTable;</pre></li>
 			</ol>
-			<p>让我们看看Teradata集成。</p>
-			<h2 id="_idParaDest-192"><a id="_idTextAnchor194"/> Teradata集成</h2>
-			<p>H2O.ai已经与<a id="_idIndexMarker809"/> Teradata合作，直接针对Teradata表实现批处理或<a id="_idIndexMarker810"/>实时评分。如下图所示:</p>
+			<p>让我们看看 Teradata 集成。</p>
+			<h2 id="_idParaDest-192"><a id="_idTextAnchor194"/> Teradata 集成</h2>
+			<p>H2O.ai 已经与<a id="_idIndexMarker809"/> Teradata 合作，直接针对 Teradata 表实现批处理或<a id="_idIndexMarker810"/>实时评分。如下图所示:</p>
 			<div><div><img src="img/B16721_10_009.jpg" alt="Figure 10.9 – MOJO scoring pattern for Teradata integration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.9-Teradata集成的MOJO评分模式</p>
+			<p class="figure-caption">图 10.9-Teradata 集成的 MOJO 评分模式</p>
 			<h3>评分上下文</h3>
-			<p>针对Teradata <a id="_idIndexMarker811"/>表进行批量评分，并利用Teradata平台的可伸缩性。因此，可以对任何Teradata表进行评分，包括那些拥有大量数据集的表。这在概念上类似于雪花UDF集成，但只是在概念上:底层架构和实现是根本不同的。</p>
-			<p>针对Teradata表的评分是通过从Teradata客户端运行SQL语句来完成的。这可以是本机Teradata Studio客户端，也可以是带有Teradata连接器的SQL客户端。</p>
+			<p>针对 Teradata <a id="_idIndexMarker811"/>表进行批量评分，并利用 Teradata 平台的可伸缩性。因此，可以对任何 Teradata 表进行评分，包括那些拥有大量数据集的表。这在概念上类似于雪花 UDF 集成，但只是在概念上:底层架构和实现是根本不同的。</p>
+			<p>针对 Teradata 表的评分是通过从 Teradata 客户端运行 SQL 语句来完成的。这可以是本机 Teradata Studio 客户端，也可以是带有 Teradata 连接器的 SQL 客户端。</p>
 			<h3>履行</h3>
-			<p>要实现，你首先必须<a id="_idIndexMarker812"/>安装Teradata Vantage <strong class="bold">自带模型</strong> ( <strong class="bold"> BYOM </strong>)。然后，您<a id="_idIndexMarker813"/>使用SQL创建一个Vantage表来存储H2O魔咒。然后使用SQL将MOJOs加载到Vantage表中。详见<a href="https://docs.teradata.com/r/CYNuZkahMT3u2Q~mX35YxA/WC6Ku8fmrVnx4cmPEqYoXA">https://docs . teradata . com/r/cynuzkahmt 3 u2q ~ MX 35 yxa/WC 6 ku 8 fmrvnx 4 cmpeqyoxa</a>。</p>
+			<p>要实现，你首先必须<a id="_idIndexMarker812"/>安装 Teradata Vantage <strong class="bold">自带模型</strong> ( <strong class="bold"> BYOM </strong>)。然后，您<a id="_idIndexMarker813"/>使用 SQL 创建一个 Vantage 表来存储 H2O 魔咒。然后使用 SQL 将 MOJOs 加载到 Vantage 表中。详见<a href="https://docs.teradata.com/r/CYNuZkahMT3u2Q~mX35YxA/WC6Ku8fmrVnx4cmPEqYoXA">https://docs . teradata . com/r/cynuzkahmt 3 u2q ~ MX 35 yxa/WC 6 ku 8 fmrvnx 4 cmpeqyoxa</a>。</p>
 			<h3>评分示例</h3>
-			<p>下面是一个对Teradata表进行批量评分的SQL <a id="_idIndexMarker814"/>语句示例:</p>
+			<p>下面是一个对 Teradata 表进行批量评分的 SQL <a id="_idIndexMarker814"/>语句示例:</p>
 			<pre class="source-code">select * from H2OPredict(</pre>
 			<pre class="source-code">on risk_table</pre>
 			<pre class="source-code">on (select * from mojo_models where model_id=riskmodel) dimension</pre>
 			<pre class="source-code">using Accumulate('id')</pre>
 			<pre class="source-code">) as td_alias;</pre>
-			<p>在这种情况下，代码假设所有的<code>risk_table</code>字段都被用作MOJO的输入。</p>
+			<p>在这种情况下，代码假设所有的<code>risk_table</code>字段都被用作 MOJO 的输入。</p>
 			<h3>附加注释</h3>
-			<p>批处理分数的SQL语句可能包含返回原因代码、阶段概率和叶节点分配的选项。</p>
+			<p>批处理分数的 SQL 语句可能包含返回原因代码、阶段概率和叶节点分配的选项。</p>
 			<h2 id="_idParaDest-193"><a id="_idTextAnchor195"/>商务智能工具集成</h2>
-			<p>MOJO评分的一个强大用途是集成到BI工具中。最常见的方法是在REST服务器上或针对<a id="_idIndexMarker816"/>数据库实现MOJO评分<a id="_idIndexMarker815"/>，如下图所示。请注意，在这种模式中，MOJOs不是部署在BI工具本身上，而是与外部评分系统集成。MOJO评分的低延迟特性允许用户通过以下模式与MOJO预测进行实时交互:</p>
+			<p>MOJO 评分的一个强大用途是集成到 BI 工具中。最常见的方法是在 REST 服务器上或针对<a id="_idIndexMarker816"/>数据库实现 MOJO 评分<a id="_idIndexMarker815"/>，如下图所示。请注意，在这种模式中，MOJOs 不是部署在 BI 工具本身上，而是与外部评分系统集成。MOJO 评分的低延迟特性允许用户通过以下模式与 MOJO 预测进行实时交互:</p>
 			<div><div><img src="img/B16721_10_010.jpg" alt="Figure 10.10 – MOJO scoring patterns for BI tool integration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.10–BI工具集成的MOJO评分模式</p>
+			<p class="figure-caption">图 10.10–BI 工具集成的 MOJO 评分模式</p>
 			<h3>评分上下文</h3>
-			<p>BI工具整合了来自<a id="_idIndexMarker817"/>外部计分器的实时预测。</p>
+			<p>BI 工具整合了来自<a id="_idIndexMarker817"/>外部计分器的实时预测。</p>
 			<h3>履行</h3>
-			<p>实施外部REST或数据库MOJO评分系统。与外部计分器的集成是在BI工具中实现的<a id="_idIndexMarker818"/>。这些集成是特定于每个BI工具的，通常，一个BI工具有多种方式来进行这种集成。</p>
+			<p>实施外部 REST 或数据库 MOJO 评分系统。与外部计分器的集成是在 BI 工具中实现的<a id="_idIndexMarker818"/>。这些集成是特定于每个 BI 工具的，通常，一个 BI 工具有多种方式来进行这种集成。</p>
 			<h3>评分示例–Excel</h3>
-			<p>以下代码块显示了在Excel电子表格<a id="_idIndexMarker820"/>的单元格中创建的<a id="_idIndexMarker819"/>公式:</p>
+			<p>以下代码块显示了在 Excel 电子表格<a id="_idIndexMarker820"/>的单元格中创建的<a id="_idIndexMarker819"/>公式:</p>
 			<pre class="source-code">=WEBSERVICE(CONCAT("http://192.1.1.1:8080/modeltext?name=riskmodel.mojo&amp;row=",TEXTJOIN(","FALSE, $A4:$M4))))</pre>
-			<p>当公式应用于目标单元格时，或者每当公式中引用的任何单元格中的值发生变化时，都会调用此web服务。然后，用户可以将公式向下拖动到一列，并让预测填充该列。</p>
-			<p>请注意，在前面的公式中，REST调用构成了要作为CSV而不是JSON评分的观察。这个有效负载的结构是特定于REST API及其端点的。</p>
-			<p>我们可以以类似的方式使用REST端点将MOJO <a id="_idIndexMarker821"/>评分集成到其他第三方软件中，尽管<a id="_idIndexMarker822"/>端点构造的语义不同。让我们看看如何在Tableau中完成它。</p>
+			<p>当公式应用于目标单元格时，或者每当公式中引用的任何单元格中的值发生变化时，都会调用此 web 服务。然后，用户可以将公式向下拖动到一列，并让预测填充该列。</p>
+			<p>请注意，在前面的公式中，REST 调用构成了要作为 CSV 而不是 JSON 评分的观察。这个有效负载的结构是特定于 REST API 及其端点的。</p>
+			<p>我们可以以类似的方式使用 REST 端点将 MOJO <a id="_idIndexMarker821"/>评分集成到其他第三方软件中，尽管<a id="_idIndexMarker822"/>端点构造的语义不同。让我们看看如何在 Tableau 中完成它。</p>
 			<h3>评分示例-表格</h3>
-			<p>Tableau是一种常见的<a id="_idIndexMarker823"/>仪表板工具，在<a id="_idIndexMarker824"/>企业中用于向组织内的各种不同用户呈现信息。</p>
-			<p>使用Tableau脚本语法，可以从仪表板调用模型。这是非常强大的，因为现在，业务用户可以根据需要直接在仪表板中获得当前预测结果。您可以在这里看到一个示例脚本:</p>
+			<p>Tableau 是一种常见的<a id="_idIndexMarker823"/>仪表板工具，在<a id="_idIndexMarker824"/>企业中用于向组织内的各种不同用户呈现信息。</p>
+			<p>使用 Tableau 脚本语法，可以从仪表板调用模型。这是非常强大的，因为现在，业务用户可以根据需要直接在仪表板中获得当前预测结果。您可以在这里看到一个示例脚本:</p>
 			<pre class="source-code">SCRIPT_STR(</pre>
 			<pre class="source-code">'name'='riskmodel.mojo',</pre>
 			<pre class="source-code">ATTR([./riskmodel.mojo]),</pre>
@@ -325,10 +325,10 @@
 			<pre class="source-code">ATTR([revol_bal]),</pre>
 			<pre class="source-code">ATTR([revol_util]),</pre>
 			<pre class="source-code">ATTR([total_acc]))</pre>
-			<p>脚本将值作为属性(<code>ATTR</code>关键字)读取，并在对模型进行REST调用时将它们传递给Tableau环境中的脚本。使用REST调用允许部署和管理一个集中的模型，但是不同的应用程序和消费者基于他们的特定需求调用<a id="_idIndexMarker825"/>该模型。</p>
-			<p>现在，让我们看看如何<a id="_idIndexMarker826"/>在Power BI中构建一个REST端点。</p>
-			<h3>评分示例Power BI</h3>
-			<p>以下是Power BI的评分示例。在这种情况下，我们<a id="_idIndexMarker827"/>使用了一个<code>Web.Contents</code>幂查询M函数。此功能<a id="_idIndexMarker828"/>粘贴到您的Power BI仪表板中所需的Power BI元素:</p>
+			<p>脚本将值作为属性(<code>ATTR</code>关键字)读取，并在对模型进行 REST 调用时将它们传递给 Tableau 环境中的脚本。使用 REST 调用允许部署和管理一个集中的模型，但是不同的应用程序和消费者基于他们的特定需求调用<a id="_idIndexMarker825"/>该模型。</p>
+			<p>现在，让我们看看如何<a id="_idIndexMarker826"/>在 Power BI 中构建一个 REST 端点。</p>
+			<h3>评分示例 Power BI</h3>
+			<p>以下是 Power BI 的评分示例。在这种情况下，我们<a id="_idIndexMarker827"/>使用了一个<code>Web.Contents</code>幂查询 M 函数。此功能<a id="_idIndexMarker828"/>粘贴到您的 Power BI 仪表板中所需的 Power BI 元素:</p>
 			<pre class="source-code">Web.Contents(</pre>
 			<pre class="source-code">    "http://192.1.1.1:8080",</pre>
 			<pre class="source-code">    [</pre>
@@ -354,66 +354,66 @@
 			<pre class="source-code">)</pre>
 			<p>让我们从这些具体的<a id="_idIndexMarker830"/>例子中归纳出一点<a id="_idIndexMarker829"/>。</p>
 			<h3>附加注释</h3>
-			<p>每个BI工具都以自己的方式与REST端点或数据库集成，并且通常提供多种方式来实现。有关详细信息，请参见您的BI工具文档。</p>
-			<h2 id="_idParaDest-194"><a id="_idTextAnchor196"/> UiPath集成</h2>
-			<p><strong class="bold"> UiPath </strong>是一个RPA平台，它基于人工操作自动化<a id="_idIndexMarker831"/>工作流。做出预测并对这些预测做出响应<a id="_idIndexMarker832"/>是这种自动化的一个强大部分，因此在这些工作流程步骤中对模型进行评分是非常合适的。您可以在下图中看到这样的示例:</p>
+			<p>每个 BI 工具都以自己的方式与 REST 端点或数据库集成，并且通常提供多种方式来实现。有关详细信息，请参见您的 BI 工具文档。</p>
+			<h2 id="_idParaDest-194"><a id="_idTextAnchor196"/> UiPath 集成</h2>
+			<p><strong class="bold"> UiPath </strong>是一个 RPA 平台，它基于人工操作自动化<a id="_idIndexMarker831"/>工作流。做出预测并对这些预测做出响应<a id="_idIndexMarker832"/>是这种自动化的一个强大部分，因此在这些工作流程步骤中对模型进行评分是非常合适的。您可以在下图中看到这样的示例:</p>
 			<div><div><img src="img/B16721_10_011.jpg" alt="Figure 10.11 – MOJO scoring pattern for UiPath integration&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.11–ui path集成的MOJO评分模式</p>
+			<p class="figure-caption">图 10.11–ui path 集成的 MOJO 评分模式</p>
 			<h3>评分上下文</h3>
-			<p>UiPath与外部MOJO <a id="_idIndexMarker833"/>评分相集成，类似于上一节中BI工具的评分。在UiPath的情况下，工作流步骤被配置为进行REST调用、接收预测并响应该预测。</p>
+			<p>UiPath 与外部 MOJO <a id="_idIndexMarker833"/>评分相集成，类似于上一节中 BI 工具的评分。在 UiPath 的情况下，工作流步骤被配置为进行 REST 调用、接收预测并响应该预测。</p>
 			<h3>履行</h3>
-			<p>MOJO评分是在REST服务器外部实现的<a id="_idIndexMarker834"/>，UiPath请求构建器向导用于配置REST端点以返回预测。详情可以看这里:<a href="https://www.uipath.com/learning/video-tutorials/application-integration-rest-web-service-json">https://www . ui path . com/learning/video-tutorials/application-integration-rest-we B- service-JSON</a>。</p>
+			<p>MOJO 评分是在 REST 服务器外部实现的<a id="_idIndexMarker834"/>，UiPath 请求构建器向导用于配置 REST 端点以返回预测。详情可以看这里:<a href="https://www.uipath.com/learning/video-tutorials/application-integration-rest-web-service-json">https://www . ui path . com/learning/video-tutorials/application-integration-rest-we B- service-JSON</a>。</p>
 			<h3>评分示例</h3>
-			<p>该视频展示了如何<a id="_idIndexMarker835"/>使用https://www.youtube.com/watch?v=LRlGjphraTY<a href="https://www.youtube.com/watch?v=LRlGjphraTY">H2O MOJO评分来自动化工作流程。</a></p>
-			<p>我们刚刚完成了对第三方软件的一些MOJO评分模式的调查。让我们来看看您的组织自己构建的软件的一些评分模式。</p>
-			<h1 id="_idParaDest-195"><a id="_idTextAnchor197"/>使用您的目标系统软件探索MOJO评分示例</h1>
-			<p>除了在H2O和第三方软件上部署评分<a id="_idIndexMarker836"/>的MOJOs之外，您还可以采取<strong class="bold">自己动手</strong> ( <strong class="bold"> DIY </strong>)的方式，在自己的<a id="_idIndexMarker837"/>软件中部署评分。让我们看看如何做到这一点。</p>
+			<p>该视频展示了如何<a id="_idIndexMarker835"/>使用 https://www.youtube.com/watch?v=LRlGjphraTY<a href="https://www.youtube.com/watch?v=LRlGjphraTY">H2O MOJO 评分来自动化工作流程。</a></p>
+			<p>我们刚刚完成了对第三方软件的一些 MOJO 评分模式的调查。让我们来看看您的组织自己构建的软件的一些评分模式。</p>
+			<h1 id="_idParaDest-195"><a id="_idTextAnchor197"/>使用您的目标系统软件探索 MOJO 评分示例</h1>
+			<p>除了在 H2O 和第三方软件上部署评分<a id="_idIndexMarker836"/>的 MOJOs 之外，您还可以采取<strong class="bold">自己动手</strong> ( <strong class="bold"> DIY </strong>)的方式，在自己的<a id="_idIndexMarker837"/>软件中部署评分。让我们看看如何做到这一点。</p>
 			<h2 id="_idParaDest-196"><a id="_idTextAnchor198"/>您的软件应用</h2>
 			<p>有两种方法可以从你自己的软件中评分:集成外部评分系统或直接在你的软件系统中嵌入评分。</p>
 			<p>下图显示了与外部评分系统集成的模式:</p>
 			<div><div><img src="img/B16721_10_012.jpg" alt="Figure 10.12 – MOJO application-scoring pattern for external scoring&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.12–外部评分的MOJO应用评分模式</p>
-			<p>这种模式应该看起来很熟悉，因为它从根本上与我们从BI工具中看到的评分是一样的:您的软件充当一个客户端来消费来自另一个系统的MOJO预测。外部预测系统可以是部署在REST服务器(例如，H2O REST计分器)或批处理数据库计分器(例如，雪花Java UDF或H2O批处理数据库计分器)或其他外部系统上的MOJO，您的应用程序需要实现连接到该系统的库。</p>
-			<p>相比之下，下图显示了将MOJO评分直接嵌入应用程序本身的模式:</p>
+			<p class="figure-caption">图 10.12–外部评分的 MOJO 应用评分模式</p>
+			<p>这种模式应该看起来很熟悉，因为它从根本上与我们从 BI 工具中看到的评分是一样的:您的软件充当一个客户端来消费来自另一个系统的 MOJO 预测。外部预测系统可以是部署在 REST 服务器(例如，H2O REST 计分器)或批处理数据库计分器(例如，雪花 Java UDF 或 H2O 批处理数据库计分器)或其他外部系统上的 MOJO，您的应用程序需要实现连接到该系统的库。</p>
+			<p>相比之下，下图显示了将 MOJO 评分直接嵌入应用程序本身的模式:</p>
 			<div><div><img src="img/B16721_10_013.jpg" alt="Figure 10.13 – MOJO application-scoring pattern for embedded scoring&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图10.13–嵌入式评分的MOJO应用评分模式</p>
-			<p>这样做需要您的应用程序实现一个Java包装器类，该类使用H2O MOJO API来加载MOJO并使用它来评分数据。这在第九章<em class="italic">的<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">和《H2O魔咒》的</em>中有详细说明。</a></em></p>
+			<p class="figure-caption">图 10.13–嵌入式评分的 MOJO 应用评分模式</p>
+			<p>这样做需要您的应用程序实现一个 Java 包装器类，该类使用 H2O MOJO API 来加载 MOJO 并使用它来评分数据。这在第九章<em class="italic">的<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">和《H2O 魔咒》的</em>中有详细说明。</a></em></p>
 			<p>什么时候应该使用外部评分模式而不是嵌入评分模式？当然，每种模式都有优点和缺点。</p>
-			<p>外部评分<a id="_idIndexMarker839"/>模式将评分从应用程序中分离出来，从而允许每个组件及其周围的角色专注于它做得最好的部分。例如，应用程序开发人员可以专注于开发应用程序，而不是部署和监控模型。此外，可以重用外部评分组件，以便许多应用程序和客户端可以连接到同一个部署模型。最后，特别是在基于数据库的评分(例如，Java UDF和Teradata集成)和具有极端批量大小或吞吐量的流式评分的情况下，试图自己构建它是困难的或愚蠢的。</p>
+			<p>外部评分<a id="_idIndexMarker839"/>模式将评分从应用程序中分离出来，从而允许每个组件及其周围的角色专注于它做得最好的部分。例如，应用程序开发人员可以专注于开发应用程序，而不是部署和监控模型。此外，可以重用外部评分组件，以便许多应用程序和客户端可以连接到同一个部署模型。最后，特别是在基于数据库的评分(例如，Java UDF 和 Teradata 集成)和具有极端批量大小或吞吐量的流式评分的情况下，试图自己构建它是困难的或愚蠢的。</p>
 			<p>嵌入式评分模式的优势在于消除了通过网络发送观察和预测的时间成本。这可能重要，也可能不重要，取决于<a id="_idIndexMarker840"/>您的<strong class="bold">服务级别协议</strong>(<strong class="bold">SLA</strong>)。这无疑简化了执行评分的基础设施要求，尤其是在网络基础设施不可用或不可靠的情况下。最后，通常由于法规的原因，将模型部署和应用程序作为一个单独的实体来管理可能是理想的或者必要的，因此需要将两者耦合起来。</p>
 			<h2 id="_idParaDest-197"><a id="_idTextAnchor199"/>设备上评分</h2>
-			<p>MOJOs可以部署到设备上，无论是办公室扫描仪/打印机、医疗设备还是传感器。这些可以被视为迷你应用程序，外部或嵌入式评分的决定同样适用于设备和应用程序，如前所述。然而，就设备而言，外部评分相对于嵌入式评分的优势和劣势可能会被大大放大<a id="_idIndexMarker842"/>。例如，像<strong class="bold">物联网</strong> ( <strong class="bold">物联网</strong>)传感器这样的设备可能数以千计，在这些设备上部署和管理模型的成本可能会超过与中央外部计分器进行网络通信所带来的更大延迟的成本。</p>
+			<p>MOJOs 可以部署到设备上，无论是办公室扫描仪/打印机、医疗设备还是传感器。这些可以被视为迷你应用程序，外部或嵌入式评分的决定同样适用于设备和应用程序，如前所述。然而，就设备而言，外部评分相对于嵌入式评分的优势和劣势可能会被大大放大<a id="_idIndexMarker842"/>。例如，像<strong class="bold">物联网</strong> ( <strong class="bold">物联网</strong>)传感器这样的设备可能数以千计，在这些设备上部署和管理模型的成本可能会超过与中央外部计分器进行网络通信所带来的更大延迟的成本。</p>
 			<p class="callout-heading">重要说明</p>
-			<p class="callout">根据经验，可用的设备内存需要是MOJO大小的两倍以上。</p>
-			<h1 id="_idParaDest-198"><a id="_idTextAnchor200"/>探索基于H2O无人驾驶人工智能集成的加速器示例</h1>
-			<p>到目前为止，这本书已经把重点放在用H2O建造大比例模型上。我们一直在用H2O核心(通常称为H2O开放<a id="_idIndexMarker844"/>源)做这件事，这是一个可扩展到大规模数据集的分布式ML框架。我们将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第13章</em> </a>、<em class="italic">介绍H2O人工智能云、</em>中看到，H2O提供了一套更广泛的功能，由一个名为H2O人工智能云的端到端平台代表。这些能力之一是一个高度专注的基于人工智能的AutoML组件，称为无人驾驶人工智能，我们将在第13章  <em class="italic">介绍H2O人工智能云</em>的<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">中将其与H2O核心区分开来。</em></a></p>
-			<p>无人驾驶人工智能类似于H2O核心，因为它也通过通用的MOJO运行时和API生成随时部署的MOJO，尽管无人驾驶人工智能需要一个许可证文件来部署MOJO，并且MOJO和运行时的命名不同于H2O核心。</p>
-			<p>这里提到这一点的原因是，无人驾驶人工智能的几个集成已经建立起来，并得到了很好的记录，但还没有为H2O核心类似地建立起来。这些集成及其文档可用作加速器，为H2O核心做同样的事情。请记住，部署H2O核心mojo不需要许可证，mojo和运行时的名称也不同。</p>
+			<p class="callout">根据经验，可用的设备内存需要是 MOJO 大小的两倍以上。</p>
+			<h1 id="_idParaDest-198"><a id="_idTextAnchor200"/>探索基于 H2O 无人驾驶人工智能集成的加速器示例</h1>
+			<p>到目前为止，这本书已经把重点放在用 H2O 建造大比例模型上。我们一直在用 H2O 核心(通常称为 H2O 开放<a id="_idIndexMarker844"/>源)做这件事，这是一个可扩展到大规模数据集的分布式 ML 框架。我们将在<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">第 13 章</em> </a>、<em class="italic">介绍 H2O 人工智能云、</em>中看到，H2O 提供了一套更广泛的功能，由一个名为 H2O 人工智能云的端到端平台代表。这些能力之一是一个高度专注的基于人工智能的 AutoML 组件，称为无人驾驶人工智能，我们将在第 13 章  <em class="italic">介绍 H2O 人工智能云</em>的<a href="B16721_13_Final_SK_ePub.xhtml#_idTextAnchor241"> <em class="italic">中将其与 H2O 核心区分开来。</em></a></p>
+			<p>无人驾驶人工智能类似于 H2O 核心，因为它也通过通用的 MOJO 运行时和 API 生成随时部署的 MOJO，尽管无人驾驶人工智能需要一个许可证文件来部署 MOJO，并且 MOJO 和运行时的命名不同于 H2O 核心。</p>
+			<p>这里提到这一点的原因是，无人驾驶人工智能的几个集成已经建立起来，并得到了很好的记录，但还没有为 H2O 核心类似地建立起来。这些集成及其文档可用作加速器，为 H2O 核心做同样的事情。请记住，部署 H2O 核心 mojo 不需要许可证，mojo 和运行时的名称也不同。</p>
 			<p class="callout-heading">描述加速器的方法</p>
-			<p class="callout">这里概述了加速器，并提供了链接，以便您了解它们的实现细节。如上所述，这些加速器代表了H2O无人驾驶AI AutoML工具生成的MOJOs的部署。请查看<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第九章</em> </a>、<em class="italic">生产评分和H2O MOJO </em>以了解从H2O核心(H2O-3或苏打水)生成的MOJO与从无人驾驶AI生成的MOJO在本质上是相同的，但在命名和MOJO API上有所不同。这些知识将允许您实现无人驾驶AI MOJO细节，如H2O核心MOJO的链接所示。</p>
+			<p class="callout">这里概述了加速器，并提供了链接，以便您了解它们的实现细节。如上所述，这些加速器代表了 H2O 无人驾驶 AI AutoML 工具生成的 MOJOs 的部署。请查看<a href="B16721_09_Final_SK_ePub.xhtml#_idTextAnchor159"> <em class="italic">第九章</em> </a>、<em class="italic">生产评分和 H2O MOJO </em>以了解从 H2O 核心(H2O-3 或苏打水)生成的 MOJO 与从无人驾驶 AI 生成的 MOJO 在本质上是相同的，但在命名和 MOJO API 上有所不同。这些知识将允许您实现无人驾驶 AI MOJO 细节，如 H2O 核心 MOJO 的链接所示。</p>
 			<p>让我们来看看<a id="_idIndexMarker846"/>的一些例子。</p>
 			<h2 id="_idParaDest-199"><a id="_idTextAnchor201"/>阿帕奇尼菲</h2>
-			<p>Apache NiFi是一款<strong class="bold">开源软件</strong> ( <strong class="bold"> OSS </strong>)，旨在<a id="_idIndexMarker847"/>以UI和拖放的方式对数据流进行编程。它是围绕通过不同的可配置处理器移动数据的概念而构建的<a id="_idIndexMarker848"/>，这些处理器以专门的方式作用于<a id="_idIndexMarker849"/>数据。产生的数据流允许处理器序列的子流<a id="_idIndexMarker850"/>的分叉、合并和嵌套，并且通常类似于复杂的<strong class="bold">有向无环图</strong>(<strong class="bold">Dag</strong>)。项目的<a id="_idIndexMarker851"/>主页可以在这里找到:【https://nifi.apache.org/index.html】T21。</p>
-			<p>NiFi处理器可用于与外部REST、JDBC和Kafka系统通信，因此可以利用外部系统的MOJOs评分模式。</p>
-			<p>但是，您可以构建自己的处理器，将MOJO嵌入到处理器中，以进行实时或批量评分。该处理器只需要指向MOJO及其依赖项的配置。下面的链接展示了如何为无人驾驶人工智能做这件事，并可以用作H2O核心做同样事情的加速器:<a href="https://github.com/h2oai/dai-deployment-examples/tree/master/mojo-nifi">https://github . com/h2oai/Dai-deployment-examples/tree/master/mojo-nifi</a>。</p>
+			<p>Apache NiFi 是一款<strong class="bold">开源软件</strong> ( <strong class="bold"> OSS </strong>)，旨在<a id="_idIndexMarker847"/>以 UI 和拖放的方式对数据流进行编程。它是围绕通过不同的可配置处理器移动数据的概念而构建的<a id="_idIndexMarker848"/>，这些处理器以专门的方式作用于<a id="_idIndexMarker849"/>数据。产生的数据流允许处理器序列的子流<a id="_idIndexMarker850"/>的分叉、合并和嵌套，并且通常类似于复杂的<strong class="bold">有向无环图</strong>(<strong class="bold">Dag</strong>)。项目的<a id="_idIndexMarker851"/>主页可以在这里找到:【https://nifi.apache.org/index.html】T21。</p>
+			<p>NiFi 处理器可用于与外部 REST、JDBC 和 Kafka 系统通信，因此可以利用外部系统的 MOJOs 评分模式。</p>
+			<p>但是，您可以构建自己的处理器，将 MOJO 嵌入到处理器中，以进行实时或批量评分。该处理器只需要指向 MOJO 及其依赖项的配置。下面的链接展示了如何为无人驾驶人工智能做这件事，并可以用作 H2O 核心做同样事情的加速器:<a href="https://github.com/h2oai/dai-deployment-examples/tree/master/mojo-nifi">https://github . com/h2oai/Dai-deployment-examples/tree/master/mojo-nifi</a>。</p>
 			<h2 id="_idParaDest-200">阿帕奇弗林克</h2>
-			<p>Apache Flink是一个高吞吐量<a id="_idIndexMarker852"/>分布式<a id="_idIndexMarker853"/>流和批处理引擎，具有广泛的功能集，可以以容错方式运行事件驱动、数据分析和数据管道应用程序。</p>
-			<p>以下链接展示了如何嵌入无人驾驶AI MOJOs，以直接针对Flink数据流对数据进行评分，并可用作H2O核心进行相同操作的加速器:<a href="https://github.com/h2oai/dai-deployment-examples/tree/master/mojo-flink">https://github . com/h2oai/Dai-deployment-examples/tree/master/mojo-Flink</a>。</p>
+			<p>Apache Flink 是一个高吞吐量<a id="_idIndexMarker852"/>分布式<a id="_idIndexMarker853"/>流和批处理引擎，具有广泛的功能集，可以以容错方式运行事件驱动、数据分析和数据管道应用程序。</p>
+			<p>以下链接展示了如何嵌入无人驾驶 AI MOJOs，以直接针对 Flink 数据流对数据进行评分，并可用作 H2O 核心进行相同操作的加速器:<a href="https://github.com/h2oai/dai-deployment-examples/tree/master/mojo-flink">https://github . com/h2oai/Dai-deployment-examples/tree/master/mojo-Flink</a>。</p>
 			<h2 id="_idParaDest-201"><a id="_idTextAnchor203"/> AWS Lambda</h2>
-			<p>AWS Lambda是一种无服务器的计算服务，让你无需建立、管理和支付底层服务器基础设施就能运行代码。它可以执行任何短期和无状态的计算任务，因此非常适合处理评分请求。以下加速器展示了如何实现一个AWS Lambda作为实时或批量MOJO评分的REST端点:<a href="https://h2oai.github.io/dai-deployment-templates/aws_lambda_scorer/">https://h2oai . github . io/Dai-deployment-templates/AWS _ Lambda _ scorer/</a>。</p>
+			<p>AWS Lambda 是一种无服务器的计算服务，让你无需建立、管理和支付底层服务器基础设施就能运行代码。它可以执行任何短期和无状态的计算任务，因此非常适合处理评分请求。以下加速器展示了如何实现一个 AWS Lambda 作为实时或批量 MOJO 评分的 REST 端点:<a href="https://h2oai.github.io/dai-deployment-templates/aws_lambda_scorer/">https://h2oai . github . io/Dai-deployment-templates/AWS _ Lambda _ scorer/</a>。</p>
 			<h2 id="_idParaDest-202"><a id="_idTextAnchor204"/> AWS SageMaker</h2>
-			<p>AWS SageMaker可以用来主持<a id="_idIndexMarker855"/>和监控模型评分。以下加速器展示了如何实现实时MOJO评分的REST端点:<a href="https://h2oai.github.io/dai-deployment-templates/aws-sagemaker-hosted-scorer/">https://h2oai . github . io/Dai-deployment-templates/AWS-sage maker-hosted-scorer/</a>。</p>
-			<p>现在，我们已经完成了对H2O mojo评分和部署模式的调查。当您的H2O规模模型被部署到生产系统时，它们的商业价值就实现了。这里显示的例子只是一些可能性，但是它们应该让您了解MOJO部署和评分的多样性。</p>
+			<p>AWS SageMaker 可以用来主持<a id="_idIndexMarker855"/>和监控模型评分。以下加速器展示了如何实现实时 MOJO 评分的 REST 端点:<a href="https://h2oai.github.io/dai-deployment-templates/aws-sagemaker-hosted-scorer/">https://h2oai . github . io/Dai-deployment-templates/AWS-sage maker-hosted-scorer/</a>。</p>
+			<p>现在，我们已经完成了对 H2O mojo 评分和部署模式的调查。当您的 H2O 规模模型被部署到生产系统时，它们的商业价值就实现了。这里显示的例子只是一些可能性，但是它们应该让您了解 MOJO 部署和评分的多样性。</p>
 			<p>让我们总结一下本章所学的内容。</p>
 			<h1 id="_idParaDest-203"><a id="_idTextAnchor205"/>总结</h1>
-			<p>在本章中，我们探讨了部署MOJOs和消费预测的各种方法。这包括根据实时、批处理和流数据进行评分，以及使用H2O软件、第三方软件(如BI工具和雪花表格)以及您自己的软件和设备进行评分。从这些例子中可以明显看出，H2O模型部署的可能性非常多样，因此能够满足您特定的评分需求。</p>
-			<p>现在，我们已经了解了如何将H2O模型部署到生产评分环境中，让我们后退一步，开始从企业利益相关者的角度来看问题，这些利益相关者参与了与H2O一起实现ML规模成功所需的所有步骤。在下一节中，我们将通过这些利益相关者的需求和关注来审视H2O。</p>
+			<p>在本章中，我们探讨了部署 MOJOs 和消费预测的各种方法。这包括根据实时、批处理和流数据进行评分，以及使用 H2O 软件、第三方软件(如 BI 工具和雪花表格)以及您自己的软件和设备进行评分。从这些例子中可以明显看出，H2O 模型部署的可能性非常多样，因此能够满足您特定的评分需求。</p>
+			<p>现在，我们已经了解了如何将 H2O 模型部署到生产评分环境中，让我们后退一步，开始从企业利益相关者的角度来看问题，这些利益相关者参与了与 H2O 一起实现 ML 规模成功所需的所有步骤。在下一节中，我们将通过这些利益相关者的需求和关注来审视 H2O。</p>
 		</div>
 	
 

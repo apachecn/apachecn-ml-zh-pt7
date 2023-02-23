@@ -22,7 +22,7 @@
 
                             
 
-                    <h1 class="header-title">Android上类似Snapchat的AR滤镜</h1>
+                    <h1 class="header-title">Android 上类似 Snapchat 的 AR 滤镜</h1>
 
                 
 
@@ -32,17 +32,17 @@
 
                 
 
-<p class="mce-root">在本章中，我们将构建一个<strong>增强Rea</strong><strong>Lite</strong>(<strong>AR</strong>)过滤器，用于Snapchat和Instagram等使用TensorFlow Lite的应用程序。通过这个应用程序，我们将在实时摄像机视图上放置AR滤镜。例如，我们可以在男性的面部关键点添加小胡子，我们可以在眼睛上方添加相关的情感表达。TensorFlow Lite模型用于从摄像机视图中检测性别和情感。</p>
+<p class="mce-root">在本章中，我们将构建一个<strong>增强 Rea</strong><strong>Lite</strong>(<strong>AR</strong>)过滤器，用于 Snapchat 和 Instagram 等使用 TensorFlow Lite 的应用程序。通过这个应用程序，我们将在实时摄像机视图上放置 AR 滤镜。例如，我们可以在男性的面部关键点添加小胡子，我们可以在眼睛上方添加相关的情感表达。TensorFlow Lite 模型用于从摄像机视图中检测性别和情感。</p>
 
 <p>在本章中，我们将理解以下概念:</p>
 
 <ul>
 
-<li>MobileNet型号</li>
+<li>MobileNet 型号</li>
 
 <li>构建模型转换所需的数据集</li>
 
-<li>构建Android应用程序</li>
+<li>构建 Android 应用程序</li>
 
 </ul>
 
@@ -87,7 +87,7 @@
 
                             
 
-                    <h1 class="header-title">MobileNet型号</h1>
+                    <h1 class="header-title">MobileNet 型号</h1>
 
                 
 
@@ -97,21 +97,21 @@
 
                 
 
-<p class="mce-root">我们使用MobileNet模型来识别性别，而AffectNet模型用于检测情绪。面部关键点检测是使用谷歌的移动视觉API实现的。</p>
+<p class="mce-root">我们使用 MobileNet 模型来识别性别，而 AffectNet 模型用于检测情绪。面部关键点检测是使用谷歌的移动视觉 API 实现的。</p>
 
 <p class="mce-root">神经网络和深度学习在<strong>自然语言处理</strong> ( <strong> NLP </strong>)和计算机视觉领域引发了巨大的进步。虽然许多面部、物体、地标、徽标和文本识别技术都是为联网设备提供的，但我们相信，移动设备不断增长的计算能力可以让用户随时随地获得这些技术，而不管是否连接了互联网。然而，用于设备和嵌入式应用的计算机视觉面临许多挑战——模型必须在资源受限的环境中利用有限的计算、功率和空间快速、高精度地运行。</p>
 
 <p class="mce-root"/>
 
-<p class="mce-root">TensorFlow提供各种预训练模型，如拖放模型，以便识别大约1，000个默认对象。与其他类似的模型(如Inception模型数据集)相比，MobileNet在延迟、大小和准确性方面表现更好。在输出性能方面，有一个成熟的模型，有很大的滞后。然而，当模型可在移动设备上部署并且用于实时离线模型检测时，这种折衷是可接受的。</p>
+<p class="mce-root">TensorFlow 提供各种预训练模型，如拖放模型，以便识别大约 1，000 个默认对象。与其他类似的模型(如 Inception 模型数据集)相比，MobileNet 在延迟、大小和准确性方面表现更好。在输出性能方面，有一个成熟的模型，有很大的滞后。然而，当模型可在移动设备上部署并且用于实时离线模型检测时，这种折衷是可接受的。</p>
 
 <p>你可以在<a href="https://github.com/intrepidkarthi/MLmobileapps/tree/master/Chapter5/ARfilter" target="_blank">https://github . com/intrepidkarthi/MLmobileapps/tree/master/chapter 5/ar filter</a>和<a href="https://github.com/PacktPublishing/Machine-Learning-Projects-for-Mobile-Applications" target="_blank">https://github . com/packt publishing/Machine-Learning-Projects-for-Mobile-Applications</a>中参考本章的代码。</p>
 
-<p>MobileNet架构以不同于典型CNN的方式处理3×3卷积层。</p>
+<p>MobileNet 架构以不同于典型 CNN 的方式处理 3×3 卷积层。</p>
 
-<p>有关MobileNet架构的更详细解释，请访问<a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">https://arxiv.org/pdf/1704.04861.pdf</a>。</p>
+<p>有关 MobileNet 架构的更详细解释，请访问<a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">https://arxiv.org/pdf/1704.04861.pdf</a>。</p>
 
-<p>让我们看一个如何使用MobileNet的例子。在这种情况下，我们不要再构建一个通用数据集。相反，我们将编写一个简单的分类器来查找图像中的皮卡丘。以下是展示皮卡丘图像和没有皮卡丘的图像的样本图片:</p>
+<p>让我们看一个如何使用 MobileNet 的例子。在这种情况下，我们不要再构建一个通用数据集。相反，我们将编写一个简单的分类器来查找图像中的皮卡丘。以下是展示皮卡丘图像和没有皮卡丘的图像的样本图片:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-291 image-border" src="img/c46e2594-7289-4b8a-bb3c-f377dfaebfe7.png" style="width:22.00em;height:23.08em;"/></p>
 
@@ -168,11 +168,11 @@
 
                 
 
-<p>为了构建我们自己的分类器，我们需要包含有和没有皮卡丘的图像的数据集。你可以从每个数据库中的1000张图片开始，你可以在这里找到这样的图片:<a href="https://search.creativecommons.org/" target="_blank">https://search.creativecommons.org/</a>。<a href="https://search.creativecommons.org/" target="_blank"/></p>
+<p>为了构建我们自己的分类器，我们需要包含有和没有皮卡丘的图像的数据集。你可以从每个数据库中的 1000 张图片开始，你可以在这里找到这样的图片:<a href="https://search.creativecommons.org/" target="_blank">https://search.creativecommons.org/</a>。<a href="https://search.creativecommons.org/" target="_blank"/></p>
 
 <p>让我们创建两个名为<kbd>pikachu</kbd>和<kbd>no-pikachu</kbd>的文件夹，并相应地删除这些图像。始终确保您有适当的许可证来使用任何图像，尤其是用于商业目的。</p>
 
-<p>来自谷歌和必应API的图片剪贴:<a href="https://github.com/rushilsrivastava/image_search" target="_blank">https://github.com/rushilsrivastava/image_search</a>。</p>
+<p>来自谷歌和必应 API 的图片剪贴:<a href="https://github.com/rushilsrivastava/image_search" target="_blank">https://github.com/rushilsrivastava/image_search</a>。</p>
 
 <p class="mce-root"/>
 
@@ -233,17 +233,17 @@
 
                 
 
-<p>我们现在可以开始标记我们的图像。有了TensorFlow，这项工作变得更加容易。假设您已经安装了TensorFlow，请下载以下再培训脚本:</p>
+<p>我们现在可以开始标记我们的图像。有了 TensorFlow，这项工作变得更加容易。假设您已经安装了 TensorFlow，请下载以下再培训脚本:</p>
 
 <pre>curl <br/> https://github.com/tensorflow/hub/blob/master/examples/<br/> image_retraining/retrain.py</pre>
 
-<p>现在让我们用Python脚本重新训练图像:</p>
+<p>现在让我们用 Python 脚本重新训练图像:</p>
 
 <pre>python retrain.py \<br/> --image_dir ~/MLmobileapps/Chapter5/dataset/ \<br/> --learning_rate=0.0001 \<br/> --testing_percentage=20 \<br/> --validation_percentage=20 \<br/> --train_batch_size=32 \<br/> --validation_batch_size=-1 \<br/> --eval_step_interval=100 \<br/> --how_many_training_steps=1000 \<br/> --flip_left_right=True \<br/> --random_scale=30 \<br/> --random_brightness=30 \<br/> --architecture mobilenet_1.0_224 \<br/> --output_graph=output_graph.pb \
 
  --output_labels=output_labels.txt</pre>
 
-<p>如果将<kbd>validation_batch_size</kbd>设置为<kbd>-1</kbd>，将验证整个数据集；<kbd>learning_rate</kbd> = <kbd>0.0001</kbd>效果不错。你可以调整一下，自己试试这个。在<kbd>architecture</kbd>标志中，我们从版本1.0、0.75、0.50和0.25中选择使用哪个版本的MobileNet。后缀数字<kbd>224</kbd>代表图像分辨率。您也可以指定224、192、160或128。</p>
+<p>如果将<kbd>validation_batch_size</kbd>设置为<kbd>-1</kbd>，将验证整个数据集；<kbd>learning_rate</kbd> = <kbd>0.0001</kbd>效果不错。你可以调整一下，自己试试这个。在<kbd>architecture</kbd>标志中，我们从版本 1.0、0.75、0.50 和 0.25 中选择使用哪个版本的 MobileNet。后缀数字<kbd>224</kbd>代表图像分辨率。您也可以指定 224、192、160 或 128。</p>
 
 
 
@@ -286,7 +286,7 @@
 
                             
 
-                    <h1 class="header-title">从GraphDef到TFLite的模型转换</h1>
+                    <h1 class="header-title">从 GraphDef 到 TFLite 的模型转换</h1>
 
                 
 
@@ -296,13 +296,13 @@
 
                 
 
-<p><kbd>TocoConverter</kbd>用于从TensorFlow <kbd>GraphDef</kbd>文件或SavedModel转换为TFLite FlatBuffer或图形可视化。TOCO代表<em> TensorFlow Lite优化转换器</em>。</p>
+<p><kbd>TocoConverter</kbd>用于从 TensorFlow <kbd>GraphDef</kbd>文件或 SavedModel 转换为 TFLite FlatBuffer 或图形可视化。TOCO 代表<em> TensorFlow Lite 优化转换器</em>。</p>
 
 <p>我们需要通过命令行参数传递数据。下面列出了一些关于<kbd>TensorFlow 1.10.0</kbd>的命令行参数:</p>
 
 <pre> --output_file OUTPUT_FILE<br/> Filepath of the output tflite model.<br/> --graph_def_file GRAPH_DEF_FILE<br/> Filepath of input TensorFlow GraphDef.<br/> --saved_model_dir <br/> Filepath of directory containing the SavedModel.<br/> --keras_model_file<br/> Filepath of HDF5 file containing tf.Keras model.<br/> --output_format {TFLITE,GRAPHVIZ_DOT}<br/> Output file format.<br/> --inference_type {FLOAT,QUANTIZED_UINT8}<br/> Target data type in the output<br/> --inference_input_type {FLOAT,QUANTIZED_UINT8}<br/> Target data type of real-number input arrays. <br/> --input_arrays INPUT_ARRAYS<br/> Names of the input arrays, comma-separated.<br/> --input_shapes INPUT_SHAPES<br/> Shapes corresponding to --input_arrays, colon-separated.<br/> --output_arrays OUTPUT_ARRAYS<br/> Names of the output arrays, comma-separated.</pre>
 
-<p>我们现在可以使用<kbd>toco</kbd>工具将TensorFlow模型转换为TensorFlow Lite模型:</p>
+<p>我们现在可以使用<kbd>toco</kbd>工具将 TensorFlow 模型转换为 TensorFlow Lite 模型:</p>
 
 <pre>toco \ <br/> --graph_def_file=/tmp/output_graph.pb<br/> --output_file=/tmp/optimized_graph.tflite <br/> --input_arrays=Mul <br/> --output_arrays=final_result <br/> --input_format=TENSORFLOW_GRAPHDEF <br/> --output_format=TFLITE <br/> --input_shape=1,${224},${224},3 <br/> --inference_type=FLOAT <br/> --input_data_type=FLOAT</pre>
 
@@ -310,7 +310,7 @@
 
 <p class="mce-root"/>
 
-<p>要将TensorFlow 1.9.0中的ML模型转换为TensorFlow 1.11.0，请使用to converter。TocoConverter在语义上与TFLite Converter相同。要转换TensorFlow 1.9之前的模型，请使用<kbd>toco_convert</kbd>功能。运行<kbd>help(tf.contrib.lite.toco_convert)</kbd>获取可接受参数的详细信息。</p>
+<p>要将 TensorFlow 1.9.0 中的 ML 模型转换为 TensorFlow 1.11.0，请使用 to converter。TocoConverter 在语义上与 TFLite Converter 相同。要转换 TensorFlow 1.9 之前的模型，请使用<kbd>toco_convert</kbd>功能。运行<kbd>help(tf.contrib.lite.toco_convert)</kbd>获取可接受参数的详细信息。</p>
 
 
 
@@ -363,13 +363,13 @@
 
                 
 
-<p>这是建立在<kbd>IMDB WIKI</kbd>数据集上的，该数据集包含500，000+名人面孔。它使用MobileNet_V1_224_0.5版本的MobileNet。</p>
+<p>这是建立在<kbd>IMDB WIKI</kbd>数据集上的，该数据集包含 500，000+名人面孔。它使用 MobileNet_V1_224_0.5 版本的 MobileNet。</p>
 
 <p>数据模型项目的链接可以在这里找到:<a href="https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/" target="_blank">https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/</a>。<a href="https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/"/></p>
 
-<p>很难找到包含数千幅图像的公共数据集。这个数据集是建立在一个名人面孔的大集合之上的。有两个共同的地方:一个是IMDb，另一个是维基百科。超过10万名名人的详细资料通过脚本从他们的个人资料中检索。然后通过去除噪音(无关内容)进行组织。所有没有时间戳的图像都被删除，假设只有一张照片的图像可能显示该人和出生日期细节是正确的。最后，有460723张面孔来自IMDb的20284位名人，62328张来自维基百科，总计523051张。</p>
+<p>很难找到包含数千幅图像的公共数据集。这个数据集是建立在一个名人面孔的大集合之上的。有两个共同的地方:一个是 IMDb，另一个是维基百科。超过 10 万名名人的详细资料通过脚本从他们的个人资料中检索。然后通过去除噪音(无关内容)进行组织。所有没有时间戳的图像都被删除，假设只有一张照片的图像可能显示该人和出生日期细节是正确的。最后，有 460723 张面孔来自 IMDb 的 20284 位名人，62328 张来自维基百科，总计 523051 张。</p>
 
-<p>模型背后的论文可以在这里找到:<a href="https://www.vision.ee.ethz.ch/en/publications/papers/proceedings/eth_biwi_01229.pdf">https://www . vision . ee . ethz . ch/en/publications/papers/proceedings/eth _ biwi _ 01229 . pdf</a>。这个模型说它只能用于研究目的。虽然我们可以重用第二章的模型，但我们想让你接触不同的模型数据集，因此我们选择了这个流行人脸数据集。你可以根据你解决的问题选择自己的模型数据集，哪个更适合你。<br/> <br/>作者鸣谢:@article{Rothe-IJCV-2016，作者= {拉斯穆斯·罗斯和拉杜·蒂莫夫特和吕克·范·古尔}，标题= {对没有面部标志的单一图像的真实和表观年龄的深度期望}，期刊= {国际计算机视觉杂志(IJCV)}，年份= {2016}，月份= { 7月}，}</p>
+<p>模型背后的论文可以在这里找到:<a href="https://www.vision.ee.ethz.ch/en/publications/papers/proceedings/eth_biwi_01229.pdf">https://www . vision . ee . ethz . ch/en/publications/papers/proceedings/eth _ biwi _ 01229 . pdf</a>。这个模型说它只能用于研究目的。虽然我们可以重用第二章的模型，但我们想让你接触不同的模型数据集，因此我们选择了这个流行人脸数据集。你可以根据你解决的问题选择自己的模型数据集，哪个更适合你。<br/> <br/>作者鸣谢:@article{Rothe-IJCV-2016，作者= {拉斯穆斯·罗斯和拉杜·蒂莫夫特和吕克·范·古尔}，标题= {对没有面部标志的单一图像的真实和表观年龄的深度期望}，期刊= {国际计算机视觉杂志(IJCV)}，年份= {2016}，月份= { 7 月}，}</p>
 
 
 
@@ -422,11 +422,11 @@
 
                 
 
-<p>这是建立在拥有超过100万张图片的AffectNet模型上的。它使用MobileNet_V2_224_1.4版本的MobileNet。</p>
+<p>这是建立在拥有超过 100 万张图片的 AffectNet 模型上的。它使用 MobileNet_V2_224_1.4 版本的 MobileNet。</p>
 
 <p>数据模型项目的链接可以在这里找到:【http://mohammadmahoor.com/affectnet/】T4。</p>
 
-<p>AffectNet模型是通过从互联网上收集并注释超过100万张人脸的面部图像而构建的。这些图片来自三个搜索引擎，使用了六种不同语言的大约1250个相关关键词。在收集的图像中，一半的图像被人工注释了七个离散面部表情的存在(分类模型)以及效价和唤醒的强度(维度模型)。</p>
+<p>AffectNet 模型是通过从互联网上收集并注释超过 100 万张人脸的面部图像而构建的。这些图片来自三个搜索引擎，使用了六种不同语言的大约 1250 个相关关键词。在收集的图像中，一半的图像被人工注释了七个离散面部表情的存在(分类模型)以及效价和唤醒的强度(维度模型)。</p>
 
 
 
@@ -469,7 +469,7 @@
 
                             
 
-                    <h1 class="header-title">MobileNet版本比较</h1>
+                    <h1 class="header-title">MobileNet 版本比较</h1>
 
                 
 
@@ -479,21 +479,21 @@
 
                 
 
-<p>在我们的两个模型中，我们使用不同版本的MobileNet模型。V2移动网络基本上是V1的升级版，在性能方面更加高效和强大。我们将看到两种模型之间的一些因素:</p>
+<p>在我们的两个模型中，我们使用不同版本的 MobileNet 模型。V2 移动网络基本上是 V1 的升级版，在性能方面更加高效和强大。我们将看到两种模型之间的一些因素:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/26a9be8a-d10e-444f-b6ea-87f3a962df23.png" style="width:22.42em;height:4.92em;"/></p>
 
-<p>上图显示来自V1和V2的MobileNet的数字属于带有1.0深度乘数的型号版本。如果这个表中的数字较低，那就更好了。通过查看结果，我们可以假设V2的速度几乎是V1模型的两倍。在移动设备上，当内存访问受限于计算能力时，V2工作得非常好。</p>
+<p>上图显示来自 V1 和 V2 的 MobileNet 的数字属于带有 1.0 深度乘数的型号版本。如果这个表中的数字较低，那就更好了。通过查看结果，我们可以假设 V2 的速度几乎是 V1 模型的两倍。在移动设备上，当内存访问受限于计算能力时，V2 工作得非常好。</p>
 
-<p>MACs—乘-累加运算。这衡量在一张224×224 RGB图像上进行推理需要多少计算。当图像尺寸增加时，需要更多的MAC。</p>
+<p>MACs—乘-累加运算。这衡量在一张 224×224 RGB 图像上进行推理需要多少计算。当图像尺寸增加时，需要更多的 MAC。</p>
 
-<p>单从MAC电脑的数量来看，V2的速度应该是V1的两倍。但是，不仅仅是计算次数的问题。在移动设备上，内存访问比计算慢得多。但是V2也有优势:它的参数数量只有V1的80%。现在，我们来看看精确度方面的性能:</p>
+<p>单从 MAC 电脑的数量来看，V2 的速度应该是 V1 的两倍。但是，不仅仅是计算次数的问题。在移动设备上，内存访问比计算慢得多。但是 V2 也有优势:它的参数数量只有 V1 的 80%。现在，我们来看看精确度方面的性能:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img src="img/5e369875-0813-4004-a6f6-506e68bb5f64.png" style="width:22.33em;height:4.92em;"/></p>
 
-<p>上图是在ImageNet数据集上测试的。这些数字可能会产生误导，因为它取决于在推导这些数字时考虑的所有约束条件。</p>
+<p>上图是在 ImageNet 数据集上测试的。这些数字可能会产生误导，因为它取决于在推导这些数字时考虑的所有约束条件。</p>
 
-<p>模型背后的IEEE论文可以在这里找到:<a href="http://mohammadmahoor.com/wp-content/uploads/2017/08/AffectNet_oneColumn-2.pdf" target="_blank">http://Mohammad mahoor . com/WP-content/uploads/2017/08/affect net _ one column-2 . pdf</a>。</p>
+<p>模型背后的 IEEE 论文可以在这里找到:<a href="http://mohammadmahoor.com/wp-content/uploads/2017/08/AffectNet_oneColumn-2.pdf" target="_blank">http://Mohammad mahoor . com/WP-content/uploads/2017/08/affect net _ one column-2 . pdf</a>。</p>
 
 
 
@@ -536,7 +536,7 @@
 
                             
 
-                    <h1 class="header-title">构建Android应用程序</h1>
+                    <h1 class="header-title">构建 Android 应用程序</h1>
 
                 
 
@@ -546,11 +546,11 @@
 
                 
 
-<p>现在从Android Studio创建一个新的Android项目。这应该叫做<kbd>ARFilter</kbd>，或者你喜欢的任何名字:</p>
+<p>现在从 Android Studio 创建一个新的 Android 项目。这应该叫做<kbd>ARFilter</kbd>，或者你喜欢的任何名字:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-296 image-border" src="img/728e57e5-251d-4adb-9c75-1a20ff4c5aff.png" style="width:40.83em;height:27.58em;"/></p>
 
-<p>在下一个屏幕上，选择我们的应用程序支持的Android OS版本，并选择图像上未显示的<strong> API 15 </strong>。这几乎涵盖了所有现有的安卓手机。准备好后，请按下一步。在下一个屏幕上，选择Add No Activity并单击Finish。这将创建一个空项目:</p>
+<p>在下一个屏幕上，选择我们的应用程序支持的 Android OS 版本，并选择图像上未显示的<strong> API 15 </strong>。这几乎涵盖了所有现有的安卓手机。准备好后，请按下一步。在下一个屏幕上，选择 Add No Activity 并单击 Finish。这将创建一个空项目:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-297 image-border" src="img/6e3932a1-9625-46bc-93c3-7830737a5c7d.png" style="width:59.83em;height:44.33em;"/></p>
 
@@ -558,7 +558,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-298 image-border" src="img/0c33b304-b5a8-4dd6-82ed-056702732e72.png" style="width:162.50em;height:92.75em;"/></p>
 
-<p>通过选中复选框来命名创建的activity Launcher Activity。这将在<kbd>AndroidManifest.xml</kbd>文件中的特定活动下添加一个意图过滤器:</p>
+<p>通过选中复选框来命名创建的 activity Launcher Activity。这将在<kbd>AndroidManifest.xml</kbd>文件中的特定活动下添加一个意图过滤器:</p>
 
 <pre>&lt;intent-filter&gt;<br/>    &lt;action android:name="android.intent.action.MAIN" /&gt;<br/>    &lt;category android:name="android.intent.category.LAUNCHER" /&gt;<br/>&lt;/intent-filter&gt;</pre>
 
@@ -582,19 +582,19 @@
 
 <div><kbd>Intent</kbd>: An <kbd>Intent</kbd> is a messaging object you can use to request an action from another app component. Although intents facilitate communication between components in several ways, there are three fundamental use cases such as starting an <kbd>Activity</kbd>, starting a service and delivering a broadcast.</div>
 
-<p>UI将进行相应设计，以便通过<kbd>activity_arfilter</kbd>布局在布局底部显示结果，如下所示。<kbd>CameraSourcePreview</kbd>为视图启动Camera2 API，我们将在其中添加<kbd>GraphicOverlay</kbd>类。它是一个视图，呈现一系列自定义图形，覆盖在相关预览(即相机预览)的顶部。创建者可以添加图形对象、更新对象和删除它们，从而在视图中触发适当的绘制和失效。</p>
+<p>UI 将进行相应设计，以便通过<kbd>activity_arfilter</kbd>布局在布局底部显示结果，如下所示。<kbd>CameraSourcePreview</kbd>为视图启动 Camera2 API，我们将在其中添加<kbd>GraphicOverlay</kbd>类。它是一个视图，呈现一系列自定义图形，覆盖在相关预览(即相机预览)的顶部。创建者可以添加图形对象、更新对象和删除它们，从而在视图中触发适当的绘制和失效。</p>
 
 <p>它支持相对于相机预览属性的图形缩放和镜像。想法是检测项目以预览尺寸表示，但是需要放大到全视图尺寸，并且在前置摄像头的情况下也是镜像的:</p>
 
 <pre>public static String classifierType(){<br/>    String type = mn.getIntent().getExtras().getString("TYPE");<br/>    if(type!=null) {<br/>        if(type.equals("gender"))<br/>            return "gender";<br/>        else<br/>            return "emotion";<br/>    }<br/>    else<br/>        return null;<br/>}</pre>
 
-<p>我们使用Google开源项目中的<kbd>CameraPreview</kbd>类，而<kbd>CAMERA</kbd>对象需要基于不同Android API级别的用户权限:</p>
+<p>我们使用 Google 开源项目中的<kbd>CameraPreview</kbd>类，而<kbd>CAMERA</kbd>对象需要基于不同 Android API 级别的用户权限:</p>
 
-<p>链接到谷歌摄像头API:<a href="https://github.com/googlesamples/android-Camera2Basic" target="_blank">https://github.com/googlesamples/android-Camera2Basic</a>。</p>
+<p>链接到谷歌摄像头 API:<a href="https://github.com/googlesamples/android-Camera2Basic" target="_blank">https://github.com/googlesamples/android-Camera2Basic</a>。</p>
 
 <pre>&lt;com.mlmobileapps.arfilter.CameraSourcePreview<br/>    android:id="@+id/preview"<br/>    android:layout_width="wrap_content"<br/>    android:layout_height="wrap_content"&gt;<br/><br/>    &lt;com.mlmobileapps.arfilter.GraphicOverlay<br/>        android:id="@+id/faceOverlay"<br/>        android:layout_width="match_parent"<br/>        android:layout_height="match_parent" /&gt;<br/>&lt;/com.mlmobileapps.arfilter.CameraSourcePreview&gt;</pre>
 
-<p>一旦我们准备好了相机API，我们需要从用户端获得适当的许可来使用相机，如下所示。我们需要以下权限:</p>
+<p>一旦我们准备好了相机 API，我们需要从用户端获得适当的许可来使用相机，如下所示。我们需要以下权限:</p>
 
 <p><kbd>Manifest.permission.CAMERA</kbd></p>
 
@@ -604,7 +604,7 @@
 
 <li>这样，我们现在就有了一个应用程序，在这个应用程序的屏幕上，我们可以选择加载哪个模型。在下一个屏幕上，我们准备好了摄像机视图。我们现在必须加载适当的模型，检测屏幕上的人脸，并相应地应用过滤器。</li>
 
-<li>真实摄像头视图上的人脸检测是通过Google Vision API完成的。这可以作为一个依赖项添加到您的<kbd>build.gradle</kbd>上，如下所示。您应该始终使用最新版本的<kbd>api</kbd>:</li>
+<li>真实摄像头视图上的人脸检测是通过 Google Vision API 完成的。这可以作为一个依赖项添加到您的<kbd>build.gradle</kbd>上，如下所示。您应该始终使用最新版本的<kbd>api</kbd>:</li>
 
 </ul>
 
@@ -624,29 +624,29 @@
 
 <pre>//tflite object is created with the model loaded into memory<br/>tflite = new Interpreter(loadModelFile(activity));<br/>//gets the list of defined labels for the model<br/>labelList = loadLabelList(activity);<br/>//input image buffer is created<br/>imgData =<br/>    ByteBuffer.allocateDirect(<br/>        4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);<br/>imgData.order(ByteOrder.nativeOrder());<br/>labelProbArray = new float[1][labelList.size()];<br/>filterLabelProbArray = new float[FILTER_STAGES][labelList.size()];</pre>
 
-<p><kbd>AssetManager</kbd>中条目的文件描述符。这提供了您自己打开的可用于读取数据的<kbd>FileDescriptor</kbd>，以及文件中该条目数据的偏移量和长度。Assets文件夹位于我们的codebase主文件夹旁边，如屏幕截图所示:</p>
+<p><kbd>AssetManager</kbd>中条目的文件描述符。这提供了您自己打开的可用于读取数据的<kbd>FileDescriptor</kbd>，以及文件中该条目数据的偏移量和长度。Assets 文件夹位于我们的 codebase 主文件夹旁边，如屏幕截图所示:</p>
 
 <p class="CDPAlignCenter CDPAlign">一旦我们将模型数据加载到内存中，我们需要将相应的标签文件加载到如下列表中。标签文件位于模型文件旁边的<kbd>Assets</kbd>文件夹中:</p>
 
-<p>从实时摄像机视角来看，逐帧数据由<kbd>ImageClassifier</kbd>解析。所有的ML算法和基于视觉的库都将输入输入到数据阵列中。所以我们将把我们的输入图像数据转换成ByteBuffer。然后，传递的位图值将被转换为ByteBuffer，如下所示:</p>
+<p>从实时摄像机视角来看，逐帧数据由<kbd>ImageClassifier</kbd>解析。所有的 ML 算法和基于视觉的库都将输入输入到数据阵列中。所以我们将把我们的输入图像数据转换成 ByteBuffer。然后，传递的位图值将被转换为 ByteBuffer，如下所示:</p>
 
 <pre>/** load the model into memory from Assets. */<br/>private MappedByteBuffer loadModelFile(Activity activity) throws IOException {<br/>  AssetFileDescriptor fileDescriptor = <br/>                           activity.getAssets().openFd(MODEL_PATH);<br/>  FileInputStream inputStream = new <br/>              FileInputStream(fileDescriptor.getFileDescriptor());<br/>              FileChannel fileChannel = inputStream.getChannel();<br/>              long startOffset = fileDescriptor.getStartOffset();<br/>              long declaredLength = fileDescriptor.getDeclaredLength();<br/>  return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);<br/>}</pre>
 
-<p>然后，将调用<kbd>classifyFrame()</kbd>方法。一旦我们有了作为<kbd>ByteBuffer</kbd>的输入数据，我们将通过调用<kbd>run()</kbd>方法来调用TensorFlow Lite对输入进行分类。这就是奇迹发生的地方:</p>
+<p>然后，将调用<kbd>classifyFrame()</kbd>方法。一旦我们有了作为<kbd>ByteBuffer</kbd>的输入数据，我们将通过调用<kbd>run()</kbd>方法来调用 TensorFlow Lite 对输入进行分类。这就是奇迹发生的地方:</p>
 
 <pre>/** Reads label list from Assets. */<br/>private List&lt;String&gt; loadLabelList(Activity activity) throws IOException {<br/>  List&lt;String&gt; labelList = new ArrayList&lt;String&gt;();<br/>  BufferedReader reader =<br/>      new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));<br/>  String line;<br/>  while ((line = reader.readLine()) != null) {<br/>    labelList.add(line);<br/>  }<br/>  reader.close();<br/>  return labelList;<br/>}</pre>
 
-<p>ByteBuffer是一个令人困惑的类。它有点像基于RAM的<kbd>RandomAccessFile</kbd>。它也有点像没有自动增长特性的ByteArrayList，让您以一致的方式处理部分填充的<kbd>byte[]</kbd>。它没有异步前瞻。这是非常低的水平。您必须显式清除和填充缓冲区，并显式读取和/或写入它。避免缓冲区溢出取决于您。</p>
+<p>ByteBuffer 是一个令人困惑的类。它有点像基于 RAM 的<kbd>RandomAccessFile</kbd>。它也有点像没有自动增长特性的 ByteArrayList，让您以一致的方式处理部分填充的<kbd>byte[]</kbd>。它没有异步前瞻。这是非常低的水平。您必须显式清除和填充缓冲区，并显式读取和/或写入它。避免缓冲区溢出取决于您。</p>
 
 <pre>private void convertBitmapToByteBuffer(Bitmap bitmap) {<br/>    if (imgData == null) {<br/>      return;<br/>    }<br/>    imgData.rewind();<br/>    bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());<br/>    // Convert the image to floating point.<br/>    int pixel = 0;<br/>    long startTime = SystemClock.uptimeMillis();<br/>    for (int i = 0; i &lt; DIM_IMG_SIZE_X; ++i) {<br/>      for (int j = 0; j &lt; DIM_IMG_SIZE_Y; ++j) {<br/>        final int val = intValues[pixel++];<br/>        imgData.putFloat((((val &gt;&gt; 16) &amp; 0xFF)-IMAGE_MEAN)/IMAGE_STD);<br/>        imgData.putFloat((((val &gt;&gt; 8) &amp; 0xFF)-IMAGE_MEAN)/IMAGE_STD);<br/>        imgData.putFloat((((val) &amp; 0xFF)-IMAGE_MEAN)/IMAGE_STD);<br/>      }<br/>    }<br/>    long endTime = SystemClock.uptimeMillis();<br/>//    Log.d(TAG, "Timecost to put values into ByteBuffer: " + Long.toString(endTime - startTime));<br/>  }</pre>
 
-<p class="mce-root">一旦我们从TensorFlow Lite模型获得结果，我们将开始应用过滤器。这是我们在相机视图上叠加相应滤镜的地方。在<kbd>applyFilter</kbd>方法中，相应的标签被分配给当前帧，并在屏幕上显示如下:</p>
+<p class="mce-root">一旦我们从 TensorFlow Lite 模型获得结果，我们将开始应用过滤器。这是我们在相机视图上叠加相应滤镜的地方。在<kbd>applyFilter</kbd>方法中，相应的标签被分配给当前帧，并在屏幕上显示如下:</p>
 
 <pre>convertBitmapToByteBuffer(bitmap);<br/>// Here's where the magic happens!!!<br/>long startTime = SystemClock.uptimeMillis();<br/>tflite.run(imgData, labelProbArray);<br/>long endTime = SystemClock.uptimeMillis();<br/>Log.d(TAG, "Timecost to run model inference: " + Long.toString(endTime - startTime));<br/><br/>// smooth the results<br/>applyFilter();</pre>
 
 <p>我们将在摄像机视图下方的视图中打印最高概率值。我们有截图如下。我们将把数据格式化并显示在屏幕上。一旦基于概率识别了标签，结果将返回顶部的标签:</p>
 
-<p>现在，让我们回到<kbd>ARFilterActivity</kbd>。通过谷歌视觉API，我们使用<kbd>GraphicFaceTrackerFactory</kbd>检测每一帧中的人脸。我们将使用Google Vision API中的<kbd>FaceDetector</kbd>:</p>
+<p>现在，让我们回到<kbd>ARFilterActivity</kbd>。通过谷歌视觉 API，我们使用<kbd>GraphicFaceTrackerFactory</kbd>检测每一帧中的人脸。我们将使用 Google Vision API 中的<kbd>FaceDetector</kbd>:</p>
 
 <pre>void applyFilter(){<br/>  int num_labels =  labelList.size();<br/><br/>  // Low pass filter `labelProbArray` into the first stage of the <br/>     filter.<br/>  for(int j=0; j&lt;num_labels; ++j){<br/>    filterLabelProbArray[0][j] += FILTER_FACTOR*(labelProbArray[0][j] -<br/>                                                 filterLabelProbArray[0][j]);<br/>  }<br/>  // Low pass filter each stage into the next.<br/>  for (int i=1; i&lt;FILTER_STAGES; ++i){<br/>    for(int j=0; j&lt;num_labels; ++j){<br/>      filterLabelProbArray[i][j] += FILTER_FACTOR*(<br/>              filterLabelProbArray[i-1][j] -<br/>              filterLabelProbArray[i][j]);<br/>    }<br/>  }<br/><br/>  // Copy the last stage filter output back to `labelProbArray`.<br/>  for(int j=0; j&lt;num_labels; ++j){<br/>    labelProbArray[0][j] = filterLabelProbArray[FILTER_STAGES-1][j];<br/>  }<br/>}</pre>
 
@@ -654,7 +654,7 @@
 
 <pre>/** Prints top labels, to be shown in UI as the results. */<br/>private String printTopKLabels() {<br/>  for (int i = 0; i &lt; labelList.size(); ++i) {<br/>    sortedLabels.add(<br/>        new AbstractMap.SimpleEntry&lt;&gt;(labelList.get(i), labelProbArray[0][i]));<br/>    if (sortedLabels.size() &gt; RESULTS_TO_SHOW) {<br/>      sortedLabels.poll();<br/>    }<br/>  }<br/>  String textToShow = "";<br/>  final int size = sortedLabels.size();<br/>  for (int i = 0; i &lt; size; ++i) {<br/>    Map.Entry&lt;String, Float&gt; label = sortedLabels.poll();<br/>    textToShow = String.format("\n%s: %3s",label.getKey(), Math.round(label.getValue()*100) + "%"+textToShow);<br/><br/>    if(i==size-1)<br/>      topLabel = label.getKey();<br/>  }<br/>  return textToShow;<br/>}</pre>
 
-<p><kbd>ACCURATE_MODE</kbd>:表示扩展设置中对精度的偏好，这可能会使精度vs</p>
+<p><kbd>ACCURATE_MODE</kbd>:表示扩展设置中对精度的偏好，这可能会使精度 vs</p>
 
 <pre>private void createCameraSourceFront() {<br/>        previewFaceDetector = new FaceDetector.Builder(context)<br/>                .setClassificationType(FaceDetector.NO_CLASSIFICATIONS)<br/>                .setLandmarkType(FaceDetector.ALL_LANDMARKS)<br/>                .setMode(FaceDetector.FAST_MODE)<br/>                .setProminentFaceOnly(usingFrontCamera)<br/>                .setTrackingEnabled(true)<br/>                .setMinFaceSize(usingFrontCamera?0.35f : 0.15f)<br/>                .build();<br/><br/>        if(previewFaceDetector.isOperational()) {<br/>            previewFaceDetector.setProcessor(new MultiProcessor.Builder&lt;&gt;(new GraphicFaceTrackerFactory()).build());<br/>        } else {<br/>            Toast.makeText(context, "FACE DETECTION NOT AVAILABLE", <br/>                           Toast.LENGTH_SHORT).show();<br/>        }<br/>        Log.e(TAG, "createCameraSourceFront: "+useCamera2 );<br/>        if(useCamera2) {<br/>            mCamera2Source = new Camera2Source.Builder(context, <br/>                                 previewFaceDetector)<br/>                    .setFocusMode(Camera2Source.CAMERA_AF_AUTO)<br/>                    .setFlashMode(Camera2Source.CAMERA_FLASH_AUTO)<br/>                    .setFacing(Camera2Source.CAMERA_FACING_FRONT)<br/>                    .build();<br/>            startCameraSource();<br/>          <br/>        } else {<br/>            mCameraSource = new CameraSource.Builder(context, <br/>                                previewFaceDetector)<br/>                    .setFacing(CameraSource.CAMERA_FACING_FRONT)<br/>                    .setRequestedFps(30.0f)<br/>                    .build();<br/><br/>            startCameraSource();<br/>        }<br/>    }</pre>
 
@@ -664,7 +664,7 @@
 
 <li><kbd>ALL_LANDMARKS</kbd>:检测所有地标</li>
 
-<li><kbd>FAST_MODE</kbd>:表示扩展设置中的速度偏好，可使精度vs</li>
+<li><kbd>FAST_MODE</kbd>:表示扩展设置中的速度偏好，可使精度 vs</li>
 
 <li><kbd>NO_CLASSIFICATIONS</kbd>:不进行分类</li>
 
@@ -844,7 +844,7 @@
 
 <li class="mce-root">摘要</li>
 
-<li class="mce-root">通过这款应用，你可以构建一个类似于Snapchat或Instagram上使用的应用功能。如果你对OpenCV很熟悉，你可以不使用Google APIs来检测人脸。有了这个，你就可以开发很多整容AR应用，比如虚拟化妆、虚拟珠宝挑选、虚拟太阳镜挑选等等。</li>
+<li class="mce-root">通过这款应用，你可以构建一个类似于 Snapchat 或 Instagram 上使用的应用功能。如果你对 OpenCV 很熟悉，你可以不使用 Google APIs 来检测人脸。有了这个，你就可以开发很多整容 AR 应用，比如虚拟化妆、虚拟珠宝挑选、虚拟太阳镜挑选等等。</li>
 
 </ol>
 
@@ -899,7 +899,7 @@
 
                 
 
-<p>在下一章中，您将构建一个Android应用程序，它可以识别手写内容并根据数字对文本进行分类。为此，我们将使用MNIST数据库。</p>
+<p>在下一章中，您将构建一个 Android 应用程序，它可以识别手写内容并根据数字对文本进行分类。为此，我们将使用 MNIST 数据库。</p>
 
 <p>With this experience under your belt, let's move on to building an application that allows you to classify text for hand-drawn images. </p>
 

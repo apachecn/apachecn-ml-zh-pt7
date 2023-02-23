@@ -28,11 +28,11 @@
 
 				<li class="list">要素分析</li>
 
-				<li class="list"><strong class="bold">主成分分析</strong> ( <strong class="bold"> PCA </strong>)、核PCA、稀疏PCA</li>
+				<li class="list"><strong class="bold">主成分分析</strong> ( <strong class="bold"> PCA </strong>)、核 PCA、稀疏 PCA</li>
 
 				<li class="list"><strong class="bold">独立分量分析</strong> ( <strong class="bold"> ICA </strong>)</li>
 
-				<li class="list">简要说明<strong class="bold">隐马尔可夫模型</strong> ( <strong class="bold"> HMMs </strong>)考虑EM步长的前向-后向算法</li>
+				<li class="list">简要说明<strong class="bold">隐马尔可夫模型</strong> ( <strong class="bold"> HMMs </strong>)考虑 EM 步长的前向-后向算法</li>
 
 			</ul>
 
@@ -46,13 +46,13 @@
 
 			<p class="normal">如果<em class="italics"> p </em>由于零对中通常没有缺点，因此更容易移除平均值以简化模型。</p>
 
-			<p class="normal">无监督学习中最常见的问题之一是找到更低的维度分布<em class="italics">p</em>T28】lower，使得与<em class="italics">p</em>T32】数据的Kullback-Leibler散度最小化。在执行<strong class="bold">因子分析</strong> ( <strong class="bold"> FA </strong>)时，遵循Rubin D .、Thayer D .、<em class="italics"> EM算法用于ML因子分析、</em> Psychometrika，47/1982，第1期，以及Ghahramani Z .、Hinton G. E .、<em class="italics">EM算法用于因子分析混合物、</em> CRC-TG-96-1，1996年5月，我们从假设我们可以对模型进行建模开始</p>
+			<p class="normal">无监督学习中最常见的问题之一是找到更低的维度分布<em class="italics">p</em>T28】lower，使得与<em class="italics">p</em>T32】数据的 Kullback-Leibler 散度最小化。在执行<strong class="bold">因子分析</strong> ( <strong class="bold"> FA </strong>)时，遵循 Rubin D .、Thayer D .、<em class="italics"> EM 算法用于 ML 因子分析、</em> Psychometrika，47/1982，第 1 期，以及 Ghahramani Z .、Hinton G. E .、<em class="italics">EM 算法用于因子分析混合物、</em> CRC-TG-96-1，1996 年 5 月，我们从假设我们可以对模型进行建模开始</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_007.png" alt=""/></figure>
 
 			<p class="normal">矩阵<em class="italics"> A </em>被称为<em class="italics">因子加载矩阵</em>，因为它<a id="_idIndexMarker792"/>决定了每个潜在变量(因子)对<img src="img/B14713_13_004.png" alt=""/>重构的贡献。假设因素和输入数据在统计上是独立的。相反，考虑最后一项，如果<img src="img/B14713_13_009.png" alt=""/>，噪声称为异方差，如果方差相等<img src="img/B14713_13_010.png" alt=""/>，则定义为同方差。为了理解这两种噪声之间的区别，考虑一个信号<img src="img/B14713_13_004.png" alt=""/>，它是两个相同声音的总和，记录在不同的地方(例如，一个机场和一个树林)。在这种情况下，我们很容易想象这些记录如何具有不同的噪声方差；也就是说，异方差噪声(考虑到不同噪声源的数量，来自机场的记录应该比森林记录具有更高的方差)。相反，如果两种声音都在隔音的房间里录制——甚至是在同一个机场——则更有可能出现同质噪声(我们不考虑噪声的幅度，只考虑方差之间的差异)。</p>
 
-			<p class="normal">与其他方法(如PCA)相比，FA最重要的优势之一是它对异方差噪声的内在鲁棒性。事实上，在模型中包括噪声项(仅具有要去相关的约束)允许基于单个分量的部分去噪滤波，而PCA的前提条件之一是仅施加同方差噪声(在许多情况下，这非常类似于完全没有噪声)。考虑到前面的例子，我们可以假设第一个方差是<img style="height: 1.15em! important;" src="img/B14713_13_012.png" alt=""/>。以这种方式，模型将能够理解第一分量中的高方差应该(以更高的概率)被认为是噪声的产物，而不是该分量的固有属性。</p>
+			<p class="normal">与其他方法(如 PCA)相比，FA 最重要的优势之一是它对异方差噪声的内在鲁棒性。事实上，在模型中包括噪声项(仅具有要去相关的约束)允许基于单个分量的部分去噪滤波，而 PCA 的前提条件之一是仅施加同方差噪声(在许多情况下，这非常类似于完全没有噪声)。考虑到前面的例子，我们可以假设第一个方差是<img style="height: 1.15em! important;" src="img/B14713_13_012.png" alt=""/>。以这种方式，模型将能够理解第一分量中的高方差应该(以更高的概率)被认为是噪声的产物，而不是该分量的固有属性。</p>
 
 			<h2 id="_idParaDest-204" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor215"/>线性关系分析</h2>
 
@@ -66,7 +66,7 @@
 
 			<p class="normal">因此，为了解决问题，我们需要找到最佳的<img style="height: 1.2em! important;" src="img/B14713_13_016.png" alt=""/>，以便<img style="height: 1.2em! important;" src="img/B14713_13_017.png" alt=""/>(对于以零为中心的数据集，估计仅限于输入协方差矩阵<img src="img/B14713_13_018.png" alt=""/>)。应对嘈杂变量的能力现在应该更清晰了。如果<img style="height: 1em! important;" src="img/B14713_13_019.png" alt=""/>恰好等于<img src="img/B14713_13_018.png" alt=""/>并且<img src="img/B14713_13_021.png" alt=""/>的估计正确，算法将优化因子加载矩阵<em class="italics"> A </em>，排除噪声项产生的干扰；因此，组件将被近似去噪。</p>
 
-			<p class="normal">为了采用EM <a id="_idIndexMarker795"/>算法，我们需要确定联合概率<img src="img/B14713_13_022.png" alt=""/>。考虑到<img src="img/B14713_13_023.png" alt=""/>，右侧的第一项很容易确定。因此，我们得到以下结果:</p>
+			<p class="normal">为了采用 EM <a id="_idIndexMarker795"/>算法，我们需要确定联合概率<img src="img/B14713_13_022.png" alt=""/>。考虑到<img src="img/B14713_13_023.png" alt=""/>，右侧的第一项很容易确定。因此，我们得到以下结果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_024.png" alt=""/></figure>
 
@@ -126,7 +126,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_057.png" alt=""/></figure>
 
-			<p class="normal">总结这些步骤，我们可以定义完整的FA算法:</p>
+			<p class="normal">总结这些步骤，我们可以定义完整的 FA 算法:</p>
 
 			<ul>
 
@@ -136,7 +136,7 @@
 
 				<li class="list">电子步骤:计算<img src="img/B14713_13_059.png" alt=""/></li>
 
-				<li class="list">m步:使用之前的估计和之前提供的公式计算<img src="img/B14713_13_060.png" alt=""/></li>
+				<li class="list">m 步:使用之前的估计和之前提供的公式计算<img src="img/B14713_13_060.png" alt=""/></li>
 
 				<li class="list">计算逆模型的矩阵<em class="italics"> B </em>和<img src="img/B14713_13_061.png" alt=""/></li>
 
@@ -144,11 +144,11 @@
 
 			<p class="normal">必须重复该过程，直到<img style="height: 1.2em! important;" src="img/B14713_13_062.png" alt=""/>停止修改它们的值(使用阈值)以及对最大迭代次数的限制。使用逆模型可以容易地获得这些因子。</p>
 
-			<h2 id="_idParaDest-205" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor216"/>使用scikit-learn进行因子分析的示例</h2>
+			<h2 id="_idParaDest-205" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor216"/>使用 scikit-learn 进行因子分析的示例</h2>
 
-			<p class="normal">现在，我们可以使用原始版本中的MNIST手写数字数据集(70，000个28 × 28灰度图像)和添加的异方差正态噪声(<img src="img/B14713_13_063.png" alt=""/>在范围(0，0.25)中随机选择)，用scikit-learn对FA的示例<a id="_idIndexMarker800"/>进行编码。</p>
+			<p class="normal">现在，我们可以使用原始版本中的 MNIST 手写数字数据集(70，000 个 28 × 28 灰度图像)和添加的异方差正态噪声(<img src="img/B14713_13_063.png" alt=""/>在范围(0，0.25)中随机选择)，用 scikit-learn 对 FA 的示例<a id="_idIndexMarker800"/>进行编码。</p>
 
-			<p class="normal">第一步是加载原始数据集并使其归零(我使用的是第1章、<em class="italics">机器学习模型基础</em>中定义的函数):</p>
+			<p class="normal">第一步是加载原始数据集并使其归零(我使用的是第 1 章、<em class="italics">机器学习模型基础</em>中定义的函数):</p>
 
 			<pre>import numpy as np
 from sklearn.datasets import fetch_openml
@@ -167,9 +167,9 @@ Xh = X + np.random.normal(0.0, Omega,
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_01.png" alt=""/></figure>
 
-			<p class="packt_figref">MNIST样本(左)。噪音版本(右)</p>
+			<p class="packt_figref">MNIST 样本(左)。噪音版本(右)</p>
 
-			<p class="normal">我们可以使用带有<code class="Code-In-Text--PACKT-">n_components=64</code>参数的scikit-learn <code class="Code-In-Text--PACKT-">FactorAnalysis</code>类对两个数据集执行FA，并检查分数(所有样本的平均对数似然)。如果噪声方差是已知的(或者有一个很好的估计)，可以通过<code class="Code-In-Text--PACKT-">noise_variance_init</code>参数包含起点；否则，它将用单位矩阵初始化:</p>
+			<p class="normal">我们可以使用带有<code class="Code-In-Text--PACKT-">n_components=64</code>参数的 scikit-learn <code class="Code-In-Text--PACKT-">FactorAnalysis</code>类对两个数据集执行 FA，并检查分数(所有样本的平均对数似然)。如果噪声方差是已知的(或者有一个很好的估计)，可以通过<code class="Code-In-Text--PACKT-">noise_variance_init</code>参数包含起点；否则，它将用单位矩阵初始化:</p>
 
 			<pre>from sklearn.decomposition import FactorAnalysis
 fa = FactorAnalysis(n_components=64,
@@ -188,7 +188,7 @@ print('Factor analysis score Xh: {:.3f}'.
 			<pre>Factor analysis score X: 1821.404
 Factor analysis score Xh: 311.249</pre>
 
-			<p class="normal">正如所料，噪声的存在降低了最终精度(MLE)。按照A. Gramfort和D. A. Engemann在最初的scikit-learn文档中提供的示例，我们可以使用Ledoit-Wolf算法(一种改进协方差条件的收缩方法<a id="_idIndexMarker802"/>,超出了本书的范围)为MLE创建一个基准。欲了解更多信息，请阅读Ledoit O .，Wolf M .，<em class="italics">一种适用于高维协方差矩阵的条件良好的估计器</em>，多变量分析杂志，88，2/2004:</p>
+			<p class="normal">正如所料，噪声的存在降低了最终精度(MLE)。按照 A. Gramfort 和 D. A. Engemann 在最初的 scikit-learn 文档中提供的示例，我们可以使用 Ledoit-Wolf 算法(一种改进协方差条件的收缩方法<a id="_idIndexMarker802"/>,超出了本书的范围)为 MLE 创建一个基准。欲了解更多信息，请阅读 Ledoit O .，Wolf M .，<em class="italics">一种适用于高维协方差矩阵的条件良好的估计器</em>，多变量分析杂志，88，2/2004:</p>
 
 			<pre>from sklearn.covariance import LedoitWolf
 ldw = LedoitWolf()
@@ -208,11 +208,11 @@ print('Ledoit-Wolf score Xh: {:.3f}'.
 			<pre>Ledoit-Wolf score X: 1367.221
 Ledoit-Wolf score Xh: 346.825</pre>
 
-			<p class="normal">对于原始数据集，FA的性能比基准测试好得多，而在存在异方差噪声的情况下，FA的性能稍差。读者可以使用不同数量的元件和噪声方差的网格搜索来尝试其他组合，并试验消除零居中步骤的效果。可以使用<code class="Code-In-Text--PACKT-">components_</code>实例变量绘制提取的组件:</p>
+			<p class="normal">对于原始数据集，FA 的性能比基准测试好得多，而在存在异方差噪声的情况下，FA 的性能稍差。读者可以使用不同数量的元件和噪声方差的网格搜索来尝试其他组合，并试验消除零居中步骤的效果。可以使用<code class="Code-In-Text--PACKT-">components_</code>实例变量绘制提取的组件:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_02.png" alt=""/></figure>
 
-			<p class="packt_figref">原始数据集上通过因子分析提取的64个成分的图</p>
+			<p class="packt_figref">原始数据集上通过因子分析提取的 64 个成分的图</p>
 
 			<p class="normal">仔细分析表明，这些组件是许多低级视觉特征的叠加。这是假设我们在组件上具有高斯先验分布的结果(<img style="height: 1.1em! important;" src="img/B14713_13_064.png" alt=""/>)。事实上，这种分布的一个缺点是其固有的密集性(采样值远离平均值的概率通常太高，而在某些情况下，希望有一个峰值分布来阻止值不接近其平均值，以便能够更有选择性地观察成分)。</p>
 
@@ -222,7 +222,7 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<p class="normal">换句话说，任何特征旋转(<img src="img/B14713_13_073.png" alt=""/>)总是原始问题的解决方案，不可能决定哪个是真正的加载矩阵。所有这些条件导致进一步的结论，即组件之间的互信息不等于零，也不接近最小值(在这种情况下，它们中的每一个都携带特定部分的信息)。另一方面，我们的主要目标是降低维度。既然<a id="_idIndexMarker804"/>是这样，那么我们有依赖成分也就不足为奇了，因为我们的目的是保存最大数量的包含在<em class="italics"> p </em> ( <em class="italics"> X </em>)中的原始信息(记住信息量与熵有关，后者与方差成正比)。</p>
 
-			<p class="normal">在PCA(仍然基于高斯假设)中可以观察到相同的现象，但在最后一段中，我们将讨论一种称为ICA的技术，其目标是在从一组统计独立的特征开始之后，创建每个样本的表示(没有维数缩减的约束)。这种方法，即使有其独特之处，也属于一个称为稀疏编码的大算法家族。在这种情况下，如果对应的字典有<img style="height: 1.1em! important;" src="img/B14713_13_074.png" alt=""/>就称为过完备(当然，主要目标不再是降维)。然而，我们将只考虑字典最完整的情况<img style="height: 1.1em! important;" src="img/B14713_13_075.png" alt=""/>，因为字典过完整的ICA需要更复杂的方法。当然，稀疏程度与<img style="height: 1.1em! important;" src="img/B14713_13_076.png" alt=""/>成正比，使用ICA，它总是作为次要目标来实现(主要目标总是组件之间的独立性)。</p>
+			<p class="normal">在 PCA(仍然基于高斯假设)中可以观察到相同的现象，但在最后一段中，我们将讨论一种称为 ICA 的技术，其目标是在从一组统计独立的特征开始之后，创建每个样本的表示(没有维数缩减的约束)。这种方法，即使有其独特之处，也属于一个称为稀疏编码的大算法家族。在这种情况下，如果对应的字典有<img style="height: 1.1em! important;" src="img/B14713_13_074.png" alt=""/>就称为过完备(当然，主要目标不再是降维)。然而，我们将只考虑字典最完整的情况<img style="height: 1.1em! important;" src="img/B14713_13_075.png" alt=""/>，因为字典过完整的 ICA 需要更复杂的方法。当然，稀疏程度与<img style="height: 1.1em! important;" src="img/B14713_13_076.png" alt=""/>成正比，使用 ICA，它总是作为次要目标来实现(主要目标总是组件之间的独立性)。</p>
 
 			<h1 id="_idParaDest-206" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor217"/>主成分分析</h1>
 
@@ -232,7 +232,7 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<p class="normal">因此，如果一些分量具有非常低的方差，它们对熵的贡献也是有限的，并且提供很少的附加信息。因此，它们可以被移除而不会有很高的精度损失。</p>
 
-			<p class="normal">正如我们对FA所做的一样，让我们考虑一个来自<img style="height: 1.2em! important;" src="img/B14713_13_079.png" alt=""/>的数据集(为了简单起见，我们假设它是以零为中心的，即使这不是必需的):</p>
+			<p class="normal">正如我们对 FA 所做的一样，让我们考虑一个来自<img style="height: 1.2em! important;" src="img/B14713_13_079.png" alt=""/>的数据集(为了简单起见，我们假设它是以零为中心的，即使这不是必需的):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_080.png" alt=""/></figure>
 
@@ -244,17 +244,17 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_085.png" alt=""/></figure>
 
-			<p class="normal"><em class="italics"> V </em>是包含特征向量的(<em class="italics"> n </em> x <em class="italics"> n </em>)矩阵(作为列)，而<img src="img/B14713_13_021.png" alt=""/>是包含特征值的对角矩阵。此外，<em class="italics"> V </em>也是正交的，因此特征向量构成了基。另一种方法是基于<strong class="bold">奇异值分解</strong> ( <strong class="bold"> SVD </strong>)，其具有<a id="_idIndexMarker807"/>增量变量。还有一些算法可以执行任意数量分量的截断分解，从而加快收敛过程(如scikit-learn实现TruncatedSVD)。在这种情况下，很容易注意到样本协方差如下(如果<em class="italics"> M </em> &gt; &gt; 1，<img style="height: 0.8em! important;" src="img/B14713_13_087.png" alt=""/>并且估计几乎是无偏的):</p>
+			<p class="normal"><em class="italics"> V </em>是包含特征向量的(<em class="italics"> n </em> x <em class="italics"> n </em>)矩阵(作为列)，而<img src="img/B14713_13_021.png" alt=""/>是包含特征值的对角矩阵。此外，<em class="italics"> V </em>也是正交的，因此特征向量构成了基。另一种方法是基于<strong class="bold">奇异值分解</strong> ( <strong class="bold"> SVD </strong>)，其具有<a id="_idIndexMarker807"/>增量变量。还有一些算法可以执行任意数量分量的截断分解，从而加快收敛过程(如 scikit-learn 实现 TruncatedSVD)。在这种情况下，很容易注意到样本协方差如下(如果<em class="italics"> M </em> &gt; &gt; 1，<img style="height: 0.8em! important;" src="img/B14713_13_087.png" alt=""/>并且估计几乎是无偏的):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_088.png" alt=""/></figure>
 
-			<p class="normal">如果我们将SVD应用于矩阵<em class="italics"> X </em>(每一行代表具有形状的单个数据点(1 x <em class="italics"> n </em>))，我们将获得以下结果:</p>
+			<p class="normal">如果我们将 SVD 应用于矩阵<em class="italics"> X </em>(每一行代表具有形状的单个数据点(1 x <em class="italics"> n </em>))，我们将获得以下结果:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_089.png" alt=""/></figure>
 
-			<p class="normal"><em class="italics"> U </em>是包含(作为行)左奇异向量(<em class="italics">XX</em>T45】T的特征向量)的酉矩阵，<em class="italics"> V </em>(也是酉矩阵)包含(作为行)右奇异向量(对应于<em class="italics">X</em>T51】TT53】X的特征向量)，而<img src="img/B14713_13_090.png" alt=""/>是包含<img src="img/B14713_13_091.png" alt=""/>的奇异值(它们是平方根传统上，特征值按降序排序，特征向量重新排列以匹配相应的位置。</p>
+			<p class="normal"><em class="italics"> U </em>是包含(作为行)左奇异向量(<em class="italics">XX</em>T45】T 的特征向量)的酉矩阵，<em class="italics"> V </em>(也是酉矩阵)包含(作为行)右奇异向量(对应于<em class="italics">X</em>T51】TT53】X 的特征向量)，而<img src="img/B14713_13_090.png" alt=""/>是包含<img src="img/B14713_13_091.png" alt=""/>的奇异值(它们是平方根传统上，特征值按降序排序，特征向量重新排列以匹配相应的位置。</p>
 
-			<p class="normal">因此，我们可以直接使用矩阵<img src="img/B14713_13_090.png" alt=""/>来选择最相关的特征值(平方根是增函数，并且不改变顺序)和矩阵<em class="italics"> V </em>来检索相应的特征向量(因子<img src="img/B14713_13_093.png" alt=""/>是比例常数)。通过这种方式，我们不需要计算和特征分解协方差矩阵<img src="img/B14713_13_018.png" alt=""/>(包含<em class="italics"> n </em> x <em class="italics"> n </em>元素)，并且我们可以开发一些仅适用于数据集的非常快速的近似算法(不需要计算<em class="italics"> X </em> <sup style="font-style: italic;"> T </sup> <em class="italics"> X </em>)。利用SVD可以直接做<em class="italics"> X </em>的变换，考虑到<em class="italics"> U </em>和<em class="italics"> V </em>是酉矩阵(这意味着<em class="italics">UU</em>T=<em class="italics">U</em><sup style="font-style: italic;">T</sup>U=<em class="italics">I</em>；因此，共轭转置也是逆的):</p>
+			<p class="normal">因此，我们可以直接使用矩阵<img src="img/B14713_13_090.png" alt=""/>来选择最相关的特征值(平方根是增函数，并且不改变顺序)和矩阵<em class="italics"> V </em>来检索相应的特征向量(因子<img src="img/B14713_13_093.png" alt=""/>是比例常数)。通过这种方式，我们不需要计算和特征分解协方差矩阵<img src="img/B14713_13_018.png" alt=""/>(包含<em class="italics"> n </em> x <em class="italics"> n </em>元素)，并且我们可以开发一些仅适用于数据集的非常快速的近似算法(不需要计算<em class="italics"> X </em> <sup style="font-style: italic;"> T </sup> <em class="italics"> X </em>)。利用 SVD 可以直接做<em class="italics"> X </em>的变换，考虑到<em class="italics"> U </em>和<em class="italics"> V </em>是酉矩阵(这意味着<em class="italics">UU</em>T=<em class="italics">U</em><sup style="font-style: italic;">T</sup>U=<em class="italics">I</em>；因此，共轭转置也是逆的):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_095.png" alt=""/></figure>
 
@@ -266,11 +266,11 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_099.png" alt=""/></figure>
 
-			<p class="normal">如果我们选择前<em class="italics"> k个</em>特征值，我们可以基于将<em class="italics"> X </em>投影到原始特征向量空间的子空间上的相应特征向量(主分量)来构建变换矩阵:</p>
+			<p class="normal">如果我们选择前<em class="italics"> k 个</em>特征值，我们可以基于将<em class="italics"> X </em>投影到原始特征向量空间的子空间上的相应特征向量(主分量)来构建变换矩阵:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_100.png" alt=""/></figure>
 
-			<p class="normal">使用SVD，代替<em class="italics"> A </em> <sub style="font-style: italic;"> k </sub>，我们可以直接截断<em class="italics"> U </em>和<img src="img/B14713_13_090.png" alt=""/>，创建矩阵<em class="italics"> U </em> <sub style="font-style: italic;"> k </sub>(它只包含顶部的<em class="italics"> k </em>特征向量)和<img src="img/B14713_13_102.png" alt=""/>，一个具有顶部的<em class="italics"> k </em>特征值的对角矩阵。</p>
+			<p class="normal">使用 SVD，代替<em class="italics"> A </em> <sub style="font-style: italic;"> k </sub>，我们可以直接截断<em class="italics"> U </em>和<img src="img/B14713_13_090.png" alt=""/>，创建矩阵<em class="italics"> U </em> <sub style="font-style: italic;"> k </sub>(它只包含顶部的<em class="italics"> k </em>特征向量)和<img src="img/B14713_13_102.png" alt=""/>，一个具有顶部的<em class="italics"> k </em>特征值的对角矩阵。</p>
 
 			<h2 id="_idParaDest-207" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor218"/>组件重要性评估</h2>
 
@@ -278,15 +278,15 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_103.png" alt=""/></figure>
 
-			<p class="normal">为了实现这一目标，通常需要比较不同数量组件的性能。在下图中，方差比率(<em class="italics">方差由分量n解释/总方差</em>)和累积方差被绘制为分量的函数:</p>
+			<p class="normal">为了实现这一目标，通常需要比较不同数量组件的性能。在下图中，方差比率(<em class="italics">方差由分量 n 解释/总方差</em>)和累积方差被绘制为分量的函数:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_03.png" alt=""/></figure>
 
 			<p class="packt_figref">每个成分的解释方差(左)和每个成分的累积方差(右)</p>
 
-			<p class="normal">在这种情况下，前10个成分能够解释总方差的80%。其余25个组件的影响越来越小，可以删除。但是，选择必须始终基于具体的背景，考虑到信息丢失导致的价值损失。</p>
+			<p class="normal">在这种情况下，前 10 个成分能够解释总方差的 80%。其余 25 个组件的影响越来越小，可以删除。但是，选择必须始终基于具体的背景，考虑到信息丢失导致的价值损失。</p>
 
-			<p class="normal">确定元件正确数量的技巧是基于对<em class="italics"> X </em>的特征值的分析。排序后，可以考虑后续值之间的差异<img style="height: 1.1em! important;" src="img/B14713_13_104.png" alt=""/>。最高差值<img src="img/B14713_13_105.png" alt=""/>决定了潜在最优缩减的指数<em class="italics"> k </em>(显然，需要考虑最小值的约束，因为通常<img src="img/B14713_13_106.png" alt=""/>是最高差值)。例如，如果<em class="italics"> d </em> = {4，4，3，0.2，0.18，0.05}，则原始维数为<em class="italics">n</em>= 6；然而，<img src="img/B14713_13_107.png" alt=""/>是最小的差异，因此，将维度减少到(<em class="italics">n</em>+1)–<em class="italics">k</em>= 3是合理的。原因很简单；特征值决定了每个分量的大小，但是我们需要一个相对的量度，因为标度是变化的。在这个例子中，最后三个特征向量指向的方向与前三个分量相比，所解释的方差可以忽略不计。</p>
+			<p class="normal">确定元件正确数量的技巧是基于对<em class="italics"> X </em>的特征值的分析。排序后，可以考虑后续值之间的差异<img style="height: 1.1em! important;" src="img/B14713_13_104.png" alt=""/>。最高差值<img src="img/B14713_13_105.png" alt=""/>决定了潜在最优缩减的指数<em class="italics"> k </em>(显然，需要考虑最小值的约束，因为通常<img src="img/B14713_13_106.png" alt=""/>是最高差值)。例如，如果<em class="italics"> d </em> = {4，4，3，0.2，0.18，0.05}，则原始维数为<em class="italics">n</em>= 6；然而，<img src="img/B14713_13_107.png" alt=""/>是最小的差异，因此，将维度减少到(<em class="italics">n</em>+1)–<em class="italics">k</em>= 3 是合理的。原因很简单；特征值决定了每个分量的大小，但是我们需要一个相对的量度，因为标度是变化的。在这个例子中，最后三个特征向量指向的方向与前三个分量相比，所解释的方差可以忽略不计。</p>
 
 			<p class="normal">一旦我们定义了<a id="_idIndexMarker811"/>变换矩阵<em class="italics">A</em>k，就有可能在新的子空间中执行原始向量的实际投影，通过关系:</p>
 
@@ -300,23 +300,23 @@ Ledoit-Wolf score Xh: 346.825</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_112.png" alt=""/></figure>
 
-			<p class="normal">考虑到<img src="img/B14713_13_021.png" alt=""/>是对角的，结果矩阵<img src="img/B14713_13_114.png" alt=""/>也将是对角的。这意味着PCA对变换后的协方差矩阵去相关。同时，我们可以说，对输入协方差矩阵去相关的每个算法执行一个PCA(有或没有维数减少)。例如，白化过程是一种没有降维的特定PCA，而Isomap(参见<em class="italics">第5章</em>、<em class="italics">基于图的半监督学习</em>)以更具几何性的方法对Gram矩阵执行相同的操作。这个结果将在第14章、<em class="italics"> Hebbian Learning </em>中使用，以展示一些特定的神经网络如何在没有特征分解的情况下执行PCA<img src="img/B14713_13_018.png" alt=""/>。</p>
+			<p class="normal">考虑到<img src="img/B14713_13_021.png" alt=""/>是对角的，结果矩阵<img src="img/B14713_13_114.png" alt=""/>也将是对角的。这意味着 PCA 对变换后的协方差矩阵去相关。同时，我们可以说，对输入协方差矩阵去相关的每个算法执行一个 PCA(有或没有维数减少)。例如，白化过程是一种没有降维的特定 PCA，而 Isomap(参见<em class="italics">第 5 章</em>、<em class="italics">基于图的半监督学习</em>)以更具几何性的方法对 Gram 矩阵执行相同的操作。这个结果将在第 14 章、<em class="italics"> Hebbian Learning </em>中使用，以展示一些特定的神经网络如何在没有特征分解的情况下执行 PCA<img src="img/B14713_13_018.png" alt=""/>。</p>
 
-			<p class="normal">现在让我们考虑一个具有同方差噪声的FA。我们已经看到<a id="_idIndexMarker812"/>条件分布<img style="height: 1.2em! important;" src="img/B14713_13_116.png" alt=""/>的协方差矩阵等于<img style="height: 1.1em! important;" src="img/B14713_13_117.png" alt=""/>。在同质噪声的情况下，它变成<img style="height: 1.2em! important;" src="img/B14713_13_118.png" alt=""/>。对于一般协方差矩阵<img src="img/B14713_13_018.png" alt=""/>，可以证明添加一个常数对角矩阵<img src="img/B14713_13_120.png" alt=""/>不会修改原始特征向量，并且会将特征值移动相同的量:</p>
+			<p class="normal">现在让我们考虑一个具有同方差噪声的 FA。我们已经看到<a id="_idIndexMarker812"/>条件分布<img style="height: 1.2em! important;" src="img/B14713_13_116.png" alt=""/>的协方差矩阵等于<img style="height: 1.1em! important;" src="img/B14713_13_117.png" alt=""/>。在同质噪声的情况下，它变成<img style="height: 1.2em! important;" src="img/B14713_13_118.png" alt=""/>。对于一般协方差矩阵<img src="img/B14713_13_018.png" alt=""/>，可以证明添加一个常数对角矩阵<img src="img/B14713_13_120.png" alt=""/>不会修改原始特征向量，并且会将特征值移动相同的量:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_121.png" alt=""/></figure>
 
-			<p class="normal">因此，我们可以考虑没有噪声的一般情况而不失一般性。我们知道FA(用<img style="height: 1.2em! important;" src="img/B14713_13_122.png" alt=""/>)的目标是求矩阵<em class="italics"> A </em>，这样<img style="height: 1.2em! important;" src="img/B14713_13_123.png" alt=""/>(输入协方差)。因此，由于对称性和施加渐近等式，我们可以写出如下:</p>
+			<p class="normal">因此，我们可以考虑没有噪声的一般情况而不失一般性。我们知道 FA(用<img style="height: 1.2em! important;" src="img/B14713_13_122.png" alt=""/>)的目标是求矩阵<em class="italics"> A </em>，这样<img style="height: 1.2em! important;" src="img/B14713_13_123.png" alt=""/>(输入协方差)。因此，由于对称性和施加渐近等式，我们可以写出如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_124.png" alt=""/></figure>
 
-			<p class="normal">这一结果表明，FA是一种在存在异方差噪声的情况下管理维数减少的更通用和更鲁棒的方法，而PCA是对同方差噪声的限制。当对受异方差噪声影响的数据集执行PCA时，MLE恶化，因为改变不同水平的特征值的幅度的不同噪声分量可以驱动特征向量的选择，该特征向量仅解释原始数据集中的低百分比的方差(并且在无噪声的情况下，这些特征向量通常会被丢弃以有利于更重要的方向)。</p>
+			<p class="normal">这一结果表明，FA 是一种在存在异方差噪声的情况下管理维数减少的更通用和更鲁棒的方法，而 PCA 是对同方差噪声的限制。当对受异方差噪声影响的数据集执行 PCA 时，MLE 恶化，因为改变不同水平的特征值的幅度的不同噪声分量可以驱动特征向量的选择，该特征向量仅解释原始数据集中的低百分比的方差(并且在无噪声的情况下，这些特征向量通常会被丢弃以有利于更重要的方向)。</p>
 
-			<p class="normal">如果回想一下我们在上一段开始时讨论的例子，我们知道<a id="_idIndexMarker813"/>噪声是强异方差的，但我们没有任何工具来告诉PCA如何处理它。这意味着，考虑到两个源是相同的，第一个分量的方差将比预期的高得多。不幸的是，在现实生活中，噪声是相关的，当噪声功率非常高时，因子和PCA都不能有效地解决问题。在所有这些情况下，必须采用更复杂的去噪技术。相反，只要有可能定义一个近似的对角噪声协方差矩阵，FA肯定比PCA更加鲁棒和有效。后者应<a id="_idIndexMarker814"/>仅在无噪声或<em class="italics">准</em>无噪声情况下考虑。在这两种情况下，结果永远不会导致良好分离的特征。由于这个原因，已经研究了ICA并且设计了许多不同的策略。</p>
+			<p class="normal">如果回想一下我们在上一段开始时讨论的例子，我们知道<a id="_idIndexMarker813"/>噪声是强异方差的，但我们没有任何工具来告诉 PCA 如何处理它。这意味着，考虑到两个源是相同的，第一个分量的方差将比预期的高得多。不幸的是，在现实生活中，噪声是相关的，当噪声功率非常高时，因子和 PCA 都不能有效地解决问题。在所有这些情况下，必须采用更复杂的去噪技术。相反，只要有可能定义一个近似的对角噪声协方差矩阵，FA 肯定比 PCA 更加鲁棒和有效。后者应<a id="_idIndexMarker814"/>仅在无噪声或<em class="italics">准</em>无噪声情况下考虑。在这两种情况下，结果永远不会导致良好分离的特征。由于这个原因，已经研究了 ICA 并且设计了许多不同的策略。</p>
 
-			<h2 id="_idParaDest-208" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor219"/>带scikit-learn的PCA示例</h2>
+			<h2 id="_idParaDest-208" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor219"/>带 scikit-learn 的 PCA 示例</h2>
 
-			<p class="normal">我们可以重复使用FA和异方差噪声进行的<a id="_idIndexMarker815"/>相同实验，以评估PCA的MLE分数。我们将使用具有相同数量组件的PCA类(<code class="Code-In-Text--PACKT-">n_components=64</code>)。为了达到最大的准确性，我们还设置了<code class="Code-In-Text--PACKT-">svd_solver='full'</code>参数，以强制scikit-learn应用完整的SVD，而不是截断的版本。这样，仅在分解后选择顶部特征值，避免了不精确估计的风险:</p>
+			<p class="normal">我们可以重复使用 FA 和异方差噪声进行的<a id="_idIndexMarker815"/>相同实验，以评估 PCA 的 MLE 分数。我们将使用具有相同数量组件的 PCA 类(<code class="Code-In-Text--PACKT-">n_components=64</code>)。为了达到最大的准确性，我们还设置了<code class="Code-In-Text--PACKT-">svd_solver='full'</code>参数，以强制 scikit-learn 应用完整的 SVD，而不是截断的版本。这样，仅在分解后选择顶部特征值，避免了不精确估计的风险:</p>
 
 			<pre>from sklearn.decomposition import PCA
 pca = PCA(n_components=64,
@@ -330,7 +330,7 @@ print('PCA score: {:.3f}'.
 
 			<pre><strong class="screen-text">PCA score: 162.927</strong></pre>
 
-			<p class="normal">结果并不令人惊讶:由于异方差噪声造成的不正确估计，MLE比FA低得多。考虑到PCA的训练性能通常高于FA，我邀请读者比较不同数据集和噪声水平的结果。因此，当处理大型数据集时，一个好的权衡肯定是可取的。与FA一样，可以通过<code class="Code-In-Text--PACKT-">components_</code>实例变量检索组件。</p>
+			<p class="normal">结果并不令人惊讶:由于异方差噪声造成的不正确估计，MLE 比 FA 低得多。考虑到 PCA 的训练性能通常高于 FA，我邀请读者比较不同数据集和噪声水平的结果。因此，当处理大型数据集时，一个好的权衡肯定是可取的。与 FA 一样，可以通过<code class="Code-In-Text--PACKT-">components_</code>实例变量检索组件。</p>
 
 			<p class="normal">有趣的是<a id="_idIndexMarker816"/>通过基于组件的实例数组<code class="Code-In-Text--PACKT-">explained_variance_ratio_</code>来检查总解释方差(作为总输入方差的一部分):</p>
 
@@ -341,7 +341,7 @@ print('PCA score: {:.3f}'.
 
 			<pre><strong class="screen-text">Explained variance ratio: 0.677</strong></pre>
 
-			<p class="normal">用64个分量，我们解释了总输入方差的大约68%。当然，使用图表比较解释的方差也是有用的:</p>
+			<p class="normal">用 64 个分量，我们解释了总输入方差的大约 68%。当然，使用图表比较解释的方差也是有用的:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_04.png" alt=""/></figure>
 
@@ -349,9 +349,9 @@ print('PCA score: {:.3f}'.
 
 			<pre>n components and compare the results) and, at the same time, the PCA will be able to overcome a higher threshold (such as 95%) only by adding a large number of new<a id="_idIndexMarker817"/> components. In this particular case, we know that the dataset is made up of handwritten digits; therefore, we can suppose that the tail is due to secondary differences (a line slightly longer than average, a marked stroke, and so on); hence, we can drop all the components with <em class="italics">n</em> &gt; 64 (or less) without problems (it's also easy to verify visually a rebuilt image using the <code class="Code-In-Text--PACKT-">inverse_transform()</code> method). However, it is always best practice to perform a complete analysis before moving on to further processing steps, particularly when the dimensionality of <em class="italics">X</em> is high.</pre>
 
-			<p class="normal">Minka提出了另一种确定最佳组分数量的有趣方法(在Minka T. P .，<em class="italics">PCA的维数自动选择</em>，NIPS 2000)，该方法基于贝叶斯模型选择。</p>
+			<p class="normal">Minka 提出了另一种确定最佳组分数量的有趣方法(在 Minka T. P .，<em class="italics">PCA 的维数自动选择</em>，NIPS 2000)，该方法基于贝叶斯模型选择。</p>
 
-			<p class="normal">想法是使用MLE来优化似然性<em class="italics"> p </em> ( <em class="italics"> X </em> | <em class="italics"> k </em>)，其中k是指示组件数量的参数。换句话说，它并不开始分析解释的方差，而是确定一个<em class="italics"> k </em> &lt; <em class="italics"> n </em>的值，使得可能性保持最高可能(隐含地，<em class="italics"> k </em>将解释max<em class="italics">k</em>=<em class="italics">k</em><sub style="font-style: italic;">max</sub>约束下的最大可能方差)。该方法的理论基础(带有冗长的数学推导)在前面提到的论文中给出。然而，通过设置<code class="Code-In-Text--PACKT-">n_components='mle'</code>和<code class="Code-In-Text--PACKT-">svd_solver='full'</code>参数，可以将这种方法用于scikit-learn。</p>
+			<p class="normal">想法是使用 MLE 来优化似然性<em class="italics"> p </em> ( <em class="italics"> X </em> | <em class="italics"> k </em>)，其中 k 是指示组件数量的参数。换句话说，它并不开始分析解释的方差，而是确定一个<em class="italics"> k </em> &lt; <em class="italics"> n </em>的值，使得可能性保持最高可能(隐含地，<em class="italics"> k </em>将解释 max<em class="italics">k</em>=<em class="italics">k</em><sub style="font-style: italic;">max</sub>约束下的最大可能方差)。该方法的理论基础(带有冗长的数学推导)在前面提到的论文中给出。然而，通过设置<code class="Code-In-Text--PACKT-">n_components='mle'</code>和<code class="Code-In-Text--PACKT-">svd_solver='full'</code>参数，可以将这种方法用于 scikit-learn。</p>
 
 			<h2 id="_idParaDest-209" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor220"/>内核主成分分析</h2>
 
@@ -368,21 +368,21 @@ X, _ = make_circles(n_samples=1000,
 
 			<p class="packt_figref">核主成分分析示例的径向数据集</p>
 
-			<p class="normal">数据集几乎是对称的；因此，标准PCA可以容易地检测正交且具有大约相同幅度的主成分<a id="_idIndexMarker820"/>。然而，这不足以执行考虑数据集实际语义的维度缩减。事实上，在这种情况下，内部斑点显然是由周围圆圈分隔的密集成分，为了了解哪些成分对解释的方差有较大影响，可能有必要突出显示这一属性。</p>
+			<p class="normal">数据集几乎是对称的；因此，标准 PCA 可以容易地检测正交且具有大约相同幅度的主成分<a id="_idIndexMarker820"/>。然而，这不足以执行考虑数据集实际语义的维度缩减。事实上，在这种情况下，内部斑点显然是由周围圆圈分隔的密集成分，为了了解哪些成分对解释的方差有较大影响，可能有必要突出显示这一属性。</p>
 
 			<p class="normal">为了解决这个问题，我们有必要执行预处理转换。想象有一个函数<img style="height: 1.1em! important;" src="img/B14713_13_125.png" alt=""/>，其中<em class="italics"> m </em>一般(但不一定)大于<em class="italics"> n </em>。新点<img src="img/B14713_13_126.png" alt=""/>是原始点在特征空间<em class="italics"> G </em>上的投影，在特征空间中非线性被移除，并且分量可以被线性分离。这种空间非常普遍，一般来说，付出的代价只是增加了复杂性(因为转换)。然而，许多算法(例如，支持向量机)基于数据点之间的点积<img src="img/B14713_13_127.png" alt=""/>，不需要显式转换。幸运的是，这些问题通常可以通过使用所谓的内核技巧来解决。我们不打算深究所有的数学理论(这需要更多的篇幅，超出了本书的范围)，但可以说，给定一个特征图<img src="img/B14713_13_128.png" alt=""/>，在温和的条件下，有可能找到一个核等于:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_129.png" alt=""/></figure>
 
-			<p class="normal">换句话说，特征空间中的点积就是为这两个点评估的核。<a id="_idIndexMarker822"/> PCA基于协方差矩阵的特征分解。很容易理解，处理由内核引起的Gram矩阵类似于处理特征空间中的协方差矩阵。实际上，克矩阵条目是<img style="height: 1.4em! important;" src="img/B14713_13_130.png" alt=""/>。此时，考虑标准的PCA变换<img style="height: 1.3em! important;" src="img/B14713_13_131.png" alt=""/>，并应用特征投影，我们得到<img style="height: 1.2em! important;" src="img/B14713_13_132.png" alt=""/> <img style="height: 1.2em! important;" src="img/B14713_13_133.png" alt=""/>。</p>
+			<p class="normal">换句话说，特征空间中的点积就是为这两个点评估的核。<a id="_idIndexMarker822"/> PCA 基于协方差矩阵的特征分解。很容易理解，处理由内核引起的 Gram 矩阵类似于处理特征空间中的协方差矩阵。实际上，克矩阵条目是<img style="height: 1.4em! important;" src="img/B14713_13_130.png" alt=""/>。此时，考虑标准的 PCA 变换<img style="height: 1.3em! important;" src="img/B14713_13_131.png" alt=""/>，并应用特征投影，我们得到<img style="height: 1.2em! important;" src="img/B14713_13_132.png" alt=""/> <img style="height: 1.2em! important;" src="img/B14713_13_133.png" alt=""/>。</p>
 
-			<p class="normal">矩阵<em class="italics">W</em>T7】G是核<a id="_idIndexMarker823"/> PCA投影矩阵，通过计算Gram矩阵的特征向量<img src="img/B14713_13_134.png" alt=""/>并执行乘法<img src="img/B14713_13_135.png" alt=""/>简单获得。因此，特征空间中的最终变换变成了<img src="img/B14713_13_136.png" alt=""/> <img src="img/B14713_13_137.png" alt=""/> <img src="img/B14713_13_138.png" alt=""/>。最后一步是内核技巧本身，它允许我们直接在特征空间中执行PCA投影，而不需要变换所有点。我们在讨论谱聚类的时候已经分析了一些核；因此，我们不再展示它们。然而，现在应该很容易理解，我们的示例可以通过使用<strong class="bold">径向基函数</strong> ( <strong class="bold"> RBF </strong>)内核<a id="_idIndexMarker824"/>来轻松解决:</p>
+			<p class="normal">矩阵<em class="italics">W</em>T7】G 是核<a id="_idIndexMarker823"/> PCA 投影矩阵，通过计算 Gram 矩阵的特征向量<img src="img/B14713_13_134.png" alt=""/>并执行乘法<img src="img/B14713_13_135.png" alt=""/>简单获得。因此，特征空间中的最终变换变成了<img src="img/B14713_13_136.png" alt=""/> <img src="img/B14713_13_137.png" alt=""/> <img src="img/B14713_13_138.png" alt=""/>。最后一步是内核技巧本身，它允许我们直接在特征空间中执行 PCA 投影，而不需要变换所有点。我们在讨论谱聚类的时候已经分析了一些核；因此，我们不再展示它们。然而，现在应该很容易理解，我们的示例可以通过使用<strong class="bold">径向基函数</strong> ( <strong class="bold"> RBF </strong>)内核<a id="_idIndexMarker824"/>来轻松解决:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_139.png" alt=""/></figure>
 
 			<p class="normal">显然，相应的特征空间是径向的(因此对于角度是不变的)，并且通过参数<img src="img/B14713_13_097.png" alt=""/>，可以控制高斯曲线的幅度(以便捕捉或<a id="_idIndexMarker825"/>排除特定区域)。</p>
 
-			<p class="normal">现在让我们使用RBF内核来执行内核PCA:</p>
+			<p class="normal">现在让我们使用 RBF 内核来执行内核 PCA:</p>
 
 			<pre>from sklearn.decomposition import KernelPCA
 kpca = KernelPCA(n_components=2,
@@ -392,19 +392,19 @@ kpca = KernelPCA(n_components=2,
                      random_state=1000)
 X_kpca = kpca.fit_transform(X)</pre>
 
-			<p class="normal">在这种情况下，我们选择了<img style="height: 1.2em! important;" src="img/B14713_13_141.png" alt=""/>，因为中心和边界之间的平均间距约为0.5，选择<a id="_idIndexMarker826"/>，因此高斯分布的标准偏差为<img style="height: 1.5em! important;" src="img/B14713_13_142.png" alt=""/>。在大约三个标准偏差之后，该值接近于零，因此我们应该能够完美地分离这些区域。结果如下图所示:</p>
+			<p class="normal">在这种情况下，我们选择了<img style="height: 1.2em! important;" src="img/B14713_13_141.png" alt=""/>，因为中心和边界之间的平均间距约为 0.5，选择<a id="_idIndexMarker826"/>，因此高斯分布的标准偏差为<img style="height: 1.5em! important;" src="img/B14713_13_142.png" alt=""/>。在大约三个标准偏差之后，该值接近于零，因此我们应该能够完美地分离这些区域。结果如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_06.png" alt=""/></figure>
 
-			<p class="packt_figref">核PCA投影</p>
+			<p class="packt_figref">核 PCA 投影</p>
 
 			<p class="normal">正如<a id="_idIndexMarker827"/>所看到的，可以使用<a id="_idIndexMarker828"/>单个分量(<img src="img/B14713_13_143.png" alt=""/>来分离数据集，而第二个分量(对应于角度)可以忽略不计，因为分散仅由噪声引起。</p>
 
 			<h2 id="_idParaDest-210" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor221"/>稀疏主成分分析</h2>
 
-			<p class="normal">稀疏PCA是一种特殊的<a id="_idIndexMarker829"/>降维技术，也称为字典学习。目标是确定一个<a id="_idIndexMarker830"/>原子字典(换句话说，可以<em class="italics">组装</em>以构成任何其他现有数据点的唯一元素)，以便将每个训练和新点<img src="img/B14713_13_068.png" alt=""/>表示为它们的组合。就像在自然语言中，有限数量的单词可以组成无限数量的文本一样，稀疏PCA的目标是确定那些可重用性使其成为组成字典的完美候选的元素。为了实现这个目标，我们需要用一种更严谨的方式来表述这个问题。</p>
+			<p class="normal">稀疏 PCA 是一种特殊的<a id="_idIndexMarker829"/>降维技术，也称为字典学习。目标是确定一个<a id="_idIndexMarker830"/>原子字典(换句话说，可以<em class="italics">组装</em>以构成任何其他现有数据点的唯一元素)，以便将每个训练和新点<img src="img/B14713_13_068.png" alt=""/>表示为它们的组合。就像在自然语言中，有限数量的单词可以组成无限数量的文本一样，稀疏 PCA 的目标是确定那些可重用性使其成为组成字典的完美候选的元素。为了实现这个目标，我们需要用一种更严谨的方式来表述这个问题。</p>
 
-			<p class="normal">给定一个数据集<img style="height: 1.2em! important;" src="img/B14713_13_145.png" alt=""/>，我们需要用<em class="italics"> k &lt; &lt; n </em>和一组权重<img src="img/B14713_13_147.png" alt=""/>确定一个包含k个原子的字典<img style="height: 1.2em! important;" src="img/B14713_13_146.png" alt=""/>(注意每个原子都具有相同的数据点维数)。使用这些元素，我们可以计算转换:</p>
+			<p class="normal">给定一个数据集<img style="height: 1.2em! important;" src="img/B14713_13_145.png" alt=""/>，我们需要用<em class="italics"> k &lt; &lt; n </em>和一组权重<img src="img/B14713_13_147.png" alt=""/>确定一个包含 k 个原子的字典<img style="height: 1.2em! important;" src="img/B14713_13_146.png" alt=""/>(注意每个原子都具有相同的数据点维数)。使用这些元素，我们可以计算转换:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_148.png" alt=""/></figure>
 
@@ -412,9 +412,9 @@ X_kpca = kpca.fit_transform(X)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_149.png" alt=""/></figure>
 
-			<p class="normal">参数<img src="img/B14713_13_150.png" alt=""/>控制稀疏程度。很明显，更强的稀疏性将迫使算法<a id="_idIndexMarker832"/>运行更长的时间，并且最优可能无法获得高质量的重建。然而，当数据集本质上被分割成可以重用的元素(比如单词——这就是为什么这种方法也被称为字典学习)时，通常采用这种技术。事实上，该算法找到的组件在某种程度上是<em class="italics">原理</em>，因为它们的重用意味着这些组件具有相当大的方差的底层分布，但是形式上，稀疏PCA不是真正的PCA，而是一种降维算法。此外，即使稀疏约束倾向于避免(或限制)冗余，成本函数也不能保证找到去相关的分量。</p>
+			<p class="normal">参数<img src="img/B14713_13_150.png" alt=""/>控制稀疏程度。很明显，更强的稀疏性将迫使算法<a id="_idIndexMarker832"/>运行更长的时间，并且最优可能无法获得高质量的重建。然而，当数据集本质上被分割成可以重用的元素(比如单词——这就是为什么这种方法也被称为字典学习)时，通常采用这种技术。事实上，该算法找到的组件在某种程度上是<em class="italics">原理</em>，因为它们的重用意味着这些组件具有相当大的方差的底层分布，但是形式上，稀疏 PCA 不是真正的 PCA，而是一种降维算法。此外，即使稀疏约束倾向于避免(或限制)冗余，成本函数也不能保证找到去相关的分量。</p>
 
-			<p class="normal">现在让我们将该算法应用于MNIST数据集(考虑到复杂性，我们将仅对10张图片进行处理):</p>
+			<p class="normal">现在让我们将该算法应用于 MNIST 数据集(考虑到复杂性，我们将仅对 10 张图片进行处理):</p>
 
 			<pre>from sklearn.datasets import fetch_openml
 digits = fetch_openml("mnist_784")
@@ -422,7 +422,7 @@ X = zero_center(digits['data'].
                 astype(np.float64) / 255.0)
 np.random.shuffle(X)</pre>
 
-			<p class="normal">现在让我们应用稀疏PCA来获得10个分量(因此<img style="height: 1.2em! important;" src="img/B14713_13_151.png" alt=""/>,因为每个图像有28×28 = 784个特征):</p>
+			<p class="normal">现在让我们应用稀疏 PCA 来获得 10 个分量(因此<img style="height: 1.2em! important;" src="img/B14713_13_151.png" alt=""/>,因为每个图像有 28×28 = 784 个特征):</p>
 
 			<pre>from sklearn.decomposition import SparsePCA
 spca = SparsePCA(n_components=10,
@@ -434,12 +434,12 @@ X_spca = spca.fit_transform(X[0:10, :])
 print('SPCA components shape:')
 print(spca.components_.shape)</pre>
 
-			<p class="normal">参数α<a id="_idIndexMarker833"/>对应于<em class="italics">L</em>T8】1惩罚约束<img src="img/B14713_13_150.png" alt=""/>。我们还使用库joblib来进行并行计算，因为这种算法非常慢。前面代码片段的输出是:</p>
+			<p class="normal">参数α<a id="_idIndexMarker833"/>对应于<em class="italics">L</em>T8】1 惩罚约束<img src="img/B14713_13_150.png" alt=""/>。我们还使用库 joblib 来进行并行计算，因为这种算法非常慢。前面代码片段的输出是:</p>
 
 			<pre><strong class="screen-text">SPCA components shape:</strong>
 <strong class="screen-text">(10, 784)</strong></pre>
 
-			<p class="normal">词典位置颠倒了，但尺寸是正确的。下图中还显示了10个组件:</p>
+			<p class="normal">词典位置颠倒了，但尺寸是正确的。下图中还显示了 10 个组件:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_07.png" alt=""/></figure>
 
@@ -451,31 +451,31 @@ print(spca.components_.shape)</pre>
 
 			<h1 id="_idParaDest-211" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor222"/>独立成分分析</h1>
 
-			<p class="normal">我们已经看到，PCA提取的<a id="_idIndexMarker835"/>因子是去相关的，但不是独立的。一个经典的例子是鸡尾酒会:我们有许多重叠声音的录音，我们想把它们分开。每一个声音都可以建模为一个随机过程，并且可以假设它们在统计上是独立的(这意味着可以使用每个源的边际概率来分解联合概率)。使用FA或PCA，我们可以找到不相关的因素，但没有办法评估它们是否也是独立的(通常情况下，它们不是独立的)。在这一节中，我们将研究一个模型，它能够用一组统计上独立的成分产生稀疏表示(当字典不是不完全时)。</p>
+			<p class="normal">我们已经看到，PCA 提取的<a id="_idIndexMarker835"/>因子是去相关的，但不是独立的。一个经典的例子是鸡尾酒会:我们有许多重叠声音的录音，我们想把它们分开。每一个声音都可以建模为一个随机过程，并且可以假设它们在统计上是独立的(这意味着可以使用每个源的边际概率来分解联合概率)。使用 FA 或 PCA，我们可以找到不相关的因素，但没有办法评估它们是否也是独立的(通常情况下，它们不是独立的)。在这一节中，我们将研究一个模型，它能够用一组统计上独立的成分产生稀疏表示(当字典不是不完全时)。</p>
 
 			<p class="normal">假设我们有一个从<em class="italics"> N </em> (0，<em class="italics"> I </em>)采样的以零为中心的白化数据集<em class="italics"> X </em>和无噪声线性变换:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_153.png" alt=""/></figure>
 
-			<p class="normal">在这种情况下，<img src="img/B14713_13_005.png" alt=""/>上的先验被建模为独立变量的乘积(<img src="img/B14713_13_155.png" alt=""/>是归一化因子)，每个独立变量被表示为通用指数，其中函数<img src="img/B14713_13_156.png" alt=""/>必须是非二次的，即<img src="img/B14713_13_157.png" alt=""/>不能是高斯的。此外，我们假设<img src="img/B14713_13_067.png" alt=""/>的方差等于1，因此<img style="height: 1.5em! important;" src="img/B14713_13_158.png" alt=""/>。联合概率<img style="height: 1.5em! important;" src="img/B14713_13_159.png" alt=""/>等于:</p>
+			<p class="normal">在这种情况下，<img src="img/B14713_13_005.png" alt=""/>上的先验被建模为独立变量的乘积(<img src="img/B14713_13_155.png" alt=""/>是归一化因子)，每个独立变量被表示为通用指数，其中函数<img src="img/B14713_13_156.png" alt=""/>必须是非二次的，即<img src="img/B14713_13_157.png" alt=""/>不能是高斯的。此外，我们假设<img src="img/B14713_13_067.png" alt=""/>的方差等于 1，因此<img style="height: 1.5em! important;" src="img/B14713_13_158.png" alt=""/>。联合概率<img style="height: 1.5em! important;" src="img/B14713_13_159.png" alt=""/>等于:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_160.png" alt=""/></figure>
 
-			<p class="normal">如果<em class="italics"> X </em>已经白化，<em class="italics"> A </em>正交(证明很简单)；因此，前面的表达式可以简化。然而，应用EM算法需要确定<img src="img/B14713_13_161.png" alt=""/>和<a id="_idIndexMarker836"/>，这相当困难。在为<img src="img/B14713_13_005.png" alt=""/>(即<img src="img/B14713_13_163.png" alt=""/>)选择合适的先验分布后，这个过程可能会更容易，但是，正如我们在本章开始时所讨论的，如果实际因子的分布不同，这个假设可能会产生戏剧性的后果。由于这些原因，已经研究了其他策略。</p>
+			<p class="normal">如果<em class="italics"> X </em>已经白化，<em class="italics"> A </em>正交(证明很简单)；因此，前面的表达式可以简化。然而，应用 EM 算法需要确定<img src="img/B14713_13_161.png" alt=""/>和<a id="_idIndexMarker836"/>，这相当困难。在为<img src="img/B14713_13_005.png" alt=""/>(即<img src="img/B14713_13_163.png" alt=""/>)选择合适的先验分布后，这个过程可能会更容易，但是，正如我们在本章开始时所讨论的，如果实际因子的分布不同，这个假设可能会产生戏剧性的后果。由于这些原因，已经研究了其他策略。</p>
 
 			<p class="normal">我们需要强调的主要概念是因子的非高斯分布。特别是，我们希望有一个带重尾的尖峰分布(导致稀疏)。从理论上，我们知道标准化的四阶矩(也称为<strong class="bold">峰度</strong>)是一个完美的度量:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_164.png" alt=""/></figure>
 
-			<p class="normal">对于高斯分布，<em class="italics"> Kurt </em> [ <em class="italics"> X </em> ]等于3(通常被认为是参考点，确定所谓的<em class="italics">过度峰度</em>[<em class="italics">X</em>]=<em class="italics">Kurt</em>[<em class="italics">X</em>]-3)，而对于一族<a id="_idIndexMarker837"/>分布，它更大，称为<em class="italics">细尾分布或超高斯分布</em>，它们是尖峰厚尾的(此外， 具有<em class="italics">Kurt</em>[<em class="italics">X</em>]&lt;3的分布，称为<em class="italics">platykurtic</em>或<em class="italics"> sub-Gaussian </em>，可以是很好的候选，但是它们的峰值较小，通常<a id="_idIndexMarker838"/>只考虑超高斯分布。 然而，即使是精确的，由于四次方的原因，这种度量对异常值非常敏感。例如，如果<em class="italics"> x </em> ~ <em class="italics"> N </em> (0，1)和<em class="italics">z</em>=<em class="italics">X</em>+<em class="italics">v</em>，其中<em class="italics"> v </em>是改变一些样本的噪声项，将它们的值增加到2，则结果可以是超高斯(<em class="italics">Kurt</em>[<em class="italics">X</em>]&gt;3)，即使在滤波之后</p>
+			<p class="normal">对于高斯分布，<em class="italics"> Kurt </em> [ <em class="italics"> X </em> ]等于 3(通常被认为是参考点，确定所谓的<em class="italics">过度峰度</em>[<em class="italics">X</em>]=<em class="italics">Kurt</em>[<em class="italics">X</em>]-3)，而对于一族<a id="_idIndexMarker837"/>分布，它更大，称为<em class="italics">细尾分布或超高斯分布</em>，它们是尖峰厚尾的(此外， 具有<em class="italics">Kurt</em>[<em class="italics">X</em>]&lt;3 的分布，称为<em class="italics">platykurtic</em>或<em class="italics"> sub-Gaussian </em>，可以是很好的候选，但是它们的峰值较小，通常<a id="_idIndexMarker838"/>只考虑超高斯分布。 然而，即使是精确的，由于四次方的原因，这种度量对异常值非常敏感。例如，如果<em class="italics"> x </em> ~ <em class="italics"> N </em> (0，1)和<em class="italics">z</em>=<em class="italics">X</em>+<em class="italics">v</em>，其中<em class="italics"> v </em>是改变一些样本的噪声项，将它们的值增加到 2，则结果可以是超高斯(<em class="italics">Kurt</em>[<em class="italics">X</em>]&gt;3)，即使在滤波之后</p>
 
-			<p class="normal">为了克服这个问题，hyvrinen和Oja(在hyvrinen a .，Oja E .，<em class="italics">独立成分分析:算法和应用</em>，神经网络13/2000)提出了一种基于另一种度量的解决方案，即负熵。我们知道熵与方差成正比，给定方差，高斯分布具有最大熵。因此，我们可以定义该度量:</p>
+			<p class="normal">为了克服这个问题，hyvrinen 和 Oja(在 hyvrinen a .，Oja E .，<em class="italics">独立成分分析:算法和应用</em>，神经网络 13/2000)提出了一种基于另一种度量的解决方案，即负熵。我们知道熵与方差成正比，给定方差，高斯分布具有最大熵。因此，我们可以定义该度量:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_165.png" alt=""/></figure>
 
-			<p class="normal">形式上，<em class="italics"> X </em>的负熵是具有相同协方差的高斯分布的熵与<em class="italics"> X </em>的熵之差(我们假设两者都以零为中心)。<a id="_idIndexMarker839"/>很容易理解<img style="height: 1.2em! important;" src="img/B14713_13_166.png" alt=""/>，因此，最大化的唯一方法是减少<em class="italics"> H </em> ( <em class="italics"> X </em>)。这样，<em class="italics"> X </em>就变得不那么随机，把概率集中在均值附近(换句话说，就变成了超高斯)。然而，之前的表达式不容易适用于封闭形式的解决方案，因为<em class="italics"> H </em> ( <em class="italics"> X </em>)需要在<em class="italics"> X </em>的整个分布上进行计算，这必须进行估计。出于这个原因，相同的作者提出了一种基于非二次函数的近似(请记住，在ICA的上下文中，永远不能使用二次函数，因为它会导致高斯分布)，这对于推导一种称为<em class="italics"> FastICA </em>的定点迭代算法非常有用(事实上，它确实比EM快)。</p>
+			<p class="normal">形式上，<em class="italics"> X </em>的负熵是具有相同协方差的高斯分布的熵与<em class="italics"> X </em>的熵之差(我们假设两者都以零为中心)。<a id="_idIndexMarker839"/>很容易理解<img style="height: 1.2em! important;" src="img/B14713_13_166.png" alt=""/>，因此，最大化的唯一方法是减少<em class="italics"> H </em> ( <em class="italics"> X </em>)。这样，<em class="italics"> X </em>就变得不那么随机，把概率集中在均值附近(换句话说，就变成了超高斯)。然而，之前的表达式不容易适用于封闭形式的解决方案，因为<em class="italics"> H </em> ( <em class="italics"> X </em>)需要在<em class="italics"> X </em>的整个分布上进行计算，这必须进行估计。出于这个原因，相同的作者提出了一种基于非二次函数的近似(请记住，在 ICA 的上下文中，永远不能使用二次函数，因为它会导致高斯分布)，这对于推导一种称为<em class="italics"> FastICA </em>的定点迭代算法非常有用(事实上，它确实比 EM 快)。</p>
 
-			<p class="normal">使用k函数<img src="img/B14713_13_167.png" alt=""/>，近似值如下:</p>
+			<p class="normal">使用 k 函数<img src="img/B14713_13_167.png" alt=""/>，近似值如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_168.png" alt=""/></figure>
 
@@ -489,23 +489,23 @@ print(spca.components_.shape)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_171.png" alt=""/></figure>
 
-			<p class="normal">很明显，第二项不依赖于<em class="italics"> w </em>(其实只是一个参考)，可以排除在优化之外。而且，考虑到最初的假设，<em class="italics">E</em>[<em class="italics">Z</em><sup>T</sup><em class="italics">Z</em>=<em class="italics">我们</em>[<em class="italics">X</em><sup>T</sup><em class="italics">X</em><em class="italics">W</em><sup>T</sup>=<em class="italics">I</em>，因此<em class="italics"> WW因此，我们的目标是找到以下内容:</em></p>
+			<p class="normal">很明显，第二项不依赖于<em class="italics"> w </em>(其实只是一个参考)，可以排除在优化之外。而且，考虑到最初的假设，<em class="italics">E</em>[<em class="italics">Z</em><sup>T</sup><em class="italics">Z</em>=<em class="italics">我们</em>[<em class="italics">X</em><sup>T</sup><em class="italics">X</em><em class="italics">W</em><sup>T</sup>=<em class="italics">I</em>，因此<em class="italics"> WW 因此，我们的目标是找到以下内容:</em></p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_173.png" alt=""/></figure>
 
-			<p class="normal">通过这种方式，我们迫使<a id="_idIndexMarker840"/>矩阵<em class="italics"> W </em>转换输入向量<img src="img/B14713_13_004.png" alt=""/>，这样<img src="img/B14713_13_005.png" alt=""/>具有最低可能的熵；因此，它是超高斯的。最大化过程基于超出本书范围的凸优化技术(读者可以在luen Berger d . g .<em class="italics">通过向量空间方法优化，</em> Wiley，1997中找到拉格朗日定理的所有细节)。因此，我将直接提供必须执行的迭代步骤:</p>
+			<p class="normal">通过这种方式，我们迫使<a id="_idIndexMarker840"/>矩阵<em class="italics"> W </em>转换输入向量<img src="img/B14713_13_004.png" alt=""/>，这样<img src="img/B14713_13_005.png" alt=""/>具有最低可能的熵；因此，它是超高斯的。最大化过程基于超出本书范围的凸优化技术(读者可以在 luen Berger d . g .<em class="italics">通过向量空间方法优化，</em> Wiley，1997 中找到拉格朗日定理的所有细节)。因此，我将直接提供必须执行的迭代步骤:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_176.png" alt=""/></figure>
 
 			<p class="normal">当然，为了保证<img style="height: 1.2em! important;" src="img/B14713_13_177.png" alt=""/>，每一步之后，权重向量都必须归一化(<img src="img/B14713_13_179.png" alt=""/>)。</p>
 
-			<p class="normal">在更一般的上下文中，矩阵<em class="italics"> W </em>包含不止一个权重向量，并且如果我们应用先前的规则来找出独立的因素，则可能发生一些元素<img src="img/B14713_13_180.png" alt=""/>是相关的。避免这个问题的策略是基于Gram-Schmidt <a id="_idIndexMarker841"/>正交归一化过程，该过程逐个去相关分量，减去当前分量<img src="img/B14713_13_181.png" alt=""/>到所有先前分量<img src="img/B14713_13_182.png" alt=""/>到<img src="img/B14713_13_181.png" alt=""/>的投影。通过这种方式，<img src="img/B14713_13_181.png" alt=""/>被强制与所有其他组件正交。</p>
+			<p class="normal">在更一般的上下文中，矩阵<em class="italics"> W </em>包含不止一个权重向量，并且如果我们应用先前的规则来找出独立的因素，则可能发生一些元素<img src="img/B14713_13_180.png" alt=""/>是相关的。避免这个问题的策略是基于 Gram-Schmidt <a id="_idIndexMarker841"/>正交归一化过程，该过程逐个去相关分量，减去当前分量<img src="img/B14713_13_181.png" alt=""/>到所有先前分量<img src="img/B14713_13_182.png" alt=""/>到<img src="img/B14713_13_181.png" alt=""/>的投影。通过这种方式，<img src="img/B14713_13_181.png" alt=""/>被强制与所有其他组件正交。</p>
 
-			<h2 id="_idParaDest-212" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor223"/>带有scikit-learn的FastICA示例</h2>
+			<h2 id="_idParaDest-212" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor223"/>带有 scikit-learn 的 FastICA 示例</h2>
 
-			<p class="normal">使用相同的<a id="_idIndexMarker842"/>数据集，我们现在可以测试ICA的性能。然而，在这种情况下，正如所解释的，我们需要对数据集进行零中心和白化，但幸运的是，这些预处理步骤是由scikit-learn实现完成的(如果省略了参数<code class="Code-In-Text--PACKT-">whiten=True</code>)。</p>
+			<p class="normal">使用相同的<a id="_idIndexMarker842"/>数据集，我们现在可以测试 ICA 的性能。然而，在这种情况下，正如所解释的，我们需要对数据集进行零中心和白化，但幸运的是，这些预处理步骤是由 scikit-learn 实现完成的(如果省略了参数<code class="Code-In-Text--PACKT-">whiten=True</code>)。</p>
 
-			<p class="normal">为了在MNIST数据集上执行ICA，我们将实例化<code class="Code-In-Text--PACKT-">FastICA</code>类，传递参数<code class="Code-In-Text--PACKT-">n_components=64</code>和最大迭代次数<code class="Code-In-Text--PACKT-">max_iter=5000</code>。也可以指定哪个函数将用于近似负熵；然而，缺省值是log cosh <em class="italics"> x </em>，这通常是一个合理的选择:</p>
+			<p class="normal">为了在 MNIST 数据集上执行 ICA，我们将实例化<code class="Code-In-Text--PACKT-">FastICA</code>类，传递参数<code class="Code-In-Text--PACKT-">n_components=64</code>和最大迭代次数<code class="Code-In-Text--PACKT-">max_iter=5000</code>。也可以指定哪个函数将用于近似负熵；然而，缺省值是 log cosh <em class="italics"> x </em>，这通常是一个合理的选择:</p>
 
 			<pre>from sklearn.decomposition import FastICA
 fastica = FastICA(n_components=64,
@@ -517,9 +517,9 @@ fastica.fit(X)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_08.png" alt=""/></figure>
 
-			<p class="packt_figref">由FastICA算法提取的MNIST数据集的独立分量(64个分量)</p>
+			<p class="packt_figref">由 FastICA 算法提取的 MNIST 数据集的独立分量(64 个分量)</p>
 
-			<p class="normal">还有一些冗余(读者可以尝试增加元件数量)和<a id="_idIndexMarker843"/>背景噪声；然而，现在可以区分许多数字共有的一些低级特征(如定向条纹)。这种表示还不是很稀疏。事实上，我们总是使用64个组件(比如FA和PCA)；所以字典是欠完备的(输入维数为28 × 28 = 784)。为了看出区别，我们可以用十倍大的字典重复这个实验，设置<code class="Code-In-Text--PACKT-">n_components=640</code>:</p>
+			<p class="normal">还有一些冗余(读者可以尝试增加元件数量)和<a id="_idIndexMarker843"/>背景噪声；然而，现在可以区分许多数字共有的一些低级特征(如定向条纹)。这种表示还不是很稀疏。事实上，我们总是使用 64 个组件(比如 FA 和 PCA)；所以字典是欠完备的(输入维数为 28 × 28 = 784)。为了看出区别，我们可以用十倍大的字典重复这个实验，设置<code class="Code-In-Text--PACKT-">n_components=640</code>:</p>
 
 			<pre>fastica = FastICA(n_components=640,
                   max_iter=5000,
@@ -530,7 +530,7 @@ fastica.fit(X)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_13_09.png" alt=""/></figure>
 
-			<p class="packt_figref">由FastICA算法提取的MNIST数据集的独立分量(640个分量)</p>
+			<p class="packt_figref">由 FastICA 算法提取的 MNIST 数据集的独立分量(640 个分量)</p>
 
 			<p class="normal">这些组件的结构几乎是基本的。它们代表定向条纹和位置<a id="_idIndexMarker844"/>点。为了检查输入是如何重建的，我们可以将混合矩阵<em class="italics">视为</em>(可以作为<code class="Code-In-Text--PACKT-">mixing_</code>实例变量获得)。考虑第一个输入样本，我们可以检查有多少因素的权重小于平均值的一半:</p>
 
@@ -543,63 +543,63 @@ print(len(M0[np.abs(M0) &lt; (np.mean(np.abs(M0)) / 2.0)]))</pre>
 
 			<pre><strong class="screen-text">233</strong></pre>
 
-			<p class="normal">该示例使用大约410个组件重建。稀疏程度更高，但考虑到因素的粒度，很容易理解，即使是重建存在长线的单个结构(如a 1的图像),也需要许多因素。然而，这并不是一个缺点，因为如前所述，ICA的主要目标是提取独立成分。考虑与鸡尾酒会的例子进行类比，我们可以推断出每个成分代表一个音素，而不是一个单词或句子的完整声音。</p>
+			<p class="normal">该示例使用大约 410 个组件重建。稀疏程度更高，但考虑到因素的粒度，很容易理解，即使是重建存在长线的单个结构(如 a 1 的图像),也需要许多因素。然而，这并不是一个缺点，因为如前所述，ICA 的主要目标是提取独立成分。考虑与鸡尾酒会的例子进行类比，我们可以推断出每个成分代表一个音素，而不是一个单词或句子的完整声音。</p>
 
-			<p class="normal">读者可以测试不同数量的组件，并将结果与其他稀疏编码算法(如字典学习或稀疏PCA)获得的结果进行比较。</p>
+			<p class="normal">读者可以测试不同数量的组件，并将结果与其他稀疏编码算法(如字典学习或稀疏 PCA)获得的结果进行比较。</p>
 
 			<h1 id="_idParaDest-213" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor224"/>隐马尔可夫模型补遗</h1>
 
-			<p class="normal">在前一章中，我们<a id="_idIndexMarker846"/>讨论了如何使用前向-后向算法训练HMM，我们已经看到这是EM算法的一个特殊应用。读者现在可以根据<em class="italics"> E </em>和<em class="italics"> M </em>步骤来理解内部动态。事实上，该过程从随机初始化的<em class="italics"> A </em>和<em class="italics"> B </em>矩阵开始，并以交替的方式进行:</p>
+			<p class="normal">在前一章中，我们<a id="_idIndexMarker846"/>讨论了如何使用前向-后向算法训练 HMM，我们已经看到这是 EM 算法的一个特殊应用。读者现在可以根据<em class="italics"> E </em>和<em class="italics"> M </em>步骤来理解内部动态。事实上，该过程从随机初始化的<em class="italics"> A </em>和<em class="italics"> B </em>矩阵开始，并以交替的方式进行:</p>
 
 			<ul>
 
-				<li class="list">电子步骤:<ul><li class="Bullet-Within-Bullet--PACKT-">给定观察和当前参数估计(<em class="italics"> A </em>和<em class="italics"> B </em>，估计HMM在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>以及在时间<em class="italics"> t </em> + 1处于状态<em class="italics"> j </em>的概率<img src="img/B14713_13_185.png" alt=""/></li>
+				<li class="list">电子步骤:<ul><li class="Bullet-Within-Bullet--PACKT-">给定观察和当前参数估计(<em class="italics"> A </em>和<em class="italics"> B </em>，估计 HMM 在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>以及在时间<em class="italics"> t </em> + 1 处于状态<em class="italics"> j </em>的概率<img src="img/B14713_13_185.png" alt=""/></li>
 
-<li class="Bullet-Within-Bullet-End--PACKT-">给定观察值和当前参数估计值(<em class="italics"> A </em>和<em class="italics"> B </em>，估计HMM在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>的概率<img src="img/B14713_13_186.png" alt=""/></li>
+<li class="Bullet-Within-Bullet-End--PACKT-">给定观察值和当前参数估计值(<em class="italics"> A </em>和<em class="italics"> B </em>，估计 HMM 在时间<em class="italics"> t </em>处于状态<em class="italics"> i </em>的概率<img src="img/B14713_13_186.png" alt=""/></li>
 
 </ul></li>
 
-				<li class="list">m步:<ul><li class="Bullet-Within-Bullet-End--PACKT-">计算跃迁概率<em class="italics">A</em>T33】ij(<em class="italics">A</em>)和发射概率<em class="italics">B</em><sub style="font-style: italic;">IP</sub>(<em class="italics">B</em>的新估计值</li>
+				<li class="list">m 步:<ul><li class="Bullet-Within-Bullet-End--PACKT-">计算跃迁概率<em class="italics">A</em>T33】ij(<em class="italics">A</em>)和发射概率<em class="italics">B</em><sub style="font-style: italic;">IP</sub>(<em class="italics">B</em>的新估计值</li>
 
 </ul></li>
 
 			</ul>
 
-			<p class="normal">重复该过程，直到达到收敛。即使没有一个<em class="italics"> Q </em>函数的明确定义，E-step也会为给定观察值的模型的预期完整数据可能性确定一个拆分表达式(使用向前和向后算法)，而M-Step会修正参数<em class="italics"> A </em>和<em class="italics"> B </em>以最大化这种可能性。</p>
+			<p class="normal">重复该过程，直到达到收敛。即使没有一个<em class="italics"> Q </em>函数的明确定义，E-step 也会为给定观察值的模型的预期完整数据可能性确定一个拆分表达式(使用向前和向后算法)，而 M-Step 会修正参数<em class="italics"> A </em>和<em class="italics"> B </em>以最大化这种可能性。</p>
 
 			<h1 id="_idParaDest-214" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor225"/>总结</h1>
 
-			<p class="normal">在这一章中，我们分析了三种不同的组件提取方法。FA假设我们有少量的高斯潜变量和高斯去相关噪声项。对噪声的唯一限制是有一个对角协方差矩阵，因此可能有两种不同的情况。当我们面对异方差噪声时，这个过程就是一个实际的FA。相反，当噪声是同质的时，该算法就相当于PCA。在这种情况下，该过程相当于检查样本空间，以便找到方差较高的方向。仅选择最重要的方向，我们可以将原始数据集投影到低维子空间上，其中协方差矩阵变得去相关。</p>
+			<p class="normal">在这一章中，我们分析了三种不同的组件提取方法。FA 假设我们有少量的高斯潜变量和高斯去相关噪声项。对噪声的唯一限制是有一个对角协方差矩阵，因此可能有两种不同的情况。当我们面对异方差噪声时，这个过程就是一个实际的 FA。相反，当噪声是同质的时，该算法就相当于 PCA。在这种情况下，该过程相当于检查样本空间，以便找到方差较高的方向。仅选择最重要的方向，我们可以将原始数据集投影到低维子空间上，其中协方差矩阵变得去相关。</p>
 
-			<p class="normal">FA和PCA的一个问题是假设潜在变量为高斯分布。这种选择简化了模型，但同时产生了单一成分在统计上相关的密集表示。为此，我们研究了如何使因子分布变得稀疏。由此产生的算法通常比最大似然法更快更准确，称为FastICA，其目标是提取一组统计上独立的分量，使负熵的近似值最大化。</p>
+			<p class="normal">FA 和 PCA 的一个问题是假设潜在变量为高斯分布。这种选择简化了模型，但同时产生了单一成分在统计上相关的密集表示。为此，我们研究了如何使因子分布变得稀疏。由此产生的算法通常比最大似然法更快更准确，称为 FastICA，其目标是提取一组统计上独立的分量，使负熵的近似值最大化。</p>
 
-			<p class="normal">最后，考虑到细分为E和M步，我们提供了HMM向前-向后算法的简要说明(在前一章中讨论过)。其他EM专用应用将在下一章讨论。</p>
+			<p class="normal">最后，考虑到细分为 E 和 M 步，我们提供了 HMM 向前-向后算法的简要说明(在前一章中讨论过)。其他 EM 专用应用将在下一章讨论。</p>
 
-			<p class="normal">下一章我们要介绍的是Hebbian学习和自组织映射的基本概念，对于解决很多具体问题，比如主成分提取，还是很有用的，有很强的神经生理学基础。</p>
+			<p class="normal">下一章我们要介绍的是 Hebbian 学习和自组织映射的基本概念，对于解决很多具体问题，比如主成分提取，还是很有用的，有很强的神经生理学基础。</p>
 
 			<h1 id="_idParaDest-215" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor226"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">Dempster A. P .、Laird N. M .、Rubin D. B .，<em class="italics">通过EM算法从不完整数据中获得最大似然</em>，皇家统计学会杂志，B，39(1):1–38，11/1977</li>
+				<li class="list">Dempster A. P .、Laird N. M .、Rubin D. B .，<em class="italics">通过 EM 算法从不完整数据中获得最大似然</em>，皇家统计学会杂志，B，39(1):1–38，11/1977</li>
 
 				<li class="list">Hansen F .，Pedersen G. K .，<em class="italics">詹森算子不等式</em>，arXiv:math/0204049【数学。OA]</li>
 
-				<li class="list">Rubin D .、Thayer D .，<em class="italics">用于ML因子分析的EM算法，心理测量学</em>，47/1982，第1期</li>
+				<li class="list">Rubin D .、Thayer D .，<em class="italics">用于 ML 因子分析的 EM 算法，心理测量学</em>，47/1982，第 1 期</li>
 
-				<li class="list">Ghahramani Z .，Hinton G. E .，<em class="italics">因子分析仪混合物的EM算法</em>，CRC-TG-96-1，1996年5月</li>
+				<li class="list">Ghahramani Z .，Hinton G. E .，<em class="italics">因子分析仪混合物的 EM 算法</em>，CRC-TG-96-1，1996 年 5 月</li>
 
-				<li class="list">Hyvä rinen A .，Oja E .，<em class="italics">独立成分分析:算法和应用</em>，神经网络13/2000</li>
+				<li class="list">Hyvä rinen A .，Oja E .，<em class="italics">独立成分分析:算法和应用</em>，神经网络 13/2000</li>
 
 				<li class="list">Luenberger D. G .，<em class="italics">向量空间方法优化</em>，Wiley，1997</li>
 
-				<li class="list">Ledoit O .，Wolf M .，<em class="italics">一种适用于高维协方差矩阵的条件良好的估计量</em>，多元分析杂志，88，2004年2月</li>
+				<li class="list">Ledoit O .，Wolf M .，<em class="italics">一种适用于高维协方差矩阵的条件良好的估计量</em>，多元分析杂志，88，2004 年 2 月</li>
 
-				<li class="list">Minka T. P .，<em class="italics">PCA维度的自动选择</em>，NIPS 2000年</li>
+				<li class="list">Minka T. P .，<em class="italics">PCA 维度的自动选择</em>，NIPS 2000 年</li>
 
-				<li class="list">Nasios N .，Bors A. G., <em class="italics">高斯混合模型的变分学习，</em> IEEE系统、人与控制论汇刊，36/4，2006</li>
+				<li class="list">Nasios N .，Bors A. G., <em class="italics">高斯混合模型的变分学习，</em> IEEE 系统、人与控制论汇刊，36/4，2006</li>
 
-				<li class="list">Bonaccorso G .，<em class="italics">用Python进行动手无监督学习</em>，Packt出版社，2018年</li>
+				<li class="list">Bonaccorso G .，<em class="italics">用 Python 进行动手无监督学习</em>，Packt 出版社，2018 年</li>
 
 			</ul>
 

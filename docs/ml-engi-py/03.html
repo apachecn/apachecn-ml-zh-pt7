@@ -7,10 +7,10 @@
 	
 	
 		<div><h1 id="_idParaDest-30"><em class="italic"> <a id="_idTextAnchor030"/>第二章</em>:机器学习开发过程</h1>
-			<p>在这一章中，我们将定义任何成功的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)软件工程项目的工作是如何划分的。基本上，我们将回答你如何<em class="italic">实际组织</em>一个成功的ML项目的问题？我们不仅会讨论流程和工作流，还会设置流程每个阶段所需的工具，并通过真实的ML代码示例强调一些重要的最佳实践。</p>
-			<p>具体来说，本章将涵盖ML项目的<em class="italic">发现</em>、<em class="italic">行动</em>、<em class="italic">开发</em>、<em class="italic">部署</em>工作流的概念、适当的开发工具以及它们的配置和成功项目的集成。我们还将涵盖版本控制策略及其基本实现，为您的ML项目设置<strong class="bold">持续集成/持续部署</strong> ( <strong class="bold"> CI/CD </strong>)。我们还将介绍一些潜在的执行环境。在本章的最后，你将会在你的Python ML工程项目中获得成功。这是我们在后续章节中构建一切的基础。</p>
+			<p>在这一章中，我们将定义任何成功的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)软件工程项目的工作是如何划分的。基本上，我们将回答你如何<em class="italic">实际组织</em>一个成功的 ML 项目的问题？我们不仅会讨论流程和工作流，还会设置流程每个阶段所需的工具，并通过真实的 ML 代码示例强调一些重要的最佳实践。</p>
+			<p>具体来说，本章将涵盖 ML 项目的<em class="italic">发现</em>、<em class="italic">行动</em>、<em class="italic">开发</em>、<em class="italic">部署</em>工作流的概念、适当的开发工具以及它们的配置和成功项目的集成。我们还将涵盖版本控制策略及其基本实现，为您的 ML 项目设置<strong class="bold">持续集成/持续部署</strong> ( <strong class="bold"> CI/CD </strong>)。我们还将介绍一些潜在的执行环境。在本章的最后，你将会在你的 Python ML 工程项目中获得成功。这是我们在后续章节中构建一切的基础。</p>
 			<p>像往常一样，我们将通过总结要点来结束这一章，并在本书的其余部分强调这意味着什么。</p>
-			<p>最后，同样重要的是要注意，虽然我们在这里将讨论ML挑战，但是你在本章学到的大部分内容也可以应用到其他Python软件工程项目中。我的希望是，详细构建这些基本概念的投资将是你在所有工作中可以反复利用的东西。</p>
+			<p>最后，同样重要的是要注意，虽然我们在这里将讨论 ML 挑战，但是你在本章学到的大部分内容也可以应用到其他 Python 软件工程项目中。我的希望是，详细构建这些基本概念的投资将是你在所有工作中可以反复利用的东西。</p>
 			<p>我们将在以下几节中探讨所有这些内容:</p>
 			<ul>
 				<li>设置我们的工具</li>
@@ -21,22 +21,22 @@
 			<p>本章中使用了以下软件和软件包(版本应等于或高于这些软件和软件包):</p>
 			<ul>
 				<li>蟒蛇</li>
-				<li>PyCharm社区版</li>
+				<li>PyCharm 社区版</li>
 				<li>饭桶</li>
-				<li>Jupyter笔记本</li>
+				<li>Jupyter 笔记本</li>
 				<li>PySpark</li>
 				<li><code>fbprophet</code></li>
 				<li>sci kit-学习</li>
 				<li>MLflow</li>
 				<li>pytest</li>
-				<li>薄片8</li>
+				<li>薄片 8</li>
 			</ul>
 			<p>您还需要以下物品:</p>
 			<ul>
-				<li>一个亚特兰蒂斯的吉拉账户。我们将在本章稍后讨论这个问题，但是你可以在https://www.atlassian.com/software/jira/free免费注册一个。</li>
-				<li>AWS账户。这一章也会涉及到，但是你可以在https://aws.amazon.com/注册一个账户。您将需要添加支付细节来注册AWS，但我们在本书中所做的一切将只需要免费层解决方案。</li>
+				<li>一个亚特兰蒂斯的吉拉账户。我们将在本章稍后讨论这个问题，但是你可以在 https://www.atlassian.com/software/jira/free 免费注册一个。</li>
+				<li>AWS 账户。这一章也会涉及到，但是你可以在 https://aws.amazon.com/注册一个账户。您将需要添加支付细节来注册 AWS，但我们在本书中所做的一切将只需要免费层解决方案。</li>
 			</ul>
-			<p>本章中的技术步骤都是在运行Ubuntu 20.04.1的Linux机器上执行的，用户配置文件具有管理员权限。如果您在不同的系统上运行这些步骤，那么如果这些步骤没有按计划进行，您可能必须查阅特定工具的文档。即使是这样，对于大多数系统来说，大多数步骤几乎完全相同或非常相似。你也可以在<a href="https://github.com/PacktPublishing/Machine-Learning-Engineering-with-Python/tree/main/Chapter02">https://github . com/packt publishing/Machine-Learning-Engineering-with-Python/tree/main/chapter 02</a>的图书库下查看本章的所有代码。repo还将包含更多用于启动和运行代码示例的资源。<a id="_idTextAnchor032"/></p>
+			<p>本章中的技术步骤都是在运行 Ubuntu 20.04.1 的 Linux 机器上执行的，用户配置文件具有管理员权限。如果您在不同的系统上运行这些步骤，那么如果这些步骤没有按计划进行，您可能必须查阅特定工具的文档。即使是这样，对于大多数系统来说，大多数步骤几乎完全相同或非常相似。你也可以在<a href="https://github.com/PacktPublishing/Machine-Learning-Engineering-with-Python/tree/main/Chapter02">https://github . com/packt publishing/Machine-Learning-Engineering-with-Python/tree/main/chapter 02</a>的图书库下查看本章的所有代码。repo 还将包含更多用于启动和运行代码示例的资源。<a id="_idTextAnchor032"/></p>
 			<h1 id="_idParaDest-32"><a id="_idTextAnchor033"/>设置我们的工具</h1>
 			<p>为了准备本章剩余部分的工作，甚至是本书的剩余部分，设置一些工具会很有帮助。总体而言，我们需要以下内容:</p>
 			<ul>
@@ -47,63 +47,63 @@
 			</ul>
 			<p>让我们来看一下如何依次解决这些问题:</p>
 			<ul>
-				<li><strong class="bold">编码的地方</strong>:首先，虽然数据科学家选择的编码武器当然是Jupyter笔记本(其他解决方案也是可用的)，但是一旦你开始向<a id="_idIndexMarker059"/> ML工程迈进，拥有一个<strong class="bold">集成开发环境</strong> ( <strong class="bold"> IDE </strong>)将是很重要的。IDE基本上是一个应用程序，它带有一系列内置的工具和功能，可以帮助您开发最好的软件。对于Python开发者来说，PyCharm 是一个极好的例子<a id="_idIndexMarker060"/>,它提供了对ML工程师有用的各种插件、插件和集成。你可以从https://www.jetbrains.com/pycharm/的JetBrains下载社区版。成功安装PyCharm后，您可以在<strong class="bold">欢迎使用PyCharm </strong>窗口中创建新项目或打开现有项目，如图<em class="italic">图2.1 </em>所示:</li>
+				<li><strong class="bold">编码的地方</strong>:首先，虽然数据科学家选择的编码武器当然是 Jupyter 笔记本(其他解决方案也是可用的)，但是一旦你开始向<a id="_idIndexMarker059"/> ML 工程迈进，拥有一个<strong class="bold">集成开发环境</strong> ( <strong class="bold"> IDE </strong>)将是很重要的。IDE 基本上是一个应用程序，它带有一系列内置的工具和功能，可以帮助您开发最好的软件。对于 Python 开发者来说，PyCharm 是一个极好的例子<a id="_idIndexMarker060"/>,它提供了对 ML 工程师有用的各种插件、插件和集成。你可以从 https://www.jetbrains.com/pycharm/的 JetBrains 下载社区版。成功安装 PyCharm 后，您可以在<strong class="bold">欢迎使用 PyCharm </strong>窗口中创建新项目或打开现有项目，如图<em class="italic">图 2.1 </em>所示:</li>
 			</ul>
 			<div><div><img src="img/B17343_02_001.jpg" alt="Figure 2.1 – Opening or creating your PyCharm project&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.1–打开或创建您的PyCharm项目</p>
+			<p class="figure-caption">图 2.1–打开或创建您的 PyCharm 项目</p>
 			<ul>
-				<li>file告诉您的Git发行版忽略某些通常对版本控制不重要的文件类型。这取决于你是希望这个库是公开的还是私有的，以及你希望使用什么样的许可。这本书的存储库使用了麻省理工学院的许可证:</li>
+				<li>file 告诉您的 Git 发行版忽略某些通常对版本控制不重要的文件类型。这取决于你是希望这个库是公开的还是私有的，以及你希望使用什么样的许可。这本书的存储库使用了麻省理工学院的许可证:</li>
 			</ul>
 			<div><div><img src="img/B17343_02_002.jpg" alt="Figure 2.2 – Setting up your GitHub repository&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.2–设置GitHub存储库</p>
-			<p>一旦你建立了你的IDE和版本控制系统，你需要通过使用PyCharm提供的Git插件让它们相互交流。这就像导航到<strong class="bold"> VCS </strong> | <strong class="bold">启用版本控制集成</strong>并选择<strong class="bold"> Git </strong>一样简单。您可以通过导航到<strong class="bold">文件</strong> | <strong class="bold">设置</strong> | <strong class="bold">版本控制</strong>来编辑版本控制设置；参见<em class="italic">图2.3 </em>:</p>
+			<p class="figure-caption">图 2.2–设置 GitHub 存储库</p>
+			<p>一旦你建立了你的 IDE 和版本控制系统，你需要通过使用 PyCharm 提供的 Git 插件让它们相互交流。这就像导航到<strong class="bold"> VCS </strong> | <strong class="bold">启用版本控制集成</strong>并选择<strong class="bold"> Git </strong>一样简单。您可以通过导航到<strong class="bold">文件</strong> | <strong class="bold">设置</strong> | <strong class="bold">版本控制</strong>来编辑版本控制设置；参见<em class="italic">图 2.3 </em>:</p>
 			<div><div><img src="img/B17343_02_003.jpg" alt="Figure 2.3 – Configuring version control with PyCharm&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.3–用PyCharm配置版本控制</p>
+			<p class="figure-caption">图 2.3–用 PyCharm 配置版本控制</p>
 			<ul>
-				<li><strong class="bold">有助于管理我们任务的东西</strong>:你现在已经准备好编写Python <a id="_idIndexMarker066"/>并跟踪你的代码变更，但是你准备好管理或与其他团队成员一起参与一个复杂的项目了吗？为此，拥有一个可以跟踪任务、问题、bug、用户故事以及其他文档和工作项目的解决方案通常是有用的。如果它与您将使用的其他工具有很好的集成点，也会有所帮助。在本书中，我们将使用<strong class="bold">吉拉</strong>作为例子。如果您导航到https://www.atlassian.com/software/jira的<a href="https://www.atlassian.com/software/jira"/>，您可以创建一个免费的云吉拉帐户，然后按照解决方案中的交互式教程设置您的<a id="_idIndexMarker068"/>第一个板并创建一些任务。<em class="italic">图2.4 </em>显示了本书项目的任务板，在Python中称为<strong class="bold">机器学习工程</strong> ( <strong class="bold"> MEIP </strong>):</li>
+				<li><strong class="bold">有助于管理我们任务的东西</strong>:你现在已经准备好编写 Python <a id="_idIndexMarker066"/>并跟踪你的代码变更，但是你准备好管理或与其他团队成员一起参与一个复杂的项目了吗？为此，拥有一个可以跟踪任务、问题、bug、用户故事以及其他文档和工作项目的解决方案通常是有用的。如果它与您将使用的其他工具有很好的集成点，也会有所帮助。在本书中，我们将使用<strong class="bold">吉拉</strong>作为例子。如果您导航到 https://www.atlassian.com/software/jira 的<a href="https://www.atlassian.com/software/jira"/>，您可以创建一个免费的云吉拉帐户，然后按照解决方案中的交互式教程设置您的<a id="_idIndexMarker068"/>第一个板并创建一些任务。<em class="italic">图 2.4 </em>显示了本书项目的任务板，在 Python 中称为<strong class="bold">机器学习工程</strong> ( <strong class="bold"> MEIP </strong>):</li>
 			</ul>
 			<div><div><img src="img/B17343_02_004.jpg" alt="Figure 2.4 – The task board for this book in Jira&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.4-本书在吉拉的任务板</p>
+			<p class="figure-caption">图 2.4-本书在吉拉的任务板</p>
 			<ul>
-				<li><strong class="bold">供应基础设施和部署我们的解决方案的地方</strong>:您刚刚安装和设置的一切<a id="_idIndexMarker069"/>都是真正有助于将您的工作流程和软件开发实践提升到下一个级别的工具。难题的最后一块是拥有可用于部署最终解决方案的工具、技术和基础设施。应用计算基础设施的管理过去是(现在仍然是)由专门的基础设施团队提供，但随着公共云的出现，这种能力已经真正民主化，人们可以跨软件领域工作<a id="_idIndexMarker070"/>。特别是，现代ML工程非常依赖于云技术的成功实施<a id="_idIndexMarker071"/>，通常<a id="_idIndexMarker072"/>通过主要的公共云提供商，如<strong class="bold">亚马逊网络服务</strong>(<strong class="bold">AWS</strong>)<strong class="bold">微软Azure </strong>或<strong class="bold">谷歌云平台</strong> ( <strong class="bold"> GCP </strong>)。这本书将利用AWS生态系统中的工具，但是<a id="_idIndexMarker073"/>你将在这里找到的所有工具和技术在其他云中都有对等物。</li>
+				<li><strong class="bold">供应基础设施和部署我们的解决方案的地方</strong>:您刚刚安装和设置的一切<a id="_idIndexMarker069"/>都是真正有助于将您的工作流程和软件开发实践提升到下一个级别的工具。难题的最后一块是拥有可用于部署最终解决方案的工具、技术和基础设施。应用计算基础设施的管理过去是(现在仍然是)由专门的基础设施团队提供，但随着公共云的出现，这种能力已经真正民主化，人们可以跨软件领域工作<a id="_idIndexMarker070"/>。特别是，现代 ML 工程非常依赖于云技术的成功实施<a id="_idIndexMarker071"/>，通常<a id="_idIndexMarker072"/>通过主要的公共云提供商，如<strong class="bold">亚马逊网络服务</strong>(<strong class="bold">AWS</strong>)<strong class="bold">微软 Azure </strong>或<strong class="bold">谷歌云平台</strong> ( <strong class="bold"> GCP </strong>)。这本书将利用 AWS 生态系统中的工具，但是<a id="_idIndexMarker073"/>你将在这里找到的所有工具和技术在其他云中都有对等物。</li>
 			</ul>
-			<p>云带来的功能民主化的另一面是，拥有其解决方案部署的团队必须获得新的技能和理解。我坚信这样一个原则:你构建它，你拥有它，你尽可能地运行它，但这意味着作为一名ML工程师，你必须适应大量潜在的新工具和原则，以及拥有你部署的解决方案的性能。T21:权力越大，责任越大，诸如此类。在<a href="B17343_05_Final_JC_ePub.xhtml#_idTextAnchor116"> <em class="italic">第五章</em> </a>、<em class="italic">部署模式和工具</em>中，我们将详细深入这个话题。</p>
+			<p>云带来的功能民主化的另一面是，拥有其解决方案部署的团队必须获得新的技能和理解。我坚信这样一个原则:你构建它，你拥有它，你尽可能地运行它，但这意味着作为一名 ML 工程师，你必须适应大量潜在的新工具和原则，以及拥有你部署的解决方案的性能。T21:权力越大，责任越大，诸如此类。在<a href="B17343_05_Final_JC_ePub.xhtml#_idTextAnchor116"> <em class="italic">第五章</em> </a>、<em class="italic">部署模式和工具</em>中，我们将详细深入这个话题。</p>
 			<p>让我们讨论一下如何设置它。</p>
-			<h2 id="_idParaDest-33"><a id="_idTextAnchor034"/>设置AWS账户</h2>
-			<p>正如前面的<a id="_idIndexMarker074"/>所说，你不必使用AWS，但这就是我们将在本书中使用的。在这里设置好之后，您可以使用它来完成我们要做的所有事情:</p>
+			<h2 id="_idParaDest-33"><a id="_idTextAnchor034"/>设置 AWS 账户</h2>
+			<p>正如前面的<a id="_idIndexMarker074"/>所说，你不必使用 AWS，但这就是我们将在本书中使用的。在这里设置好之后，您可以使用它来完成我们要做的所有事情:</p>
 			<ol>
-				<li>要设置AWS账户，导航至<a href="http://aws.amazon.com">aws.amazon.com</a>并选择<strong class="bold">创建账户</strong>。你必须添加一些支付细节，但我们在本书中提到的一切都可以通过AWS的<em class="italic">免费层</em>进行探索，在那里你不会产生低于某个设定消费阈值的费用。</li>
-				<li>Once you have created your account, you can navigate to the AWS Management Console, where you can see all of the services that are available to you (see <em class="italic">Figure 2.5</em>):<div><img src="img/B17343_02_005.jpg" alt="Figure 2.5 – The AWS Management Console&#13;&#10;"/></div><p class="figure-caption">图2.5–AWS管理控制台</p></li>
+				<li>要设置 AWS 账户，导航至<a href="http://aws.amazon.com">aws.amazon.com</a>并选择<strong class="bold">创建账户</strong>。你必须添加一些支付细节，但我们在本书中提到的一切都可以通过 AWS 的<em class="italic">免费层</em>进行探索，在那里你不会产生低于某个设定消费阈值的费用。</li>
+				<li>Once you have created your account, you can navigate to the AWS Management Console, where you can see all of the services that are available to you (see <em class="italic">Figure 2.5</em>):<div><img src="img/B17343_02_005.jpg" alt="Figure 2.5 – The AWS Management Console&#13;&#10;"/></div><p class="figure-caption">图 2.5–AWS 管理控制台</p></li>
 				<li>Finally, there <a id="_idIndexMarker075"/>would be no ML engineering without ML models. So, the final piece of software you should install is one that will help you track and serve your models in a consistent way. For this, we will use <strong class="bold">MLflow</strong>, an open <a id="_idIndexMarker076"/>source platform from <strong class="bold">Databricks</strong> and under <a id="_idIndexMarker077"/>the stewardship of the Linux Foundation. Setting up MLflow locally is very simple; all you have to do is find your normal UNIX terminal and run the following code:<pre><strong class="bold">pip install mlflow</strong></pre><p>或者运行以下命令:</p><pre><strong class="bold">conda install -c conda-forge mlflow </strong></pre></li>
 			</ol>
-			<p>我们将在本章的后面看一下<code>pip</code>和<code>conda</code>的区别，但是这里的关键点是安装MLflow真的很简单。我们将在本书的后面讨论在云中安装MLflow的<a id="_idIndexMarker078"/>,但是对于本书中的大多数例子，您可以首先在本地工作。</p>
-			<p>随着我们的AWS帐户准备就绪，让我们来看看涵盖<a id="_idTextAnchor035"/>整个流程的四个步骤。</p>
+			<p>我们将在本章的后面看一下<code>pip</code>和<code>conda</code>的区别，但是这里的关键点是安装 MLflow 真的很简单。我们将在本书的后面讨论在云中安装 MLflow 的<a id="_idIndexMarker078"/>,但是对于本书中的大多数例子，您可以首先在本地工作。</p>
+			<p>随着我们的 AWS 帐户准备就绪，让我们来看看涵盖<a id="_idTextAnchor035"/>整个流程的四个步骤。</p>
 			<h1 id="_idParaDest-34"><a id="_idTextAnchor036"/>概念要分四步解决</h1>
-			<p>所有的ML项目在某些方面都是独一无二的:任何两个项目的组织、数据、人员、工具和技术都不会完全相同。这很好，因为它标志着进步，也标志着自然的多样性，使这里成为一个有趣的工作空间。</p>
-			<p>也就是说，不管细节如何，总的来说，所有成功的ML项目实际上都有很多共同点。它们需要将业务问题转化为技术问题、大量的研究和理解、概念验证、分析、迭代、工作整合、最终产品的构建以及部署到适当的环境中。简而言之，这就是ML工程！</p>
-			<p>进一步发展，您可以开始将这些活动分成粗略的类别或阶段，每个阶段的结果都是后续阶段的必要输入。如图2.6 中的<em class="italic">所示:</em></p>
+			<p>所有的 ML 项目在某些方面都是独一无二的:任何两个项目的组织、数据、人员、工具和技术都不会完全相同。这很好，因为它标志着进步，也标志着自然的多样性，使这里成为一个有趣的工作空间。</p>
+			<p>也就是说，不管细节如何，总的来说，所有成功的 ML 项目实际上都有很多共同点。它们需要将业务问题转化为技术问题、大量的研究和理解、概念验证、分析、迭代、工作整合、最终产品的构建以及部署到适当的环境中。简而言之，这就是 ML 工程！</p>
+			<p>进一步发展，您可以开始将这些活动分成粗略的类别或阶段，每个阶段的结果都是后续阶段的必要输入。如图 2.6 中的<em class="italic">所示:</em></p>
 			<div><div><img src="img/B17343_02_006.jpg" alt="Figure 2.6 – The stages that any ML project goes through as part of the ML development process&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.6–作为ML开发过程的一部分，任何ML项目都要经历的阶段</p>
-			<p>每一类工作都有稍微不同的味道，但是放在一起，它们提供了任何好的ML项目的主干。接下来的几节将详细介绍这些类别，并开始向您展示如何使用它们来构建您的ML工程解决方案。正如我们将在后面讨论的，你也没有必要像这样分四个阶段处理你的整个项目；实际上，您可以为整个项目的特定功能或部分完成这些步骤。这将在<em class="italic">选择软件开发方法</em>一节中介绍。</p>
-			<p>让我们更真实一点。每个阶段的主要关注点和输出可以总结在<em class="italic">图2.7 </em>的表格中:</p>
+			<p class="figure-caption">图 2.6–作为 ML 开发过程的一部分，任何 ML 项目都要经历的阶段</p>
+			<p>每一类工作都有稍微不同的味道，但是放在一起，它们提供了任何好的 ML 项目的主干。接下来的几节将详细介绍这些类别，并开始向您展示如何使用它们来构建您的 ML 工程解决方案。正如我们将在后面讨论的，你也没有必要像这样分四个阶段处理你的整个项目；实际上，您可以为整个项目的特定功能或部分完成这些步骤。这将在<em class="italic">选择软件开发方法</em>一节中介绍。</p>
+			<p>让我们更真实一点。每个阶段的主要关注点和输出可以总结在<em class="italic">图 2.7 </em>的表格中:</p>
 			<div><div><img src="img/B17343_02_007-Table.jpg" alt="Figure 2.7 – The outputs of the different stages of the ML development process&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.7–ML开发过程不同阶段的输出</p>
+			<p class="figure-caption">图 2.7–ML 开发过程不同阶段的输出</p>
 			<p class="callout-heading">重要说明</p>
-			<p class="callout">你可能认为ML工程师只需要考虑后两个阶段，即<em class="italic">开发</em>和<em class="italic">部署</em>，而早期阶段由数据科学家甚至业务分析师负责。通过这本书，我们将主要关注这些阶段，这种分工可以很好地工作。然而，至关重要的是，如果你要建立一个ML解决方案，你要了解所有的动机和以前的开发步骤——你不会在不知道你想先去哪里的情况下建立一个新型的火箭，你会吗？</p>
+			<p class="callout">你可能认为 ML 工程师只需要考虑后两个阶段，即<em class="italic">开发</em>和<em class="italic">部署</em>，而早期阶段由数据科学家甚至业务分析师负责。通过这本书，我们将主要关注这些阶段，这种分工可以很好地工作。然而，至关重要的是，如果你要建立一个 ML 解决方案，你要了解所有的动机和以前的开发步骤——你不会在不知道你想先去哪里的情况下建立一个新型的火箭，你会吗？</p>
 			<h2 id="_idParaDest-35"><a id="_idTextAnchor037"/>发现</h2>
-			<p>在你开始构建任何解决方案之前，理解你试图解决的问题是至关重要的。这种<a id="_idIndexMarker082"/>活动在商业分析中通常被称为<strong class="bold">发现</strong>，如果你的ML项目要取得成功，这是至关重要的。</p>
+			<p>在你开始构建任何解决方案之前，理解你试图解决的问题是至关重要的。这种<a id="_idIndexMarker082"/>活动在商业分析中通常被称为<strong class="bold">发现</strong>，如果你的 ML 项目要取得成功，这是至关重要的。</p>
 			<p>在发现阶段要做的关键事情<a id="_idIndexMarker083"/>如下:</p>
 			<ul>
 				<li><em class="italic">与客户交谈！然后再次对他们说</em>:如果你要设计和构建正确的系统，你必须详细了解最终用户的需求。</li>
@@ -112,7 +112,7 @@
 				<li><em class="italic">开始寻找数据所在的位置！如果你能开始计划你将不得不访问什么样的系统来获得你需要的数据，这将节省你以后的时间，并能帮助你在他们破坏你的项目之前发现任何主要的问题。</em></li>
 			</ul>
 			<h3>使用用户故事</h3>
-			<p>一旦你<a id="_idIndexMarker084"/>与客户交谈过(几次)，你就可以开始定义一些<strong class="bold">用户故事</strong>。用户故事是对用户或客户想要看到的内容以及该功能或工作单元的接受标准的简洁和一致的表达。例如，我们可能想要基于来自<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第1章</em> </a>、<em class="italic">ML工程简介</em> : <em class="italic">的出租车乘坐示例来定义用户故事，作为我们内部web服务的用户，我想要看到异常的出租车乘坐，并能够进一步调查它们</em>。</p>
+			<p>一旦你<a id="_idIndexMarker084"/>与客户交谈过(几次)，你就可以开始定义一些<strong class="bold">用户故事</strong>。用户故事是对用户或客户想要看到的内容以及该功能或工作单元的接受标准的简洁和一致的表达。例如，我们可能想要基于来自<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第 1 章</em> </a>、<em class="italic">ML 工程简介</em> : <em class="italic">的出租车乘坐示例来定义用户故事，作为我们内部 web 服务的用户，我想要看到异常的出租车乘坐，并能够进一步调查它们</em>。</p>
 			<p>我们开始吧！</p>
 			<ol>
 				<li value="1">要在吉拉添加，选择<strong class="bold">创建</strong>按钮。</li>
@@ -122,84 +122,84 @@
 			<div><div><img src="img/B17343_02_008.jpg" alt="Figure 2.8 – An example user story in Jira&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.8-吉拉的一个用户案例</p>
-			<p>理解你使用的数据<a id="_idIndexMarker085"/>来源尤为重要。如你所知，<em class="italic">垃圾进，垃圾出</em>，或者更糟，<em class="italic">无数据，无go </em>！你必须回答的关于数据的具体问题主要围绕<strong class="bold">访问</strong>、<strong class="bold">技术</strong>、<strong class="bold">质量</strong>和<strong class="bold">相关性</strong>展开。</p>
+			<p class="figure-caption">图 2.8-吉拉的一个用户案例</p>
+			<p>理解你使用的数据<a id="_idIndexMarker085"/>来源尤为重要。如你所知，<em class="italic">垃圾进，垃圾出</em>，或者更糟，<em class="italic">无数据，无 go </em>！你必须回答的关于数据的具体问题主要围绕<strong class="bold">访问</strong>、<strong class="bold">技术</strong>、<strong class="bold">质量</strong>和<strong class="bold">相关性</strong>展开。</p>
 			<p>对于访问和技术，您试图预先确定数据工程师在开始他们的工作流程时需要做多少工作，以及这会耽误项目的其余部分多少时间。因此，这一点至关重要。</p>
-			<p>一个很好的例子是，如果您很快发现您需要的大部分数据存储在遗留的内部财务系统中，没有真正的现代API，也没有非财务团队成员的访问请求机制。如果它的主要后端是内部的，并且您需要将锁定的财务数据迁移到云中，但这使您的业务紧张，那么您知道在您键入一行代码之前有许多工作要做。如果数据已经存在于您的团队已经可以访问的企业数据湖中，那么您显然处于更有利的位置。如果价值主张足够强大，任何挑战都是可以克服的，但是尽早发现这一切将会在以后为您节省时间、精力和金钱。</p>
-			<p>在你开始之前，找出相关性有点困难，但是你可以开始有一个想法。例如，如果要执行我们在<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第一章</em> </a>、<em class="italic">ML工程简介</em>中讨论的库存预测，是否需要拉进客户账户信息？如果你想创建<em class="italic">溢价</em>或<em class="italic">非溢价</em>客户的分类器作为营销目标，在<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第一章</em> </a>、<em class="italic">ML工程介绍</em>中也有提到，是否需要有社交媒体feed的数据？什么是相关的问题通常没有这些明确，但是要记住的一件重要的事情是，如果你真的错过了一些重要的东西，你可以随时回来。您正试图尽早捕捉最重要的设计决策，因此常识和大量利益相关方和主题专家的参与将大有帮助。</p>
+			<p>一个很好的例子是，如果您很快发现您需要的大部分数据存储在遗留的内部财务系统中，没有真正的现代 API，也没有非财务团队成员的访问请求机制。如果它的主要后端是内部的，并且您需要将锁定的财务数据迁移到云中，但这使您的业务紧张，那么您知道在您键入一行代码之前有许多工作要做。如果数据已经存在于您的团队已经可以访问的企业数据湖中，那么您显然处于更有利的位置。如果价值主张足够强大，任何挑战都是可以克服的，但是尽早发现这一切将会在以后为您节省时间、精力和金钱。</p>
+			<p>在你开始之前，找出相关性有点困难，但是你可以开始有一个想法。例如，如果要执行我们在<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第一章</em> </a>、<em class="italic">ML 工程简介</em>中讨论的库存预测，是否需要拉进客户账户信息？如果你想创建<em class="italic">溢价</em>或<em class="italic">非溢价</em>客户的分类器作为营销目标，在<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第一章</em> </a>、<em class="italic">ML 工程介绍</em>中也有提到，是否需要有社交媒体 feed 的数据？什么是相关的问题通常没有这些明确，但是要记住的一件重要的事情是，如果你真的错过了一些重要的东西，你可以随时回来。您正试图尽早捕捉最重要的设计决策，因此常识和大量利益相关方和主题专家的参与将大有帮助。</p>
 			<p>数据质量是您在项目中向前推进之前可以尝试预测的东西，您可以向数据的当前用户或消费者或那些参与其输入过程的人提出一些问题。但是，为了获得更定量的理解，您通常只需要让您的数据科学家以实际操作的方式处理数据。</p>
-			<p>在下一节中，我们将了解如何在研究最密集的阶段<strong class="bold"> p <a id="_idTextAnchor038"/> lay </strong>开发概念验证ML解决方案。</p>
+			<p>在下一节中，我们将了解如何在研究最密集的阶段<strong class="bold"> p <a id="_idTextAnchor038"/> lay </strong>开发概念验证 ML 解决方案。</p>
 			<h2 id="_idParaDest-36"><a id="_idTextAnchor039"/>播放</h2>
-			<p>在项目的play <a id="_idIndexMarker087"/>阶段，你的目标是找出即使在概念验证阶段解决任务是否可行。要做到这一点，您可以使用我们在上一章中提到的探索性数据分析和解释性建模的常用数据科学基本技术，然后再创建一个您需要的ML模型。</p>
+			<p>在项目的 play <a id="_idIndexMarker087"/>阶段，你的目标是找出即使在概念验证阶段解决任务是否可行。要做到这一点，您可以使用我们在上一章中提到的探索性数据分析和解释性建模的常用数据科学基本技术，然后再创建一个您需要的 ML 模型。</p>
 			<p>在流程的这一部分，您不必过分关注实施的细节，而是要探索可能性的领域，深入了解数据和问题，这超出了最初的发现工作。因为这里的目标不是创建<em class="italic">生产就绪的</em>代码或构建可重用的工具，所以您不应该担心您正在编写的代码是否是最高质量的<a id="_idIndexMarker088"/>或使用复杂的模式。例如，下面的例子中的代码并不少见(事实上，摘自本书的回购):</p>
 			<div><div><img src="img/B17343_02_009.jpg" alt="Figure 2.9 – Some example prototype code that will be created during the play stage&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.9–将在播放阶段创建的一些示例原型代码</p>
+			<p class="figure-caption">图 2.9–将在播放阶段创建的一些示例原型代码</p>
 			<p>即使快速浏览一下这些截图，也能告诉你一些事情:</p>
 			<ul>
-				<li>代码在Jupyter笔记本中，用户在web浏览器中交互运行。</li>
+				<li>代码在 Jupyter 笔记本中，用户在 web 浏览器中交互运行。</li>
 				<li>代码偶尔会调用一些方法来简单地检查或探索数据元素(例如，<code>df.head()</code>和<code>df.dtypes</code>)。</li>
 				<li>有专门的绘图代码(而且不是很直观！).</li>
 				<li>有一个变量叫做<code>tmp</code>，描述性不是很强。</li>
 			</ul>
-			<p>在这个更具探索性的阶段，所有这些都是绝对好的，但是本书的目的之一是<a id="_idIndexMarker089"/>帮助你理解需要什么来获取这样的代码，并使它成为适合你的生产ML管道的东西。下一节让我们沿着这条<a id="_idTextAnchor040"/>路径开始。</p>
+			<p>在这个更具探索性的阶段，所有这些都是绝对好的，但是本书的目的之一是<a id="_idIndexMarker089"/>帮助你理解需要什么来获取这样的代码，并使它成为适合你的生产 ML 管道的东西。下一节让我们沿着这条<a id="_idTextAnchor040"/>路径开始。</p>
 			<h2 id="_idParaDest-37"><a id="_idTextAnchor041"/>开发</h2>
-			<p>正如我们已经多次提到的，这本书的目的之一是让你思考这样一个事实:你正在构建的软件产品中恰好包含了ML。对于我们中一些来自更多数学和算法背景的人来说，这意味着一个陡峭的学习曲线。这看起来有点吓人，但是不要绝望！好消息是，我们可以重用软件工程社区几十年来磨练出来的许多最佳实践和技术。日光之下无新事。</p>
-			<p>本节探讨了在我们的ML工程项目的开发阶段可以采用的一些方法、流程和考虑因素。</p>
+			<p>正如我们已经多次提到的，这本书的目的之一是让你思考这样一个事实:你正在构建的软件产品中恰好包含了 ML。对于我们中一些来自更多数学和算法背景的人来说，这意味着一个陡峭的学习曲线。这看起来有点吓人，但是不要绝望！好消息是，我们可以重用软件工程社区几十年来磨练出来的许多最佳实践和技术。日光之下无新事。</p>
+			<p>本节探讨了在我们的 ML 工程项目的开发阶段可以采用的一些方法、流程和考虑因素。</p>
 			<h3>选择软件开发方法</h3>
-			<p>作为ML工程师，我们能够并且应该无耻地复制的第一件事是软件<a id="_idIndexMarker091"/>开发方法，它被用于全球的项目中。其中的一个类别<a id="_idIndexMarker092"/>，通常被称为<strong class="bold">瀑布</strong>，涵盖了与构建复杂事物(比如一座建筑或一辆汽车)的想法非常契合的项目工作流。在瀑布方法中，有不同的和连续的工作阶段，在进入下一个阶段之前，每个阶段都有一组清晰的输出。例如，一个典型的瀑布项目可能有广泛覆盖需求收集、分析、设计、开发、测试和部署的阶段(听起来熟悉吗？).关键是在一个瀑布式的项目中，当你处于<em class="italic">需求收集</em>阶段时，你应该<em class="italic">只</em>在收集需求，当处于测试阶段时，你应该<em class="italic">只</em>在测试，等等。在介绍了另一套方法之后，我们将在接下来的几段中讨论这对于ML的利弊。</p>
-			<p>另一套<a id="_idIndexMarker093"/>方法论，被称为<strong class="bold">敏捷</strong>，在2001年<strong class="bold">敏捷宣言</strong>(<a href="https://agilemanifesto.org/">https://agilemanifesto.org/</a>)出台后开始了它的生命。敏捷开发的核心是灵活性、迭代和<a id="_idIndexMarker094"/>增量更新、快速失败和适应不断变化的需求。如果你来自研究或科学背景，这种基于结果和新发现的灵活性和适应性的概念可能听起来很熟悉。</p>
-			<p>如果你有这种类型的科学或学术背景，你可能不太熟悉的是，你仍然可以在一个相对严格的以交付成果为中心的框架内接受这些概念。敏捷软件开发方法都是关于寻找实验和交付之间的平衡。这通常是通过引入<strong class="bold">仪式</strong>(比如Scrum和Sprint回顾)和<strong class="bold">角色</strong>(比如Scrum Master和产品负责人)的概念来实现的。</p>
-			<p>除此之外，在敏捷开发中，有两种变体非常流行:<strong class="bold"> Scrum </strong>和<strong class="bold">看板</strong>。Scrum项目围绕着被称为“冲刺”的短工作单元(T10 ),其理念是在这么短的时间内，从构思到部署，对产品进行补充。在看板中，主要的想法是实现一个稳定的<strong class="bold">任务流</strong>从一个有组织的积压工作到正在进行的工作，直到完成的工作。</p>
-			<p>所有这些方法(除此之外还有很多)都有它们的优点和缺点。你不必和他们中的任何一个结婚；你可以在它们之间反复无常。例如，在一个ML项目中，做一些<em class="italic">部署后</em>工作可能是有意义的，这些工作关注于维护一个已经存在的服务(有时被称为<em class="italic">业务照常</em>活动),比如在看板框架中进一步的模型改进或者软件优化。在冲刺阶段完成你核心工作的主要交付，并有非常清晰的结果，这可能是有意义的。但是您可以反复无常，看看什么最适合您的用例、您的团队和您的组织。</p>
-			<p>但是将这些类型的工作流应用到ML项目中有什么不同呢？在这个ML的世界里，我们需要思考什么是我们以前没有思考过的？一些关键点如下:</p>
+			<p>作为 ML 工程师，我们能够并且应该无耻地复制的第一件事是软件<a id="_idIndexMarker091"/>开发方法，它被用于全球的项目中。其中的一个类别<a id="_idIndexMarker092"/>，通常被称为<strong class="bold">瀑布</strong>，涵盖了与构建复杂事物(比如一座建筑或一辆汽车)的想法非常契合的项目工作流。在瀑布方法中，有不同的和连续的工作阶段，在进入下一个阶段之前，每个阶段都有一组清晰的输出。例如，一个典型的瀑布项目可能有广泛覆盖需求收集、分析、设计、开发、测试和部署的阶段(听起来熟悉吗？).关键是在一个瀑布式的项目中，当你处于<em class="italic">需求收集</em>阶段时，你应该<em class="italic">只</em>在收集需求，当处于测试阶段时，你应该<em class="italic">只</em>在测试，等等。在介绍了另一套方法之后，我们将在接下来的几段中讨论这对于 ML 的利弊。</p>
+			<p>另一套<a id="_idIndexMarker093"/>方法论，被称为<strong class="bold">敏捷</strong>，在 2001 年<strong class="bold">敏捷宣言</strong>(<a href="https://agilemanifesto.org/">https://agilemanifesto.org/</a>)出台后开始了它的生命。敏捷开发的核心是灵活性、迭代和<a id="_idIndexMarker094"/>增量更新、快速失败和适应不断变化的需求。如果你来自研究或科学背景，这种基于结果和新发现的灵活性和适应性的概念可能听起来很熟悉。</p>
+			<p>如果你有这种类型的科学或学术背景，你可能不太熟悉的是，你仍然可以在一个相对严格的以交付成果为中心的框架内接受这些概念。敏捷软件开发方法都是关于寻找实验和交付之间的平衡。这通常是通过引入<strong class="bold">仪式</strong>(比如 Scrum 和 Sprint 回顾)和<strong class="bold">角色</strong>(比如 Scrum Master 和产品负责人)的概念来实现的。</p>
+			<p>除此之外，在敏捷开发中，有两种变体非常流行:<strong class="bold"> Scrum </strong>和<strong class="bold">看板</strong>。Scrum 项目围绕着被称为“冲刺”的短工作单元(T10 ),其理念是在这么短的时间内，从构思到部署，对产品进行补充。在看板中，主要的想法是实现一个稳定的<strong class="bold">任务流</strong>从一个有组织的积压工作到正在进行的工作，直到完成的工作。</p>
+			<p>所有这些方法(除此之外还有很多)都有它们的优点和缺点。你不必和他们中的任何一个结婚；你可以在它们之间反复无常。例如，在一个 ML 项目中，做一些<em class="italic">部署后</em>工作可能是有意义的，这些工作关注于维护一个已经存在的服务(有时被称为<em class="italic">业务照常</em>活动),比如在看板框架中进一步的模型改进或者软件优化。在冲刺阶段完成你核心工作的主要交付，并有非常清晰的结果，这可能是有意义的。但是您可以反复无常，看看什么最适合您的用例、您的团队和您的组织。</p>
+			<p>但是将这些类型的工作流应用到 ML 项目中有什么不同呢？在这个 ML 的世界里，我们需要思考什么是我们以前没有思考过的？一些关键点如下:</p>
 			<ul>
-				<li><em class="italic">你不知道你不知道的事情</em>:在你看到数据之前，你无法知道你是否能够解决这个问题。传统的软件工程不像ML工程那样严格依赖于流经系统的数据。我们可以在原则上知道如何解决一个问题，但如果适当的数据没有足够的数量或质量很差，那么我们就无法在实践中解决问题。</li>
-				<li><em class="italic">你的系统是活的</em>:如果你建立了一个经典的网站，拥有后台数据库、闪亮的前台、惊人的负载平衡和其他功能，那么实际上，如果资源在那里，它可以永远运行下去。网站没有什么根本性的变化，它还在运行。点击仍然被转换成动作，页面导航也是同样的方式。现在考虑把一些基于典型的<a id="_idIndexMarker099"/>用户档案的ML生成的广告内容放在那里。什么是典型的<em class="italic">用户配置文件</em>，它会随着时间而变化吗？随着更多的流量和更多的用户，我们以前从未见过的行为会成为新的常态吗？您的系统一直在学习，这导致了<em class="italic">模型漂移</em>和<em class="italic">分布偏移</em>的问题，以及更复杂的更新和回滚场景。</li>
-				<li><em class="italic">没有什么是确定的</em>:当构建一个使用基于规则的逻辑的系统时，你知道每次你会得到什么。<em class="italic">如果X，那么Y </em>就是这个意思，总是。对于ML模型，当你问问题时，通常很难知道答案是什么，这实际上是这些算法如此强大的原因。但这确实意味着你可能会有不可预测的行为，要么是因为前面讨论过的原因，要么只是因为算法学到了一些对人类观察者来说不明显的数据，要么是因为ML算法可能基于概率和统计概念，结果会附带一些不确定性或模糊性。一个典型的例子是，当您应用逻辑回归并获得属于某一类的数据点的概率时。这是一种可能性，所以你不能肯定地说这是事实；只是可能性有多大！当你的ML系统的输出被用户或其他系统用来做决策时，这一点尤为重要。</li>
+				<li><em class="italic">你不知道你不知道的事情</em>:在你看到数据之前，你无法知道你是否能够解决这个问题。传统的软件工程不像 ML 工程那样严格依赖于流经系统的数据。我们可以在原则上知道如何解决一个问题，但如果适当的数据没有足够的数量或质量很差，那么我们就无法在实践中解决问题。</li>
+				<li><em class="italic">你的系统是活的</em>:如果你建立了一个经典的网站，拥有后台数据库、闪亮的前台、惊人的负载平衡和其他功能，那么实际上，如果资源在那里，它可以永远运行下去。网站没有什么根本性的变化，它还在运行。点击仍然被转换成动作，页面导航也是同样的方式。现在考虑把一些基于典型的<a id="_idIndexMarker099"/>用户档案的 ML 生成的广告内容放在那里。什么是典型的<em class="italic">用户配置文件</em>，它会随着时间而变化吗？随着更多的流量和更多的用户，我们以前从未见过的行为会成为新的常态吗？您的系统一直在学习，这导致了<em class="italic">模型漂移</em>和<em class="italic">分布偏移</em>的问题，以及更复杂的更新和回滚场景。</li>
+				<li><em class="italic">没有什么是确定的</em>:当构建一个使用基于规则的逻辑的系统时，你知道每次你会得到什么。<em class="italic">如果 X，那么 Y </em>就是这个意思，总是。对于 ML 模型，当你问问题时，通常很难知道答案是什么，这实际上是这些算法如此强大的原因。但这确实意味着你可能会有不可预测的行为，要么是因为前面讨论过的原因，要么只是因为算法学到了一些对人类观察者来说不明显的数据，要么是因为 ML 算法可能基于概率和统计概念，结果会附带一些不确定性或模糊性。一个典型的例子是，当您应用逻辑回归并获得属于某一类的数据点的概率时。这是一种可能性，所以你不能肯定地说这是事实；只是可能性有多大！当你的 ML 系统的输出被用户或其他系统用来做决策时，这一点尤为重要。</li>
 			</ul>
-			<p>考虑到这些问题，在下一节中，我们将尝试并理解当我们构建ML解决方案时，什么样的开发方法可以帮助我们。在<em class="italic">图2.10 </em>中，我们可以看到这些敏捷方法对于不同阶段和不同类型的ML工程项目的一些<a id="_idIndexMarker100"/>优势和劣势:</p>
+			<p>考虑到这些问题，在下一节中，我们将尝试并理解当我们构建 ML 解决方案时，什么样的开发方法可以帮助我们。在<em class="italic">图 2.10 </em>中，我们可以看到这些敏捷方法对于不同阶段和不同类型的 ML 工程项目的一些<a id="_idIndexMarker100"/>优势和劣势:</p>
 			<div><div><img src="img/B17343_02_010.jpg" alt="Figure 2.10 – Agile versus Waterfall for ML development&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.10–ML开发的敏捷与瀑布</p>
+			<p class="figure-caption">图 2.10–ML 开发的敏捷与瀑布</p>
 			<p>让我们进入下一部分！</p>
-			<h3><a id="_idTextAnchor043"/>包装管理(conda和pip)</h3>
-			<p>如果我告诉你不使用任何库或包，只使用纯Python来编写一个在数据科学或ML中做任何事情的程序，你可能会发现这在任何合理的时间内都很难实现，而且非常无聊！这是好事。用Python开发软件的一个真正强大的特性是，您可以相对容易地利用广泛的工具和功能生态系统。另一方面，管理代码库的依赖性很容易变成一项非常复杂且难以复制的任务。这就是包和环境管理器如<code>pip</code>和<code>conda</code>的用武之地。</p>
-			<p><code>pip</code>是Python中的标准包管理器，也是Python <a id="_idIndexMarker102"/>包管理机构推荐使用的包管理器。它从<code>pip</code>获取并安装Python包，非常容易使用，也是教程和书籍中经常推荐的安装包的方式。</p>
-			<p><code>conda</code>是Anaconda和Miniconda Python发行版附带的<em class="italic">包和环境</em>管理器。<code>conda</code>的一个关键优势是，尽管它来自Python生态系统，并且它在那里有出色的功能，但它实际上是一个更通用的包管理器。因此，如果您的项目需要Python之外的依赖项(<code>numpy</code>和<code>scipy</code>库就是很好的例子)，那么尽管<code>pip</code>可以安装这些，但它不能跟踪所有非Python依赖项，也不能管理它们的版本。有了<code>conda</code>，这个就解决了。</p>
-			<p>您也可以在<code>conda</code>环境中使用<code>pip</code>，这样您就可以尝试两全其美，或者使用您的项目所需要的任何东西。也就是说，我强烈建议尽可能坚持用<code>conda</code>命令安装<a id="_idIndexMarker103"/>包，这是因为非Python依赖性，也是为了一致性。在本书中，我们将使用<code>conda</code>来管理我们的Python环境以及管理和安装包(例如，当我们安装MLflow时，您已经在前面的章节中看到了这一点)。</p>
-			<p>如果你还没有开始使用Conda，你可以从Anaconda网站(【https://www.anaconda.com/products/individual】T21)下载<strong class="bold">个人</strong>发行版安装程序。Anaconda附带了一些已经安装的Python包，但是如果您想从一个完全空的环境开始，您可以从相同的网站下载Miniconda(它们具有完全相同的功能；你只是从一个不同的基础开始)。</p>
-			<p>Anaconda文档对于让您快速掌握适当的命令非常有帮助，但是这里有一些关键命令的快速浏览。</p>
-			<p>首先，如果我们想创建一个名为<code>mleng</code>的<code>conda</code>环境，并安装Python版，我们只需在终端中执行以下命令:</p>
+			<h3><a id="_idTextAnchor043"/>包装管理(conda 和 pip)</h3>
+			<p>如果我告诉你不使用任何库或包，只使用纯 Python 来编写一个在数据科学或 ML 中做任何事情的程序，你可能会发现这在任何合理的时间内都很难实现，而且非常无聊！这是好事。用 Python 开发软件的一个真正强大的特性是，您可以相对容易地利用广泛的工具和功能生态系统。另一方面，管理代码库的依赖性很容易变成一项非常复杂且难以复制的任务。这就是包和环境管理器如<code>pip</code>和<code>conda</code>的用武之地。</p>
+			<p><code>pip</code>是 Python 中的标准包管理器，也是 Python <a id="_idIndexMarker102"/>包管理机构推荐使用的包管理器。它从<code>pip</code>获取并安装 Python 包，非常容易使用，也是教程和书籍中经常推荐的安装包的方式。</p>
+			<p><code>conda</code>是 Anaconda 和 Miniconda Python 发行版附带的<em class="italic">包和环境</em>管理器。<code>conda</code>的一个关键优势是，尽管它来自 Python 生态系统，并且它在那里有出色的功能，但它实际上是一个更通用的包管理器。因此，如果您的项目需要 Python 之外的依赖项(<code>numpy</code>和<code>scipy</code>库就是很好的例子)，那么尽管<code>pip</code>可以安装这些，但它不能跟踪所有非 Python 依赖项，也不能管理它们的版本。有了<code>conda</code>，这个就解决了。</p>
+			<p>您也可以在<code>conda</code>环境中使用<code>pip</code>，这样您就可以尝试两全其美，或者使用您的项目所需要的任何东西。也就是说，我强烈建议尽可能坚持用<code>conda</code>命令安装<a id="_idIndexMarker103"/>包，这是因为非 Python 依赖性，也是为了一致性。在本书中，我们将使用<code>conda</code>来管理我们的 Python 环境以及管理和安装包(例如，当我们安装 MLflow 时，您已经在前面的章节中看到了这一点)。</p>
+			<p>如果你还没有开始使用 Conda，你可以从 Anaconda 网站(【https://www.anaconda.com/products/individual】T21)下载<strong class="bold">个人</strong>发行版安装程序。Anaconda 附带了一些已经安装的 Python 包，但是如果您想从一个完全空的环境开始，您可以从相同的网站下载 Miniconda(它们具有完全相同的功能；你只是从一个不同的基础开始)。</p>
+			<p>Anaconda 文档对于让您快速掌握适当的命令非常有帮助，但是这里有一些关键命令的快速浏览。</p>
+			<p>首先，如果我们想创建一个名为<code>mleng</code>的<code>conda</code>环境，并安装 Python 版，我们只需在终端中执行以下命令:</p>
 			<pre>conda env --name mleng python=3.8</pre>
 			<p>然后，我们可以通过运行以下命令来激活<code>conda</code>环境:</p>
 			<pre>source activate mleng</pre>
 			<p>这意味着任何新的<code>conda</code>或<code>pip</code>命令将在这个环境中安装软件包，而不是在系统范围内。</p>
 			<p>我们经常希望与从事同一项目的其他人分享我们环境的细节，因此将所有的包配置导出到一个<code>.yml</code>文件中会很有用:</p>
 			<pre>conda export env &gt; environment.yml</pre>
-			<p>本书的GitHub资源库包含一个名为<code>mleng-environment.yml</code> <a id="_idIndexMarker104"/>的文件，供您创建自己的<code>mleng</code>环境实例。以下命令使用此文件创建具有此配置的环境:</p>
+			<p>本书的 GitHub 资源库包含一个名为<code>mleng-environment.yml</code> <a id="_idIndexMarker104"/>的文件，供您创建自己的<code>mleng</code>环境实例。以下命令使用此文件创建具有此配置的环境:</p>
 			<pre>conda env create --file environment.yml</pre>
 			<p>这些命令，加上经典的<code>install</code>命令，将会很好地为您的项目做好准备！</p>
 			<pre>conda install &lt;package-name&gt;</pre>
 			<p>既然我们已经成功地配置了一个环境，我们应该讨论如何在这个开发环境中工作。</p>
 			<h3>代码版本控制</h3>
 			<p>如果你要为真实的系统编写代码，你几乎肯定要作为团队的一员来做。如果您可以对变更、编辑和更新进行清晰的<a id="_idIndexMarker105"/>审计跟踪，以便您可以看到解决方案是如何开发的，那么您的生活也会变得更加轻松。最后，您将<a id="_idIndexMarker106"/>希望干净、安全地分离出您正在构建的解决方案的稳定版本，以及可以部署的版本，而不是更短暂的开发版本。谢天谢地，所有这些都由源代码版本控制系统来处理，其中最流行的是<strong class="bold"> Git </strong>。</p>
-			<p>我们不会在这里深入Git是如何工作的(关于这个主题有整本书！)但我们将重点了解使用它的关键实际要素:</p>
+			<p>我们不会在这里深入 Git 是如何工作的(关于这个主题有整本书！)但我们将重点了解使用它的关键实际要素:</p>
 			<ol>
-				<li value="1">在本章的前面，您已经有了一个GitHub帐户，所以首先要做的是创建一个以Python为语言的存储库，并初始化<code>README.me</code>和<code>.gitignore</code>文件。接下来要做的事情是通过在Bash、Git Bash或其他终端中运行以下命令来获得这个存储库的本地副本:<pre><strong class="bold">git clone &lt;repo-name&gt;</strong></pre></li>
+				<li value="1">在本章的前面，您已经有了一个 GitHub 帐户，所以首先要做的是创建一个以 Python 为语言的存储库，并初始化<code>README.me</code>和<code>.gitignore</code>文件。接下来要做的事情是通过在 Bash、Git Bash 或其他终端中运行以下命令来获得这个存储库的本地副本:<pre><strong class="bold">git clone &lt;repo-name&gt;</strong></pre></li>
 				<li>Now that you have done this, go into the <code>README.me</code> file and make some edits (anything will do). Then, run the following commands to tell Git to <em class="italic">monitor</em> this file and to save your changes locally with a message briefly explaining what these are:<pre><strong class="bold">git add README.m</strong>
-<strong class="bold">git commit -m "I've made a nice change …"</strong></pre><p>这意味着您的本地Git实例已经存储了您所做的更改，并准备好与远程repo共享。</p></li>
-				<li>You can <a id="_idIndexMarker107"/>then incorporate <a id="_idIndexMarker108"/>these changes into the main branch by doing the following:<pre><strong class="bold">git push origin main</strong></pre><p>如果您现在回到GitHub站点，您会看到在您的远程存储库中已经发生了变化，并且您添加的注释也伴随着变化。</p></li>
+<strong class="bold">git commit -m "I've made a nice change …"</strong></pre><p>这意味着您的本地 Git 实例已经存储了您所做的更改，并准备好与远程 repo 共享。</p></li>
+				<li>You can <a id="_idIndexMarker107"/>then incorporate <a id="_idIndexMarker108"/>these changes into the main branch by doing the following:<pre><strong class="bold">git push origin main</strong></pre><p>如果您现在回到 GitHub 站点，您会看到在您的远程存储库中已经发生了变化，并且您添加的注释也伴随着变化。</p></li>
 				<li>然后，您团队中的其他人可以通过运行以下命令获得更新的更改:<pre><strong class="bold">git pull origin main</strong></pre></li>
 			</ol>
-			<p>这些步骤是Git的绝对基础，你可以在网上学到更多。不过，我们现在要做的是，开始以与T4工程相关的方式建立我们的回购和工作流程。</p>
-			<h4>Git策略</h4>
-			<p>使用版本<a id="_idIndexMarker110"/>控制系统的策略的存在<a id="_idIndexMarker109"/>通常是项目的数据科学和ML工程方面的关键区别。为探索和基本建模阶段(发现和玩)定义一个严格的Git策略有时可能有些过头了，但是如果你想为部署设计一些东西(你正在读这本书，所以这可能是你的想法)，那么它是非常重要的。</p>
-			<p>很好，但是我们所说的Git策略是什么意思呢？</p>
+			<p>这些步骤是 Git 的绝对基础，你可以在网上学到更多。不过，我们现在要做的是，开始以与 T4 工程相关的方式建立我们的回购和工作流程。</p>
+			<h4>Git 策略</h4>
+			<p>使用版本<a id="_idIndexMarker110"/>控制系统的策略的存在<a id="_idIndexMarker109"/>通常是项目的数据科学和 ML 工程方面的关键区别。为探索和基本建模阶段(发现和玩)定义一个严格的 Git 策略有时可能有些过头了，但是如果你想为部署设计一些东西(你正在读这本书，所以这可能是你的想法)，那么它是非常重要的。</p>
+			<p>很好，但是我们所说的 Git 策略是什么意思呢？</p>
 			<p>好吧，让我们想象一下，我们只是试图开发我们的解决方案，而没有一个关于如何组织版本和代码的共同方向。</p>
-			<p>ML工程师<em class="italic"> A </em>希望<a id="_idIndexMarker111"/>开始将一些数据科学代码构建到Spark MLlib管道中(稍后将详细介绍)，因此从main创建了一个名为<code>pipeline1spark</code>的分支:</p>
+			<p>ML 工程师<em class="italic"> A </em>希望<a id="_idIndexMarker111"/>开始将一些数据科学代码构建到 Spark MLlib 管道中(稍后将详细介绍)，因此从 main 创建了一个名为<code>pipeline1spark</code>的分支:</p>
 			<pre><strong class="bold">git checkout -b pipeline1spark</strong></pre>
 			<p>然后，她<a id="_idIndexMarker112"/>开始在分支中工作，并在一个名为<code>pipeline.py</code>的新文件中编写一些不错的代码:</p>
 			<pre># Configure an ML pipeline, which consists of three stages: tokenizer, hashingTF, and lr.
@@ -207,9 +207,9 @@ tokenizer = Tokenizer(inputCol="text", outputCol="words")
 hashingTF = HashingTF(inputCol=tokenizer.getOutputCol(), outputCol="features")
 lr = LogisticRegression(maxIter=10, regParam=0.001)
 pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])</pre>
-			<p>很好，她在将一些以前的<code>sklearn</code>代码翻译成Spark方面取得了一些出色的进展，这被认为更适合用例。然后，她继续在这个分支中工作，因为它有她所有的附加物，她认为最好在一个地方做所有的事情。当她想要将分支推送到远程存储库时，她运行以下命令:</p>
+			<p>很好，她在将一些以前的<code>sklearn</code>代码翻译成 Spark 方面取得了一些出色的进展，这被认为更适合用例。然后，她继续在这个分支中工作，因为它有她所有的附加物，她认为最好在一个地方做所有的事情。当她想要将分支推送到远程存储库时，她运行以下命令:</p>
 			<pre>git push origin pipelinespark</pre>
-			<p>ML工程师<em class="italic"> B </em>出现了，他想使用ML工程师<em class="italic"> A </em>的管道代码，并围绕它构建一些额外的步骤。他知道她有一个关于这个工作的分支，所以他知道足够的Git来创建另一个包含她的代码的分支，他称之为<code>pipeline</code>:</p>
+			<p>ML 工程师<em class="italic"> B </em>出现了，他想使用 ML 工程师<em class="italic"> A </em>的管道代码，并围绕它构建一些额外的步骤。他知道她有一个关于这个工作的分支，所以他知道足够的 Git 来创建另一个包含她的代码的分支，他称之为<code>pipeline</code>:</p>
 			<pre>git pull origin pipelinspark
 git checkout pipelinespark
 git checkout -b pipeline</pre>
@@ -217,7 +217,7 @@ git checkout -b pipeline</pre>
 			<pre>lr = LogisticRegression(maxIter=model_config["maxIter"], regParam=model_config["regParam"])</pre>
 			<p>酷，工程师<em class="italic"> B </em>做了一个更新，开始提取一些参数。然后，他将新的分支推送到远程存储库:</p>
 			<pre>git push origin pipeline</pre>
-			<p>最后，ML工程师<em class="italic"> C </em>加入团队，想要开始编写代码。打开Git并查看树枝，她看到有三个:</p>
+			<p>最后，ML 工程师<em class="italic"> C </em>加入团队，想要开始编写代码。打开 Git 并查看树枝，她看到有三个:</p>
 			<pre>main
 pipeline1spark
 pipeline</pre>
@@ -228,7 +228,7 @@ pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])
 # Branch pipeline - Commit 2 (Engineer B)
 lr = LogisticRegression(maxIter=model_config["maxIter"], regParam=model_config["regParam"])
 pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])</pre>
-			<p>如果这两个提交同时被推送到主分支，那么我们将得到所谓的<strong class="bold">合并冲突</strong>，在每种情况下，工程师将不得不选择保留哪一段<a id="_idIndexMarker115"/>代码，当前的还是新的示例。如果工程师<em class="italic"> A </em>首先将他们的更改推送到main，看起来会是这样:</p>
+			<p>如果这两个提交同时被推送到主分支，那么我们将得到所谓的<strong class="bold">合并冲突</strong>，在每种情况下，工程师将不得不选择保留哪一段<a id="_idIndexMarker115"/>代码，当前的还是新的示例。如果工程师<em class="italic"> A </em>首先将他们的更改推送到 main，看起来会是这样:</p>
 			<pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 lr = LogisticRegression(maxIter=10, regParam=0.001)
 pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])
@@ -240,9 +240,9 @@ pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])
 			<p class="callout-heading">重要说明</p>
 			<p class="callout">尽管在这个简单的例子中，我们可以相信工程师会选择更好的代码，但是允许这样的情况频繁发生对您的项目来说是一个巨大的风险。这不仅浪费了大量宝贵的开发时间，而且还可能意味着您最终会得到更糟糕的代码！</p>
 			<p>避免这种混乱和额外工作的方法是有一个非常清晰的使用版本控制系统的策略，就像我们现在将要探讨的一样。</p>
-			<h4>Gitflow工作流</h4>
+			<h4>Gitflow 工作流</h4>
 			<p>前一个<a id="_idIndexMarker119"/>例子中最大的问题是，我们所有假设的工程师实际上都在不同的地方处理同一段代码。为了阻止这样的情况，你必须创建一个你的团队都可以遵循的过程——换句话说，一个版本控制策略或者工作流。</p>
-			<p>这些策略中最受欢迎的一个是git flow T21工作流。这建立在拥有致力于特性的分支的基本思想之上，并将其扩展到包含<a id="_idIndexMarker120"/>版本和补丁的概念，这<a id="_idIndexMarker121"/>与具有持续部署元素的项目特别相关。</p>
+			<p>这些策略中最受欢迎的一个是 git flow T21 工作流。这建立在拥有致力于特性的分支的基本思想之上，并将其扩展到包含<a id="_idIndexMarker120"/>版本和补丁的概念，这<a id="_idIndexMarker121"/>与具有持续部署元素的项目特别相关。</p>
 			<p>主要思想是我们有以下类型的分支:</p>
 			<ul>
 				<li>主要的</li>
@@ -254,34 +254,34 @@ pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])
 			<p>每一个的创造都是为了一个明确且极其具体的原因。开始使用这种方法的一些一般要点如下:</p>
 			<ul>
 				<li><strong class="bold"> Main </strong>包含您的<a id="_idIndexMarker122"/>官方版本，并且应该只包含您代码的稳定版本。</li>
-				<li><strong class="bold"> Dev </strong>作为<a id="_idIndexMarker123"/>主要点，用于从存储库中的大部分工作分支并合并到其中；它包含正在进行的代码库开发，并充当main之前的准备区域。</li>
+				<li><strong class="bold"> Dev </strong>作为<a id="_idIndexMarker123"/>主要点，用于从存储库中的大部分工作分支并合并到其中；它包含正在进行的代码库开发，并充当 main 之前的准备区域。</li>
 				<li><strong class="bold">特征</strong>分支<a id="_idIndexMarker124"/>不应直接合并到主分支中；一切都应该从开发分支，然后合并回开发。</li>
-				<li><strong class="bold"> Release </strong>分支<a id="_idIndexMarker125"/>是从dev创建的，用于启动一个构建或发布过程，然后被合并到main和dev中，然后被删除。</li>
-				<li><strong class="bold"> Hotfix </strong>分支<a id="_idIndexMarker126"/>用于删除已部署或生产软件中的bug。完成后，在合并到main和dev之前，您可以从main中分支出来。</li>
+				<li><strong class="bold"> Release </strong>分支<a id="_idIndexMarker125"/>是从 dev 创建的，用于启动一个构建或发布过程，然后被合并到 main 和 dev 中，然后被删除。</li>
+				<li><strong class="bold"> Hotfix </strong>分支<a id="_idIndexMarker126"/>用于删除已部署或生产软件中的 bug。完成后，在合并到 main 和 dev 之前，您可以从 main 中分支出来。</li>
 			</ul>
-			<p>这些都可以在图2.11 中用图解法进行总结，图2.11显示了<a id="_idIndexMarker128"/>不同的分支如何在Gitflow工作流中促进您的代码库的发展:</p>
+			<p>这些都可以在图 2.11 中用图解法进行总结，图 2.11 显示了<a id="_idIndexMarker128"/>不同的分支如何在 Gitflow 工作流中促进您的代码库的发展:</p>
 			<div><div><img src="img/B17343_02_011.jpg" alt="Figure 2.11 – The Gitflow Workflow&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.11–git flow工作流程</p>
+			<p class="figure-caption">图 2.11–git flow 工作流程</p>
 			<p>本图摘自<a href="https://lucamezzalira.com/2014/03/10/git-flow-vs-github-flow/">https://lucamezzalira . com/2014/03/10/git-flow-vs-github-flow/</a>。更多详情可登陆<a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">https://www . atlassian . com/git/tutorials/comparising-workflows/git flow-workflow</a>。</p>
-			<p>如果你的ML项目可以遵循这种策略(如果你想适应它，你不需要对它完全严格要求)，你可能会看到生产率、代码质量甚至文档的显著提高:</p>
+			<p>如果你的 ML 项目可以遵循这种策略(如果你想适应它，你不需要对它完全严格要求)，你可能会看到生产率、代码质量甚至文档的显著提高:</p>
 			<div><div><img src="img/B17343_02_012.jpg" alt="Figure 2.12 – Example code changes upon a pull request in GitHub&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.12-GitHub中请求pull时的代码变化示例</p>
-			<p>我们还没有讨论的一个重要方面是代码审查的概念。这些是在这个<a id="_idIndexMarker131"/>过程中由所谓的<strong class="bold">拉请求</strong>触发的，在这个过程中，您表明您打算合并到另一个分支，并允许另一个团队成员在执行之前审查您的代码。这是将代码审查引入工作流的自然方式。每当您想要合并您的变更，并将它们更新到dev或main分支中时，您就可以这样做。然后，被提议的变更可以<a id="_idIndexMarker132"/>对团队的其他成员可见，在完成合并之前，他们可以<a id="_idIndexMarker133"/>在进一步的提交中被讨论和迭代。这加强了代码审查以提高质量，并为更新创建了审计线索和安全措施。<em class="italic">图2.12 </em>展示了在GitHub中的pull请求期间，代码的更改如何变得可见以供讨论。</p>
-			<p>既然我们已经讨论了将版本控制应用到您的代码中的一些最佳实践，那么让我们来探索如何对您在ML <a id="_idTextAnchor048"/>项目中产生的模型进行版本控制。</p>
+			<p class="figure-caption">图 2.12-GitHub 中请求 pull 时的代码变化示例</p>
+			<p>我们还没有讨论的一个重要方面是代码审查的概念。这些是在这个<a id="_idIndexMarker131"/>过程中由所谓的<strong class="bold">拉请求</strong>触发的，在这个过程中，您表明您打算合并到另一个分支，并允许另一个团队成员在执行之前审查您的代码。这是将代码审查引入工作流的自然方式。每当您想要合并您的变更，并将它们更新到 dev 或 main 分支中时，您就可以这样做。然后，被提议的变更可以<a id="_idIndexMarker132"/>对团队的其他成员可见，在完成合并之前，他们可以<a id="_idIndexMarker133"/>在进一步的提交中被讨论和迭代。这加强了代码审查以提高质量，并为更新创建了审计线索和安全措施。<em class="italic">图 2.12 </em>展示了在 GitHub 中的 pull 请求期间，代码的更改如何变得可见以供讨论。</p>
+			<p>既然我们已经讨论了将版本控制应用到您的代码中的一些最佳实践，那么让我们来探索如何对您在 ML <a id="_idTextAnchor048"/>项目中产生的模型进行版本控制。</p>
 			<h3>模型版本控制</h3>
-			<p>在任何ML工程项目中，你不仅要清楚地跟踪代码变更，还要跟踪模型中的变更。当新的或不同的数据输入到您选择的算法中时，您不仅要跟踪建模方法的变化，还要跟踪性能的变化。跟踪这类变更并提供ML模型的<a id="_idIndexMarker136"/>版本控制的最好工具之一是<strong class="bold"> MLflow </strong>，我们在本章前面已经安装了它。</p>
-			<p>MLflow的主要目的是提供一个平台，通过这个平台，您可以记录模型实验、工件和性能指标。它通过Python <code>mlflow</code>库提供的一些非常简单的API来实现，通过一系列集中开发的社区插件与选定的存储解决方案<a id="_idIndexMarker137"/>接口。它还带有通过<strong class="bold">图形用户界面</strong> ( <strong class="bold"> GUI </strong>)查询、分析和导入/导出数据的功能，看起来类似于<em class="italic">图2.13 </em>:</p>
+			<p>在任何 ML 工程项目中，你不仅要清楚地跟踪代码变更，还要跟踪模型中的变更。当新的或不同的数据输入到您选择的算法中时，您不仅要跟踪建模方法的变化，还要跟踪性能的变化。跟踪这类变更并提供 ML 模型的<a id="_idIndexMarker136"/>版本控制的最好工具之一是<strong class="bold"> MLflow </strong>，我们在本章前面已经安装了它。</p>
+			<p>MLflow 的主要目的是提供一个平台，通过这个平台，您可以记录模型实验、工件和性能指标。它通过 Python <code>mlflow</code>库提供的一些非常简单的 API 来实现，通过一系列集中开发的社区插件与选定的存储解决方案<a id="_idIndexMarker137"/>接口。它还带有通过<strong class="bold">图形用户界面</strong> ( <strong class="bold"> GUI </strong>)查询、分析和导入/导出数据的功能，看起来类似于<em class="italic">图 2.13 </em>:</p>
 			<div><div><img src="img/B17343_02_013.jpg" alt="Figure 2.13 – The MLflow Tracking Server UI with some forecasting runs&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.13–带有一些预测运行的MLflow跟踪服务器用户界面</p>
-			<p>这个库非常容易使用。在以下示例中，我们将从<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第1章</em> </a>、<em class="italic">ML工程简介</em>中获取销售预测示例，并添加一些基本的MLflow功能，用于跟踪绩效指标和保存训练好的Prophet模型:</p>
+			<p class="figure-caption">图 2.13–带有一些预测运行的 MLflow 跟踪服务器用户界面</p>
+			<p>这个库非常容易使用。在以下示例中，我们将从<a href="B17343_01_Final_JC_ePub.xhtml#_idTextAnchor014"> <em class="italic">第 1 章</em> </a>、<em class="italic">ML 工程简介</em>中获取销售预测示例，并添加一些基本的 MLflow 功能，用于跟踪绩效指标和保存训练好的 Prophet 模型:</p>
 			<ol>
-				<li value="1">首先，我们进行相关的导入，包括MLflow的<code>pyfunc</code>模块，它作为保存和加载模型的通用接口，这些模型可以写成Python函数。这有助于使用MLflow中不支持的库和工具(如<code>fbprophet</code>库):<pre>import pandas as pd from fbprophet import Prophet from fbprophet.diagnostics import cross_validation from fbprophet.diagnostics import performance_metrics import mlflow import mlflow.pyfunc</pre></li>
+				<li value="1">首先，我们进行相关的导入，包括 MLflow 的<code>pyfunc</code>模块，它作为保存和加载模型的通用接口，这些模型可以写成 Python 函数。这有助于使用 MLflow 中不支持的库和工具(如<code>fbprophet</code>库):<pre>import pandas as pd from fbprophet import Prophet from fbprophet.diagnostics import cross_validation from fbprophet.diagnostics import performance_metrics import mlflow import mlflow.pyfunc</pre></li>
 				<li>To create a more seamless integration with the forecasting models from <code>fbprophet</code>, we define a small wrapper class that inherits from the <code>mlflow.pyfunc.PythonModel</code> object:<pre>class FbProphetWrapper(mlflow.pyfunc.PythonModel):
    def __init__(self, model):
        self.model = model
@@ -291,11 +291,11 @@ pipeline = Pipeline(stages=[tokenizer, hashingTF, lr])
        return
    def predict(self, context, model_input):
        future = self.model.make_future_dataframe(periods=model_input["periods"][0])
-       return self.model.predict(future)</pre><p>我们现在<a id="_idIndexMarker140"/>将用于训练和预测的功能<a id="_idIndexMarker141"/>封装到一个叫做<code>train_predict()</code>的辅助函数中，使运行更加简单。我们不会在这里定义这个函数中的所有细节，但是让我们浏览一下其中包含的MLflow功能的主要部分。</p></li>
-				<li>首先，我们需要让MLflow知道我们现在正在开始我们希望跟踪的训练跑步:<pre>with mlflow.start_run():     # Do stuff ...</pre></li>
+       return self.model.predict(future)</pre><p>我们现在<a id="_idIndexMarker140"/>将用于训练和预测的功能<a id="_idIndexMarker141"/>封装到一个叫做<code>train_predict()</code>的辅助函数中，使运行更加简单。我们不会在这里定义这个函数中的所有细节，但是让我们浏览一下其中包含的 MLflow 功能的主要部分。</p></li>
+				<li>首先，我们需要让 MLflow 知道我们现在正在开始我们希望跟踪的训练跑步:<pre>with mlflow.start_run():     # Do stuff ...</pre></li>
 				<li>在这个循环中，我们使用代码中其他地方定义的参数来定义和训练模型:<pre># create Prophet model model = Prophet(    yearly_seasonality=seasonality_params['yearly'],    weekly_seasonality=seasonality_params['weekly'],    daily_seasonality=seasonality_params['daily'] ) # train and predict model.fit(df_train)</pre></li>
 				<li>然后<a id="_idIndexMarker142"/>执行一些<a id="_idIndexMarker143"/>交叉验证来计算一些我们想要记录的指标:<pre># Evaluate Metrics df_cv = cross_validation(model, initial="730 days", period="180 days", horizon="365 days") df_p = performance_metrics(df_cv)</pre></li>
-				<li>我们可以<a id="_idIndexMarker144"/>记录这些指标，例如，这里的<strong class="bold">均方根误差</strong> ( <strong class="bold"> RMSE </strong>)，到我们的MLflow服务器:<pre># Log parameter, metrics, and model to MLflow mlflow.log_metric("rmse", df_p.loc[0, "rmse"])</pre></li>
+				<li>我们可以<a id="_idIndexMarker144"/>记录这些指标，例如，这里的<strong class="bold">均方根误差</strong> ( <strong class="bold"> RMSE </strong>)，到我们的 MLflow 服务器:<pre># Log parameter, metrics, and model to MLflow mlflow.log_metric("rmse", df_p.loc[0, "rmse"])</pre></li>
 				<li>Then, finally, we can use our model wrapper class to log the model and print some information about the run:<pre>mlflow.pyfunc.log_model("model", python_model=FbProphetWrapper(model))
 print(
    "Logged model with URI: runs:/{run_id}/model".format(
@@ -303,51 +303,51 @@ print(
    )
 )</pre><p>仅仅用了几行代码，我们就开始对我们的模型执行版本控制，并跟踪不同运行的统计数据！</p></li>
 			</ol>
-			<p>有许多不同的方法<a id="_idIndexMarker145"/>来<a id="_idIndexMarker146"/>保存你已经建立的ML模型到MLflow(和一般情况下)，这在跟踪模型版本时特别重要。一些主要选项如下:</p>
+			<p>有许多不同的方法<a id="_idIndexMarker145"/>来<a id="_idIndexMarker146"/>保存你已经建立的 ML 模型到 MLflow(和一般情况下)，这在跟踪模型版本时特别重要。一些主要选项如下:</p>
 			<ul>
-				<li><code>pickle</code> is a <a id="_idIndexMarker147"/>Python library for object serialization that is often used for the <a id="_idIndexMarker148"/>export of ML models that are written in scikit-learn or pipelines in the wider <code>scipy</code> ecosystem (https://docs.python.org/3/library/pickle.html#module-pickle). Although it is extremely easy to use, you must be careful when exporting your models to <code>pickle</code> files because of the following:<p>a) <code>pickle</code>明确表示<em class="italic">不安全</em>并且很容易构建恶意pickles，一旦拆包就会执行危险代码。这是一个非常重要的考虑因素，尤其是当您进入生产阶段时。</p></li>
-				<li><code>joblib</code>是Python中的一个通用<a id="_idIndexMarker149"/>流水线库，非常强大<a id="_idIndexMarker150"/>但是很轻量级。它有很多围绕缓存、并行化和压缩的非常有用的功能，这使它成为在ML管道中保存和读取的非常通用的工具。我们将在后面的章节中更多地使用<code>joblib</code>。</li>
-				<li><code>pickle</code>和<code>joblib</code>不合适，你可以用JSON格式序列化你的模型及其参数。这很好，因为JSON是一种标准化的<a id="_idIndexMarker151"/>文本序列化格式<a id="_idIndexMarker152"/>，在各种解决方案和平台中广泛使用。使用模型的JSON序列化的注意事项是，您经常必须手动定义JSON结构以及您想要存储的相关参数。所以，它会产生很多额外的工作。Python中的几个ML库都有自己的导出到JSON的功能，例如深度学习包Keras，但它们都可以产生完全不同的格式。</li>
-				<li><strong class="bold"> MLeap </strong> : MLeap是一个基于<strong class="bold"> Java虚拟机</strong> ( <strong class="bold"> JVM </strong>)的<a id="_idIndexMarker153"/>序列化格式和执行引擎。它与Scala、PySpark和scikit-learn集成，但你会经常在示例和教程中看到它用于保存Spark管道，尤其是用Spark MLlib构建的模型。这种关注意味着它不是最灵活的格式，但如果你在Spark生态系统中工作，它是非常有用的。</li>
-				<li><strong class="bold">ONNX</strong>:<strong class="bold">开放式神经网络交换</strong> ( <strong class="bold"> ONNX </strong>)格式旨在<a id="_idIndexMarker156"/>完全跨平台<a id="_idIndexMarker157"/>并允许主要ML框架和生态系统之间的模型交换。ONNX的主要缺点是(从名字就能猜到)它主要针对基于神经网络的模型，只有它的scikit-learn API例外。如果你正在建立一个神经网络，这是一个很好的选择。</li>
+				<li><code>pickle</code> is a <a id="_idIndexMarker147"/>Python library for object serialization that is often used for the <a id="_idIndexMarker148"/>export of ML models that are written in scikit-learn or pipelines in the wider <code>scipy</code> ecosystem (https://docs.python.org/3/library/pickle.html#module-pickle). Although it is extremely easy to use, you must be careful when exporting your models to <code>pickle</code> files because of the following:<p>a) <code>pickle</code>明确表示<em class="italic">不安全</em>并且很容易构建恶意 pickles，一旦拆包就会执行危险代码。这是一个非常重要的考虑因素，尤其是当您进入生产阶段时。</p></li>
+				<li><code>joblib</code>是 Python 中的一个通用<a id="_idIndexMarker149"/>流水线库，非常强大<a id="_idIndexMarker150"/>但是很轻量级。它有很多围绕缓存、并行化和压缩的非常有用的功能，这使它成为在 ML 管道中保存和读取的非常通用的工具。我们将在后面的章节中更多地使用<code>joblib</code>。</li>
+				<li><code>pickle</code>和<code>joblib</code>不合适，你可以用 JSON 格式序列化你的模型及其参数。这很好，因为 JSON 是一种标准化的<a id="_idIndexMarker151"/>文本序列化格式<a id="_idIndexMarker152"/>，在各种解决方案和平台中广泛使用。使用模型的 JSON 序列化的注意事项是，您经常必须手动定义 JSON 结构以及您想要存储的相关参数。所以，它会产生很多额外的工作。Python 中的几个 ML 库都有自己的导出到 JSON 的功能，例如深度学习包 Keras，但它们都可以产生完全不同的格式。</li>
+				<li><strong class="bold"> MLeap </strong> : MLeap 是一个基于<strong class="bold"> Java 虚拟机</strong> ( <strong class="bold"> JVM </strong>)的<a id="_idIndexMarker153"/>序列化格式和执行引擎。它与 Scala、PySpark 和 scikit-learn 集成，但你会经常在示例和教程中看到它用于保存 Spark 管道，尤其是用 Spark MLlib 构建的模型。这种关注意味着它不是最灵活的格式，但如果你在 Spark 生态系统中工作，它是非常有用的。</li>
+				<li><strong class="bold">ONNX</strong>:<strong class="bold">开放式神经网络交换</strong> ( <strong class="bold"> ONNX </strong>)格式旨在<a id="_idIndexMarker156"/>完全跨平台<a id="_idIndexMarker157"/>并允许主要 ML 框架和生态系统之间的模型交换。ONNX 的主要缺点是(从名字就能猜到)它主要针对基于神经网络的模型，只有它的 scikit-learn API 例外。如果你正在建立一个神经网络，这是一个很好的选择。</li>
 			</ul>
-			<p>在<a href="B17343_03_Final_JC_ePub.xhtml#_idTextAnchor055"> <em class="italic">第3章</em> </a>、<em class="italic">从模型到模型工厂</em>中，我们将使用这些格式中的一些<a id="_idIndexMarker158"/>将我们的模型导出到MLflow，但是<a id="_idIndexMarker159"/>它们都与MLfl兼容，因此您应该可以放心地将它们用作您的ML工程工作流程的一部分。</p>
+			<p>在<a href="B17343_03_Final_JC_ePub.xhtml#_idTextAnchor055"> <em class="italic">第 3 章</em> </a>、<em class="italic">从模型到模型工厂</em>中，我们将使用这些格式中的一些<a id="_idIndexMarker158"/>将我们的模型导出到 MLflow，但是<a id="_idIndexMarker159"/>它们都与 MLfl 兼容，因此您应该可以放心地将它们用作您的 ML 工程工作流程的一部分。</p>
 			<p>本章的最后一节将介绍一些重要的概念，用于规划您希望如何部署您的解决方案，为本书后面更详细的讨论做准备。</p>
 			<h2 id="_idParaDest-38">部署</h2>
-			<p>ML开发过程的最后一个阶段才是真正重要的:你如何将你构建的惊人解决方案应用到现实世界中，并解决你最初的问题？答案由多个部分组成，其中一些将在本书的后面部分更详尽地讲述，但将在本节中概述。如果我们要成功地部署我们的解决方案，首先，我们需要知道我们的部署选项:什么基础设施是可用的，并且适合于该任务？然后，我们需要将解决方案从我们的开发环境转移到这个生产基础设施上，以便在适当的编排和控制下，它可以执行我们需要它执行的任务，并在需要的地方显示结果。这就是DevOps和MLOps的概念发挥作用的地方。</p>
+			<p>ML 开发过程的最后一个阶段才是真正重要的:你如何将你构建的惊人解决方案应用到现实世界中，并解决你最初的问题？答案由多个部分组成，其中一些将在本书的后面部分更详尽地讲述，但将在本节中概述。如果我们要成功地部署我们的解决方案，首先，我们需要知道我们的部署选项:什么基础设施是可用的，并且适合于该任务？然后，我们需要将解决方案从我们的开发环境转移到这个生产基础设施上，以便在适当的编排和控制下，它可以执行我们需要它执行的任务，并在需要的地方显示结果。这就是 DevOps 和 MLOps 的概念发挥作用的地方。</p>
 			<p>让我们详细阐述这两个核心概念，为后面的章节打下基础，并探索如何开始部署我们的工作。</p>
 			<h3>了解您的部署选项</h3>
-			<p>在<a href="B17343_05_Final_JC_ePub.xhtml#_idTextAnchor116"> <em class="italic">第5章</em> </a>、<em class="italic">部署模式和工具</em>中，我们将详细介绍从<strong class="bold">开发</strong>到<strong class="bold">部署</strong>阶段您需要什么，但是为了抢先<a id="_idIndexMarker162"/>做好准备，让我们来探索一下我们所拥有的不同类型的部署选项:</p>
+			<p>在<a href="B17343_05_Final_JC_ePub.xhtml#_idTextAnchor116"> <em class="italic">第 5 章</em> </a>、<em class="italic">部署模式和工具</em>中，我们将详细介绍从<strong class="bold">开发</strong>到<strong class="bold">部署</strong>阶段您需要什么，但是为了抢先<a id="_idIndexMarker162"/>做好准备，让我们来探索一下我们所拥有的不同类型的部署选项:</p>
 			<ul>
 				<li><strong class="bold">On-premises deployment</strong>: The first option we have is to ignore the public cloud <a id="_idIndexMarker163"/>altogether and deploy our solutions in-house on owned infrastructure. This option is particularly popular and necessary for a lot of large institutions with a lot of legacy software and strong regulatory constraints on data location and processing. The basic steps for deploying on-premises are the same as deploying on the cloud but often require a lot more involvement from other teams with particular specialties. For example, if you are in the cloud, you often do not need to spend a lot of time configuring networking or implementing load balancers, whereas on-premises solutions will require these. <p>内部部署的最大优势是安全性和高枕无忧，您的任何数据都不会穿越公司的防火墙。最大的缺点是，它需要更大的硬件前期投资，并且您必须花费大量精力来有效地成功配置和管理该<a id="_idIndexMarker164"/>硬件。我们不会在本书中详细讨论内部部署，但是我们将围绕软件开发、打包、环境管理以及培训和预测系统使用的所有概念仍然适用。</p></li>
-				<li><strong class="bold">基础设施即服务</strong> ( <strong class="bold"> IaaS </strong>):如果您打算使用云，您可以使用的最低抽象级别之一就是IaaS解决方案。这些通常是基于虚拟化的概念，例如<a id="_idIndexMarker165"/>具有各种规格的服务器可以按照用户的意愿旋转。这些解决方案通常将维护和运营需求抽象为服务的一部分。最重要的是，它们可以根据您的需要极大地扩展您的基础架构。下周必须运行100多台服务器？没问题，只需扩展您的IaaS请求，就可以了。尽管IaaS解决方案比完全托管的内部基础架构向前迈进了一大步，但您仍然需要考虑和配置一些事情。云计算中的平衡总是在于你希望事情变得多简单，还是你希望拥有什么级别的控制。与其他解决方案相比，IaaS最大化了控制<a id="_idIndexMarker166"/>，但最小化了(相对)易用性<a id="_idIndexMarker167"/>。在AWS中，<strong class="bold">简单存储服务</strong> ( <strong class="bold"> S3 </strong>)和<strong class="bold">弹性计算云</strong> ( <strong class="bold"> EC2 </strong>)是IaaS产品的良好范例。</li>
-				<li><strong class="bold">平台即服务</strong> ( <strong class="bold">平台即服务</strong>):平台即服务解决方案是抽象的下一个层次<a id="_idIndexMarker168"/>，通常为您提供许多功能，而不需要确切了解幕后发生了什么。这意味着您可以专注于平台支持的开发任务，而完全不用担心底层基础设施。AWS Lambda函数就是一个很好的例子，它是无服务器的函数，几乎可以无限制地伸缩。你所需要做的就是输入你想在函数中执行的主要代码<a id="_idIndexMarker169"/>。另一个很好的例子是Databricks，它在Spark集群基础设施之上提供了一个非常直观的UI，能够几乎无缝地供应、配置和纵向扩展这些集群。</li>
+				<li><strong class="bold">基础设施即服务</strong> ( <strong class="bold"> IaaS </strong>):如果您打算使用云，您可以使用的最低抽象级别之一就是 IaaS 解决方案。这些通常是基于虚拟化的概念，例如<a id="_idIndexMarker165"/>具有各种规格的服务器可以按照用户的意愿旋转。这些解决方案通常将维护和运营需求抽象为服务的一部分。最重要的是，它们可以根据您的需要极大地扩展您的基础架构。下周必须运行 100 多台服务器？没问题，只需扩展您的 IaaS 请求，就可以了。尽管 IaaS 解决方案比完全托管的内部基础架构向前迈进了一大步，但您仍然需要考虑和配置一些事情。云计算中的平衡总是在于你希望事情变得多简单，还是你希望拥有什么级别的控制。与其他解决方案相比，IaaS 最大化了控制<a id="_idIndexMarker166"/>，但最小化了(相对)易用性<a id="_idIndexMarker167"/>。在 AWS 中，<strong class="bold">简单存储服务</strong> ( <strong class="bold"> S3 </strong>)和<strong class="bold">弹性计算云</strong> ( <strong class="bold"> EC2 </strong>)是 IaaS 产品的良好范例。</li>
+				<li><strong class="bold">平台即服务</strong> ( <strong class="bold">平台即服务</strong>):平台即服务解决方案是抽象的下一个层次<a id="_idIndexMarker168"/>，通常为您提供许多功能，而不需要确切了解幕后发生了什么。这意味着您可以专注于平台支持的开发任务，而完全不用担心底层基础设施。AWS Lambda 函数就是一个很好的例子，它是无服务器的函数，几乎可以无限制地伸缩。你所需要做的就是输入你想在函数中执行的主要代码<a id="_idIndexMarker169"/>。另一个很好的例子是 Databricks，它在 Spark 集群基础设施之上提供了一个非常直观的 UI，能够几乎无缝地供应、配置和纵向扩展这些集群。</li>
 			</ul>
-			<p>了解这些不同的选项及其功能可以帮助您设计您的ML解决方案，并确保您将团队的工程工作集中在最需要和最有价值的地方。例如，如果你的ML工程师正在配置路由器，你一定是在某个地方出错了。</p>
+			<p>了解这些不同的选项及其功能可以帮助您设计您的 ML 解决方案，并确保您将团队的工程工作集中在最需要和最有价值的地方。例如，如果你的 ML 工程师正在配置路由器，你一定是在某个地方出错了。</p>
 			<p>但是，一旦您选择了要使用的组件并配置了基础架构，您如何将这些组件集成在一起并管理您的部署和更新周期呢？这就是我们现在要探讨的。</p>
-			<h3>DevOps和MLOps</h3>
-			<p>现代软件开发中一个非常强大的想法是，您的团队应该能够根据需要不断更新您的代码库，同时测试、集成、构建、打包和部署您的解决方案应该尽可能自动化。这就意味着这些过程几乎可以持续进行，而不需要分配大量预先计划的时间用于更新周期。这是<strong class="bold"> CI/CD </strong>背后的主要思想。CI/CD<a id="_idIndexMarker173"/>是<strong class="bold"> DevOps </strong>的核心部分，也是其专注于ML的表亲<strong class="bold"> MLOps </strong>的核心部分，两者都旨在将软件<a id="_idIndexMarker174"/>开发和后期部署运营结合在一起。我们将在本书中开发的几个概念和解决方案将被构建，以便它们自然地适合MLOps框架。</p>
-			<p>CI部分主要关注将正在进行的更改稳定地合并到代码库中，同时确保功能保持稳定。CD部分是关于获得解决方案的最终稳定版本，并将其推送到适当的基础设施。<em class="italic">图2.14 </em>显示了该流程的高级视图:</p>
+			<h3>DevOps 和 MLOps</h3>
+			<p>现代软件开发中一个非常强大的想法是，您的团队应该能够根据需要不断更新您的代码库，同时测试、集成、构建、打包和部署您的解决方案应该尽可能自动化。这就意味着这些过程几乎可以持续进行，而不需要分配大量预先计划的时间用于更新周期。这是<strong class="bold"> CI/CD </strong>背后的主要思想。CI/CD<a id="_idIndexMarker173"/>是<strong class="bold"> DevOps </strong>的核心部分，也是其专注于 ML 的表亲<strong class="bold"> MLOps </strong>的核心部分，两者都旨在将软件<a id="_idIndexMarker174"/>开发和后期部署运营结合在一起。我们将在本书中开发的几个概念和解决方案将被构建，以便它们自然地适合 MLOps 框架。</p>
+			<p>CI 部分主要关注将正在进行的更改稳定地合并到代码库中，同时确保功能保持稳定。CD 部分是关于获得解决方案的最终稳定版本，并将其推送到适当的基础设施。<em class="italic">图 2.14 </em>显示了该流程的高级视图:</p>
 			<div><div><img src="img/B17343_02_014.jpg" alt="Figure 2.14 – A high-level view of CI/CD processes&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图2.14–CI/CD流程的高级视图</p>
-			<p>为了使CI/CD成为现实，您需要整合一些工具来帮助您在开发和部署过程中自动执行传统上需要手动执行的任务。例如，如果您能够在合并<a id="_idIndexMarker175"/>代码时自动运行测试，或者将您的代码工件/模型推到适当的环境中，那么您就已经走在CI/CD的路上了。</p>
-			<p>在本书中，我们将<a id="_idIndexMarker176"/>使用GitHub Actions作为我们的CI/CD工具，但是也有其他几个工具可以做同样的工作。</p>
-			<p>当使用GitHub动作时，您必须创建一个<code>.yml</code>文件，告诉GitHub何时执行所需的动作，当然，还有要执行什么动作。在下面的代码中，我们将为Python项目构建一个示例<code>.yml</code>文件，其中我们自动安装依赖项，运行一个<strong class="bold"> linter </strong>(一个检查bug、语法错误和其他问题的解决方案)，然后运行一些单元测试。此示例来自GitHub Starter工作流存储库(<a href="https://github.com/actions/starter-workflows/blob/main/ci/python-package-conda.yml">https://GitHub . com/actions/Starter-Workflows/blob/main/ci/python-package-conda . yml</a>):</p>
+			<p class="figure-caption">图 2.14–CI/CD 流程的高级视图</p>
+			<p>为了使 CI/CD 成为现实，您需要整合一些工具来帮助您在开发和部署过程中自动执行传统上需要手动执行的任务。例如，如果您能够在合并<a id="_idIndexMarker175"/>代码时自动运行测试，或者将您的代码工件/模型推到适当的环境中，那么您就已经走在 CI/CD 的路上了。</p>
+			<p>在本书中，我们将<a id="_idIndexMarker176"/>使用 GitHub Actions 作为我们的 CI/CD 工具，但是也有其他几个工具可以做同样的工作。</p>
+			<p>当使用 GitHub 动作时，您必须创建一个<code>.yml</code>文件，告诉 GitHub 何时执行所需的动作，当然，还有要执行什么动作。在下面的代码中，我们将为 Python 项目构建一个示例<code>.yml</code>文件，其中我们自动安装依赖项，运行一个<strong class="bold"> linter </strong>(一个检查 bug、语法错误和其他问题的解决方案)，然后运行一些单元测试。此示例来自 GitHub Starter 工作流存储库(<a href="https://github.com/actions/starter-workflows/blob/main/ci/python-package-conda.yml">https://GitHub . com/actions/Starter-Workflows/blob/main/ci/python-package-conda . yml</a>):</p>
 			<ol>
-				<li value="1">首先，定义GitHub动作工作流的名称，以及哪个Git事件将触发它:<pre>name: Python package on: [push]</pre></li>
-				<li>然后列出要作为工作流的一部分执行的作业，以及它们的配置。例如，这里我们有一个名为<code>build</code>的作业，我们想在最新的Ubuntu发行版上运行它，我们想尝试使用几个不同版本的Python: <pre>jobs:   build:     runs-on: ubuntu-latest     strategy:       matrix:         python-version: [2.7, 3.5, 3.6, 3.7, 3.8]</pre></li>
-				<li>然后定义作为作业的一部分执行的步骤。每个步骤由连字符<a id="_idIndexMarker177"/>分隔，并作为单独的命令<a id="_idIndexMarker178"/>执行。需要注意的是，<code>uses</code>关键字抓取标准的GitHub动作；例如，在第一步中，工作流使用checkout动作的<code>v2</code>版本，第二步设置我们想要在工作流中运行的Python版本:<pre>    steps:     - uses: actions/checkout@v2     - name: Set up Python ${{ matrix.python-version }}       uses: actions/setup-python@v2       with:         python-version: ${{ matrix.python-version }}</pre></li>
+				<li value="1">首先，定义 GitHub 动作工作流的名称，以及哪个 Git 事件将触发它:<pre>name: Python package on: [push]</pre></li>
+				<li>然后列出要作为工作流的一部分执行的作业，以及它们的配置。例如，这里我们有一个名为<code>build</code>的作业，我们想在最新的 Ubuntu 发行版上运行它，我们想尝试使用几个不同版本的 Python: <pre>jobs:   build:     runs-on: ubuntu-latest     strategy:       matrix:         python-version: [2.7, 3.5, 3.6, 3.7, 3.8]</pre></li>
+				<li>然后定义作为作业的一部分执行的步骤。每个步骤由连字符<a id="_idIndexMarker177"/>分隔，并作为单独的命令<a id="_idIndexMarker178"/>执行。需要注意的是，<code>uses</code>关键字抓取标准的 GitHub 动作；例如，在第一步中，工作流使用 checkout 动作的<code>v2</code>版本，第二步设置我们想要在工作流中运行的 Python 版本:<pre>    steps:     - uses: actions/checkout@v2     - name: Set up Python ${{ matrix.python-version }}       uses: actions/setup-python@v2       with:         python-version: ${{ matrix.python-version }}</pre></li>
 				<li>下一步是使用<code>pip</code>和一个<code>requirements.txt</code>文件安装解决方案的相关依赖项(当然，您也可以使用<code>conda</code>！):<pre>    - name: Install dependencies       run: |         python -m pip install --upgrade pip         pip install flake8 pytest         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi</pre></li>
 				<li>我们<a id="_idIndexMarker179"/>然后<a id="_idIndexMarker180"/>跑一些林挺:<pre>    - name: Lint with flake8       run: |         # stop the build if there are Python syntax errors or undefined names         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics</pre></li>
-				<li>最后，我们使用我们最喜欢的Python测试库来运行我们的测试:<pre>    - name: Test with pytest       run: |         pytest</pre></li>
+				<li>最后，我们使用我们最喜欢的 Python 测试库来运行我们的测试:<pre>    - name: Test with pytest       run: |         pytest</pre></li>
 			</ol>
-			<p>简而言之，这就是你开始构建CI/CD管道<a id="_idTextAnchor052"/>的方式。在本书的后面，我们将构建特定于我们的ML解决方案的工作流程。</p>
+			<p>简而言之，这就是你开始构建 CI/CD 管道<a id="_idTextAnchor052"/>的方式。在本书的后面，我们将构建特定于我们的 ML 解决方案的工作流程。</p>
 			<h1 id="_idParaDest-39"><a id="_idTextAnchor053"/>总结</h1>
-			<p>这一章是关于为未来的工作打下坚实的基础。我们讨论了所有ML工程项目共有的开发步骤，我们称之为发现、游戏、开发、部署。特别是，我们概述了每一个步骤的目标及其期望的输出。</p>
-			<p>接下来是对工具的高级讨论，以及主要设置步骤的演练。我们设置工具来开发我们的代码，跟踪代码的变化，管理我们的ML工程项目，最后，部署我们的解决方案。</p>
-			<p>在本章的其余部分，我们详细介绍了之前概述的四个阶段，特别关注于<em class="italic">开发</em>和<em class="italic">部署</em>阶段。我们的讨论涵盖了一切，从瀑布和敏捷开发方法的优缺点到环境管理，再到软件开发最佳实践。我们还讨论了如何对ML代码进行测试。最后，我们探讨了如何打包您的ML解决方案以及可供您使用的部署基础架构，并概述了设置您的DevOps和MLOps工作流的基础知识。</p>
+			<p>这一章是关于为未来的工作打下坚实的基础。我们讨论了所有 ML 工程项目共有的开发步骤，我们称之为发现、游戏、开发、部署。特别是，我们概述了每一个步骤的目标及其期望的输出。</p>
+			<p>接下来是对工具的高级讨论，以及主要设置步骤的演练。我们设置工具来开发我们的代码，跟踪代码的变化，管理我们的 ML 工程项目，最后，部署我们的解决方案。</p>
+			<p>在本章的其余部分，我们详细介绍了之前概述的四个阶段，特别关注于<em class="italic">开发</em>和<em class="italic">部署</em>阶段。我们的讨论涵盖了一切，从瀑布和敏捷开发方法的优缺点到环境管理，再到软件开发最佳实践。我们还讨论了如何对 ML 代码进行测试。最后，我们探讨了如何打包您的 ML 解决方案以及可供您使用的部署基础架构，并概述了设置您的 DevOps 和 MLOps 工作流的基础知识。</p>
 			<p>在下一章中，我们将把注意力转向如何使用我们在这里讨论过的许多技术来构建用于执行模型的自动化训练和再训练的软件。</p>
 		</div>
 	

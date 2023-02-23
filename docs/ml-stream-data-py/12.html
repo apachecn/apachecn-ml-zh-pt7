@@ -7,8 +7,8 @@
 	
 	
 		<div><h1 id="_idParaDest-177"><em class="italic"> <a id="_idTextAnchor184"/>第九章</em>:漂移和漂移检测</h1>
-			<p>在前面的章节中，你已经发现了很多方法来构建以在线方式工作的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型。他们能够从一次观察中更新他们学习到的决策规则，而不是像大多数ML模型中常见的那样必须完全重新训练。</p>
-			<p>这很棒的一个原因是流，因为这些模型将允许你不断地工作和学习。然而，我们可以认为传统的ML模型也可以根据单个观察值进行预测。即使是批量学习和离线模型也可以一次预测一个新的观察结果。为了更深入地了解在线ML的附加价值，本章将深入探讨漂移和漂移检测。</p>
+			<p>在前面的章节中，你已经发现了很多方法来构建以在线方式工作的<strong class="bold">机器学习</strong> ( <strong class="bold"> ML </strong>)模型。他们能够从一次观察中更新他们学习到的决策规则，而不是像大多数 ML 模型中常见的那样必须完全重新训练。</p>
+			<p>这很棒的一个原因是流，因为这些模型将允许你不断地工作和学习。然而，我们可以认为传统的 ML 模型也可以根据单个观察值进行预测。即使是批量学习和离线模型也可以一次预测一个新的观察结果。为了更深入地了解在线 ML 的附加价值，本章将深入探讨漂移和漂移检测。</p>
 			<p>为了更好地理解这些概念，本章将从什么是漂移的深入描述开始。然后你会看到不同类型的漂移，包括概念漂移、数据漂移和再培训策略问题。</p>
 			<p>在那之后，你将会接触到许多检测数据漂移和概念漂移的方法。你还会看到许多抵消漂移的方法，并且会被介绍到模型的可解释性和再训练策略。</p>
 			<p>现在，让我们从基础开始，深入了解漂移的定义。</p>
@@ -17,26 +17,26 @@
 				<li>定义漂移</li>
 				<li>引入模型显式性</li>
 				<li>测量漂移</li>
-				<li>在Python中测量漂移</li>
+				<li>在 Python 中测量漂移</li>
 				<li>抵消漂移</li>
 			</ul>
 			<h1 id="_idParaDest-178"><a id="_idTextAnchor185"/>技术要求</h1>
-			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法是执行以下操作:</p>
+			<p>你可以在 GitHub 上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉 Git 和 GitHub，下载笔记本和代码示例的最简单方法是执行以下操作:</p>
 			<ol>
 				<li>转到存储库的链接。</li>
 				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
-				<li>选择<strong class="bold">下载zip文件</strong>。</li>
+				<li>选择<strong class="bold">下载 zip 文件</strong>。</li>
 			</ol>
-			<p>当您下载ZIP文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的Python编辑器访问代码。</p>
-			<h2 id="_idParaDest-179"><a id="_idTextAnchor186"/> Python环境</h2>
-			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
-			<p>如果你还不熟悉Python环境，我建议你去看看Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)，它带有Jupyter Notebook和JupyterLab，这两个工具都非常适合执行笔记本。还自带Spyder和<strong class="bold"> Visual Studio代码</strong> ( <strong class="bold"> VS代码</strong>)用于编辑脚本和程序。</p>
-			<p>如果你在你的机器上安装Python或相关程序有困难，你可以查看一下<strong class="bold">Google Colabatory</strong>(<strong class="bold">Google Colab</strong>)(【https://colab.research.google.com/】T4)或Kaggle Notebooks(<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a>)，它们都允许你在网上免费运行Python代码，不需要任何设置。</p>
+			<p>当您下载 ZIP 文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的 Python 编辑器访问代码。</p>
+			<h2 id="_idParaDest-179"><a id="_idTextAnchor186"/> Python 环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的 Python 编辑器执行它。</p>
+			<p>如果你还不熟悉 Python 环境，我建议你去看看 Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)，它带有 Jupyter Notebook 和 JupyterLab，这两个工具都非常适合执行笔记本。还自带 Spyder 和<strong class="bold"> Visual Studio 代码</strong> ( <strong class="bold"> VS 代码</strong>)用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装 Python 或相关程序有困难，你可以查看一下<strong class="bold">Google Colabatory</strong>(<strong class="bold">Google Colab</strong>)(【https://colab.research.google.com/】T4)或 Kaggle Notebooks(<a href="https://www.kaggle.com/code">https://www.kaggle.com/code</a>)，它们都允许你在网上免费运行 Python 代码，不需要任何设置。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">书中的代码一般会使用Python 3 . 7 . 13版本的Colab和Kaggle笔记本，你可以设置自己的环境来模仿这个。</p>
+			<p class="callout">书中的代码一般会使用 Python 3 . 7 . 13 版本的 Colab 和 Kaggle 笔记本，你可以设置自己的环境来模仿这个。</p>
 			<h1 id="_idParaDest-180"><a id="_idTextAnchor187"/>定义漂移</h1>
-			<p>众所周知，随着时间的推移，模型的表现会越来越差，这是一个常见的问题。无论您的衡量标准是准确性、R2分数、F1分数还是其他任何东西，如果您将模型投入生产并且不更新它们，您将会看到随着时间的推移，性能会缓慢但稳定地下降。</p>
-			<p>根据您的使用情况，这种减少可能会很快或很慢地出现问题。一些用例需要有连续的、近乎完美的预测。在某些用例中——例如，对于模型对生活有直接影响的专业ML——如果您观察到1%的下降，您会非常震惊。在其他用例中，ML更多地用于自动化，而不是预测，业务伙伴可能甚至没有注意到5%的减少。</p>
+			<p>众所周知，随着时间的推移，模型的表现会越来越差，这是一个常见的问题。无论您的衡量标准是准确性、R2 分数、F1 分数还是其他任何东西，如果您将模型投入生产并且不更新它们，您将会看到随着时间的推移，性能会缓慢但稳定地下降。</p>
+			<p>根据您的使用情况，这种减少可能会很快或很慢地出现问题。一些用例需要有连续的、近乎完美的预测。在某些用例中——例如，对于模型对生活有直接影响的专业 ML——如果您观察到 1%的下降，您会非常震惊。在其他用例中，ML 更多地用于自动化，而不是预测，业务伙伴可能甚至没有注意到 5%的减少。</p>
 			<p>它是否会影响你不是这里的问题。可以肯定的是，总的来说，你会看到你的模型在减少。本章的目标是确保找出模型性能下降的原因，如何测量它，以及如果您认为它对您的用例来说问题太大，可以做些什么。</p>
 			<p>在下一节中，我们将首先介绍您在流用例中可能遇到的三种不同类型的漂移。</p>
 			<h2 id="_idParaDest-181"><a id="_idTextAnchor188"/>三种类型的漂移</h2>
@@ -48,16 +48,16 @@
 			<div><div><img src="img/B18335_09_1.jpg" alt="Figure 9.1 – Concept drift&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.1–概念漂移</p>
+			<p class="figure-caption">图 9.1–概念漂移</p>
 			<p>既然您已经看到了概念漂移背后的理论，下一节将介绍数据漂移—第二种重要的漂移类型。</p>
 			<h3>数据漂移</h3>
 			<p>当我们谈论数据漂移时，我们谈论的是独立<a id="_idIndexMarker508"/>变量统计特性的变化。这主要是在我们已经处理了数据样本(可能只是基于我们现有的数据)时，但是我们开始意识到样本不再代表我们当前接收的数据。</p>
-			<p>例子包括测量机器的变化，其中新的测量设备可能给出与旧材料略有不同的测量值。想象一下，我们改变了温度计，新的温度计比旧的温度计高0.5度。您可以理解，该模型无法考虑这种类型的信息，并且会做出错误的预测，因为该模型采用的温度<a id="_idIndexMarker509"/>高于其应有的温度。</p>
+			<p>例子包括测量机器的变化，其中新的测量设备可能给出与旧材料略有不同的测量值。想象一下，我们改变了温度计，新的温度计比旧的温度计高 0.5 度。您可以理解，该模型无法考虑这种类型的信息，并且会做出错误的预测，因为该模型采用的温度<a id="_idIndexMarker509"/>高于其应有的温度。</p>
 			<p>下面的示意图显示了在数据漂移的情况下会出现什么问题:</p>
 			<div><div><img src="img/B18335_09_2.jpg" alt="Figure 9.2 – Data drift&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.2–数据漂移</p>
+			<p class="figure-caption">图 9.2–数据漂移</p>
 			<p>已经讨论了漂移的两个重要原因，下一节将介绍模型衰减和错误设定——第三个与漂移相关的问题。</p>
 			<h3>模型衰减和错误设定</h3>
 			<p>虽然在文献中一般不认为是漂移的问题，但我发现也提及模型的<a id="_idIndexMarker510"/>问题作为<a id="_idIndexMarker511"/>漂移和衰减性能背后的问题之一是很重要的。在现实生活中，人类是不完美的，会犯错误。理论上，我们应该期望模型被很好地指定，因此不会成为任何问题的原因。</p>
@@ -66,12 +66,12 @@
 			<div><div><img src="img/B18335_09_3.jpg" alt="Figure 9.3 – Model-induced problems&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.3-模型引发的问题</p>
+			<p class="figure-caption">图 9.3-模型引发的问题</p>
 			<p>已经看到了流模型中漂移的三个<a id="_idIndexMarker512"/>潜在原因，下一节<a id="_idIndexMarker513"/>将解释如何使用模型可解释性作为解决漂移的方法。</p>
 			<h1 id="_idParaDest-182"><a id="_idTextAnchor189"/>引入模型可解释性</h1>
-			<p>当模特在网上学习时，他们会反复学习。这个重新学习过程<a id="_idIndexMarker514"/>是自动发生的，人类用户通常不可能持续关注模型。此外，这将违背进行ML的主要目标，因为目标是让机器——或模型——接管，而不是持续的人工干预。</p>
+			<p>当模特在网上学习时，他们会反复学习。这个重新学习过程<a id="_idIndexMarker514"/>是自动发生的，人类用户通常不可能持续关注模型。此外，这将违背进行 ML 的主要目标，因为目标是让机器——或模型——接管，而不是持续的人工干预。</p>
 			<p>当模型学习或重新学习时，数据科学家通常会面临程序化的模型构建界面。想象一个随机森林，其中数百棵决策树同时行动，预测新观察的目标变量。即使是打印和查看所有这些决定也是一项艰巨的任务。</p>
-			<p>模型可解释性是ML最新进展中的一个大话题。通过向数据科学用例扔黑盒模型，大错误正在发生。一个例子是，当自动驾驶汽车在包含太多白人的有偏见的样本上进行训练时，这些汽车被测量出与黑人发生更多事故，这只是因为一个数据科学错误。了解您的模型中发生了什么可以产生挽救生命的影响。</p>
+			<p>模型可解释性是 ML 最新进展中的一个大话题。通过向数据科学用例扔黑盒模型，大错误正在发生。一个例子是，当自动驾驶汽车在包含太多白人的有偏见的样本上进行训练时，这些汽车被测量出与黑人发生更多事故，这只是因为一个数据科学错误。了解您的模型中发生了什么可以产生挽救生命的影响。</p>
 			<p>考虑模型中的漂移时，了解模型中发生的情况也很重要。您部署的第一个模型可能非常接近您的预期。之后，模型将从它遇到的每个数据点重新学习。如果数据中存在偏差，或者如果偏差是由于过度拟合或拟合不足而产生的(当模型自主运行时就会发生这种情况)，那么在某些时候，您可能会错过这些趋势。</p>
 			<p>您需要确保为模型的可解释性建立一个初始方法，并继续<a id="_idIndexMarker515"/>研究这个主题。在本章中，我们将重点关注数据漂移和概念漂移，但请记住，模型设定错误也是降低准确性的一个巨大因素。这将在第十一章 的<a href="B18335_11_ePub.xhtml#_idTextAnchor215"> <em class="italic">中更深入地讨论。</em></a></p>
 			<p>现在，让我们继续讨论一些测量漂移的方法。</p>
@@ -88,20 +88,20 @@
 			<p>除此之外，有必要在特定的时间尺度上跟踪漂移。如果您希望漂移持续很长时间，您可以按月甚至按年计算这些描述性统计数据，但是为了更快地检测，可以按周、按天、甚至按小时或更频繁地计算。</p>
 			<p>随着时间的推移，这些指标的比较<a id="_idIndexMarker520"/>将允许您检测数据中的变化，这将是您的模型漂移的常见原因。</p>
 			<h2 id="_idParaDest-185"><a id="_idTextAnchor192"/>测量概念漂移</h2>
-			<p>当测量概念漂移时，最好的办法是随着时间的推移建立对模型<a id="_idIndexMarker521"/>性能的全面跟踪。您使用的性能指标将取决于您的用例以及您使用的模型类型，但可能包括用于回归、准确性的R2分数、用于验证的F1分数，甚至更多。</p>
+			<p>当测量概念漂移时，最好的办法是随着时间的推移建立对模型<a id="_idIndexMarker521"/>性能的全面跟踪。您使用的性能指标将取决于您的用例以及您使用的模型类型，但可能包括用于回归、准确性的 R2 分数、用于验证的 F1 分数，甚至更多。</p>
 			<p>当随着时间的推移测量模型性能时，如果没有进行模型更新，您可能会看到性能下降。随着在线模型在每个数据点上重新学习，理论上这应该不是一个问题。当您确实看到性能下降时，这表明您的系统中的某个地方出了问题。</p>
 			<p>如果您已经在测量数据漂移，这将是一个很好的第一件事，因为数据漂移可能会导致模型性能下降。如果没有发生数据漂移，那么您的系统可能会出现概念漂移。</p>
 			<p>重要的是要记住，测量模型漂移和数据漂移在实践中是紧密联系在一起的:很难将性能下降归因于一个特定的根本原因。目标应该是保持模型的高性能，并在出现问题时找到解决方案。同时衡量绩效和个人统计数据，甚至更多指标，这将使您的策略更有效地应对漂移。</p>
-			<p>现在让我们看一些如何在建模中检测漂移的Python例子。</p>
-			<h1 id="_idParaDest-186"><a id="_idTextAnchor193"/>在Python中测量漂移</h1>
+			<p>现在让我们看一些如何在建模中检测漂移的 Python 例子。</p>
+			<h1 id="_idParaDest-186"><a id="_idTextAnchor193"/>在 Python 中测量漂移</h1>
 			<p>测量漂移时，首先要做的是确保您的模型以某种方式写出日志或结果<a id="_idIndexMarker522"/>。对于以下示例，您将使用<a id="_idIndexMarker523"/>数据集，其中记录了每个预测，这样我们就有了每个预测的输入变量、预测、实际情况以及预测和实际情况之间的绝对差异作为误差指标。</p>
-			<p>如果你<a id="_idIndexMarker525"/>想研究漂移探测，记录你的<a id="_idIndexMarker524"/>模型的行为是一个绝对的先决条件。让我们从一些基本的测量开始，这些测量可以帮助您使用Python来检测漂移。</p>
+			<p>如果你<a id="_idIndexMarker525"/>想研究漂移探测，记录你的<a id="_idIndexMarker524"/>模型的行为是一个绝对的先决条件。让我们从一些基本的测量开始，这些测量可以帮助您使用 Python 来检测漂移。</p>
 			<h2 id="_idParaDest-187"><a id="_idTextAnchor194"/>测量漂移的基本直观方法</h2>
 			<p>在本节中，您将发现一种测量漂移的直观方法。以下是我们将遵循的步骤:</p>
 			<ol>
 				<li value="1">为了开始测量我们记录的结果数据的漂移，我们首先将数据作为<code>pandas</code>数据帧导入。这是在下面的代码块中完成的:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块9-1</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 9-1</p>
 			<pre>import pandas as pd
 data = pd.read_excel('chapter9datafile.xlsx')
 data</pre>
@@ -109,51 +109,51 @@ data</pre>
 			<div><div><img src="img/B18335_09_4.jpg" alt="Figure 9.4 – The data&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.4-数据</p>
+			<p class="figure-caption">图 9.4-数据</p>
 			<ol>
 				<li value="2">现在您已经有了漂移检测数据，让我们通过在当天执行<code>groupby</code>操作并查看平均误差来查看误差随时间的发展<a id="_idIndexMarker527"/>，如下所示:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块9-2</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 9-2</p>
 			<pre>data.groupby('Day')['Error'].mean()</pre>
 			<p>您将获得以下结果:</p>
 			<div><div><img src="img/B18335_09_5.jpg" alt="Figure 9.5 – The result&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.5-结果</p>
+			<p class="figure-caption">图 9.5-结果</p>
 			<p>您可以清楚地看到，误差随着时间的推移而大幅增加，因此我们可以相当肯定，这里存在模型漂移问题。当然现在还没有界定这个问题是数据上的问题还是概念上的问题。</p>
 			<ol>
 				<li value="3">让我们对目标变量进行分析，看看随着时间的推移，目标是否经历了<a id="_idIndexMarker528"/>大的变化。以下代码计算每天的实际值的平均值，以查看目标变量是否有明显的漂移:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块9-3</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 9-3</p>
 			<pre>data.groupby('Day')['Ground Truth'].mean()</pre>
 			<p>结果看起来像这样:</p>
 			<div><div><img src="img/B18335_09_6.jpg" alt="Figure 9.6 – The result (continued)&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.6-结果(续)</p>
+			<p class="figure-caption">图 9.6-结果(续)</p>
 			<p>在这段时间里，我们确实看到了一个相当重要的平均变化。</p>
 			<ol>
 				<li value="4">让我们进一步检查，并对每个独立变量进行分析。下面的代码每天计算三个独立变量的平均值，看看是否有明显的变化:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块9-4</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 9-4</p>
 			<pre>data.groupby('Day')[['X1', 'X2', 'X3']].mean()</pre>
 			<p>您将<a id="_idIndexMarker529"/>获得以下结果:</p>
 			<div><div><img src="img/B18335_09_7.jpg" alt="Figure 9.7 – The groupby result&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.7–分组结果</p>
+			<p class="figure-caption">图 9.7–分组结果</p>
 			<p>我们看到第三个解释变量<code>X3</code>发生了非常明显的变化。这很有可能是我们模式转变的原因。</p>
 			<h2 id="_idParaDest-188"><a id="_idTextAnchor195"/>使用坚固的工具测量漂移</h2>
 			<p>如果您正在处理小型用例，并且不希望与大型外部<a id="_idIndexMarker530"/>平台集成，前面的例子确实不错。然而，如果你在一家资源有限的公司工作，从头开始开发通用用例的代码可能是不可能的或者不值得的。</p>
 			<p>漂移检测是一个目前相当受欢迎的用例，因此越来越多的强大解决方案正呈现在公众面前，无论是付费程序、云程序还是开源解决方案。</p>
 			<p>接下来，我将介绍一些有用的解决方案，如果您对<a id="_idIndexMarker532"/>采用外部平台进行模型<a id="_idIndexMarker533"/>性能跟踪和漂移检测用例感兴趣，您可以看看这些解决方案。由于这些平台是由公司拥有的，有时是付费的，我不想在这里深入探讨，但如果你对此感兴趣，给你一些提示是很好的。</p>
 			<h3>Soda SQL</h3>
-			<p>一个有趣的解决方案是Soda SQL。这是一个专门针对数据质量的工具，因此<a id="_idIndexMarker534"/>不一定针对ML用例进行调整。然而，数据质量问题几乎必然会导致有问题的模型，所以我发现讨论这个解决方案是有价值的。</p>
-			<p>你可以在这里找到完整的信息:【https://docs.soda.io/】T4。Soda SQL是一个真正面向<a id="_idIndexMarker535"/>数据工程的工具，所以我不会在这里详细介绍，但是我建议您在使用案例中记住它。</p>
+			<p>一个有趣的解决方案是 Soda SQL。这是一个专门针对数据质量的工具，因此<a id="_idIndexMarker534"/>不一定针对 ML 用例进行调整。然而，数据质量问题几乎必然会导致有问题的模型，所以我发现讨论这个解决方案是有价值的。</p>
+			<p>你可以在这里找到完整的信息:【https://docs.soda.io/】T4。Soda SQL 是一个真正面向<a id="_idIndexMarker535"/>数据工程的工具，所以我不会在这里详细介绍，但是我建议您在使用案例中记住它。</p>
 			<h3>MLflow with whylogs</h3>
-			<p>一个更加面向生产中的ML模型的工具是开源Python库，它集成了WhyLabs应用程序(<a href="http://whylabsapp.com">whylabsapp.com</a>)。如果您注册了WhyLabs的帐户，您可以使用他们的<strong class="bold">应用程序编程接口</strong> ( <strong class="bold"> API </strong>)并将您的<a id="_idIndexMarker538"/>模型日志直接发送到他们的数据库，在那里它将被分析并供您访问。</p>
+			<p>一个更加面向生产中的 ML 模型的工具是开源 Python 库，它集成了 WhyLabs 应用程序(<a href="http://whylabsapp.com">whylabsapp.com</a>)。如果您注册了 WhyLabs 的帐户，您可以使用他们的<strong class="bold">应用程序编程接口</strong> ( <strong class="bold"> API </strong>)并将您的<a id="_idIndexMarker538"/>模型日志直接发送到他们的数据库，在那里它将被分析并供您访问。</p>
 			<h3>海王星</h3>
-			<p>Neptune ( <a href="http://neptune.ai"> neptune.ai </a>)正在提供一个类似的工具。Neptune的目标也是提供一个<strong class="bold">ML operations</strong>(<strong class="bold">MLOps</strong>)平台，您可以将来自<a id="_idIndexMarker539"/>基本上任何Python(或其他)模型环境的日志数据发送到这个平台。之后，您<a id="_idIndexMarker540"/>可以在他们的web <a id="_idIndexMarker541"/>平台上访问性能，所有用于漂移检测的重担都从您的肩上卸下。</p>
+			<p>Neptune ( <a href="http://neptune.ai"> neptune.ai </a>)正在提供一个类似的工具。Neptune 的目标也是提供一个<strong class="bold">ML operations</strong>(<strong class="bold">MLOps</strong>)平台，您可以将来自<a id="_idIndexMarker539"/>基本上任何 Python(或其他)模型环境的日志数据发送到这个平台。之后，您<a id="_idIndexMarker540"/>可以在他们的 web <a id="_idIndexMarker541"/>平台上访问性能，所有用于漂移检测的重担都从您的肩上卸下。</p>
 			<p>你现在已经看到了一些测量和检测漂移的理论方法，以及一些初创平台，如果你没有能力<a id="_idIndexMarker542"/>提供这种服务，它们会建议为你做这类工作。然而，我们还没有谈到同样重要的东西，即抵制漂移。</p>
 			<h1 id="_idParaDest-189"><a id="_idTextAnchor196"/>抵消漂移</h1>
 			<p>正如在<a id="_idIndexMarker543"/>简介中所讨论的，模型漂移是必然会发生的。也许它发生得很慢，也许它发生得很快，但如果我们不试图积极应对，这是无法避免的。</p>
@@ -165,28 +165,28 @@ data</pre>
 			</ul>
 			<p>让我们从最传统的案例开始，这是离线学习，针对模型衰退实施再训练策略。</p>
 			<h2 id="_idParaDest-190"><a id="_idTextAnchor197"/>离线学习，具有针对漂移的再训练策略</h2>
-			<p>离线学习仍然是ML最常用的方法。在离线学习中，模型被训练一次<a id="_idIndexMarker545"/>，然后仅用于预测。下面的示意图描述了离线学习过程:</p>
+			<p>离线学习仍然是 ML 最常用的方法。在离线学习中，模型被训练一次<a id="_idIndexMarker545"/>，然后仅用于预测。下面的示意图描述了离线学习过程:</p>
 			<div><div><img src="img/B18335_09_8.jpg" alt="Figure 9.8 – Schematic diagram of offline learning&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.8–离线学习示意图</p>
-			<p>要更新模型，通常需要重新训练完整的模型，并将新版本部署到您的生产环境中。如图9.9 中的<em class="italic">所示。</em></p>
+			<p class="figure-caption">图 9.8–离线学习示意图</p>
+			<p>要更新模型，通常需要重新训练完整的模型，并将新版本部署到您的生产环境中。如图 9.9 中的<em class="italic">所示。</em></p>
 			<p>这种方法的优点是模型构建者可以完全控制他们的模型。没有模型学习新的错误过程的风险。这是以数据或概念漂移发生时不更新为代价的。这样，它的优点和缺点与在线学习正好相反。</p>
 			<h2 id="_idParaDest-191"><a id="_idTextAnchor198"/>在线学习对抗漂移</h2>
 			<p>正如你在本书中所看到的，在线学习是离线学习的一种替代方式，并且<a id="_idIndexMarker547"/>允许模型在新的数据点到来时进行更新。下图说明了再培训策略的工作原理:</p>
 			<div><div><img src="img/B18335_09_9.jpg" alt="Figure 9.9 – Schematic diagram of online learning&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图9.9-在线学习示意图</p>
+			<p class="figure-caption">图 9.9-在线学习示意图</p>
 			<p>使用在线学习，模型在更新方面有一定的自主权，理论上将更接近<a id="_idIndexMarker548"/>数据:应该会出现更少的漂移。然而，这是以模型构建者不能完全控制理论模型为代价的。学习可能会走向错误的方向，模型会学习不需要的决策规则。</p>
 			<p>优势与线下学习相反，选择在线学习还是线下学习将真正取决于业务案例。</p>
 			<h1 id="_idParaDest-192"><a id="_idTextAnchor199"/>总结</h1>
-			<p>在这一章中，你首先已经了解了模型漂移的基本原理。您已经看到，在现实环境中的ML模型中，随着时间的推移，模型漂移和模型性能下降是意料之中的。</p>
+			<p>在这一章中，你首先已经了解了模型漂移的基本原理。您已经看到，在现实环境中的 ML 模型中，随着时间的推移，模型漂移和模型性能下降是意料之中的。</p>
 			<p>性能下降通常可归因于数据漂移、概念漂移或模型引发的问题。当数据测量值随时间变化，但模型背后的基本理论概念保持不变时，就会出现数据漂移。概念漂移抓住了学习过程的理论基础的问题。</p>
-			<p>模型和模型再训练相关的问题通常不被认为是漂移的标准原因，但它们仍然应该被监控和认真对待。根据您的业务情况，重新学习——尤其是在缺乏监控的情况下——可能会给ML系统带来大问题。</p>
+			<p>模型和模型再训练相关的问题通常不被认为是漂移的标准原因，但它们仍然应该被监控和认真对待。根据您的业务情况，重新学习——尤其是在缺乏监控的情况下——可能会给 ML 系统带来大问题。</p>
 			<p>数据漂移通常可以通过使用描述性统计来很好地测量。概念漂移通常很难测量，但是它的存在可以从模型性能中无法解释的下降中推断出来。一般来说，这里的重要性不在于将性能下降归因于特定的原因，而在于使用所提供的解决方案之一来解决问题。</p>
 			<p>再训练策略通常可以用于离线模型。它们是一种更新模型的方法，而不会放弃对已学决策规则的控制。在线模型，正如本书前几章所介绍的，是重新训练离线模型的一个很好的选择。使用在线模型的最大好处是，在线模型是专门为再培训而制作的。这些模型允许更大程度的自治，并且将在许多商业案例中被证明是有用的，只要数据和模型的监控被正确地实现。</p>
-			<p>在下一章中，你将看到如何调整<strong class="bold">特征转换</strong> ( <strong class="bold"> FT </strong>)和缩放以适应在线建模的情况。FT和缩放是许多ML用例中的标准做法，但由于数据漂移和窗口偏差，这带来了一些需要考虑的理论困难。</p>
+			<p>在下一章中，你将看到如何调整<strong class="bold">特征转换</strong> ( <strong class="bold"> FT </strong>)和缩放以适应在线建模的情况。FT 和缩放是许多 ML 用例中的标准做法，但由于数据漂移和窗口偏差，这带来了一些需要考虑的理论困难。</p>
 			<h1 id="_idParaDest-193"><a id="_idTextAnchor200"/>延伸阅读</h1>
 			<ul>
 				<li>模型漂移:<a href="https://www.ibm.com/cloud/watson-studio/drift">https://www.ibm.com/cloud/watson-studio/drift</a></li>

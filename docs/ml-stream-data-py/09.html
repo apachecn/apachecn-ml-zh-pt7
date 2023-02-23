@@ -9,34 +9,34 @@
 		<div><h1 id="_idParaDest-139"><em class="italic"> <a id="_idTextAnchor146"/>第七章</em>:在线回归</h1>
 			<p>在查看了前面章节中的在线异常检测和在线分类之后，还有一大类在线机器学习有待观察。<strong class="bold">回归</strong>是一系列受监督的机器学习模型，适用于目标变量为数字的用例。</p>
 			<p>在异常检测和分类中，您已经看到了如何构建模型来预测分类目标(是/否和虹膜种类)，但是您还没有看到如何处理数值目标。处理数字数据需要有不同的工作方法，无论是在模型训练和模型定义的更深层次，还是在我们使用度量标准时。</p>
-			<p>想象一下，作为一名天气预报员，试图预测明天的温度(摄氏度)。也许你期待一个晴天，你有一个模型，你用它来预测25摄氏度的温度。想象一下，如果第二天，你观察到天很冷，只有18度；你显然错了。</p>
-			<p>现在，想象一下你预测了24度。在一个分类用例中，你可能倾向于说25不是24，所以结果是错误的。不过24的结果<em class="italic">比18的结果少错</em>。</p>
+			<p>想象一下，作为一名天气预报员，试图预测明天的温度(摄氏度)。也许你期待一个晴天，你有一个模型，你用它来预测 25 摄氏度的温度。想象一下，如果第二天，你观察到天很冷，只有 18 度；你显然错了。</p>
+			<p>现在，想象一下你预测了 24 度。在一个分类用例中，你可能倾向于说 25 不是 24，所以结果是错误的。不过 24 的结果<em class="italic">比 18 的结果少错</em>。</p>
 			<p>在回归分析中，一个单一的预测可能或多或少是错误的。实际上，你很少是完全正确的。在分类上，你不是错就是对，所以这是不一样的。这引入了对新指标的需求和模型基准测试过程的变化。</p>
-			<p>在这一章中，你将首先得到回归模型的更深入的介绍，重点是River中的在线回归模型。之后，您将在回归模型基准上工作。</p>
+			<p>在这一章中，你将首先得到回归模型的更深入的介绍，重点是 River 中的在线回归模型。之后，您将在回归模型基准上工作。</p>
 			<p>本章涵盖以下主题:</p>
 			<ul>
 				<li>定义回归</li>
 				<li>回归的用例</li>
-				<li>River中回归算法综述</li>
+				<li>River 中回归算法综述</li>
 			</ul>
 			<h1 id="_idParaDest-140"><a id="_idTextAnchor147"/>技术要求</h1>
-			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<p>你可以在 GitHub 上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉 Git 和 GitHub，下载笔记本和代码示例的最简单方法如下:</p>
 			<ol>
 				<li>转到存储库的链接。</li>
 				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
-				<li>选择<strong class="bold">下载ZIP文件</strong>。</li>
+				<li>选择<strong class="bold">下载 ZIP 文件</strong>。</li>
 			</ol>
-			<p>当您下载ZIP文件时，在您的本地环境中解压缩它，您将能够通过您喜欢的Python编辑器访问代码。</p>
-			<h2 id="_idParaDest-141"><a id="_idTextAnchor148"/> Python环境</h2>
-			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
-			<p>如果你还不熟悉Python环境，我建议你去看看Anaconda(【https://www.anaconda.com/products/individual】T2)，它带有Jupyter Notebook和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VS代码，用于编辑脚本和程序。</p>
-			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看谷歌Colab(【https://colab.research.google.com/】<a href="https://colab.research.google.com/">)或Kaggle笔记本(</a><a href="https://www.kaggle.com/code">【https://www.kaggle.com/code】</a>)，它们都允许你在网上免费运行Python代码，不需要任何设置。</p>
+			<p>当您下载 ZIP 文件时，在您的本地环境中解压缩它，您将能够通过您喜欢的 Python 编辑器访问代码。</p>
+			<h2 id="_idParaDest-141"><a id="_idTextAnchor148"/> Python 环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的 Python 编辑器执行它。</p>
+			<p>如果你还不熟悉 Python 环境，我建议你去看看 Anaconda(【https://www.anaconda.com/products/individual】T2)，它带有 Jupyter Notebook 和 JupyterLab，这两个工具都非常适合执行笔记本。它还带有 Spyder 和 VS 代码，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装 Python 或相关程序有困难，你可以看看谷歌 Colab(【https://colab.research.google.com/】<a href="https://colab.research.google.com/">)或 Kaggle 笔记本(</a><a href="https://www.kaggle.com/code">【https://www.kaggle.com/code】</a>)，它们都允许你在网上免费运行 Python 代码，不需要任何设置。</p>
 			<h1 id="_idParaDest-142"><a id="_idTextAnchor149"/>定义回归</h1>
 			<p>在这一章中，你会发现回归。回归是一种受监督的机器学习任务，其中构建了一个模型，该模型基于数字或分类自变量来预测或估计数字目标变量。</p>
 			<p>最简单的回归模型类型是<a id="_idIndexMarker368"/> <strong class="bold">线性回归</strong>。让我们考虑一个如何使用线性回归进行回归的超级简单的例子。</p>
-			<p>假设我们有一个数据集，其中有10个人的观察结果。根据他们每周学习的小时数，我们必须估计他们的平均成绩(从1到10)。当然，这是一个过于简单化的问题。</p>
+			<p>假设我们有一个数据集，其中有 10 个人的观察结果。根据他们每周学习的小时数，我们必须估计他们的平均成绩(从 1 到 10)。当然，这是一个过于简单化的问题。</p>
 			<p>数据如下所示:</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-1</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-1</p>
 			<pre class="source-code">import pandas as pd</pre>
 			<pre class="source-code">nb_hrs_studies = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</pre>
 			<pre class="source-code">avg_grade = [5.5, 5.8, 6.8, 7.2, 7.4, 7.8, 8.2, 8.8, 9.3, 9.4]</pre>
@@ -46,9 +46,9 @@
 			<div><div><img src="img/B18335_07_1.jpg" alt="Figure 7.1 – The dataset&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.1-数据集</p>
+			<p class="figure-caption">图 7.1-数据集</p>
 			<p>让我们绘制数据，看看这如何变成一个<a id="_idIndexMarker369"/>回归问题:</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-2</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-2</p>
 			<pre class="source-code">import matplotlib.pyplot as plt</pre>
 			<pre class="source-code">plt.scatter(data['nb_hrs_studies'], data['avg_grade'])</pre>
 			<pre class="source-code">plt.xlabel('nb_hrs_studies')</pre>
@@ -57,12 +57,12 @@
 			<div><div><img src="img/B18335_07_2.jpg" alt="Figure 7.2 – A scatter plot of the data&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.2–数据的散点图</p>
+			<p class="figure-caption">图 7.2–数据的散点图</p>
 			<p>现在，线性回归的目标是拟合最佳通过这些点的线(或超平面),并且能够预测任何<code>nb_hrs_studies</code>的估计<code>avg_grades</code>。其他回归模型各有其特定的方式来构造预测函数，但最终都有相同的目标:创建最佳拟合公式，以使用一个或多个自变量来预测数值目标变量。</p>
 			<p>在下一节中，您将发现一些可以使用回归的示例用例。</p>
 			<h1 id="_idParaDest-143"><a id="_idTextAnchor150"/>回归用例</h1>
 			<p>回归的用例是巨大的:它是许多项目中非常常用的方法。不过，让我们看一些例子来更好地理解可以从回归模型中获益的不同类型的用例。</p>
-			<h2 id="_idParaDest-144"><a id="_idTextAnchor151"/>用例1–预测</h2>
+			<h2 id="_idParaDest-144"><a id="_idTextAnchor151"/>用例 1–预测</h2>
 			<p><a id="_idIndexMarker371"/>回归算法的一个非常常见的用例是预测。在预测中，目标是预测一个变量在一段时间内的未来值。这样的变量称为<a id="_idIndexMarker372"/> <strong class="bold">时间序列</strong>。尽管时间序列建模有许多特定的方法，但回归模型也是获得良好的未来预测性能的有力竞争者。</p>
 			<p>在一些预测用例中，实时响应非常重要。股票交易就是一个例子，在股票交易中，股票价格的数据点以巨大的速度到达，预测必须立即进行调整，以使用股票交易的最佳信息。甚至自动股票交易算法也存在，它们需要快速反应，以尽可能从交易中获取最大利润。</p>
 			<p>关于这个主题的进一步阅读，您可以从查看以下链接开始:</p>
@@ -70,7 +70,7 @@
 				<li><a href="https://www.investopedia.com/articles/financial-theory/09/regression-analysis-basics-business.asp">https://www . investopedia . com/articles/financial-theory/09/regression-analysis-basics-business . ASP</a></li>
 				<li><a href="https://www.mathworks.com/help/econ/time-series-regression-vii-forecasting.html">https://www . mathworks . com/help/econ/time-series-regression-VII-forecasting . html</a></li>
 			</ul>
-			<h2 id="_idParaDest-145"><a id="_idTextAnchor152"/>用例2——预测制造过程中的缺陷产品数量</h2>
+			<h2 id="_idParaDest-145"><a id="_idTextAnchor152"/>用例 2——预测制造过程中的缺陷产品数量</h2>
 			<p>在实践中使用的实时和<a id="_idIndexMarker373"/>流式回归模型的第二个例子是预测性维护模型在制造业中的应用。例如，您可以使用生产线上每小时不合格产品数量的实时预测。这也是一个回归模型，因为结果是一个数字，而不是一个分类变量。</p>
 			<p>生产线可以将这种预测用于实时警报系统，例如，一旦预测达到了有缺陷产品的阈值。实时数据集成对此很重要，因为生产错误的产品是对资源的巨大浪费。</p>
 			<p>以下两个资源将帮助您了解有关此使用案例的更多信息:</p>
@@ -80,7 +80,7 @@
 			</ul>
 			<p>既然我们已经探索了一些<a id="_idIndexMarker374"/>回归的用例，让我们从回归的各种算法开始。</p>
 			<h1 id="_idParaDest-146"><a id="_idTextAnchor153"/>河流中回归算法概述</h1>
-			<p>River在线机器学习包中有大量的在线回归模型可用。</p>
+			<p>River 在线机器学习包中有大量的在线回归模型可用。</p>
 			<p>一些相关的例子如下:</p>
 			<ul>
 				<li><code>LinearRegression</code></li>
@@ -88,12 +88,12 @@
 				<li><code>SGTRegressor</code></li>
 				<li><code>SRPRegressor</code></li>
 			</ul>
-			<h2 id="_idParaDest-147"><a id="_idTextAnchor154"/>回归算法1–线性回归</h2>
+			<h2 id="_idParaDest-147"><a id="_idTextAnchor154"/>回归算法 1–线性回归</h2>
 			<p>线性回归是最基本的回归模型之一。简单线性回归是通过数据点拟合直线的回归模型。下图说明了这一点:</p>
 			<div><div><img src="img/B18335_07_3.jpg" alt="Figure 7.3 – A linear model in a scatter plot&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.3–散点图中的线性模型</p>
+			<p class="figure-caption">图 7.3–散点图中的线性模型</p>
 			<p>这条橙色线是以下公式的结果:</p>
 			<div><div><img src="img/Formula_07_001.jpg" alt=""/>
 				</div>
@@ -101,52 +101,52 @@
 			<p>这里，<em class="italic"> y </em>代表<code>avg_grades</code>，<em class="italic"> x </em>代表<code>nb_hrs_studies</code>。在拟合模型时，<em class="italic"> a </em>和<em class="italic"> b </em>系数是估计值。这个公式中的<em class="italic"> b </em>系数称为<a id="_idIndexMarker375"/>截距。表示<em class="italic"> x </em>等于<code>0</code>时<em class="italic"> y </em>的值。<em class="italic">一个</em>系数代表直线的斜率。对于<em class="italic"> x </em>中的每一个额外步骤，<em class="italic"> a </em>表示加到<em class="italic"> y </em>上的数量。</p>
 			<p>这是线性回归的一个版本，但是还有一个版本叫做<strong class="bold">多元线性回归</strong>，其中有<a id="_idIndexMarker377"/>多个<em class="italic"> x </em>变量。在这种情况下，模型并不代表一条线，而是代表一个超平面，其中为每个额外的<em class="italic"> x </em>变量添加一个斜率系数。</p>
 			<h3>河流中的线性回归</h3>
-			<p>现在让我们继续使用Python中的River ML构建一个在线线性回归的<a id="_idIndexMarker378"/>示例:</p>
+			<p>现在让我们继续使用 Python 中的 River ML 构建一个在线线性回归的<a id="_idIndexMarker378"/>示例:</p>
 			<ol>
 				<li value="1">如果你还记得<a id="_idIndexMarker379"/>之前的例子，我们在<code>scikit-learn</code>中使用了一个叫做<code>make_classification</code>的函数。同样可以使用<code>make_regression</code>对回归问题进行<a id="_idIndexMarker380"/>:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-3</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-3</p>
 			<pre>from sklearn.datasets import make_regression
 X,y = make_regression(n_samples=1000,n_features=5,n_informative=5,noise=100)</pre>
 			<ol>
 				<li value="2">为了更好地了解这个<code>make_regression</code>函数的结果，让我们检查一下这个数据集的<code>X</code>。您可以使用以下代码快速查看数据:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-4</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-4</p>
 			<pre>pd.DataFrame(X).describe()</pre>
 			<p><code>describe()</code>方法将输出一个包含变量描述性统计数据的数据框，如下所示:</p>
 			<div><div><img src="img/B18335_07_4.jpg" alt="Figure 7.4 – Descriptive statistics&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.4-描述性统计</p>
-			<p><code>X</code>数据中有五个<a id="_idIndexMarker381"/>列，有1000个观测值。</p>
+			<p class="figure-caption">图 7.4-描述性统计</p>
+			<p><code>X</code>数据中有五个<a id="_idIndexMarker381"/>列，有 1000 个观测值。</p>
 			<ol>
 				<li value="3">现在，来看看<code>y</code>变量，也称为<a id="_idIndexMarker382"/>变量<code>target</code>，我们<a id="_idIndexMarker383"/>可以制作如下直方图:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-5</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-5</p>
 			<pre>pd.Series(y).hist()</pre>
 			<p>生成的直方图如下图所示:</p>
 			<div><div><img src="img/B18335_07_5.jpg" alt="Figure 7.5 – The resulting histogram&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.5–生成的直方图</p>
+			<p class="figure-caption">图 7.5–生成的直方图</p>
 			<p>这里可以进行更多探索性的数据分析，但这超出了本书的范围。</p>
 			<ol>
 				<li value="4">现在让我们继续<a id="_idIndexMarker385"/>创建一个训练和测试集，以创建一个公平的模型验证方法。在下面的代码中，您可以看到如何从<code>scikit-learn</code>创建<code>train_test_split</code>函数来创建<a id="_idIndexMarker386"/>一个训练测试分割:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-6</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-6</p>
 			<pre>from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)</pre>
 			<ol>
-				<li value="5">您可以使用以下代码在River中创建线性回归:</li>
+				<li value="5">您可以使用以下代码在 River 中创建线性回归:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-7</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-7</p>
 			<pre>!pip install river
 from river.linear_model import LinearRegression
 model = LinearRegression()</pre>
 			<ol>
-				<li value="6">然后，该模型必须适合训练数据。我们使用和你在书的前面看到的相同的循环。这个循环遍历各个数据点(<code>X</code>和<code>y</code>)，并按照River的要求将<code>X</code>值转换成一个字典。然后使用<code>learn_one</code>方法对模型进行<a id="_idIndexMarker387"/>逐点数据更新:</li>
+				<li value="6">然后，该模型必须适合训练数据。我们使用和你在书的前面看到的相同的循环。这个循环遍历各个数据点(<code>X</code>和<code>y</code>)，并按照 River 的要求将<code>X</code>值转换成一个字典。然后使用<code>learn_one</code>方法对模型进行<a id="_idIndexMarker387"/>逐点数据更新:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-8</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-8</p>
 			<pre># fit the model
 for x_i,y_i in zip(X_train,y_train):
     x_json = {'val'+str(i): x for i,x in enumerate(x_i)}
@@ -154,7 +154,7 @@ for x_i,y_i in zip(X_train,y_train):
 			<ol>
 				<li value="7">一旦模型从训练数据中学习，就需要在测试集上对其进行评估。这可以通过循环测试数据并预测每个数据点的<code>X</code>值来完成<a id="_idIndexMarker388"/>。<code>y</code>值存储在一个列表中，用于对照测试数据集的实际<code>y</code>值进行评估:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-9</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-9</p>
 			<pre># predict on the test set
 import pandas as pd
 preds = []
@@ -164,22 +164,22 @@ for x_i in X_test:
 			<ol>
 				<li value="8">我们现在可以为这个回归模型计算我们选择的度量，例如,<code>r2</code>分数。这可以使用以下代码来完成:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-10</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-10</p>
 			<pre># compute accuracy
 from sklearn.metrics import r2_score
 r2_score(y_test, preds)</pre>
 			<p>得到的结果是<code>0.478</code>。</p>
 			<p>在下一节中，让我们看看其他<a id="_idIndexMarker389"/>型号是否在这项任务<a id="_idIndexMarker390"/>上表现更好。</p>
-			<h2 id="_idParaDest-148"><a id="_idTextAnchor155"/>回归算法2–hoeffdingadaptivetreegressor</h2>
+			<h2 id="_idParaDest-148"><a id="_idTextAnchor155"/>回归算法 2–hoeffdingadaptivetreegressor</h2>
 			<p>我们将要讨论的第二个在线回归模型是一个更加具体的在线回归模型。与许多其他模型一样，<code>LinearRegression</code>模型是对基本离线模型的在线改编，而许多其他模型是专门为在线模型开发的。<code>HoeffdingAdaptiveTreeRegressor</code>就是其中之一。</p>
-			<p><strong class="bold">赫夫丁自适应树回归器</strong> ( <strong class="bold"> HATR </strong>)是基于<strong class="bold">赫夫丁自适应树分类器</strong> ( <strong class="bold"> HATC </strong>)的回归<a id="_idIndexMarker392"/>模型。HATC是一个基于树的模型<a id="_idIndexMarker393"/>，它使用<strong class="bold">自适应窗口</strong> ( <strong class="bold"> ADWIN </strong>)方法来<a id="_idIndexMarker394"/>监控树的不同分支的性能。HATC方法在新分支到期时用新分支替换这些分支。这是通过观察旧分支对新分支的更好表现来确定的。HATC也有河。</p>
-			<p>HATR回归版本基于HATC方法，并在每个决策节点使用ADWIN概念漂移检测器。这允许该方法检测底层<a id="_idIndexMarker395"/>数据中可能的变化，这被称为<strong class="bold">漂移</strong>。漂移检测将在下一章中详细讨论。</p>
-			<h3>河流中的HoeffdingAdaptiveTreeRegressor</h3>
+			<p><strong class="bold">赫夫丁自适应树回归器</strong> ( <strong class="bold"> HATR </strong>)是基于<strong class="bold">赫夫丁自适应树分类器</strong> ( <strong class="bold"> HATC </strong>)的回归<a id="_idIndexMarker392"/>模型。HATC 是一个基于树的模型<a id="_idIndexMarker393"/>，它使用<strong class="bold">自适应窗口</strong> ( <strong class="bold"> ADWIN </strong>)方法来<a id="_idIndexMarker394"/>监控树的不同分支的性能。HATC 方法在新分支到期时用新分支替换这些分支。这是通过观察旧分支对新分支的更好表现来确定的。HATC 也有河。</p>
+			<p>HATR 回归版本基于 HATC 方法，并在每个决策节点使用 ADWIN 概念漂移检测器。这允许该方法检测底层<a id="_idIndexMarker395"/>数据中可能的变化，这被称为<strong class="bold">漂移</strong>。漂移检测将在下一章中详细讨论。</p>
+			<h3>河流中的 HoeffdingAdaptiveTreeRegressor</h3>
 			<p>我们将查看如下示例:</p>
 			<ol>
 				<li value="1">让我们开始在之前的<a id="_idIndexMarker396"/>模型中使用的相同数据上拟合模型:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-11</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-11</p>
 			<pre>from river.tree import HoeffdingAdaptiveTreeRegressor
 model = HoeffdingAdaptiveTreeRegressor(seed=42)
 # fit the model
@@ -199,7 +199,7 @@ r2_score(y_test, preds)</pre>
 				<li value="2">这个模型得到一个比线性回归<code>0.437</code>稍差<a id="_idIndexMarker397"/>的<code>r2</code>分数。让我们看看我们是否能做些什么来使它更好地工作。让我们写一个网格搜索，看看一些超参数是否有助于改进模型。</li>
 			</ol>
 			<p>为此，让我们将<a id="_idIndexMarker398"/>模型写成一个函数，它接受超参数<a id="_idIndexMarker399"/>的值，并返回<code>r2</code>得分:</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-12</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-12</p>
 			<pre>def evaluate_HATR(grace_period, leaf_prediction, model_selector_decay):
     # model pipeline
     model = (
@@ -223,14 +223,14 @@ r2_score(y_test, preds)</pre>
 			<ol>
 				<li value="3">让我们如下指定要调整的<a id="_idIndexMarker400"/>超参数:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-13</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-13</p>
 			<pre>grace_periods=[0,5,10,]
 leaf_predictions=['mean','adaptive']
 model_selector_decays=[ 0.3, 0.8,  0.95]</pre>
 			<ol>
 				<li value="4">然后，我们循环通过<a id="_idIndexMarker401"/>数据，如下所示:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-14</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-14</p>
 			<pre>results = []
 i = 0
 for grace_period in grace_periods:
@@ -242,22 +242,22 @@ for grace_period in grace_periods:
 			<ol>
 				<li value="5">然后可以获得如下结果:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-15</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-15</p>
 			<pre>pd.DataFrame(results, columns=['grace_period', 'leaf_prediction', 'model_selector_decay', 'r2_score' ]).sort_values('r2_score', ascending=False)</pre>
 			<p>获得的结果有点令人失望，因为没有一个测试值能够产生更好的结果。不幸的是，这是数据科学的一部分，因为不是所有的模型在每个用例上都工作得很好。</p>
 			<div><div><img src="img/B18335_07_6.jpg" alt="Figure 7.6 – The resulting output of Code Block 7-15&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.6–代码块7-15的结果输出</p>
+			<p class="figure-caption">图 7.6–代码块 7-15 的结果输出</p>
 			<p>让我们继续看下一个型号，看看它是否更合适。</p>
-			<h2 id="_idParaDest-149"><a id="_idTextAnchor156"/>回归算法3–Sgt regressor</h2>
+			<h2 id="_idParaDest-149"><a id="_idTextAnchor156"/>回归算法 3–Sgt regressor</h2>
 			<p><code>SGTRegressor</code>是用于回归的随机<a id="_idIndexMarker404"/>梯度树。这是另一种基于决策树的模型，可以随着新数据的到来而学习。它是一个增量决策树，通过最小化<a id="_idIndexMarker405"/>损失函数来最小化均方误差。</p>
-			<h3>河流中的SGTRegressor</h3>
+			<h3>河流中的 SGTRegressor</h3>
 			<p>我们将使用下面的<a id="_idIndexMarker406"/>示例来验证这一点:</p>
 			<ol>
 				<li value="1">让我们测试一下<a id="_idIndexMarker407"/>这个模型是否能够提高这个回归任务的性能:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-16</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-16</p>
 			<pre>from river.tree import SGTRegressor
 # model pipeline
 model = SGTRegressor()
@@ -275,7 +275,7 @@ r2_score(y_test, preds)</pre>
 			<ol>
 				<li value="2">结果比以前的型号更糟糕，因为它是<code>0.07</code>。让我们再次看看是否可以使用<a id="_idIndexMarker409"/>超参数调谐对其进行<a id="_idIndexMarker408"/>优化:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-17</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-17</p>
 			<pre>from river.tree import SGTRegressor
 def evaluate_SGT(delta, lambda_value, grace_period):
     # model pipeline 
@@ -296,14 +296,14 @@ def evaluate_SGT(delta, lambda_value, grace_period):
 			<ol>
 				<li value="3">对于<a id="_idIndexMarker410"/>这次试验，我们将优化<a id="_idIndexMarker411"/>的<code>grace_period</code>、<code>lambda_value</code>和<code>delta</code>超参数:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-18</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-18</p>
 			<pre>grace_periods=[0,10,25]
 lambda_values=[0.5, 0.8, 1.]
 deltas=[0.0001, 0.001, 0.01, 0.1]</pre>
 			<ol>
 				<li value="4">您可以使用下面的<a id="_idIndexMarker413"/>代码运行<a id="_idIndexMarker412"/>优化循环:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-19</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-19</p>
 			<pre>results = []
 i = 0
 for grace_period in grace_periods:
@@ -317,22 +317,22 @@ for grace_period in grace_periods:
 			<ol>
 				<li value="5">使用下面的代码行<a id="_idIndexMarker415"/>可以显示<a id="_idIndexMarker414"/>的最佳结果:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-20</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-20</p>
 			<pre>pd.DataFrame(results, columns=['delta', 'lambda_value', 'grace_period', 'r2_score' ]).sort_values('r2_score', ascending=False)</pre>
 			<p>结果如下所示:</p>
 			<div><div><img src="img/B18335_07_7.jpg" alt="Figure 7.7 – The resulting output of Code Block 7-20&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.7–代码块7-20的结果输出</p>
+			<p class="figure-caption">图 7.7–代码块 7-20 的结果输出</p>
 			<p>结果是<a id="_idIndexMarker416"/>比未调教的<code>SGTRegressor</code>好，但比前两款差很多。<a id="_idIndexMarker417"/>模型可以进一步优化<a id="_idIndexMarker418"/>，但它似乎不是<a id="_idIndexMarker419"/>当前数据的最佳选择。</p>
-			<h2 id="_idParaDest-150"><a id="_idTextAnchor157"/>回归算法4–SRP regressor</h2>
+			<h2 id="_idParaDest-150"><a id="_idTextAnchor157"/>回归算法 4–SRP regressor</h2>
 			<p><code>SRPRegressor</code>或<strong class="bold">流随机补丁回归器</strong>，是一种在输入数据的子集<a id="_idIndexMarker421"/>上训练基本<a id="_idIndexMarker420"/>学习器的集成方法。这些子集被称为<strong class="bold">小块</strong>，既是特征的子集，也是<a id="_idIndexMarker422"/>观察的子集。这与上一章看到的<a id="_idIndexMarker423"/><strong class="bold">随机森林</strong>的方法相同。</p>
 			<h3>河流中的硫酸盐还原菌</h3>
 			<p>我们将使用以下示例来验证这一点:</p>
 			<ol>
 				<li value="1">在本例中，让我们使用线性回归作为基础学习者，因为与本章中测试的其他模型<a id="_idIndexMarker426"/>相比，该模型具有<a id="_idIndexMarker424"/>最佳性能<a id="_idIndexMarker425"/>:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-21</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-21</p>
 			<pre>from river.ensemble import SRPRegressor
 # model pipeline 
 base_model = LinearRegression()
@@ -355,7 +355,7 @@ r2_score(y_test, preds)</pre>
 			<ol>
 				<li value="2"><a id="_idIndexMarker427"/>得出的分数是<code>0.34</code>。让我们试着调整使用的模型数量，看看这个<a id="_idIndexMarker428"/>是否能提高<a id="_idIndexMarker429"/>的性能:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-22</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-22</p>
 			<pre>def evaluate_SRP(n_models):
     # model pipeline 
     base_model = LinearRegression()
@@ -378,29 +378,29 @@ r2_score(y_test, preds)</pre>
 			<ol>
 				<li value="3">您可以使用以下代码执行优化循环:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-23</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-23</p>
 			<pre>results = []
 for n_models in range(1, 50):
     results.append([n_models, evaluate_SRP(n_models)])</pre>
 			<ol>
 				<li value="4">下面一行<a id="_idIndexMarker430"/>显示了<code>n_models</code>的每个值<a id="_idIndexMarker431"/>的结果:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块7-24</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 7-24</p>
 			<pre>pd.DataFrame(results,columns=['n_models', 'r2_score']).sort_values('r2_score', ascending=False)</pre>
 			<p>结果是如下所示的<a id="_idIndexMarker432"/>:</p>
 			<div><div><img src="img/B18335_07_8.jpg" alt="Figure 7.8 – The resulting output of Code Block 7-24&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图7.8–代码块7-24的结果输出</p>
-			<p>显然，12款车型的<a id="_idIndexMarker433"/>结果已经找到了一个表现<code>0.457</code>的最佳点。相对于得分为<code>0.478</code>的简单<code>LinearRegression</code>模型，这是一个更差的结果。这表明<code>LinearRegression</code>模型在该数据集中测试的四个<a id="_idIndexMarker434"/>模型中得分最高。</p>
+			<p class="figure-caption">图 7.8–代码块 7-24 的结果输出</p>
+			<p>显然，12 款车型的<a id="_idIndexMarker433"/>结果已经找到了一个表现<code>0.457</code>的最佳点。相对于得分为<code>0.478</code>的简单<code>LinearRegression</code>模型，这是一个更差的结果。这表明<code>LinearRegression</code>模型在该数据集中测试的四个<a id="_idIndexMarker434"/>模型中得分最高。</p>
 			<p>当然，这个结果与<code>make_regression</code>函数背后的数据生成过程密切相关。如果<code>make_regression</code>函数添加任何东西，比如时间趋势，自适应模型可能会比简单的线性模型性能更好。</p>
 			<h1 id="_idParaDest-151"><a id="_idTextAnchor158"/>总结</h1>
 			<p>在这一章中，你已经看到了回归建模的基础。您已经了解到分类和异常检测模型之间有一些相似之处，但也有一些基本的区别。</p>
 			<p>回归的主要区别是目标变量是数字，而它们在分类中是分类的。这不仅引入了度量标准的差异，还引入了模型定义和模型工作方式的差异。</p>
 			<p>您已经看到了几种传统的离线回归模型，以及它们对在线培训方式的适应性。你也看到了一些专门为在线训练和流而制作的在线回归模型。</p>
-			<p>在前面的章节中，您已经看到了如何使用训练测试集来实现建模基准。ML领域不会停止发展，并且会定期发布更新更好的模型。这就要求从业者在评估模型的技能上要扎实。</p>
+			<p>在前面的章节中，您已经看到了如何使用训练测试集来实现建模基准。ML 领域不会停止发展，并且会定期发布更新更好的模型。这就要求从业者在评估模型的技能上要扎实。</p>
 			<p>掌握模型评估往往比了解最大的模型列表更重要。您需要知道大量的模型来开始建模，但是评估将允许您避免将错误的或过度拟合的模型推向生产。</p>
-			<p>尽管这通常适用于ML，但下一章将介绍一类对此有着根本不同看法的模型。强化学习是在线ML的一个类别，其重点是模型更新。在线模型也有能力对进入系统的每一条数据进行学习，但强化学习更侧重于几乎自主的学习。这将是下一章的范围。</p>
+			<p>尽管这通常适用于 ML，但下一章将介绍一类对此有着根本不同看法的模型。强化学习是在线 ML 的一个类别，其重点是模型更新。在线模型也有能力对进入系统的每一条数据进行学习，但强化学习更侧重于几乎自主的学习。这将是下一章的范围。</p>
 			<h1 id="_idParaDest-152"><a id="_idTextAnchor159"/>延伸阅读</h1>
 			<ul>
 				<li><em class="italic">线性回归</em>:<a href="https://riverml.xyz/latest/api/linear-model/LinearRegression/">https://river ml . XYZ/latest/API/linear-model/linear regression/</a></li>

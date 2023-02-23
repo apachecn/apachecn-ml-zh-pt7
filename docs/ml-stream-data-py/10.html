@@ -11,37 +11,37 @@
 			<p>在强化学习中，我们赋予模型很大的决策权来进行再学习和更新决策过程的规则。模型将直接决定要采取的行动，而不是让模型做出预测并对该预测要采取的行动进行硬编码。</p>
 			<p>对于动作被有效自动化的自动化机器学习管道，这可能是一个很好的选择。当然，这必须辅之以不同类型的日志记录、监控等等。对于我们需要预测而不是行动的情况，强化学习是不合适的。</p>
 			<p>虽然在正确的用例中非常强大，但强化学习目前并不是常规机器学习的标准选择。在未来，强化学习很可能会在更多的用例中流行起来。</p>
-			<p>在这一章中，你将首先被彻底地介绍强化学习背后的不同概念。然后，您将看到Python中强化学习的实现。</p>
+			<p>在这一章中，你将首先被彻底地介绍强化学习背后的不同概念。然后，您将看到 Python 中强化学习的实现。</p>
 			<p>本章涵盖以下主题:</p>
 			<ul>
 				<li>定义强化学习</li>
 				<li>强化学习模型的主要步骤</li>
-				<li>探究Q-学习</li>
-				<li>深度Q学习</li>
+				<li>探究 Q-学习</li>
+				<li>深度 Q 学习</li>
 				<li>对流式数据使用强化学习</li>
 				<li>强化学习的用例</li>
-				<li>在Python中实现强化学习</li>
+				<li>在 Python 中实现强化学习</li>
 			</ul>
 			<h1 id="_idParaDest-154"><a id="_idTextAnchor161"/>技术要求</h1>
-			<p>你可以在GitHub上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉Git和GitHub，下载笔记本和代码示例的最简单方法如下:</p>
+			<p>你可以在 GitHub 上找到这本书的所有代码，链接如下:<a href="https://github.com/PacktPublishing/Machine-Learning-for-Streaming-Data-with-Python">https://GitHub . com/packt publishing/Machine-Learning-for-Streaming-Data-with-Python</a>。如果您还不熟悉 Git 和 GitHub，下载笔记本和代码示例的最简单方法如下:</p>
 			<ol>
 				<li>转到存储库的链接。</li>
 				<li>转到绿色的<strong class="bold">代码</strong>按钮。</li>
 				<li>选择<strong class="bold">下载压缩文件</strong>。</li>
 			</ol>
-			<p>当您下载ZIP文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的Python编辑器访问代码。</p>
-			<h2 id="_idParaDest-155"><a id="_idTextAnchor162"/> Python环境</h2>
-			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的Python编辑器执行它。</p>
-			<p>如果您还不熟悉Python环境，我建议您查看一下Jupyter笔记本附带的Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)和JupyterLab，这两个工具都非常适合执行笔记本。它还带有Spyder和VSCode，用于编辑脚本和程序。</p>
-			<p>如果你在你的机器上安装Python或相关程序有困难，你可以看看谷歌Colab(【https://colab.research.google.com/】)或Kaggle笔记本(<a href="https://www.kaggle.com/code">【https://www.kaggle.com/code】</a>)，它们都允许你免费在在线笔记本上运行Python代码，无需任何设置。</p>
+			<p>当您下载 ZIP 文件时，您将它解压缩到您的本地环境中，您将能够通过您喜欢的 Python 编辑器访问代码。</p>
+			<h2 id="_idParaDest-155"><a id="_idTextAnchor162"/> Python 环境</h2>
+			<p>要阅读本书，您可以下载存储库中的代码，并使用您喜欢的 Python 编辑器执行它。</p>
+			<p>如果您还不熟悉 Python 环境，我建议您查看一下 Jupyter 笔记本附带的 Anaconda(<a href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a>)和 JupyterLab，这两个工具都非常适合执行笔记本。它还带有 Spyder 和 VSCode，用于编辑脚本和程序。</p>
+			<p>如果你在你的机器上安装 Python 或相关程序有困难，你可以看看谷歌 Colab(【https://colab.research.google.com/】)或 Kaggle 笔记本(<a href="https://www.kaggle.com/code">【https://www.kaggle.com/code】</a>)，它们都允许你免费在在线笔记本上运行 Python 代码，无需任何设置。</p>
 			<p class="callout-heading">注意</p>
-			<p class="callout">书中的代码通常会使用带有Python版本3.7.13的Colab和Kaggle笔记本，您可以设置自己的环境来模拟这种情况。</p>
+			<p class="callout">书中的代码通常会使用带有 Python 版本 3.7.13 的 Colab 和 Kaggle 笔记本，您可以设置自己的环境来模拟这种情况。</p>
 			<h1 id="_idParaDest-156"><a id="_idTextAnchor163"/>定义强化学习</h1>
 			<p>强化学习<a id="_idIndexMarker436"/>是机器学习的一个子域，专注于创建做出决策的机器学习模型。有时，模型不被称为模型，而是被称为智能代理。</p>
 			<p>从远处看，你可能会认为强化学习非常接近机器学习。我们可以说，它们都是人工智能内部的方法，试图提供智能黑盒，能够像人类一样学习特定的任务，而且往往更好。</p>
 			<p>然而，如果我们仔细观察，我们会发现一些重要的差异。在前面的章节中，您已经看到了异常检测、分类和回归等机器学习模型。它们都使用许多变量，并能够基于这些变量对目标变量进行实时预测。</p>
 			<p>您已经看到了许多指标，这些指标使我们数据科学家能够决定一个模型是否好。在线模型还能够通过重新学习和不断考虑自己的误差指标来适应不断变化的数据。</p>
-			<p>强化学习不止于此。RL模型不仅做出预测，还会采取行动。你可以说，离线模型在从错误中重新学习方面没有任何自主权，在线模型会立即考虑错误，强化学习模型旨在犯错误并从中学习。</p>
+			<p>强化学习不止于此。RL 模型不仅做出预测，还会采取行动。你可以说，离线模型在从错误中重新学习方面没有任何自主权，在线模型会立即考虑错误，强化学习模型旨在犯错误并从中学习。</p>
 			<p>在线模型可以适应他们的错误，就像强化学习一样。然而，当您构建一个在线模型的第一个版本时，您确实希望它在开始时具有可接受的性能，并且您会根据一些历史数据来训练它。然后，它可以适应数据漂移或其他变化的情况。</p>
 			<p>另一方面，强化学习模型一开始完全是幼稚和无知的。它会尝试一些动作，犯一些错误，然后在某个时候纯粹冒险，它也会做出一些好的决定。此时，强化模型将获得奖励，并开始记住这些奖励。</p>
 			<h2 id="_idParaDest-157"><a id="_idTextAnchor164"/>比较在线和离线强化学习</h2>
@@ -53,10 +53,10 @@
 			<div><div><img src="img/B18335_08_1.jpg" alt="Figure 8.1 – Feedback loops in RL&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.1–RL中的反馈环路</p>
+			<p class="figure-caption">图 8.1–RL 中的反馈环路</p>
 			<p>在这个模式中，您会观察到<a id="_idIndexMarker442"/>以下元素:</p>
 			<ul>
-				<li><strong class="bold">RL代理</strong>:我们的模型是不断<a id="_idIndexMarker443"/>学习和决策。</li>
+				<li><strong class="bold">RL 代理</strong>:我们的模型是不断<a id="_idIndexMarker443"/>学习和决策。</li>
 				<li><strong class="bold">环境</strong>:代理<a id="_idIndexMarker444"/>可以做出一组特定决策的固定环境。</li>
 				<li><strong class="bold">动作</strong>:代理<a id="_idIndexMarker445"/>每次做决定，都会改变环境。</li>
 				<li><strong class="bold">奖励</strong>:如果决策产生了<a id="_idIndexMarker446"/>好的结果，那么代理人将获得奖励。</li>
@@ -76,32 +76,32 @@
 			<h2 id="_idParaDest-161"><a id="_idTextAnchor168"/>更新决策规则</h2>
 			<p>这个大图的最后一部分<a id="_idIndexMarker451"/>对强化学习的描述是政策的更新:基本上就是学习本身。模型有很多种，都有各自的特殊性，但无论如何还是要试着得出一个大概。</p>
 			<p>此时，您已经看到代理从一组固定动作中采取了一个动作。代理已经估计出哪一个最有可能获得最大的回报。这个任务执行后，模特会获得一定的奖励。这将用于改变策略，改变的方式取决于你使用的强化学习的确切方法。</p>
-			<p>在下一节中，您将通过探索Q-learning算法更详细地了解如何做到这一点。</p>
-			<h1 id="_idParaDest-162">探索Q-学习</h1>
+			<p>在下一节中，您将通过探索 Q-learning 算法更详细地了解如何做到这一点。</p>
+			<h1 id="_idParaDest-162">探索 Q-学习</h1>
 			<p>尽管强化学习有许多<a id="_idIndexMarker452"/>变体，但是前面的解释应该已经给了你大多数强化模型如何工作的一个很好的总体概述。现在是时候深入到强化学习的特定模型中了:Q-learning。</p>
-			<p>Q-learning是一种强化学习算法，即所谓的无模型算法。无模型强化学习算法<a id="_idIndexMarker453"/>可以被视为纯粹的试错算法:它们没有对环境的先验概念，而仅仅是尝试行动，并了解他们的行动是否会产生正确的结果。</p>
+			<p>Q-learning 是一种强化学习算法，即所谓的无模型算法。无模型强化学习算法<a id="_idIndexMarker453"/>可以被视为纯粹的试错算法:它们没有对环境的先验概念，而仅仅是尝试行动，并了解他们的行动是否会产生正确的结果。</p>
 			<p>另一方面，基于模型的算法使用不同的理论方法。他们不只是基于行动来学习结果，而是试图通过某种形式的模型来了解他们的环境。一旦代理人了解了环境是如何工作的，它就可以根据这一知识采取行动优化奖励。</p>
-			<p>虽然基于模型的方法可能看起来更容易执行，但无模型的方法(如Q-learning)实际上非常好。</p>
+			<p>虽然基于模型的方法可能看起来更容易执行，但无模型的方法(如 Q-learning)实际上非常好。</p>
 			<h2 id="_idParaDest-163"><a id="_idTextAnchor170"/>Q-学习的目标</h2>
-			<p>Q-learning算法<a id="_idIndexMarker454"/>的目标是找到一个策略，使从当前状态开始的一系列连续步骤中获得的预期回报最大化。</p>
-			<p>在常规语言中，这意味着Q-learning查看当前状态(其环境的变量)，然后使用这些信息在未来采取最佳步骤。该模型不考虑过去发生的事情，只考虑未来。</p>
-			<p>该模型使用Q值来计算状态-动作组合的质量:也就是说，对于每个状态，都有一个潜在动作的列表。潜在的<a id="_idIndexMarker455"/>状态和潜在的动作的每个组合被称为状态-动作组合。当状态为给定状态时，Q值指示该动作的质量。</p>
-			<p>在强化学习过程的开始，Q的值以某种方式(随机或固定)初始化，然后在每次收到奖励时更新。代理根据Q值处理模型，当奖励(对行动的反馈)开始出现时，这些Q值会改变。代理仍然继续遵循Q值，但是随着它们的更新，代理的行为也发生变化。</p>
-			<p>这个算法<a id="_idIndexMarker456"/>的核心是贝尔曼方程:一个Q值的更新规则，使用新旧Q值的加权平均值。因此，旧的信息会在某个时候被遗忘，此时已经发生了大量的学习。这样就避免了被之前的行为“卡住”。</p>
+			<p>Q-learning 算法<a id="_idIndexMarker454"/>的目标是找到一个策略，使从当前状态开始的一系列连续步骤中获得的预期回报最大化。</p>
+			<p>在常规语言中，这意味着 Q-learning 查看当前状态(其环境的变量)，然后使用这些信息在未来采取最佳步骤。该模型不考虑过去发生的事情，只考虑未来。</p>
+			<p>该模型使用 Q 值来计算状态-动作组合的质量:也就是说，对于每个状态，都有一个潜在动作的列表。潜在的<a id="_idIndexMarker455"/>状态和潜在的动作的每个组合被称为状态-动作组合。当状态为给定状态时，Q 值指示该动作的质量。</p>
+			<p>在强化学习过程的开始，Q 的值以某种方式(随机或固定)初始化，然后在每次收到奖励时更新。代理根据 Q 值处理模型，当奖励(对行动的反馈)开始出现时，这些 Q 值会改变。代理仍然继续遵循 Q 值，但是随着它们的更新，代理的行为也发生变化。</p>
+			<p>这个算法<a id="_idIndexMarker456"/>的核心是贝尔曼方程:一个 Q 值的更新规则，使用新旧 Q 值的加权平均值。因此，旧的信息会在某个时候被遗忘，此时已经发生了大量的学习。这样就避免了被之前的行为“卡住”。</p>
 			<p>贝尔曼方程的公式如下:</p>
 			<div><div><img src="img/Formula_08_001.jpg" alt=""/>
 				</div>
 			</div>
-			<h2 id="_idParaDest-164"><a id="_idTextAnchor171"/>Q学习算法的参数</h2>
+			<h2 id="_idParaDest-164"><a id="_idTextAnchor171"/>Q 学习算法的参数</h2>
 			<p>在这个贝尔曼方程中，有几个你可以调整的重要参数。让我们简要介绍一下:</p>
 			<ul>
 				<li>学习率是机器学习算法中非常常用的超参数。它通常定义了优化器的步长大小，其中大的步长可以使您在优化空间中更快地移动，但是太大的步长也可能导致问题进入狭窄的优化。</li>
 				<li>贴现因子是金融和经济学中经常使用的一个概念。在强化学习中，它指示模型需要以何种速率优先考虑短期或长期奖励。</li>
 			</ul>
-			<p>在概述了Q-learning之后，下一节将介绍这种方法的一个更复杂的替代版本，称为深度Q-learning。</p>
-			<h1 id="_idParaDest-165"><a id="_idTextAnchor172"/>深度Q学习</h1>
-			<p>既然您已经看到了强化学习的基础知识和最基本的强化学习模型Q-learning，那么是时候继续学习一个性能更好、更常用的模型了，这就是深度Q-learning。</p>
-			<p>深度Q-learning是Q-learning的一种变体，其中Q值不仅仅是状态和动作的每个<a id="_idIndexMarker459"/>组合的预期Q值列表，由贝尔曼方程更新。相反，在深度Q学习中，这种估计是使用(深度)神经网络来完成的。</p>
+			<p>在概述了 Q-learning 之后，下一节将介绍这种方法的一个更复杂的替代版本，称为深度 Q-learning。</p>
+			<h1 id="_idParaDest-165"><a id="_idTextAnchor172"/>深度 Q 学习</h1>
+			<p>既然您已经看到了强化学习的基础知识和最基本的强化学习模型 Q-learning，那么是时候继续学习一个性能更好、更常用的模型了，这就是深度 Q-learning。</p>
+			<p>深度 Q-learning 是 Q-learning 的一种变体，其中 Q 值不仅仅是状态和动作的每个<a id="_idIndexMarker459"/>组合的预期 Q 值列表，由贝尔曼方程更新。相反，在深度 Q 学习中，这种估计是使用(深度)神经网络来完成的。</p>
 			<p>如果你不熟悉，神经网络是一类机器学习模型，在性能方面属于最先进的。一般来说，神经网络主要用于人工智能、机器学习和数据科学中的许多用例。深度神经网络是一种允许许多数据科学用例的技术<a id="_idIndexMarker460"/>，如<strong class="bold">自然语言处理</strong> ( <strong class="bold"> NLP </strong>)、计算机视觉等等。</p>
 			<p>神经网络背后的想法是通过称为神经元的节点网络传递输入数据点，每个节点都执行非常简单的操作。事实上，有许多这样的简单操作正在进行，权重应用于其间，这意味着神经网络是一个强大的学习算法，用于将输入数据映射到目标变量。</p>
 			<p>下面的示例显示了神经网络的标准描述。这些模型可以简单，也可以复杂。你可以去大量的隐藏层，并为每个隐藏层添加尽可能多的节点。每个箭头都是一个系数，需要估计。因此，必须记住，估计这种模型需要大量的数据。</p>
@@ -109,19 +109,19 @@
 			<div><div><img src="img/B18335_08_2.jpg" alt="Figure 8.2 – Neural network architecture&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.2–神经网络架构</p>
-			<p>对于强化学习，这必须在Q学习范式中应用<a id="_idIndexMarker462"/>。本质上，深度学习模型只是一种比标准Q学习方法更好的估计Q值的方法(或者至少这是它渴望的)。</p>
-			<p>你可以看到如下的类比。在标准Q-learning中，有一个相对简单的存储和更新机制，用于新奖励的到来和更新策略。您可以看到它被描绘成一个表格，如下所示:</p>
+			<p class="figure-caption">图 8.2–神经网络架构</p>
+			<p>对于强化学习，这必须在 Q 学习范式中应用<a id="_idIndexMarker462"/>。本质上，深度学习模型只是一种比标准 Q 学习方法更好的估计 Q 值的方法(或者至少这是它渴望的)。</p>
+			<p>你可以看到如下的类比。在标准 Q-learning 中，有一个相对简单的存储和更新机制，用于新奖励的到来和更新策略。您可以看到它被描绘成一个表格，如下所示:</p>
 			<div><div><img src="img/B18335_08_3.jpg" alt="Figure 8.3 – Example table format&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.3–表格格式示例</p>
-			<p>在深度Q学习中，输入和输出过程基本相同，然而状态被转录为输入到神经网络的多个变量。神经网络然后输出每个动作的估计Q值。</p>
+			<p class="figure-caption">图 8.3–表格格式示例</p>
+			<p>在深度 Q 学习中，输入和输出过程基本相同，然而状态被转录为输入到神经网络的多个变量。神经网络然后输出每个动作的估计 Q 值。</p>
 			<p>下图显示了如何将状态作为输入添加到神经网络中。</p>
 			<div><div><img src="img/B18335_08_4.jpg" alt="Figure 8.4 – Adding the state as input to the neural network&#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.4–将状态作为输入添加到神经网络</p>
+			<p class="figure-caption">图 8.4–将状态作为输入添加到神经网络</p>
 			<p>现在您已经理解了强化学习背后的理论，下一节将会更有应用性，因为它将呈现<a id="_idIndexMarker464"/>许多关于流数据的强化学习的示例用例。</p>
 			<h1 id="_idParaDest-166"><a id="_idTextAnchor173"/>对流式数据使用强化学习</h1>
 			<p>正如在<a id="_idIndexMarker465"/>前面章节中所讨论的，在流数据上建立模型<a id="_idIndexMarker466"/>的挑战是找到能够增量学习并且能够在模型漂移或数据漂移的情况下适应的模型。</p>
@@ -184,15 +184,15 @@
 				<li><a href="https://www.science.org/doi/10.1126/science.aar6404">https://www.science.org/doi/10.1126/science.aar6404</a></li>
 				<li><a href="https://arxiv.org/pdf/1912.10944.pdf">https://arxiv.org/pdf/1912.10944.pdf</a></li>
 			</ul>
-			<p>既然我们已经探索了强化学习的一些用例，在下一节中，让我们使用Python来实现它。</p>
-			<h1 id="_idParaDest-173"><a id="_idTextAnchor180"/>在Python中实现强化学习</h1>
-			<p>现在让我们来看一个例子<a id="_idIndexMarker483"/>，其中流数据<a id="_idIndexMarker484"/>用于Q学习。我们将使用的数据是股票价格的模拟数据:</p>
+			<p>既然我们已经探索了强化学习的一些用例，在下一节中，让我们使用 Python 来实现它。</p>
+			<h1 id="_idParaDest-173"><a id="_idTextAnchor180"/>在 Python 中实现强化学习</h1>
+			<p>现在让我们来看一个例子<a id="_idIndexMarker483"/>，其中流数据<a id="_idIndexMarker484"/>用于 Q 学习。我们将使用的数据是股票价格的模拟数据:</p>
 			<ol>
 				<li value="1">数据在下面的代码块中生成。</li>
 			</ol>
-			<p>首先生成的值列表是一个包含30，000个连续值的列表，这些值代表股票价格。数据生成过程是0的起点，在每个时间步，都有一个随机值加到这个起点上。随机正常值以0为中心，这表明价格将基于标准差1以步长大小上升或下降。</p>
+			<p>首先生成的值列表是一个包含 30，000 个连续值的列表，这些值代表股票价格。数据生成过程是 0 的起点，在每个时间步，都有一个随机值加到这个起点上。随机正常值以 0 为中心，这表明价格将基于标准差 1 以步长大小上升或下降。</p>
 			<p>这个过程通常被称为随机漫步<a id="_idIndexMarker485"/>，它可以向上或向下走很远。之后，这些值再次被标准化为正态分布。</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-1</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-1</p>
 			<pre>import numpy as np
 import matplotlib.pyplot as plt
 import random
@@ -206,11 +206,11 @@ plt.plot(values)</pre>
 			<div><div><img src="img/B18335_08_5.jpg" alt="Figure 8.5 – The resulting plot from the preceding code block &#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.5–前面代码块的结果图</p>
+			<p class="figure-caption">图 8.5–前面代码块的结果图</p>
 			<ol>
-				<li value="2">现在，对于一个强化问题，有必要有一个有限数量的状态。当然，如果我们考虑<a id="_idIndexMarker488"/>的股票价格，我们可以收集<a id="_idIndexMarker489"/>到无限个小数。数据四舍五入到1位小数，以限制可能的状态数据点数:</li>
+				<li value="2">现在，对于一个强化问题，有必要有一个有限数量的状态。当然，如果我们考虑<a id="_idIndexMarker488"/>的股票价格，我们可以收集<a id="_idIndexMarker489"/>到无限个小数。数据四舍五入到 1 位小数，以限制可能的状态数据点数:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-2</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-2</p>
 			<pre>rounded_values = []
 for value in values:
     rounded_values.append(round(value, 1))
@@ -219,35 +219,35 @@ plt.plot(rounded_values)</pre>
 			<div><div><img src="img/B18335_08_6.jpg" alt="Figure 8.6 – The graph resulting from the preceding code block &#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.6–前面代码块生成的图形</p>
+			<p class="figure-caption">图 8.6–前面代码块生成的图形</p>
 			<ol>
 				<li value="3">我们现在可以将状态的潜在值<a id="_idIndexMarker490"/>设置为过去发生的所有值<a id="_idIndexMarker491"/>。我们也可以启动一项政策。</li>
 			</ol>
-			<p>正如在本章的理论部分所看到的，策略代表了强化学习代理的规则。在某些情况下，有一个非常具体的规则集，但在Q-learning中，对于状态和动作的每个组合，只有一个Q值(质量)。</p>
+			<p>正如在本章的理论部分所看到的，策略代表了强化学习代理的规则。在某些情况下，有一个非常具体的规则集，但在 Q-learning 中，对于状态和动作的每个组合，只有一个 Q 值(质量)。</p>
 			<p>在我们的例子中，让我们考虑一个一次只能做两件事的股票交易机器人<em class="italic"> t </em>。交易机器人要么在时间<em class="italic"> t </em>买入并在<em class="italic"> t+1 </em>卖出，要么在时间<em class="italic"> t </em>卖出并在时间<em class="italic"> t+1 </em>平仓。在不太深入股票交易的情况下，需要了解的重要事情如下:</p>
 			<ul>
 				<li>当代理购买时，它应该这样做，因为它预计股市会上涨。</li>
 				<li>当代理人打开一个卖单，它应该这样做，因为它预计股市将下跌。</li>
 			</ul>
-			<p>作为信息，我们的股票交易员将非常有限。状态中唯一的数据点是时间t时的价格。这里的目标不是建立一个伟大的模型，而是在一个股票交易示例上展示构建强化学习代理的原理。实际上，你需要更多的州信息来决定你的行动:</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-3</p>
+			<p>作为信息，我们的股票交易员将非常有限。状态中唯一的数据点是时间 t 时的价格。这里的目标不是建立一个伟大的模型，而是在一个股票交易示例上展示构建强化学习代理的原理。实际上，你需要更多的州信息来决定你的行动:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-3</p>
 			<pre>states = set(rounded_values)
 import pandas as pd
 policy = pd.DataFrame(0, index=states, columns=['buy', 'sell'])</pre>
 			<ol>
-				<li value="4">下文定义的函数是如何基于Q表获得一个动作(卖出或买入)。将Q表<a id="_idIndexMarker493"/>称为策略并不完全<a id="_idIndexMarker492"/>正确，但它确实使它更容易理解。</li>
+				<li value="4">下文定义的函数是如何基于 Q 表获得一个动作(卖出或买入)。将 Q 表<a id="_idIndexMarker493"/>称为策略并不完全<a id="_idIndexMarker492"/>正确，但它确实使它更容易理解。</li>
 			</ol>
-			<p>所选择的动作是对于给定状态具有最高Q值的动作(状态是股票的当前值):</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-4</p>
+			<p>所选择的动作是对于给定状态具有最高 Q 值的动作(状态是股票的当前值):</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-4</p>
 			<pre>def find_action(policy, current_value):
     
     if policy.loc[current_value,:].sum() == 0:
         return random.choice([ 'buy', 'sell'])
     return policy.columns[policy.loc[current_value,:].argmax()]</pre>
 			<ol>
-				<li value="5">还需要定义一个更新规则。在本例中，更新规则基于前面解释的贝尔曼方程。但是，请记住，代理相当简单，折扣部分并不真正相关。折扣有助于使代理人更喜欢短期收益而不是长期收益。当前代理人总是在一个时间步长内获得收益，因此贴现没有附加值。在一个真正的股票交易机器人中，这将非常重要:如果你能在一年内翻倍，你不会把你的钱放在一只将在20年内翻倍的股票上:</li>
+				<li value="5">还需要定义一个更新规则。在本例中，更新规则基于前面解释的贝尔曼方程。但是，请记住，代理相当简单，折扣部分并不真正相关。折扣有助于使代理人更喜欢短期收益而不是长期收益。当前代理人总是在一个时间步长内获得收益，因此贴现没有附加值。在一个真正的股票交易机器人中，这将非常重要:如果你能在一年内翻倍，你不会把你的钱放在一只将在 20 年内翻倍的股票上:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-5</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-5</p>
 			<pre>def update_policy(reward, current_state_value, action):
     
     LEARNING_RATE = 0.1
@@ -256,11 +256,11 @@ policy = pd.DataFrame(0, index=states, columns=['buy', 'sell'])</pre>
     
     return LEARNING_RATE * (reward + DISCOUNT_FACTOR * MAX_REWARD - policy.loc[current_state_value,action])</pre>
 			<ol>
-				<li value="6">我们现在开始执行模型的<a id="_idIndexMarker494"/>。我们首先将<code>past_state</code>设置为0，将<code>past_action</code>设置为<code>buy</code>。总的<a id="_idIndexMarker495"/>奖励被初始化为0，并且奖励的累加器列表被实例化。</li>
+				<li value="6">我们现在开始执行模型的<a id="_idIndexMarker494"/>。我们首先将<code>past_state</code>设置为 0，将<code>past_action</code>设置为<code>buy</code>。总的<a id="_idIndexMarker495"/>奖励被初始化为 0，并且奖励的累加器列表被实例化。</li>
 			</ol>
-			<p>然后，代码将遍历舍入后的值。这是一个复制数据流的过程。如果数据一个接一个地到达，代理将能够以完全相同的方式学习。本质上是在每个学习步骤更新Q表。</p>
-			<p>在每次迭代中，模型将执行最佳操作，其中最佳操作基于Q值表(策略)中的Q值。该模型还将从时间步长t-1获得奖励，因为这被定义为股票交易机器人的唯一选项。这些奖励将用于更新Q表，以便下一轮可以有更新的信息:</p>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-6</p>
+			<p>然后，代码将遍历舍入后的值。这是一个复制数据流的过程。如果数据一个接一个地到达，代理将能够以完全相同的方式学习。本质上是在每个学习步骤更新 Q 表。</p>
+			<p>在每次迭代中，模型将执行最佳操作，其中最佳操作基于 Q 值表(策略)中的 Q 值。该模型还将从时间步长 t-1 获得奖励，因为这被定义为股票交易机器人的唯一选项。这些奖励将用于更新 Q 表，以便下一轮可以有更新的信息:</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-6</p>
 			<pre>past_state_value = 0
 past_action = 'buy'
 total_reward = 0.
@@ -290,38 +290,38 @@ for i, current_state_value in enumerate(rounded_values):
 			<ol>
 				<li value="7">在下面的图中，你可以看到这个模型是如何得到回报的。开始时，总<a id="_idIndexMarker497"/>奖励长时间为负，然后结束时为正。请记住，我们是在学习假设的、代表随机行走的输入数据。如果我们想要一个真正的智能股票交易机器人，我们需要给它更多更好的数据:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-7</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-7</p>
 			<pre>plt.plot(rewards)</pre>
 			<p>结果图如下所示:</p>
 			<div><div><img src="img/B18335_08_7.jpg" alt="Figure 8.7 – The graph resulting from the preceding code block &#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.7–前面代码块生成的图形</p>
+			<p class="figure-caption">图 8.7–前面代码块生成的图形</p>
 			<ol>
-				<li value="8">下图显示了Q值相对于策略的热图。当股票<a id="_idIndexMarker499"/>价格较低时，表顶部的值<a id="_idIndexMarker498"/>是优选动作，当股票价格较高时，表底部的值是优选动作。浅黄色表示高质量的动作，黑色表示低质量的动作:</li>
+				<li value="8">下图显示了 Q 值相对于策略的热图。当股票<a id="_idIndexMarker499"/>价格较低时，表顶部的值<a id="_idIndexMarker498"/>是优选动作，当股票价格较高时，表底部的值是优选动作。浅黄色表示高质量的动作，黑色表示低质量的动作:</li>
 			</ol>
-			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块8-8</p>
+			<p class="SC---Heading" lang="en-US" xml:lang="en-US">代码块 8-8</p>
 			<pre>import seaborn as sns
 sns.heatmap(policy.sort_index())</pre>
 			<p>生成的热图如下所示:</p>
 			<div><div><img src="img/B18335_08_8.jpg" alt="Figure 8.8 – The heatmap resulting from the preceding code block &#13;&#10;"/>
 				</div>
 			</div>
-			<p class="figure-caption">图8.8–前面代码块产生的热图</p>
+			<p class="figure-caption">图 8.8–前面代码块产生的热图</p>
 			<p>有趣的是，模型似乎已经开始学习股票交易的一个基本规则:低买高卖。这可以从高价卖的黄多，低价买的黄多看出来。显然，这个规则在模拟的随机漫步数据上也是成立的。</p>
-			<p>为了学习更高级的规则，代理需要在状态中有更多的数据，因此Q表<a id="_idIndexMarker500"/>也会变得更重。你可以添加的一个例子是价格的滚动历史，这样代理就知道你是处于上升趋势还是下降趋势。你还可以添加宏观经济因素、情绪估计或任何其他数据。</p>
+			<p>为了学习更高级的规则，代理需要在状态中有更多的数据，因此 Q 表<a id="_idIndexMarker500"/>也会变得更重。你可以添加的一个例子是价格的滚动历史，这样代理就知道你是处于上升趋势还是下降趋势。你还可以添加宏观经济因素、情绪估计或任何其他数据。</p>
 			<p>你也可以让动作结构更高级。与其只有一天的买卖交易，不如有一个可以在代理决定的任何时间买卖其投资组合中任何股票的模型更有意思。</p>
 			<p>当然，您还需要提供足够的数据，以允许模型对所有这些场景进行估计。您考虑的场景越多，代理学习如何正确行为所需的时间就越长。</p>
 			<h1 id="_idParaDest-174"><a id="_idTextAnchor181"/>总结</h1>
 			<p>在这一章中，你首先了解了强化学习的基础。您看到了强化学习模型专注于采取行动，而不是做出预测。</p>
-			<p>您还看到了两种广为人知的强化学习算法。这始于Q-learning，它是强化学习的基础算法，以及它更强大的改进，深度Q-learning。</p>
+			<p>您还看到了两种广为人知的强化学习算法。这始于 Q-learning，它是强化学习的基础算法，以及它更强大的改进，深度 Q-learning。</p>
 			<p>强化学习通常用于聊天机器人或自动驾驶汽车等更高级的用例，但也可以非常好地用于数字数据流。通过一个用例，您看到了如何将强化学习应用于金融数据流。</p>
-			<p>通过这一章，你已经结束了发现与在线学习最相关的机器学习模型。在接下来的章节中，你将会发现一些额外的工具，这些工具是你在在线学习中需要考虑的，并且在传统的ML中没有真正的对应物。你将首先深入研究所有类型的数据和模型漂移，然后发现如何处理因灾难性遗忘而完全偏离方向的模型。</p>
+			<p>通过这一章，你已经结束了发现与在线学习最相关的机器学习模型。在接下来的章节中，你将会发现一些额外的工具，这些工具是你在在线学习中需要考虑的，并且在传统的 ML 中没有真正的对应物。你将首先深入研究所有类型的数据和模型漂移，然后发现如何处理因灾难性遗忘而完全偏离方向的模型。</p>
 			<h1 id="_idParaDest-175"><a id="_idTextAnchor182"/>延伸阅读</h1>
 			<ul>
 				<li>强化学习应用:【https://neptune.ai/blog/reinforcement-learning-applications T4】</li>
 				<li>q-learning:<a href="https://en.wikipedia.org/wiki/Q-learning">https://en.wikipedia.org/wiki/Q-learning</a></li>
-				<li>深度Q学习:<a href="https://en.wikipedia.org/wiki/Deep_reinforcement_learning">https://en.wikipedia.org/wiki/Deep_reinforcement_learning</a></li>
+				<li>深度 Q 学习:<a href="https://en.wikipedia.org/wiki/Deep_reinforcement_learning">https://en.wikipedia.org/wiki/Deep_reinforcement_learning</a></li>
 			</ul>
 		</div>
 	

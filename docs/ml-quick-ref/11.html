@@ -103,15 +103,15 @@
 
 <p>在前一章中，我们了解了什么是<strong>主成分分析</strong> ( <strong> PCA </strong>)，它是如何工作的，以及我们应该何时部署它。然而，作为一种降维技术，你认为你能把它用在每一个场景中吗？你能回忆起我们讨论过的路障或其背后的基本假设吗？</p>
 
-<p>是的，PCA背后最重要的假设是它适用于线性可分的数据集。然而，在现实世界中，你不会经常得到这种数据集。我们需要一种方法来捕捉非线性数据模式。</p>
+<p>是的，PCA 背后最重要的假设是它适用于线性可分的数据集。然而，在现实世界中，你不会经常得到这种数据集。我们需要一种方法来捕捉非线性数据模式。</p>
 
 <p class="mce-root"/>
 
-<p>在左侧，我们有一个数据集，其中有两个类。我们可以看到，一旦我们得到了投影并确定了成分，主成分分析就不会对其产生影响，并且它也不能在2D维中用一条线将其分开。也就是说，只有当我们得到低层次的维度和线性可分的数据时，PCA才能很好地发挥作用。下图显示了两个类的数据集:</p>
+<p>在左侧，我们有一个数据集，其中有两个类。我们可以看到，一旦我们得到了投影并确定了成分，主成分分析就不会对其产生影响，并且它也不能在 2D 维中用一条线将其分开。也就是说，只有当我们得到低层次的维度和线性可分的数据时，PCA 才能很好地发挥作用。下图显示了两个类的数据集:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-897 image-border" src="img/a232d621-ee4e-41be-8803-acf75c70efd6.png" style="width:36.00em;height:16.08em;"/></p>
 
-<p>这就是我们引入核方法的原因:这样我们可以将它与PCA合并来实现它。</p>
+<p>这就是我们引入核方法的原因:这样我们可以将它与 PCA 合并来实现它。</p>
 
 <p>为了回顾一下您对内核方法的了解，我们将简要讨论它及其重要性:</p>
 
@@ -129,7 +129,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="alignnone size-full wp-image-857 image-border" src="img/c8e0b260-2472-4be2-a5ab-c9dbd95c0e2b.png" style="width:45.42em;height:19.75em;"/></p>
 
-<p class="CDPAlignLeft CDPAlign">为了对上图中的绿色和红色点进行分类，特征映射函数必须获取数据，并将is从2D变为3D，即<em>φ= R<sup>2</sup>→R<sup>3</sup></em>。这个等式如下:</p>
+<p class="CDPAlignLeft CDPAlign">为了对上图中的绿色和红色点进行分类，特征映射函数必须获取数据，并将 is 从 2D 变为 3D，即<em>φ= R<sup>2</sup>→R<sup>3</sup></em>。这个等式如下:</p>
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/a66ab011-d5a2-4bcd-9ac0-a5942e1c9c6d.png" style="width:24.17em;height:1.67em;"/></p>
 
@@ -145,11 +145,11 @@
 
 <p class="CDPAlignCenter CDPAlign" style="padding-left: 90px"><img class="fm-editor-equation" src="img/a28c212f-cb59-4bd0-a194-ec0a992eb0cc.png" style="width:4.17em;height:1.17em;"/></p>
 
-<p>这里，Phi是一个特征映射函数。但是我们是否总是需要知道特征映射函数呢？不完全是。内核函数<em> K </em>完成了这个任务。对于给定的核函数，<em> K </em>，我们可以得出一个特征空间，<em> H </em>。两种流行的核函数是高斯核函数和多项式核函数。</p>
+<p>这里，Phi 是一个特征映射函数。但是我们是否总是需要知道特征映射函数呢？不完全是。内核函数<em> K </em>完成了这个任务。对于给定的核函数，<em> K </em>，我们可以得出一个特征空间，<em> H </em>。两种流行的核函数是高斯核函数和多项式核函数。</p>
 
 <p>选择一个合适的核函数将使我们能够很好地找出新特征空间中的数据特征。</p>
 
-<p>现在我们已经熟悉了内核技巧，让我们继续学习内核PCA。</p>
+<p>现在我们已经熟悉了内核技巧，让我们继续学习内核 PCA。</p>
 
 
 
@@ -202,7 +202,7 @@
 
                 
 
-<p>内核PCA是一种算法，它不仅保持了PCA的主要精神，而且进一步利用了内核技巧，使其可用于非线性数据:</p>
+<p>内核 PCA 是一种算法，它不仅保持了 PCA 的主要精神，而且进一步利用了内核技巧，使其可用于非线性数据:</p>
 
 <ol>
 
@@ -212,7 +212,7 @@
 
 <p class="CDPAlignCenter CDPAlign"><img class="fm-editor-equation" src="img/390c4461-854c-493d-8ffd-a0e4e8c7a67c.png" style="width:12.75em;height:3.67em;"/></p>
 
-<p style="padding-left: 60px">它类似于我们用于PCA的那个。</p>
+<p style="padding-left: 60px">它类似于我们用于 PCA 的那个。</p>
 
 <ol start="2">
 
@@ -246,7 +246,7 @@
 
 <ol start="5">
 
-<li>让我们将<em>步骤3 </em>中的等式中的<em> v </em>的值代入<em>步骤4 </em>的等式中，如下所示:</li>
+<li>让我们将<em>步骤 3 </em>中的等式中的<em> v </em>的值代入<em>步骤 4 </em>的等式中，如下所示:</li>
 
 </ol>
 
@@ -254,7 +254,7 @@
 
 <ol start="6">
 
-<li>现在，我们称<em>K</em>T35】。通过键入<em> K </em>的值来简化<em>步骤5 </em>的等式，我们得到以下结果:</li>
+<li>现在，我们称<em>K</em>T35】。通过键入<em> K </em>的值来简化<em>步骤 5 </em>的等式，我们得到以下结果:</li>
 
 </ol>
 
@@ -268,7 +268,7 @@
 
 <p class="CDPAlignCenter CDPAlign" style="padding-left: 60px"><img class="alignnone size-full wp-image-898 image-border" src="img/2cf064cb-9d15-463d-9965-6c1ffbd533ad.png" style="width:35.50em;height:14.83em;"/></p>
 
-<p class="mce-root">现在，让我们用Python执行内核PCA。我们将保持简单，并在虹膜数据集上工作。我们还将了解如何在模型中利用新的压缩维度:</p>
+<p class="mce-root">现在，让我们用 Python 执行内核 PCA。我们将保持简单，并在虹膜数据集上工作。我们还将了解如何在模型中利用新的压缩维度:</p>
 
 <p class="mce-root">让我们加载库:</p>
 
@@ -324,7 +324,7 @@
 
 <pre style="padding-left: 60px">X_train</pre>
 
-<p style="padding-left: 60px">现在，让我们将内核PCA应用于此。这里，我们试图将数据压缩成两个部分。这里选择的核是径向基函数:</p>
+<p style="padding-left: 60px">现在，让我们将内核 PCA 应用于此。这里，我们试图将数据压缩成两个部分。这里选择的核是径向基函数:</p>
 
 <p class="CDPAlignCenter CDPAlign">在核主成分分析的帮助下，我们得到了新的训练和测试数据。</p>
 
@@ -350,7 +350,7 @@
 
 <p class="CDPAlignCenter CDPAlign">独立成分分析</p>
 
-<p><strong>独立成分分析</strong> ( <strong> ICA </strong>)在降维方面类似于PCA。然而，它起源于信号处理领域，其中存在这样的问题，即多个信号从多个来源传输，并且设置了多个设备来捕捉它。然而，问题是该设备捕获的信号不是很清晰，因为它碰巧是许多来源的混合。他们需要对产生ICA的不同设备有清晰和独立的接收。赫拉尔特和朱滕在1996年提出了这个观点。</p>
+<p><strong>独立成分分析</strong> ( <strong> ICA </strong>)在降维方面类似于 PCA。然而，它起源于信号处理领域，其中存在这样的问题，即多个信号从多个来源传输，并且设置了多个设备来捕捉它。然而，问题是该设备捕获的信号不是很清晰，因为它碰巧是许多来源的混合。他们需要对产生 ICA 的不同设备有清晰和独立的接收。赫拉尔特和朱滕在 1996 年提出了这个观点。</p>
 
 
 
@@ -409,7 +409,7 @@
 
 <p><img class="fm-editor-equation" src="img/78e5eed1-8082-4bd9-b049-53969f9be9df.png" style="width:8.42em;height:3.17em;"/></p>
 
-<p>这里，<em xmlns:epub="http://www.idpf.org/2007/ops"> i= 1，2，3..........【T11号】</em></p>
+<p>这里，<em xmlns:epub="http://www.idpf.org/2007/ops"> i= 1，2，3..........【T11 号】</em></p>
 
 <p class="CDPAlignCenter CDPAlign">也可以用矩阵分解的形式写成<strong> x=As </strong>:</p>
 
@@ -433,7 +433,7 @@
 
 <p>独立分量分析预处理</p>
 
-<p>ICA的预处理可以如下进行:</p>
+<p>ICA 的预处理可以如下进行:</p>
 
 
 
@@ -486,7 +486,7 @@
 
                 
 
-<p><strong>白化</strong>:在将数据放入ICA之前，我们应该对数据进行白化。这意味着数据必须是不相关的。从几何学上来说，它倾向于恢复数据的初始形状，并且只需要旋转结果矩阵。</p>
+<p><strong>白化</strong>:在将数据放入 ICA 之前，我们应该对数据进行白化。这意味着数据必须是不相关的。从几何学上来说，它倾向于恢复数据的初始形状，并且只需要旋转结果矩阵。</p>
 
 <ul>
 
@@ -537,7 +537,7 @@
 
                             
 
-                    <h1 class="header-title">这里，我们将需要最大化峰度，这将把分布变成非高斯分布。这将产生独立的组件。下图显示了快速ICA的图像:</h1>
+                    <h1 class="header-title">这里，我们将需要最大化峰度，这将把分布变成非高斯分布。这将产生独立的组件。下图显示了快速 ICA 的图像:</h1>
 
                 
 
@@ -549,9 +549,9 @@
 
 <p><img src="img/490fddd1-61b4-48b2-92fd-f42080453314.png" style="width:18.00em;height:16.17em;"/></p>
 
-<p>为此，我们在Python中有了<kbd>FastICA</kbd>库。</p>
+<p>为此，我们在 Python 中有了<kbd>FastICA</kbd>库。</p>
 
-<p class="CDPAlignCenter CDPAlign">让我们看看如何在Python中执行这个。我们将使用相同的虹膜数据。对于执行ICA来说，这可能不是一个理想的数据集，但是这样做是出于方向性的目的。要在Python中执行代码，我们需要执行以下步骤:</p>
+<p class="CDPAlignCenter CDPAlign">让我们看看如何在 Python 中执行这个。我们将使用相同的虹膜数据。对于执行 ICA 来说，这可能不是一个理想的数据集，但是这样做是出于方向性的目的。要在 Python 中执行代码，我们需要执行以下步骤:</p>
 
 <p>首先，我们需要加载库:</p>
 
@@ -569,7 +569,7 @@
 
 <ol start="2">
 
-<li>现在，我们需要在ICA库中加载:</li>
+<li>现在，我们需要在 ICA 库中加载:</li>
 
 </ol>
 
@@ -577,7 +577,7 @@
 
 <ol start="3">
 
-<li>我们如下执行ICA。这里我们将坚持三个组成部分:</li>
+<li>我们如下执行 ICA。这里我们将坚持三个组成部分:</li>
 
 </ol>
 
@@ -662,7 +662,7 @@
 
                             
 
-                    <h1 class="header-title">这是我们在线性代数中看到的素数方程之一，其中<strong> y </strong>是一个<strong> M x 1 </strong>矩阵，phi是一个<strong> M x N </strong>矩阵，其列数大于行数，而<strong> x </strong>是一个包含<strong> k </strong>个非零元素的<strong> N x 1 </strong>矩阵。有这么多未知数，表示为一个<strong> N </strong>长度向量和<strong> M </strong>个测量值，其中<strong>M&lt;T21】N</strong>。在这种类型的方程中，我们知道许多解是可能的，因为这个矩阵的零空间是非平凡的。因此，这个方程可以容纳许多解。</h1>
+                    <h1 class="header-title">这是我们在线性代数中看到的素数方程之一，其中<strong> y </strong>是一个<strong> M x 1 </strong>矩阵，phi 是一个<strong> M x N </strong>矩阵，其列数大于行数，而<strong> x </strong>是一个包含<strong> k </strong>个非零元素的<strong> N x 1 </strong>矩阵。有这么多未知数，表示为一个<strong> N </strong>长度向量和<strong> M </strong>个测量值，其中<strong>M&lt;T21】N</strong>。在这种类型的方程中，我们知道许多解是可能的，因为这个矩阵的零空间是非平凡的。因此，这个方程可以容纳许多解。</h1>
 
                 
 
@@ -775,7 +775,7 @@
 
 <p class="CDPAlignCenter CDPAlign">自组织地图</p>
 
-<p><strong>自组织地图</strong> ( <strong> SOM </strong>)是Teuvo Kohonen在20世纪80年代发明的。有时，它们被称为<strong>科霍宁地图</strong>。那么，它们为什么存在？这种映射的主要动机是通过神经网络来降低维数。下图显示了来自输入图层的不同2D模式:</p>
+<p><strong>自组织地图</strong> ( <strong> SOM </strong>)是 Teuvo Kohonen 在 20 世纪 80 年代发明的。有时，它们被称为<strong>科霍宁地图</strong>。那么，它们为什么存在？这种映射的主要动机是通过神经网络来降低维数。下图显示了来自输入图层的不同 2D 模式:</p>
 
 <pre>x = np.array(vx.value)<br/>x = np.squeeze(x)<br/>signal = spfft.idct(x, norm='ortho', axis=0)</pre>
 
@@ -822,7 +822,7 @@
 
                             
 
-                    <h1 class="header-title">它们将列数作为输入。正如我们从2D输出中看到的，它将数据集中的列数量转换并减少到2D中。</h1>
+                    <h1 class="header-title">它们将列数作为输入。正如我们从 2D 输出中看到的，它将数据集中的列数量转换并减少到 2D 中。</h1>
 
                 
 
@@ -832,19 +832,19 @@
 
                 
 
-<p>下面的链接通向2D输出:<a href="https://www.cs.hmc.edu/~kpang/nn/som.html">https://www.cs.hmc.edu/~kpang/nn/som.html</a></p>
+<p>下面的链接通向 2D 输出:<a href="https://www.cs.hmc.edu/~kpang/nn/som.html">https://www.cs.hmc.edu/~kpang/nn/som.html</a></p>
 
-<p class="CDPAlignCenter CDPAlign">上图描述的是2D基于各种因素的健康状况。也就是说，它显示了他们是富有还是贫穷。其他要考虑的因素有教育、生活质量、卫生、通货膨胀和健康。因此，它形成了一个巨大的列集或维度集。比利时和瑞典等国家似乎显示出类似的特征，表明它们在健康指标上得分很高。</p>
+<p class="CDPAlignCenter CDPAlign">上图描述的是 2D 基于各种因素的健康状况。也就是说，它显示了他们是富有还是贫穷。其他要考虑的因素有教育、生活质量、卫生、通货膨胀和健康。因此，它形成了一个巨大的列集或维度集。比利时和瑞典等国家似乎显示出类似的特征，表明它们在健康指标上得分很高。</p>
 
 <p>由于这是一种无监督的学习技术，数据没有被标记。仅基于模式，神经网络就能够理解哪个国家应该被放置在哪里。</p>
 
-<p>与我们刚刚讨论的情况类似，可以利用自组织地图的机会很多。可以认为它在本质上类似于K-均值聚类。</p>
+<p>与我们刚刚讨论的情况类似，可以利用自组织地图的机会很多。可以认为它在本质上类似于 K-均值聚类。</p>
 
 <p>The depiction of the preceding diagram in 2D talks about a health of the country based on various factors. That is, it shows whether they are rich or poor. Some other factors that are taken into account are education, quality of life, sanitation, inflation, and health. Therefore, it forms a huge set of columns or dimensions. Countries such as Belgium and Sweden seem to show similar traits, depicting that they have got a good score on the health indicator.</p>
 
 <p>索姆</p>
 
-<p>让我们来看看SOMs是如何学习的:</p>
+<p>让我们来看看 SOMs 是如何学习的:</p>
 
 <p class="mce-root">每个节点的权重由小的标准化随机值初始化。这些就像不同输出节点的坐标。</p>
 
@@ -907,17 +907,17 @@
 
 <li>具有最接近输入向量的权重向量的节点被标记为<strong>最佳匹配单元</strong> ( <strong> BMU </strong>)。</li>
 
-<li>对输入和权重向量的所有行执行类似的操作。bmu适用于所有人。</li>
+<li>对输入和权重向量的所有行执行类似的操作。bmu 适用于所有人。</li>
 
 </ol>
 
-<p class="CDPAlignCenter CDPAlign">一旦为每次迭代确定了BMU，就可以计算BMU邻域内的其他节点。相同半径内的节点将更新其权重。绿色箭头表示半径。慢慢地，邻域将缩小到只有一个结点的大小，如下图所示:</p>
+<p class="CDPAlignCenter CDPAlign">一旦为每次迭代确定了 BMU，就可以计算 BMU 邻域内的其他节点。相同半径内的节点将更新其权重。绿色箭头表示半径。慢慢地，邻域将缩小到只有一个结点的大小，如下图所示:</p>
 
 <ol start="4">
 
 <li><img class="alignnone size-full wp-image-1003 image-border" src="img/c16e2611-8dcc-4f93-85bd-f848c0c03343.png" style="width:18.25em;height:18.25em;"/></li>
 
-<li>Kohonen算法最有趣的部分是邻域的半径不断缩小。它通过指数衰减函数发生。λ的值取决于σ。为运行算法而选择的迭代次数由以下等式给出:</li>
+<li>Kohonen 算法最有趣的部分是邻域的半径不断缩小。它通过指数衰减函数发生。λ的值取决于σ。为运行算法而选择的迭代次数由以下等式给出:</li>
 
 <li><img class="fm-editor-equation" src="img/521300be-39b7-464b-b6cf-54de2bbe33e7.png" style="width:8.83em;height:2.33em;"/></li>
 
@@ -947,13 +947,13 @@
 
 <p class="CDPAlignCenter CDPAlign"><em> L(t) </em>:学习率</p>
 
-<p style="padding-left: 60px"><em> D </em>:节点到BMU的距离</p>
+<p style="padding-left: 60px"><em> D </em>:节点到 BMU 的距离</p>
 
 <ul>
 
 <li style="list-style-type: none"><em> σ </em>:函数的宽度<ul>
 
-<li>现在，让我们用Python实现一个用例。我们将尝试检测信用卡数据集中的欺诈行为:</li>
+<li>现在，让我们用 Python 实现一个用例。我们将尝试检测信用卡数据集中的欺诈行为:</li>
 
 <li>让我们加载库:</li>
 
@@ -1076,7 +1076,7 @@
 
 <p><img class="fm-editor-equation" src="img/432ba803-d702-4821-9978-219b8a355fa9.png" style="width:40.58em;height:2.50em;"/></p>
 
-<p class="mce-root">让我们利用R中的<kbd>Amelia</kbd>包并执行它:</p>
+<p class="mce-root">让我们利用 R 中的<kbd>Amelia</kbd>包并执行它:</p>
 
 <p>现在，让我们进行估算:</p>
 

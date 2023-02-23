@@ -24,9 +24,9 @@
 
     <h1 id="_idParaDest-126" class="chapterTitle">超参数优化</h1>
 
-    <p class="normal">Kaggle解决方案的表现不仅仅取决于您选择的学习算法的类型。除了您使用的数据和特征之外，它还在很大程度上由算法的<strong class="keyWord">超参数</strong>决定，这些算法参数必须在训练之前固定<em class="italic">，并且不能在训练过程中学习。选择正确的变量/数据/特征在表格数据竞争中最为有效；然而，超参数优化在任何种类的<em class="italic">所有</em>比赛中都有效。事实上，在给定固定数据和算法的情况下，超参数优化是增强算法预测性能和攀登排行榜的唯一可靠方法。这也有助于集合，因为经过调整的模型集合总是比未经调整的模型集合表现得更好。</em></p>
+    <p class="normal">Kaggle 解决方案的表现不仅仅取决于您选择的学习算法的类型。除了您使用的数据和特征之外，它还在很大程度上由算法的<strong class="keyWord">超参数</strong>决定，这些算法参数必须在训练之前固定<em class="italic">，并且不能在训练过程中学习。选择正确的变量/数据/特征在表格数据竞争中最为有效；然而，超参数优化在任何种类的<em class="italic">所有</em>比赛中都有效。事实上，在给定固定数据和算法的情况下，超参数优化是增强算法预测性能和攀登排行榜的唯一可靠方法。这也有助于集合，因为经过调整的模型集合总是比未经调整的模型集合表现得更好。</em></p>
 
-    <p class="normal">如果您知道并理解您的选择对算法的影响，您可能会听说手动调整超参数是可能的。许多Kaggle大师和大师都宣称，他们经常在比赛中直接调整他们的模型。它们以一分为二的操作方式选择性地操作最重要的超参数，探索越来越小的参数值区间，直到找到产生最佳结果的值。然后，他们转向另一个参数。如果每个参数都有一个最小值，并且这些参数是相互独立的，那么这就非常好了。在这种情况下，搜索主要由经验和学习算法的知识驱动。然而，根据我们的经验，你在Kaggle上遇到的大多数任务并不是这样的。问题的复杂性和使用的算法需要一个系统的方法，只有搜索算法可以提供。因此，我们决定写这一章。</p>
+    <p class="normal">如果您知道并理解您的选择对算法的影响，您可能会听说手动调整超参数是可能的。许多 Kaggle 大师和大师都宣称，他们经常在比赛中直接调整他们的模型。它们以一分为二的操作方式选择性地操作最重要的超参数，探索越来越小的参数值区间，直到找到产生最佳结果的值。然后，他们转向另一个参数。如果每个参数都有一个最小值，并且这些参数是相互独立的，那么这就非常好了。在这种情况下，搜索主要由经验和学习算法的知识驱动。然而，根据我们的经验，你在 Kaggle 上遇到的大多数任务并不是这样的。问题的复杂性和使用的算法需要一个系统的方法，只有搜索算法可以提供。因此，我们决定写这一章。</p>
 
     <p class="normal">在这一章中，我们将探索如何扩展您的交叉验证方法，以找到可以推广到您的测试集的最佳超参数。这个想法是为了处理你在比赛中经历的压力和时间、资源的稀缺。出于这个原因，我们将专注于<strong class="keyWord">贝叶斯优化方法</strong>，这是一种基于您可用资源优化复杂模型和数据问题的成熟方法。我们不会局限于搜索预定义超参数的最佳值；我们还将深入研究神经网络架构的问题。</p>
 
@@ -70,7 +70,7 @@
 
     <p class="normal"><strong class="keyWord">网格搜索</strong>是<a id="_idIndexMarker632"/>穷举搜索超参数的<a id="_idIndexMarker631"/>方法，在高维空间不可行。对于每个参数，您选择一组想要测试的值。然后测试这个集合中所有可能的组合。这就是为什么它是详尽无遗的:你尝试一切。这是一个非常简单的算法，它遭受了维数灾难，但是，从积极的方面来看，它是令人尴尬的并行<em class="italic"/>(参见<a href="https://www.cs.iusb.edu/~danav/teach/b424/b424_23_embpar.html">https://www . cs . iusb . edu/~ danav/teach/b424/b424 _ 23 _ emb par . html</a>了解这个计算机科学术语的定义)。这意味着，如果您有足够的处理器来运行搜索，您可以非常快地获得最佳调优。</p>
 
-    <p class="normal">举个例子，我们拿<a id="_idIndexMarker633"/>一个分类问题和<strong class="keyWord">支持向量机分类</strong> ( <strong class="keyWord"> SVC </strong>)。<strong class="keyWord">针对<a id="_idIndexMarker634"/>分类和回归问题的支持向量机</strong> ( <strong class="keyWord"> SVMs </strong>)可能是你会使用网格搜索最多的机器学习算法。使用Scikit-learn中的<code class="inlineCode">make_classification</code>函数，我们可以快速生成分类数据集:</p>
+    <p class="normal">举个例子，我们拿<a id="_idIndexMarker633"/>一个分类问题和<strong class="keyWord">支持向量机分类</strong> ( <strong class="keyWord"> SVC </strong>)。<strong class="keyWord">针对<a id="_idIndexMarker634"/>分类和回归问题的支持向量机</strong> ( <strong class="keyWord"> SVMs </strong>)可能是你会使用网格搜索最多的机器学习算法。使用 Scikit-learn 中的<code class="inlineCode">make_classification</code>函数，我们可以快速生成分类数据集:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sklearn.datasets import make_classification
 
@@ -90,7 +90,7 @@ X, y = make_classification(n_samples=300, n_features=50,
 
 </code></pre>
 
-    <p class="normal">对于我们的下一步，我们定义一个基本的SVC算法，并设置搜索空间。由于SVC的<strong class="keyWord">内核</strong> <strong class="keyWord">函数</strong>(在SVM中转换输入数据的内部函数)决定了要设置的不同超参数，我们提供了一个包含两个不同搜索空间字典的列表，用于根据所选内核类型使用的参数。我们还设置了评估指标(在这种情况下，我们使用准确性，因为目标是完全平衡的):</p>
+    <p class="normal">对于我们的下一步，我们定义一个基本的 SVC 算法，并设置搜索空间。由于 SVC 的<strong class="keyWord">内核</strong> <strong class="keyWord">函数</strong>(在 SVM 中转换输入数据的内部函数)决定了要设置的不同超参数，我们提供了一个包含两个不同搜索空间字典的列表，用于根据所选内核类型使用的参数。我们还设置了评估指标(在这种情况下，我们使用准确性，因为目标是完全平衡的):</p>
 
     <pre class="programlisting code"><code class="hljs-code">from sklearn import svm
 
@@ -142,7 +142,7 @@ print (search_func.best_score_)
 
     <p class="normal">一段时间后，根据运行优化的机器，您将获得基于交叉验证结果的最佳组合。</p>
 
-    <p class="normal">总之，网格搜索是一种非常简单的优化算法，可以利用多核计算机的可用性。它可以很好地与不需要许多调整的机器学习算法一起工作(如SVM和山脊和拉索回归)，但在所有其他情况下，它的适用性非常有限。首先，它仅限于通过离散选择优化超参数<a id="_idIndexMarker637"/>(您需要一组有限的值来循环)。此外，你不能指望它在需要调整多个超参数的算法上有效工作。这是因为搜索空间的爆炸式复杂性，并且因为大多数计算的低效率是由于搜索是盲目地尝试参数值的事实，其中大多数对问题不起作用。</p>
+    <p class="normal">总之，网格搜索是一种非常简单的优化算法，可以利用多核计算机的可用性。它可以很好地与不需要许多调整的机器学习算法一起工作(如 SVM 和山脊和拉索回归)，但在所有其他情况下，它的适用性非常有限。首先，它仅限于通过离散选择优化超参数<a id="_idIndexMarker637"/>(您需要一组有限的值来循环)。此外，你不能指望它在需要调整多个超参数的算法上有效工作。这是因为搜索空间的爆炸式复杂性，并且因为大多数计算的低效率是由于搜索是盲目地尝试参数值的事实，其中大多数对问题不起作用。</p>
 
     <h2 id="_idParaDest-129" class="heading-2">随机搜索</h2>
 
@@ -150,7 +150,7 @@ print (search_func.best_score_)
 
     <p class="normal">随机搜索的效果非常好，而且很容易理解。尽管事实上它依赖于随机性，但它不仅仅是基于盲目的运气，尽管它可能最初看起来是这样。事实上，它的工作原理类似于统计学中的随机抽样:该技术的要点是，如果您进行了足够多的随机测试，您就很有可能找到正确的参数，而不必浪费精力来测试类似执行组合的稍微不同的组合。</p>
 
-    <p class="normal">当有太多参数需要设置时，许多AutoML系统依赖于随机搜索(参见Golovin，d .等人<em class="italic"> Google Vizier:一种用于黑盒优化的服务</em>，2017)。根据经验，当您的超参数优化问题的维度足够高(例如，超过16)时，可以考虑使用随机搜索。</p>
+    <p class="normal">当有太多参数需要设置时，许多 AutoML 系统依赖于随机搜索(参见 Golovin，d .等人<em class="italic"> Google Vizier:一种用于黑盒优化的服务</em>，2017)。根据经验，当您的超参数优化问题的维度足够高(例如，超过 16)时，可以考虑使用随机搜索。</p>
 
     <p class="normal">下面，我们使用随机搜索运行前面的示例:</p>
 
@@ -188,7 +188,7 @@ print (search_func.best_score_)
 
     <p class="normal">正如我们提到的,<a id="_idIndexMarker643"/>网格搜索和随机搜索都是在不知情的情况下工作的:如果一些测试<a id="_idIndexMarker644"/>发现某些超参数不影响结果或者某些值区间无效，则信息不会传播到后续搜索。</p>
 
-    <p class="normal">出于这个原因，Scikit-learn最近推出了<code class="inlineCode">HalvingGridSearchCV</code>和<code class="inlineCode">HalvingRandomSearchCV</code>估计器，可以使用应用于网格搜索和随机搜索调整策略的<strong class="keyWord">连续减半</strong>来搜索参数空间。</p>
+    <p class="normal">出于这个原因，Scikit-learn 最近推出了<code class="inlineCode">HalvingGridSearchCV</code>和<code class="inlineCode">HalvingRandomSearchCV</code>估计器，可以使用应用于网格搜索和随机搜索调整策略的<strong class="keyWord">连续减半</strong>来搜索参数空间。</p>
 
     <p class="normal">在减半中，在第一轮测试中评估大量超参数组合，但是使用少量计算资源。这是通过对来自您的训练数据的几个案例的子样本运行测试来实现的。较小的训练集需要测试较少的计算，因此使用较少的资源(即时间),代价是更不精确的性能估计。当训练集大小增加时，该初始回合允许选择在问题上表现更好的候选超参数值的子集，用于第二轮。</p>
 
@@ -236,15 +236,15 @@ print (search_func.best_score_)
 
       <p class="normal"><a href="https://www.kaggle.com/onodera">https://www.kaggle.com/onodera</a></p>
 
-      <p class="normal">让我们停下来采访另一位卡格勒。友川·小野寺是一名竞赛大师和讨论大师，拥有大约7年的竞赛经验。他还是NVIDIA的高级深度学习数据科学家，也是NVIDIA kg mon(NVIDIA的Kaggle Grandmasters)团队的成员。</p>
+      <p class="normal">让我们停下来采访另一位卡格勒。友川·小野寺是一名竞赛大师和讨论大师，拥有大约 7 年的竞赛经验。他还是 NVIDIA 的高级深度学习数据科学家，也是 NVIDIA kg mon(NVIDIA 的 Kaggle Grandmasters)团队的成员。</p>
 
 
 
-      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在Kaggle上的特长是什么？</p>
+      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在 Kaggle 上的特长是什么？</p>
 
-      <p class="normal">Instacart市场篮分析。<em class="italic">事实证明，这场竞争对Kaggle社区来说极具挑战性，因为它使用了与客户订单相关的匿名数据来预测用户的下一个订单中会出现哪些之前购买的产品。我喜欢它的原因是我喜欢功能工程，我可以想出一堆别人做不到的又好又有趣的功能，这让我在比赛中获得了第二名。</em></p>
+      <p class="normal">Instacart 市场篮分析。<em class="italic">事实证明，这场竞争对 Kaggle 社区来说极具挑战性，因为它使用了与客户订单相关的匿名数据来预测用户的下一个订单中会出现哪些之前购买的产品。我喜欢它的原因是我喜欢功能工程，我可以想出一堆别人做不到的又好又有趣的功能，这让我在比赛中获得了第二名。</em></p>
 
-      <p class="interviewHeader">你是如何对待一场Kaggle比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
+      <p class="interviewHeader">你是如何对待一场 Kaggle 比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
 
       <p class="normal"><em class="italic">我试图想象一个模型是如何工作的，并深入研究假阴性和假阳性。和我的日常工作一样。</em></p>
 
@@ -252,11 +252,11 @@ print (search_func.best_score_)
 
       <p class="normal">人类蛋白质图谱-单细胞分类。<em class="italic">该竞赛是一种实例分割竞赛，但不提供遮罩。因此，它变成了一个弱监督多标签分类问题。我创建了一个消除标签噪声的两级管道。</em></p>
 
-      <p class="interviewHeader">Kaggle对你的职业生涯有帮助吗？如果有，如何实现？</p>
+      <p class="interviewHeader">Kaggle 对你的职业生涯有帮助吗？如果有，如何实现？</p>
 
-      <p class="normal"><em class="italic">是的。我现在在NVIDIA kg mon(NVIDIA的Kaggle特级大师)团队工作。Kaggle发起了许多不同的机器学习竞赛，这些竞赛在数据类型、表格、图像、自然语言和信号方面不同，在行业和领域方面也不同:工业、金融、天文学、病理学、体育、零售等等。我敢打赌，除了卡格勒之外，没有人能接触到所有这些类型的数据，也没有人有这方面的经验。</em></p>
+      <p class="normal"><em class="italic">是的。我现在在 NVIDIA kg mon(NVIDIA 的 Kaggle 特级大师)团队工作。Kaggle 发起了许多不同的机器学习竞赛，这些竞赛在数据类型、表格、图像、自然语言和信号方面不同，在行业和领域方面也不同:工业、金融、天文学、病理学、体育、零售等等。我敢打赌，除了卡格勒之外，没有人能接触到所有这些类型的数据，也没有人有这方面的经验。</em></p>
 
-      <p class="interviewHeader">以你的经验来看，没有经验的Kagglers经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
+      <p class="interviewHeader">以你的经验来看，没有经验的 Kagglers 经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
 
       <p class="normal"><em class="italic">目标分析。此外，种子平均法很容易被忽视:它总是简单而强大。</em></p>
 
@@ -268,15 +268,15 @@ print (search_func.best_score_)
 
       <p class="interviewHeader">对于数据分析或机器学习，你有什么特别推荐的工具或库吗？</p>
 
-      <p class="normal"><em class="italic">只是Python和Jupyter</em><em class="italic"><a id="_idIndexMarker648"/></em><em class="italic">的笔记本。</em></p>
+      <p class="normal"><em class="italic">只是 Python 和 Jupyter</em><em class="italic"><a id="_idIndexMarker648"/></em><em class="italic">的笔记本。</em></p>
 
       <p class="interviewHeader">当一个人参加比赛时，他应该记住或做的最重要的事情是什么？</p>
 
       <p class="normal">如果你能从失败中吸取教训，你就没有真正失败。</p>
 
-      <p class="interviewHeader">你使用其他比赛平台吗？他们和Kaggle相比如何？</p>
+      <p class="interviewHeader">你使用其他比赛平台吗？他们和 Kaggle 相比如何？</p>
 
-      <p class="normal"><em class="italic"> KDD杯和RecSys。两者都符合有趣和挑战性的最低要求。</em></p>
+      <p class="normal"><em class="italic"> KDD 杯和 RecSys。两者都符合有趣和挑战性的最低要求。</em></p>
 
     </div>
 
@@ -284,9 +284,9 @@ print (search_func.best_score_)
 
     <p class="normal">下一个问题是为您使用的每种模型使用正确的超参数集。特别是，为了提高优化效率，您需要知道每个超参数的值，这对于测试每个不同的算法是有意义的。</p>
 
-    <p class="normal">在本节中，我们将研究Kaggle竞赛中最常用的模型，尤其是表格模型，并讨论为了获得最佳结果需要调整的超参数。对于一般的表格数据问题，我们将区分经典的机器学习模型和梯度推进模型(在参数空间方面要求更高)。</p>
+    <p class="normal">在本节中，我们将研究 Kaggle 竞赛中最常用的模型，尤其是表格模型，并讨论为了获得最佳结果需要调整的超参数。对于一般的表格数据问题，我们将区分经典的机器学习模型和梯度推进模型(在参数空间方面要求更高)。</p>
 
-    <p class="normal">至于神经网络，当我们展示标准模型时，我们可以让您了解要调整的特定参数(例如，TabNet神经模型需要设置一些特定的参数，以便它能够正常工作)。然而，Kaggle竞赛中对深度神经网络的大多数优化不是在标准模型上进行的，而是在<em class="italic">定制</em>模型上进行的。因此，除了基本的学习参数(如学习速率和批量大小)之外，神经网络的优化还基于模型的神经结构的具体特征。你必须临时处理这个问题。在本章接近尾声时，我们将讨论一个使用kera stuner(<a href="https://keras.io/keras_tuner/">https://keras.io/keras_tuner/</a>)的<strong class="keyWord">神经架构搜索</strong> ( <strong class="keyWord"> NAS </strong>)的例子。</p>
+    <p class="normal">至于神经网络，当我们展示标准模型时，我们可以让您了解要调整的特定参数(例如，TabNet 神经模型需要设置一些特定的参数，以便它能够正常工作)。然而，Kaggle 竞赛中对深度神经网络的大多数优化不是在标准模型上进行的，而是在<em class="italic">定制</em>模型上进行的。因此，除了基本的学习参数(如学习速率和批量大小)之外，神经网络的优化还基于模型的神经结构的具体特征。你必须临时处理这个问题。在本章接近尾声时，我们将讨论一个使用 kera stuner(<a href="https://keras.io/keras_tuner/">https://keras.io/keras_tuner/</a>)的<strong class="keyWord">神经架构搜索</strong> ( <strong class="keyWord"> NAS </strong>)的例子。</p>
 
     <h2 id="_idParaDest-132" class="heading-2">线性模型</h2>
 
@@ -302,11 +302,11 @@ print (search_func.best_score_)
 
     </ul>
 
-    <p class="normal">在Scikit-learn中，根据算法的不同，你会找到超参数<code class="inlineCode">C</code>(逻辑回归)或<code class="inlineCode">alpha</code>(套索、脊、弹性网)。</p>
+    <p class="normal">在 Scikit-learn 中，根据算法的不同，你会找到超参数<code class="inlineCode">C</code>(逻辑回归)或<code class="inlineCode">alpha</code>(套索、脊、弹性网)。</p>
 
     <h2 id="_idParaDest-133" class="heading-2">支持向量机</h2>
 
-    <p class="normal"><strong class="keyWord">支持向量机</strong>是一个<a id="_idIndexMarker650"/>系列强大而先进的监督学习技术，用于分类和回归，可以自动拟合线性和非线性模型。Scikit-learn基于<code class="inlineCode">LIBSVM</code>和<code class="inlineCode">LIBLINEAR</code>提供了一个实现，前者是SVM分类和回归实现的完整库，后者是线性分类的可扩展库，非常适合大型数据集，尤其是基于稀疏文本的数据集。在它们的优化中，支持向量机努力使用以类别之间最大可能间隔为特征的决策边界来分离分类问题中的目标类别。</p>
+    <p class="normal"><strong class="keyWord">支持向量机</strong>是一个<a id="_idIndexMarker650"/>系列强大而先进的监督学习技术，用于分类和回归，可以自动拟合线性和非线性模型。Scikit-learn 基于<code class="inlineCode">LIBSVM</code>和<code class="inlineCode">LIBLINEAR</code>提供了一个实现，前者是 SVM 分类和回归实现的完整库，后者是线性分类的可扩展库，非常适合大型数据集，尤其是基于稀疏文本的数据集。在它们的优化中，支持向量机努力使用以类别之间最大可能间隔为特征的决策边界来分离分类问题中的目标类别。</p>
 
     <p class="normal">尽管支持向量机在默认参数下工作良好，但它们通常不是最佳的，您需要使用交叉验证来测试各种值组合，以找到最佳值。根据它们列出的<a id="_idIndexMarker651"/>重要性，你必须设置以下参数:</p>
 
@@ -314,31 +314,31 @@ print (search_func.best_score_)
 
       <li class="bulletList"><code class="inlineCode">C</code>:惩罚值。减小它会使类之间的差值变大，从而忽略更多的噪声，但也会使模型更具概化能力。通常可以在范围<code class="inlineCode">np.logspace(-3, 3, 7)</code>内找到最佳值。</li>
 
-      <li class="bulletList"><code class="inlineCode">kernel</code>:该参数将决定如何在SVM中实现非线性，可设置为<code class="inlineCode">'linear'</code>、<code class="inlineCode">'poly'</code>、<code class="inlineCode">'</code>、<code class="inlineCode">rbf'</code>、<code class="inlineCode">'sigmoid'</code>或自定义内核。最常用的数值当然是<code class="inlineCode">rbf</code>。</li>
+      <li class="bulletList"><code class="inlineCode">kernel</code>:该参数将决定如何在 SVM 中实现非线性，可设置为<code class="inlineCode">'linear'</code>、<code class="inlineCode">'poly'</code>、<code class="inlineCode">'</code>、<code class="inlineCode">rbf'</code>、<code class="inlineCode">'sigmoid'</code>或自定义内核。最常用的数值当然是<code class="inlineCode">rbf</code>。</li>
 
       <li class="bulletList"><code class="inlineCode">degree</code>:与<code class="inlineCode">kernel='poly'</code>一起使用，表示多项式展开的维数。它会被其他内核忽略。通常，将其值设置在<code class="inlineCode">2</code>和<code class="inlineCode">5</code>之间效果最好。</li>
 
-      <li class="bulletList"><code class="inlineCode">gamma</code>:用于<code class="inlineCode">'rbf'</code>、<code class="inlineCode">'</code>、<code class="inlineCode">poly'</code>和<code class="inlineCode">'sigmoid'</code>的系数。高值倾向于以更好的方式拟合数据，但会导致一些过度拟合。直观地说，我们可以把<code class="inlineCode">gamma</code>想象成一个例子对模型的影响。低值让每个例子的影响力达到更远。由于必须考虑许多点，SVM曲线将倾向于采取受局部点影响较小的形状，并且结果将是更平滑的决策轮廓曲线。相反，较高的<code class="inlineCode">gamma</code>值意味着曲线更多地考虑了点在局部的排列方式，因此，您会得到一条更不规则、更不规则的决策曲线。该超参数的建议网格搜索范围为<code class="inlineCode">np.logspace(-3, 3, 7)</code>。</li>
+      <li class="bulletList"><code class="inlineCode">gamma</code>:用于<code class="inlineCode">'rbf'</code>、<code class="inlineCode">'</code>、<code class="inlineCode">poly'</code>和<code class="inlineCode">'sigmoid'</code>的系数。高值倾向于以更好的方式拟合数据，但会导致一些过度拟合。直观地说，我们可以把<code class="inlineCode">gamma</code>想象成一个例子对模型的影响。低值让每个例子的影响力达到更远。由于必须考虑许多点，SVM 曲线将倾向于采取受局部点影响较小的形状，并且结果将是更平滑的决策轮廓曲线。相反，较高的<code class="inlineCode">gamma</code>值意味着曲线更多地考虑了点在局部的排列方式，因此，您会得到一条更不规则、更不规则的决策曲线。该超参数的建议网格搜索范围为<code class="inlineCode">np.logspace(-3, 3, 7)</code>。</li>
 
-      <li class="bulletList"><code class="inlineCode">nu</code>:对于使用nuSVR和nuSVC的回归和分类，该参数为接近边缘且分类不正确的训练点设置一个公差。它有助于忽略边缘附近或边缘上的错误分类点，因此它可以使分类决策曲线更加平滑。它应该在范围<code class="inlineCode">[0,1]</code>内，因为它是相对于你的训练集的一个比例。最终，它的行为类似于<code class="inlineCode">C</code>，高比例扩大了利润。</li>
+      <li class="bulletList"><code class="inlineCode">nu</code>:对于使用 nuSVR 和 nuSVC 的回归和分类，该参数为接近边缘且分类不正确的训练点设置一个公差。它有助于忽略边缘附近或边缘上的错误分类点，因此它可以使分类决策曲线更加平滑。它应该在范围<code class="inlineCode">[0,1]</code>内，因为它是相对于你的训练集的一个比例。最终，它的行为类似于<code class="inlineCode">C</code>，高比例扩大了利润。</li>
 
-      <li class="bulletList"><code class="inlineCode">epsilon</code>:该参数通过定义一个<code class="inlineCode">epsilon</code>大范围来指定SVR将接受多少误差，在该大范围内，在算法的训练过程中，没有与示例的不正确预测相关联的惩罚。建议的搜索范围是<code class="inlineCode">np.logspace(-4, 2, 7)</code>。</li>
+      <li class="bulletList"><code class="inlineCode">epsilon</code>:该参数通过定义一个<code class="inlineCode">epsilon</code>大范围来指定 SVR 将接受多少误差，在该大范围内，在算法的训练过程中，没有与示例的不正确预测相关联的惩罚。建议的搜索范围是<code class="inlineCode">np.logspace(-4, 2, 7)</code>。</li>
 
-      <li class="bulletList"><code class="inlineCode">penalty</code>、<code class="inlineCode">loss</code>和<code class="inlineCode">dual</code>:对于LinearSVC，这些参数接受<code class="inlineCode">('l1', 'squared_hinge', False)</code>、<code class="inlineCode">('l2', 'hinge', True)</code>、<code class="inlineCode">('l2', 'squared_hinge', True)</code>和<code class="inlineCode">('l2', 'squared_hinge', False)</code>的组合。<code class="inlineCode">('l2', 'hinge', True)</code>组合类似于<code class="inlineCode">SVC(kernel='linear')</code>学习器。</li>
+      <li class="bulletList"><code class="inlineCode">penalty</code>、<code class="inlineCode">loss</code>和<code class="inlineCode">dual</code>:对于 LinearSVC，这些参数接受<code class="inlineCode">('l1', 'squared_hinge', False)</code>、<code class="inlineCode">('l2', 'hinge', True)</code>、<code class="inlineCode">('l2', 'squared_hinge', True)</code>和<code class="inlineCode">('l2', 'squared_hinge', False)</code>的组合。<code class="inlineCode">('l2', 'hinge', True)</code>组合类似于<code class="inlineCode">SVC(kernel='linear')</code>学习器。</li>
 
     </ul>
 
-    <p class="normal">一个SVM <a id="_idIndexMarker652"/>似乎有许多超参数需要设置，但许多设置只针对实现或内核，所以您只需选择相关的参数。</p>
+    <p class="normal">一个 SVM <a id="_idIndexMarker652"/>似乎有许多超参数需要设置，但许多设置只针对实现或内核，所以您只需选择相关的参数。</p>
 
     <h2 id="_idParaDest-134" class="heading-2">随机森林和极度随机的树</h2>
 
-    <p class="normal">利奥·布雷曼和T42【阿黛尔·卡特勒最初设计了随机森林算法的核心思想，该算法的名称今天仍然是他们的商标(尽管该算法是开源的)。随机森林在Scikit-learn中实现为<code class="inlineCode">RandomForestClassifier</code>或<code class="inlineCode">RandomForestRegressor</code>。</p>
+    <p class="normal">利奥·布雷曼和 T42【阿黛尔·卡特勒最初设计了随机森林算法的核心思想，该算法的名称今天仍然是他们的商标(尽管该算法是开源的)。随机森林在 Scikit-learn 中实现为<code class="inlineCode">RandomForestClassifier</code>或<code class="inlineCode">RandomForestRegressor</code>。</p>
 
-    <p class="normal">随机森林<a id="_idIndexMarker653"/>的工作方式与bagging<a id="_idIndexMarker654"/>类似，bagging也是由Leo Breiman设计的，但它只使用二叉分裂决策树进行操作，让其发展到极致。此外，它使用<strong class="keyWord">引导</strong>对每个模型中使用的案例进行采样。随着树的生长，在一个分支的每一个分叉处，为分叉考虑的变量集也被随机抽取。</p>
+    <p class="normal">随机森林<a id="_idIndexMarker653"/>的工作方式与 bagging<a id="_idIndexMarker654"/>类似，bagging 也是由 Leo Breiman 设计的，但它只使用二叉分裂决策树进行操作，让其发展到极致。此外，它使用<strong class="keyWord">引导</strong>对每个模型中使用的案例进行采样。随着树的生长，在一个分支的每一个分叉处，为分叉考虑的变量集也被随机抽取。</p>
 
-    <p class="normal">这是算法核心的秘密:它集成了树，由于分割时考虑的不同样本和变量，这些树彼此非常不同。因为它们是不同的，所以它们也是不相关的。这是有益的，因为当结果被集合时，许多方差被排除，因为分布两边的极值趋于平衡。换句话说，bagging算法保证了预测中一定程度的多样性，允许它们开发单个学习者(如决策树)可能不会遇到的规则。所有这些多样性都是有用的，因为它有助于建立一个分布，其平均值比集合中的任何一棵树都更好地预测。</p>
+    <p class="normal">这是算法核心的秘密:它集成了树，由于分割时考虑的不同样本和变量，这些树彼此非常不同。因为它们是不同的，所以它们也是不相关的。这是有益的，因为当结果被集合时，许多方差被排除，因为分布两边的极值趋于平衡。换句话说，bagging 算法保证了预测中一定程度的多样性，允许它们开发单个学习者(如决策树)可能不会遇到的规则。所有这些多样性都是有用的，因为它有助于建立一个分布，其平均值比集合中的任何一棵树都更好地预测。</p>
 
-    <p class="normal"><strong class="keyWord">额外树</strong>(也称为<strong class="keyWord">极度随机化树</strong>)，在Scikit-learn中由<code class="inlineCode">ExtraTreesClassifier</code> / <code class="inlineCode">ExtraTreesRegressor</code>类表示，是一种更加随机化的随机森林，它以估计器的更大偏差为代价，在估计中产生<a id="_idIndexMarker655"/>更低的方差。然而，就CPU效率而言，与随机树相比，额外的树可以提供相当大的速度提升，因此当您在示例和功能方面处理大型数据集时，它们可能是理想的。产生更高偏差但更快速度的原因是分裂是在一个额外的树中构建的。随机森林，在绘制了一组随机的要被考虑用于分割一棵树的分支的特征之后，仔细地在它们之中搜索分配给每个分支的最佳值。相比之下，在额外的树中，用于分割的候选特征集和实际分割值都是完全随机决定的。因此，不需要太多的计算，尽管<a id="_idIndexMarker656"/>随机选择的分割可能不是最有效的(因此有偏差)。</p>
+    <p class="normal"><strong class="keyWord">额外树</strong>(也称为<strong class="keyWord">极度随机化树</strong>)，在 Scikit-learn 中由<code class="inlineCode">ExtraTreesClassifier</code> / <code class="inlineCode">ExtraTreesRegressor</code>类表示，是一种更加随机化的随机森林，它以估计器的更大偏差为代价，在估计中产生<a id="_idIndexMarker655"/>更低的方差。然而，就 CPU 效率而言，与随机树相比，额外的树可以提供相当大的速度提升，因此当您在示例和功能方面处理大型数据集时，它们可能是理想的。产生更高偏差但更快速度的原因是分裂是在一个额外的树中构建的。随机森林，在绘制了一组随机的要被考虑用于分割一棵树的分支的特征之后，仔细地在它们之中搜索分配给每个分支的最佳值。相比之下，在额外的树中，用于分割的候选特征集和实际分割值都是完全随机决定的。因此，不需要太多的计算，尽管<a id="_idIndexMarker656"/>随机选择的分割可能不是最有效的(因此有偏差)。</p>
 
     <p class="normal">对于这两种算法，应该设置的关键超参数如下:</p>
 
@@ -358,39 +358,39 @@ print (search_func.best_score_)
 
     <h2 id="_idParaDest-135" class="heading-2">梯度树提升</h2>
 
-    <p class="normal">梯度树提升<a id="_idIndexMarker657"/>或<strong class="keyWord">梯度提升决策树</strong> ( <strong class="keyWord"> GBDT </strong>)是提升的改进版本(提升通过将一系列弱学习者拟合到数据的重新加权版本上来工作)。像AdaBoost一样，GBDT也是基于梯度下降函数。该算法已被证明是基于系综的模型家族中最熟练的算法之一，尽管它的特点是估计方差增加，对数据中的噪声更敏感(这两个问题都可以通过使用子采样来缓解)，以及由于非并行操作而导致的大量计算成本。</p>
+    <p class="normal">梯度树提升<a id="_idIndexMarker657"/>或<strong class="keyWord">梯度提升决策树</strong> ( <strong class="keyWord"> GBDT </strong>)是提升的改进版本(提升通过将一系列弱学习者拟合到数据的重新加权版本上来工作)。像 AdaBoost 一样，GBDT 也是基于梯度下降函数。该算法已被证明是基于系综的模型家族中最熟练的算法之一，尽管它的特点是估计方差增加，对数据中的噪声更敏感(这两个问题都可以通过使用子采样来缓解)，以及由于非并行操作而导致的大量计算成本。</p>
 
-    <p class="normal">除了深度学习，梯度提升是最发达的机器学习算法。自从AdaBoost和最初的梯度增强实现(由<em class="italic"> Jerome Friedman </em>开发)以来，出现了各种其他算法实现<a id="_idIndexMarker658"/>，最近的是XGBoost、LightGBM和CatBoost。</p>
+    <p class="normal">除了深度学习，梯度提升是最发达的机器学习算法。自从 AdaBoost 和最初的梯度增强实现(由<em class="italic"> Jerome Friedman </em>开发)以来，出现了各种其他算法实现<a id="_idIndexMarker658"/>，最近的是 XGBoost、LightGBM 和 CatBoost。</p>
 
     <h3 id="_idParaDest-136" class="heading-3">LightGBM</h3>
 
-    <p class="normal">高性能的LightGBM <a id="_idIndexMarker659"/>算法(【https://github.com/Microsoft/LightGBM】T21)能够<a id="_idIndexMarker660"/>分布在多台计算机上，快速处理大量数据。它是由微软的一个团队作为GitHub上的开源项目开发的(还有一篇学术论文:<a href="https://papers.nips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html">https://papers . nips . cc/paper/2017/hash/6449 F4 4a 102 FDE 848669 BDD 9 EB 6b 76 fa-abstract . html</a>)。</p>
+    <p class="normal">高性能的 LightGBM <a id="_idIndexMarker659"/>算法(【https://github.com/Microsoft/LightGBM】T21)能够<a id="_idIndexMarker660"/>分布在多台计算机上，快速处理大量数据。它是由微软的一个团队作为 GitHub 上的开源项目开发的(还有一篇学术论文:<a href="https://papers.nips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html">https://papers . nips . cc/paper/2017/hash/6449 F4 4a 102 FDE 848669 BDD 9 EB 6b 76 fa-abstract . html</a>)。</p>
 
-    <p class="normal">与XGBoost一样，LightGBM也是基于决策树的，但是它遵循不同的策略。XGBoost使用决策树对一个变量进行分割，并在该变量上探索不同的树分割(层次式<strong class="keyWord">树生长策略)，而LightGBM专注于一个分割，并从那里继续分割，以实现更好的拟合(叶式</strong>树生长策略)。这使得LightGBM能够快速地获得数据的良好拟合，并生成与XGBoost相比的替代解决方案(如果您希望将两种解决方案混合在一起以减少估计的方差，这是一个好方法)。从算法上来说，如果我们把决策树操作的分裂结构看作一个图，XGBoost追求的是<em class="italic">广度优先</em>搜索(BFS ), light GBM追求的是<em class="italic">深度优先</em>搜索(DFS)。</p>
+    <p class="normal">与 XGBoost 一样，LightGBM 也是基于决策树的，但是它遵循不同的策略。XGBoost 使用决策树对一个变量进行分割，并在该变量上探索不同的树分割(层次式<strong class="keyWord">树生长策略)，而 LightGBM 专注于一个分割，并从那里继续分割，以实现更好的拟合(叶式</strong>树生长策略)。这使得 LightGBM 能够快速地获得数据的良好拟合，并生成与 XGBoost 相比的替代解决方案(如果您希望将两种解决方案混合在一起以减少估计的方差，这是一个好方法)。从算法上来说，如果我们把决策树操作的分裂结构看作一个图，XGBoost 追求的是<em class="italic">广度优先</em>搜索(BFS ), light GBM 追求的是<em class="italic">深度优先</em>搜索(DFS)。</p>
 
-    <p class="normal">调优LightGBM可能会让人望而生畏；它有一百多个参数可以调整，你可以在这个页面上探索:<a href="https://github.com/Microsoft/LightGBM/blob/master/docs/Parameters.rst">https://github . com/Microsoft/light GBM/blob/master/docs/parameters . rst</a>(也在这里:<a href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>)。</p>
+    <p class="normal">调优 LightGBM 可能会让人望而生畏；它有一百多个参数可以调整，你可以在这个页面上探索:<a href="https://github.com/Microsoft/LightGBM/blob/master/docs/Parameters.rst">https://github . com/Microsoft/light GBM/blob/master/docs/parameters . rst</a>(也在这里:<a href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>)。</p>
 
     <p class="normal">根据经验，您应该关注以下<a id="_idIndexMarker661"/>超参数，它们通常对结果影响最大:</p>
 
     <ul>
 
-      <li class="bulletList"><code class="inlineCode">n_estimators</code>:10到10000之间的整数，设置迭代次数。</li>
+      <li class="bulletList"><code class="inlineCode">n_estimators</code>:10 到 10000 之间的整数，设置迭代次数。</li>
 
-      <li class="bulletList"><code class="inlineCode">learning_rate</code>:0.01到1.0之间的实数，通常从对数均匀分布中采样。它表示梯度下降过程的步长，该过程计算到目前为止算法的所有迭代的总和的权重。</li>
+      <li class="bulletList"><code class="inlineCode">learning_rate</code>:0.01 到 1.0 之间的实数，通常从对数均匀分布中采样。它表示梯度下降过程的步长，该过程计算到目前为止算法的所有迭代的总和的权重。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_depth</code>:1到16之间的整数，代表特征的最大分割数。将其设置为小于0的数字会允许最大可能的拆分次数，通常会有过度适应数据的风险。</li>
+      <li class="bulletList"><code class="inlineCode">max_depth</code>:1 到 16 之间的整数，代表特征的最大分割数。将其设置为小于 0 的数字会允许最大可能的拆分次数，通常会有过度适应数据的风险。</li>
 
-      <li class="bulletList"><code class="inlineCode">num_leaves</code>:介于2和2^ <code class="inlineCode">max_depth</code>之间的整数，代表每棵树最终最多拥有的叶子数。</li>
+      <li class="bulletList"><code class="inlineCode">num_leaves</code>:介于 2 和 2^ <code class="inlineCode">max_depth</code>之间的整数，代表每棵树最终最多拥有的叶子数。</li>
 
-      <li class="bulletList"><code class="inlineCode">min_data_in_leaf</code>:0-300之间的整数，确定一个叶中的最小数据点数。</li>
+      <li class="bulletList"><code class="inlineCode">min_data_in_leaf</code>:0-300 之间的整数，确定一个叶中的最小数据点数。</li>
 
-      <li class="bulletList"><code class="inlineCode">min_gain_to_split</code>:0到15之间的浮点数；它设置了树分割算法的最小增益。通过设置这个参数，可以避免不必要的树分裂，从而减少过度拟合(它对应于XGBoost中的<code class="inlineCode">gamma</code>参数)。</li>
+      <li class="bulletList"><code class="inlineCode">min_gain_to_split</code>:0 到 15 之间的浮点数；它设置了树分割算法的最小增益。通过设置这个参数，可以避免不必要的树分裂，从而减少过度拟合(它对应于 XGBoost 中的<code class="inlineCode">gamma</code>参数)。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_bin</code>:一个介于32和512之间的整数，用于设置特征值将被存储到的最大箱数。此参数大于默认值255意味着产生过度拟合结果的风险更大。</li>
+      <li class="bulletList"><code class="inlineCode">max_bin</code>:一个介于 32 和 512 之间的整数，用于设置特征值将被存储到的最大箱数。此参数大于默认值 255 意味着产生过度拟合结果的风险更大。</li>
 
-      <li class="bulletList"><code class="inlineCode">subsample</code>:介于0.01和1.0之间的实数<a id="_idIndexMarker662"/>，代表用于训练的样本部分。</li>
+      <li class="bulletList"><code class="inlineCode">subsample</code>:介于 0.01 和 1.0 之间的实数<a id="_idIndexMarker662"/>，代表用于训练的样本部分。</li>
 
-      <li class="bulletList"><code class="inlineCode">subsample_freq</code>:介于0和10之间的整数，指定算法对示例进行二次采样的迭代频率。</li>
+      <li class="bulletList"><code class="inlineCode">subsample_freq</code>:介于 0 和 10 之间的整数，指定算法对示例进行二次采样的迭代频率。</li>
 
     </ul>
 
@@ -400,29 +400,29 @@ print (search_func.best_score_)
 
     <ul>
 
-      <li class="bulletList"><code class="inlineCode">feature_fraction</code>:一个介于0.1和1.0之间的实数，允许您指定要进行二次抽样的特征部分。对要素进行二次采样是允许更多随机化在训练中发挥作用的另一种方式，可消除要素中存在的噪声和多重共线性。</li>
+      <li class="bulletList"><code class="inlineCode">feature_fraction</code>:一个介于 0.1 和 1.0 之间的实数，允许您指定要进行二次抽样的特征部分。对要素进行二次采样是允许更多随机化在训练中发挥作用的另一种方式，可消除要素中存在的噪声和多重共线性。</li>
 
-      <li class="bulletList"><code class="inlineCode">subsample_for_bin</code>:介于30和例数之间的整数。这设置了为构建直方图仓而采样的样本数。</li>
+      <li class="bulletList"><code class="inlineCode">subsample_for_bin</code>:介于 30 和例数之间的整数。这设置了为构建直方图仓而采样的样本数。</li>
 
-      <li class="bulletList"><code class="inlineCode">reg_lambda</code>:设置L2正则化的0到100.0之间的实数。由于它对尺度比对参数的确切数目更敏感，因此通常从对数均匀分布中取样。</li>
+      <li class="bulletList"><code class="inlineCode">reg_lambda</code>:设置 L2 正则化的 0 到 100.0 之间的实数。由于它对尺度比对参数的确切数目更敏感，因此通常从对数均匀分布中取样。</li>
 
-      <li class="bulletList"><code class="inlineCode">reg_alpha</code>:0到100.0之间的实数，通常从对数均匀分布中采样，设置L1正则化。</li>
+      <li class="bulletList"><code class="inlineCode">reg_alpha</code>:0 到 100.0 之间的实数，通常从对数均匀分布中采样，设置 L1 正则化。</li>
 
-      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:1e-6到500之间的实数，最好从对数均匀分布中取样。该参数对正例(从而有效地进行上采样或下采样)和负例进行加权，负例的值保持为<a id="_idIndexMarker663"/>1。</li>
+      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:1e-6 到 500 之间的实数，最好从对数均匀分布中取样。该参数对正例(从而有效地进行上采样或下采样)和负例进行加权，负例的值保持为<a id="_idIndexMarker663"/>1。</li>
 
     </ul>
 
-    <p class="normal">尽管在使用LightGBM时需要优化的超参数数量可能令人望而生畏，但实际上只有其中的几个非常重要。给定固定的迭代次数和学习率，只有几个是最有影响力的(<code class="inlineCode">feature_fraction</code>、<code class="inlineCode">num_leaves</code>、<code class="inlineCode">subsample</code>、<code class="inlineCode">reg_lambda</code>、<code class="inlineCode">reg_alpha</code>、<code class="inlineCode">min_data_in_leaf</code>)，正如Kaggle大师<em class="italic">科黑小崎</em>在这篇博客文章中解释的那样:<a href="https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258">https://medium . com/optuna/light GBM-tuner-new-optuna-integration-for-hyperparameter-optimization-8b 7095 e 99258</a>。科黑·小崎利用这一事实为Optuna创建了一个快速调优程序(在本章末尾你会找到更多关于Optuna优化器的内容)。</p>
+    <p class="normal">尽管在使用 LightGBM 时需要优化的超参数数量可能令人望而生畏，但实际上只有其中的几个非常重要。给定固定的迭代次数和学习率，只有几个是最有影响力的(<code class="inlineCode">feature_fraction</code>、<code class="inlineCode">num_leaves</code>、<code class="inlineCode">subsample</code>、<code class="inlineCode">reg_lambda</code>、<code class="inlineCode">reg_alpha</code>、<code class="inlineCode">min_data_in_leaf</code>)，正如 Kaggle 大师<em class="italic">科黑小崎</em>在这篇博客文章中解释的那样:<a href="https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258">https://medium . com/optuna/light GBM-tuner-new-optuna-integration-for-hyperparameter-optimization-8b 7095 e 99258</a>。科黑·小崎利用这一事实为 Optuna 创建了一个快速调优程序(在本章末尾你会找到更多关于 Optuna 优化器的内容)。</p>
 
     <h3 id="_idParaDest-137" class="heading-3">XGBoost</h3>
 
-    <p class="normal">XGBoost(<a href="https://github.com/dmlc/XGBoost">https://github.com/dmlc/XGBoost</a>)代表<strong class="keyWord">极限梯度提升</strong>。它是一个开源项目<a id="_idIndexMarker664"/>，不属于Scikit-learn的一部分，尽管它最近通过Scikit-learn <a id="_idIndexMarker665"/>包装器接口进行了扩展，使得将XGBoost合并到Scikit-learn风格的数据管道中变得更加容易。</p>
+    <p class="normal">XGBoost(<a href="https://github.com/dmlc/XGBoost">https://github.com/dmlc/XGBoost</a>)代表<strong class="keyWord">极限梯度提升</strong>。它是一个开源项目<a id="_idIndexMarker664"/>，不属于 Scikit-learn 的一部分，尽管它最近通过 Scikit-learn <a id="_idIndexMarker665"/>包装器接口进行了扩展，使得将 XGBoost 合并到 Scikit-learn 风格的数据管道中变得更加容易。</p>
 
-    <p class="normal">XGBoost算法在2015年的数据科学竞赛中获得了动力和人气，例如Kaggle和2015年KDD杯。正如创作者(<em class="italic"> Tianqui Chen </em>、<em class="italic"> Tong He </em>和<em class="italic"> Carlos Guestrin </em>)在他们撰写的关于该算法的论文中所报告的那样，在2015年Kaggle上举行的29场挑战中，有17场获胜的解决方案将XGBoost作为一个独立的解决方案或作为多个不同模型的一部分。从那以后，该算法在数据科学家社区中一直保持着强大的吸引力，尽管它很难跟上LightGBM和CatBoost等其他GBM实现带来的创新。</p>
+    <p class="normal">XGBoost 算法在 2015 年的数据科学竞赛中获得了动力和人气，例如 Kaggle 和 2015 年 KDD 杯。正如创作者(<em class="italic"> Tianqui Chen </em>、<em class="italic"> Tong He </em>和<em class="italic"> Carlos Guestrin </em>)在他们撰写的关于该算法的论文中所报告的那样，在 2015 年 Kaggle 上举行的 29 场挑战中，有 17 场获胜的解决方案将 XGBoost 作为一个独立的解决方案或作为多个不同模型的一部分。从那以后，该算法在数据科学家社区中一直保持着强大的吸引力，尽管它很难跟上 LightGBM 和 CatBoost 等其他 GBM 实现带来的创新。</p>
 
-    <p class="normal">除了在准确性和计算效率方面的良好性能，XGBoost还是一个<em class="italic">可扩展的</em>解决方案，最多使用多核处理器和分布式机器。</p>
+    <p class="normal">除了在准确性和计算效率方面的良好性能，XGBoost 还是一个<em class="italic">可扩展的</em>解决方案，最多使用多核处理器和分布式机器。</p>
 
-    <p class="normal">由于对最初的树提升GBM算法进行了重要的调整，XGBoost代表了新一代的GBM算法:</p>
+    <p class="normal">由于对最初的树提升 GBM 算法进行了重要的调整，XGBoost 代表了新一代的 GBM 算法:</p>
 
     <ul>
 
@@ -436,95 +436,95 @@ print (search_func.best_score_)
 
     </ul>
 
-    <p class="normal">XGBoost还可以有效地处理缺失数据。基于标准决策树的其他树集成需要首先使用非标度值(例如负数)来估算缺失数据，以便开发树的适当分支来处理缺失值。</p>
+    <p class="normal">XGBoost 还可以有效地处理缺失数据。基于标准决策树的其他树集成需要首先使用非标度值(例如负数)来估算缺失数据，以便开发树的适当分支来处理缺失值。</p>
 
-    <p class="normal">至于XGBoost的参数(<a href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a>)，我们已经决定突出几个你会<a id="_idIndexMarker668"/>在竞赛和项目中发现的关键参数:</p>
+    <p class="normal">至于 XGBoost 的参数(<a href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a>)，我们已经决定突出几个你会<a id="_idIndexMarker668"/>在竞赛和项目中发现的关键参数:</p>
 
     <ul>
 
-      <li class="bulletList"><code class="inlineCode">n_estimators</code>:通常是10到5000之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">n_estimators</code>:通常是 10 到 5000 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">learning_rate</code>:从0.01到1.0的实数，最好从对数均匀分布中采样。</li>
+      <li class="bulletList"><code class="inlineCode">learning_rate</code>:从 0.01 到 1.0 的实数，最好从对数均匀分布中采样。</li>
 
-      <li class="bulletList"><code class="inlineCode">min_child_weight</code>:通常是1到10之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">min_child_weight</code>:通常是 1 到 10 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_depth</code>:通常是1到50之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">max_depth</code>:通常是 1 到 50 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_delta_step</code>:通常是一个介于0和20之间的整数，代表我们允许每个叶输出的最大增量步长。</li>
+      <li class="bulletList"><code class="inlineCode">max_delta_step</code>:通常是一个介于 0 和 20 之间的整数，代表我们允许每个叶输出的最大增量步长。</li>
 
-      <li class="bulletList"><code class="inlineCode">subsample</code>:从0.1到1.0的实数，表示要进行二次抽样的样本比例。</li>
+      <li class="bulletList"><code class="inlineCode">subsample</code>:从 0.1 到 1.0 的实数，表示要进行二次抽样的样本比例。</li>
 
-      <li class="bulletList"><code class="inlineCode">colsample_bytree</code>:从0.1到1.0的实数，表示按树的列的子抽样比率。</li>
+      <li class="bulletList"><code class="inlineCode">colsample_bytree</code>:从 0.1 到 1.0 的实数，表示按树的列的子抽样比率。</li>
 
-      <li class="bulletList"><code class="inlineCode">colsample_bylevel</code>:从0.1到1.0的实数，表示树中各层的子抽样比率。</li>
+      <li class="bulletList"><code class="inlineCode">colsample_bylevel</code>:从 0.1 到 1.0 的实数，表示树中各层的子抽样比率。</li>
 
-      <li class="bulletList"><code class="inlineCode">reg_lambda</code>:1e-9到100.0之间的实数，最好从对数均匀分布中采样。该参数控制L2正则化。</li>
+      <li class="bulletList"><code class="inlineCode">reg_lambda</code>:1e-9 到 100.0 之间的实数，最好从对数均匀分布中采样。该参数控制 L2 正则化。</li>
 
-      <li class="bulletList"><code class="inlineCode">reg_alpha</code>:1e-9到100.0之间的实数，最好从对数均匀分布中采样。该参数控制L1正则化。</li>
+      <li class="bulletList"><code class="inlineCode">reg_alpha</code>:1e-9 到 100.0 之间的实数，最好从对数均匀分布中采样。该参数控制 L1 正则化。</li>
 
-      <li class="bulletList"><code class="inlineCode">gamma</code>:指定树划分的最小损失减少，该参数需要一个介于1e-9和0.5之间的实数，最好从对数均匀分布中采样。</li>
+      <li class="bulletList"><code class="inlineCode">gamma</code>:指定树划分的最小损失减少，该参数需要一个介于 1e-9 和 0.5 之间的实数，最好从对数均匀分布中采样。</li>
 
-      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:1e-6到500.0之间的一个<a id="_idIndexMarker669"/>实数，最好从对数均匀分布中采样，代表正类的权重。</li>
+      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:1e-6 到 500.0 之间的一个<a id="_idIndexMarker669"/>实数，最好从对数均匀分布中采样，代表正类的权重。</li>
 
     </ul>
 
-    <p class="normal">与LightGBM一样，XGBoost也有许多类似的超参数需要优化，因此之前为LightGBM考虑的所有因素也适用于XGBoost。</p>
+    <p class="normal">与 LightGBM 一样，XGBoost 也有许多类似的超参数需要优化，因此之前为 LightGBM 考虑的所有因素也适用于 XGBoost。</p>
 
     <h3 id="_idParaDest-138" class="heading-3">CatBoost</h3>
 
-    <p class="normal">2017年7月，俄罗斯搜索引擎Yandex公开了另一个有趣的GBM算法CatBoost(<a href="https://catboost.ai/">https://catboost.ai/</a>)，其<a id="_idIndexMarker670"/>名称来自于将“类别”和“助推”两个词放在一起事实上，它的优点是能够处理分类<a id="_idIndexMarker671"/>变量，这些变量构成了大多数关系数据库中的大部分信息，这是通过采用一次性编码和目标编码的混合策略实现的。目标编码是一种表达分类水平的方法，通过为手头的问题分配一个适当的数值；有关这方面的更多信息，请参见第7章、【表格竞赛的T21】建模。</p>
+    <p class="normal">2017 年 7 月，俄罗斯搜索引擎 Yandex 公开了另一个有趣的 GBM 算法 CatBoost(<a href="https://catboost.ai/">https://catboost.ai/</a>)，其<a id="_idIndexMarker670"/>名称来自于将“类别”和“助推”两个词放在一起事实上，它的优点是能够处理分类<a id="_idIndexMarker671"/>变量，这些变量构成了大多数关系数据库中的大部分信息，这是通过采用一次性编码和目标编码的混合策略实现的。目标编码是一种表达分类水平的方法，通过为手头的问题分配一个适当的数值；有关这方面的更多信息，请参见第 7 章、【表格竞赛的 T21】建模。</p>
 
-    <p class="normal">CatBoost使用编码分类变量的思想并不新鲜，但它是一种以前使用过的特征工程，大多在数据科学竞赛中使用。目标编码，也称为似然编码、影响编码或均值编码，是一种基于标签与目标变量的关联将标签转换为数字的简单方法。如果您有一个回归，您可以根据该级别的典型平均目标值转换标签；如果它是一个分类，它只是给定标签的你的目标的分类概率(你的目标的概率取决于每个类别值)。这可能看起来是一个简单而聪明的特征工程技巧，但它有副作用，主要是在过度拟合方面，因为你将来自目标的信息带入了预测器。</p>
+    <p class="normal">CatBoost 使用编码分类变量的思想并不新鲜，但它是一种以前使用过的特征工程，大多在数据科学竞赛中使用。目标编码，也称为似然编码、影响编码或均值编码，是一种基于标签与目标变量的关联将标签转换为数字的简单方法。如果您有一个回归，您可以根据该级别的典型平均目标值转换标签；如果它是一个分类，它只是给定标签的你的目标的分类概率(你的目标的概率取决于每个类别值)。这可能看起来是一个简单而聪明的特征工程技巧，但它有副作用，主要是在过度拟合方面，因为你将来自目标的信息带入了预测器。</p>
 
-    <p class="normal">CatBoost有相当少的<a id="_idIndexMarker672"/>参数(参见<a href="https://catboost.ai/en/docs/references/training-parameters/">https://catboost.ai/en/docs/references/training-parameters/</a>)。我们将讨论限制在八个最重要的方面:</p>
+    <p class="normal">CatBoost 有相当少的<a id="_idIndexMarker672"/>参数(参见<a href="https://catboost.ai/en/docs/references/training-parameters/">https://catboost.ai/en/docs/references/training-parameters/</a>)。我们将讨论限制在八个最重要的方面:</p>
 
     <ul>
 
-      <li class="bulletList"><code class="inlineCode">iterations</code>:通常是10到1000之间的整数，但可以根据问题增加。</li>
+      <li class="bulletList"><code class="inlineCode">iterations</code>:通常是 10 到 1000 之间的整数，但可以根据问题增加。</li>
 
-      <li class="bulletList"><code class="inlineCode">depth</code>:1到8之间的整数；通常，较高的值需要较长的拟合时间，并且不会产生较好的结果。</li>
+      <li class="bulletList"><code class="inlineCode">depth</code>:1 到 8 之间的整数；通常，较高的值需要较长的拟合时间，并且不会产生较好的结果。</li>
 
-      <li class="bulletList"><code class="inlineCode">learning_rate</code>:介于0.01和1.0之间的真实值，最好从对数均匀分布中采样。</li>
+      <li class="bulletList"><code class="inlineCode">learning_rate</code>:介于 0.01 和 1.0 之间的真实值，最好从对数均匀分布中采样。</li>
 
-      <li class="bulletList"><code class="inlineCode">random_strength</code>:从1e-9到10.0范围内对数线性采样的实数，它指定了得分分割的随机性水平。</li>
+      <li class="bulletList"><code class="inlineCode">random_strength</code>:从 1e-9 到 10.0 范围内对数线性采样的实数，它指定了得分分割的随机性水平。</li>
 
-      <li class="bulletList"><code class="inlineCode">bagging_temperature</code>:设置贝叶斯自举的0.0到1.0之间的实数值。</li>
+      <li class="bulletList"><code class="inlineCode">bagging_temperature</code>:设置贝叶斯自举的 0.0 到 1.0 之间的实数值。</li>
 
-      <li class="bulletList"><code class="inlineCode">border_count</code>:1到255之间的整数，表示数字特征的拆分。</li>
+      <li class="bulletList"><code class="inlineCode">border_count</code>:1 到 255 之间的整数，表示数字特征的拆分。</li>
 
-      <li class="bulletList"><code class="inlineCode">l2_leaf_reg</code>:2到30之间的整数；L2正则化的值。</li>
+      <li class="bulletList"><code class="inlineCode">l2_leaf_reg</code>:2 到 30 之间的整数；L2 正则化的值。</li>
 
-      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:一个介于0.01和10.0之间的实数<a id="_idIndexMarker673"/>，代表正类的权重。</li>
+      <li class="bulletList"><code class="inlineCode">scale_pos_weight</code>:一个介于 0.01 和 10.0 之间的实数<a id="_idIndexMarker673"/>，代表正类的权重。</li>
 
     </ul>
 
-    <p class="normal">即使CatBoost可能看起来只是另一个GBM实现，但它有相当多的差异(使用的不同参数也突出了这一点)，这可能会在竞争中提供很大的帮助，无论是作为单一模型解决方案还是作为集成到更大集合中的模型。</p>
+    <p class="normal">即使 CatBoost 可能看起来只是另一个 GBM 实现，但它有相当多的差异(使用的不同参数也突出了这一点)，这可能会在竞争中提供很大的帮助，无论是作为单一模型解决方案还是作为集成到更大集合中的模型。</p>
 
     <h3 id="_idParaDest-139" class="heading-3">histgradientsboosting</h3>
 
-    <p class="normal">最近，Scikit-learn推出了一个受LightGBM的分箱数据和直方图启发的<a id="_idIndexMarker674"/>新版本的梯度增强(参见在EuroPython上由<em class="italic">Olivier Grisel</em>:<a href="https://www.youtube.com/watch?v=urVUlKbQfQ4">https://www.youtube.com/watch?v=urVUlKbQfQ4</a>所做的这个演示)。无论是作为分类器(<code class="inlineCode">HistGradientBoostingClassifier</code>)还是回归器(<code class="inlineCode">HistGradientBoostingRegressor</code>)，它都可以用于丰富不同模型的集合，并且它提供了一个更短的<a id="_idIndexMarker675"/>需要调整的基本超参数范围:</p>
+    <p class="normal">最近，Scikit-learn 推出了一个受 LightGBM 的分箱数据和直方图启发的<a id="_idIndexMarker674"/>新版本的梯度增强(参见在 EuroPython 上由<em class="italic">Olivier Grisel</em>:<a href="https://www.youtube.com/watch?v=urVUlKbQfQ4">https://www.youtube.com/watch?v=urVUlKbQfQ4</a>所做的这个演示)。无论是作为分类器(<code class="inlineCode">HistGradientBoostingClassifier</code>)还是回归器(<code class="inlineCode">HistGradientBoostingRegressor</code>)，它都可以用于丰富不同模型的集合，并且它提供了一个更短的<a id="_idIndexMarker675"/>需要调整的基本超参数范围:</p>
 
     <ul>
 
-      <li class="bulletList"><code class="inlineCode">learning_rate</code>:0.01到1.0之间的实数，通常从对数均匀分布中采样。</li>
+      <li class="bulletList"><code class="inlineCode">learning_rate</code>:0.01 到 1.0 之间的实数，通常从对数均匀分布中采样。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_iter</code>:10到10000之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">max_iter</code>:10 到 10000 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_leaf_nodes</code>:2到500之间的整数。它与<code class="inlineCode">max_depth</code>交互；建议只设置两个中的一个，将另一个设置为<code class="inlineCode">None</code>。</li>
+      <li class="bulletList"><code class="inlineCode">max_leaf_nodes</code>:2 到 500 之间的整数。它与<code class="inlineCode">max_depth</code>交互；建议只设置两个中的一个，将另一个设置为<code class="inlineCode">None</code>。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_depth</code>:介于2和12之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">max_depth</code>:介于 2 和 12 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">min_samples_leaf</code>:2到300之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">min_samples_leaf</code>:2 到 300 之间的整数。</li>
 
-      <li class="bulletList"><code class="inlineCode">l2_regularization</code>:0.0到100.0之间的浮动。</li>
+      <li class="bulletList"><code class="inlineCode">l2_regularization</code>:0.0 到 100.0 之间的浮动。</li>
 
-      <li class="bulletList"><code class="inlineCode">max_bins</code>:32到512之间的整数。</li>
+      <li class="bulletList"><code class="inlineCode">max_bins</code>:32 到 512 之间的整数。</li>
 
     </ul>
 
-    <p class="normal">即使Scikit-learn的<code class="inlineCode">HistGradientBoosting</code>与LightGBM或XGBoost没有什么太大的不同，但它确实提供了一种在竞争中实现GBM的不同方式，并且<code class="inlineCode">HistGradientBoosting</code>构建的模型可能会在集成多个预测时做出贡献，例如在混合和堆叠中。</p>
+    <p class="normal">即使 Scikit-learn 的<code class="inlineCode">HistGradientBoosting</code>与 LightGBM 或 XGBoost 没有什么太大的不同，但它确实提供了一种在竞争中实现 GBM 的不同方式，并且<code class="inlineCode">HistGradientBoosting</code>构建的模型可能会在集成多个预测时做出贡献，例如在混合和堆叠中。</p>
 
-    <p class="normal">学完本节的<a id="_idIndexMarker676"/>后，你应该更熟悉最常见的机器学习算法(只有深度学习解决方案没有讨论)和它们最重要的要调整的超参数，这将帮助你在Kaggle竞争中建立一个出色的解决方案。了解基本的优化策略、可用的算法及其关键的超参数只是一个起点。在下一节中，我们将开始深入讨论如何使用贝叶斯优化更好地调优它们。</p>
+    <p class="normal">学完本节的<a id="_idIndexMarker676"/>后，你应该更熟悉最常见的机器学习算法(只有深度学习解决方案没有讨论)和它们最重要的要调整的超参数，这将帮助你在 Kaggle 竞争中建立一个出色的解决方案。了解基本的优化策略、可用的算法及其关键的超参数只是一个起点。在下一节中，我们将开始深入讨论如何使用贝叶斯优化更好地调优它们。</p>
 
     <div><div><img src="img/Alberto_Danese.png" alt=""/>
 
@@ -534,41 +534,41 @@ print (search_func.best_score_)
 
       <p class="normal"><a href="https://www.kaggle.com/albedan">https://www.kaggle.com/albedan</a></p>
 
-      <p class="normal">我们对本章的第二次采访是意大利信用卡和数字支付公司Nexi的数据科学主管Alberto Danese。作为2015年加入该平台的比赛大师，他作为一名单独的竞争对手获得了大部分金牌。</p>
+      <p class="normal">我们对本章的第二次采访是意大利信用卡和数字支付公司 Nexi 的数据科学主管 Alberto Danese。作为 2015 年加入该平台的比赛大师，他作为一名单独的竞争对手获得了大部分金牌。</p>
 
-      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在Kaggle上的特长是什么？</p>
+      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在 Kaggle 上的特长是什么？</p>
 
       <p class="normal"><em class="italic">我一直在金融服务行业工作，主要处理结构化数据，我确实更喜欢属于这一类别的比赛。我喜欢能够实际掌握数据是关于什么的，并做一些智能特征工程，以便从数据中挤出每一点信息。</em></p>
 
-      <p class="normal">从技术上讲，我对经典的ML库有很好的经验，尤其是梯度推进决策树:最常见的库(XGBoost，LightGBM，CatBoost)总是我的首选。</p>
+      <p class="normal">从技术上讲，我对经典的 ML 库有很好的经验，尤其是梯度推进决策树:最常见的库(XGBoost，LightGBM，CatBoost)总是我的首选。</p>
 
-      <p class="interviewHeader">你是如何对待一场Kaggle比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
+      <p class="interviewHeader">你是如何对待一场 Kaggle 比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
 
-      <p class="normal"><em class="italic">我总是花费大量时间探索数据，试图找出发起人实际上试图用机器学习解决的问题是什么。与新手通常对Kaggle的看法不同，我没有花太多时间对特定的ML算法进行“调整”——显然这种方法取得了成效！</em></p>
+      <p class="normal"><em class="italic">我总是花费大量时间探索数据，试图找出发起人实际上试图用机器学习解决的问题是什么。与新手通常对 Kaggle 的看法不同，我没有花太多时间对特定的 ML 算法进行“调整”——显然这种方法取得了成效！</em></p>
 
 
 
-      <p class="normal"><em class="italic">在我的日常工作中，理解数据也是极其重要的，但在Kaggle竞赛中还有一些额外的阶段是完全缺失的。我得:</em></p>
+      <p class="normal"><em class="italic">在我的日常工作中，理解数据也是极其重要的，但在 Kaggle 竞赛中还有一些额外的阶段是完全缺失的。我得:</em></p>
 
       <ul>
 
-        <li class="bulletList"><em class="italic">确定一个需要ML解决的业务问题(与业务部门的同事一起)</em></li>
+        <li class="bulletList"><em class="italic">确定一个需要 ML 解决的业务问题(与业务部门的同事一起)</em></li>
 
         <li class="bulletList"><em class="italic">寻找数据，有时也从外部数据提供商那里寻找</em></li>
 
-        <li class="bulletList"><em class="italic">当ML部分完成后，了解如何将其投入生产并管理进展</em></li>
+        <li class="bulletList"><em class="italic">当 ML 部分完成后，了解如何将其投入生产并管理进展</em></li>
 
       </ul>
 
       <p class="interviewHeader">告诉我们你参加的一个特别有挑战性的比赛，以及你用什么样的洞察力来完成这个任务。</p>
 
-      <p class="normal"><em class="italic">我很享受</em><em class="italic"><a id="_idIndexMarker678"/></em><em class="italic"/>talking data AdTracking欺诈检测挑战赛<em class="italic">，凭借它我成为了一代宗师。除了是一个非常有趣的话题(打击来自点击农场的欺诈)，它真的促使我进行有效的特征工程，因为卷是巨大的(超过1亿个标记行),为了测试不同的方法，减少计算时间是关键。这也迫使我理解如何以最佳方式利用滞后/超前特征(以及其他窗口函数)，以便在一个经典的ML问题中创建一种时间序列。</em></p>
+      <p class="normal"><em class="italic">我很享受</em><em class="italic"><a id="_idIndexMarker678"/></em><em class="italic"/>talking data AdTracking 欺诈检测挑战赛<em class="italic">，凭借它我成为了一代宗师。除了是一个非常有趣的话题(打击来自点击农场的欺诈)，它真的促使我进行有效的特征工程，因为卷是巨大的(超过 1 亿个标记行),为了测试不同的方法，减少计算时间是关键。这也迫使我理解如何以最佳方式利用滞后/超前特征(以及其他窗口函数)，以便在一个经典的 ML 问题中创建一种时间序列。</em></p>
 
-      <p class="interviewHeader">Kaggle对你的职业生涯有帮助吗？如果有，如何实现？</p>
+      <p class="interviewHeader">Kaggle 对你的职业生涯有帮助吗？如果有，如何实现？</p>
 
-      <p class="normal"><em class="italic">肯定！能够取得非常客观和可证实的结果无疑是让一份简历脱颖而出的原因。当我在2016年被Cerved(一家营销情报服务公司)聘用时，招聘经理非常清楚Kaggle是什么——在面试中有一些真实世界的项目可以谈论是非常有价值的事情。毫无疑问，卡格尔在我职业生涯的发展中扮演了重要角色。</em></p>
+      <p class="normal"><em class="italic">肯定！能够取得非常客观和可证实的结果无疑是让一份简历脱颖而出的原因。当我在 2016 年被 Cerved(一家营销情报服务公司)聘用时，招聘经理非常清楚 Kaggle 是什么——在面试中有一些真实世界的项目可以谈论是非常有价值的事情。毫无疑问，卡格尔在我职业生涯的发展中扮演了重要角色。</em></p>
 
-      <p class="interviewHeader">以你的经验来看，没有经验的Kagglers经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
+      <p class="interviewHeader">以你的经验来看，没有经验的 Kagglers 经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
 
       <p class="normal"><em class="italic">我认为每个人都是刚刚开始编码，也许是分叉一个公共内核，只是改变几行或几个参数。这在开始时是非常好的！但是你必须花相当多的时间不是编码，而是研究数据和理解问题。</em></p>
 
@@ -580,7 +580,7 @@ print (search_func.best_score_)
 
       <p class="interviewHeader">对于数据分析或机器学习，你有什么特别推荐的工具或库吗？</p>
 
-      <p class="normal"><em class="italic">除了</em> <em class="italic"> <a id="_idIndexMarker679"/> </em> <em class="italic">平常的那些，我一直是</em> <code class="inlineCode">data.table</code> <em class="italic">(从R版开始)的超级粉丝:我觉得它没有得到应有的赞誉！当您想要在本地机器上处理大量数据时，这确实是一个非常棒的软件包。</em></p>
+      <p class="normal"><em class="italic">除了</em> <em class="italic"> <a id="_idIndexMarker679"/> </em> <em class="italic">平常的那些，我一直是</em> <code class="inlineCode">data.table</code> <em class="italic">(从 R 版开始)的超级粉丝:我觉得它没有得到应有的赞誉！当您想要在本地机器上处理大量数据时，这确实是一个非常棒的软件包。</em></p>
 
       <p class="interviewHeader">当一个人参加比赛时，他应该记住或做的最重要的事情是什么？</p>
 
@@ -592,31 +592,31 @@ print (search_func.best_score_)
 
     <p class="normal">抛开网格<a id="_idIndexMarker680"/>搜索(仅在实验空间有限时可行)，从业者通常的选择是应用随机搜索优化或尝试<strong class="keyWord">贝叶斯优化</strong> ( <strong class="keyWord">博</strong>)技术，这需要更复杂的设置。</p>
 
-    <p class="normal">最初由Snoek，j .、Larochelle，h .和Adams，r . p .(<a href="http://export.arxiv.org/pdf/1206.2944">http://export.arxiv.org/pdf/1206.2944</a>)在论文<em class="italic">中介绍了机器学习算法</em>的实用贝叶斯优化，贝叶斯优化背后的关键思想<a id="_idIndexMarker681"/>是我们<a id="_idIndexMarker682"/>优化一个<strong class="keyWord">代理函数</strong>(也称为<strong class="keyWord">代理函数</strong>)，而不是真正的目标函数(网格搜索和随机搜索都是这样)。如果没有梯度，如果测试真正的目标函数是昂贵的(如果不是，那么我们简单地去随机搜索)，并且如果搜索空间是嘈杂的和足够复杂的，我们这样做。</p>
+    <p class="normal">最初由 Snoek，j .、Larochelle，h .和 Adams，r . p .(<a href="http://export.arxiv.org/pdf/1206.2944">http://export.arxiv.org/pdf/1206.2944</a>)在论文<em class="italic">中介绍了机器学习算法</em>的实用贝叶斯优化，贝叶斯优化背后的关键思想<a id="_idIndexMarker681"/>是我们<a id="_idIndexMarker682"/>优化一个<strong class="keyWord">代理函数</strong>(也称为<strong class="keyWord">代理函数</strong>)，而不是真正的目标函数(网格搜索和随机搜索都是这样)。如果没有梯度，如果测试真正的目标函数是昂贵的(如果不是，那么我们简单地去随机搜索)，并且如果搜索空间是嘈杂的和足够复杂的，我们这样做。</p>
 
     <p class="normal">贝叶斯<a id="_idIndexMarker683"/>搜索平衡<em class="italic">探索</em>与<em class="italic">开发</em>。在开始时，它随机地探索，从而在探索过程中训练代理函数。基于该替代函数，搜索利用其关于预测器如何工作的初始近似知识，以便采样更多有用的示例并最小化成本函数。正如名字的<em class="italic">贝叶斯</em>部分所暗示的，我们正在使用先验知识，以便在优化过程中对采样做出更明智的决策。这样，通过限制我们需要进行的评估次数，我们可以更快地达到最小化。</p>
 
     <p class="normal">贝叶斯优化使用<a id="_idIndexMarker684"/>和<strong class="keyWord">获取函数</strong>来告诉我们一个观察结果有多有希望。事实上，为了管理探索和开发之间的权衡，该算法定义了一个获取函数，该函数提供了对尝试任何给定点的有用程度的单一度量。</p>
 
-    <p class="normal">通常，贝叶斯优化是由高斯过程驱动的。当搜索空间具有平滑且可预测的响应时，高斯过程表现得更好。当搜索空间更复杂时，另一种选择是使用树算法(例如，随机森林)，或者一种完全不同的方法，称为树Parzen估计器(树Parzen Estimators)或树结构Parzen估计器(树结构Parzen Estimators)。</p>
+    <p class="normal">通常，贝叶斯优化是由高斯过程驱动的。当搜索空间具有平滑且可预测的响应时，高斯过程表现得更好。当搜索空间更复杂时，另一种选择是使用树算法(例如，随机森林)，或者一种完全不同的方法，称为树 Parzen 估计器(树 Parzen Estimators)或树结构 Parzen 估计器(树结构 Parzen Estimators)。</p>
 
-    <p class="normal">TPEs不是直接建立一个模型来估计一组参数的成功<a id="_idIndexMarker686"/>，从而像一个先知一样，而是根据实验提供的逐次逼近法来估计定义参数最佳值的多变量分布的参数。以这种方式，TPE通过从概率分布中对参数进行采样来导出最佳参数集，而不是像高斯过程那样直接从机器学习模型中导出。</p>
+    <p class="normal">TPEs 不是直接建立一个模型来估计一组参数的成功<a id="_idIndexMarker686"/>，从而像一个先知一样，而是根据实验提供的逐次逼近法来估计定义参数最佳值的多变量分布的参数。以这种方式，TPE 通过从概率分布中对参数进行采样来导出最佳参数集，而不是像高斯过程那样直接从机器学习模型中导出。</p>
 
-    <p class="normal">我们将讨论这些方法中的每一种，首先通过检查Scikit-optimize和KerasTuner，两者都基于高斯过程(Scikit-optimize也可以使用随机森林，KerasTuner可以使用多臂土匪)，然后是Optuna，它主要基于TPE(尽管它也提供不同的策略:<a href="https://optuna.readthedocs.io/en/stable/reference/samplers.html">https://Optuna . readthedocs . io/en/stable/reference/samplers . html</a>)。</p>
+    <p class="normal">我们将讨论这些方法中的每一种，首先通过检查 Scikit-optimize 和 KerasTuner，两者都基于高斯过程(Scikit-optimize 也可以使用随机森林，KerasTuner 可以使用多臂土匪)，然后是 Optuna，它主要基于 TPE(尽管它也提供不同的策略:<a href="https://optuna.readthedocs.io/en/stable/reference/samplers.html">https://Optuna . readthedocs . io/en/stable/reference/samplers . html</a>)。</p>
 
-    <div><p class="normal">虽然贝叶斯优化被认为是超参数调整的最先进技术，但请始终记住，对于更复杂的参数空间，使用贝叶斯优化在时间和计算开销方面并不比通过随机搜索找到的解决方案更有优势。例如，在谷歌云机器学习引擎服务中，贝叶斯优化的使用限于涉及最多16个参数的问题。对于大量的参数，它诉诸随机抽样。</p>
+    <div><p class="normal">虽然贝叶斯优化被认为是超参数调整的最先进技术，但请始终记住，对于更复杂的参数空间，使用贝叶斯优化在时间和计算开销方面并不比通过随机搜索找到的解决方案更有优势。例如，在谷歌云机器学习引擎服务中，贝叶斯优化的使用限于涉及最多 16 个参数的问题。对于大量的参数，它诉诸随机抽样。</p>
 
     </div>
 
-    <h2 id="_idParaDest-141" class="heading-2">使用Scikit-optimize</h2>
+    <h2 id="_idParaDest-141" class="heading-2">使用 Scikit-optimize</h2>
 
-    <p class="normal">Scikit-optimize ( <code class="inlineCode">skopt</code>)已经使用与Scikit-learn相同的API进行了开发，并且大量使用了NumPy和SciPy函数。此外，它是由Scikit-learn项目的一些贡献者创建的，例如<em class="italic"> Gilles Louppe </em>。</p>
+    <p class="normal">Scikit-optimize ( <code class="inlineCode">skopt</code>)已经使用与 Scikit-learn 相同的 API 进行了开发，并且大量使用了 NumPy 和 SciPy 函数。此外，它是由 Scikit-learn 项目的一些贡献者创建的，例如<em class="italic"> Gilles Louppe </em>。</p>
 
-    <p class="normal">基于高斯过程算法，该包得到了很好的维护，尽管有时它必须赶上，因为Scikit-learn、NumPy或SciPy方面有所改进。例如，在撰写本文时，为了在Kaggle笔记本上正确运行它，您必须回滚到这些包的旧版本，正如GitHub问题中所解释的那样(<a href="https://github.com/scikit-optimize/scikit-optimize/issues/981">https://GitHub . com/scikit-optimize/scikit-optimize/issues/981</a>)。</p>
+    <p class="normal">基于高斯过程算法，该包得到了很好的维护，尽管有时它必须赶上，因为 Scikit-learn、NumPy 或 SciPy 方面有所改进。例如，在撰写本文时，为了在 Kaggle 笔记本上正确运行它，您必须回滚到这些包的旧版本，正如 GitHub 问题中所解释的那样(<a href="https://github.com/scikit-optimize/scikit-optimize/issues/981">https://GitHub . com/scikit-optimize/scikit-optimize/issues/981</a>)。</p>
 
-    <p class="normal">该软件包有一个直观的API，很容易破解它，并在自定义优化策略中使用它的功能。Scikit-optimize还因其有用的图形表示而闻名。事实上，通过可视化优化过程的结果(使用Scikit-optimize的<code class="inlineCode">plot_objective</code>函数)，您可以确定是否可以重新定义问题的搜索空间，并对优化如何解决问题做出解释。</p>
+    <p class="normal">该软件包有一个直观的 API，很容易破解它，并在自定义优化策略中使用它的功能。Scikit-optimize 还因其有用的图形表示而闻名。事实上，通过可视化优化过程的结果(使用 Scikit-optimize 的<code class="inlineCode">plot_objective</code>函数)，您可以确定是否可以重新定义问题的搜索空间，并对优化如何解决问题做出解释。</p>
 
-    <p class="normal">在我们的工作示例中，我们将参考可在以下Kaggle笔记本中找到的工作:</p>
+    <p class="normal">在我们的工作示例中，我们将参考可在以下 Kaggle 笔记本中找到的工作:</p>
 
     <ul>
 
@@ -626,13 +626,13 @@ print (search_func.best_score_)
 
     </ul>
 
-    <p class="normal">我们在这里的目的是<a id="_idIndexMarker688"/>向您展示如何快速处理竞赛中的优化问题，例如<em class="italic"> 30天的ML </em>，这是最近的一次竞赛，许多Kagglers参与了学习新技能并在持续30天的竞赛中应用它们。这个竞赛的目标是预测一个保险索赔的价值，所以它是一个回归问题。您可以通过访问<a href="https://www.kaggle.com/thirty-days-of-ml">https://www.kaggle.com/thirty-days-of-ml</a>了解更多关于该计划的信息，并下载我们将要展示的例子所需的数据(公众随时可以获得相关资料)。</p>
+    <p class="normal">我们在这里的目的是<a id="_idIndexMarker688"/>向您展示如何快速处理竞赛中的优化问题，例如<em class="italic"> 30 天的 ML </em>，这是最近的一次竞赛，许多 Kagglers 参与了学习新技能并在持续 30 天的竞赛中应用它们。这个竞赛的目标是预测一个保险索赔的价值，所以它是一个回归问题。您可以通过访问<a href="https://www.kaggle.com/thirty-days-of-ml">https://www.kaggle.com/thirty-days-of-ml</a>了解更多关于该计划的信息，并下载我们将要展示的例子所需的数据(公众随时可以获得相关资料)。</p>
 
-    <div><p class="normal">如果因为之前没有参加过比赛而无法访问数据，可以使用这个Kaggle数据集:<a href="https://www.kaggle.com/lucamassaron/30-days-of-ml">https://www.kaggle.com/lucamassaron/30-days-of-ml</a>。</p>
+    <div><p class="normal">如果因为之前没有参加过比赛而无法访问数据，可以使用这个 Kaggle 数据集:<a href="https://www.kaggle.com/lucamassaron/30-days-of-ml">https://www.kaggle.com/lucamassaron/30-days-of-ml</a>。</p>
 
     </div>
 
-    <p class="normal">下面的代码<a id="_idIndexMarker689"/>将介绍如何为这个问题加载数据，然后建立一个贝叶斯优化过程，这将提高LightGBM模型的性能。</p>
+    <p class="normal">下面的代码<a id="_idIndexMarker689"/>将介绍如何为这个问题加载数据，然后建立一个贝叶斯优化过程，这将提高 LightGBM 模型的性能。</p>
 
     <p class="normal">我们从加载包开始:</p>
 
@@ -710,7 +710,7 @@ X_test[categoricals] = X_test[categoricals].replace(cat_dict).astype('category')
 
 </code></pre>
 
-    <p class="normal">在使数据<a id="_idIndexMarker690"/>可用之后，我们定义了一个报告函数，Scikit-optimize可以使用它来完成各种优化任务。该函数将数据和优化器作为输入。它还可以处理<strong class="keyWord">回调函数</strong>，这些函数执行各种操作，例如报告、根据搜索时间是否达到某个阈值或性能是否改善(例如，在一定次数的迭代中没有看到改善)提前停止，或在每次优化迭代后保存处理状态:</p>
+    <p class="normal">在使数据<a id="_idIndexMarker690"/>可用之后，我们定义了一个报告函数，Scikit-optimize 可以使用它来完成各种优化任务。该函数将数据和优化器作为输入。它还可以处理<strong class="keyWord">回调函数</strong>，这些函数执行各种操作，例如报告、根据搜索时间是否达到某个阈值或性能是否改善(例如，在一定次数的迭代中没有看到改善)提前停止，或在每次优化迭代后保存处理状态:</p>
 
     <pre class="programlisting code"><code class="hljs-code"># Reporting util for different optimizers
 
@@ -774,7 +774,7 @@ def report_perf(optimizer, X, y, title="model", callbacks=None):
 
 </code></pre>
 
-    <p class="normal">我们现在必须准备<a id="_idIndexMarker691"/>评分函数(评估基于此)、验证策略(基于交叉验证)、模型和搜索空间。对于评分函数，它应该是一个均方根误差度量，我们参考Scikit-learn中的实践，在那里你总是最小化一个函数(如果你必须最大化，你最小化它的负值)。</p>
+    <p class="normal">我们现在必须准备<a id="_idIndexMarker691"/>评分函数(评估基于此)、验证策略(基于交叉验证)、模型和搜索空间。对于评分函数，它应该是一个均方根误差度量，我们参考 Scikit-learn 中的实践，在那里你总是最小化一个函数(如果你必须最大化，你最小化它的负值)。</p>
 
     <p class="normal"><code class="inlineCode">make_scorer</code>包装器可以很容易地复制这样的实践:</p>
 
@@ -804,7 +804,7 @@ reg = lgb.LGBMRegressor(boosting_type='gbdt',
 
 </code></pre>
 
-    <p class="normal">设置搜索空间需要使用Scikit-optimize中的不同函数，如<code class="inlineCode">Real</code>、<code class="inlineCode">Integer</code>或<code class="inlineCode">Choice</code>，每一个函数都从您定义为参数的不同类型的分布中采样(通常是均匀分布，但当您对参数的比例效应比对其精确值更感兴趣时，也可以使用对数均匀分布):</p>
+    <p class="normal">设置搜索空间需要使用 Scikit-optimize 中的不同函数，如<code class="inlineCode">Real</code>、<code class="inlineCode">Integer</code>或<code class="inlineCode">Choice</code>，每一个函数都从您定义为参数的不同类型的分布中采样(通常是均匀分布，但当您对参数的比例效应比对其精确值更感兴趣时，也可以使用对数均匀分布):</p>
 
     <pre class="programlisting code"><code class="hljs-code"># Setting the search space
 
@@ -892,7 +892,7 @@ search_spaces = {
 
     </ul>
 
-    <p class="normal">剩下的只是把它们输入到你的优化函数中，<code class="inlineCode">BayesSearchCV</code>。基于所提供的CV方案，该函数将基于搜索空间内的值寻找得分函数的最小值。您可以设置执行的最大迭代次数、代理函数的种类(高斯过程(<code class="inlineCode">GP</code>)在大多数情况下有效)以及再现性的<a id="_idIndexMarker693"/>随机种子:</p>
+    <p class="normal">剩下的只是把它们输入到你的优化函数中，<code class="inlineCode">BayesSearchCV</code>。基于所提供的 CV 方案，该函数将基于搜索空间内的值寻找得分函数的最小值。您可以设置执行的最大迭代次数、代理函数的种类(高斯过程(<code class="inlineCode">GP</code>)在大多数情况下有效)以及再现性的<a id="_idIndexMarker693"/>随机种子:</p>
 
     <pre class="programlisting code"><code class="hljs-code"># Wrapping everything up into the Bayesian optimizer
 
@@ -944,7 +944,7 @@ best_params = report_perf(opt, X, y,'LightGBM_regression',
 
 </code></pre>
 
-    <p class="normal">在示例中，我们通过指定停止和报告最佳结果之前允许的最大时间(6小时)来设置操作限制。由于贝叶斯优化方法将超参数的不同组合的探索和利用混合在一起，因此在任何时候停止都将总是返回到目前为止找到的最佳解决方案(但不一定是可能的最佳方案)。这是因为获取函数将总是基于由替代函数返回的估计性能及其不确定性区间，优先探索搜索空间中最有希望的部分。</p>
+    <p class="normal">在示例中，我们通过指定停止和报告最佳结果之前允许的最大时间(6 小时)来设置操作限制。由于贝叶斯优化方法将超参数的不同组合的探索和利用混合在一起，因此在任何时候停止都将总是返回到目前为止找到的最佳解决方案(但不一定是可能的最佳方案)。这是因为获取函数将总是基于由替代函数返回的估计性能及其不确定性区间，优先探索搜索空间中最有希望的部分。</p>
 
     <h2 id="_idParaDest-142" class="heading-2">定制贝叶斯优化搜索</h2>
 
@@ -964,7 +964,7 @@ best_params = report_perf(opt, X, y,'LightGBM_regression',
 
     </ul>
 
-    <p class="normal">如果您可以修改<code class="inlineCode">BayesSearchCV</code>内部程序，这些任务都不会太复杂。幸运的是，Scikit-optimize让您可以做到这一点。事实上，在<code class="inlineCode">BayesSearchCV</code>之后，以及在这个包的其他包装器之后，有一些特定的最小化函数，您可以将它们用作您自己的搜索函数的独立部分:</p>
+    <p class="normal">如果您可以修改<code class="inlineCode">BayesSearchCV</code>内部程序，这些任务都不会太复杂。幸运的是，Scikit-optimize 让您可以做到这一点。事实上，在<code class="inlineCode">BayesSearchCV</code>之后，以及在这个包的其他包装器之后，有一些特定的最小化函数，您可以将它们用作您自己的搜索函数的独立部分:</p>
 
     <ul>
 
@@ -980,7 +980,7 @@ best_params = report_perf(opt, X, y,'LightGBM_regression',
 
     <p class="normal">在下面的示例中，我们将使用自己的自定义搜索功能来修改之前的搜索。新的自定义函数将接受训练期间的提前停止，并且如果折叠验证结果之一不是最佳结果，它将修剪实验。</p>
 
-    <div><p class="normal">你可以在<a href="https://www.kaggle.com/lucamassaron/hacking-bayesian-optimization">https://www . Kaggle . com/lucamassaron/hacking-Bayesian-optimization</a>找到在ka ggle笔记本中工作的下一个例子。</p>
+    <div><p class="normal">你可以在<a href="https://www.kaggle.com/lucamassaron/hacking-bayesian-optimization">https://www . Kaggle . com/lucamassaron/hacking-Bayesian-optimization</a>找到在 ka ggle 笔记本中工作的下一个例子。</p>
 
     </div>
 
@@ -1046,7 +1046,7 @@ from sklearn.preprocessing import OrdinalEncoder
 
 </code></pre>
 
-    <p class="normal">与之前一样，我们上传了ML<em class="italic">30天</em>比赛的数据:</p>
+    <p class="normal">与之前一样，我们上传了 ML<em class="italic">30 天</em>比赛的数据:</p>
 
     <pre class="programlisting code"><code class="hljs-code"># Loading data 
 
@@ -1120,7 +1120,7 @@ model = XGBRegressor(n_estimators=10_000,
 
     <p class="normal">请注意，这次我们没有在搜索空间中包括估计量的数量(参数<code class="inlineCode">n_estimators</code>)。相反，我们在实例化模型时设置它，并输入一个高值，因为我们希望根据验证集尽早停止模型。</p>
 
-    <p class="normal">作为下一步，您现在需要创建目标函数。目标函数应该只接受要优化的参数作为输入，并返回结果分数。然而，目标函数也需要接受您刚才准备的搜索所必需的元素。自然，你可以在函数内部引用它们。但是，将它们放入函数本身的内部内存空间是一个很好的做法。这有它的好处；例如，您将使元素不可变，并且它们将与目标函数一起运行(通过pickling或者如果您在多处理器级别上分配搜索任务)。您可以通过创建一个接受元素的<code class="inlineCode">make</code>函数来获得第二个结果，修改后的目标函数由<code class="inlineCode">make</code>函数返回。有了这个简单的结构，您的目标函数将包含所有的元素，比如数据和模型，并且您只需要传递要测试的参数。</p>
+    <p class="normal">作为下一步，您现在需要创建目标函数。目标函数应该只接受要优化的参数作为输入，并返回结果分数。然而，目标函数也需要接受您刚才准备的搜索所必需的元素。自然，你可以在函数内部引用它们。但是，将它们放入函数本身的内部内存空间是一个很好的做法。这有它的好处；例如，您将使元素不可变，并且它们将与目标函数一起运行(通过 pickling 或者如果您在多处理器级别上分配搜索任务)。您可以通过创建一个接受元素的<code class="inlineCode">make</code>函数来获得第二个结果，修改后的目标函数由<code class="inlineCode">make</code>函数返回。有了这个简单的结构，您的目标函数将包含所有的元素，比如数据和模型，并且您只需要传递要测试的参数。</p>
 
     <p class="normal">让我们开始编写函数代码。我们将沿途停下来讨论一些相关的方面:</p>
 
@@ -1330,7 +1330,7 @@ for sp, x in zip(gp_round.space, gp_round.x):
 
     <p class="normal">现在我们有了<a id="_idIndexMarker702"/>组参数及其结果(<code class="inlineCode">x0</code>和<code class="inlineCode">y0</code>列表)，我们还可以探索不同的结果，并将输出相似但使用的参数组不同的结果聚集在一起。这将有助于我们训练一组具有相似性能但不同优化策略的更多样化的模型。这是<strong class="keyWord">混合</strong>的理想情况，这是多个模型的平均，以便<a id="_idIndexMarker703"/>降低估计值的方差，并获得更好的公共和私人排行榜分数。</p>
 
-    <div><p class="normal">参考<em class="chapterRef">第9章</em>、<em class="italic">用混合和堆叠溶液组装</em>，了解混合的讨论。</p>
+    <div><p class="normal">参考<em class="chapterRef">第 9 章</em>、<em class="italic">用混合和堆叠溶液组装</em>，了解混合的讨论。</p>
 
     </div>
 
@@ -1352,17 +1352,17 @@ for sp, x in zip(gp_round.space, gp_round.x):
 
     <p class="normal">也就是说，当使用<strong class="keyWord">深度神经网络</strong> ( <strong class="keyWord"> DNNs </strong>)工作<a id="_idIndexMarker705"/>时，这些学习参数并不是唯一可以优化的参数。网络如何分层组织以及其架构的细节会产生更大的差异。</p>
 
-    <p class="normal">事实上，从技术上来说，<strong class="keyWord">架构</strong>意味着深度神经网络的表示能力，这意味着，根据您使用的层，网络要么能够读取和处理数据中所有可用的信息，要么不能。虽然在其他机器学习算法中，你有大量但有限的选择，但在DNNs中，你的选择似乎是无限的，因为唯一明显的限制是你在处理部分神经网络并将它们放在一起的知识和经验。</p>
+    <p class="normal">事实上，从技术上来说，<strong class="keyWord">架构</strong>意味着深度神经网络的表示能力，这意味着，根据您使用的层，网络要么能够读取和处理数据中所有可用的信息，要么不能。虽然在其他机器学习算法中，你有大量但有限的选择，但在 DNNs 中，你的选择似乎是无限的，因为唯一明显的限制是你在处理部分神经网络并将它们放在一起的知识和经验。</p>
 
-    <p class="normal">当组装性能良好的dnn时，伟大的深度学习实践者的常见最佳实践主要取决于:</p>
+    <p class="normal">当组装性能良好的 dnn 时，伟大的深度学习实践者的常见最佳实践主要取决于:</p>
 
     <ul>
 
-      <li class="bulletList">依靠预先训练好的模型(所以你必须非常了解可用的解决方案，比如在拥抱脸(<a href="https://huggingface.co/models">https://huggingface.co/models</a>)或GitHub上找到的那些)</li>
+      <li class="bulletList">依靠预先训练好的模型(所以你必须非常了解可用的解决方案，比如在拥抱脸(<a href="https://huggingface.co/models">https://huggingface.co/models</a>)或 GitHub 上找到的那些)</li>
 
       <li class="bulletList">阅读前沿论文</li>
 
-      <li class="bulletList">复制同一个竞赛或以前的顶级Kaggle笔记本</li>
+      <li class="bulletList">复制同一个竞赛或以前的顶级 Kaggle 笔记本</li>
 
       <li class="bulletList">反复试验</li>
 
@@ -1370,17 +1370,17 @@ for sp, x in zip(gp_round.space, gp_round.x):
 
     </ul>
 
-    <p class="normal">在Geoffrey Hinton教授的一堂著名的课中，他说你可以使用自动方法，比如贝叶斯优化，来达到相似的甚至更好的结果。贝叶斯优化也将避免你陷入困境，因为你不能在许多可能的超参数中找出最佳组合。</p>
+    <p class="normal">在 Geoffrey Hinton 教授的一堂著名的课中，他说你可以使用自动方法，比如贝叶斯优化，来达到相似的甚至更好的结果。贝叶斯优化也将避免你陷入困境，因为你不能在许多可能的超参数中找出最佳组合。</p>
 
-    <div><p class="normal">关于杰弗里·辛顿教授的课程录音，见https://www.youtube.com/watch?v=i0cKa0di_lo<a href="https://www.youtube.com/watch?v=i0cKa0di_lo"/>。</p>
+    <div><p class="normal">关于杰弗里·辛顿教授的课程录音，见 https://www.youtube.com/watch?v=i0cKa0di_lo<a href="https://www.youtube.com/watch?v=i0cKa0di_lo"/>。</p>
 
       <p class="normal">幻灯片见<a href="https://www.cs.toronto.edu/~hinton/coursera/lecture16/lec16.pdf">https://www . cs . Toronto . edu/~ hint on/coursera/lech 16/LEC 16 . pdf</a>。</p>
 
     </div>
 
-    <p class="normal">正如我们之前提到的，即使在最复杂的AutoML系统中，当您有太多的超参数时，依靠随机优化可能会产生更好的结果，或者在与贝叶斯优化相同的时间内产生相同的结果。另外，在这种情况下，你还得对抗一个有急转弯和曲面的优化景观；在DNN优化中，许多参数不是连续的，而是布尔型的，仅仅一个变化就可能出乎意料地使网络性能变好或变坏。</p>
+    <p class="normal">正如我们之前提到的，即使在最复杂的 AutoML 系统中，当您有太多的超参数时，依靠随机优化可能会产生更好的结果，或者在与贝叶斯优化相同的时间内产生相同的结果。另外，在这种情况下，你还得对抗一个有急转弯和曲面的优化景观；在 DNN 优化中，许多参数不是连续的，而是布尔型的，仅仅一个变化就可能出乎意料地使网络性能变好或变坏。</p>
 
-    <p class="normal">我们的经验告诉我们，随机优化可能不适合Kaggle竞争，因为:</p>
+    <p class="normal">我们的经验告诉我们，随机优化可能不适合 Kaggle 竞争，因为:</p>
 
     <ul>
 
@@ -1390,13 +1390,13 @@ for sp, x in zip(gp_round.space, gp_round.x):
 
     </ul>
 
-    <p class="normal">在这种情况下，贝叶斯优化是理想的:您可以根据您拥有的时间和计算资源来设置它，并分阶段进行，通过多个会话来完善您的设置。此外，您不太可能轻松地利用并行性来调优dnn，因为它们使用GPU，除非您手头有多台非常强大的机器。通过顺序工作，贝叶斯优化只需要一台好机器来执行任务。最后，即使很难通过搜索找到最佳架构，由于优化环境，您可以利用以前实验的信息，尤其是在开始时，完全避免无效的参数组合。使用随机优化，除非你改变搜索空间，所有的组合总是容易被测试。</p>
+    <p class="normal">在这种情况下，贝叶斯优化是理想的:您可以根据您拥有的时间和计算资源来设置它，并分阶段进行，通过多个会话来完善您的设置。此外，您不太可能轻松地利用并行性来调优 dnn，因为它们使用 GPU，除非您手头有多台非常强大的机器。通过顺序工作，贝叶斯优化只需要一台好机器来执行任务。最后，即使很难通过搜索找到最佳架构，由于优化环境，您可以利用以前实验的信息，尤其是在开始时，完全避免无效的参数组合。使用随机优化，除非你改变搜索空间，所有的组合总是容易被测试。</p>
 
     <p class="normal">然而，也有缺点。贝叶斯优化使用从以前的试验中构建的代理函数对超参数空间建模，这不是一个无错误的过程。这个过程很有可能最终只关注搜索空间的一部分，而忽略了其他部分(这些部分可能包含您正在寻找的最小值)。解决这个问题的方法是运行大量实验以确保安全，或者在随机搜索和贝叶斯优化之间交替进行，用随机试验挑战贝叶斯模型，这些随机试验可以迫使它以更优化的方式重塑其搜索模型。</p>
 
-    <p class="normal">对于我们的例子，我们再次使用来自Kaggle的ML 计划的<em class="italic"> 30天的数据，这是一个回归任务。我们的例子基于TensorFlow，但稍加修改，它可以在PyTorch或MXNet等其他深度学习框架上运行。</em></p>
+    <p class="normal">对于我们的例子，我们再次使用来自 Kaggle 的 ML 计划的<em class="italic"> 30 天的数据，这是一个回归任务。我们的例子基于 TensorFlow，但稍加修改，它可以在 PyTorch 或 MXNet 等其他深度学习框架上运行。</em></p>
 
-    <div><p class="normal">和之前一样，你可以在这里找到Kaggle上的例子:<a href="https://www.kaggle.com/lucamassaron/hacking-bayesian-optimization-for-dnns">https://www . ka ggle . com/lucamassaron/hacking-Bayesian-optimization-for-dnns</a>。</p>
+    <div><p class="normal">和之前一样，你可以在这里找到 Kaggle 上的例子:<a href="https://www.kaggle.com/lucamassaron/hacking-bayesian-optimization-for-dnns">https://www . ka ggle . com/lucamassaron/hacking-Bayesian-optimization-for-dnns</a>。</p>
 
     </div>
 
@@ -1406,7 +1406,7 @@ for sp, x in zip(gp_round.space, gp_round.x):
 
 </code></pre>
 
-    <p class="normal">在导入TensorFlow包之后，我们利用它的<code class="inlineCode">Dataset</code>函数来创建一个能够向我们的神经网络提供批量数据的iterable:</p>
+    <p class="normal">在导入 TensorFlow 包之后，我们利用它的<code class="inlineCode">Dataset</code>函数来创建一个能够向我们的神经网络提供批量数据的 iterable:</p>
 
     <pre class="programlisting code"><code class="hljs-code">def df_to_dataset(dataframe, shuffle=True, batch_size=32):
 
@@ -1430,7 +1430,7 @@ tf.keras.utils.get_custom_objects().update({'leaky-relu': tf.keras.layers.Activa
 
 </code></pre>
 
-    <p class="normal">我们还为我们的模型定制了一个【leaky ReLU activation对象；可以用字符串调用，不需要直接使用函数。</p>
+    <p class="normal">我们还为我们的模型定制了一个【leaky ReLU activation 对象；可以用字符串调用，不需要直接使用函数。</p>
 
     <p class="normal">我们继续编写一个函数，该函数基于一组超参数创建我们的深度神经网络模型:</p>
 
@@ -1782,17 +1782,17 @@ gc.collect()
 
     <p class="normal">和以前一样，在这个过程中，我们必须努力使<a id="_idIndexMarker712"/>优化在我们拥有的时间和资源范围内变得可行(例如，通过设置一个较低的<code class="inlineCode">n_calls</code>)。因此，我们可以通过保存优化状态、检查获得的结果，并在此后决定继续或结束优化过程，而不是投入更多的时间和精力来寻找更好的解决方案，来进行成批的搜索迭代。</p>
 
-    <h2 id="_idParaDest-144" class="heading-2">使用KerasTuner创建更轻、更快的模型</h2>
+    <h2 id="_idParaDest-144" class="heading-2">使用 KerasTuner 创建更轻、更快的模型</h2>
 
-    <p class="normal">如果前一部分的<a id="_idIndexMarker713"/>因为其复杂性而让你困惑，那么KerasTuner可以为你提供一个快速的解决方案来设置一个优化，而没有太多的麻烦。虽然它默认使用贝叶斯优化和高斯过程，但KerasTuner背后的新想法是<strong class="keyWord">超波段优化</strong>。超波段优化<a id="_idIndexMarker714"/>使用bandit方法计算出最佳参数(参见<a href="http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf">http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf</a>)。这对于神经网络来说工作得很好，神经网络的优化前景非常不规则和不连续，因此并不总是适合高斯过程。</p>
+    <p class="normal">如果前一部分的<a id="_idIndexMarker713"/>因为其复杂性而让你困惑，那么 KerasTuner 可以为你提供一个快速的解决方案来设置一个优化，而没有太多的麻烦。虽然它默认使用贝叶斯优化和高斯过程，但 KerasTuner 背后的新想法是<strong class="keyWord">超波段优化</strong>。超波段优化<a id="_idIndexMarker714"/>使用 bandit 方法计算出最佳参数(参见<a href="http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf">http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf</a>)。这对于神经网络来说工作得很好，神经网络的优化前景非常不规则和不连续，因此并不总是适合高斯过程。</p>
 
-    <div><p class="normal">请记住，您无法避免构建使用输入超参数构建自定义网络的函数；KerasTuner只是让它更容易处理。</p>
+    <div><p class="normal">请记住，您无法避免构建使用输入超参数构建自定义网络的函数；KerasTuner 只是让它更容易处理。</p>
 
     </div>
 
-    <p class="normal">让我们从头开始。Keras的创造者Fran ois Chollet宣布,<a id="_idIndexMarker715"/>Keras tuner(<a href="https://keras.io/keras_tuner/">https://keras.io/keras_tuner/</a>)为“Keras模型的灵活高效的超参数调谐”。</p>
+    <p class="normal">让我们从头开始。Keras 的创造者 Fran ois Chollet 宣布,<a id="_idIndexMarker715"/>Keras tuner(<a href="https://keras.io/keras_tuner/">https://keras.io/keras_tuner/</a>)为“Keras 模型的灵活高效的超参数调谐”。</p>
 
-    <p class="normal">Chollet提出的运行KerasTuner的方法由简单的步骤组成，从您现有的Keras模型开始:</p>
+    <p class="normal">Chollet 提出的运行 KerasTuner 的方法由简单的步骤组成，从您现有的 Keras 模型开始:</p>
 
     <ol class="numberedList" style="list-style-type: decimal;">
 
@@ -1800,7 +1800,7 @@ gc.collect()
 
       <li class="numberedList">在函数的开始定义超参数。</li>
 
-      <li class="numberedList">用超参数替换DNN静态值。</li>
+      <li class="numberedList">用超参数替换 DNN 静态值。</li>
 
       <li class="numberedList">根据给定的超参数编写模拟复杂神经网络的代码。</li>
 
@@ -1808,9 +1808,9 @@ gc.collect()
 
     </ol>
 
-    <p class="normal">我们现在将通过一个例子来探索<a id="_idIndexMarker716"/>所有这些步骤如何在Kaggle比赛中为你所用。目前，KerasTuner是任何Kaggle笔记本提供的堆栈的一部分，因此您不需要安装它。此外，TensorFlow附加组件是笔记本预装包的一部分。</p>
+    <p class="normal">我们现在将通过一个例子来探索<a id="_idIndexMarker716"/>所有这些步骤如何在 Kaggle 比赛中为你所用。目前，KerasTuner 是任何 Kaggle 笔记本提供的堆栈的一部分，因此您不需要安装它。此外，TensorFlow 附加组件是笔记本预装包的一部分。</p>
 
-    <p class="normal">如果您没有使用Kaggle笔记本，并且需要尝试KerasTuner，您可以使用以下命令轻松安装这两个程序:</p>
+    <p class="normal">如果您没有使用 Kaggle 笔记本，并且需要尝试 KerasTuner，您可以使用以下命令轻松安装这两个程序:</p>
 
     <pre class="programlisting code"><code class="hljs-code">!pip install -U keras-tuner
 
@@ -1818,11 +1818,11 @@ gc.collect()
 
 </code></pre>
 
-    <div><p class="normal">你可以在Kaggle笔记本上找到这个例子:<a href="https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/">https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/</a>。</p>
+    <div><p class="normal">你可以在 Kaggle 笔记本上找到这个例子:<a href="https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/">https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/</a>。</p>
 
     </div>
 
-    <p class="normal">我们的第一步是导入必要的包(为一些命令创建快捷方式，例如<code class="inlineCode">pad_sequences</code>)并直接从Keras上传我们将使用的数据:</p>
+    <p class="normal">我们的第一步是导入必要的包(为一些命令创建快捷方式，例如<code class="inlineCode">pad_sequences</code>)并直接从 Keras 上传我们将使用的数据:</p>
 
     <pre class="programlisting code"><code class="hljs-code">import numpy as np
 
@@ -1860,11 +1860,11 @@ train_data, val_data, train_labels, val_labels = train_test_split(train_data, tr
 
 </code></pre>
 
-    <p class="normal">这一次，我们使用的是Keras包(<a href="https://keras.io/api/datasets/imdb/">https://keras.io/api/datasets/imdb/</a>)中的<a id="_idIndexMarker717"/> IMDb数据集。该数据集有一些有趣的特征:</p>
+    <p class="normal">这一次，我们使用的是 Keras 包(<a href="https://keras.io/api/datasets/imdb/">https://keras.io/api/datasets/imdb/</a>)中的<a id="_idIndexMarker717"/> IMDb 数据集。该数据集有一些有趣的特征:</p>
 
     <ul>
 
-      <li class="bulletList">这是来自IMDb的25，000条电影评论的数据集</li>
+      <li class="bulletList">这是来自 IMDb 的 25，000 条电影评论的数据集</li>
 
       <li class="bulletList">这些评论由情绪(正面/负面)标记</li>
 
@@ -1876,9 +1876,9 @@ train_data, val_data, train_labels, val_labels = train_test_split(train_data, tr
 
     </ul>
 
-    <p class="normal">此外，它还被成功地用于一个流行的单词嵌入的Kaggle竞赛中(【https://www.kaggle.com/c/word2vec-nlp-tutorial/overview】T21)。</p>
+    <p class="normal">此外，它还被成功地用于一个流行的单词嵌入的 Kaggle 竞赛中(【https://www.kaggle.com/c/word2vec-nlp-tutorial/overview】T21)。</p>
 
-    <p class="normal">这个例子涉及自然语言处理。这类问题通常通过使用基于LSTM或GRU层的<strong class="keyWord">递归神经网络</strong> ( <strong class="keyWord"> RNNs </strong>)来解决。BERT、RoBERTa和其他<a id="_idIndexMarker718"/>基于transformer的模型通常会取得更好的结果——作为依赖于大型语言语料库的预训练模型——但这不一定在所有问题中都是正确的，rnn可以证明是一个强大的基线，或者是神经模型集合的一个很好的补充。在我们的例子中，所有的单词都已经进行了数字索引。我们只需在现有的索引中添加数字代码，这些代码表示填充符(因此我们可以轻松地将所有文本标准化为短语长度)、句子的开头、一个未知单词和一个未使用的单词:</p>
+    <p class="normal">这个例子涉及自然语言处理。这类问题通常通过使用基于 LSTM 或 GRU 层的<strong class="keyWord">递归神经网络</strong> ( <strong class="keyWord"> RNNs </strong>)来解决。BERT、RoBERTa 和其他<a id="_idIndexMarker718"/>基于 transformer 的模型通常会取得更好的结果——作为依赖于大型语言语料库的预训练模型——但这不一定在所有问题中都是正确的，rnn 可以证明是一个强大的基线，或者是神经模型集合的一个很好的补充。在我们的例子中，所有的单词都已经进行了数字索引。我们只需在现有的索引中添加数字代码，这些代码表示填充符(因此我们可以轻松地将所有文本标准化为短语长度)、句子的开头、一个未知单词和一个未使用的单词:</p>
 
     <pre class="programlisting code"><code class="hljs-code"># A dictionary mapping words to an integer index
 
@@ -1904,13 +1904,13 @@ def decode_review(text):
 
 </code></pre>
 
-    <p class="normal">下一步是为<strong class="keyWord">注意力</strong>创建一个自定义层。注意力是变压器模型的基础，也是最近神经NLP中最具创新性的想法之一。</p>
+    <p class="normal">下一步是为<strong class="keyWord">注意力</strong>创建一个自定义层。注意力是变压器模型的基础，也是最近神经 NLP 中最具创新性的想法之一。</p>
 
     <div><p class="normal">关于这些层次如何工作的所有细节，请参见关于注意力的开创性论文:Vaswani，a .等人。神经信息处理系统的进展。2017(<a href="https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings . neur IPS . cc/paper/2017/file/3 F5 ee 243547 dee 91 FBD 053 C1 C4 a845 aa-paper . pdf</a>)。</p>
 
     </div>
 
-    <p class="normal">注意力的概念很容易传达。LSTM和GRU图层输出经过处理的序列，但并非这些输出序列中的所有元素对您的预测都很重要。除了使用分层序列上的池层对所有输出序列进行平均，您实际上可以对它们进行<em class="italic">加权平均</em>(并在训练阶段学习要使用的正确权重)。这个加权过程(<strong class="keyWord">注意</strong>)肯定会提高你将要进一步传递的结果。当然，您可以使用多个注意力层使这种方法更加复杂(我们称之为<strong class="keyWord">多头注意力</strong>)，但是在我们的例子中，一个层就足够了，因为我们想要<a id="_idIndexMarker721"/>证明在这个问题中使用注意力比简单地平均或只是将所有结果连接在一起更有效:</p>
+    <p class="normal">注意力的概念很容易传达。LSTM 和 GRU 图层输出经过处理的序列，但并非这些输出序列中的所有元素对您的预测都很重要。除了使用分层序列上的池层对所有输出序列进行平均，您实际上可以对它们进行<em class="italic">加权平均</em>(并在训练阶段学习要使用的正确权重)。这个加权过程(<strong class="keyWord">注意</strong>)肯定会提高你将要进一步传递的结果。当然，您可以使用多个注意力层使这种方法更加复杂(我们称之为<strong class="keyWord">多头注意力</strong>)，但是在我们的例子中，一个层就足够了，因为我们想要<a id="_idIndexMarker721"/>证明在这个问题中使用注意力比简单地平均或只是将所有结果连接在一起更有效:</p>
 
     <pre class="programlisting code"><code class="hljs-code">from tensorflow.keras.layers import Dense, Dropout
 
@@ -1946,7 +1946,7 @@ def attention(layer):
 
 </code></pre>
 
-    <p class="normal">作为我们对这个问题的DNNs架构的实验的进一步<a id="_idIndexMarker722"/>变化，我们还想测试使用不同种类的优化器的有效性，例如<a id="_idIndexMarker723"/>作为<strong class="keyWord">修正的Adam </strong>(一个自适应学习Adam优化器；阅读本帖了解更多:<a href="https://lessw.medium.com/new-state-of-the-art-ai-optimizer-rectified-adam-radam-5d854730807b">https://lessw . medium . com/new-state-of-art-ai-optimizer-rectified-Adam-radam-5d 854730807 b</a>或<strong class="keyWord">随机加权平均</strong> ( <strong class="keyWord"> SWA </strong>)。SWA是一种在<a id="_idIndexMarker724"/>优化过程中平均遍历权重的方法，基于修改的学习率计划:如果您的模型倾向于过拟合或过冲，SWA有助于接近最优解，并且它被证明特别适用于NLP问题。</p>
+    <p class="normal">作为我们对这个问题的 DNNs 架构的实验的进一步<a id="_idIndexMarker722"/>变化，我们还想测试使用不同种类的优化器的有效性，例如<a id="_idIndexMarker723"/>作为<strong class="keyWord">修正的 Adam </strong>(一个自适应学习 Adam 优化器；阅读本帖了解更多:<a href="https://lessw.medium.com/new-state-of-the-art-ai-optimizer-rectified-adam-radam-5d854730807b">https://lessw . medium . com/new-state-of-art-ai-optimizer-rectified-Adam-radam-5d 854730807 b</a>或<strong class="keyWord">随机加权平均</strong> ( <strong class="keyWord"> SWA </strong>)。SWA 是一种在<a id="_idIndexMarker724"/>优化过程中平均遍历权重的方法，基于修改的学习率计划:如果您的模型倾向于过拟合或过冲，SWA 有助于接近最优解，并且它被证明特别适用于 NLP 问题。</p>
 
     <pre class="programlisting code"><code class="hljs-code">def get_optimizer(option=0, learning_rate=0.001):
 
@@ -1988,7 +1988,7 @@ def attention(layer):
 
 </code></pre>
 
-    <p class="normal">定义了两个关键函数后，我们现在面对最重要的编码函数:在给定参数的情况下提供不同神经架构的函数。我们并不编码我们想要连接到不同架构选择的所有各种参数；我们只提供了<code class="inlineCode">hp</code>参数，它应该包含我们想要使用的所有可能的参数，并且将由KerasTuner运行。除了函数输入中的<code class="inlineCode">hp</code>,我们固定词汇的大小和要填充的长度(如果有效长度较短，则添加虚拟值，如果长度较长，则删除短语):</p>
+    <p class="normal">定义了两个关键函数后，我们现在面对最重要的编码函数:在给定参数的情况下提供不同神经架构的函数。我们并不编码我们想要连接到不同架构选择的所有各种参数；我们只提供了<code class="inlineCode">hp</code>参数，它应该包含我们想要使用的所有可能的参数，并且将由 KerasTuner 运行。除了函数输入中的<code class="inlineCode">hp</code>,我们固定词汇的大小和要填充的长度(如果有效长度较短，则添加虚拟值，如果长度较长，则删除短语):</p>
 
     <pre class="programlisting code"><code class="hljs-code">layers = keras.layers
 
@@ -2040,7 +2040,7 @@ def create_tunable_model(hp, vocab_size=10000, pad_length=256):
 
     <p class="normal">在函数的第一部分，我们简单地从<code class="inlineCode">hp</code>参数中恢复所有的设置。我们还明确了它们各自的搜索空间范围。与我们目前看到的解决方案相反，这部分工作是在模型函数内部完成的，而不是在外部。</p>
 
-    <p class="normal">功能<a id="_idIndexMarker725"/>继续使用从<code class="inlineCode">hp</code>提取的参数定义不同的层。在某些情况下，参数将打开或关闭执行某些数据处理的网络的一部分。例如，在代码中，我们插入了一个图的分支(<code class="inlineCode">conv_filters</code>和<code class="inlineCode">conv_kernel</code>)，该分支使用卷积层处理单词序列，其1D形式也可以证明对NLP问题是有用的，因为它们可以捕捉LSTMs可能难以理解的单词和含义的本地序列。</p>
+    <p class="normal">功能<a id="_idIndexMarker725"/>继续使用从<code class="inlineCode">hp</code>提取的参数定义不同的层。在某些情况下，参数将打开或关闭执行某些数据处理的网络的一部分。例如，在代码中，我们插入了一个图的分支(<code class="inlineCode">conv_filters</code>和<code class="inlineCode">conv_kernel</code>)，该分支使用卷积层处理单词序列，其 1D 形式也可以证明对 NLP 问题是有用的，因为它们可以捕捉 LSTMs 可能难以理解的单词和含义的本地序列。</p>
 
     <p class="normal">现在我们可以定义实际的模型了:</p>
 
@@ -2134,7 +2134,7 @@ def create_tunable_model(hp, vocab_size=10000, pad_length=256):
 
 </code></pre>
 
-    <p class="normal">我们从定义<a id="_idIndexMarker726"/>输入层开始，用后续的嵌入层对其进行变换，嵌入层将序列值编码成密集层。使用<code class="inlineCode">SpatialDropout1D</code>将一些丢弃正则化应用于该过程，该函数将随机丢弃输出矩阵的所有列(标准丢弃将随机丢弃矩阵中的单个元素)。在这些初始阶段之后，我们将网络分成一个基于卷积的管道(<code class="inlineCode">Conv1D</code>)和另一个基于递归层的管道(GRU或LSTM)。正是在循环层之后，我们应用了注意力层。最后，这两个管道的输出被连接，在几个更密集的层之后，它们到达最终输出节点，一个sigmoid，因为我们必须表示范围在0到1之间的概率。</p>
+    <p class="normal">我们从定义<a id="_idIndexMarker726"/>输入层开始，用后续的嵌入层对其进行变换，嵌入层将序列值编码成密集层。使用<code class="inlineCode">SpatialDropout1D</code>将一些丢弃正则化应用于该过程，该函数将随机丢弃输出矩阵的所有列(标准丢弃将随机丢弃矩阵中的单个元素)。在这些初始阶段之后，我们将网络分成一个基于卷积的管道(<code class="inlineCode">Conv1D</code>)和另一个基于递归层的管道(GRU 或 LSTM)。正是在循环层之后，我们应用了注意力层。最后，这两个管道的输出被连接，在几个更密集的层之后，它们到达最终输出节点，一个 sigmoid，因为我们必须表示范围在 0 到 1 之间的概率。</p>
 
     <p class="normal">在模型定义之后，我们设置学习参数并在返回之前编译模型:</p>
 
@@ -2162,11 +2162,11 @@ def create_tunable_model(hp, vocab_size=10000, pad_length=256):
 
 </code></pre>
 
-    <p class="normal">请注意，我们已经使用Keras的功能API构建了模型，而不是顺序API。事实上，我们会建议你避免连续的；它更容易设置，但是严重限制了您的潜在架构。</p>
+    <p class="normal">请注意，我们已经使用 Keras 的功能 API 构建了模型，而不是顺序 API。事实上，我们会建议你避免连续的；它更容易设置，但是严重限制了您的潜在架构。</p>
 
-    <p class="normal">此时，大部分工作已经完成。作为一个建议，在我们自己使用KerasTuner进行了许多优化之后，我们更愿意首先构建一个<em class="italic">非参数</em>模型，使用我们想要测试的所有可能的架构特性，将网络的互斥部分设置为最复杂的解决方案。在我们建立了生成函数并且我们的模型看起来工作正常之后，我们可以，例如，表示它的图形，并且让它成功地适合一些例子作为测试。之后，我们开始将参数变量插入架构，并设置<code class="inlineCode">hp</code>参数定义。</p>
+    <p class="normal">此时，大部分工作已经完成。作为一个建议，在我们自己使用 KerasTuner 进行了许多优化之后，我们更愿意首先构建一个<em class="italic">非参数</em>模型，使用我们想要测试的所有可能的架构特性，将网络的互斥部分设置为最复杂的解决方案。在我们建立了生成函数并且我们的模型看起来工作正常之后，我们可以，例如，表示它的图形，并且让它成功地适合一些例子作为测试。之后，我们开始将参数变量插入架构，并设置<code class="inlineCode">hp</code>参数定义。</p>
 
-    <div><p class="normal">根据我们的经验，立即从参数函数开始将花费更多的时间和调试工作。KerasTuner背后的想法是让你把你的dnn想象成一组模块化电路，并帮助你优化数据在其中的流动。</p>
+    <div><p class="normal">根据我们的经验，立即从参数函数开始将花费更多的时间和调试工作。KerasTuner 背后的想法是让你把你的 dnn 想象成一组模块化电路，并帮助你优化数据在其中的流动。</p>
 
     </div>
 
@@ -2210,9 +2210,9 @@ tuner.search(train_data, train_labels,
 
 </code></pre>
 
-    <p class="normal">作为一个调谐器，我们选择贝叶斯优化，但你也可以尝试超波段调谐器(<a href="https://keras.io/api/keras_tuner/tuners/hyperband/">https://keras.io/api/keras_tuner/tuners/hyperband/</a>)并检查它是否能更好地解决你的问题。我们将我们的模型函数提供给<code class="inlineCode">hypermodel</code>参数。然后，我们使用字符串或函数设置目标、最大试验次数(如果没有更多的事情要做，KerasTuner会更早停止)和初始随机试验次数(越多越好),以便通知贝叶斯过程。早期停止是dnn建模中的一个标准且表现良好的实践，您绝对不能忽视。最后，也是重要的一点，我们设置了保存搜索结果的目录，以及优化步骤可重复性的种子编号。</p>
+    <p class="normal">作为一个调谐器，我们选择贝叶斯优化，但你也可以尝试超波段调谐器(<a href="https://keras.io/api/keras_tuner/tuners/hyperband/">https://keras.io/api/keras_tuner/tuners/hyperband/</a>)并检查它是否能更好地解决你的问题。我们将我们的模型函数提供给<code class="inlineCode">hypermodel</code>参数。然后，我们使用字符串或函数设置目标、最大试验次数(如果没有更多的事情要做，KerasTuner 会更早停止)和初始随机试验次数(越多越好),以便通知贝叶斯过程。早期停止是 dnn 建模中的一个标准且表现良好的实践，您绝对不能忽视。最后，也是重要的一点，我们设置了保存搜索结果的目录，以及优化步骤可重复性的种子编号。</p>
 
-    <p class="normal">search <a id="_idIndexMarker728"/>阶段像Keras模型的标准拟合一样运行，并且——这很重要——它接受回调。因此，您可以轻松地将提前停止添加到您的模型中。在这种情况下，给定的历元数因此应该被认为是最大的历元数。您可能还想优化批量大小，这在我们的示例中还没有实现。这仍然需要一些额外的工作，但是你可以通过阅读这期GitHub封闭版:<a href="https://github.com/keras-team/keras-tuner/issues/122">https://github.com/keras-team/keras-tuner/issues/122</a>来了解如何实现。</p>
+    <p class="normal">search <a id="_idIndexMarker728"/>阶段像 Keras 模型的标准拟合一样运行，并且——这很重要——它接受回调。因此，您可以轻松地将提前停止添加到您的模型中。在这种情况下，给定的历元数因此应该被认为是最大的历元数。您可能还想优化批量大小，这在我们的示例中还没有实现。这仍然需要一些额外的工作，但是你可以通过阅读这期 GitHub 封闭版:<a href="https://github.com/keras-team/keras-tuner/issues/122">https://github.com/keras-team/keras-tuner/issues/122</a>来了解如何实现。</p>
 
     <p class="normal">优化完成后，您可以提取最佳参数并保存最佳模型，而无需重新训练它:</p>
 
@@ -2228,13 +2228,13 @@ model.save("best_model.h5")
 
 </code></pre>
 
-    <p class="normal">在本例中，KerasTuner找到了一个解决方案，它使用了:</p>
+    <p class="normal">在本例中，KerasTuner 找到了一个解决方案，它使用了:</p>
 
     <ul>
 
       <li class="bulletList">更大的嵌入层</li>
 
-      <li class="bulletList">只有普通的GRU和LSTM图层(没有双向图层)</li>
+      <li class="bulletList">只有普通的 GRU 和 LSTM 图层(没有双向图层)</li>
 
       <li class="bulletList">多个一维卷积层的叠加(Conv1D)</li>
 
@@ -2244,9 +2244,9 @@ model.save("best_model.h5")
 
     <p class="normal">有趣的是，该解决方案不仅更有效，而且比我们以前基于直觉和经验解决问题的尝试更轻更快。</p>
 
-    <p class="normal">Chollet自己建议使用KerasTuner不仅仅是为了让你的DNS性能更好，也是为了把它们缩小到一个更容易管理的规模，这可能会在代码竞争中产生影响。这让你可以在竞赛赞助商提供的有限推断时间内，把更多协同工作的模型放在一起。</p>
+    <p class="normal">Chollet 自己建议使用 KerasTuner 不仅仅是为了让你的 DNS 性能更好，也是为了把它们缩小到一个更容易管理的规模，这可能会在代码竞争中产生影响。这让你可以在竞赛赞助商提供的有限推断时间内，把更多协同工作的模型放在一起。</p>
 
-    <div><p class="normal">如果您想查看更多使用KerasTuner的示例，Franç ois Chollet还为Kaggle竞赛制作了一系列笔记本，以展示他的优化器的工作方式和功能:</p>
+    <div><p class="normal">如果您想查看更多使用 KerasTuner 的示例，Franç ois Chollet 还为 Kaggle 竞赛制作了一系列笔记本，以展示他的优化器的工作方式和功能:</p>
 
       <ul>
 
@@ -2260,9 +2260,9 @@ model.save("best_model.h5")
 
     </div>
 
-    <h2 id="_idParaDest-145" class="heading-2">Optuna的TPE方法</h2>
+    <h2 id="_idParaDest-145" class="heading-2">Optuna 的 TPE 方法</h2>
 
-    <p class="normal">我们用另一个有趣的工具和方法完成了对贝叶斯优化的概述。正如我们所讨论的，Scikit-optimize使用高斯过程(以及树算法),它直接对代理函数和采集函数建模。</p>
+    <p class="normal">我们用另一个有趣的工具和方法完成了对贝叶斯优化的概述。正如我们所讨论的，Scikit-optimize 使用高斯过程(以及树算法),它直接对代理函数和采集函数建模。</p>
 
     <div><p class="normal">作为对这些主题的提醒，当您尝试一组超参数时，<strong class="keyWord">代理函数</strong>有助于优化过程对潜在的<a id="_idIndexMarker731"/>性能结果进行建模。使用先前的实验及其结果建立替代函数；它只是一个预测模型，用于预测特定机器学习算法在特定问题上的行为。对于提供给代理函数的每个参数输入，您将获得一个预期的性能输出。正如我们所见，这很直观，也很容易被破解。</p>
 
@@ -2274,17 +2274,17 @@ model.save("best_model.h5")
 
     <p class="normal">在这种方法中，超参数集被这些分布分为好的和坏的，它们在贝叶斯优化中扮演代理和获取函数的角色，因为分布告诉您在哪里采样以获得更好的性能或探索哪里存在不确定性。</p>
 
-    <div><p class="normal">为了探索TPE的技术细节，我们建议阅读Bergstra，j .等人的<em class="italic">超参数优化算法</em>。神经信息处理系统进展24，2011(<a href="https://proceedings.neurips.cc/paper/2011/file/86e8f7ab32cfd12577bc2619bc635690-Paper.pdf">https://proceedings . neur IPS . cc/paper/2011/file/86 E8 f 7 ab 32 CFD 12577 BC 2619 BC 635690-paper . pdf</a>)。</p>
+    <div><p class="normal">为了探索 TPE 的技术细节，我们建议阅读 Bergstra，j .等人的<em class="italic">超参数优化算法</em>。神经信息处理系统进展 24，2011(<a href="https://proceedings.neurips.cc/paper/2011/file/86e8f7ab32cfd12577bc2619bc635690-Paper.pdf">https://proceedings . neur IPS . cc/paper/2011/file/86 E8 f 7 ab 32 CFD 12577 BC 2619 BC 635690-paper . pdf</a>)。</p>
 
     </div>
 
-    <p class="normal">因此，TPE可以<a id="_idIndexMarker733"/>对搜索空间建模，同时通过从调整后的参数概率分布中采样，建议算法接下来可以尝试什么。</p>
+    <p class="normal">因此，TPE 可以<a id="_idIndexMarker733"/>对搜索空间建模，同时通过从调整后的参数概率分布中采样，建议算法接下来可以尝试什么。</p>
 
-    <p class="normal">长期以来，<strong class="keyWord">hyperpt</strong>是那些更喜欢使用TPE而不是基于<a id="_idIndexMarker734"/>高斯过程的贝叶斯优化的人的选择。然而，在2018年10月，Optuna出现在开源中，由于其多功能性(它也适用于神经网络，甚至用于集成)，速度以及与之前的优化器相比在找到更好的解决方案方面的效率，它已经成为Kagglers的首选。</p>
+    <p class="normal">长期以来，<strong class="keyWord">hyperpt</strong>是那些更喜欢使用 TPE 而不是基于<a id="_idIndexMarker734"/>高斯过程的贝叶斯优化的人的选择。然而，在 2018 年 10 月，Optuna 出现在开源中，由于其多功能性(它也适用于神经网络，甚至用于集成)，速度以及与之前的优化器相比在找到更好的解决方案方面的效率，它已经成为 Kagglers 的首选。</p>
 
-    <p class="normal">在这一节中，我们将<a id="_idIndexMarker735"/>演示建立一个搜索是多么容易，在Optuna术语中，这被称为<em class="italic">研究</em>。您所需要做的就是编写一个目标函数，将Optuna要测试的参数作为输入，然后返回一个评估。验证和其他算法方面可以在目标函数中以直接的方式处理，也可以使用对函数本身外部变量的引用(全局变量或局部变量)。Optuna还允许<strong class="keyWord">修剪</strong>，也就是说，发出信号表明某个特定的实验进展不顺利，Optuna可以停止并忘记它。Optuna提供了激活这个回调的函数列表(见<a href="https://optuna.readthedocs.io/en/stable/reference/integration.html">https://optuna . readthe docs . io/en/stable/reference/integration . html</a>)；之后算法会高效地为你运行一切，这将大大减少优化所需的时间。</p>
+    <p class="normal">在这一节中，我们将<a id="_idIndexMarker735"/>演示建立一个搜索是多么容易，在 Optuna 术语中，这被称为<em class="italic">研究</em>。您所需要做的就是编写一个目标函数，将 Optuna 要测试的参数作为输入，然后返回一个评估。验证和其他算法方面可以在目标函数中以直接的方式处理，也可以使用对函数本身外部变量的引用(全局变量或局部变量)。Optuna 还允许<strong class="keyWord">修剪</strong>，也就是说，发出信号表明某个特定的实验进展不顺利，Optuna 可以停止并忘记它。Optuna 提供了激活这个回调的函数列表(见<a href="https://optuna.readthedocs.io/en/stable/reference/integration.html">https://optuna . readthe docs . io/en/stable/reference/integration . html</a>)；之后算法会高效地为你运行一切，这将大大减少优化所需的时间。</p>
 
-    <p class="normal">所有这些都在我们的下一个例子中。我们回到为<em class="italic"> 30天的ML </em>比赛进行优化。这一次，我们试图找出什么参数使XGBoost适用于这个比赛。</p>
+    <p class="normal">所有这些都在我们的下一个例子中。我们回到为<em class="italic"> 30 天的 ML </em>比赛进行优化。这一次，我们试图找出什么参数使 XGBoost 适用于这个比赛。</p>
 
     <div><p class="normal">你可以在<a href="https://www.kaggle.com/lucamassaron/optuna-bayesian-optimization">https://www . ka ggle . com/lucamassaron/optuna-Bayesian-optimization</a>找到这个例子的笔记本。</p>
 
@@ -2340,9 +2340,9 @@ X_test[categoricals] = ordinal_encoder.transform(X_test[categoricals])
 
 </code></pre>
 
-    <p class="normal">当使用Optuna时，您只需定义一个包含模型、交叉验证逻辑、评估度量和搜索空间的目标函数。</p>
+    <p class="normal">当使用 Optuna 时，您只需定义一个包含模型、交叉验证逻辑、评估度量和搜索空间的目标函数。</p>
 
-    <p class="normal">当然，对于数据，您可以引用函数本身之外的对象，这使得函数的构造更加容易。和在KerasTuner中一样，这里需要一个基于Optuna类的特殊输入参数:</p>
+    <p class="normal">当然，对于数据，您可以引用函数本身之外的对象，这使得函数的构造更加容易。和在 KerasTuner 中一样，这里需要一个基于 Optuna 类的特殊输入参数:</p>
 
     <pre class="programlisting code"><code class="hljs-code">def objective(trial):
 
@@ -2408,7 +2408,7 @@ X_test[categoricals] = ordinal_encoder.transform(X_test[categoricals])
 
 </code></pre>
 
-    <p class="normal">在本例中，出于<a id="_idIndexMarker738"/>性能原因，我们不会交叉验证，而是使用<a id="_idIndexMarker739"/>一个固定数据集用于训练，一个用于验证(提前停止)，一个用于测试。我们在这个例子中使用了GPU，并且我们还对可用数据进行了子集化，以便在合理的时间长度内执行60次试验。如果不想使用GPU，只需从<code class="inlineCode">XGBRegressor</code>实例化中移除<code class="inlineCode">tree_method</code>和<code class="inlineCode">predictor</code>参数即可。还要注意我们如何在<code class="inlineCode">fit</code>方法中设置回调，以便为Optuna提供关于模型执行情况的反馈，这样优化器就可以尽早停止性能不佳的实验，为其他尝试留出空间。</p>
+    <p class="normal">在本例中，出于<a id="_idIndexMarker738"/>性能原因，我们不会交叉验证，而是使用<a id="_idIndexMarker739"/>一个固定数据集用于训练，一个用于验证(提前停止)，一个用于测试。我们在这个例子中使用了 GPU，并且我们还对可用数据进行了子集化，以便在合理的时间长度内执行 60 次试验。如果不想使用 GPU，只需从<code class="inlineCode">XGBRegressor</code>实例化中移除<code class="inlineCode">tree_method</code>和<code class="inlineCode">predictor</code>参数即可。还要注意我们如何在<code class="inlineCode">fit</code>方法中设置回调，以便为 Optuna 提供关于模型执行情况的反馈，这样优化器就可以尽早停止性能不佳的实验，为其他尝试留出空间。</p>
 
     <pre class="programlisting code"><code class="hljs-code">x, x_val, y, y_val = train_test_split(X_train, y_train, random_state=0,
 
@@ -2422,7 +2422,7 @@ study.optimize(objective, n_trials=100)
 
 </code></pre>
 
-    <p class="normal">另一个值得注意的方面是，根据您的问题，您可以决定优化最小化还是最大化(Scikit-optimize只对最小化问题有效)。</p>
+    <p class="normal">另一个值得注意的方面是，根据您的问题，您可以决定优化最小化还是最大化(Scikit-optimize 只对最小化问题有效)。</p>
 
     <pre class="programlisting code"><code class="hljs-code">print(study.best_value)
 
@@ -2440,61 +2440,61 @@ print(study.best_params)
 
       <p class="normal"><a href="https://www.kaggle.com/ruchi798">https://www.kaggle.com/ruchi798</a></p>
 
-      <p class="normal">作为对这一密集章节的总结，让我们来看最后一次采访。这一次，我们采访了鲁奇·巴蒂亚，一位数据集和笔记本方面的大师。Ruchi目前是卡内基梅隆大学的研究生，OpenMined的数据科学家，HP在Z的数据科学全球大使。</p>
+      <p class="normal">作为对这一密集章节的总结，让我们来看最后一次采访。这一次，我们采访了鲁奇·巴蒂亚，一位数据集和笔记本方面的大师。Ruchi 目前是卡内基梅隆大学的研究生，OpenMined 的数据科学家，HP 在 Z 的数据科学全球大使。</p>
 
-      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在Kaggle上的特长是什么？</p>
+      <p class="interviewHeader">你最喜欢哪种比赛，为什么？从技术和解决途径来说，你在 Kaggle 上的特长是什么？</p>
 
-      <p class="normal"><em class="italic">我最喜欢的竞赛类型是NLP和分析竞赛。掌握多种语言在我的主要关注点和兴趣中发挥了重要作用:自然语言处理。</em></p>
+      <p class="normal"><em class="italic">我最喜欢的竞赛类型是 NLP 和分析竞赛。掌握多种语言在我的主要关注点和兴趣中发挥了重要作用:自然语言处理。</em></p>
 
 
 
-      <p class="normal"><em class="italic">至于分析竞赛，我喜欢从复杂的数据中寻找意义，并在数据的支持下回答问题！Kaggle上的每个比赛都很新颖，需要不同的技术。我主要遵循数据驱动的算法选择方法，没有固定的偏好。</em></p>
+      <p class="normal"><em class="italic">至于分析竞赛，我喜欢从复杂的数据中寻找意义，并在数据的支持下回答问题！Kaggle 上的每个比赛都很新颖，需要不同的技术。我主要遵循数据驱动的算法选择方法，没有固定的偏好。</em></p>
 
-      <p class="interviewHeader">你是如何对待一场Kaggle比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
+      <p class="interviewHeader">你是如何对待一场 Kaggle 比赛的？这种方法与你在日常工作中的做法有什么不同？</p>
 
-      <p class="normal"><em class="italic">当宣布一项新的竞赛时，我的首要任务是深入理解问题陈述。有时，问题陈述可能会超出我们的舒适区或领域，因此</em> <em class="italic"> <a id="_idIndexMarker743"/> </em> <em class="italic">至关重要，以确保我们在继续进行探索性数据分析之前很好地掌握它们。在执行EDA时，我的目标是理解数据分布，并专注于了解手头的数据。在此期间，我们可能会遇到一些模式，我们应该努力理解这些模式，并为异常值和例外情况形成一个假设。</em></p>
+      <p class="normal"><em class="italic">当宣布一项新的竞赛时，我的首要任务是深入理解问题陈述。有时，问题陈述可能会超出我们的舒适区或领域，因此</em> <em class="italic"> <a id="_idIndexMarker743"/> </em> <em class="italic">至关重要，以确保我们在继续进行探索性数据分析之前很好地掌握它们。在执行 EDA 时，我的目标是理解数据分布，并专注于了解手头的数据。在此期间，我们可能会遇到一些模式，我们应该努力理解这些模式，并为异常值和例外情况形成一个假设。</em></p>
 
       <p class="normal">在此之后，我花时间了解竞争指标。我的下一步是创建一个无泄漏的交叉验证策略。之后，我选择了一个基线模型，并提交了我的第一份报告。如果本地验证和竞赛排行榜之间的相关性不令人满意，我会根据需要进行迭代，以了解可能的差异并解释它们。</p>
 
       <p class="normal">然后，我会继续改进我的建模方法。除此之外，调整参数和尝试新的实验有助于了解什么对手头的数据最有效(确保我在整个过程中防止过度拟合)。最后，在比赛的最后几周，我进行了模型组装，并检查了我的解决方案的健壮性。</p>
 
-      <p class="normal">至于我在Kaggle之外的项目，我的大部分时间都花在数据收集、清理和从数据中获取相关价值上。</p>
+      <p class="normal">至于我在 Kaggle 之外的项目，我的大部分时间都花在数据收集、清理和从数据中获取相关价值上。</p>
 
-      <p class="interviewHeader">Kaggle对你的职业生涯有帮助吗？如果有，如何实现？</p>
+      <p class="interviewHeader">Kaggle 对你的职业生涯有帮助吗？如果有，如何实现？</p>
 
-      <p class="normal">Kaggle极大地帮助了我加快职业发展。它不仅帮助我找到了对数据科学的热情，还激励我有效地做出贡献并保持一致。这是一个完美的地方，可以用我们手边的大量数据进行动手实验，并在全球范围内展示我们的工作。此外，我们的作品易于获取，因此我们也可以接触到更广泛的受众。</p>
+      <p class="normal">Kaggle 极大地帮助了我加快职业发展。它不仅帮助我找到了对数据科学的热情，还激励我有效地做出贡献并保持一致。这是一个完美的地方，可以用我们手边的大量数据进行动手实验，并在全球范围内展示我们的工作。此外，我们的作品易于获取，因此我们也可以接触到更广泛的受众。</p>
 
-      <p class="normal"><em class="italic">我已经在我的文件夹中使用了我的大部分Kaggle作品，来表明我在迄今为止的旅程中所完成的作品的多样性。Kaggle竞赛旨在解决新奇和现实世界的问题，我觉得雇主在寻找我们解决这些问题的能力和资质。我还策划了广泛的数据集，帮助我突出了我在处理原始数据方面的敏锐度。这些项目帮助我获得了多个工作机会。</em></p>
+      <p class="normal"><em class="italic">我已经在我的文件夹中使用了我的大部分 Kaggle 作品，来表明我在迄今为止的旅程中所完成的作品的多样性。Kaggle 竞赛旨在解决新奇和现实世界的问题，我觉得雇主在寻找我们解决这些问题的能力和资质。我还策划了广泛的数据集，帮助我突出了我在处理原始数据方面的敏锐度。这些项目帮助我获得了多个工作机会。</em></p>
 
 
 
-      <p class="interviewHeader">以你的经验来看，没有经验的Kagglers经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
+      <p class="interviewHeader">以你的经验来看，没有经验的 Kagglers 经常会忽略什么？你现在知道了什么，你希望在你刚开始的时候就知道？</p>
 
-      <p class="normal"><em class="italic">在我的经历中，我注意到许多Kagglers在比赛中的排名没有达到他们的预期时会感到沮丧。经过几个星期和几个月的努力，我可以理解为什么他们可能会提前放弃，但赢得Kaggle比赛不是一件容易的事。有几个不同教育背景和工作经验的人在竞争，勇于尝试才是最重要的。我们应该关注我们的个人成长，看看我们在旅程中走了多远。</em></p>
+      <p class="normal"><em class="italic">在我的经历中，我注意到许多 Kagglers 在比赛中的排名没有达到他们的预期时会感到沮丧。经过几个星期和几个月的努力，我可以理解为什么他们可能会提前放弃，但赢得 Kaggle 比赛不是一件容易的事。有几个不同教育背景和工作经验的人在竞争，勇于尝试才是最重要的。我们应该关注我们的个人成长，看看我们在旅程中走了多远。</em></p>
 
       <p class="interviewHeader">对于数据分析或机器学习，你有什么特别推荐的工具或库吗？</p>
 
-      <p class="normal"><em class="italic">全面的探索性数据分析与相关可视化相结合，帮助我们发现数据趋势和背景，从而改进我们的方法。因为我相信可视化的力量，我最喜欢的数据科学库是Seaborn和TensorBoard。Seaborn用于EDA，TensorBoard用于机器学习工作流程中所需的可视化。我偶尔也用Tableau。</em></p>
+      <p class="normal"><em class="italic">全面的探索性数据分析与相关可视化相结合，帮助我们发现数据趋势和背景，从而改进我们的方法。因为我相信可视化的力量，我最喜欢的数据科学库是 Seaborn 和 TensorBoard。Seaborn 用于 EDA，TensorBoard 用于机器学习工作流程中所需的可视化。我偶尔也用 Tableau。</em></p>
 
       <p class="interviewHeader">当一个人参加比赛时，他应该记住或做的最重要的事情是什么？</p>
 
-      <p class="normal">当人们参加比赛时，我认为他们应该做好深入问题陈述和研究的准备。Kaggle上的比赛尤其具有挑战性，在许多情况下有助于解决现实生活中的问题。人们应该有积极的心态，不要灰心丧气。Kaggle竞赛提供了学习和成长的绝佳机会！</p>
+      <p class="normal">当人们参加比赛时，我认为他们应该做好深入问题陈述和研究的准备。Kaggle 上的比赛尤其具有挑战性，在许多情况下有助于解决现实生活中的问题。人们应该有积极的心态，不要灰心丧气。Kaggle 竞赛提供了学习和成长的绝佳机会！</p>
 
     </div>
 
     <h1 id="_idParaDest-146" class="heading-1">摘要</h1>
 
-    <p class="normal">在本章中，我们详细讨论了超参数优化，这是一种提高模型性能和在排行榜上获得更高分数的方法。我们从解释Scikit-learn的代码功能开始，比如网格搜索和随机搜索，以及更新的减半算法。</p>
+    <p class="normal">在本章中，我们详细讨论了超参数优化，这是一种提高模型性能和在排行榜上获得更高分数的方法。我们从解释 Scikit-learn 的代码功能开始，比如网格搜索和随机搜索，以及更新的减半算法。</p>
 
-    <p class="normal">然后，我们进展到贝叶斯优化，并探讨了Scikit-optimize、KerasTuner，最后是Optuna。我们花了更多的时间讨论通过高斯过程对代理函数的直接建模以及如何破解它，因为它可以让你有更强的直觉和更特别的解决方案。我们认识到，目前，Optuna已经成为Kaggler中的黄金标准，用于表格比赛以及深度神经网络比赛，因为它在ka ggle笔记本允许的时间内更快地收敛到最佳参数。</p>
+    <p class="normal">然后，我们进展到贝叶斯优化，并探讨了 Scikit-optimize、KerasTuner，最后是 Optuna。我们花了更多的时间讨论通过高斯过程对代理函数的直接建模以及如何破解它，因为它可以让你有更强的直觉和更特别的解决方案。我们认识到，目前，Optuna 已经成为 Kaggler 中的黄金标准，用于表格比赛以及深度神经网络比赛，因为它在 ka ggle 笔记本允许的时间内更快地收敛到最佳参数。</p>
 
     <p class="normal">然而，如果你想在竞争中脱颖而出，你也应该努力测试来自其他优化器的解决方案。</p>
 
-    <p class="normal">在下一章，我们将继续讨论另一种提高你在Kaggle比赛中表现的方法:集合模型。通过发现平均、混合和叠加的工作原理，我们将说明如何提高结果，使之超过仅通过调整超参数所能获得的结果。</p>
+    <p class="normal">在下一章，我们将继续讨论另一种提高你在 Kaggle 比赛中表现的方法:集合模型。通过发现平均、混合和叠加的工作原理，我们将说明如何提高结果，使之超过仅通过调整超参数所能获得的结果。</p>
 
     <h1 id="_idParaDest-147" class="heading-1">加入我们书的不和谐空间</h1>
 
-    <p class="normal">加入这本书的Discord workspace，每月与作者进行一次<em class="italic">向我提问</em>会议:</p>
+    <p class="normal">加入这本书的 Discord workspace，每月与作者进行一次<em class="italic">向我提问</em>会议:</p>
 
     <p class="normal"><a href="https://packt.link/KaggleDiscord">https://packt.link/KaggleDiscord</a></p>
 

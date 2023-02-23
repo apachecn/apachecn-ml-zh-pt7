@@ -30,7 +30,7 @@
 
 				<li class="list">定义损失和成本函数</li>
 
-				<li class="list">成本函数的例子，包括均方误差和Huber和hinge成本函数</li>
+				<li class="list">成本函数的例子，包括均方误差和 Huber 和 hinge 成本函数</li>
 
 				<li class="list">正规化</li>
 
@@ -94,7 +94,7 @@
 
 				<li class="list"><strong class="bold">脊线</strong>(或<strong class="bold">局部极大值</strong>)，这里梯度为零，二阶导数为负。它们是不稳定点，因为即使是最小的扰动也会让它们逃向成本更低的地区。</li>
 
-				<li class="list"><strong class="bold">高原</strong>，或者表面几乎平坦，坡度接近于零的区域。逃离平台期的唯一方法是保留一些剩余动能——我们将在第18章、<em class="italics">优化神经网络</em>中讨论神经优化算法时讨论这个概念。</li>
+				<li class="list"><strong class="bold">高原</strong>，或者表面几乎平坦，坡度接近于零的区域。逃离平台期的唯一方法是保留一些剩余动能——我们将在第 18 章、<em class="italics">优化神经网络</em>中讨论神经优化算法时讨论这个概念。</li>
 
 				<li class="list"><strong class="bold">全局最小值</strong>，我们希望达到的优化成本函数的点。</li>
 
@@ -104,7 +104,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_009.png" alt="" style="height: 3.5em !important;"/></figure>
 
-			<p class="normal">第二个<a id="_idIndexMarker145"/>条件强加了一个正定的Hessian矩阵——等价地，由第一个<em class="italics"> n个</em>行和第<em class="italics"> n个</em>列组成的所有主子式<img src="img/B14713_02_010.png" alt="" style="height: 1.1em !important;"/>必须是正的——因此它的所有特征值<img src="img/B14713_02_011.png" alt="" style="height: 1em !important;"/>必须是正的。这个概率<a id="_idIndexMarker146"/>随着参数个数的增加而减小(<img src="img/B14713_02_012.png" alt="" style="height: 1em !important;"/>是一个<em class="italics"> n × n </em>方阵，有<em class="italics"> n个</em>特征值)，在权值数量可以是百万量级，甚至更多的深度学习模型中变得接近于零。对完整的数学证明感兴趣的读者可以阅读Dube S .，<em class="italics">高维空间，深度学习和对抗性例子</em>，arXiv:1801.00634【cs。简历】。</p>
+			<p class="normal">第二个<a id="_idIndexMarker145"/>条件强加了一个正定的 Hessian 矩阵——等价地，由第一个<em class="italics"> n 个</em>行和第<em class="italics"> n 个</em>列组成的所有主子式<img src="img/B14713_02_010.png" alt="" style="height: 1.1em !important;"/>必须是正的——因此它的所有特征值<img src="img/B14713_02_011.png" alt="" style="height: 1em !important;"/>必须是正的。这个概率<a id="_idIndexMarker146"/>随着参数个数的增加而减小(<img src="img/B14713_02_012.png" alt="" style="height: 1em !important;"/>是一个<em class="italics"> n × n </em>方阵，有<em class="italics"> n 个</em>特征值)，在权值数量可以是百万量级，甚至更多的深度学习模型中变得接近于零。对完整的数学证明感兴趣的读者可以阅读 Dube S .，<em class="italics">高维空间，深度学习和对抗性例子</em>，arXiv:1801.00634【cs。简历】。</p>
 
 			<p class="normal">因此，更常见的情况是考虑是否存在<strong class="bold">鞍点</strong>，其中<a id="_idIndexMarker147"/>特征值具有不同的符号，并且正交方向导数为零，即使这些点既不是局部最大值也不是局部最小值。例如，考虑下面的情节:</p>
 
@@ -112,7 +112,7 @@
 
 			<p class="packt_figref">三维场景中的鞍点</p>
 
-			<p class="normal">表面<a id="_idIndexMarker148"/>在形状上非常类似于马鞍，如果我们将<a id="_idIndexMarker149"/>点投影到正交平面上，<em class="italics"> XZ </em>是最小值，而在另一个平面上(<em class="italics"> YZ </em>是最大值。直截了当的说鞍点是相当<em class="italics">危险的</em>，因为很多更简单的优化算法会变慢甚至停止，失去找准方向的能力。在<em class="italics">第18章</em>、<em class="italics">优化神经网络</em>中，我们将讨论一些能够缓解这类问题的方法，允许深度模型收敛。</p>
+			<p class="normal">表面<a id="_idIndexMarker148"/>在形状上非常类似于马鞍，如果我们将<a id="_idIndexMarker149"/>点投影到正交平面上，<em class="italics"> XZ </em>是最小值，而在另一个平面上(<em class="italics"> YZ </em>是最大值。直截了当的说鞍点是相当<em class="italics">危险的</em>，因为很多更简单的优化算法会变慢甚至停止，失去找准方向的能力。在<em class="italics">第 18 章</em>、<em class="italics">优化神经网络</em>中，我们将讨论一些能够缓解这类问题的方法，允许深度模型收敛。</p>
 
 			<h2 id="_idParaDest-34" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor036"/>成本函数的例子</h2>
 
@@ -130,7 +130,7 @@
 
 			<h3 id="_idParaDest-36" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor038"/>胡伯成本函数</h3>
 
-			<p class="normal">如前所述，均方误差对异常值并不稳健，因为它总是二次的，与实际值和预测值之间的距离<a id="_idIndexMarker157"/>无关。为了克服这个问题，可以采用<strong class="bold"> Huber成本函数</strong>，它是基于阈值<em class="italics">t</em>T7】H的<a id="_idIndexMarker158"/>，因此对于小于<em class="italics">t</em>t<sub style="font-style: italic;">H</sub>的距离，它的行为是二次的，而对于大于<em class="italics">t</em>t<sub style="font-style: italic;">H</sub>的距离，它变成线性的，减少了误差的实体，从而降低了异常值的相对重要性。</p>
+			<p class="normal">如前所述，均方误差对异常值并不稳健，因为它总是二次的，与实际值和预测值之间的距离<a id="_idIndexMarker157"/>无关。为了克服这个问题，可以采用<strong class="bold"> Huber 成本函数</strong>，它是基于阈值<em class="italics">t</em>T7】H 的<a id="_idIndexMarker158"/>，因此对于小于<em class="italics">t</em>t<sub style="font-style: italic;">H</sub>的距离，它的行为是二次的，而对于大于<em class="italics">t</em>t<sub style="font-style: italic;">H</sub>的距离，它变成线性的，减少了误差的实体，从而降低了异常值的相对重要性。</p>
 
 			<p class="normal">解析表达式为:</p>
 
@@ -142,11 +142,11 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_015.png" alt="" style="height: 3.5em !important;"/></figure>
 
-			<p class="normal">与<a id="_idIndexMarker162"/>其他示例相反，该成本函数没有使用经典SGD方法进行优化<a id="_idIndexMarker163"/>，因为它在以下情况下不可微:</p>
+			<p class="normal">与<a id="_idIndexMarker162"/>其他示例相反，该成本函数没有使用经典 SGD 方法进行优化<a id="_idIndexMarker163"/>，因为它在以下情况下不可微:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_016.png" alt="" style="height: 1.5em !important;"/></figure>
 
-			<p class="normal">为此，SVM算法使用二次规划技术进行优化。</p>
+			<p class="normal">为此，SVM 算法使用二次规划技术进行优化。</p>
 
 			<h3 id="_idParaDest-38" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor040"/>范畴交叉熵</h3>
 
@@ -154,35 +154,35 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_017.png" alt="" style="height: 3.5em !important;"/></figure>
 
-			<p class="normal">这个成本函数是凸的，可以很容易地使用SGD技术进行优化。根据信息论，分布的熵<em class="italics"> p </em>是不确定性数量的度量——如果使用<img src="img/B14713_02_018.png" alt="" style="height: 1em !important;"/>则用<strong class="bold">位</strong>表示，如果使用<strong class="bold">位</strong>则用自然对数表示——特定概率分布的<em class="italics">携带</em>。例如，如果我们掷一枚公平的硬币，那么<img src="img/B14713_02_019.png" alt="" style="height: 1.5em !important;"/>根据伯努利分布。因此，这种离散分布的熵是:</p>
+			<p class="normal">这个成本函数是凸的，可以很容易地使用 SGD 技术进行优化。根据信息论，分布的熵<em class="italics"> p </em>是不确定性数量的度量——如果使用<img src="img/B14713_02_018.png" alt="" style="height: 1em !important;"/>则用<strong class="bold">位</strong>表示，如果使用<strong class="bold">位</strong>则用自然对数表示——特定概率分布的<em class="italics">携带</em>。例如，如果我们掷一枚公平的硬币，那么<img src="img/B14713_02_019.png" alt="" style="height: 1.5em !important;"/>根据伯努利分布。因此，这种离散分布的熵是:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_020.png" alt="" style="height: 4em !important;"/></figure>
 
-			<p class="normal">不确定性等于1比特，这意味着在任何实验之前都有2种可能的结果，这是显而易见的。如果我们知道硬币是装的，<em class="italics"> P(头)= 0.1 </em>，<em class="italics"> P(尾)= 0.9 </em>会怎么样？熵现在是:</p>
+			<p class="normal">不确定性等于 1 比特，这意味着在任何实验之前都有 2 种可能的结果，这是显而易见的。如果我们知道硬币是装的，<em class="italics"> P(头)= 0.1 </em>，<em class="italics"> P(尾)= 0.9 </em>会怎么样？熵现在是:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_021.png" alt="" style="height: 1.8em !important;"/></figure>
 
-			<p class="normal">由于我们的<a id="_idIndexMarker166"/>不确定性现在非常低——我们知道在90%的情况下，结果将是反面——熵小于半个比特。这个概念必须<a id="_idIndexMarker167"/>解释为一个连续的测量，这意味着一个单一的结果很可能出现。当<em class="italics"> P(头部)→ 0 </em>和<em class="italics"> P(尾部)→ 1 </em>渐近需要0位时的极端情况，因为不再有不确定性，并且概率分布是退化的。</p>
+			<p class="normal">由于我们的<a id="_idIndexMarker166"/>不确定性现在非常低——我们知道在 90%的情况下，结果将是反面——熵小于半个比特。这个概念必须<a id="_idIndexMarker167"/>解释为一个连续的测量，这意味着一个单一的结果很可能出现。当<em class="italics"> P(头部)→ 0 </em>和<em class="italics"> P(尾部)→ 1 </em>渐近需要 0 位时的极端情况，因为不再有不确定性，并且概率分布是退化的。</p>
 
 			<p class="normal">熵的概念，以及交叉熵和其他信息理论公式，可以通过使用积分而不是总和来扩展到连续分布。比如正态分布<img src="img/B14713_02_022.png" alt="" style="height: 1em !important;"/>的熵是<img src="img/B14713_02_023.png" alt="" style="height: 2em !important;"/>。通常，熵与方差或分布的<em class="italics">分布</em>成比例。</p>
 
-			<p class="normal">这是一个直观的概念，事实上；方差越大，潜在结果被选择的概率相似的区域就越大。当潜在的候选结果集增加时，不确定性增加，我们需要为消除不确定性支付的bit或NAT的<em class="italics">价格</em>增加。在硬币的例子中，我们需要为一个公平的结果支付1比特，而当我们已经知道<em class="italics"> P(Tail) = 0.9 </em>时，只需要支付0.47比特；我们的不确定性降低了很多。</p>
+			<p class="normal">这是一个直观的概念，事实上；方差越大，潜在结果被选择的概率相似的区域就越大。当潜在的候选结果集增加时，不确定性增加，我们需要为消除不确定性支付的 bit 或 NAT 的<em class="italics">价格</em>增加。在硬币的例子中，我们需要为一个公平的结果支付 1 比特，而当我们已经知道<em class="italics"> P(Tail) = 0.9 </em>时，只需要支付 0.47 比特；我们的不确定性降低了很多。</p>
 
 			<p class="normal">类似地，交叉熵定义在两个分布<em class="italics"> p </em>和<em class="italics"> q </em>之间:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_024.png" alt="" style="height: 3.5em !important;"/></figure>
 
-			<p class="normal">让我们假设p是我们正在处理的数据生成过程。<em class="italics"> H(P，q) </em>是什么意思？考虑到表达式，我们正在做的是计算期望值<img src="img/B14713_02_025.png" alt="" style="height: 1em !important;"/>，而熵计算期望值<img src="img/B14713_02_026.png" alt="" style="height: 1em !important;"/>。因此，如果<em class="italics"> q </em>是<em class="italics"> p </em>的近似值，则交叉熵测量我们在使用模型<em class="italics"> q </em>代替原始数据生成过程时引入的额外不确定性<a id="_idIndexMarker168"/>。不难理解，我们仅仅通过使用真实基础过程的近似来增加不确定性。</p>
+			<p class="normal">让我们假设 p 是我们正在处理的数据生成过程。<em class="italics"> H(P，q) </em>是什么意思？考虑到表达式，我们正在做的是计算期望值<img src="img/B14713_02_025.png" alt="" style="height: 1em !important;"/>，而熵计算期望值<img src="img/B14713_02_026.png" alt="" style="height: 1em !important;"/>。因此，如果<em class="italics"> q </em>是<em class="italics"> p </em>的近似值，则交叉熵测量我们在使用模型<em class="italics"> q </em>代替原始数据生成过程时引入的额外不确定性<a id="_idIndexMarker168"/>。不难理解，我们仅仅通过使用真实基础过程的近似来增加不确定性。</p>
 
-			<p class="normal">事实上，如果我们正在训练一个分类器，我们的目标是创建一个模型，它的分布尽可能地类似于<em class="italics">p</em>T14】数据。这种情况可以通过最小化两种分布之间的Kullback-Leibler散度来实现:</p>
+			<p class="normal">事实上，如果我们正在训练一个分类器，我们的目标是创建一个模型，它的分布尽可能地类似于<em class="italics">p</em>T14】数据。这种情况可以通过最小化两种分布之间的 Kullback-Leibler 散度来实现:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_027.png" alt="" style="height: 4em !important;"/></figure>
 
-			<p class="normal">在前面的表达式中，<em class="italics">p</em>T18】M是模型生成的分布。现在，如果我们重写散度，我们得到:</p>
+			<p class="normal">在前面的表达式中，<em class="italics">p</em>T18】M 是模型生成的分布。现在，如果我们重写散度，我们得到:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_028.png" alt="" style="height: 7.5em !important;"/></figure>
 
-			<p class="normal">第一项是数据生成分布的熵，它不依赖于模型参数，而第二项是交叉熵。因此，如果我们最小化交叉熵，我们也最小化Kullback-Leibler散度，迫使模型重现一个与<em class="italics">p</em>T22】数据非常相似的分布。这意味着我们正在减少由近似引起的额外的不确定性。这是关于交叉熵成本函数为什么是分类问题的极好选择的非常优雅的解释。</p>
+			<p class="normal">第一项是数据生成分布的熵，它不依赖于模型参数，而第二项是交叉熵。因此，如果我们最小化交叉熵，我们也最小化 Kullback-Leibler 散度，迫使模型重现一个与<em class="italics">p</em>T22】数据非常相似的分布。这意味着我们正在减少由近似引起的额外的不确定性。这是关于交叉熵成本函数为什么是分类问题的极好选择的非常优雅的解释。</p>
 
 			<h1 id="_idParaDest-39" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor041"/>正规化</h1>
 
@@ -190,7 +190,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_029.png" alt="" style="height: 1.5em !important;"/></figure>
 
-			<p class="normal">参数<img src="img/B14713_02_030.png" alt="" style="height: 1em !important;"/>控制正则化的强度，通过函数<img src="img/B14713_02_031.png" alt="" style="height: 1em !important;"/>表示。<img src="img/B14713_02_032.png" alt="" style="height: 1.1em !important;"/>的一个基本条件是它必须是可微的，这样新的复合成本函数仍然可以使用SGD算法进行优化。一般来说，可以使用任何常规函数；然而，我们通常需要一个函数来对比参数的无限增长。</p>
+			<p class="normal">参数<img src="img/B14713_02_030.png" alt="" style="height: 1em !important;"/>控制正则化的强度，通过函数<img src="img/B14713_02_031.png" alt="" style="height: 1em !important;"/>表示。<img src="img/B14713_02_032.png" alt="" style="height: 1.1em !important;"/>的一个基本条件是它必须是可微的，这样新的复合成本函数仍然可以使用 SGD 算法进行优化。一般来说，可以使用任何常规函数；然而，我们通常需要一个函数来对比参数的无限增长。</p>
 
 			<p class="normal">为了理解这一原理，让我们考虑下图:</p>
 
@@ -230,11 +230,11 @@
 
 			<p class="normal">以零为中心的<a id="_idIndexMarker179"/>圆代表脊线边界，而阴影面是原始的代价函数。在没有正则化的情况下，最小值(<em class="italics"> w </em> <sub style="font-style: italic;"> 1 </sub>，<em class="italics"> w </em> <sub style="font-style: italic;"> 2 </sub>)的大小(例如，与原点的距离)大约是通过应用脊约束获得的大小的两倍，从而确认了预期的收缩。</p>
 
-			<p class="normal">当将<a id="_idIndexMarker180"/>应用到用<strong class="bold">普通最小二乘法</strong> ( <strong class="bold"> OLS </strong>)算法求解的回归中时，可以证明总是存在一个岭系数，因此权重相对于OLS权重缩小了。同样的结果，加上一些限制，可以扩展到其他成本函数。</p>
+			<p class="normal">当将<a id="_idIndexMarker180"/>应用到用<strong class="bold">普通最小二乘法</strong> ( <strong class="bold"> OLS </strong>)算法求解的回归中时，可以证明总是存在一个岭系数，因此权重相对于 OLS 权重缩小了。同样的结果，加上一些限制，可以扩展到其他成本函数。</p>
 
-			<p class="normal">此外，吴恩达(在Ng A. Y .，<em class="italics">特征选择，L1对L2正则化，和旋转不变性</em>，ICML，2004)证明了<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>正则化，应用于大多数分类算法，允许我们获得旋转不变性。换句话说，如果训练<a id="_idIndexMarker181"/>集被旋转，正则化模型将产生与原始模型相同的预测分布。要记住的另一个基本方面是<em class="italics">L</em>T54】2-正则化缩小了权重<a id="_idIndexMarker182"/>，与数据的规模无关。因此，如果要素的比例不同，结果可能会比预期的更糟。</p>
+			<p class="normal">此外，吴恩达(在 Ng A. Y .，<em class="italics">特征选择，L1 对 L2 正则化，和旋转不变性</em>，ICML，2004)证明了<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>正则化，应用于大多数分类算法，允许我们获得旋转不变性。换句话说，如果训练<a id="_idIndexMarker181"/>集被旋转，正则化模型将产生与原始模型相同的预测分布。要记住的另一个基本方面是<em class="italics">L</em>T54】2-正则化缩小了权重<a id="_idIndexMarker182"/>，与数据的规模无关。因此，如果要素的比例不同，结果可能会比预期的更糟。</p>
 
-			<p class="normal">考虑一个简单的两变量线性模型，很容易理解这个概念，<em class="italics">y = ax</em><sub style="font-style: italic;">1</sub><em class="italics">+bx</em><sub style="font-style: italic;">1</sub><em class="italics">+c</em>。由于<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>的控制系数单一，因此对<em class="italics"> a </em>和<em class="italics"> b </em>的效果相同(不包括截距<em class="italics"> c </em>)。如果<img src="img/B14713_02_035.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_02_036.png" alt="" style="height: 1em !important;"/>，收缩对<em class="italics">x</em>T81】1的影响要远远大于<em class="italics">x</em>T85】2。</p>
+			<p class="normal">考虑一个简单的两变量线性模型，很容易理解这个概念，<em class="italics">y = ax</em><sub style="font-style: italic;">1</sub><em class="italics">+bx</em><sub style="font-style: italic;">1</sub><em class="italics">+c</em>。由于<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>的控制系数单一，因此对<em class="italics"> a </em>和<em class="italics"> b </em>的效果相同(不包括截距<em class="italics"> c </em>)。如果<img src="img/B14713_02_035.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_02_036.png" alt="" style="height: 1em !important;"/>，收缩对<em class="italics">x</em>T81】1 的影响要远远大于<em class="italics">x</em>T85】2。</p>
 
 			<p class="normal">因此，我们建议在应用正则化之前缩放数据集。这种方法的其他重要属性将在整本书中讨论，当具体的算法介绍。</p>
 
@@ -244,7 +244,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_037.png" alt="" style="height: 2em !important;"/></figure>
 
-			<p class="normal">当Ridge <a id="_idIndexMarker184"/>将所有权重与其重要性成反比缩小时，Lasso可以将最小的权重移至零，从而创建一个稀疏的参数向量。</p>
+			<p class="normal">当 Ridge <a id="_idIndexMarker184"/>将所有权重与其重要性成反比缩小时，Lasso 可以将最小的权重移至零，从而创建一个稀疏的参数向量。</p>
 
 			<p class="normal">数学证明超出了本书的范围；然而，通过考虑下面的二维图表，可以直观地理解它:</p>
 
@@ -252,7 +252,7 @@
 
 			<p class="packt_figref">套索(L <sub> 1 </sub>)正规化</p>
 
-			<p class="normal">零中心正方形代表二维场景中的套索边界(在<img src="img/B14713_02_038.png" alt="" style="height: 1em !important;"/>中它将是一个超菱形)。如果我们考虑一条普通的线，该线与正方形相切的概率<a id="_idIndexMarker185"/>在角上更高，这里至少有一个参数为空——在二维场景中正好有一个参数<a id="_idIndexMarker186"/>。一般来说，如果我们有一个向量凸函数<em class="italics"> f(x) </em>(我们在<em class="italics">第7章</em>、<em class="italics">高级聚类和无监督模型</em>中提供了凸性的定义)，我们可以定义:</p>
+			<p class="normal">零中心正方形代表二维场景中的套索边界(在<img src="img/B14713_02_038.png" alt="" style="height: 1em !important;"/>中它将是一个超菱形)。如果我们考虑一条普通的线，该线与正方形相切的概率<a id="_idIndexMarker185"/>在角上更高，这里至少有一个参数为空——在二维场景中正好有一个参数<a id="_idIndexMarker186"/>。一般来说，如果我们有一个向量凸函数<em class="italics"> f(x) </em>(我们在<em class="italics">第 7 章</em>、<em class="italics">高级聚类和无监督模型</em>中提供了凸性的定义)，我们可以定义:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_039.png" alt="" style="height: 2em !important;"/></figure>
 
@@ -260,21 +260,21 @@
 
 			<p class="normal">在最小化<img src="img/B14713_02_041.png" alt="" style="height: 1em !important;"/>时，我们还需要考虑以原点为中心的球中范数的梯度的贡献，这里不存在偏导数。增加<em class="italics"> p </em>的值，范数在原点周围变得平滑，并且<img src="img/B14713_02_042.png" alt="" style="height: 1em !important;"/>的偏导数接近零。</p>
 
-			<p class="normal">另一方面，排除<em class="italics">L</em><sub style="font-style: italic;">0</sub>-范数和所有具有<img src="img/B14713_02_043.png" alt="" style="height: 1em !important;"/>的范数允许甚至更强的稀疏性，但是是非凸的(即使<em class="italics"> L </em> <sub style="font-style: italic;"> 0 </sub>当前在量子算法QBoost中被采用)。随着<em class="italics"> p = 1 </em>，根据<img src="img/B14713_02_044.png" alt="" style="height: 1em !important;"/>的符号，偏导数总是+1或-1。因此，<em class="italics">对于<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub> -norm来说更容易将最小的<a id="_idIndexMarker187"/>分量推到零，因为对最小化的贡献(例如，具有梯度下降)与<em class="italics">x</em>T53】I无关，而<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub> -norm在接近原点时降低其<em class="italics">速度</em>。</em></p>
+			<p class="normal">另一方面，排除<em class="italics">L</em><sub style="font-style: italic;">0</sub>-范数和所有具有<img src="img/B14713_02_043.png" alt="" style="height: 1em !important;"/>的范数允许甚至更强的稀疏性，但是是非凸的(即使<em class="italics"> L </em> <sub style="font-style: italic;"> 0 </sub>当前在量子算法 QBoost 中被采用)。随着<em class="italics"> p = 1 </em>，根据<img src="img/B14713_02_044.png" alt="" style="height: 1em !important;"/>的符号，偏导数总是+1 或-1。因此，<em class="italics">对于<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub> -norm 来说更容易将最小的<a id="_idIndexMarker187"/>分量推到零，因为对最小化的贡献(例如，具有梯度下降)与<em class="italics">x</em>T53】I 无关，而<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub> -norm 在接近原点时降低其<em class="italics">速度</em>。</em></p>
 
-			<p class="normal">这是使用<em class="italics">L</em><sub style="font-style: italic;">1</sub>-范数实现的稀疏性的<a id="_idIndexMarker188"/>非严格解释。在实践中，我们还需要考虑术语<img src="img/B14713_02_045.png" alt="" style="height: 1em !important;"/>，它限制了全局最小值的值；然而，它可以帮助读者对这个概念有一个直观的理解。在Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习优化</em>，麻省理工学院出版社，2011年，可以找到更进一步的，数学上更严格的细节。</p>
+			<p class="normal">这是使用<em class="italics">L</em><sub style="font-style: italic;">1</sub>-范数实现的稀疏性的<a id="_idIndexMarker188"/>非严格解释。在实践中，我们还需要考虑术语<img src="img/B14713_02_045.png" alt="" style="height: 1em !important;"/>，它限制了全局最小值的值；然而，它可以帮助读者对这个概念有一个直观的理解。在 Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习优化</em>，麻省理工学院出版社，2011 年，可以找到更进一步的，数学上更严格的细节。</p>
 
-			<p class="normal">当需要数据集的稀疏表示时，套索正则化特别有用。例如，我们可能对找到对应于一组图像的特征向量感兴趣。由于我们预计会有许多特征，但每个图像中只存在这些特征的子集，因此应用Lasso正则化允许我们强制所有最小的系数变为零，这有助于我们抑制次要特征的存在。</p>
+			<p class="normal">当需要数据集的稀疏表示时，套索正则化特别有用。例如，我们可能对找到对应于一组图像的特征向量感兴趣。由于我们预计会有许多特征，但每个图像中只存在这些特征的子集，因此应用 Lasso 正则化允许我们强制所有最小的系数变为零，这有助于我们抑制次要特征的存在。</p>
 
 			<p class="normal">另一个潜在的应用是潜在语义分析，我们的目标是根据有限数量的主题来描述属于一个语料库的文档。所有这些方法可以<a id="_idIndexMarker189"/>总结为一种称为<strong class="bold">稀疏编码</strong>的技术，其目标是通过提取最具代表性的原子来降低数据集的维度，使用不同的方法来实现稀疏性。</p>
 
-			<p class="normal"><em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>正则化的另一个重要属性涉及其执行由<a id="_idIndexMarker190"/>稀疏性引起的隐式<strong class="bold">特征选择</strong>的能力。在一般情况下，数据集还可能包含无助于提高分类精度的不相关要素。这可能是因为真实世界的数据集通常是冗余的，数据收集者更感兴趣的是它们的可读性，而不是它们在分析中的用途。有许多技术(其中一些在Bonaccorso G .，<em class="italics"> Machine Learning Algorithms，Second Edition </em>，Packt，2018中描述)可用于仅选择那些真正传输独特信息片段的特征，并丢弃其余的特征；不过<em class="italics">L</em>T14】1特别有帮助。</p>
+			<p class="normal"><em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>正则化的另一个重要属性涉及其执行由<a id="_idIndexMarker190"/>稀疏性引起的隐式<strong class="bold">特征选择</strong>的能力。在一般情况下，数据集还可能包含无助于提高分类精度的不相关要素。这可能是因为真实世界的数据集通常是冗余的，数据收集者更感兴趣的是它们的可读性，而不是它们在分析中的用途。有许多技术(其中一些在 Bonaccorso G .，<em class="italics"> Machine Learning Algorithms，Second Edition </em>，Packt，2018 中描述)可用于仅选择那些真正传输独特信息片段的特征，并丢弃其余的特征；不过<em class="italics">L</em>T14】1 特别有帮助。</p>
 
-			<p class="normal">首先，它是自动的，不需要任何预处理步骤。这在深度学习中极其有用。此外，正如Ng在前述论文中所指出的，如果数据集包含<em class="italics"> n </em>个特征，那么将精确度提高到超过预定义阈值<a id="_idIndexMarker191"/>所需的最小样本数量会受到冗余或不相关特征数量的对数的影响。</p>
+			<p class="normal">首先，它是自动的，不需要任何预处理步骤。这在深度学习中极其有用。此外，正如 Ng 在前述论文中所指出的，如果数据集包含<em class="italics"> n </em>个特征，那么将精确度提高到超过预定义阈值<a id="_idIndexMarker191"/>所需的最小样本数量会受到冗余或不相关特征数量的对数的影响。</p>
 
-			<p class="normal">这意味着，例如，如果数据集<em class="italics"> X </em>包含1000个点<img src="img/B14713_02_046.png" alt="" style="height: 1em !important;"/>，并且当<em class="italics"> k &lt; p </em>特征不相关时，当所有特征都是信息性的时，用该样本量实现的最佳精度是<a id="_idIndexMarker192"/>，我们需要大约1000个+ <em class="italics"> O </em> (log <em class="italics"> k </em>)样本。这是对原始结果的简化；举个例子，如果<em class="italics"> p </em> = 5000和500个特征不相关，假设最简单的情况，我们大约需要<img src="img/B14713_02_047.png" alt="" style="height: 1em !important;"/>个数据点。</p>
+			<p class="normal">这意味着，例如，如果数据集<em class="italics"> X </em>包含 1000 个点<img src="img/B14713_02_046.png" alt="" style="height: 1em !important;"/>，并且当<em class="italics"> k &lt; p </em>特征不相关时，当所有特征都是信息性的时，用该样本量实现的最佳精度是<a id="_idIndexMarker192"/>，我们需要大约 1000 个+ <em class="italics"> O </em> (log <em class="italics"> k </em>)样本。这是对原始结果的简化；举个例子，如果<em class="italics"> p </em> = 5000 和 500 个特征不相关，假设最简单的情况，我们大约需要<img src="img/B14713_02_047.png" alt="" style="height: 1em !important;"/>个数据点。</p>
 
-			<p class="normal">这一结果非常重要，因为获得大量新样本通常既困难又昂贵，尤其是在实验环境中获得的样本(例如，社会科学、药理学研究等)。在继续之前，让我们考虑一个包含500个点的合成数据集<img src="img/B14713_02_048.png" alt="" style="height: 1em !important;"/>，它只有五个信息特征:</p>
+			<p class="normal">这一结果非常重要，因为获得大量新样本通常既困难又昂贵，尤其是在实验环境中获得的样本(例如，社会科学、药理学研究等)。在继续之前，让我们考虑一个包含 500 个点的合成数据集<img src="img/B14713_02_048.png" alt="" style="height: 1em !important;"/>，它只有五个信息特征:</p>
 
 			<pre>from sklearn.datasets import make_classification
 from sklearn.preprocessing import StandardScaler
@@ -283,7 +283,7 @@ X, Y = make_classification(n_samples=500, n_classes=2, n_features=10, n_informat
 ss = StandardScaler()
 X_s = ss.fit_transform(X)</pre>
 
-			<p class="normal">我们现在可以用整个数据集拟合两个逻辑回归实例:第一个使用<em class="italics">L</em>T35】2正则化，第二个使用<em class="italics">L</em>T39】1。在这两种情况下，强度保持不变:</p>
+			<p class="normal">我们现在可以用整个数据集拟合两个逻辑回归实例:第一个使用<em class="italics">L</em>T35】2 正则化，第二个使用<em class="italics">L</em>T39】1。在这两种情况下，强度保持不变:</p>
 
 			<pre>from sklearn.linear_model import LogisticRegression
 lr_l2 = LogisticRegression(solver='saga', penalty='l2', C=0.25, random_state=1000)
@@ -291,19 +291,19 @@ lr_l1 = LogisticRegression(solver='saga', penalty='l1', C=0.25, random_state=100
 lr_l2.fit(X_s, Y)
 lr_l1.fit(X_s, Y)</pre>
 
-			<p class="normal">可以看出，在这两种情况下，10倍交叉验证产生了大致相同的<a id="_idIndexMarker193"/>平均准确度。但是，在这种情况下，我们更感兴趣的是检查<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>的特征选择属性；因此，我们将比较两个模型的10个系数，可用<a id="_idIndexMarker194"/>作为实例变量<code class="Code-In-Text--PACKT-">coef_</code>。结果如下图所示:</p>
+			<p class="normal">可以看出，在这两种情况下，10 倍交叉验证产生了大致相同的<a id="_idIndexMarker193"/>平均准确度。但是，在这种情况下，我们更感兴趣的是检查<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>的特征选择属性；因此，我们将比较两个模型的 10 个系数，可用<a id="_idIndexMarker194"/>作为实例变量<code class="Code-In-Text--PACKT-">coef_</code>。结果如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_06.png" alt="https://packt-type-cloud.s3.amazonaws.com/uploads/sites/3717/2019/05/IMG_50.png"/></figure>
 
-			<p class="packt_figref">L1(左)和L2(右)正则化的逻辑回归系数</p>
+			<p class="packt_figref">L1(左)和 L2(右)正则化的逻辑回归系数</p>
 
-			<p class="normal">如你所见，<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>正则化倾向于几乎均匀地收缩所有系数，排除9和10的优势，而<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>执行特征选择，通过仅保留5个非空系数。这个结果与数据集的结构是一致的，因为它只包含5个信息特征，因此，好的分类算法可以去除剩余的特征。</p>
+			<p class="normal">如你所见，<em class="italics"> L </em> <sub style="font-style: italic;"> 2 </sub>正则化倾向于几乎均匀地收缩所有系数，排除 9 和 10 的优势，而<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>执行特征选择，通过仅保留 5 个非空系数。这个结果与数据集的结构是一致的，因为它只包含 5 个信息特征，因此，好的分类算法可以去除剩余的特征。</p>
 
-			<p class="normal">记住我们经常需要创建可解释的模型是有帮助的。也就是说，我们经常需要创建其输出可以立即追溯到其原因的模型。当有许多参数时，这个任务变得更加困难。Lasso的使用允许我们排除所有那些相对于主要组来说重要性是次要的特征。这样，得到的模型更小，而且更容易解释。</p>
+			<p class="normal">记住我们经常需要创建可解释的模型是有帮助的。也就是说，我们经常需要创建其输出可以立即追溯到其原因的模型。当有许多参数时，这个任务变得更加困难。Lasso 的使用允许我们排除所有那些相对于主要组来说重要性是次要的特征。这样，得到的模型更小，而且更容易解释。</p>
 
 			<p class="normal">作为一般建议，特别是当使用线性模型时，我邀请读者进行<a id="_idIndexMarker195"/>特征选择以去除所有非决定性因素；并且<em class="italics"> L </em> <sub style="font-style: italic;"> 1 </sub>正则化是避免额外预处理步骤的极佳选择。</p>
 
-			<p class="normal">在<a id="_idIndexMarker196"/>讨论了<em class="italics">L</em>T3】1和<em class="italics">L</em>T7】2正则化的主要属性之后，我们现在可以解释如何将它们组合起来以利用各自的优势。</p>
+			<p class="normal">在<a id="_idIndexMarker196"/>讨论了<em class="italics">L</em>T3】1 和<em class="italics">L</em>T7】2 正则化的主要属性之后，我们现在可以解释如何将它们组合起来以利用各自的优势。</p>
 
 			<h3 id="_idParaDest-43" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor045"/>弹力网</h3>
 
@@ -311,49 +311,49 @@ lr_l1.fit(X_s, Y)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_049.png" alt="" style="height: 2.5em !important;"/></figure>
 
-			<p class="normal">每个正则化的强度由参数<img src="img/B14713_02_050.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_02_051.png" alt="" style="height: 1em !important;"/>控制。在鼓励稀疏性的同时，只要有必要减轻过度拟合的影响，ElasticNet就能产生极好的结果。当我们讨论深度学习架构时，我们将应用所有这些正则化技术。</p>
+			<p class="normal">每个正则化的强度由参数<img src="img/B14713_02_050.png" alt="" style="height: 1em !important;"/>和<img src="img/B14713_02_051.png" alt="" style="height: 1em !important;"/>控制。在鼓励稀疏性的同时，只要有必要减轻过度拟合的影响，ElasticNet 就能产生极好的结果。当我们讨论深度学习架构时，我们将应用所有这些正则化技术。</p>
 
 			<h3 id="_idParaDest-44" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor046"/>提前停止</h3>
 
-			<p class="normal">尽管<a id="_idIndexMarker199"/>是一种纯粹的正则化技术，但当所有其他防止过度拟合和最大化验证精度的方法<a id="_idIndexMarker200"/>都失败时，<strong class="bold">提前停止</strong>通常被认为是最后的手段<em class="italics"/>。在许多情况下，尤其是在深度学习场景中，尽管SVM和其他更简单的分类器也可能发生这种情况，但考虑到训练和验证成本函数，可以观察到训练过程的典型行为:</p>
+			<p class="normal">尽管<a id="_idIndexMarker199"/>是一种纯粹的正则化技术，但当所有其他防止过度拟合和最大化验证精度的方法<a id="_idIndexMarker200"/>都失败时，<strong class="bold">提前停止</strong>通常被认为是最后的手段<em class="italics"/>。在许多情况下，尤其是在深度学习场景中，尽管 SVM 和其他更简单的分类器也可能发生这种情况，但考虑到训练和验证成本函数，可以观察到训练过程的典型行为:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_02_07.png" alt="https://packt-type-cloud.s3.amazonaws.com/uploads/sites/3717/2019/04/7b96eec9-cac9-4134-b959-2c8ed73f2584.png"/></figure>
 
-			<p class="packt_figref">在U型曲线上升阶段开始前提前停止的例子</p>
+			<p class="packt_figref">在 U 型曲线上升阶段开始前提前停止的例子</p>
 
-			<p class="normal">在第一个时期期间，两个成本都降低，但是有可能在一个<em class="italics">阈值</em>时期<em class="italics">e</em>s之后，验证成本开始增加。如果我们继续训练过程，这将导致过度适应训练集并增加方差。</p>
+			<p class="normal">在第一个时期期间，两个成本都降低，但是有可能在一个<em class="italics">阈值</em>时期<em class="italics">e</em>s 之后，验证成本开始增加。如果我们继续训练过程，这将导致过度适应训练集并增加方差。</p>
 
 			<p class="normal">出于这个原因，当没有其他选择时，就有可能过早地停止训练过程。为了做到这一点，有必要在新的迭代开始<a id="_idIndexMarker201"/>之前存储最后一个参数向量，并且在没有改进或精度恶化的情况下，停止该过程并恢复最后一组参数。</p>
 
 			<p class="normal">如前所述，这一过程决不能被视为最佳选择，因为更好的模型<a id="_idIndexMarker202"/>或改进的数据集可以产生更高的性能。如果提前停止，就无法验证替代方案，因此只能在流程的最后阶段采用，而不能在流程开始时采用。</p>
 
-			<p class="normal">Keras等许多深度学习框架都包含帮助器来实现早期停止回调。但是，检查最后一个参数向量是存储在最后一个时期之前的参数向量还是对应于<em class="italics">e</em>s的参数向量非常重要。在这种情况下，<a id="_idIndexMarker203"/>重复训练过程可能是有帮助的，在<em class="italics">e</em>s<sub style="font-style: italic;">s</sub>之前的时间点停止训练过程，此时<a id="_idIndexMarker204"/>的最小验证成本已经达到。</p>
+			<p class="normal">Keras 等许多深度学习框架都包含帮助器来实现早期停止回调。但是，检查最后一个参数向量是存储在最后一个时期之前的参数向量还是对应于<em class="italics">e</em>s 的参数向量非常重要。在这种情况下，<a id="_idIndexMarker203"/>重复训练过程可能是有帮助的，在<em class="italics">e</em>s<sub style="font-style: italic;">s</sub>之前的时间点停止训练过程，此时<a id="_idIndexMarker204"/>的最小验证成本已经达到。</p>
 
 			<h1 id="_idParaDest-45" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor047"/>总结</h1>
 
 			<p class="normal">在这一章中，我们介绍了损失和成本函数，首先作为预期风险的代理，然后我们详细介绍了在优化问题中可能遇到的一些常见情况。我们还展示了一些常见的成本函数，以及它们的主要特性和具体应用。</p>
 
-			<p class="normal">在最后一部分中，我们讨论了正则化，解释了它如何减轻过度拟合的影响并导致稀疏。特别是，Lasso的使用可以通过强制所有次要系数等于0来帮助数据科学家执行自动特征选择。</p>
+			<p class="normal">在最后一部分中，我们讨论了正则化，解释了它如何减轻过度拟合的影响并导致稀疏。特别是，Lasso 的使用可以通过强制所有次要系数等于 0 来帮助数据科学家执行自动特征选择。</p>
 
-			<p class="normal">在下一章<em class="italics">第3章</em>，<em class="italics">半监督学习介绍</em>，我们将介绍半监督学习，重点关注直推式和归纳式学习的概念。</p>
+			<p class="normal">在下一章<em class="italics">第 3 章</em>，<em class="italics">半监督学习介绍</em>，我们将介绍半监督学习，重点关注直推式和归纳式学习的概念。</p>
 
 			<h1 id="_idParaDest-46" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor048"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">Darwiche A .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》，第61卷，2018年10月</li>
+				<li class="list">Darwiche A .，<em class="italics">人类水平的智力还是动物般的能力？</em>《美国计算机学会通讯》，第 61 卷，2018 年 10 月</li>
 
-				<li class="list">Crammer K .，Kearns M .，<em class="italics"> Wortman J .，</em>从多个来源学习，机器学习研究杂志，2008年9月</li>
+				<li class="list">Crammer K .，Kearns M .，<em class="italics"> Wortman J .，</em>从多个来源学习，机器学习研究杂志，2008 年 9 月</li>
 
-				<li class="list">Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础，第二版</em>，麻省理工学院出版社，2018年</li>
+				<li class="list">Mohri M .，Rostamizadeh A .，Talwalkar A .，<em class="italics">机器学习基础，第二版</em>，麻省理工学院出版社，2018 年</li>
 
-				<li class="list">威廉特·l .，<a id="_idTextAnchor049"/><em class="italics"/>一种可学的理论，《美国计算机学会通讯》，第27期，1984年</li>
+				<li class="list">威廉特·l .，<a id="_idTextAnchor049"/><em class="italics"/>一种可学的理论，《美国计算机学会通讯》，第 27 期，1984 年</li>
 
-				<li class="list">Ng A. Y .，<em class="italics">特征选择，L1与L2正则化，以及旋转不变性</em>，ICML，2004</li>
+				<li class="list">Ng A. Y .，<em class="italics">特征选择，L1 与 L2 正则化，以及旋转不变性</em>，ICML，2004</li>
 
 				<li class="list">Dube S .，<em class="italics">高维空间，深度学习和对抗性例子</em>，arXiv:1801.00634 [cs。简历]</li>
 
-				<li class="list">Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习的优化</em>，麻省理工学院出版社，2011年</li>
+				<li class="list">Sra S .，Nowozin S .，Wright S. J .(编辑)，<em class="italics">机器学习的优化</em>，麻省理工学院出版社，2011 年</li>
 
 				<li class="list">Bonaccorso G .，<em class="italics">机器学习算法，第二版</em>，Packt，2018</li>
 

@@ -11,25 +11,25 @@
         
 
                             
-                    <h1 class="header-title">iOS上的随机森林</h1>
+                    <h1 class="header-title">iOS 上的随机森林</h1>
                 
             
             
                 
-<p>本章将为你提供随机森林算法的概述。我们将首先看看决策树算法，一旦我们掌握了它，试着理解随机森林算法。然后，我们将使用Core ML创建一个机器学习程序，该程序利用随机森林算法，并根据一组给定的乳腺癌患者数据预测患者被诊断为乳腺癌的可能性。</p>
-<p>正如我们在<a href="51fcaf51-eb68-4493-afc2-0b02f1c1d50e.xhtml" target="_blank">第1章</a>、<em>移动机器学习简介、</em>中已经看到的，任何机器学习程序都有四个阶段:定义机器学习问题、准备数据、构建/重建/测试模型、部署使用。在本章中，我们将尝试将这些与随机森林联系起来，并解决底层的机器学习问题。</p>
+<p>本章将为你提供随机森林算法的概述。我们将首先看看决策树算法，一旦我们掌握了它，试着理解随机森林算法。然后，我们将使用 Core ML 创建一个机器学习程序，该程序利用随机森林算法，并根据一组给定的乳腺癌患者数据预测患者被诊断为乳腺癌的可能性。</p>
+<p>正如我们在<a href="51fcaf51-eb68-4493-afc2-0b02f1c1d50e.xhtml" target="_blank">第 1 章</a>、<em>移动机器学习简介、</em>中已经看到的，任何机器学习程序都有四个阶段:定义机器学习问题、准备数据、构建/重建/测试模型、部署使用。在本章中，我们将尝试将这些与随机森林联系起来，并解决底层的机器学习问题。</p>
 <p><strong>问题定义</strong>:提供了某些患者的乳腺癌数据，我们想预测一个新数据项诊断乳腺癌的可能性。</p>
 <p>我们将讨论以下主题:</p>
 <ul>
-<li>理解决策树以及如何应用它们解决ML问题</li>
-<li>通过示例数据集和Excel了解决策树</li>
+<li>理解决策树以及如何应用它们解决 ML 问题</li>
+<li>通过示例数据集和 Excel 了解决策树</li>
 <li>了解随机森林</li>
-<li>在核心ML中使用随机森林解决问题:<ul>
+<li>在核心 ML 中使用随机森林解决问题:<ul>
 <li>技术要求</li>
-<li>使用scikit-learn和pandas库创建模型文件</li>
+<li>使用 scikit-learn 和 pandas 库创建模型文件</li>
 <li>测试模型</li>
-<li>将scikit-learn模型导入核心ML项目</li>
-<li>编写一个iOS移动应用程序并使用其中的scikit-learn模型来执行乳腺癌预测</li>
+<li>将 scikit-learn 模型导入核心 ML 项目</li>
+<li>编写一个 iOS 移动应用程序并使用其中的 scikit-learn 模型来执行乳腺癌预测</li>
 </ul>
 </li>
 </ul>
@@ -105,7 +105,7 @@
 <p>对于任何给定的数据项，会询问一系列问题，这些问题会导致一个类标签或一个值。该模型询问传入数据项的一系列预定义问题，并基于这些答案，分支到该系列并继续进行，直到到达结果数据值或类标签。该模型是基于观察到的数据构建的，并且没有关于误差分布或数据本身分布的假设。</p>
 <p>在目标变量使用一组离散值的决策树模型中，这被称为<strong>分类树</strong>。在这些树中，每个节点或叶子代表类别标签，而分支代表通向类别标签的特征。</p>
 <p>目标变量取连续值(通常是数字)的决策树被称为<strong>回归树</strong>。</p>
-<p>使用<strong>有向无环图</strong> ( <strong> DAGs </strong>)可以很好地表示这些决策树。在这些图中，节点代表决策点，边是节点之间的连接。在前面的贷款场景中，30，000美元到70，000美元的工资范围是优势，中间是节点。</p>
+<p>使用<strong>有向无环图</strong> ( <strong> DAGs </strong>)可以很好地表示这些决策树。在这些图中，节点代表决策点，边是节点之间的连接。在前面的贷款场景中，30，000 美元到 70，000 美元的工资范围是优势，中间是节点。</p>
 
 
             
@@ -135,7 +135,7 @@
             
                 
 <p>决策树的目标是对给定的问题做出最佳选择。最后的叶节点应该是手头问题的最佳选择。该算法贪婪地运行，并试图在其做出的每个决策中找到最佳选择。</p>
-<p>整个问题被分成多个子问题，每个子问题又分支到其他子问题。到达的子集基于名为<strong>纯度</strong>的参数。当所有的决定将导致属于同一类的数据时，称一个节点是100%纯的。当有可能将其子集分成类别时，它将是100%不纯的。该算法的目标是使树中的每个节点达到100%的纯度。</p>
+<p>整个问题被分成多个子问题，每个子问题又分支到其他子问题。到达的子集基于名为<strong>纯度</strong>的参数。当所有的决定将导致属于同一类的数据时，称一个节点是 100%纯的。当有可能将其子集分成类别时，它将是 100%不纯的。该算法的目标是使树中的每个节点达到 100%的纯度。</p>
 <p>节点的纯度使用基尼系数来衡量，基尼系数是一个标准的度量标准，有助于分裂决策树的节点。</p>
 <p>决策树中使用的另一个度量是信息增益，它将用于决定在树中的每一步应该使用数据集的什么特征进行分割。信息增益是在属性上分割数据集后熵(随机性)的减少。构建决策树就是要找到返回最高信息增益的属性，也就是最同质的分支，这意味着所有数据都属于同一个子集或类。</p>
 
@@ -281,12 +281,12 @@
         
 
                             
-                    <h1 class="header-title">在核心ML中使用随机森林解决问题</h1>
+                    <h1 class="header-title">在核心 ML 中使用随机森林解决问题</h1>
                 
             
             
                 
-<p>在本节中，我们将通过一个带有特定数据集的详细示例来尝试理解随机森林。我们将使用相同的数据集来计算iOS核心ML示例。</p>
+<p>在本节中，我们将通过一个带有特定数据集的详细示例来尝试理解随机森林。我们将使用相同的数据集来计算 iOS 核心 ML 示例。</p>
 
 
             
@@ -350,7 +350,7 @@
 <li>诊断(<em> M </em> =恶性，而<em> B </em> =良性)</li>
 </ul>
 <ul>
-<li>为每个细胞核计算10个实值特征:<ul>
+<li>为每个细胞核计算 10 个实值特征:<ul>
 <li>半径(从中心到周边各点的平均距离)</li>
 <li>纹理(灰度值的标准偏差)</li>
 <li>周长</li>
@@ -364,7 +364,7 @@
 </ul>
 </li>
 </ul>
-<p>我们将通过Excel使用随机森林，应用乳腺癌数据集，详细了解随机森林。出于分析的目的，我们将只考虑来自乳腺癌数据集的569个样本数据的数据元素。</p>
+<p>我们将通过 Excel 使用随机森林，应用乳腺癌数据集，详细了解随机森林。出于分析的目的，我们将只考虑来自乳腺癌数据集的 569 个样本数据的数据元素。</p>
 
 
             
@@ -396,9 +396,9 @@
 <p>开发人员计算机上需要安装以下软件:</p>
 <ul>
 <li>计算机编程语言</li>
-<li>macOS环境中的Xcode</li>
+<li>macOS 环境中的 Xcode</li>
 </ul>
-<p>本章的练习程序可以在GitHub资源库(<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile">https://GitHub . com/packt publishing/Machine-Learning-for-Mobile</a>)的<kbd>Chapter03</kbd>文件夹下找到。让我们从输入安装Python包的命令开始:</p>
+<p>本章的练习程序可以在 GitHub 资源库(<a href="https://github.com/PacktPublishing/Machine-Learning-for-Mobile">https://GitHub . com/packt publishing/Machine-Learning-for-Mobile</a>)的<kbd>Chapter03</kbd>文件夹下找到。让我们从输入安装 Python 包的命令开始:</p>
 <pre>pip install pandas<br/>pip install -U scikit-learn<br/>pip install -U pandas</pre>
 <p>然后，发出安装<kbd>coremltools</kbd>的命令:</p>
 <pre>pip install -U coremltools</pre>
@@ -425,24 +425,24 @@
         
 
                             
-                    <h1 class="header-title">使用scikit-learn创建模型文件</h1>
+                    <h1 class="header-title">使用 scikit-learn 创建模型文件</h1>
                 
             
             
                 
-<p>本节将解释我们如何使用scikit-learn创建随机森林模型文件，并将其转换成与Core ML兼容的<kbd>.mlmodel</kbd>文件。我们将使用乳腺癌数据集来创建模型。以下是使用scikit-learn和乳腺癌数据集创建简单随机森林模型的Python程序。然后，核心ML工具将它转换成核心ML兼容的模型文件。让我们详细地看一下这个程序。</p>
+<p>本节将解释我们如何使用 scikit-learn 创建随机森林模型文件，并将其转换成与 Core ML 兼容的<kbd>.mlmodel</kbd>文件。我们将使用乳腺癌数据集来创建模型。以下是使用 scikit-learn 和乳腺癌数据集创建简单随机森林模型的 Python 程序。然后，核心 ML 工具将它转换成核心 ML 兼容的模型文件。让我们详细地看一下这个程序。</p>
 <p>首先，我们需要导入所需的包:</p>
 <pre># importing required packages<br/> import numpy as np</pre>
-<p>NumPy是使用Python进行科学计算的基础包。它包含了一个强大的N维数组对象。这个<kbd>numpy</kbd>数组将在这个程序中用于存储数据集，它有14个维度:</p>
+<p>NumPy 是使用 Python 进行科学计算的基础包。它包含了一个强大的 N 维数组对象。这个<kbd>numpy</kbd>数组将在这个程序中用于存储数据集，它有 14 个维度:</p>
 <pre>import pandas as pd<br/> from pandas.core import series</pre>
-<p>这里，我们使用pandas(<a href="https://pandas.pydata.org/pandas-docs/stable/10min.html">https://pandas.pydata.org/pandas-docs/stable/10min.html</a>)，它是一个开源的、BSD许可的库，为Python编程语言提供了高性能、易于使用的数据结构和数据分析工具。使用熊猫，我们可以创建一个数据框。你可以假设熊猫数据框架是一个Excel表格，其中每个表格都有标题和数据。</p>
+<p>这里，我们使用 pandas(<a href="https://pandas.pydata.org/pandas-docs/stable/10min.html">https://pandas.pydata.org/pandas-docs/stable/10min.html</a>)，它是一个开源的、BSD 许可的库，为 Python 编程语言提供了高性能、易于使用的数据结构和数据分析工具。使用熊猫，我们可以创建一个数据框。你可以假设熊猫数据框架是一个 Excel 表格，其中每个表格都有标题和数据。</p>
 <p>现在，让我们继续理解为解决手头的机器学习问题而编写的程序:</p>
 <pre>from sklearn.ensemble import RandomForestClassifier<br/><br/>from sklearn.metrics import accuracy_score<br/>import sklearn.datasets as dsimport sklearn.datasets as ds</pre>
 <p>前面几行导入了<kbd>sklearn</kbd>包。现在，我们将导入<kbd>sklearn</kbd>包中的内置数据集:</p>
 <pre>dataset = ds.load_breast_cancer()</pre>
 <p>前面一行从<kbd>sklearn</kbd>数据集包中加载乳腺癌数据集:</p>
 <pre> cancerdata = pd.DataFrame(dataset.data)</pre>
-<p>这将从数据集中的数据创建一个数据帧。让我们假设数据集是一个Excel表，包含带有列标题的行和列:</p>
+<p>这将从数据集中的数据创建一个数据帧。让我们假设数据集是一个 Excel 表，包含带有列标题的行和列:</p>
 <pre> cancerdata.columns = dataset.feature_names</pre>
 <p>下面这段代码将向数据集中的列添加列标题:</p>
 <pre>for i in range(0,len(dataset.feature_names)):<br/>if ['mean concave points', 'mean area', 'mean radius', 'mean perimeter', 'mean concavity'].\<br/>__contains__(dataset.feature_names[i]):<br/>continue<br/>else:<br/>cancerdata = cancerdata.drop(dataset.feature_names[i], axis=1)</pre>
@@ -456,9 +456,9 @@
 </ul>
 <p class="mce-root">为了减少数据集中要素列的数量，我删除了一些对模型影响较小的列:</p>
 <pre>cancerdata.to_csv("myfile.csv")</pre>
-<p>这一行将数据保存到一个CSV文件中；您可以打开它并在Excel中查看，找出数据集中存在的内容:</p>
+<p>这一行将数据保存到一个 CSV 文件中；您可以打开它并在 Excel 中查看，找出数据集中存在的内容:</p>
 <pre> cancer_types = dataset.target_names</pre>
-<p>在Excel数据集中，当您检查它时，您会知道诊断将包括值0或1，其中0是恶性的，1是良性的。为了将这些数值改为真实的名称，我们编写了以下代码:</p>
+<p>在 Excel 数据集中，当您检查它时，您会知道诊断将包括值 0 或 1，其中 0 是恶性的，1 是良性的。为了将这些数值改为真实的名称，我们编写了以下代码:</p>
 <pre>cancer_names = []<br/>//getting all the corresponding cancer types with name [string] format.<br/>for i in range(len(dataset.target)):<br/>cancer_names.append(cancer_types[dataset.target[i]])<br/>x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(cancerdata,cancer_names,test_size=0.3, random_state=5)</pre>
 <p>这一行代码将数据集一分为二，一个用于训练，一个用于测试，并将它保存在为此目的定义的相应变量中:</p>
 <pre> classifier = RandomForestClassifier()</pre>
@@ -491,18 +491,18 @@
         
 
                             
-                    <h1 class="header-title">将scikit模型转换为核心ML模型</h1>
+                    <h1 class="header-title">将 scikit 模型转换为核心 ML 模型</h1>
                 
             
             
                 
 <p>让我用一个例子来解释:假设你来自法国，你只会说法语和英语。想象你去印度度假。你去旅馆的餐厅，服务员给你一份用当地语言写的菜单。现在，你会怎么做？让我猜猜，你会要求服务员，或者另一个顾客/你的导游，向你解释这些项目，或者你只是在谷歌翻译中扫描图片。</p>
-<p>我的观点是你需要一个翻译。就是这样。类似地，为了让iOS移动应用程序理解scikit模型，需要一个将它转换为核心ML格式的转换器。</p>
-<p>这就是下面代码的全部工作。它会将scikit-learn格式转换为核心ML格式:</p>
+<p>我的观点是你需要一个翻译。就是这样。类似地，为了让 iOS 移动应用程序理解 scikit 模型，需要一个将它转换为核心 ML 格式的转换器。</p>
+<p>这就是下面代码的全部工作。它会将 scikit-learn 格式转换为核心 ML 格式:</p>
 <pre>//converting the fitted model to a Core ML Model file<br/><br/>model = coremltools.converters.sklearn.convert(classifier, input_features=list(cancerdata.columns.values), output_feature_names='typeofcancer')<br/><br/>model.save("cancermodel.mlmodel")</pre>
 <p>为此，要工作，你必须使用你的<kbd>pip</kbd>安装<kbd>coremltools</kbd>。然后，在顶部编写以下代码来导入它:</p>
 <pre>import coremltools</pre>
-<p>一旦你运行这个程序，你会在你的磁盘上得到一个模型文件，名为<kbd>cancermodel.mlmodel</kbd>，你将在你的iOS项目中使用它进行推理。</p>
+<p>一旦你运行这个程序，你会在你的磁盘上得到一个模型文件，名为<kbd>cancermodel.mlmodel</kbd>，你将在你的 iOS 项目中使用它进行推理。</p>
 
 
             
@@ -526,22 +526,22 @@
         
 
                             
-                    <h1 class="header-title">使用核心ML模型创建iOS移动应用程序</h1>
+                    <h1 class="header-title">使用核心 ML 模型创建 iOS 移动应用程序</h1>
                 
             
             
                 
-<p>在本节中，我们将创建一个iOS项目来使用Core ML，为此您将需要Xcode(它必须是版本9+)。</p>
-<p>让我们从打开Xcode并创建一个带有故事板的空swift应用程序开始。在主要的故事板设计中，屏幕将如下所示。然后，将生成的模型文件添加到您的项目中。这将为您提供以下结构:</p>
+<p>在本节中，我们将创建一个 iOS 项目来使用 Core ML，为此您将需要 Xcode(它必须是版本 9+)。</p>
+<p>让我们从打开 Xcode 并创建一个带有故事板的空 swift 应用程序开始。在主要的故事板设计中，屏幕将如下所示。然后，将生成的模型文件添加到您的项目中。这将为您提供以下结构:</p>
 <p class="mce-root"/>
 <p class="CDPAlignCenter CDPAlign"><img class="aligncenter size-full wp-image-928 image-border" src="img/8852eb62-93c8-45a7-b04b-118ab566e3f1.png" style="width:14.83em;height:18.58em;"/></p>
-<p>现在，在主故事板文件中创建UI，如下所示:</p>
+<p>现在，在主故事板文件中创建 UI，如下所示:</p>
 <p class="CDPAlignCenter CDPAlign"><img src="img/caaef230-54a1-4912-bd7e-9679cae60ff4.png" style="width:17.83em;height:32.00em;"/></p>
 <p>为每个文本字段创建出口。并将事件侦听器添加到每个文本字段中。现在，您的视图控制器将如下所示:</p>
 <pre>import UIKit<br/>import Core ML <br/>class ViewController: UIViewController {<br/>    let model = cancermodel()<br/>    @IBOutlet weak var meanradius: UITextField!<br/>    @IBOutlet weak var cancertype: UILabel!<br/>    @IBOutlet weak var meanperimeter: UITextField!<br/>    @IBOutlet weak var meanarea: UITextField!<br/>    @IBOutlet weak var meanconcavity: UITextField!<br/>    @IBOutlet weak var meanconcavepoints: UITextField!<br/>    override func didReceiveMemoryWarning() {<br/>        super.didReceiveMemoryWarning()<br/>        // Dispose of any resources that can be recreated.<br/>    }<br/>    override func viewDidLoad() {<br/>        super.viewDidLoad();<br/>        updated(meanconcavepoints);<br/>        //This line is to fire the initial update of the cancer type.<br/>    }<br/>    /*<br/>This method will send the input data to your generated model class and display the returned result to the label.<br/>*/<br/><br/>    @IBAction func updated(_ sender: Any) {<br/>        guard let modeloutput = try? model.prediction(mean_radius: <br/>        Double(meanradius.text!)!, mean_perimeter: <br/>        Double(meanperimeter.text!)!, mean_area: Double(meanarea.text!)!, <br/>        mean_concavity: Double(meanconcavity.text!)!, mean_concave_points: <br/>        Double(meanconcavepoints.text!)!) else {<br/>            fatalError("unexpected runtime error")<br/>        }<br/>        cancertype.text = modeloutput.typeofcancer;<br/>    }<br/>}</pre>
-<p>您可以在本书的GitHub资源库中找到相同的代码。</p>
+<p>您可以在本书的 GitHub 资源库中找到相同的代码。</p>
 <p>如果您在构建过程中遇到任何问题。如签名或证书，请谷歌它或写信给我们。</p>
-<p>一旦在Xcode中设置了项目，就可以在模拟器中运行它。结果将如下所示:</p>
+<p>一旦在 Xcode 中设置了项目，就可以在模拟器中运行它。结果将如下所示:</p>
 <p class="CDPAlignCenter CDPAlign"><img src="img/5a912732-bce4-4f4c-b19f-b715bbfa735f.png" style="width:19.42em;height:34.58em;"/></p>
 
 
@@ -571,8 +571,8 @@
             
             
                 
-<p>在这一章中，我们学习了决策树和随机森林，以及它们之间的区别。我们还通过样本数据集和使用样本数据集的Excel来探索决策树，并对其使用随机森林算法以建立预测。我们使用Core ML编写iOS程序，然后应用scikit-learn创建模型，并使用Core ML工具将scikit模型转换为Core ML模型。</p>
-<p>在下一章中，我们将了解更多关于TensorFlow及其在Android中的使用。</p>
+<p>在这一章中，我们学习了决策树和随机森林，以及它们之间的区别。我们还通过样本数据集和使用样本数据集的 Excel 来探索决策树，并对其使用随机森林算法以建立预测。我们使用 Core ML 编写 iOS 程序，然后应用 scikit-learn 创建模型，并使用 Core ML 工具将 scikit 模型转换为 Core ML 模型。</p>
+<p>在下一章中，我们将了解更多关于 TensorFlow 及其在 Android 中的使用。</p>
 
 
             
@@ -601,7 +601,7 @@
             
             
                 
-<p>通过访问Core ML的官方网站:<a href="https://developer.apple.com/documentation/coreml">https://developer.apple.com/documentation/coreml</a>，我们可以进一步了解Core ML及其提供的服务。</p>
+<p>通过访问 Core ML 的官方网站:<a href="https://developer.apple.com/documentation/coreml">https://developer.apple.com/documentation/coreml</a>，我们可以进一步了解 Core ML 及其提供的服务。</p>
 
 
             

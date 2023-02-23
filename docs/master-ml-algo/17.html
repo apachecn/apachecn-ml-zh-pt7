@@ -22,7 +22,7 @@
 
 			<h1 id="_idParaDest-256" class="chapterTitle" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor268"/>神经网络建模</h1>
 
-			<p class="normal">这一章是对深度学习世界的介绍，其方法使得在许多通常被认为极难管理的分类和回归领域(如图像分割、自动翻译、语音合成等)实现<em class="italics">最先进的</em>性能成为可能。目标是为读者提供基本工具，以理解使用Keras的全连接神经网络的结构(采用现代技术来加速训练过程并防止过拟合)。</p>
+			<p class="normal">这一章是对深度学习世界的介绍，其方法使得在许多通常被认为极难管理的分类和回归领域(如图像分割、自动翻译、语音合成等)实现<em class="italics">最先进的</em>性能成为可能。目标是为读者提供基本工具，以理解使用 Keras 的全连接神经网络的结构(采用现代技术来加速训练过程并防止过拟合)。</p>
 
 			<p class="normal">特别是，本章涵盖的主题如下:</p>
 
@@ -32,7 +32,7 @@
 
 				<li class="list">感知器、线性分类器及其局限性</li>
 
-				<li class="list">具有最重要激活函数的多层感知器(如ReLU)</li>
+				<li class="list">具有最重要激活函数的多层感知器(如 ReLU)</li>
 
 				<li class="list">基于<strong class="bold">随机梯度下降</strong> ( <strong class="bold"> SGD </strong>)优化方法的反向传播算法</li>
 
@@ -42,7 +42,7 @@
 
 			<h1 id="_idParaDest-257" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor269"/>基本人工神经元</h1>
 
-			<p class="normal">神经网络的构建模块是生物神经元的抽象，这是一个非常简单但<a id="_idIndexMarker1043"/>强大的计算单元，由F. Rosenblatt于1957年首次提出，以构成最简单的神经架构，称为感知器，我们将在下一节中<a id="_idIndexMarker1044"/>对其进行分析。与更符合生物学原理但有一些强烈局限性的Hebbian学习相反，人工神经元是以实用主义观点设计的，只有它的结构是基于表征生物神经元的一些元素。</p>
+			<p class="normal">神经网络的构建模块是生物神经元的抽象，这是一个非常简单但<a id="_idIndexMarker1043"/>强大的计算单元，由 F. Rosenblatt 于 1957 年首次提出，以构成最简单的神经架构，称为感知器，我们将在下一节中<a id="_idIndexMarker1044"/>对其进行分析。与更符合生物学原理但有一些强烈局限性的 Hebbian 学习相反，人工神经元是以实用主义观点设计的，只有它的结构是基于表征生物神经元的一些元素。</p>
 
 			<p class="normal">然而，最近的深度学习研究活动揭示了这种架构的巨大力量。即使有更复杂和更专门的计算单元，基本的人工神经元也可以概括为两个块的结合，这在下图中清楚地显示出来:</p>
 
@@ -54,7 +54,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_003.png" alt=""/></figure>
 
-			<p class="normal">向量<img src="img/B14713_17_004.png" alt=""/>被称为权重向量(或突触权重向量，因为类似于生物神经元，它对输入值进行重新加权)，而标量项<img style="height: 0.8em! important;" src="img/B14713_17_005.png" alt=""/>是一个称为bias的常数。在许多情况下，只考虑权重向量更容易。可以通过添加一个等于1的额外输入特征和相应的权重来消除偏差:</p>
+			<p class="normal">向量<img src="img/B14713_17_004.png" alt=""/>被称为权重向量(或突触权重向量，因为类似于生物神经元，它对输入值进行重新加权)，而标量项<img style="height: 0.8em! important;" src="img/B14713_17_005.png" alt=""/>是一个称为 bias 的常数。在许多情况下，只考虑权重向量更容易。可以通过添加一个等于 1 的额外输入特征和相应的权重来消除偏差:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_006.png" alt=""/></figure>
 
@@ -62,7 +62,7 @@
 
 			<h1 id="_idParaDest-258" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor270"/>感知器</h1>
 
-			<p class="normal">感知器是弗兰克·罗森布拉特在1957年给第一个神经模型起的名字。感知器是一种神经网络，具有单层输入线性神经元，后跟基于<em class="italics">符号</em> ( <em class="italics"> x </em>)函数的输出单元(或者，可以考虑输出为-1和1的双极单元)。感知器的架构如下图所示:</p>
+			<p class="normal">感知器是弗兰克·罗森布拉特在 1957 年给第一个神经模型起的名字。感知器是一种神经网络，具有单层输入线性神经元，后跟基于<em class="italics">符号</em> ( <em class="italics"> x </em>)函数的输出单元(或者，可以考虑输出为-1 和 1 的双极单元)。感知器的架构如下图所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_02.png" alt=""/></figure>
 
@@ -72,7 +72,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_008.png" alt=""/></figure>
 
-			<p class="normal">所有的向量通常都是列向量；因此，点积<img src="img/B14713_17_009.png" alt=""/>将输入转换为标量，然后加上偏置，利用阶跃函数得到二进制输出，当<em class="italics">z</em>T27】0时输出1，否则输出0。在这一点上，读者可能会反对阶跃函数是非线性的；然而，应用于输出层的非线性仅仅是对实际计算没有影响的过滤操作。</p>
+			<p class="normal">所有的向量通常都是列向量；因此，点积<img src="img/B14713_17_009.png" alt=""/>将输入转换为标量，然后加上偏置，利用阶跃函数得到二进制输出，当<em class="italics">z</em>T27】0 时输出 1，否则输出 0。在这一点上，读者可能会反对阶跃函数是非线性的；然而，应用于输出层的非线性仅仅是对实际计算没有影响的过滤操作。</p>
 
 			<p class="normal">事实上，输出已经由线性模块决定，而阶跃函数仅用于<a id="_idIndexMarker1049"/>施加二进制阈值(将连续输出转换为离散输出)。此外，在这个分析中，我们只考虑单值输出(即使有多类变量),因为我们的目标是在转移到可用于解决极其复杂的问题的更通用的架构之前，展示动态和限制。</p>
 
@@ -80,7 +80,7 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_010.png" alt=""/></figure>
 
-			<p class="normal">当样本出现时，计算输出，如果输出错误，则应用权重校正(否则跳过该步骤)。为简单起见，我们不考虑偏差，因为它不影响程序。我们的目标是校正重量，以使损失最小化。这可以通过计算相对于<em class="italics">w</em>T3】I的偏导数来实现:</p>
+			<p class="normal">当样本出现时，计算输出，如果输出错误，则应用权重校正(否则跳过该步骤)。为简单起见，我们不考虑偏差，因为它不影响程序。我们的目标是校正重量，以使损失最小化。这可以通过计算相对于<em class="italics">w</em>T3】I 的偏导数来实现:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_011.png" alt=""/></figure>
 
@@ -88,9 +88,9 @@
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_017.png" alt=""/></figure>
 
-			<p class="normal">当样品被错误分类时，重量会根据<a id="_idIndexMarker1050"/>实际线性输出和真实标签之间的差异按比例进行修正。这是一个名为delta rule的学习规则的变体，它代表了最著名的训练算法的第一步，几乎在任何有监督的深度学习场景中都被采用(我们将在接下来的章节中讨论)。由于数据集是线性可分的，该算法已被证明在有限数量的状态下收敛到稳定的解。形式上的证明相当冗长且非常技术性，但感兴趣的读者可以在Minsky M. L .、Papert S. A .、<em class="italics">感知器</em>，麻省理工学院出版社，1969年中找到。</p>
+			<p class="normal">当样品被错误分类时，重量会根据<a id="_idIndexMarker1050"/>实际线性输出和真实标签之间的差异按比例进行修正。这是一个名为 delta rule 的学习规则的变体，它代表了最著名的训练算法的第一步，几乎在任何有监督的深度学习场景中都被采用(我们将在接下来的章节中讨论)。由于数据集是线性可分的，该算法已被证明在有限数量的状态下收敛到稳定的解。形式上的证明相当冗长且非常技术性，但感兴趣的读者可以在 Minsky M. L .、Papert S. A .、<em class="italics">感知器</em>，麻省理工学院出版社，1969 年中找到。</p>
 
-			<p class="normal">在这一章中，学习率的作用变得越来越重要，特别是在评估单个样本(如在感知器中)或小批量样本后执行更新时。在这种情况下，高学习率(即大于1.0的学习率)会由于单次校正的幅度而导致收敛过程不稳定。</p>
+			<p class="normal">在这一章中，学习率的作用变得越来越重要，特别是在评估单个样本(如在感知器中)或小批量样本后执行更新时。在这种情况下，高学习率(即大于 1.0 的学习率)会由于单次校正的幅度而导致收敛过程不稳定。</p>
 
 			<p class="normal">使用神经网络时，通常最好使用较小的学习率，并在固定的时期数内重复训练会话。这样，单个校正是有限的，只有在被大多数样本/批次确认后，它们才能变得稳定，这促使网络收敛到最优解。相反，如果校正是异常值的结果，一个小的学习率可以限制它的作用，避免整个网络因为几个有噪声的样本而不稳定。我们将在接下来的几节中进一步讨论这个问题。</p>
 
@@ -100,7 +100,7 @@
 
 				<li class="list">为学习率<img src="img/B14713_17_018.png" alt=""/>选择一个值(如<img src="img/B14713_17_019.png" alt=""/>)。通常，较小的值允许更精确的修改，但是增加了计算成本，而较大的值加快了训练阶段，但是降低了学习精度。</li>
 
-				<li class="list">将一个<a id="_idIndexMarker1051"/>常量列(设置为等于1.0)附加到样本向量<em class="italics"> X </em>上。因此，得到的矢量将是<img src="img/B14713_17_020.png" alt=""/>。</li>
+				<li class="list">将一个<a id="_idIndexMarker1051"/>常量列(设置为等于 1.0)附加到样本向量<em class="italics"> X </em>上。因此，得到的矢量将是<img src="img/B14713_17_020.png" alt=""/>。</li>
 
 				<li class="list">用从方差较小的正态分布中采样的随机值初始化权重向量<img src="img/B14713_17_021.png" alt=""/>(如<img src="img/B14713_17_022.png" alt=""/>)。</li>
 
@@ -112,9 +112,9 @@
 
 				<li class="list">设置<em class="italics"> e </em> = 1。</li>
 
-				<li class="list">同时<em class="italics">I&lt;N</em>T10】max和<em class="italics"> e &gt; Thr </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">设置<em class="italics"> e </em> =0。</li>
+				<li class="list">同时<em class="italics">I&lt;N</em>T10】max 和<em class="italics"> e &gt; Thr </em>:<ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB">设置<em class="italics"> e </em> =0。</li>
 
-<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> k </em> = 1至<em class="italics"> M </em>:</li>
+<li class="Alphabetical-Bullet-End--PACKT-" lang="en-GB" xml:lang="en-GB">对于<em class="italics"> k </em> = 1 至<em class="italics"> M </em>:</li>
 
 </ol><ol><li class="Alphabetical-Bullet--PACKT-" lang="en-GB" xml:lang="en-GB" value="1">计算线性输出<img src="img/B14713_17_023.png" alt=""/>和阈值输出<em class="italics"> t </em> <sub style="font-style: italic;"> k </sub> = <em class="italics">符号</em> ( <em class="italics"> l </em> <sub style="font-style: italic;"> k </sub>)。</li>
 
@@ -140,15 +140,15 @@
 
 			</ol>
 
-			<p class="normal">算法非常简单，您应该已经注意到了与逻辑回归的类比。事实上，这种方法基于一种结构，该结构可以被认为是具有<a id="_idIndexMarker1052"/>sigmoid输出激活函数(其输出可以被认为是概率的真实值)的感知器。主要区别在于训练策略-在逻辑回归中，校正是在基于负对数似然的成本函数评估之后进行的:</p>
+			<p class="normal">算法非常简单，您应该已经注意到了与逻辑回归的类比。事实上，这种方法基于一种结构，该结构可以被认为是具有<a id="_idIndexMarker1052"/>sigmoid 输出激活函数(其输出可以被认为是概率的真实值)的感知器。主要区别在于训练策略-在逻辑回归中，校正是在基于负对数似然的成本函数评估之后进行的:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_027.png" alt=""/></figure>
 
-			<p class="normal">这个成本<a id="_idIndexMarker1053"/>函数就是众所周知的交叉熵，在<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>中，我们表明最小化它相当于减少真实分布和预测分布之间的Kullback-Leibler散度。在几乎所有的深度学习分类任务中，我们将采用交叉熵，这要归功于它的鲁棒性和凸性(凸性是逻辑回归中的收敛保证，但不幸的是，在成本函数是非凸的更复杂的架构中，该属性通常会丢失)。</p>
+			<p class="normal">这个成本<a id="_idIndexMarker1053"/>函数就是众所周知的交叉熵，在<em class="italics">第 2 章</em>、<em class="italics">损失函数和正则化</em>中，我们表明最小化它相当于减少真实分布和预测分布之间的 Kullback-Leibler 散度。在几乎所有的深度学习分类任务中，我们将采用交叉熵，这要归功于它的鲁棒性和凸性(凸性是逻辑回归中的收敛保证，但不幸的是，在成本函数是非凸的更复杂的架构中，该属性通常会丢失)。</p>
 
-			<h2 id="_idParaDest-259" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor271"/>带有scikit-learn的感知器示例</h2>
+			<h2 id="_idParaDest-259" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor271"/>带有 scikit-learn 的感知器示例</h2>
 
-			<p class="normal">即使从零开始实现算法<a id="_idIndexMarker1054"/>非常简单，我还是喜欢使用scikit-learn实现感知器，将我们的注意力集中在导致非线性神经网络的局限性上。显示感知机主要弱点的历史问题是基于XOR数据集的。在我们解释它之前，先构建它并想象它的结构更容易:</p>
+			<p class="normal">即使从零开始实现算法<a id="_idIndexMarker1054"/>非常简单，我还是喜欢使用 scikit-learn 实现感知器，将我们的注意力集中在导致非线性神经网络的局限性上。显示感知机主要弱点的历史问题是基于 XOR 数据集的。在我们解释它之前，先构建它并想象它的结构更容易:</p>
 
 			<pre>import numpy as np
 from sklearn.preprocessing import StandardScaler
@@ -179,9 +179,9 @@ X, Y = shuffle(X, Y, random_state=1000)</pre>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_03.png" alt=""/></figure>
 
-			<p class="packt_figref">XOR数据集示例</p>
+			<p class="packt_figref">XOR 数据集示例</p>
 
-			<p class="normal">正如可能看到的，数据集<a id="_idIndexMarker1056"/>被分成四个块，这四个块被组织为逻辑XOR运算符的输出。考虑到二维感知器的分离超曲面(以及逻辑回归的分离超曲面)是直线；很容易理解，任何可能的最终配置都可以达到大约50%的精度(随机猜测)。为了得到证实，让我们试着解决这个问题:</p>
+			<p class="normal">正如可能看到的，数据集<a id="_idIndexMarker1056"/>被分成四个块，这四个块被组织为逻辑 XOR 运算符的输出。考虑到二维感知器的分离超曲面(以及逻辑回归的分离超曲面)是直线；很容易理解，任何可能的最终配置都可以达到大约 50%的精度(随机猜测)。为了得到证实，让我们试着解决这个问题:</p>
 
 			<pre>from sklearn.linear_model import Perceptron
 from sklearn.model_selection import cross_val_score
@@ -194,15 +194,15 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<pre>Perceptron Avg. CV score: 0.504</pre>
 
-			<p class="normal">这个值证实，在这种情况下，感知器大约等于随机猜测，因此，它不提供任何优势，也没有办法克服这个限制。相反，对于线性可分的场景，scikit-learn实现提供了通过参数惩罚(可以是<code class="Code-In-Text--PACKT-">'l1'</code>、<code class="Code-In-Text--PACKT-">'l2'</code>或<code class="Code-In-Text--PACKT-">'elasticnet'</code>)添加正则化项的可能性(参见<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>)，以避免过拟合、引起稀疏并提高收敛速度(强度可以使用参数<code class="Code-In-Text--PACKT-">alpha</code>指定)。这并不总是必要的，但是由于算法<a id="_idIndexMarker1057"/>是在一个生产就绪的包中提供的，设计者决定添加这个特性。尽管如此，平均交叉验证精度略高于0.5(邀请您测试任何其他可能的超参数配置)。相应的图(可随不同的随机状态或后续实验而变化)如下所示:</p>
+			<p class="normal">这个值证实，在这种情况下，感知器大约等于随机猜测，因此，它不提供任何优势，也没有办法克服这个限制。相反，对于线性可分的场景，scikit-learn 实现提供了通过参数惩罚(可以是<code class="Code-In-Text--PACKT-">'l1'</code>、<code class="Code-In-Text--PACKT-">'l2'</code>或<code class="Code-In-Text--PACKT-">'elasticnet'</code>)添加正则化项的可能性(参见<em class="italics">第 2 章</em>、<em class="italics">损失函数和正则化</em>)，以避免过拟合、引起稀疏并提高收敛速度(强度可以使用参数<code class="Code-In-Text--PACKT-">alpha</code>指定)。这并不总是必要的，但是由于算法<a id="_idIndexMarker1057"/>是在一个生产就绪的包中提供的，设计者决定添加这个特性。尽管如此，平均交叉验证精度略高于 0.5(邀请您测试任何其他可能的超参数配置)。相应的图(可随不同的随机状态或后续实验而变化)如下所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_04.png" alt=""/></figure>
 
-			<p class="packt_figref">使用感知器标记的XOR数据集</p>
+			<p class="packt_figref">使用感知器标记的 XOR 数据集</p>
 
-			<p class="normal">很明显，感知器是另一种没有特定特性的线性模型，它的使用被其他算法所取代，如逻辑回归或SVM。1957年后的几年里，许多研究人员没有掩饰他们的幻灭，认为神经网络是一个从未实现的承诺。需要等到对架构进行简单的修改，再加上强大的学习算法，才正式打开了<a id="_idIndexMarker1058"/>一个新的迷人的机器学习分支(后来称为深度学习)的大门。</p>
+			<p class="normal">很明显，感知器是另一种没有特定特性的线性模型，它的使用被其他算法所取代，如逻辑回归或 SVM。1957 年后的几年里，许多研究人员没有掩饰他们的幻灭，认为神经网络是一个从未实现的承诺。需要等到对架构进行简单的修改，再加上强大的学习算法，才正式打开了<a id="_idIndexMarker1058"/>一个新的迷人的机器学习分支(后来称为深度学习)的大门。</p>
 
-			<div><div><p class="Information-Box--PACKT-">在scikit-learn &gt; 0.19中，<code class="Code-In-Text--PACKT-">Perceptron</code>类允许添加<code class="Code-In-Text--PACKT-">max_iter</code>或<code class="Code-In-Text--PACKT-">tol</code>(公差)参数。如果未指定，将发出警告，通知您未来的行为。这条信息不会影响实际结果。</p>
+			<div><div><p class="Information-Box--PACKT-">在 scikit-learn &gt; 0.19 中，<code class="Code-In-Text--PACKT-">Perceptron</code>类允许添加<code class="Code-In-Text--PACKT-">max_iter</code>或<code class="Code-In-Text--PACKT-">tol</code>(公差)参数。如果未指定，将发出警告，通知您未来的行为。这条信息不会影响实际结果。</p>
 
 				</div>
 
@@ -218,11 +218,11 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<p class="normal">这是一个所谓的前馈网络，意味着信息流从第一层开始，总是沿着相同的方向前进，并在输出层结束。允许部分反馈(例如，为了实现局部记忆)的结构被称为循环网络，将在下一章分析。</p>
 
-			<p class="normal">在这种情况下，有两个权重矩阵<em class="italics"> W </em>和<em class="italics"> H </em>，以及两个对应的偏置向量<em class="italics"> b </em>和<em class="italics"> c </em>。如果有m个隐藏神经元、<img src="img/B14713_17_028.png" alt=""/>(列向量)和<img src="img/B14713_17_029.png" alt=""/>，则动态由以下变换定义:</p>
+			<p class="normal">在这种情况下，有两个权重矩阵<em class="italics"> W </em>和<em class="italics"> H </em>，以及两个对应的偏置向量<em class="italics"> b </em>和<em class="italics"> c </em>。如果有 m 个隐藏神经元、<img src="img/B14713_17_028.png" alt=""/>(列向量)和<img src="img/B14713_17_029.png" alt=""/>，则动态由以下变换定义:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_030.png" alt=""/></figure>
 
-			<p class="normal">任何MLP的一个基本条件是至少有一个隐藏层激活函数<img src="img/B14713_17_031.png" alt=""/>是非线性的。很容易证明m个线性隐藏层等价于单个线性网络，因此，MLP回归到标准感知器的情况。一般来说，所有隐藏层都具有非线性激活，而最后一层也可以具有线性输出来表示例如无界量(例如，在回归任务中)。通常，对于给定的层，激活函数是固定的，但是对它们的组合没有限制。特别地，通常选择输出激活来满足精确的要求(例如多标签分类、回归、图像重建等等)。这就是为什么这个分析的第一步关注最常见的激活函数及其特性。</p>
+			<p class="normal">任何 MLP 的一个基本条件是至少有一个隐藏层激活函数<img src="img/B14713_17_031.png" alt=""/>是非线性的。很容易证明 m 个线性隐藏层等价于单个线性网络，因此，MLP 回归到标准感知器的情况。一般来说，所有隐藏层都具有非线性激活，而最后一层也可以具有线性输出来表示例如无界量(例如，在回归任务中)。通常，对于给定的层，激活函数是固定的，但是对它们的组合没有限制。特别地，通常选择输出激活来满足精确的要求(例如多标签分类、回归、图像重建等等)。这就是为什么这个分析的第一步关注最常见的激活函数及其特性。</p>
 
 			<p class="normal">我们现在可以更深入地了解最常见的激活功能，讨论它们的特性和局限性。</p>
 
@@ -230,7 +230,7 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<p class="normal">通常，任何连续的(也是步进的)和可微分的函数都可以用作激活函数。连续性允许我们取域<em class="italics"> D </em>(一般为<img style="height: 0.8em! important;" src="img/B14713_17_032.png" alt=""/>，所以<em class="italics"> f </em> ( <em class="italics"> x </em>)中的所有值，而可微性是优化神经网络的一个基本<a id="_idIndexMarker1061"/>条件。即便如此，一些函数具有特殊的属性，允许我们在提高学习过程速度的同时实现良好的准确性。它们通常用于最先进的模型中，为了做出最合理的选择，了解它们的属性非常重要。</p>
 
-			<h3 id="_idParaDest-262" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor274"/> Sigmoid和双曲线正切</h3>
+			<h3 id="_idParaDest-262" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor274"/> Sigmoid 和双曲线正切</h3>
 
 			<p class="normal">这<a id="_idIndexMarker1062"/>两个激活<a id="_idIndexMarker1063"/>非常相似，有一个非常<a id="_idIndexMarker1064"/>简单但<a id="_idIndexMarker1065"/>重要的区别。让我们开始定义它们:</p>
 
@@ -240,15 +240,15 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_06.png" alt=""/></figure>
 
-			<p class="packt_figref">Sigmoid和双曲线正切图</p>
+			<p class="packt_figref">Sigmoid 和双曲线正切图</p>
 
-			<p class="normal">一个sigmoid <img src="img/B14713_17_034.png" alt=""/>有界在0和1之间，有两条渐近线(当<img src="img/B14713_17_036.png" alt=""/>时为<img src="img/B14713_17_035.png" alt=""/>，当<img src="img/B14713_17_038.png" alt=""/>时为<img src="img/B14713_17_037.png" alt=""/>)。类似地，双曲正切(tanh)被限制在-1和1之间，具有对应于极值的两条渐近线。分析这两个图，我们可以发现，两个函数在一个很短的范围内(大约(-2，2))几乎都是线性的，紧接着它们变得几乎平坦。这意味着当<em class="italics"> x </em>具有大约0的小值时，梯度很高并且大约恒定，对于较大的绝对值，梯度下降到大约0。sigmoid完美地表示了一种概率或一组必须介于0和1之间的权重，因此，对于某些输出图层来说，它是一个不错的选择。</p>
+			<p class="normal">一个 sigmoid <img src="img/B14713_17_034.png" alt=""/>有界在 0 和 1 之间，有两条渐近线(当<img src="img/B14713_17_036.png" alt=""/>时为<img src="img/B14713_17_035.png" alt=""/>，当<img src="img/B14713_17_038.png" alt=""/>时为<img src="img/B14713_17_037.png" alt=""/>)。类似地，双曲正切(tanh)被限制在-1 和 1 之间，具有对应于极值的两条渐近线。分析这两个图，我们可以发现，两个函数在一个很短的范围内(大约(-2，2))几乎都是线性的，紧接着它们变得几乎平坦。这意味着当<em class="italics"> x </em>具有大约 0 的小值时，梯度很高并且大约恒定，对于较大的绝对值，梯度下降到大约 0。sigmoid 完美地表示了一种概率或一组必须介于 0 和 1 之间的权重，因此，对于某些输出图层来说，它是一个不错的选择。</p>
 
-			<p class="normal">然而，双曲正切是完全对称的，它更适合于优化目的，因为它的性能通常更好。每当输入通常较小时，该激活函数<a id="_idIndexMarker1066"/>通常在中间层使用。当分析反向传播算法时，原因就清楚了；然而，很明显，大的绝对输入导致几乎<a id="_idIndexMarker1068"/>恒定的输出，并且由于梯度大约为0，权重<a id="_idIndexMarker1069"/>校正可能变得非常慢(该问题正式称为消失梯度)。由于这个原因，在许多实际应用中，经常使用下一族激活函数。</p>
+			<p class="normal">然而，双曲正切是完全对称的，它更适合于优化目的，因为它的性能通常更好。每当输入通常较小时，该激活函数<a id="_idIndexMarker1066"/>通常在中间层使用。当分析反向传播算法时，原因就清楚了；然而，很明显，大的绝对输入导致几乎<a id="_idIndexMarker1068"/>恒定的输出，并且由于梯度大约为 0，权重<a id="_idIndexMarker1069"/>校正可能变得非常慢(该问题正式称为消失梯度)。由于这个原因，在许多实际应用中，经常使用下一族激活函数。</p>
 
 			<h3 id="_idParaDest-263" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor275"/>整流器激活功能</h3>
 
-			<p class="normal">当<em class="italics">x</em>T49】为0时，这些函数<a id="_idIndexMarker1070"/>都是线性的(或者说对于Swish来说是准线性的)，而当<em class="italics">x</em>T50】为0时，这些函数就不同了。即使当<em class="italics"> x </em> = 0时它们中的一些不可微，在这种情况下导数总是被设置为等于<a id="_idIndexMarker1071"/>0。最常见的功能如下:</p>
+			<p class="normal">当<em class="italics">x</em>T49】为 0 时，这些函数<a id="_idIndexMarker1070"/>都是线性的(或者说对于 Swish 来说是准线性的)，而当<em class="italics">x</em>T50】为 0 时，这些函数就不同了。即使当<em class="italics"> x </em> = 0 时它们中的一些不可微，在这种情况下导数总是被设置为等于<a id="_idIndexMarker1071"/>0。最常见的功能如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_039.png" alt=""/></figure>
 
@@ -256,23 +256,23 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_07.png" alt=""/></figure>
 
-			<p class="packt_figref">ReLU(左上)、Leaky ReLU(右上)、eLU(左下)和Swish(右下)</p>
+			<p class="packt_figref">ReLU(左上)、Leaky ReLU(右上)、eLU(左下)和 Swish(右下)</p>
 
-			<p class="normal">最基本的函数(也是最常用的)是ReLU，当<em class="italics">x</em>T51】0时，它具有恒定的梯度，而当<em class="italics">x</em>T52】0时，它为空。当输入通常大于0时，该功能经常在视觉<a id="_idIndexMarker1072"/>处理中使用，并且具有减轻消失梯度问题的特别优势，因为基于梯度的校正总是可能的。另一方面，当<em class="italics">x</em>T53】0时，ReLU为空(及其一阶导数)，因此每个负输入不允许任何修改。一般来说，这不是问题，但是当允许小的负梯度时，有一些深度网络表现得更好。这一考虑推动了其他变体的产生，其特征在于超参数<img src="img/B14713_17_040.png" alt=""/>的存在，该参数控制负尾部的强度。介于0.01和0.1之间的常用值允许与ReLU几乎相同的行为，但是当<em class="italics"> x </em> &lt; 0时，可能会有小的权重更新。</p>
+			<p class="normal">最基本的函数(也是最常用的)是 ReLU，当<em class="italics">x</em>T51】0 时，它具有恒定的梯度，而当<em class="italics">x</em>T52】0 时，它为空。当输入通常大于 0 时，该功能经常在视觉<a id="_idIndexMarker1072"/>处理中使用，并且具有减轻消失梯度问题的特别优势，因为基于梯度的校正总是可能的。另一方面，当<em class="italics">x</em>T53】0 时，ReLU 为空(及其一阶导数)，因此每个负输入不允许任何修改。一般来说，这不是问题，但是当允许小的负梯度时，有一些深度网络表现得更好。这一考虑推动了其他变体的产生，其特征在于超参数<img src="img/B14713_17_040.png" alt=""/>的存在，该参数控制负尾部的强度。介于 0.01 和 0.1 之间的常用值允许与 ReLU 几乎相同的行为，但是当<em class="italics"> x </em> &lt; 0 时，可能会有小的权重更新。</p>
 
-			<p class="normal">最后一个函数，叫做<a id="_idIndexMarker1074"/> Swish并在Ramachandran P .、Zoph P .、Le V. L .、<em class="italics">搜索激活函数</em>、arXiv:1710.05941【cs。NE]是基于sigmoid的，并提供了在<img src="img/B14713_17_041.png" alt=""/>时收敛到0的额外优势，因此非零效果仅限于(<em class="italics"> -b </em>，0)与<em class="italics"> b </em> &gt; 0之间的短区域。这个函数可以提高某些特定视觉处理深度网络的性能，如前述论文中所讨论的。然而，我总是建议从ReLU开始分析(它非常<a id="_idIndexMarker1075"/>健壮并且计算成本低),并且只有在没有其他技术可以提高模型性能的情况下才切换到<a id="_idIndexMarker1076"/>作为替代。</p>
+			<p class="normal">最后一个函数，叫做<a id="_idIndexMarker1074"/> Swish 并在 Ramachandran P .、Zoph P .、Le V. L .、<em class="italics">搜索激活函数</em>、arXiv:1710.05941【cs。NE]是基于 sigmoid 的，并提供了在<img src="img/B14713_17_041.png" alt=""/>时收敛到 0 的额外优势，因此非零效果仅限于(<em class="italics"> -b </em>，0)与<em class="italics"> b </em> &gt; 0 之间的短区域。这个函数可以提高某些特定视觉处理深度网络的性能，如前述论文中所讨论的。然而，我总是建议从 ReLU 开始分析(它非常<a id="_idIndexMarker1075"/>健壮并且计算成本低),并且只有在没有其他技术可以提高模型性能的情况下才切换到<a id="_idIndexMarker1076"/>作为替代。</p>
 
 			<h3 id="_idParaDest-264" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor276"/> Softmax</h3>
 
-			<p class="normal">这个函数表征了几乎所有分类网络的输出层，因为它可以直接<a id="_idIndexMarker1077"/>表示一个离散的概率分布。如果有<em class="italics"> k </em>输出，<em class="italics">y</em>I，softmax计算如下:</p>
+			<p class="normal">这个函数表征了几乎所有分类网络的输出层，因为它可以直接<a id="_idIndexMarker1077"/>表示一个离散的概率分布。如果有<em class="italics"> k </em>输出，<em class="italics">y</em>I，softmax 计算如下:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_042.png" alt=""/></figure>
 
-			<p class="normal">这样，包含<em class="italics"> k个</em>神经元的层的输出<a id="_idIndexMarker1078"/>被归一化，使得总和总是1。不言而喻，在这种情况下，最佳成本函数是交叉熵。事实上，如果所有真实标签都用一键编码来表示，它们就隐含地变成了概率向量，其中1对应于真实类别。因此，分类器的目标是通过最小化函数来减少其输出的训练分布之间的差异(参见<em class="italics">第2章</em>、<em class="italics">损失函数和正则化</em>):</p>
+			<p class="normal">这样，包含<em class="italics"> k 个</em>神经元的层的输出<a id="_idIndexMarker1078"/>被归一化，使得总和总是 1。不言而喻，在这种情况下，最佳成本函数是交叉熵。事实上，如果所有真实标签都用一键编码来表示，它们就隐含地变成了概率向量，其中 1 对应于真实类别。因此，分类器的目标是通过最小化函数来减少其输出的训练分布之间的差异(参见<em class="italics">第 2 章</em>、<em class="italics">损失函数和正则化</em>):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_043.png" alt=""/></figure>
 
-			<p class="normal">我们现在可以讨论MLP(以及几乎所有其他神经网络)中采用的训练方法。</p>
+			<p class="normal">我们现在可以讨论 MLP(以及几乎所有其他神经网络)中采用的训练方法。</p>
 
 			<h1 id="_idParaDest-265" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor277"/>反向传播算法</h1>
 
@@ -298,7 +298,7 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_053.png" alt=""/></figure>
 
-			<p class="normal">现在，让我们考虑<a id="_idIndexMarker1081"/>MLP中的单个步骤(从底部开始),并利用链式法则:</p>
+			<p class="normal">现在，让我们考虑<a id="_idIndexMarker1081"/>MLP 中的单个步骤(从底部开始),并利用链式法则:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_054.png" alt=""/></figure>
 
@@ -326,17 +326,17 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_070.png" alt=""/></figure>
 
-			<p class="normal">观察这个表达式(可以很容易地使用梯度重写)并将其与前面的表达式进行比较，可以理解反向传播算法的原理，该算法在Rumelhart D. E .，Hinton G. E .，Williams R. J .，<em class="italics">Learning re presentations by back-propagation errors</em>，Nature 323，1986中首次提出。将数据点输入网络，并计算成本函数。在这一点上，过程<a id="_idIndexMarker1083"/>从底部开始，计算相对于最近权重的梯度，并重新使用一部分计算<img src="img/B14713_17_071.png" alt=""/>(与误差成比例)向后移动，直到到达第一层。校正确实从源(成本函数)传播到源(输入层)，并且效果与每个不同权重(和偏差)的责任成比例。考虑到所有可能的不同架构，为单个示例编写所有方程是没有用的。</p>
+			<p class="normal">观察这个表达式(可以很容易地使用梯度重写)并将其与前面的表达式进行比较，可以理解反向传播算法的原理，该算法在 Rumelhart D. E .，Hinton G. E .，Williams R. J .，<em class="italics">Learning re presentations by back-propagation errors</em>，Nature 323，1986 中首次提出。将数据点输入网络，并计算成本函数。在这一点上，过程<a id="_idIndexMarker1083"/>从底部开始，计算相对于最近权重的梯度，并重新使用一部分计算<img src="img/B14713_17_071.png" alt=""/>(与误差成比例)向后移动，直到到达第一层。校正确实从源(成本函数)传播到源(输入层)，并且效果与每个不同权重(和偏差)的责任成比例。考虑到所有可能的不同架构，为单个示例编写所有方程是没有用的。</p>
 
-			<p class="normal">值得考虑的一个非常重要的现象已经在前面的部分中概述，现在应该更清楚了:链规则基于乘法，因此，当梯度开始变得小于1时，乘法效应迫使最后的值接近0。这个问题被称为消失梯度，可以真正停止使用饱和激活函数(如sigmoid或tanh)的非常深的模型的训练过程。整流器单元为许多特定问题提供了良好的解决方案，但有时当双曲正切等函数是必要的时，必须采用归一化等其他方法来缓解这一现象。我们将在本章和下一章讨论一些特定的技术，但是一个通用的最佳实践是<a id="_idIndexMarker1084"/>总是使用规范化的数据集，如果必要的话，也测试白化的效果。</p>
+			<p class="normal">值得考虑的一个非常重要的现象已经在前面的部分中概述，现在应该更清楚了:链规则基于乘法，因此，当梯度开始变得小于 1 时，乘法效应迫使最后的值接近 0。这个问题被称为消失梯度，可以真正停止使用饱和激活函数(如 sigmoid 或 tanh)的非常深的模型的训练过程。整流器单元为许多特定问题提供了良好的解决方案，但有时当双曲正切等函数是必要的时，必须采用归一化等其他方法来缓解这一现象。我们将在本章和下一章讨论一些特定的技术，但是一个通用的最佳实践是<a id="_idIndexMarker1084"/>总是使用规范化的数据集，如果必要的话，也测试白化的效果。</p>
 
 			<h2 id="_idParaDest-266" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor278"/>随机梯度下降(SGD)</h2>
 
 			<p class="normal">一旦计算了梯度，成本函数可以向其最小值的方向移动。然而，在实践中，最好在评估固定数量<a id="_idIndexMarker1085"/>的训练样本(一批)之后执行更新。</p>
 
-			<p class="normal">事实上，通常采用的算法不会计算整个数据集的<a id="_idIndexMarker1086"/>全局成本，因为这种操作在计算上非常昂贵。通过部分步骤获得一个近似值，限于通过评估一个小的子集积累的经验。根据一些文献，仅当在每个单个样本之后执行更新时，才应该使用表达式随机梯度下降(SGD)。当在每<em class="italics"> k </em>个点上进行该操作时，该算法也称为小批量梯度下降；但是，按照惯例，SGD指的是包含<img src="img/B14713_17_072.png" alt=""/>数据点的所有批次，我们从现在开始就要用这个表述了。</p>
+			<p class="normal">事实上，通常采用的算法不会计算整个数据集的<a id="_idIndexMarker1086"/>全局成本，因为这种操作在计算上非常昂贵。通过部分步骤获得一个近似值，限于通过评估一个小的子集积累的经验。根据一些文献，仅当在每个单个样本之后执行更新时，才应该使用表达式随机梯度下降(SGD)。当在每<em class="italics"> k </em>个点上进行该操作时，该算法也称为小批量梯度下降；但是，按照惯例，SGD 指的是包含<img src="img/B14713_17_072.png" alt=""/>数据点的所有批次，我们从现在开始就要用这个表述了。</p>
 
-			<p class="normal">可以考虑使用包含k个数据点的批次计算的部分成本函数来表达该过程:</p>
+			<p class="normal">可以考虑使用包含 k 个数据点的批次计算的部分成本函数来表达该过程:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_073.png" alt=""/></figure>
 
@@ -348,21 +348,21 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_08.png" alt=""/></figure>
 
-			<p class="packt_figref">基于SGD的优化过程的图形表示</p>
+			<p class="packt_figref">基于 SGD 的优化过程的图形表示</p>
 
 			<p class="normal">权重向最小值<img src="img/B14713_17_077.png" alt=""/>移动，考虑到整个数据集，许多后续校正也可能是错误的。因此，该过程必须重复<a id="_idIndexMarker1087"/>几次(历元)，直到验证精度达到最大值。在一个完美的场景中，利用一个凸成本函数<a id="_idIndexMarker1088"/>L，这个简单的过程收敛到最优配置。</p>
 
-			<p class="normal">不幸的是，深度网络是一个非常复杂的非凸函数，其中平台和鞍点非常常见(参见<em class="italics">第1章</em>、<em class="italics">机器学习模型基础</em>)。在这种情况下，普通的SGD将无法找到全局最优解，在许多情况下，甚至找不到接近点。例如，在平坦的区域，梯度会变得很小(也考虑到数值的不精确性),以至于减慢训练过程，直到没有变化是可能的(所以<img src="img/B14713_17_078.png" alt=""/>)。在下一节中，我们将介绍一些常见且强大的算法，这些算法旨在缓解这一问题，并显著加速深度模型的收敛。</p>
+			<p class="normal">不幸的是，深度网络是一个非常复杂的非凸函数，其中平台和鞍点非常常见(参见<em class="italics">第 1 章</em>、<em class="italics">机器学习模型基础</em>)。在这种情况下，普通的 SGD 将无法找到全局最优解，在许多情况下，甚至找不到接近点。例如，在平坦的区域，梯度会变得很小(也考虑到数值的不精确性),以至于减慢训练过程，直到没有变化是可能的(所以<img src="img/B14713_17_078.png" alt=""/>)。在下一节中，我们将介绍一些常见且强大的算法，这些算法旨在缓解这一问题，并显著加速深度模型的收敛。</p>
 
-			<p class="normal">在继续之前，重要的是要标记两个重要的元素。第一个关系到学习率<img src="img/B14713_17_079.png" alt=""/>。这个超参数在学习过程中起着重要的作用。如图所示，算法从一个点跳到另一个点(不一定更接近最优)。与优化算法一起，正确调整学习率是绝对重要的。高值(如1.0)会使权重移动过快，从而增加不稳定性。特别是，如果一个批次包含<a id="_idIndexMarker1089"/>几个异常值(或简单的非主导样本)，一个大的<img src="img/B14713_17_080.png" alt=""/>将把它们视为代表性元素，校正权重以最小化误差。然而，后续的<a id="_idIndexMarker1090"/>批次可能更好地代表数据生成过程，因此，算法必须部分地恢复其修改，以补偿不正确的更新。由于这个原因，学习率通常很小，通常值在0.0001和0.01之间(在某些特定情况下，<img src="img/B14713_17_081.png" alt=""/>也可以是一个有效的选择)。</p>
+			<p class="normal">在继续之前，重要的是要标记两个重要的元素。第一个关系到学习率<img src="img/B14713_17_079.png" alt=""/>。这个超参数在学习过程中起着重要的作用。如图所示，算法从一个点跳到另一个点(不一定更接近最优)。与优化算法一起，正确调整学习率是绝对重要的。高值(如 1.0)会使权重移动过快，从而增加不稳定性。特别是，如果一个批次包含<a id="_idIndexMarker1089"/>几个异常值(或简单的非主导样本)，一个大的<img src="img/B14713_17_080.png" alt=""/>将把它们视为代表性元素，校正权重以最小化误差。然而，后续的<a id="_idIndexMarker1090"/>批次可能更好地代表数据生成过程，因此，算法必须部分地恢复其修改，以补偿不正确的更新。由于这个原因，学习率通常很小，通常值在 0.0001 和 0.01 之间(在某些特定情况下，<img src="img/B14713_17_081.png" alt=""/>也可以是一个有效的选择)。</p>
 
-			<p class="normal">另一方面，非常小的学习率导致最小的修正，减慢了训练过程。一个好的折衷，通常是最佳实践，是让学习率作为纪元的函数衰减。一开始，<img src="img/B14713_17_082.png" alt=""/>可以更高，因为接近最优的概率几乎为零；因此，较大的跳跃很容易调整。随着训练过程的进行，砝码逐渐向其最终形态移动，因此，校正变得越来越小。在这种情况下，应该避免大的跳跃，而应该进行微调。这就是学习率衰减的原因。常见的技术包括指数衰减或线性衰减。在这两种情况下，必须根据具体问题(测试不同的配置)和优化算法来选择初始值和最终值。在许多情况下，起始值和结束值之间的比值大约为10，有时甚至更大。</p>
+			<p class="normal">另一方面，非常小的学习率导致最小的修正，减慢了训练过程。一个好的折衷，通常是最佳实践，是让学习率作为纪元的函数衰减。一开始，<img src="img/B14713_17_082.png" alt=""/>可以更高，因为接近最优的概率几乎为零；因此，较大的跳跃很容易调整。随着训练过程的进行，砝码逐渐向其最终形态移动，因此，校正变得越来越小。在这种情况下，应该避免大的跳跃，而应该进行微调。这就是学习率衰减的原因。常见的技术包括指数衰减或线性衰减。在这两种情况下，必须根据具体问题(测试不同的配置)和优化算法来选择初始值和最终值。在许多情况下，起始值和结束值之间的比值大约为 10，有时甚至更大。</p>
 
-			<p class="normal">另一个重要的超参数是批量大小。没有什么灵丹妙药可以让我们自动做出正确的选择，但是可以做一些考虑。由于SGD是一种近似算法，较大的批量可能会导致更类似于考虑整个数据集所获得的校正。然而，当样本数量极高时，我们不期望深度模型将它们一一对应，而是将我们的努力指向提高泛化能力。这个特征可以通过说网络必须学习更少数量的抽象并重用它们以便分类新的样本来重新表达。</p>
+			<p class="normal">另一个重要的超参数是批量大小。没有什么灵丹妙药可以让我们自动做出正确的选择，但是可以做一些考虑。由于 SGD 是一种近似算法，较大的批量可能会导致更类似于考虑整个数据集所获得的校正。然而，当样本数量极高时，我们不期望深度模型将它们一一对应，而是将我们的努力指向提高泛化能力。这个特征可以通过说网络必须学习更少数量的抽象并重用它们以便分类新的样本来重新表达。</p>
 
-			<p class="normal">如果取样正确，一个批次包含这些抽象元素的一部分和部分修正<a id="_idIndexMarker1091"/>自动改善后续批次的评估。你可以想象一个瀑布式的过程，一个新的训练步骤不会从零开始。然而，该算法也被称为小批量梯度下降，因为通常的<a id="_idIndexMarker1093"/>批量大小通常在16到512之间(更大的大小不常见，但总是可能的)，这些值小于总样本数(特别是在深度学习上下文中)。一个合理的默认值可以是32个数据点，但是我总是建议测试更大的值，从训练速度和最终准确性方面比较性能。</p>
+			<p class="normal">如果取样正确，一个批次包含这些抽象元素的一部分和部分修正<a id="_idIndexMarker1091"/>自动改善后续批次的评估。你可以想象一个瀑布式的过程，一个新的训练步骤不会从零开始。然而，该算法也被称为小批量梯度下降，因为通常的<a id="_idIndexMarker1093"/>批量大小通常在 16 到 512 之间(更大的大小不常见，但总是可能的)，这些值小于总样本数(特别是在深度学习上下文中)。一个合理的默认值可以是 32 个数据点，但是我总是建议测试更大的值，从训练速度和最终准确性方面比较性能。</p>
 
-			<div><div><p class="Information-Box--PACKT-">使用深度神经网络时，所有值(一层中的神经元数量、批量大小等)通常都是2的幂。这不是一个约束，而只是一个优化技巧(最重要的是，当使用GPU时)，因为当块基于2个<sup style="font-style: italic;"> N个</sup>元素时，可以更有效地填充内存。然而，这只是一个建议，其好处也可以忽略不计；所以，不要害怕测试具有不同价值的架构。例如，在许多论文中，批量大小为100，有些层有1000个神经元。</p>
+			<div><div><p class="Information-Box--PACKT-">使用深度神经网络时，所有值(一层中的神经元数量、批量大小等)通常都是 2 的幂。这不是一个约束，而只是一个优化技巧(最重要的是，当使用 GPU 时)，因为当块基于 2 个<sup style="font-style: italic;"> N 个</sup>元素时，可以更有效地填充内存。然而，这只是一个建议，其好处也可以忽略不计；所以，不要害怕测试具有不同价值的架构。例如，在许多论文中，批量大小为 100，有些层有 1000 个神经元。</p>
 
 				</div>
 
@@ -370,49 +370,49 @@ print("Perceptron Avg. CV score: {:.3f}".
 
 			<h2 id="_idParaDest-267" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor279"/>权重初始化</h2>
 
-			<p class="normal">一个非常重要的因素是神经网络的初始配置。权重应该如何初始化？让我们想象一下，我们把它们都设置为零。由于一层中的所有神经元接收<a id="_idIndexMarker1094"/>相同的输入，如果权重为0(或任何其他常见的常数)，则输出将相等。当应用梯度校正时，所有神经元将以相同的方式处理；因此，这个网络相当于一系列单神经元层的<a id="_idIndexMarker1095"/>。很明显，为了达到一个叫做<em class="italics">对称破缺</em>的目标，初始权重必须不同，但是哪一个是最佳选择呢？</p>
+			<p class="normal">一个非常重要的因素是神经网络的初始配置。权重应该如何初始化？让我们想象一下，我们把它们都设置为零。由于一层中的所有神经元接收<a id="_idIndexMarker1094"/>相同的输入，如果权重为 0(或任何其他常见的常数)，则输出将相等。当应用梯度校正时，所有神经元将以相同的方式处理；因此，这个网络相当于一系列单神经元层的<a id="_idIndexMarker1095"/>。很明显，为了达到一个叫做<em class="italics">对称破缺</em>的目标，初始权重必须不同，但是哪一个是最佳选择呢？</p>
 
 			<p class="normal">如果我们知道(也大致知道)最终的配置，我们就可以设置它们在几次迭代中很容易达到最佳点，但不幸的是，我们不知道最小值在哪里。</p>
 
-			<p class="normal">因此，已经开发并测试了一些经验策略，目标是最小化训练时间(获得<em class="italics">最先进的</em>精确度)。一般的经验法则是权重应该很小(与输入样本方差相比)。大值导致对饱和函数(如双曲正切函数和sigmoid函数)产生负面影响的大输出，而小值可以更容易地优化，因为相应的梯度相对较大，并且校正效果更强。整流器单元也是如此，因为最大效率是通过在穿过原点(非线性实际所在的位置)的段中工作来实现的。例如，在处理图像时，如果值为正值且较大，一个ReLU神经元几乎成为一个线性单元，失去了很多优势(这就是为什么图像被归一化，以将每个像素值绑定在0和1或-1和1之间)。</p>
+			<p class="normal">因此，已经开发并测试了一些经验策略，目标是最小化训练时间(获得<em class="italics">最先进的</em>精确度)。一般的经验法则是权重应该很小(与输入样本方差相比)。大值导致对饱和函数(如双曲正切函数和 sigmoid 函数)产生负面影响的大输出，而小值可以更容易地优化，因为相应的梯度相对较大，并且校正效果更强。整流器单元也是如此，因为最大效率是通过在穿过原点(非线性实际所在的位置)的段中工作来实现的。例如，在处理图像时，如果值为正值且较大，一个 ReLU 神经元几乎成为一个线性单元，失去了很多优势(这就是为什么图像被归一化，以将每个像素值绑定在 0 和 1 或-1 和 1 之间)。</p>
 
-			<p class="normal">同时，理想地，激活方差在整个网络中应该保持几乎恒定，以及在每个反向传播步骤之后的权重方差。这两个条件是改善收敛过程和避免消失和爆炸梯度问题的基本条件(后者与消失梯度相反，将在<em class="italics">第19章</em>、<em class="italics">深度卷积网络</em>中讨论)。</p>
+			<p class="normal">同时，理想地，激活方差在整个网络中应该保持几乎恒定，以及在每个反向传播步骤之后的权重方差。这两个条件是改善收敛过程和避免消失和爆炸梯度问题的基本条件(后者与消失梯度相反，将在<em class="italics">第 19 章</em>、<em class="italics">深度卷积网络</em>中讨论)。</p>
 
 			<p class="normal">一种非常常见的策略是考虑一层中神经元的数量，并如下初始化权重:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_083.png" alt=""/></figure>
 
-			<p class="normal">该方法被称为<a id="_idIndexMarker1096"/>方差缩放，可使用输入单元的数量(扇入)、输出单元的数量(扇出)或其平均值来应用。这个想法<a id="_idIndexMarker1097"/>非常直观:如果传入或传出连接的数量很大，权重必须较小，以避免大的输出。在单个神经元退化的情况下，方差被设置为1.0，这是允许的<a id="_idIndexMarker1098"/>最大值(通常，所有方法都将偏差的初始值保持为0.0，因为没有必要用随机值初始化它们)。</p>
+			<p class="normal">该方法被称为<a id="_idIndexMarker1096"/>方差缩放，可使用输入单元的数量(扇入)、输出单元的数量(扇出)或其平均值来应用。这个想法<a id="_idIndexMarker1097"/>非常直观:如果传入或传出连接的数量很大，权重必须较小，以避免大的输出。在单个神经元退化的情况下，方差被设置为 1.0，这是允许的<a id="_idIndexMarker1098"/>最大值(通常，所有方法都将偏差的初始值保持为 0.0，因为没有必要用随机值初始化它们)。</p>
 
-			<p class="normal">已经提出了其他变体，即使它们都具有相同的基本思想。LeCun建议如下初始化权重:</p>
+			<p class="normal">已经提出了其他变体，即使它们都具有相同的基本思想。LeCun 建议如下初始化权重:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_084.png" alt=""/></figure>
 
-			<p class="normal">另一种<a id="_idIndexMarker1099"/>方法，称为Xavier初始化(在Glorot X .，Bengio Y .，<em class="italics">理解训练深度前馈神经网络的困难</em>，第13届人工智能和统计国际会议论文集，2010年)类似于LeCun初始化，但它基于两个连续层的单元数量的平均值(为了标记顺序性，我们用显式索引代替了术语扇入和扇出):</p>
+			<p class="normal">另一种<a id="_idIndexMarker1099"/>方法，称为 Xavier 初始化(在 Glorot X .，Bengio Y .，<em class="italics">理解训练深度前馈神经网络的困难</em>，第 13 届人工智能和统计国际会议论文集，2010 年)类似于 LeCun 初始化，但它基于两个连续层的单元数量的平均值(为了标记顺序性，我们用显式索引代替了术语扇入和扇出):</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_085.png" alt=""/></figure>
 
-			<p class="normal">这是一个更健壮的变体，因为它既考虑了传入连接，也考虑了传出连接(后者又是传入连接)。目标(作者在上述论文中广泛讨论)是试图满足前面提出的两个要求。第一个是避免每层激活的方差振荡(理想情况下，这种情况可以避免饱和)。第二个与反向传播算法严格相关，它基于这样的观察:当采用方差缩放(或等效的均匀分布)时，权重矩阵的方差与3<em class="italics">n</em>T8】k的倒数成比例。因此，扇入和扇出的平均值乘以3，试图避免更新后权重的较大变化。Xavier初始化<a id="_idIndexMarker1100"/>已经被证明在许多深层架构中非常有效，并且经常是默认选择。</p>
+			<p class="normal">这是一个更健壮的变体，因为它既考虑了传入连接，也考虑了传出连接(后者又是传入连接)。目标(作者在上述论文中广泛讨论)是试图满足前面提出的两个要求。第一个是避免每层激活的方差振荡(理想情况下，这种情况可以避免饱和)。第二个与反向传播算法严格相关，它基于这样的观察:当采用方差缩放(或等效的均匀分布)时，权重矩阵的方差与 3<em class="italics">n</em>T8】k 的倒数成比例。因此，扇入和扇出的平均值乘以 3，试图避免更新后权重的较大变化。Xavier 初始化<a id="_idIndexMarker1100"/>已经被证明在许多深层架构中非常有效，并且经常是默认选择。</p>
 
-			<p class="normal">其他方法<a id="_idIndexMarker1101"/>基于一种不同的方法来测量前馈和反向传播阶段的方差，并尝试修正数值以最小化特定环境中的残余振荡。例如，何、张、任、孙(在《深入研究整流器:在ImageNet分类上超越人类水平的性能》、arXiv:1502.01852【cs .CV])分析了基于ReLU或可变Leaky-ReLU激活(也称为PReLU-parametric ReLU)的卷积网络环境中的初始化问题(我们将在下一章讨论)，导出了一个最佳标准(通常称为he初始化器)，该标准与Xavier初始化器略有不同:</p>
+			<p class="normal">其他方法<a id="_idIndexMarker1101"/>基于一种不同的方法来测量前馈和反向传播阶段的方差，并尝试修正数值以最小化特定环境中的残余振荡。例如，何、张、任、孙(在《深入研究整流器:在 ImageNet 分类上超越人类水平的性能》、arXiv:1502.01852【cs .CV])分析了基于 ReLU 或可变 Leaky-ReLU 激活(也称为 PReLU-parametric ReLU)的卷积网络环境中的初始化问题(我们将在下一章讨论)，导出了一个最佳标准(通常称为 he 初始化器)，该标准与 Xavier 初始化器略有不同:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_086.png" alt=""/></figure>
 
-			<p class="normal">所有这些方法都有一些共同的原则，在许多情况下，它们是可以互换的。如前所述，Xavier是最健壮的方法之一，在大多数现实生活问题中，没有必要寻找其他方法；然而，您应该始终意识到，必须经常使用基于有时过于简单的数学假设的经验方法来面对深度模型的复杂性。只有用真实数据集进行验证，才能确认假设是否正确，或者最好从另一个方向继续调查。</p>
+			<p class="normal">所有这些方法都有一些共同的原则，在许多情况下，它们是可以互换的。如前所述，Xavier 是最健壮的方法之一，在大多数现实生活问题中，没有必要寻找其他方法；然而，您应该始终意识到，必须经常使用基于有时过于简单的数学假设的经验方法来面对深度模型的复杂性。只有用真实数据集进行验证，才能确认假设是否正确，或者最好从另一个方向继续调查。</p>
 
-			<h2 id="_idParaDest-268" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor280"/>使用TensorFlow和Keras的MLP示例</h2>
+			<h2 id="_idParaDest-268" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor280"/>使用 TensorFlow 和 Keras 的 MLP 示例</h2>
 
-			<p class="normal">keras(<a href="https://keras.io">https://keras . io</a>)是一个<a id="_idIndexMarker1102"/>强大的Python工具包，允许以最小的努力建模<a id="_idIndexMarker1103"/>和训练<a id="_idIndexMarker1104"/>复杂的深度学习架构。由于其灵活性，它已被纳入TensorFlow，成为其预定义的后端。所以，从现在开始，我们要参考TensorFlow 2.0(更详细的内容，我建议参考Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版社，2019)。当不需要使用高级特性时，我们通过TensorFlow使用Keras API。如果你想使用另一个后端，你必须单独安装Keras】，并按照文档中的说明正确配置它。</p>
+			<p class="normal">keras(<a href="https://keras.io">https://keras . io</a>)是一个<a id="_idIndexMarker1102"/>强大的 Python 工具包，允许以最小的努力建模<a id="_idIndexMarker1103"/>和训练<a id="_idIndexMarker1104"/>复杂的深度学习架构。由于其灵活性，它已被纳入 TensorFlow，成为其预定义的后端。所以，从现在开始，我们要参考 TensorFlow 2.0(更详细的内容，我建议参考 Holdroyd T .，<em class="italics"> TensorFlow 2.0 快速入门指南</em>，Packt 出版社，2019)。当不需要使用高级特性时，我们通过 TensorFlow 使用 Keras API。如果你想使用另一个后端，你必须单独安装 Keras】，并按照文档中的说明正确配置它。</p>
 
-			<div><div><p class="Information-Box--PACKT-">Tensorflow可以使用命令<code class="Code-In-Text--PACKT-">pip -U</code> <code class="Code-In-Text--PACKT-">install tensorflow</code>(或<code class="Code-In-Text--PACKT-">tensorflow-gpu</code>用于GPU支持)安装。所有需要的文件都可以在https://www.tensorflow.org/的官方网页上找到。</p>
+			<div><div><p class="Information-Box--PACKT-">Tensorflow 可以使用命令<code class="Code-In-Text--PACKT-">pip -U</code> <code class="Code-In-Text--PACKT-">install tensorflow</code>(或<code class="Code-In-Text--PACKT-">tensorflow-gpu</code>用于 GPU 支持)安装。所有需要的文件都可以在 https://www.tensorflow.org/的官方网页上找到。</p>
 
 				</div>
 
 			</div>
 
-			<p class="normal">在这个例子中，我们希望<a id="_idIndexMarker1107"/>用一个隐藏的<a id="_idIndexMarker1108"/>层构建一个小MLP来解决XOR问题(数据集与前一个例子中创建的相同)。最简单的<a id="_idIndexMarker1109"/>和最常见的<a id="_idIndexMarker1110"/>方式是实例化类<code class="Code-In-Text--PACKT-">Sequential</code>，它为一个不定模型定义了一个空容器。在这个初始部分，最基本的方法是<code class="Code-In-Text--PACKT-">add()</code>，它允许给模型添加一个层。对于我们的例子，我们想要使用四个双曲正切激活的隐藏层和两个<code class="Code-In-Text--PACKT-">softmax</code>输出层。</p>
+			<p class="normal">在这个例子中，我们希望<a id="_idIndexMarker1107"/>用一个隐藏的<a id="_idIndexMarker1108"/>层构建一个小 MLP 来解决 XOR 问题(数据集与前一个例子中创建的相同)。最简单的<a id="_idIndexMarker1109"/>和最常见的<a id="_idIndexMarker1110"/>方式是实例化类<code class="Code-In-Text--PACKT-">Sequential</code>，它为一个不定模型定义了一个空容器。在这个初始部分，最基本的方法是<code class="Code-In-Text--PACKT-">add()</code>，它允许给模型添加一个层。对于我们的例子，我们想要使用四个双曲正切激活的隐藏层和两个<code class="Code-In-Text--PACKT-">softmax</code>输出层。</p>
 
-			<p class="normal">下面的代码片段定义了MLP:</p>
+			<p class="normal">下面的代码片段定义了 MLP:</p>
 
 			<pre>import tensorflow as tf
 model = tf.keras.models.Sequential([
@@ -421,17 +421,17 @@ model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(2, activation='softmax')
 ])</pre>
 
-			<p class="normal"><code class="Code-In-Text--PACKT-">Dense</code>类定义了一个完全连接的层(一个经典的MLP层)，第一个参数用于声明所需单元的数量。第一层必须声明<code class="Code-In-Text--PACKT-">input_shape</code>或<code class="Code-In-Text--PACKT-">input_dim</code>，它们指定单个样本的尺寸(或形状)(批量大小被省略，因为它是由框架动态设置的)。所有后续层都会自动计算尺寸。Keras的优势之一是可以避免设置许多参数(例如权重初始化器)，因为它们将使用最合适的默认值自动配置(例如，默认的权重初始化器是Xavier)。</p>
+			<p class="normal"><code class="Code-In-Text--PACKT-">Dense</code>类定义了一个完全连接的层(一个经典的 MLP 层)，第一个参数用于声明所需单元的数量。第一层必须声明<code class="Code-In-Text--PACKT-">input_shape</code>或<code class="Code-In-Text--PACKT-">input_dim</code>，它们指定单个样本的尺寸(或形状)(批量大小被省略，因为它是由框架动态设置的)。所有后续层都会自动计算尺寸。Keras 的优势之一是可以避免设置许多参数(例如权重初始化器)，因为它们将使用最合适的默认值自动配置(例如，默认的权重初始化器是 Xavier)。</p>
 
 			<p class="normal">在接下来的例子中，我们将显式地设置其中的一些，但是我建议您查阅官方文档来熟悉所有的可能性和特性。本实验中涉及的另一层是<strong class="bold">激活</strong>，它指定了所需的激活函数(也可以使用几乎所有<a id="_idIndexMarker1112"/>层实现的参数激活来声明它，但我更喜欢<a id="_idIndexMarker1113"/>将操作分离以强调单个角色，还因为一些技术——如批处理规范化——通常在激活前应用于线性输出)。</p>
 
-			<p class="normal">此时，我们必须要求Keras编译模型(使用首选后端):</p>
+			<p class="normal">此时，我们必须要求 Keras 编译模型(使用首选后端):</p>
 
 			<pre>model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])</pre>
 
-			<p class="normal">参数<a id="_idIndexMarker1114"/>优化器定义了我们想要使用的随机梯度下降算法。使用<code class="Code-In-Text--PACKT-">optimizer='sgd'</code>，可以实现一个标准版本(如前一段所述)。在这种情况下，我们使用Adam(默认参数)，这是<a id="_idIndexMarker1115"/>一个性能更好的变体，将在下一章讨论。参数<code class="Code-In-Text--PACKT-">loss</code>用于定义<a id="_idIndexMarker1116"/>代价函数(在这种情况下是交叉熵)，而<code class="Code-In-Text--PACKT-">metrics</code> <a id="_idIndexMarker1117"/>是我们想要计算的所有评估分数的列表(<code class="Code-In-Text--PACKT-">'accuracy'</code>对于许多分类任务已经足够)。一旦模型被编译，就可以训练它:</p>
+			<p class="normal">参数<a id="_idIndexMarker1114"/>优化器定义了我们想要使用的随机梯度下降算法。使用<code class="Code-In-Text--PACKT-">optimizer='sgd'</code>，可以实现一个标准版本(如前一段所述)。在这种情况下，我们使用 Adam(默认参数)，这是<a id="_idIndexMarker1115"/>一个性能更好的变体，将在下一章讨论。参数<code class="Code-In-Text--PACKT-">loss</code>用于定义<a id="_idIndexMarker1116"/>代价函数(在这种情况下是交叉熵)，而<code class="Code-In-Text--PACKT-">metrics</code> <a id="_idIndexMarker1117"/>是我们想要计算的所有评估分数的列表(<code class="Code-In-Text--PACKT-">'accuracy'</code>对于许多分类任务已经足够)。一旦模型被编译，就可以训练它:</p>
 
 			<pre>from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = \
@@ -462,21 +462,21 @@ model.fit(X_train,
 <strong class="screen-text">Epoch 100/100</strong>
 <strong class="screen-text">700/700 [==============================] - 1s 2ms/sample - loss: 0.0977 - accuracy: 0.9914 - val_loss: 0.0878 - val_accuracy: 0.9967</strong></pre>
 
-			<p class="normal">操作<a id="_idIndexMarker1118"/>非常简单。我们已经将数据集分为训练集和测试/验证集(在深度学习中，很少使用交叉验证<a id="_idIndexMarker1119"/>)，然后，我们已经训练了模型设置<code class="Code-In-Text--PACKT-">batch_size=32</code>和<code class="Code-In-Text--PACKT-">epochs=100</code>。数据集<a id="_idIndexMarker1120"/>在每个时期的<a id="_idIndexMarker1121"/>开始时自动混洗，除非设置<code class="Code-In-Text--PACKT-">shuffle=False</code>。为了将离散标签转换为一键编码，我们使用了实用程序<a id="_idIndexMarker1122"/>函数<code class="Code-In-Text--PACKT-">to_categorical</code>。在这种情况下，标签0变为(1，0)，标签1变为(0，1)。模型在达到100个历元之前收敛<a id="_idIndexMarker1123"/>；因此，我邀请您优化参数作为练习。然而，在该过程结束时，两个精度都非常接近1。</p>
+			<p class="normal">操作<a id="_idIndexMarker1118"/>非常简单。我们已经将数据集分为训练集和测试/验证集(在深度学习中，很少使用交叉验证<a id="_idIndexMarker1119"/>)，然后，我们已经训练了模型设置<code class="Code-In-Text--PACKT-">batch_size=32</code>和<code class="Code-In-Text--PACKT-">epochs=100</code>。数据集<a id="_idIndexMarker1120"/>在每个时期的<a id="_idIndexMarker1121"/>开始时自动混洗，除非设置<code class="Code-In-Text--PACKT-">shuffle=False</code>。为了将离散标签转换为一键编码，我们使用了实用程序<a id="_idIndexMarker1122"/>函数<code class="Code-In-Text--PACKT-">to_categorical</code>。在这种情况下，标签 0 变为(1，0)，标签 1 变为(0，1)。模型在达到 100 个历元之前收敛<a id="_idIndexMarker1123"/>；因此，我邀请您优化参数作为练习。然而，在该过程结束时，两个精度都非常接近 1。</p>
 
 			<p class="normal">最终的分类图如下所示:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_09.png" alt=""/></figure>
 
-			<p class="packt_figref">异或数据集的MLP分类</p>
+			<p class="packt_figref">异或数据集的 MLP 分类</p>
 
-			<p class="normal">只有<a id="_idIndexMarker1124"/>几个点(也可以<a id="_idIndexMarker1125"/>被认为是异常值)被<a id="_idIndexMarker1126"/>错误分类，但是很明显MLP成功地分离了<a id="_idIndexMarker1127"/>异或数据集。为了确认<a id="_idIndexMarker1128"/>的泛化能力，我们为双曲正切隐藏层和ReLU层绘制了<a id="_idIndexMarker1129"/>决策曲面:</p>
+			<p class="normal">只有<a id="_idIndexMarker1124"/>几个点(也可以<a id="_idIndexMarker1125"/>被认为是异常值)被<a id="_idIndexMarker1126"/>错误分类，但是很明显 MLP 成功地分离了<a id="_idIndexMarker1127"/>异或数据集。为了确认<a id="_idIndexMarker1128"/>的泛化能力，我们为双曲正切隐藏层和 ReLU 层绘制了<a id="_idIndexMarker1129"/>决策曲面:</p>
 
 			<figure class="mediaobject" lang="en-GB" xml:lang="en-GB"><img src="img/B14713_17_10.png" alt=""/></figure>
 
-			<p class="packt_figref">带有Tanh(左)和ReLU(右)隐藏层的MLP决策表面</p>
+			<p class="packt_figref">带有 Tanh(左)和 ReLU(右)隐藏层的 MLP 决策表面</p>
 
-			<p class="normal">在这两种情况下，MLP都以合理的方式划定了区域。然而，虽然双曲正切隐藏层似乎过拟合(在我们的情况下并非如此，因为数据集准确地表示了数据生成过程)，但ReLU层生成的边界不太平滑，方差明显较低(特别是考虑到类的异常值)。我们知道，最终验证<a id="_idIndexMarker1132"/>的准确性证实<a id="_idIndexMarker1133"/>几乎是完美的拟合，并且决策图(很容易用二维创建)在两种情况下都显示出可接受的边界，但是这个简单的练习对于理解深度模型的复杂性和<a id="_idIndexMarker1134"/>敏感性是有用的，并且可以更好地理解构建它的最佳方式。出于这些原因，选择一个有效的训练集(代表基本事实)并采用所有可能的技术<a id="_idIndexMarker1135"/>来避免过度拟合(我们将在后面讨论)是绝对必要的。检测这种情况最简单的方法是检查确认损失。一个好的模型应该在每个时期后减少训练和验证的损失，达到后者的平稳状态。如果在<em class="italics"> n </em>个时期之后，验证损失(以及随之而来的准确度)开始增加，而训练损失持续减少，这意味着模型过度拟合训练集。</p>
+			<p class="normal">在这两种情况下，MLP 都以合理的方式划定了区域。然而，虽然双曲正切隐藏层似乎过拟合(在我们的情况下并非如此，因为数据集准确地表示了数据生成过程)，但 ReLU 层生成的边界不太平滑，方差明显较低(特别是考虑到类的异常值)。我们知道，最终验证<a id="_idIndexMarker1132"/>的准确性证实<a id="_idIndexMarker1133"/>几乎是完美的拟合，并且决策图(很容易用二维创建)在两种情况下都显示出可接受的边界，但是这个简单的练习对于理解深度模型的复杂性和<a id="_idIndexMarker1134"/>敏感性是有用的，并且可以更好地理解构建它的最佳方式。出于这些原因，选择一个有效的训练集(代表基本事实)并采用所有可能的技术<a id="_idIndexMarker1135"/>来避免过度拟合(我们将在后面讨论)是绝对必要的。检测这种情况最简单的方法是检查确认损失。一个好的模型应该在每个时期后减少训练和验证的损失，达到后者的平稳状态。如果在<em class="italics"> n </em>个时期之后，验证损失(以及随之而来的准确度)开始增加，而训练损失持续减少，这意味着模型过度拟合训练集。</p>
 
 			<p class="normal">训练过程正在正确发展的另一个普遍有效的经验指标是，至少在开始时，验证准确性应该高于训练准确性。这可能看起来很奇怪，但是我们需要考虑验证集比训练集稍微小一点<a id="_idIndexMarker1136"/>并且不那么复杂；因此，如果模型的<a id="_idIndexMarker1137"/>容量未被训练<a id="_idIndexMarker1138"/>样本饱和，则训练集的<a id="_idIndexMarker1139"/>误分类概率高于验证集。</p>
 
@@ -488,35 +488,35 @@ model.fit(X_train,
 
 			<p class="normal">尽管该模型对于许多问题非常强大，但在处理非线性可分离数据集时，它很快就显示出其局限性。感知器与逻辑回归没有太大的不同，没有具体的理由使用它。然而，这个模型为通过组合多个非线性层获得的一系列极其强大的模型打开了大门。多层感知器已被证明是一种通用的近似器，能够管理几乎任何类型的数据集，在其他方法失败时实现高水平的性能。</p>
 
-			<p class="normal">在下一节中，我们分析了MLP的构造块。我们从激活函数开始，描述了它们的结构和特性，并重点讨论了它们成为特定问题的主要选择的原因。然后，我们讨论了训练过程，考虑了反向传播算法背后的基本思想以及如何使用随机梯度下降方法来实现它。尽管这种方法非常有效，但是当网络非常复杂时，它会很慢。为此，人们提出了许多优化算法。在本章中，我们分析了动量的作用以及如何使用RMSProp管理自适应修正。然后，我们把momentum和RMSProp结合起来，推导出一个非常强大的算法，叫做Adam。为了提供一个完整的画面，我们还提出了两个略有不同的自适应算法，称为AdaGrad和AdaDelta。</p>
+			<p class="normal">在下一节中，我们分析了 MLP 的构造块。我们从激活函数开始，描述了它们的结构和特性，并重点讨论了它们成为特定问题的主要选择的原因。然后，我们讨论了训练过程，考虑了反向传播算法背后的基本思想以及如何使用随机梯度下降方法来实现它。尽管这种方法非常有效，但是当网络非常复杂时，它会很慢。为此，人们提出了许多优化算法。在本章中，我们分析了动量的作用以及如何使用 RMSProp 管理自适应修正。然后，我们把 momentum 和 RMSProp 结合起来，推导出一个非常强大的算法，叫做 Adam。为了提供一个完整的画面，我们还提出了两个略有不同的自适应算法，称为 AdaGrad 和 AdaDelta。</p>
 
-			<p class="normal">在下一章中，我们将讨论最重要的神经网络优化策略(包括RMSProp和Adam ),以及如何使用正则化和其他技术来提高模型在速度和准确性方面的整体性能。</p>
+			<p class="normal">在下一章中，我们将讨论最重要的神经网络优化策略(包括 RMSProp 和 Adam ),以及如何使用正则化和其他技术来提高模型在速度和准确性方面的整体性能。</p>
 
 			<h1 id="_idParaDest-270" class="title" lang="en-GB" xml:lang="en-GB"><a id="_idTextAnchor282"/>延伸阅读</h1>
 
 			<ul>
 
-				<li class="list">明斯基M. L .，<em class="italics">感知机</em>，麻省理工学院出版社，1969年</li>
+				<li class="list">明斯基 M. L .，<em class="italics">感知机</em>，麻省理工学院出版社，1969 年</li>
 
 				<li class="list">Ramachandran P .，Zoph P .，Le V. L .，<em class="italics">搜索激活函数</em>，arXiv:1710.05941【cs .NE]</li>
 
 				<li class="list">Rumelhart D. E .、Hinton G. E .、Williams R. J .，<em class="italics">通过反向传播误差学习表征</em>，《自然》323，1986</li>
 
-				<li class="list">Glorot X .，Bengio Y .，<em class="italics">理解训练深度前馈神经网络的困难</em>，第13届人工智能与统计国际会议论文集，2010</li>
+				<li class="list">Glorot X .，Bengio Y .，<em class="italics">理解训练深度前馈神经网络的困难</em>，第 13 届人工智能与统计国际会议论文集，2010</li>
 
-				<li class="list">何凯，张x，任s，孙军，<em class="italics">深入研究整流器:在ImageNet分类上超越人类水平的性能</em>，arXiv:1502.01852【cs .简历]</li>
+				<li class="list">何凯，张 x，任 s，孙军，<em class="italics">深入研究整流器:在 ImageNet 分类上超越人类水平的性能</em>，arXiv:1502.01852【cs .简历]</li>
 
-				<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0快速入门指南</em>，Packt出版社，2019</li>
+				<li class="list">Holdroyd T .，<em class="italics"> TensorFlow 2.0 快速入门指南</em>，Packt 出版社，2019</li>
 
-				<li class="list">金玛D. P .，巴j .，<em class="italics">亚当:随机优化的一种方法</em>，arXiv:1412.6980【cs。LG]</li>
+				<li class="list">金玛 D. P .，巴 j .，<em class="italics">亚当:随机优化的一种方法</em>，arXiv:1412.6980【cs。LG]</li>
 
-				<li class="list">Duchi J .，Hazan E .，Singer Y .，<em class="italics">在线学习和随机优化的自适应次梯度方法</em>，机器学习研究杂志12，2011</li>
+				<li class="list">Duchi J .，Hazan E .，Singer Y .，<em class="italics">在线学习和随机优化的自适应次梯度方法</em>，机器学习研究杂志 12，2011</li>
 
 				<li class="list">泽勒医学博士，<em class="italics">阿达德尔塔:一种自适应学习率方法</em>，arXiv:1212.5701【cs。LG]</li>
 
 				<li class="list">Hornik K .，<em class="italics">多层前馈网络的逼近能力</em>，神经网络，4/2，1991</li>
 
-				<li class="list">Cybenko G .，<em class="italics">叠加Sigmoidal函数的近似法</em>，控制、信号和系统的数学，1989年2月4日</li>
+				<li class="list">Cybenko G .，<em class="italics">叠加 Sigmoidal 函数的近似法</em>，控制、信号和系统的数学，1989 年 2 月 4 日</li>
 
 			</ul>
 
